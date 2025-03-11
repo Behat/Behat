@@ -58,7 +58,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
      */
     public static function group(array $specificationIterators)
     {
-        $groupedSpecifications = array();
+        $groupedSpecifications = [];
         foreach ($specificationIterators as $specificationIterator) {
             $groupedSpecifications[$specificationIterator->getSuite()->getName()][] = $specificationIterator;
         }

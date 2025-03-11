@@ -49,7 +49,7 @@ final class DefinitionTranslator
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();
 
-        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
+        $translatedPattern = $this->translator->trans($pattern, [], $assetsId, $language);
         if ($pattern != $translatedPattern) {
             return new TranslatedDefinition($definition, $translatedPattern, $language);
         }

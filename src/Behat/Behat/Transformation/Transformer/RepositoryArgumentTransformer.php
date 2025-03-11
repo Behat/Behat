@@ -57,7 +57,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         TransformationRepository $repository,
         CallCenter $callCenter,
         PatternTransformer $patternTransformer,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
     ) {
         $this->repository = $repository;
         $this->callCenter = $callCenter;
@@ -94,7 +94,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     public function generateRegex($suiteName, $pattern, $language)
     {
-        $translatedPattern = $this->translator->trans($pattern, array(), $suiteName, $language);
+        $translatedPattern = $this->translator->trans($pattern, [], $suiteName, $language);
         if ($pattern == $translatedPattern) {
             return $this->patternTransformer->transformPatternToRegex($pattern);
         }
@@ -185,10 +185,10 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     private function splitSimpleAndNormalTransformations(array $transformations)
     {
         return array_reduce($transformations, function ($acc, $t) {
-            return array(
-                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], array($t)) : $acc[0],
-                !$t instanceof SimpleArgumentTransformation ? array_merge($acc[1], array($t)) : $acc[1],
-            );
-        }, array(array(), array()));
+            return [
+                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
+                !$t instanceof SimpleArgumentTransformation ? array_merge($acc[1], [$t]) : $acc[1],
+            ];
+        }, [[], []]);
     }
 }

@@ -69,7 +69,7 @@ final class NodeEventListeningFormatter implements Formatter
      */
     public static function getSubscribedEvents()
     {
-        return array(TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent');
+        return [TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent'];
     }
 
     /**

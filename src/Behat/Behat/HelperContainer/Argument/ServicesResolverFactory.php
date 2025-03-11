@@ -63,7 +63,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
         );
 
         if (!$suite->hasSetting('services')) {
-            return array();
+            return [];
         }
 
         $container = $this->createContainer($suite->getSetting('services'));
@@ -82,7 +82,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
         $suite = $environment->getSuite();
 
         if (!$suite->hasSetting('services')) {
-            return array();
+            return [];
         }
 
         $container = $this->createContainer($suite->getSetting('services'));
@@ -212,9 +212,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
         }
 
         if ($autowire) {
-            return array(new ServicesResolver($container), new AutowiringResolver($container));
+            return [new ServicesResolver($container), new AutowiringResolver($container)];
         }
 
-        return array(new ServicesResolver($container));
+        return [new ServicesResolver($container)];
     }
 }

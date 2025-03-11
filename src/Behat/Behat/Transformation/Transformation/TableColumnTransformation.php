@@ -39,7 +39,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
     public function supportsDefinitionAndArgument(
         DefinitionCall $definitionCall,
         $argumentIndex,
-        $argumentArgumentValue
+        $argumentArgumentValue,
     ): bool {
         // The argument passed initially will be a TableNode but if a column transformation
         // has already been applied then this will have been transformed into an array already,
@@ -78,7 +78,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
         CallCenter $callCenter,
         DefinitionCall $definitionCall,
         $argumentIndex,
-        $argumentValue
+        $argumentValue,
     ): array {
         $columnNames = explode(',', substr($this->pattern, 7));
         $rows = [];

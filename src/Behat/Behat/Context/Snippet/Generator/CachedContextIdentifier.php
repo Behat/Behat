@@ -26,7 +26,7 @@ final class CachedContextIdentifier implements TargetContextIdentifier
     /**
      * @var array
      */
-    private $contextClasses = array();
+    private $contextClasses = [];
 
     /**
      * Initialise the identifier.

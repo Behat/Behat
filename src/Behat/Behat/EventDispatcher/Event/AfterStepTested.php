@@ -58,7 +58,7 @@ final class AfterStepTested extends StepTested implements AfterTested
         FeatureNode $feature,
         StepNode $step,
         StepResult $result,
-        Teardown $teardown
+        Teardown $teardown,
     ) {
         parent::__construct($env);
 

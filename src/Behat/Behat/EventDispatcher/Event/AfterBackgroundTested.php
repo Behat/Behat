@@ -56,7 +56,7 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
         FeatureNode $feature,
         BackgroundNode $background,
         TestResult $result,
-        Teardown $teardown
+        Teardown $teardown,
     ) {
         parent::__construct($env);
 

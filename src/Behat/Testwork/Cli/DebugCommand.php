@@ -46,7 +46,7 @@ final class DebugCommand extends BaseCommand
     public function __construct(
         Application $application,
         ConfigurationLoader $configurationLoader,
-        ExtensionManager $extensionManager
+        ExtensionManager $extensionManager,
     ) {
         $this->application = $application;
         $this->configurationLoader = $configurationLoader;

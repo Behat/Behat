@@ -48,7 +48,7 @@ final class RuntimeFeatureTester implements SpecificationTester
     public function __construct(
         ScenarioTester $scenarioTester,
         OutlineTester $outlineTester,
-        EnvironmentManager $envManager
+        EnvironmentManager $envManager,
     ) {
         $this->scenarioTester = $scenarioTester;
         $this->outlineTester = $outlineTester;
@@ -67,7 +67,7 @@ final class RuntimeFeatureTester implements SpecificationTester
      */
     public function test(Environment $env, $spec, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($spec->getScenarios() as $scenario) {
             $tester = $scenario instanceof OutlineNode ? $this->outlineTester : $this->scenarioTester;
 

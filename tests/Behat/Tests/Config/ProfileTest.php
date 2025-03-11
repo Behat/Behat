@@ -146,11 +146,11 @@ final class ProfileTest extends TestCase
                     'paths' => false,
                     'multiline' => true,
                     'output_verbosity' => 2,
-                    'show_output' => 'yes'
+                    'show_output' => 'yes',
                 ],
                 'progress' => [
                     'timer' => false,
-                    'show_output' => 'in-summary'
+                    'show_output' => 'in-summary',
                 ],
                 'junit' => [],
             ],
@@ -187,7 +187,7 @@ final class ProfileTest extends TestCase
                 'pretty' => false,
                 'progress' => [
                     'timer' => true,
-                    'show_output' => 'yes'
+                    'show_output' => 'yes',
                 ],
                 'junit' => false,
             ],

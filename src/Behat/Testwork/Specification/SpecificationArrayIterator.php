@@ -36,7 +36,7 @@ final class SpecificationArrayIterator extends ArrayIterator implements Specific
      * @param Suite         $suite
      * @param array<int, T> $specifications
      */
-    public function __construct(Suite $suite, $specifications = array())
+    public function __construct(Suite $suite, $specifications = [])
     {
         $this->suite = $suite;
 

@@ -138,9 +138,9 @@ final class DefinitionExtension implements Extension
      */
     private function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\DefinitionRepository', array(
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Definition\DefinitionRepository', [
+            new Reference(EnvironmentExtension::MANAGER_ID),
+        ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
 
@@ -151,10 +151,10 @@ final class DefinitionExtension implements Extension
      */
     private function loadWriter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\DefinitionWriter', array(
+        $definition = new Definition('Behat\Behat\Definition\DefinitionWriter', [
             new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(self::REPOSITORY_ID)
-        ));
+            new Reference(self::REPOSITORY_ID),
+        ]);
         $container->setDefinition(self::WRITER_ID, $definition);
     }
 
@@ -176,9 +176,9 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefinitionTranslator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Translator\DefinitionTranslator', array(
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Definition\Translator\DefinitionTranslator', [
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
+        ]);
         $container->setDefinition(self::DEFINITION_TRANSLATOR_ID, $definition);
     }
 
@@ -189,13 +189,13 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefaultSearchEngines(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Search\RepositorySearchEngine', array(
+        $definition = new Definition('Behat\Behat\Definition\Search\RepositorySearchEngine', [
             new Reference(self::REPOSITORY_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
-            new Reference(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID)
-        ));
-        $definition->addTag(self::SEARCH_ENGINE_TAG, array('priority' => 50));
+            new Reference(ArgumentExtension::PREG_MATCH_ARGUMENT_ORGANISER_ID),
+        ]);
+        $definition->addTag(self::SEARCH_ENGINE_TAG, ['priority' => 50]);
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
     }
 
@@ -207,11 +207,11 @@ final class DefinitionExtension implements Extension
     private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy');
-        $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 50));
+        $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 50]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.turnip', $definition);
 
         $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy');
-        $definition->addTag(self::PATTERN_POLICY_TAG, array('priority' => 60));
+        $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 60]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.regex', $definition);
     }
 
@@ -223,7 +223,7 @@ final class DefinitionExtension implements Extension
     private function loadAnnotationReader(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Context\Annotation\DefinitionAnnotationReader');
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
+        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.definition', $definition);
     }
 
@@ -234,10 +234,10 @@ final class DefinitionExtension implements Extension
      */
     private function loadAttributeReader(ContainerBuilder $container)
     {
-        $definition = new Definition('\Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader', array(
-            new Reference(self::DOC_BLOCK_HELPER_ID)
-        ));
-        $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, array('priority' => 50));
+        $definition = new Definition('\Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader', [
+            new Reference(self::DOC_BLOCK_HELPER_ID),
+        ]);
+        $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.definition', $definition);
     }
 
@@ -248,41 +248,41 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefinitionPrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', array(
+        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', [
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
-            new Reference(GherkinExtension::KEYWORDS_ID)
-        ));
+            new Reference(GherkinExtension::KEYWORDS_ID),
+        ]);
         $container->setDefinition($this->getInformationPrinterId(), $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', array(
+        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', [
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
-            new Reference(GherkinExtension::KEYWORDS_ID)
-        ));
+            new Reference(GherkinExtension::KEYWORDS_ID),
+        ]);
         $container->setDefinition($this->getListPrinterId(), $definition);
     }
 
     private function loadControllers(ContainerBuilder $container, bool $printUnusedDefinitions): void
     {
-        $definition = new Definition('Behat\Behat\Definition\Cli\AvailableDefinitionsController', array(
+        $definition = new Definition('Behat\Behat\Definition\Cli\AvailableDefinitionsController', [
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(self::WRITER_ID),
             new Reference($this->getListPrinterId()),
-            new Reference($this->getInformationPrinterId())
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 500));
+            new Reference($this->getInformationPrinterId()),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 500]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.available_definitions', $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Cli\UnusedDefinitionsController', array(
+        $definition = new Definition('Behat\Behat\Definition\Cli\UnusedDefinitionsController', [
             new Reference(self::REPOSITORY_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference($this->getInformationPrinterId()),
-            $printUnusedDefinitions
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
+            $printUnusedDefinitions,
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 300]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.unused_definitions', $definition);
     }
 
@@ -309,7 +309,7 @@ final class DefinitionExtension implements Extension
         $definition = $container->getDefinition(self::FINDER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSearchEngine', array($reference));
+            $definition->addMethodCall('registerSearchEngine', [$reference]);
         }
     }
 
@@ -324,7 +324,7 @@ final class DefinitionExtension implements Extension
         $definition = $container->getDefinition(self::PATTERN_TRANSFORMER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerPatternPolicy', array($reference));
+            $definition->addMethodCall('registerPatternPolicy', [$reference]);
         }
     }
 

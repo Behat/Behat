@@ -30,16 +30,16 @@ final class TurnipPatternPolicy implements PatternPolicy
     /**
      * @var string[]
      */
-    private $regexCache = array();
+    private $regexCache = [];
 
     /**
      * @var string[]
      */
-    private static $placeholderPatterns = array(
+    private static $placeholderPatterns = [
         "/(?<!\w)\"[^\"]+\"(?!\w)/",
         "/(?<!\w)'[^']+'(?!\w)/",
-        "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/"
-    );
+        "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/",
+    ];
 
     /**
      * {@inheritdoc}
@@ -133,7 +133,7 @@ final class TurnipPatternPolicy implements PatternPolicy
 
         return preg_replace_callback(
             self::PLACEHOLDER_REGEXP,
-            array($this, 'replaceTokenWithRegexCaptureGroup'),
+            [$this, 'replaceTokenWithRegexCaptureGroup'],
             $regex
         );
     }

@@ -45,7 +45,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * @var ClassResolver[]
      */
-    private $classResolvers = array();
+    private $classResolvers = [];
 
     /**
      * Initializes handler.
@@ -138,14 +138,14 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         return array_map(
             function ($context) {
                 $class = $context;
-                $arguments = array();
+                $arguments = [];
 
                 if (is_array($context)) {
                     $class = current(array_keys($context));
                     $arguments = $context[$class];
                 }
 
-                return array($class, $arguments);
+                return [$class, $arguments];
             },
             $this->getSuiteContexts($suite)
         );

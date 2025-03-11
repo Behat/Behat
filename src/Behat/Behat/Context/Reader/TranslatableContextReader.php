@@ -47,15 +47,15 @@ final class TranslatableContextReader implements ContextReader
         $reflClass = new \ReflectionClass($contextClass);
 
         if (!$reflClass->implementsInterface('Behat\Behat\Context\TranslatableContext')) {
-            return array();
+            return [];
         }
 
         $assetsId = $environment->getSuite()->getName();
-        foreach (call_user_func(array($contextClass, 'getTranslationResources')) as $path) {
+        foreach (call_user_func([$contextClass, 'getTranslationResources']) as $path) {
             $this->addTranslationResource($path, $assetsId);
         }
 
-        return array();
+        return [];
     }
 
     /**

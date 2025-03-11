@@ -65,7 +65,7 @@ final class RuntimeExercise implements Exercise
      */
     public function test(array $iterators, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach (GroupedSpecificationIterator::group($iterators) as $iterator) {
             $environment = $this->envManager->buildEnvironment($iterator->getSuite());
 

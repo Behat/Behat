@@ -116,11 +116,11 @@ class TesterExtension extends BaseExtension
      */
     protected function loadSpecificationTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeFeatureTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeFeatureTester', [
             new Reference(self::SCENARIO_TESTER_ID),
             new Reference(self::OUTLINE_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+            new Reference(EnvironmentExtension::MANAGER_ID),
+        ]);
         $container->setDefinition(self::SPECIFICATION_TESTER_ID, $definition);
 
         $this->loadScenarioTester($container);
@@ -136,26 +136,26 @@ class TesterExtension extends BaseExtension
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
-            new Reference(self::STEP_TESTER_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', [
+            new Reference(self::STEP_TESTER_ID),
+        ]);
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', [
             new Reference('tester.step_container'),
-            new Reference(self::BACKGROUND_TESTER_ID)
-        ));
+            new Reference(self::BACKGROUND_TESTER_ID),
+        ]);
         $container->setDefinition(self::SCENARIO_TESTER_ID, $definition);
 
         // Proper isolation for scenarios
         $definition = new Definition(
             'Behat\Behat\Tester\Runtime\IsolatingScenarioTester',
-            array(
+            [
                 new Reference(self::SCENARIO_TESTER_ID),
-                new Reference(EnvironmentExtension::MANAGER_ID)
-            )
+                new Reference(EnvironmentExtension::MANAGER_ID),
+            ]
         );
-        $definition->addTag(self::SCENARIO_TESTER_WRAPPER_TAG, array('priority' => -999999));
+        $definition->addTag(self::SCENARIO_TESTER_WRAPPER_TAG, ['priority' => -999999]);
         $container->setDefinition(self::SCENARIO_TESTER_WRAPPER_TAG . '.isolating', $definition);
     }
 
@@ -166,9 +166,9 @@ class TesterExtension extends BaseExtension
      */
     protected function loadOutlineTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeOutlineTester', array(
-            new Reference(self::EXAMPLE_TESTER_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeOutlineTester', [
+            new Reference(self::EXAMPLE_TESTER_ID),
+        ]);
         $container->setDefinition(self::OUTLINE_TESTER_ID, $definition);
 
         $this->loadExampleTester($container);
@@ -181,26 +181,26 @@ class TesterExtension extends BaseExtension
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
-            new Reference(self::STEP_TESTER_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', [
+            new Reference(self::STEP_TESTER_ID),
+        ]);
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', [
             new Reference('tester.step_container'),
-            new Reference(self::BACKGROUND_TESTER_ID)
-        ));
+            new Reference(self::BACKGROUND_TESTER_ID),
+        ]);
         $container->setDefinition(self::EXAMPLE_TESTER_ID, $definition);
 
         // Proper isolation for examples
         $definition = new Definition(
             'Behat\Behat\Tester\Runtime\IsolatingScenarioTester',
-            array(
+            [
                 new Reference(self::EXAMPLE_TESTER_ID),
-                new Reference(EnvironmentExtension::MANAGER_ID)
-            )
+                new Reference(EnvironmentExtension::MANAGER_ID),
+            ]
         );
-        $definition->addTag(self::EXAMPLE_TESTER_WRAPPER_TAG, array('priority' => -999999));
+        $definition->addTag(self::EXAMPLE_TESTER_WRAPPER_TAG, ['priority' => -999999]);
         $container->setDefinition(self::EXAMPLE_TESTER_WRAPPER_TAG . '.isolating', $definition);
     }
 
@@ -211,14 +211,14 @@ class TesterExtension extends BaseExtension
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', array(
-            new Reference(self::STEP_TESTER_ID)
-        ));
+        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', [
+            new Reference(self::STEP_TESTER_ID),
+        ]);
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeBackgroundTester', array(
-            new Reference('tester.step_container')
-        ));
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeBackgroundTester', [
+            new Reference('tester.step_container'),
+        ]);
         $container->setDefinition(self::BACKGROUND_TESTER_ID, $definition);
     }
 
@@ -229,10 +229,10 @@ class TesterExtension extends BaseExtension
      */
     protected function loadStepTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeStepTester', array(
+        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeStepTester', [
             new Reference(DefinitionExtension::FINDER_ID),
-            new Reference(CallExtension::CALL_CENTER_ID)
-        ));
+            new Reference(CallExtension::CALL_CENTER_ID),
+        ]);
         $container->setDefinition(self::STEP_TESTER_ID, $definition);
     }
 
@@ -244,13 +244,13 @@ class TesterExtension extends BaseExtension
      */
     protected function loadRerunController(ContainerBuilder $container, $cachePath)
     {
-        $definition = new Definition('Behat\Behat\Tester\Cli\RerunController', array(
+        $definition = new Definition('Behat\Behat\Tester\Cli\RerunController', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference(TesterExtension::RESULT_INTERPRETER_ID),
             $container->getParameter('paths.base'),
-            $cachePath
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 200));
+            $cachePath,
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 200]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.rerun', $definition);
     }
 

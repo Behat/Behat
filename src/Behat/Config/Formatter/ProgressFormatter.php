@@ -19,7 +19,7 @@ final class ProgressFormatter extends Formatter
     ) {
         parent::__construct(name: self::NAME, settings: [
             'timer' => $timer,
-            ShowOutputOption::OPTION_NAME => $showOutput->value
+            ShowOutputOption::OPTION_NAME => $showOutput->value,
         ]);
     }
 

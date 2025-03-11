@@ -28,7 +28,7 @@ final class ContextSnippetAppender implements SnippetAppender
     public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
 
     public function __construct(
-        private ?FilesystemLogger $logger = null
+        private ?FilesystemLogger $logger = null,
     ) {
     }
 
@@ -55,7 +55,7 @@ final class ContextSnippetAppender implements SnippetAppender
                 }
             }
 
-            $generated = rtrim(strtr($snippet->getSnippet(), array('\\' => '\\\\', '$' => '\\$')));
+            $generated = rtrim(strtr($snippet->getSnippet(), ['\\' => '\\\\', '$' => '\\$']));
             $content = preg_replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
             $path = $reflection->getFileName();
 

@@ -102,7 +102,7 @@ final class AggregateSnippet
     public function getUsedClasses(): array
     {
         if (empty($this->snippets)) {
-            return array();
+            return [];
         }
 
         return array_unique(
@@ -111,7 +111,7 @@ final class AggregateSnippet
                     array_map(
                         function (Snippet $snippet) {
                             if (!$snippet instanceof ContextSnippet) {
-                                return array();
+                                return [];
                             }
 
                             return $snippet->getUsedClasses();

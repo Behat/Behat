@@ -76,12 +76,12 @@ final class JUnitScenarioPrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $testCaseAttributes = array(
+        $testCaseAttributes = [
             'name'      => $name,
             'classname' => $feature->getTitle(),
             'status'    => $this->resultConverter->convertResultToString($result),
-            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
-        );
+            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
+        ];
 
         if ($file) {
             $cwd = realpath(getcwd());

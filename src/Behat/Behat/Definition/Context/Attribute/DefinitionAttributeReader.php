@@ -26,11 +26,11 @@ final class DefinitionAttributeReader implements AttributeReader
     /**
      * @var array<class-string<Attribute\Definition>, class-string<Call\RuntimeDefinition>>
      */
-    private static $attributeToCallMap = array(
+    private static $attributeToCallMap = [
         Attribute\Given::class => Call\Given::class,
         Attribute\When::class  => Call\When::class,
         Attribute\Then::class  => Call\Then::class,
-    );
+    ];
 
     /**
      * @var DocBlockHelper
@@ -57,7 +57,7 @@ final class DefinitionAttributeReader implements AttributeReader
         $callees = [];
         foreach ($attributes as $attribute) {
             $class = self::$attributeToCallMap[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $callable = [$contextClass, $method->getName()];
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);

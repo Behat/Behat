@@ -29,7 +29,7 @@ final class ScenarioStatsListener implements EventListener
     private ?string $currentFeaturePath = null;
 
     public function __construct(
-        private Statistics $statistics
+        private Statistics $statistics,
     ) {
     }
 

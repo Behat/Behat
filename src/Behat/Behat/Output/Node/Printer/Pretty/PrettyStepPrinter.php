@@ -75,7 +75,7 @@ final class PrettyStepPrinter implements StepPrinter
         PrettyPathPrinter $pathPrinter,
         ExceptionPresenter $exceptionPresenter,
         $indentation = 4,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
         $this->textPainter = $textPainter;
         $this->resultConverter = $resultConverter;
@@ -134,7 +134,7 @@ final class PrettyStepPrinter implements StepPrinter
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
-            $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+            $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }
@@ -180,7 +180,7 @@ final class PrettyStepPrinter implements StepPrinter
         }
 
         $text = $this->exceptionPresenter->presentException($result->getException());
-        $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+        $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
         $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
     }
 

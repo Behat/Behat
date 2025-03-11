@@ -61,7 +61,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     private function printDefinitionsWithOptionalSuite(array $definitions, ?Suite $suite = null): void
     {
         $search = $this->searchCriterion;
-        $output = array();
+        $output = [];
 
         foreach ($definitions as $definition) {
             if ($suite) {
@@ -93,15 +93,15 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     private function extractHeader(?Suite $suite, Definition $definition): array
     {
         $pattern = $definition->getPattern();
-        $lines = array();
+        $lines = [];
         $indent = $suite ? '{suite} <def_dimmed>|</def_dimmed> ' : '';
         $lines[] = strtr(
             $indent . '<info>{type}</info> <def_regex>{regex}</def_regex>',
-            array(
+            [
                 '{suite}' => $suite ? $suite->getName() : '',
                 '{type}'  => $this->getDefinitionType($definition),
                 '{regex}' => $pattern,
-            )
+            ]
         );
 
         return $lines;
@@ -114,16 +114,16 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
      */
     private function extractDescription(?Suite $suite, Definition $definition): array
     {
-        $lines = array();
+        $lines = [];
         if ($description = $definition->getDescription()) {
             $indent = $suite ? '{space}<def_dimmed>|</def_dimmed> ' : '';
             foreach (explode("\n", $description) as $descriptionLine) {
                 $lines[] = strtr(
                     $indent . '{description}',
-                    array(
+                    [
                         '{space}'       => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
-                        '{description}' => $descriptionLine
-                    )
+                        '{description}' => $descriptionLine,
+                    ]
                 );
             }
         }
@@ -138,26 +138,26 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
      */
     private function extractFooter(?Suite $suite, Definition $definition): array
     {
-        $lines = array();
+        $lines = [];
         $indent = $suite ? '{space}<def_dimmed>|</def_dimmed> at ' : '';
         $lines[] = strtr(
             $indent . '`{path}`',
-            array(
+            [
                 '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
-                '{path}'  => $definition->getPath()
-            )
+                '{path}'  => $definition->getPath(),
+            ]
         );
 
         if ($this->isVerbose()) {
             $indent = $suite ? '{space}<def_dimmed>|</def_dimmed> on ' : '';
             $lines[] = strtr(
                 $indent . '`{filepath}[{start}:{end}]`',
-                array(
+                [
                     '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
                     '{filepath}' => $definition->getReflection()->getFileName(),
                     '{start}' => $definition->getReflection()->getStartLine(),
-                    '{end}' => $definition->getReflection()->getEndLine()
-                )
+                    '{end}' => $definition->getReflection()->getEndLine(),
+                ]
             );
         }
 

@@ -26,7 +26,7 @@ final class AttributeContextReader implements ContextReader
     /**
      * @var AttributeReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * Registers attribute reader.
@@ -45,7 +45,7 @@ final class AttributeContextReader implements ContextReader
     {
         $reflection = new ReflectionClass($contextClass);
 
-        $callees = array();
+        $callees = [];
 
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->readMethodCallees($reflection->getName(), $method) as $callee) {
@@ -77,7 +77,7 @@ final class AttributeContextReader implements ContextReader
         string $contextClass,
         ReflectionMethod $method,
         AttributeReader $reader,
-        array $callees
+        array $callees,
     ): array {
         try {
             $prototype = $method->getPrototype();

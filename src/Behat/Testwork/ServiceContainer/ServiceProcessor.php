@@ -32,11 +32,11 @@ final class ServiceProcessor
      */
     public function findAndSortTaggedServices(ContainerBuilder $container, $tag)
     {
-        $serviceTags = array();
+        $serviceTags = [];
         foreach ($container->findTaggedServiceIds($tag) as $id => $tags) {
             $firstTags = current($tags);
 
-            $serviceTags[] = array_merge(array('priority' => 0), $firstTags, array('id' => $id));
+            $serviceTags[] = array_merge(['priority' => 0], $firstTags, ['id' => $id]);
         }
 
         usort($serviceTags, function ($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; });

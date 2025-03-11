@@ -39,7 +39,7 @@ final class UnusedDefinitionsController implements Controller
         private DefinitionRepository $definitionRepository,
         private EventDispatcherInterface $eventDispatcher,
         private UnusedDefinitionPrinter $printer,
-        private bool $printUnusedDefinitions
+        private bool $printUnusedDefinitions,
     ) {
     }
 
@@ -61,8 +61,8 @@ final class UnusedDefinitionsController implements Controller
             $this->printUnusedDefinitions = true;
         }
         if ($this->printUnusedDefinitions) {
-            $this->eventDispatcher->addListener(SuiteTested::AFTER, array($this, 'registerDefinitionUsages'), -999);
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printUnusedDefinitions'), -999);
+            $this->eventDispatcher->addListener(SuiteTested::AFTER, [$this, 'registerDefinitionUsages'], -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUnusedDefinitions'], -999);
         }
         return null;
     }

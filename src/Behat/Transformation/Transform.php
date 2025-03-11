@@ -17,7 +17,7 @@ namespace Behat\Transformation;
 final class Transform
 {
     public function __construct(
-        public readonly string $pattern = ''
+        public readonly string $pattern = '',
     ) {
     }
 }

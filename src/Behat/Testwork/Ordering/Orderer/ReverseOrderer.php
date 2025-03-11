@@ -35,7 +35,7 @@ final class ReverseOrderer implements Orderer
      */
     private function orderFeatures(array $scenarioIterators)
     {
-        $orderedSuites = array();
+        $orderedSuites = [];
 
         foreach ($scenarioIterators as $scenarioIterator) {
             $orderedSpecifications = array_reverse(iterator_to_array($scenarioIterator));

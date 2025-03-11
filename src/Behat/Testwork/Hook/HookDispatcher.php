@@ -53,7 +53,7 @@ final class HookDispatcher
      */
     public function dispatchScopeHooks(HookScope $scope)
     {
-        $results = array();
+        $results = [];
         foreach ($this->repository->getScopeHooks($scope) as $hook) {
             $results[] = $this->dispatchHook($scope, $hook);
         }

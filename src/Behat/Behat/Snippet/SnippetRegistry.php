@@ -24,15 +24,15 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * @var SnippetGenerator[]
      */
-    private $generators = array();
+    private $generators = [];
     /**
      * @var UndefinedStep[]
      */
-    private $undefinedSteps = array();
+    private $undefinedSteps = [];
     /**
      * @var AggregateSnippet[]
      */
-    private $snippets = array();
+    private $snippets = [];
     /**
      * @var bool
      */
@@ -96,7 +96,7 @@ final class SnippetRegistry implements SnippetRepository
             return null;
         }
 
-        $snippetsSet = array();
+        $snippetsSet = [];
         foreach ($this->undefinedSteps as $i => $undefinedStep) {
             $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
 
@@ -105,7 +105,7 @@ final class SnippetRegistry implements SnippetRepository
             }
 
             if (!isset($snippetsSet[$snippet->getHash()])) {
-                $snippetsSet[$snippet->getHash()] = array();
+                $snippetsSet[$snippet->getHash()] = [];
             }
 
             $snippetsSet[$snippet->getHash()][] = $snippet;

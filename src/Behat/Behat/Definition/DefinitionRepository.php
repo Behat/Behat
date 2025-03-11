@@ -47,8 +47,8 @@ final class DefinitionRepository
      */
     public function getEnvironmentDefinitions(Environment $environment)
     {
-        $patterns = array();
-        $definitions = array();
+        $patterns = [];
+        $definitions = [];
 
         foreach ($this->environmentManager->readEnvironmentCallees($environment) as $callee) {
             if (!$callee instanceof Definition) {

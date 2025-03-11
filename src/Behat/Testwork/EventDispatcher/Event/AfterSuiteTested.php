@@ -47,7 +47,7 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
         Environment $env,
         SpecificationIterator $iterator,
         TestResult $result,
-        Teardown $teardown
+        Teardown $teardown,
     ) {
         parent::__construct($env);
 

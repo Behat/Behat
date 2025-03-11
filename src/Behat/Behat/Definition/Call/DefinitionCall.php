@@ -50,7 +50,7 @@ final class DefinitionCall extends EnvironmentCall
         StepNode $step,
         Definition $definition,
         array $arguments,
-        $errorReportingLevel = null
+        $errorReportingLevel = null,
     ) {
         parent::__construct($environment, $definition, $arguments, $errorReportingLevel);
 

@@ -35,7 +35,7 @@ final class JUnitOutlineStoreListener implements EventListener
     /**
      * @var array
      */
-    private $lineScenarioMap = array();
+    private $lineScenarioMap = [];
 
     /**
      * Initializes listener.

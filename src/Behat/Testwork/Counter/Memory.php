@@ -20,7 +20,7 @@ final class Memory
     /**
      * @var string[]
      */
-    private $units = array('B', 'Kb', 'Mb', 'Gb', 'Tb');
+    private $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
 
     /**
      * Returns current memory usage.

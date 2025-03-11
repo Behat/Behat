@@ -34,31 +34,31 @@ final class TotalStatistics implements Statistics
     /**
      * @var array<TestResult::*, int>
      */
-    private $scenarioCounters = array();
+    private $scenarioCounters = [];
     /**
      * @var array<StepResult::*, int>
      */
-    private $stepCounters = array();
+    private $stepCounters = [];
     /**
      * @var ScenarioStat[]
      */
-    private $failedScenarioStats = array();
+    private $failedScenarioStats = [];
     /**
      * @var ScenarioStat[]
      */
-    private $skippedScenarioStats = array();
+    private $skippedScenarioStats = [];
     /**
      * @var StepStat[]
      */
-    private $failedStepStats = array();
+    private $failedStepStats = [];
     /**
      * @var StepStat[]
      */
-    private $pendingStepStats = array();
+    private $pendingStepStats = [];
     /**
      * @var HookStat[]
      */
-    private $failedHookStats = array();
+    private $failedHookStats = [];
 
     /**
      * Initializes statistics.
@@ -73,13 +73,13 @@ final class TotalStatistics implements Statistics
 
     public function resetAllCounters()
     {
-        $this->scenarioCounters = $this->stepCounters = array(
+        $this->scenarioCounters = $this->stepCounters = [
             TestResult::PASSED    => 0,
             TestResult::FAILED    => 0,
             TestResult::UNDEFINED => 0,
             TestResult::PENDING   => 0,
-            TestResult::SKIPPED   => 0
-        );
+            TestResult::SKIPPED   => 0,
+        ];
     }
 
     /**

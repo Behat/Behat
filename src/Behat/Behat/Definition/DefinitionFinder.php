@@ -25,7 +25,7 @@ final class DefinitionFinder
     /**
      * @var SearchEngine[]
      */
-    private $engines = array();
+    private $engines = [];
 
     /**
      * Registers definition search engine.

@@ -20,7 +20,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 final class FixedContextIdentifier implements TargetContextIdentifier
 {
     public function __construct(
-        private readonly ?string $contextClass = null
+        private readonly ?string $contextClass = null,
     ) {
     }
 

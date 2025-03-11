@@ -22,14 +22,14 @@ final class GenericSuiteGenerator implements SuiteGenerator
     /**
      * @var array
      */
-    private $defaultSettings = array();
+    private $defaultSettings = [];
 
     /**
      * Initializes suite generator.
      *
      * @param array $defaultSettings
      */
-    public function __construct(array $defaultSettings = array())
+    public function __construct(array $defaultSettings = [])
     {
         $this->defaultSettings = $defaultSettings;
     }

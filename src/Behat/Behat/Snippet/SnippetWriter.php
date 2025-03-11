@@ -23,7 +23,7 @@ final class SnippetWriter
     /**
      * @var SnippetAppender[]
      */
-    private $appenders = array();
+    private $appenders = [];
 
     /**
      * Registers snippet appender.
@@ -55,10 +55,10 @@ final class SnippetWriter
      */
     public function printSnippets(SnippetPrinter $printer, array $snippets)
     {
-        $printableSnippets = array();
+        $printableSnippets = [];
         foreach ($snippets as $snippet) {
             foreach ($snippet->getTargets() as $target) {
-                $targetSnippets = array();
+                $targetSnippets = [];
 
                 if (isset($printableSnippets[$target])) {
                     $targetSnippets = $printableSnippets[$target];
@@ -82,13 +82,13 @@ final class SnippetWriter
      */
     public function printUndefinedSteps(SnippetPrinter $printer, array $undefinedSteps)
     {
-        $printableSteps = array();
+        $printableSteps = [];
         foreach ($undefinedSteps as $undefinedStep) {
             $suiteName = $undefinedStep->getEnvironment()->getSuite()->getName();
             $step = $undefinedStep->getStep();
 
             if (!isset($printableSteps[$suiteName])) {
-                $printableSteps[$suiteName] = array();
+                $printableSteps[$suiteName] = [];
             }
 
             $printableSteps[$suiteName][$step->getText()] = $step;

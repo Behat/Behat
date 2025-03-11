@@ -84,7 +84,7 @@ final class FilterController implements Controller
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $filters = array();
+        $filters = [];
 
         foreach ($input->getOption('name') as $name) {
             $filters[] = new NameFilter($name);

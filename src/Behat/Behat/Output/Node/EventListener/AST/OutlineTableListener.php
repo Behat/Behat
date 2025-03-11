@@ -57,7 +57,7 @@ final class OutlineTableListener implements EventListener
         private OutlineTablePrinter $tablePrinter,
         private ExampleRowPrinter $exampleRowPrinter,
         private SetupPrinter $exampleSetupPrinter,
-        private SetupPrinter $stepSetupPrinter
+        private SetupPrinter $stepSetupPrinter,
     ) {
     }
 
@@ -193,8 +193,8 @@ final class OutlineTableListener implements EventListener
         $this->exampleSetupPrinter->printTeardown($formatter, $event->getTeardown());
 
         $this->exampleSetup = null;
-        $this->stepBeforeTestedEvents = array();
-        $this->stepAfterTestedEvents = array();
+        $this->stepBeforeTestedEvents = [];
+        $this->stepAfterTestedEvents = [];
     }
 
     /**

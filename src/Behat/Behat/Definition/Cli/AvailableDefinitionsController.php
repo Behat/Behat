@@ -57,7 +57,7 @@ final class AvailableDefinitionsController implements Controller
         SuiteRepository $suiteRepository,
         DefinitionWriter $writer,
         ConsoleDefinitionListPrinter $listPrinter,
-        ConsoleDefinitionInformationPrinter $infoPrinter
+        ConsoleDefinitionInformationPrinter $infoPrinter,
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->writer = $writer;

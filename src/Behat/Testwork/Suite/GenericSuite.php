@@ -26,7 +26,7 @@ final class GenericSuite implements Suite
     /**
      * @var array
      */
-    private $settings = array();
+    private $settings = [];
 
     /**
      * Initializes suite.

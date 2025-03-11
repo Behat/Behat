@@ -30,7 +30,7 @@ final class ScenarioNodeListener implements EventListener
         private string $beforeEventName,
         private string $afterEventName,
         private ScenarioPrinter $scenarioPrinter,
-        private ?SetupPrinter $setupPrinter = null
+        private ?SetupPrinter $setupPrinter = null,
     ) {
     }
 

@@ -29,3 +29,9 @@ ba52edd29e43302f4a4254626fd27af8f92dbf32
 4ee4d6e9d81598fe48f2e0a6b2755648aa241cb9
 # PHP-CS-Fixer - PSR12 other miscellaneous changes
 efb86c8d82cdf25017a1adfdbddf7c286e49c0c8
+# PHP-CS-Fixer - PER-CS2.0 array syntax
+093a391a650fbd1139eff9c244753ea7b318bb1a
+# PHP-CS-Fixer - PER-CS2.0 spacing
+7484ac5dbf2fca0efbf4b2c2789929aa0c942fc8
+# PHP-CS-Fixer - Trailing comma in multiline
+d7b5b1fa805435b1a9c9746bfc4c72aa766c6864

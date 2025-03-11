@@ -49,7 +49,7 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
         Environment $env,
         FeatureNode $feature,
         Scenario $scenario,
-        TestResult $result
+        TestResult $result,
     ) {
         parent::__construct($env);
 

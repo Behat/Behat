@@ -56,7 +56,7 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     public function supportsDefinitionAndArgument(
         RegexGenerator $regexGenerator,
         DefinitionCall $definitionCall,
-        $argumentValue
+        $argumentValue,
     ) {
         $regex = $regexGenerator->generateRegex(
             $definitionCall->getEnvironment()->getSuite()->getName(),
@@ -83,7 +83,7 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
         RegexGenerator $regexGenerator,
         CallCenter $callCenter,
         DefinitionCall $definitionCall,
-        $argumentValue
+        $argumentValue,
     ) {
         $regex = $regexGenerator->generateRegex(
             $definitionCall->getEnvironment()->getSuite()->getName(),

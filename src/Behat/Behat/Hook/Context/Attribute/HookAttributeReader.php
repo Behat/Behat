@@ -28,7 +28,7 @@ final class HookAttributeReader implements AttributeReader
     /**
      * @var string[]
      */
-    private const KNOWN_ATTRIBUTES = array(
+    private const KNOWN_ATTRIBUTES = [
         AfterFeature::class => 'Behat\Behat\Hook\Call\AfterFeature',
         AfterScenario::class => 'Behat\Behat\Hook\Call\AfterScenario',
         AfterStep::class => 'Behat\Behat\Hook\Call\AfterStep',
@@ -37,7 +37,7 @@ final class HookAttributeReader implements AttributeReader
         BeforeStep::class => 'Behat\Behat\Hook\Call\BeforeStep',
         BeforeSuite::class => 'Behat\Testwork\Hook\Call\BeforeSuite',
         AfterSuite::class => 'Behat\Testwork\Hook\Call\AfterSuite',
-    );
+    ];
 
     /**
      * @var DocBlockHelper
@@ -64,7 +64,7 @@ final class HookAttributeReader implements AttributeReader
         $callees = [];
         foreach ($attributes as $attribute) {
             $class = self::KNOWN_ATTRIBUTES[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $callable = [$contextClass, $method->getName()];
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);

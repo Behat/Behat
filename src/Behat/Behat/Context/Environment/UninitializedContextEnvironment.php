@@ -28,7 +28,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
     /**
      * @var array<class-string<Context>, array>
      */
-    private $contextClasses = array();
+    private $contextClasses = [];
 
     /**
      * Registers context class.
@@ -57,7 +57,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
             ), $contextClass);
         }
 
-        $this->contextClasses[$contextClass] = $arguments ?: array();
+        $this->contextClasses[$contextClass] = $arguments ?: [];
     }
 
     /**

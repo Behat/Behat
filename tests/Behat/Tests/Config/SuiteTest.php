@@ -45,10 +45,10 @@ final class SuiteTest extends TestCase
                 [
                     'ThirdContext' => [
                         'http://localhost:8080',
-                        '/var/tmp'
+                        '/var/tmp',
                     ],
                 ],
-            ]
+            ],
         ], $config->toArray());
     }
 
@@ -63,7 +63,7 @@ final class SuiteTest extends TestCase
                 'features/admin/first',
                 'features/front/first',
                 'features/api/first',
-            ]
+            ],
         ], $config->toArray());
     }
 
@@ -77,7 +77,7 @@ final class SuiteTest extends TestCase
             'filters' => [
                 'tags' => 'tag1',
                 'name' => 'name1',
-            ]
+            ],
         ], $config->toArray());
     }
 

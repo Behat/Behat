@@ -30,7 +30,7 @@ abstract class OutputFactory
     /**
      * @var array
      */
-    private $outputStyles = array();
+    private $outputStyles = [];
     /**
      * @var null|bool
      */

@@ -33,7 +33,7 @@ final class StepListener implements EventListener
 
     public function __construct(
         private StepPrinter $stepPrinter,
-        private ?SetupPrinter $setupPrinter = null
+        private ?SetupPrinter $setupPrinter = null,
     ) {
     }
 
@@ -69,7 +69,7 @@ final class StepListener implements EventListener
      */
     private function forgetScenarioOnAfterEvent($eventName)
     {
-        if (!in_array($eventName, array(ScenarioTested::AFTER, ExampleTested::AFTER))) {
+        if (!in_array($eventName, [ScenarioTested::AFTER, ExampleTested::AFTER])) {
             return;
         }
 

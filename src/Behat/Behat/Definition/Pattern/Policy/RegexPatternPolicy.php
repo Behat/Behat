@@ -24,11 +24,11 @@ final class RegexPatternPolicy implements PatternPolicy
     /**
      * @var array<string,string>
      */
-    private static $replacePatterns = array(
+    private static $replacePatterns = [
         "/(?<=\W|^)\\\'(?:((?!\\').)*)\\\'(?=\W|$)/" => "'([^']*)'", // Single quoted strings
         '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/'          => "\"([^\"]*)\"", // Double quoted strings
         '/(?<=\W|^)(\d+)(?=\W|$)/'                   => "(\\d+)", // Numbers
-    );
+    ];
 
     /**
      * {@inheritdoc}

@@ -12,7 +12,7 @@ final class Profile
 {
     public function __construct(
         private string $name,
-        private array $settings = []
+        private array $settings = [],
     ) {
     }
 

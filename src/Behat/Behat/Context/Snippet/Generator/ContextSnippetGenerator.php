@@ -140,7 +140,7 @@ TPL;
      */
     private function getMethodArguments(StepNode $step, int $tokenCount): array
     {
-        $args = array();
+        $args = [];
         for ($i = 0; $i < $tokenCount; $i++) {
             $args[] = '$arg' . ($i + 1);
         }

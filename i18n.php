@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'en'    => array(
+return [
+    'en'    => [
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> suite has undefined steps. Please choose the context to generate snippets:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
         'snippet_proposal_use'    => 'Don\'t forget these %count% use statements:',
@@ -20,8 +20,8 @@ return array(
         'undefined_count'         => '[1,Inf] %count% undefined',
         'skipped_count'           => '[1,Inf] %count% skipped',
         'unused_definitions'      => '{0} No unused definitions|{1} 1 unused definition:|]1,Inf] %count% unused definitions:',
-    ),
-    'bg'    => array(
+    ],
+    'bg'    => [
         'snippet_context_choice'  => 'В сет <snippet_undefined><snippet_keyword>%count%</snippet_keyword> има недекларирани стъпки. Изберете в кой Context да бъдат създадени:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> има липсващи стъпки. Можете да ги създадете чрез:</snippet_undefined>',
         'snippet_proposal_use'    => 'Не забравяйте тези %count% use изрази:',
@@ -40,8 +40,8 @@ return array(
         'undefined_count'         => '[1,Inf] %count% неопределени',
         'skipped_count'           => '[1,Inf] %count% пропуснати',
         'unused_definitions'      => '{0} Няма неизползвани дефиниции|{1} 1 неизползвана дефиниция:|]1,Inf] %count% неизползвани дефиниции:',
-    ),
-    'cs'    => array(
+    ],
+    'cs'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> obsahuje chybné kroky. Definujte je za použití následujícího kódu:</snippet_undefined>',
         'snippet_proposal_use'   => 'Nezapomeňte na těchto %count% use příkazů:',
         'snippet_missing_title'  => '<snippet_undefined>Snippety pro následující kroky v sadě <snippet_keyword>%count%</snippet_keyword> nebyly vygenerovány (zkontrolujte správnost konfigurace):</snippet_undefined>',
@@ -58,8 +58,8 @@ return array(
         'undefined_count'        => '{1} %count% nedefinován|{2,3,4} %count% nedefinovány|]4,Inf] %count% nedefinováno',
         'skipped_count'          => '{1} %count% přeskočen|{2,3,4} %count% přeskočeny|]4,Inf] %count% přeskočeno',
         'unused_definitions'     => '{0} Žádné nepoužité definice|{1} 1 nepoužitá definice:|]1,Inf] %count% nepoužitých definic:',
-    ),
-    'de'    => array(
+    ],
+    'de'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> hat fehlende Schritte. Definiere diese mit den folgenden Snippets:</snippet_undefined>',
         'snippet_proposal_use'   => 'Vergessen Sie nicht diese %count% use-Anweisungen:',
         'snippet_missing_title'  => '<snippet_undefined>Snippets für die folgenden Schritte in der <snippet_keyword>%count%</snippet_keyword> Suite wurden nicht generiert (Konfiguration überprüfen):</snippet_undefined>',
@@ -76,8 +76,8 @@ return array(
         'undefined_count'        => '[1,Inf] %count% nicht definiert',
         'skipped_count'          => '[1,Inf] %count% übersprungen',
         'unused_definitions'     => '{0} Keine unbenutzten Definitionen|{1} 1 unbenutzte Definition:|]1,Inf] %count% unbenutzte Definitionen:',
-    ),
-    'es'    => array(
+    ],
+    'es'    => [
         'snippet_proposal_title' => '<snippet_undefined>A <snippet_keyword>%count%</snippet_keyword> le faltan pasos. Defínelos con estos pasos:</snippet_undefined>',
         'snippet_proposal_use'   => 'No olvides estas %count% declaraciones de use:',
         'snippet_missing_title'  => '<snippet_undefined>Las plantillas para los siguientes pasos en <snippet_keyword>%count%</snippet_keyword> no fueron generadas (revisa tu configuración):</snippet_undefined>',
@@ -94,8 +94,8 @@ return array(
         'undefined_count'        => '[1,Inf] %count% por definir',
         'skipped_count'          => '[1,Inf] %count% saltadas',
         'unused_definitions'     => '{0} No hay definiciones sin usar|{1} 1 definición sin usar:|]1,Inf] %count% definiciones sin usar:',
-    ),
-    'fr'    => array(
+    ],
+    'fr'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> a des étapes manquantes. Définissez-les avec les modèles suivants :</snippet_undefined>',
         'snippet_proposal_use'   => 'N\'oubliez pas d\'ajouter ces %count% use :',
         'snippet_missing_title'  => '<snippet_undefined>Les modèles des étapes de la suite <snippet_keyword>%count%</snippet_keyword> n\'ont pas été générés (vérifiez votre configuration):</snippet_undefined>',
@@ -112,8 +112,8 @@ return array(
         'undefined_count'        => '[1,Inf] %count% indéfinis',
         'skipped_count'          => '[1,Inf] %count% ignorés',
         'unused_definitions'     => '{0} Aucune définition inutilisée|{1} 1 définition inutilisée:|]1,Inf] %count% définitions inutilisées:',
-    ),
-    'hu'    => array(
+    ],
+    'hu'    => [
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> sorozat meghatározatlan lépéseket tartalmaz. Válaszd ki a környezetet kódrészlet készítéséhez:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> lépései hiányosak. Hozd létre az alábbi kódrészletekkel:</snippet_undefined>',
         'snippet_proposal_use'    => 'Ne felejtsd el ezeket a %count% use utasításokat:',
@@ -132,8 +132,8 @@ return array(
         'undefined_count'         => '[1,Inf] %count% meghatározatlan',
         'skipped_count'           => '[1,Inf] %count% kihagyott',
         'unused_definitions'      => '{0} Nincsenek nem használt definíciók|{1} nem használt definíció:|]1,Inf] %count% nem használt definíciók:',
-    ),
-    'it'    => array(
+    ],
+    'it'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> ha dei passaggi mancanti. Definiscili con questi snippet:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Gli snippet per i seguenti passaggi della suite <snippet_keyword>%count%</snippet_keyword> non sono stati generati (verifica la configurazione):</snippet_undefined>',
         'snippet_proposal_use'   => 'Non dimenticare queste %count% istruzioni di use:',
@@ -150,8 +150,8 @@ return array(
         'undefined_count'        => '{1} 1 non definito|]1,Inf] %count% non definiti',
         'skipped_count'          => '{1} 1 ignorato|]1,Inf] %count% ignorati',
         'unused_definitions'     => '{0} Nessuna definizione inutilizzata|{1} 1 definizione inutilizzata:|]1,Inf] %count% definizioni inutilizzate:',
-    ),
-    'ja'    => array(
+    ],
+    'ja'    => [
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> のステップが見つかりません。 次のスニペットで定義できます:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>以下のステップのスニペットは<snippet_keyword>%count%</snippet_keyword>スイートに生成されませんでした(設定を確認してください):</snippet_undefined>',
         'snippet_proposal_use'    => 'これらの %count% use 文を忘れずに:',
@@ -169,8 +169,8 @@ return array(
         'undefined_count'         => '[1,Inf] %count% 個未定義',
         'skipped_count'           => '[1,Inf] %count% 個スキップ',
         'unused_definitions'      => '{0} 未使用の定義はありません|{1} 未使用の定義が1つあります:|]1,Inf] 未使用の定義が %count% 個あります:',
-    ),
-    'ko'    => array(
+    ],
+    'ko'    => [
         'snippet_proposal_title'  => '<snippet_keyword>%count%</snippet_keyword> <snippet_undefined> 정의가 되지 않았습니다. 스니펫을 생성할 컨텍스트를 선택하십시오:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 단계가 누락되었습니다. 스니펫을 정의해주세요:</snippet_undefined>',
         'snippet_proposal_use'    => '이 %count% 개의 use 문을 잊지 마세요:',
@@ -188,8 +188,8 @@ return array(
         'undefined_count'         => '[1,Inf] %count% 정의되지 않았습니다.',
         'skipped_count'           => '[1,Inf] %count% 건너뜀',
         'unused_definitions'      => '{0} 사용하지 않은 정의가 없습니다|{1} 사용하지 않은 정의가 1개 있습니다:|]1,Inf] 사용하지 않은 정의가 %count%개 있습니다:',
-    ),
-    'nl'    => array(
+    ],
+    'nl'    => [
         'snippet_proposal_title' => '<snippet_undefined>Ontbrekende stappen in <snippet_keyword>%count%</snippet_keyword>. Definieer ze met de volgende fragmenten:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Fragmenten voor de volgende stappen in de <snippet_keyword>%count%</snippet_keyword> suite werden niet gegenereerd (controleer de configuratie):</snippet_undefined>',
         'snippet_proposal_use'   => 'Vergeet deze %count% use-verklaringen niet:',
@@ -206,8 +206,8 @@ return array(
         'undefined_count'        => '[1,Inf] %count% niet gedefinieerd',
         'skipped_count'          => '[1,Inf] %count% overgeslagen',
         'unused_definitions'     => '{0} Geen ongebruikte definities|{1} 1 ongebruikte definitie:|]1,Inf] %count% ongebruikte definities:',
-    ),
-    'no'    => array(
+    ],
+    'no'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> mangler steg. Definer dem med disse snuttene:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Snutter for de følgende stegene i <snippet_keyword>%count%</snippet_keyword>-samlingen ble ikke laget. (Sjekk konfigurasjonen din.):</snippet_undefined>',
         'snippet_proposal_use'   => 'Ikke glem disse %count% use-setningene:',
@@ -224,8 +224,8 @@ return array(
         'undefined_count'        => '[1,Inf] %count% ikke definert',
         'skipped_count'          => '[1,Inf] %count% hoppet over',
         'unused_definitions'     => '{0} Ingen ubrukte definisjoner|{1} 1 ubrukt definisjon:|]1,Inf] %count% ubrukte definisjoner:',
-    ),
-    'pl'    => array(
+    ],
+    'pl'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> zawiera brakujące kroki. Utwórz je korzystając z tych fragmentów kodu:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Fragmenty kodu dla następujących kroków <snippet_keyword>%count%</snippet_keyword> nie zostały wygenerowane (sprawdź swoją konfigurację):</snippet_undefined>',
         'snippet_proposal_use'   => 'Nie zapomnij o tych %count% wpisach use:',
@@ -242,8 +242,8 @@ return array(
         'undefined_count'        => '{1} %count% niezdefiniowany|{2,3,4,22,23,24,32,33,34,42,43,44} %count% niezdefiniowane|]4,Inf] %count% niezdefiniowanych',
         'skipped_count'          => '{1} %count% pominięty|{2,3,4,22,23,24,32,33,34,42,43,44} %count% pominięte|]4,Inf] %count% pominiętych',
         'unused_definitions'     => '{0} Brak nieużytych definicji|{1} 1 nieużyta definicja:|]1,Inf] %count% nieużytych definicji:',
-    ),
-    'pt'    => array(
+    ],
+    'pt'    => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> contém definições em falta. Defina-as com estes exemplos:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Os exemplos para as seguintes definições da suite <snippet_keyword>%count%</snippet_keyword> não foram gerados (verifique a configuração):</snippet_undefined>',
         'snippet_proposal_use'   => 'Não te esqueças destas %count% declarações de use:',
@@ -260,8 +260,8 @@ return array(
         'undefined_count'        => '{1} indefinido|]1,Inf] %count% indefinidos',
         'skipped_count'          => '{1} omitido|]1,Inf] %count% omitidos',
         'unused_definitions'     => '{0} Nenhuma definição não utilizada|{1} 1 definição não utilizada:|]1,Inf] %count% definições não utilizadas:',
-    ),
-    'pt-BR' => array(
+    ],
+    'pt-BR' => [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> possue etapas faltando. Defina elas com esse(s) trecho(s) de código:</snippet_undefined>',
         'snippet_missing_title'  => '<snippet_undefined>Trecho de códigos para as seguintes etapas em <snippet_keyword>%count%</snippet_keyword> suite não foram geradas (verique sua configuração):</snippet_undefined>',
         'snippet_proposal_use'   => 'Não se esqueça destas %count% declarações de use:',
@@ -278,8 +278,8 @@ return array(
         'undefined_count'        => '[1,Inf] %count% indefinido',
         'skipped_count'          => '[1,Inf] %count% pulado',
         'unused_definitions'     => '{0} Nenhuma definição não utilizada|{1} 1 definição não utilizada:|]1,Inf] %count% definições não utilizadas:',
-    ),
-    'ro'    => array(
+    ],
+    'ro'    => [
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> are pași lipsa. Puteți implementa pașii cu ajutorul acestor fragmente de cod:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>Fragmentele de cod pentru urmatorii pași din suita <snippet_keyword>%count%</snippet_keyword> nu au fost generate (contextul tau implementeaza interfata SnippetAcceptingContext?):</snippet_undefined>',
         'snippet_proposal_use'    => 'Nu uitați aceste %count% instrucțiuni de use:',
@@ -297,8 +297,8 @@ return array(
         'undefined_count'         => '[1,Inf] %count% fara implementare',
         'skipped_count'           => '{1} %count% omis|]1,Inf] %count% omiși',
         'unused_definitions'      => '{0} Nu există definiții neutilizate|{1} 1 definiție neutilizată:|]1,Inf] %count% definiții neutilizate:',
-    ),
-    'ru'    => array(
+    ],
+    'ru'    => [
         'snippet_proposal_title'  => '<snippet_keyword>%count%</snippet_keyword> <snippet_undefined>не содержит необходимых определений. Вы можете добавить их используя шаблоны:</snippet_undefined>',
         'snippet_missing_title'   => '<snippet_undefined>Шаблоны для следующих шагов в среде <snippet_keyword>%count%</snippet_keyword> не были сгенерированы (проверьте ваши настройки):</snippet_undefined>',
         'snippet_proposal_use'    => 'Не забудьте эти %count% use утверждения:',
@@ -316,8 +316,8 @@ return array(
         'undefined_count'         => '{1,21,31} %count% не определен|]1,Inf] %count% не определено',
         'skipped_count'           => '{1,21,31} %count% пропущен|]1,Inf] %count% пропущено',
         'unused_definitions'      => '{0} Нет неиспользованных определений|{1} 1 неиспользованное определение:|]1,Inf] %count% неиспользованных определений:',
-    ),
-    'zh'    => array(
+    ],
+    'zh'    => [
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 有新的场景步骤， 请选择要生成代码片段的ContextClass:</snippet_undefined>',
         'snippet_proposal_title'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> 已经更新。 请检查生成片段:</snippet_undefined>',
         'snippet_proposal_use'    => '别忘了这 %count% 个 use 声明:',
@@ -335,5 +335,5 @@ return array(
         'undefined_count'         => '[1,Inf] %count% 个未定义',
         'skipped_count'           => '[1,Inf] %count% 个跳过',
         'unused_definitions'      => '{0} 没有未使用的定义|{1} 1 个未使用的定义:|]1,Inf] %count% 个未使用的定义:',
-    ),
-);
+    ],
+];

@@ -29,7 +29,7 @@ class StepStat
         private string $path,
         private int $resultCode,
         private ?string $error = null,
-        private ?string $stdOut = null
+        private ?string $stdOut = null,
     ) {
     }
 

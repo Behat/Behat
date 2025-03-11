@@ -44,7 +44,7 @@ final class StepStatsListener implements EventListener
 
     public function __construct(
         private Statistics $statistics,
-        private ExceptionPresenter $exceptionPresenter
+        private ExceptionPresenter $exceptionPresenter,
     ) {
     }
 

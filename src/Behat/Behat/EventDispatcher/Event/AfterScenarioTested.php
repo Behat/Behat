@@ -56,7 +56,7 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
         FeatureNode $feature,
         Scenario $scenario,
         TestResult $result,
-        Teardown $teardown
+        Teardown $teardown,
     ) {
         parent::__construct($env);
 

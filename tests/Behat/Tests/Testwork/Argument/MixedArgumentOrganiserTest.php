@@ -35,7 +35,7 @@ final class MixedArgumentOrganiserTest extends TestCase
         $args = [
             1,
             2,
-            3
+            3,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -50,7 +50,7 @@ final class MixedArgumentOrganiserTest extends TestCase
         );
         $args = [
             'date' => $date = new \DateTime(),
-            'x' => new \stdClass()
+            'x' => new \stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -65,7 +65,7 @@ final class MixedArgumentOrganiserTest extends TestCase
         );
         $args = [
             'x' => $date = new \DateTime(),
-            'y' => new \stdClass()
+            'y' => new \stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -80,7 +80,7 @@ final class MixedArgumentOrganiserTest extends TestCase
         );
         $args = [
             'date' => $date = new \DateTime(),
-            'x' => 1
+            'x' => 1,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -101,7 +101,7 @@ PHP
         );
         $args = [
             'date' => $date = new \DateTime(),
-            'x' => 1
+            'x' => 1,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);

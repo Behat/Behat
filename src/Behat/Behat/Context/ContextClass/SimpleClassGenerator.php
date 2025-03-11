@@ -71,10 +71,10 @@ PHP;
 
         return strtr(
             static::$template,
-            array(
+            [
                 '{namespace}' => $namespace,
                 '{className}' => $contextClass,
-            )
+            ]
         );
     }
 }

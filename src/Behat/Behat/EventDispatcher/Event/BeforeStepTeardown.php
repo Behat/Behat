@@ -51,7 +51,7 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
         Environment $env,
         FeatureNode $feature,
         StepNode $step,
-        StepResult $result
+        StepResult $result,
     ) {
         parent::__construct($env);
 

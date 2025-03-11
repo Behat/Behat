@@ -64,7 +64,7 @@ final class SnippetsController implements Controller
         SnippetRegistry $registry,
         SnippetWriter $writer,
         ConsoleSnippetPrinter $printer,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
     ) {
         $this->registry = $registry;
         $this->writer = $writer;
@@ -96,19 +96,19 @@ final class SnippetsController implements Controller
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(StepTested::AFTER, array($this, 'registerUndefinedStep'), -999);
+        $this->eventDispatcher->addListener(StepTested::AFTER, [$this, 'registerUndefinedStep'], -999);
         $this->output = $output;
 
         if ($input->getOption('append-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'appendAllSnippets'), -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'appendAllSnippets'], -999);
         }
 
         if (!$input->getOption('no-snippets') && !$input->getOption('append-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printAllSnippets'), -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printAllSnippets'], -999);
         }
 
         if (!$input->getOption('no-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'printUndefinedSteps'), -995);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUndefinedSteps'], -995);
         }
         return null;
     }

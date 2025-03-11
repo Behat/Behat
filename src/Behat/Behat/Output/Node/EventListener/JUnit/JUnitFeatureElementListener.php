@@ -37,12 +37,12 @@ final class JUnitFeatureElementListener implements EventListener
     /**
      * @var AfterStepTested[]
      */
-    private $afterStepTestedEvents = array();
+    private $afterStepTestedEvents = [];
 
     /**
      * @var AfterStepSetup[]
      */
-    private $afterStepSetupEvents = array();
+    private $afterStepSetupEvents = [];
 
     private ?AfterSuiteSetup $afterSuiteSetup = null;
 
@@ -62,7 +62,7 @@ final class JUnitFeatureElementListener implements EventListener
         private FeaturePrinter $featurePrinter,
         private JUnitScenarioPrinter $scenarioPrinter,
         private StepPrinter $stepPrinter,
-        private SetupPrinter $setupPrinter
+        private SetupPrinter $setupPrinter,
     ) {
     }
 
@@ -171,8 +171,8 @@ final class JUnitFeatureElementListener implements EventListener
 
         $this->setupPrinter->printTeardown($formatter, $afterScenarioTested->getTeardown());
 
-        $this->afterStepTestedEvents = array();
-        $this->afterStepSetupEvents = array();
+        $this->afterStepTestedEvents = [];
+        $this->afterStepSetupEvents = [];
     }
 
     /**

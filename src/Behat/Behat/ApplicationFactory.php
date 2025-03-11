@@ -78,9 +78,9 @@ final class ApplicationFactory extends BaseFactory
     {
         $processor = new ServiceProcessor();
 
-        return array(
+        return [
             new ArgumentExtension(),
-            new AutoloaderExtension(array('' => '%paths.base%/features/bootstrap')),
+            new AutoloaderExtension(['' => '%paths.base%/features/bootstrap']),
             new SuiteExtension($processor),
             new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
             new ExceptionExtension($processor),
@@ -101,7 +101,7 @@ final class ApplicationFactory extends BaseFactory
             new TransformationExtension($processor),
             new OrderingExtension($processor),
             new HelperContainerExtension($processor),
-        );
+        ];
     }
 
     /**
@@ -119,7 +119,7 @@ final class ApplicationFactory extends BaseFactory
     {
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $configDir = $cwd . 'config' . DIRECTORY_SEPARATOR;
-        $paths = array(
+        $paths = [
             $cwd . 'behat.yaml',
             $cwd . 'behat.yml',
             $cwd . 'behat.yaml.dist',
@@ -136,7 +136,7 @@ final class ApplicationFactory extends BaseFactory
             $configDir . 'behat.dist.yml',
             $configDir . 'behat.php',
             $configDir . 'behat.dist.php',
-        );
+        ];
 
         foreach ($paths as $path) {
             if (is_file($path)) {
@@ -156,10 +156,10 @@ final class ApplicationFactory extends BaseFactory
      */
     private function getDefaultFormatterFactories(ServiceProcessor $processor)
     {
-        return array(
+        return [
             new PrettyFormatterFactory($processor),
             new ProgressFormatterFactory($processor),
             new JUnitFormatterFactory(),
-        );
+        ];
     }
 }

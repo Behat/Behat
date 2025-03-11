@@ -39,7 +39,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      *
      * TODO use a class-string-map type to have an accurate type once https://github.com/phpstan/phpstan/issues/9521 is implemented
      */
-    private $contexts = array();
+    private $contexts = [];
 
     /**
      * Initializes environment.
@@ -150,7 +150,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         $callable = $callee->getCallable();
 
         if ($callee->isAnInstanceMethod() && is_array($callable)) {
-            return array($this->getContext($callable[0]), $callable[1]);
+            return [$this->getContext($callable[0]), $callable[1]];
         }
 
         return $callable;

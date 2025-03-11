@@ -33,7 +33,7 @@ class TransformationCalleeFactory
 {
     public static function create(string $contextClass, ReflectionMethod $method, string $pattern, ?string $description): Transformation
     {
-        $callable = array($contextClass, $method->getName());
+        $callable = [$contextClass, $method->getName()];
 
         foreach (self::simpleTransformations() as $transformation) {
             if ($transformation::supportsPatternAndMethod($pattern, $method)) {
@@ -58,7 +58,7 @@ class TransformationCalleeFactory
             TableColumnTransformation::class,
             TokenNameAndReturnTypeTransformation::class,
             ReturnTypeTransformation::class,
-            TokenNameTransformation::class
+            TokenNameTransformation::class,
         ];
     }
 }

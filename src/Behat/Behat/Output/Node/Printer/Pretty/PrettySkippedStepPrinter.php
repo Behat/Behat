@@ -67,7 +67,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         ResultToStringConverter $resultConverter,
         PrettyPathPrinter $pathPrinter,
         $indentation = 4,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
         $this->textPainter = $textPainter;
         $this->resultConverter = $resultConverter;
@@ -123,7 +123,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
-            $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+            $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }

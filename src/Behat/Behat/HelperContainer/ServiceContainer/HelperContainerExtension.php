@@ -77,14 +77,14 @@ final class HelperContainerExtension implements Extension
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', array(
-            new Reference('service_container')
-        ));
-        $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, array('priority' => 0));
+        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', [
+            new Reference('service_container'),
+        ]);
+        $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, ['priority' => 0]);
         $container->setDefinition(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG . '.helper_container', $definition);
 
         $definition = new Definition('Behat\Behat\HelperContainer\Call\Filter\ServicesResolver');
-        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 0));
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 0]);
         $container->setDefinition(CallExtension::CALL_FILTER_TAG . '.helper_container', $definition);
     }
 
