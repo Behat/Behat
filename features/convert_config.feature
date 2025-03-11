@@ -14,7 +14,7 @@ Feature: Convert config
   Scenario: Convert empty file
     When I copy the "empty.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                       |
       | --config | {SYSTEM_TMP_DIR}/empty.yaml |
     Then the temp "empty.php" file should be like:
       """
@@ -47,7 +47,7 @@ Feature: Convert config
   Scenario: Preferred profile
     When I copy the "preferred_profile.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                                   |
       | --config | {SYSTEM_TMP_DIR}/preferred_profile.yaml |
     Then the temp "preferred_profile.php" file should be like:
       """
@@ -68,7 +68,7 @@ Feature: Convert config
     When I copy the "imports.yaml" file to the temp folder
     And I copy the "imported.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                         |
       | --config | {SYSTEM_TMP_DIR}/imports.yaml |
     Then the temp "imports.php" file should be like:
       """
@@ -99,7 +99,7 @@ Feature: Convert config
     And I copy the "imported.yaml" file to the temp folder
     And I copy the "other_imported.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                                  |
       | --config | {SYSTEM_TMP_DIR}/multiple_imports.yaml |
     Then the temp "multiple_imports.php" file should be like:
       """
@@ -142,7 +142,7 @@ Feature: Convert config
   Scenario: Suites
     When I copy the "suites.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                        |
       | --config | {SYSTEM_TMP_DIR}/suites.yaml |
     Then the temp "suites.php" file should be like:
       """
@@ -162,7 +162,7 @@ Feature: Convert config
   Scenario: Suite contexts
     When I copy the "suite_contexts.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                                |
       | --config | {SYSTEM_TMP_DIR}/suite_contexts.yaml |
     Then the temp "suite_contexts.php" file should be like:
       """
@@ -185,7 +185,7 @@ Feature: Convert config
   Scenario: Suite paths
     When I copy the "suite_paths.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                             |
       | --config | {SYSTEM_TMP_DIR}/suite_paths.yaml |
     Then the temp "suite_paths.php" file should be like:
       """
@@ -208,7 +208,7 @@ Feature: Convert config
   Scenario: Suite filters
     When I copy the "suite_filters.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                               |
       | --config | {SYSTEM_TMP_DIR}/suite_filters.yaml |
     Then the temp "suite_filters.php" file should be like:
       """
@@ -229,7 +229,7 @@ Feature: Convert config
   Scenario: Extensions
     When I copy the "extensions.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                            |
       | --config | {SYSTEM_TMP_DIR}/extensions.yaml |
     Then the temp "extensions.php" file should be like:
       """
@@ -256,7 +256,7 @@ Feature: Convert config
   Scenario: Profile filters
     When I copy the "profile_filters.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                                 |
       | --config | {SYSTEM_TMP_DIR}/profile_filters.yaml |
     Then the temp "profile_filters.php" file should be like:
       """
@@ -277,7 +277,7 @@ Feature: Convert config
   Scenario: Unused definitions
     When I copy the "unused_definitions.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/unused_definitions.yaml |
     Then the temp "unused_definitions.php" file should be like:
       """
@@ -295,7 +295,7 @@ Feature: Convert config
   Scenario: Formatters
     When I copy the "formatters.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                            |
       | --config | {SYSTEM_TMP_DIR}/formatters.yaml |
     Then the temp "formatters.php" file should be like:
       """
@@ -326,7 +326,7 @@ Feature: Convert config
     When I copy the "full_configuration.yaml" file to the temp folder
     And I copy the "imported.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
+      | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/full_configuration.yaml |
     Then the temp "full_configuration.php" file should be like:
       """

@@ -39,13 +39,10 @@ final class Profile implements ConfigConverterInterface
     private const EXTENSION_FUNCTION = 'withExtension';
     private const SUITE_FUNCTION = 'withSuite';
 
-    private BuilderFactory $builderFactory;
-
     public function __construct(
         private string $name,
         private array $settings = [],
     ) {
-        $this->builderFactory = new BuilderFactory();
     }
 
     public function withSuite(Suite $suite): self
@@ -115,36 +112,36 @@ final class Profile implements ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(): Node\Expr
+    public function toPhpExpr(BuilderFactory $builderFactory): Node\Expr
     {
-        $profileObject =  $this->builderFactory->new(new FullyQualified(self::class));
+        $profileObject =  $builderFactory->new(new FullyQualified(self::class));
         $expr = $profileObject;
 
-        $this->addFormattersToExpr($expr);
-        $this->addFiltersToExpr($expr);
-        $this->addUnusedDefinitionsToExpr($expr);
-        $this->addExtensionsToExpr($expr);
-        $this->addSuitesToExpr($expr);
+        $this->addFormattersToExpr($expr, $builderFactory);
+        $this->addFiltersToExpr($expr, $builderFactory);
+        $this->addUnusedDefinitionsToExpr($expr, $builderFactory);
+        $this->addExtensionsToExpr($expr, $builderFactory);
+        $this->addSuitesToExpr($expr, $builderFactory);
 
         if (count($this->settings) === 0) {
-            $args = $this->builderFactory->args([$this->name]);
+            $args = $builderFactory->args([$this->name]);
         } else {
-            $args = $this->builderFactory->args([$this->name, $this->settings]);
+            $args = $builderFactory->args([$this->name, $this->settings]);
         }
         $profileObject->args = $args;
 
         return $expr;
     }
 
-    private function addFormattersToExpr(Expr &$expr): void
+    private function addFormattersToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (!isset($this->settings[self::FORMATTERS_SETTING])) {
             return;
         }
         foreach ($this->settings[self::FORMATTERS_SETTING] as $name => $formatterSettings) {
             if ($formatterSettings === false) {
-                $args = $this->builderFactory->args([$name]);
-                $expr = $this->builderFactory->methodCall($expr, self::DISABLE_FORMATTER_FUNCTION, $args);
+                $args = $builderFactory->args([$name]);
+                $expr = $builderFactory->methodCall($expr, self::DISABLE_FORMATTER_FUNCTION, $args);
             } else {
                 if ($formatterSettings === null) {
                     $formatterSettings = true;
@@ -161,15 +158,15 @@ final class Profile implements ConfigConverterInterface
                     JUnitFormatter::NAME => new JUnitFormatter(),
                     default => $formatterSettings === true ? new Formatter($name) : new Formatter($name, $formatterSettings),
                 };
-                $formatterExpr = $formatter->toPhpExpr();
-                $args = $this->builderFactory->args([$formatterExpr]);
-                $expr = $this->builderFactory->methodCall($expr, self::FORMATTER_FUNCTION, $args);
+                $formatterExpr = $formatter->toPhpExpr($builderFactory);
+                $args = $builderFactory->args([$formatterExpr]);
+                $expr = $builderFactory->methodCall($expr, self::FORMATTER_FUNCTION, $args);
             }
         }
         unset($this->settings[self::FORMATTERS_SETTING]);
     }
 
-    private function addFiltersToExpr(Expr &$expr): void
+    private function addFiltersToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (!isset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING])) {
             return;
@@ -183,8 +180,8 @@ final class Profile implements ConfigConverterInterface
                 default => null,
             };
             if ($filter !== null) {
-                $args = $this->builderFactory->args([$filter->toPhpExpr()]);
-                $expr = $this->builderFactory->methodCall($expr, self::FILTER_FUNCTION, $args);
+                $args = $builderFactory->args([$filter->toPhpExpr($builderFactory)]);
+                $expr = $builderFactory->methodCall($expr, self::FILTER_FUNCTION, $args);
                 unset($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING][$name]);
             }
         }
@@ -196,22 +193,22 @@ final class Profile implements ConfigConverterInterface
         }
     }
 
-    private function addUnusedDefinitionsToExpr(Expr &$expr): void
+    private function addUnusedDefinitionsToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (!isset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING])) {
             return;
         }
-        $args = $this->builderFactory->args([
+        $args = $builderFactory->args([
             $this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING],
         ]);
-        $expr = $this->builderFactory->methodCall($expr, self::UNUSED_DEFINITIONS_FUNCTION, $args);
+        $expr = $builderFactory->methodCall($expr, self::UNUSED_DEFINITIONS_FUNCTION, $args);
         unset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]);
         if ($this->settings[self::DEFINITIONS_SETTING] === []) {
             unset($this->settings[self::DEFINITIONS_SETTING]);
         }
     }
 
-    private function addExtensionsToExpr(Expr &$expr): void
+    private function addExtensionsToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (!isset($this->settings[self::EXTENSIONS_SETTING])) {
             return;
@@ -219,25 +216,21 @@ final class Profile implements ConfigConverterInterface
         foreach ($this->settings[self::EXTENSIONS_SETTING] as $name => $extensionSettings) {
             $extensionObject = new Extension($name, $extensionSettings ?? []);
 
-            $args = $this->builderFactory->args([$extensionObject->toPhpExpr()]);
-            $expr = $this->builderFactory->methodCall($expr, self::EXTENSION_FUNCTION, $args);
-            unset($this->settings[self::EXTENSIONS_SETTING][$name]);
+            $args = $builderFactory->args([$extensionObject->toPhpExpr($builderFactory)]);
+            $expr = $builderFactory->methodCall($expr, self::EXTENSION_FUNCTION, $args);
         }
-        if ($this->settings[self::EXTENSIONS_SETTING] === []) {
-            unset($this->settings[self::EXTENSIONS_SETTING]);
-        }
+        unset($this->settings[self::EXTENSIONS_SETTING]);
     }
 
-    private function addSuitesToExpr(Expr &$expr): void
+    private function addSuitesToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (!isset($this->settings[self::SUITES_SETTING])) {
             return;
         }
         foreach ($this->settings[self::SUITES_SETTING] as $name => $suiteSettings) {
             $suiteObject = new Suite($name, $suiteSettings ?? []);
-            $args = $this->builderFactory->args([$suiteObject->toPhpExpr()]);
-            $expr = $this->builderFactory->methodCall($expr, self::SUITE_FUNCTION, $args);
-            unset($this->settings[self::SUITES_SETTING][$name]);
+            $args = $builderFactory->args([$suiteObject->toPhpExpr($builderFactory)]);
+            $expr = $builderFactory->methodCall($expr, self::SUITE_FUNCTION, $args);
         }
         unset($this->settings[self::SUITES_SETTING]);
     }

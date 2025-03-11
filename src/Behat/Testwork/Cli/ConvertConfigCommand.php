@@ -70,7 +70,7 @@ final class ConvertConfigCommand extends BaseCommand
 
         $factory = new BuilderFactory();
 
-        $expr = $config->toPhpExpr();
+        $expr = $config->toPhpExpr($factory);
 
         $configStms = [new Return_($expr)];
 

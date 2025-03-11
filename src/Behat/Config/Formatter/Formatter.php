@@ -28,13 +28,10 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
         self::OUTPUT_STYLES_SETTING => self::OUTPUT_STYLES_FUNCTION,
     ];
 
-    private BuilderFactory $builderFactory;
-
     public function __construct(
         private readonly string $name,
         private array $settings = [],
     ) {
-        $this->builderFactory = new BuilderFactory();
     }
 
     /**
@@ -86,16 +83,16 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(): Expr
+    public function toPhpExpr(BuilderFactory $builderFactory): Expr
     {
-        $formatterObject =  $this->builderFactory->new(new FullyQualified(self::class));
+        $formatterObject =  $builderFactory->new(new FullyQualified(self::class));
 
-        $expr = $this->applyBaseSettings($formatterObject);
+        $expr = $this->applyBaseSettings($formatterObject, $builderFactory);
 
         if ($this->settings === []) {
-            $args = $this->builderFactory->args([$this->name]);
+            $args = $builderFactory->args([$this->name]);
         } else {
-            $args = $this->builderFactory->args([$this->name, $this->settings]);
+            $args = $builderFactory->args([$this->name, $this->settings]);
         }
         $formatterObject->args = $args;
 
@@ -105,11 +102,11 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    protected function toPhpExprForNamedFormatter(): Expr
+    protected function toPhpExprForNamedFormatter(BuilderFactory $builderFactory): Expr
     {
-        $formatterObject =  $this->builderFactory->new(new FullyQualified(static::class));
+        $formatterObject =  $builderFactory->new(new FullyQualified(static::class));
 
-        $expr = $this->applyBaseSettings($formatterObject);
+        $expr = $this->applyBaseSettings($formatterObject, $builderFactory);
 
         $defaults = static::defaults();
         $argValues = [];
@@ -125,20 +122,20 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
             $argValues[$name] = $value;
         }
         if ($argValues !== []) {
-            $args = $this->builderFactory->args($argValues);
+            $args = $builderFactory->args($argValues);
             $formatterObject->args = $args;
         }
 
         return $expr;
     }
 
-    private function applyBaseSettings(Expr $expr): Expr
+    private function applyBaseSettings(Expr $expr, BuilderFactory $builderFactory): Expr
     {
         foreach ($this->settings as $settingName => $setting) {
             $functionName = Formatter::FORMATTER_FUNCTION_NAMES_PER_SETTING[$settingName] ?? null;
             if ($functionName !== null) {
-                $args = $this->builderFactory->args([$setting]);
-                $expr = $this->builderFactory->methodCall($expr, $functionName, $args);
+                $args = $builderFactory->args([$setting]);
+                $expr = $builderFactory->methodCall($expr, $functionName, $args);
                 unset($this->settings[$settingName]);
             }
         }

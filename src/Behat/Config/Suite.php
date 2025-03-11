@@ -16,8 +16,6 @@ use PhpParser\Node\Name\FullyQualified;
 
 final class Suite implements ConfigConverterInterface
 {
-    private BuilderFactory $builderFactory;
-
     private const CONTEXTS_SETTING = 'contexts';
     private const PATHS_SETTING = 'paths';
     private const FILTERS_SETTING = 'filters';
@@ -30,7 +28,6 @@ final class Suite implements ConfigConverterInterface
         private string $name,
         private array $settings = [],
     ) {
-        $this->builderFactory = new BuilderFactory();
     }
 
     public function withContexts(string ...$contexts): self
@@ -86,45 +83,45 @@ final class Suite implements ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(): Expr
+    public function toPhpExpr(BuilderFactory $builderFactory): Expr
     {
-        $suiteObject =  $this->builderFactory->new(new FullyQualified(self::class));
+        $suiteObject =  $builderFactory->new(new FullyQualified(self::class));
 
         $expr = $suiteObject;
 
-        $this->addContextsToExpr($expr);
-        $this->addPathsToExpr($expr);
-        $this->addFiltersToExpr($expr);
+        $this->addContextsToExpr($expr, $builderFactory);
+        $this->addPathsToExpr($expr, $builderFactory);
+        $this->addFiltersToExpr($expr, $builderFactory);
 
         if ($this->settings === []) {
-            $args = $this->builderFactory->args([$this->name]);
+            $args = $builderFactory->args([$this->name]);
         } else {
-            $args = $this->builderFactory->args([$this->name, $this->settings]);
+            $args = $builderFactory->args([$this->name, $this->settings]);
         }
         $suiteObject->args = $args;
 
         return $expr;
     }
 
-    private function addContextsToExpr(Expr &$expr): void
+    private function addContextsToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (isset($this->settings[self::CONTEXTS_SETTING])) {
-            $args = $this->builderFactory->args($this->settings[self::CONTEXTS_SETTING]);
-            $expr = $this->builderFactory->methodCall($expr, self::CONTEXTS_FUNCTION, $args);
+            $args = $builderFactory->args($this->settings[self::CONTEXTS_SETTING]);
+            $expr = $builderFactory->methodCall($expr, self::CONTEXTS_FUNCTION, $args);
             unset($this->settings[self::CONTEXTS_SETTING]);
         }
     }
 
-    private function addPathsToExpr(Expr &$expr): void
+    private function addPathsToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (isset($this->settings[self::PATHS_SETTING])) {
-            $args = $this->builderFactory->args($this->settings[self::PATHS_SETTING]);
-            $expr = $this->builderFactory->methodCall($expr, self::PATHS_FUNCTION, $args);
+            $args = $builderFactory->args($this->settings[self::PATHS_SETTING]);
+            $expr = $builderFactory->methodCall($expr, self::PATHS_FUNCTION, $args);
             unset($this->settings[self::PATHS_SETTING]);
         }
     }
 
-    private function addFiltersToExpr(Expr &$expr): void
+    private function addFiltersToExpr(Expr &$expr, BuilderFactory $builderFactory): void
     {
         if (isset($this->settings[self::FILTERS_SETTING])) {
             foreach ($this->settings[self::FILTERS_SETTING] as $filterName => $filterValue) {
@@ -136,8 +133,8 @@ final class Suite implements ConfigConverterInterface
                     default => null,
                 };
                 if ($filter !== null) {
-                    $args = $this->builderFactory->args([$filter->toPhpExpr()]);
-                    $expr = $this->builderFactory->methodCall($expr, self::FILTER_FUNCTION, $args);
+                    $args = $builderFactory->args([$filter->toPhpExpr($builderFactory)]);
+                    $expr = $builderFactory->methodCall($expr, self::FILTER_FUNCTION, $args);
                     unset($this->settings[self::FILTERS_SETTING][$filterName]);
                 }
             }

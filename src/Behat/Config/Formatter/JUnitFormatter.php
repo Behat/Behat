@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 
 final class JUnitFormatter extends Formatter
@@ -18,8 +19,8 @@ final class JUnitFormatter extends Formatter
     /**
      * @internal
      */
-    public function toPhpExpr(): Expr
+    public function toPhpExpr(BuilderFactory $builderFactory): Expr
     {
-        return $this->toPhpExprForNamedFormatter();
+        return $this->toPhpExprForNamedFormatter($builderFactory);
     }
 }

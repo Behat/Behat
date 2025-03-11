@@ -11,13 +11,10 @@ use PhpParser\Node\Name\FullyQualified;
 
 class Filter implements FilterInterface, ConfigConverterInterface
 {
-    private BuilderFactory $builderFactory;
-
     public function __construct(
         private readonly string $name,
         private readonly string $value,
     ) {
-        $this->builderFactory = new BuilderFactory();
     }
 
     public function name(): string
@@ -33,11 +30,11 @@ class Filter implements FilterInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(): Expr
+    public function toPhpExpr(BuilderFactory $builderFactory): Expr
     {
-        $filterObject =  $this->builderFactory->new(new FullyQualified(static::class));
+        $filterObject =  $builderFactory->new(new FullyQualified(static::class));
 
-        $filterObject->args = $this->builderFactory->args([$this->value]);
+        $filterObject->args = $builderFactory->args([$this->value]);
 
         return $filterObject;
     }
