@@ -238,7 +238,7 @@ final class Application extends BaseApplication
             return 'debug';
         }
 
-        if ($input->hasParameterOption(array('--convert-config'))) {
+        if ($input->hasParameterOption(['--convert-config'])) {
             return 'convert-config';
         }
 

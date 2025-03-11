@@ -29,9 +29,9 @@ class CustomExtension implements Extension
 
     public function load(ContainerBuilder $container, array $config)
     {
-        $outputPrinterDefinition = new Definition(StreamOutputPrinter::class, array(
+        $outputPrinterDefinition = new Definition(StreamOutputPrinter::class, [
             new Definition(ConsoleOutputFactory::class),
-        ));
+        ]);
         $container->setDefinition(StreamOutputPrinter::class, $outputPrinterDefinition);
 
         $formatterDefinition = $container->register(CustomFormatter::class, CustomFormatter::class);
@@ -47,7 +47,7 @@ class CustomExtension implements Extension
 class CustomFormatter implements Formatter
 {
     public function __construct(
-        private OutputPrinter $outputPrinter
+        private OutputPrinter $outputPrinter,
     ) {
     }
 

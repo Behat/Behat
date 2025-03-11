@@ -155,7 +155,7 @@ final class Profile implements ConfigConverterInterface
                     unset($formatterSettings[ShowOutputOption::OPTION_NAME]);
                 }
 
-                $formatter = match($name) {
+                $formatter = match ($name) {
                     PrettyFormatter::NAME => $formatterSettings === true ? new PrettyFormatter() : new PrettyFormatter(...$formatterSettings),
                     ProgressFormatter::NAME => $formatterSettings === true ? new ProgressFormatter() : new ProgressFormatter(...$formatterSettings),
                     JUnitFormatter::NAME => new JUnitFormatter(),
@@ -175,7 +175,7 @@ final class Profile implements ConfigConverterInterface
             return;
         }
         foreach ($this->settings[self::GHERKIN_SETTING][self::FILTERS_SETTING] as $name => $filterValue) {
-            $filter = match($name) {
+            $filter = match ($name) {
                 NameFilter::NAME => new NameFilter($filterValue),
                 NarrativeFilter::NAME => new NarrativeFilter($filterValue),
                 RoleFilter::NAME => new RoleFilter($filterValue),
@@ -202,7 +202,7 @@ final class Profile implements ConfigConverterInterface
             return;
         }
         $args = $this->builderFactory->args([
-            $this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]
+            $this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING],
         ]);
         $expr = $this->builderFactory->methodCall($expr, self::UNUSED_DEFINITIONS_FUNCTION, $args);
         unset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]);

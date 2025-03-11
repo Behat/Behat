@@ -31,7 +31,7 @@ final class PrettyFormatter extends Formatter
         bool             $paths = true,
         bool             $multiline = true,
         ShowOutputOption $showOutput = ShowOutputOption::Yes,
-        ...$baseOptions
+        ...$baseOptions,
     ) {
         if ($showOutput === ShowOutputOption::InSummary) {
             throw new UnexpectedValueException(

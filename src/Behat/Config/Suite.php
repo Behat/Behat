@@ -128,7 +128,7 @@ final class Suite implements ConfigConverterInterface
     {
         if (isset($this->settings[self::FILTERS_SETTING])) {
             foreach ($this->settings[self::FILTERS_SETTING] as $filterName => $filterValue) {
-                $filter = match($filterName) {
+                $filter = match ($filterName) {
                     NameFilter::NAME => new NameFilter($filterValue),
                     NarrativeFilter::NAME => new NarrativeFilter($filterValue),
                     RoleFilter::NAME => new RoleFilter($filterValue),

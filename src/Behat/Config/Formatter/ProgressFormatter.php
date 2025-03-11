@@ -20,7 +20,7 @@ final class ProgressFormatter extends Formatter
     public function __construct(
         bool             $timer = true,
         ShowOutputOption $showOutput = ShowOutputOption::InSummary,
-        ...$baseOptions
+        ...$baseOptions,
     ) {
         $settings = [
             self::TIMER_SETTING => $timer,

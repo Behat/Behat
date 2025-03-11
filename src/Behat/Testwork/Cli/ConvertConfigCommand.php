@@ -56,7 +56,7 @@ final class ConvertConfigCommand extends BaseCommand
 
         if (isset($yamlConfig[Config::IMPORTS_SETTING])) {
             $imports = $yamlConfig[Config::IMPORTS_SETTING];
-            $basePath = rtrim(dirname($filePath), DIRECTORY_SEPARATOR)  . DIRECTORY_SEPARATOR;
+            $basePath = rtrim(dirname($filePath), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
             $newImports = [];
             foreach ($imports as $import) {
