@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Behat\Config\Filter;
 
-final class NarrativeFilter implements FilterInterface
+final class NarrativeFilter extends Filter
 {
+    public const NAME = 'narrative';
+
     public function __construct(
-        private readonly string $value,
+        string $value,
     ) {
-    }
-
-    public function name(): string
-    {
-        return 'narrative';
-    }
-
-    public function value(): string
-    {
-        return $this->value;
+        parent::__construct(self::NAME, $value);
     }
 }
