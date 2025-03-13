@@ -84,12 +84,11 @@ final class ConvertConfigCommand extends BaseCommand
         foreach ($usedClasses as $usedClass) {
             $useStmts[] = ConfigConverterTools::createUseStatement($usedClass);
         }
-        if (count($useStmts) !== 0) {
+        if ($useStmts !== []) {
             $useStmts[] = new Nop();
         }
 
-        $stmts = array_merge($useStmts, $configStms);
-        $stmts[] = new Nop();
+        $stmts = [...$useStmts, ...$configStms, new Nop()];
 
         // Find the name of the output file
         $outputFileName = $filePath;

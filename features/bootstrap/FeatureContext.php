@@ -650,7 +650,10 @@ EOL;
             $option = $row['option'];
             $value = $row['value'];
             if ($value !== '') {
-                $value = preg_replace('/^\{SYSTEM_TMP_DIR}/', $this->tempDir, $value);
+                if (str_starts_with($value, '{SYSTEM_TMP_DIR}')) {
+                    $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
+                }
+
                 $option .= '=' . $value;
             }
             $this->options .= ' ' . $option;
