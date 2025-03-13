@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
+use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\BuilderFactory;
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Expr;
 
 use function is_string;
 
@@ -63,26 +63,36 @@ final class Config implements ConfigInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(BuilderFactory $builderFactory): Node\Expr
+    public function toPhpExpr(): Expr
     {
-        $configObject =  $builderFactory->new(new FullyQualified(self::class));
+        $configObject =  ConfigConverterTools::createObject(self::class);
         $expr = $configObject;
 
         foreach ($this->settings as $settingsName => $settings) {
             if ($settingsName === self::PREFERRED_PROFILE_NAME_SETTING) {
-                $args = $builderFactory->args([$settings]);
-                $expr = $builderFactory->methodCall($expr, self::PREFERRED_PROFILE_FUNCTION, $args);
+                $expr = ConfigConverterTools::addMethodCall(
+                    self::PREFERRED_PROFILE_FUNCTION,
+                    [$settings],
+                    $expr
+                );
             } elseif ($settingsName === self::IMPORTS_SETTING) {
                 if (count($settings) === 1) {
-                    $args = $builderFactory->args([$settings[0]]);
+                    $arguments = [$settings[0]];
                 } else {
-                    $args = $builderFactory->args([$settings]);
+                    $arguments = [$settings];
                 }
-                $expr = $builderFactory->methodCall($expr, self::IMPORT_FUNCTION, $args);
+                $expr = ConfigConverterTools::addMethodCall(
+                    self::IMPORT_FUNCTION,
+                    $arguments,
+                    $expr
+                );
             } else {
                 $profile = new Profile($settingsName, $settings ?? []);
-                $args = $builderFactory->args([$profile->toPhpExpr($builderFactory)]);
-                $expr = $builderFactory->methodCall($expr, self::PROFILE_FUNCTION, $args);
+                $expr = ConfigConverterTools::addMethodCall(
+                    self::PROFILE_FUNCTION,
+                    [$profile->toPhpExpr()],
+                    $expr
+                );
             }
             unset($this->settings[$settingsName]);
         }

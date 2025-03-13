@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
-use PhpParser\BuilderFactory;
+use Behat\Config\Converter\ConfigConverterTools;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Name\FullyQualified;
 
 final class Extension implements ExtensionConfigInterface
 {
@@ -26,16 +25,16 @@ final class Extension implements ExtensionConfigInterface
         return $this->settings;
     }
 
-    public function toPhpExpr(BuilderFactory $builderFactory): Expr
+    public function toPhpExpr(): Expr
     {
-        $extensionObject =  $builderFactory->new(new FullyQualified(self::class));
+        $extensionObject =  ConfigConverterTools::createObject(self::class);
 
         if ($this->settings === []) {
-            $args = $builderFactory->args([$this->name]);
+            $arguments = [$this->name];
         } else {
-            $args = $builderFactory->args([$this->name, $this->settings]);
+            $arguments = [$this->name, $this->settings];
         }
-        $extensionObject->args = $args;
+        ConfigConverterTools::addArgumentsToConstructor($arguments, $extensionObject);
 
         return $extensionObject;
     }

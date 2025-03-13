@@ -5,12 +5,12 @@ namespace Behat\Config\Converter;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
-class UseStatementAdder extends NodeVisitorAbstract
+class UsedClassesCollector extends NodeVisitorAbstract
 {
     /**
      * @var array <string, class-string>
      */
-    private array $uses = [];
+    private array $usedClasses = [];
 
     public function enterNode(Node $node): ?Node
     {
@@ -20,7 +20,7 @@ class UseStatementAdder extends NodeVisitorAbstract
         $className = $node->toString();
         $shortName = $node->getLast();
 
-        $this->uses[$shortName] = $className;
+        $this->usedClasses[$shortName] = $className;
 
         return new Node\Name($shortName);
     }
@@ -28,8 +28,8 @@ class UseStatementAdder extends NodeVisitorAbstract
     /**
      * @return array <string, class-string>
      */
-    public function getUseStatements()
+    public function getUsedClasses()
     {
-        return $this->uses;
+        return $this->usedClasses;
     }
 }

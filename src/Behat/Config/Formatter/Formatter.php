@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Behat\Config\Formatter;
 
 use Behat\Config\ConfigConverterInterface;
-use PhpParser\BuilderFactory;
+use Behat\Config\Converter\ConfigConverterTools;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Name\FullyQualified;
 
 class Formatter implements FormatterConfigInterface, ConfigConverterInterface
 {
@@ -83,18 +82,18 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(BuilderFactory $builderFactory): Expr
+    public function toPhpExpr(): Expr
     {
-        $formatterObject =  $builderFactory->new(new FullyQualified(self::class));
+        $formatterObject = ConfigConverterTools::createObject(self::class);
 
-        $expr = $this->applyBaseSettings($formatterObject, $builderFactory);
+        $expr = $this->applyBaseSettings($formatterObject);
 
         if ($this->settings === []) {
-            $args = $builderFactory->args([$this->name]);
+            $arguments = [$this->name];
         } else {
-            $args = $builderFactory->args([$this->name, $this->settings]);
+            $arguments = [$this->name, $this->settings];
         }
-        $formatterObject->args = $args;
+        ConfigConverterTools::addArgumentsToConstructor($arguments, $formatterObject);
 
         return $expr;
     }
@@ -102,14 +101,14 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    protected function toPhpExprForNamedFormatter(BuilderFactory $builderFactory): Expr
+    protected function toPhpExprForNamedFormatter(): Expr
     {
-        $formatterObject =  $builderFactory->new(new FullyQualified(static::class));
+        $formatterObject = ConfigConverterTools::createObject(static::class);
 
-        $expr = $this->applyBaseSettings($formatterObject, $builderFactory);
+        $expr = $this->applyBaseSettings($formatterObject);
 
         $defaults = static::defaults();
-        $argValues = [];
+        $arguments = [];
         foreach ($defaults as $name => $defaultValue) {
             if ($this->settings[$name] === $defaultValue) {
                 continue;
@@ -119,23 +118,25 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
                 $value = ShowOutputOption::from($value);
                 $name = ShowOutputOption::PARAMETER_NAME;
             }
-            $argValues[$name] = $value;
+            $arguments[$name] = $value;
         }
-        if ($argValues !== []) {
-            $args = $builderFactory->args($argValues);
-            $formatterObject->args = $args;
+        if ($arguments !== []) {
+            ConfigConverterTools::addArgumentsToConstructor($arguments, $formatterObject);
         }
 
         return $expr;
     }
 
-    private function applyBaseSettings(Expr $expr, BuilderFactory $builderFactory): Expr
+    private function applyBaseSettings(Expr $expr): Expr
     {
         foreach ($this->settings as $settingName => $setting) {
             $functionName = Formatter::FORMATTER_FUNCTION_NAMES_PER_SETTING[$settingName] ?? null;
             if ($functionName !== null) {
-                $args = $builderFactory->args([$setting]);
-                $expr = $builderFactory->methodCall($expr, $functionName, $args);
+                $expr = ConfigConverterTools::addMethodCall(
+                    $functionName,
+                    [$setting],
+                    $expr
+                );
                 unset($this->settings[$settingName]);
             }
         }

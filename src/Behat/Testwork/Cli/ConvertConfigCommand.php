@@ -11,11 +11,11 @@
 namespace Behat\Testwork\Cli;
 
 use Behat\Config\Config;
+use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Config\Converter\CustomPrettyPrinter;
-use Behat\Config\Converter\UseStatementAdder;
+use Behat\Config\Converter\UsedClassesCollector;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
@@ -68,23 +68,21 @@ final class ConvertConfigCommand extends BaseCommand
 
         $config = new Config($yamlConfig);
 
-        $factory = new BuilderFactory();
-
-        $expr = $config->toPhpExpr($factory);
+        $expr = $config->toPhpExpr();
 
         $configStms = [new Return_($expr)];
 
         $traverser = new NodeTraverser();
-        $useStatementAdder = new UseStatementAdder();
-        $traverser->addVisitor($useStatementAdder);
+        $usedClasssesCollector = new UsedClassesCollector();
+        $traverser->addVisitor($usedClasssesCollector);
         $configStms = $traverser->traverse($configStms);
 
         $useStmts = [];
 
-        $useStatements = $useStatementAdder->getUseStatements();
-        sort($useStatements);
-        foreach ($useStatements as $useStatement) {
-            $useStmts[] = $factory->use($useStatement)->getNode();
+        $usedClasses = $usedClasssesCollector->getUsedClasses();
+        sort($usedClasses);
+        foreach ($usedClasses as $usedClass) {
+            $useStmts[] = ConfigConverterTools::createUseStatement($usedClass);
         }
         if (count($useStmts) !== 0) {
             $useStmts[] = new Nop();

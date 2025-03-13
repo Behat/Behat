@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Behat\Config\Filter;
 
 use Behat\Config\ConfigConverterInterface;
-use PhpParser\BuilderFactory;
+use Behat\Config\Converter\ConfigConverterTools;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Name\FullyQualified;
 
 class Filter implements FilterInterface, ConfigConverterInterface
 {
@@ -30,11 +29,11 @@ class Filter implements FilterInterface, ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(BuilderFactory $builderFactory): Expr
+    public function toPhpExpr(): Expr
     {
-        $filterObject =  $builderFactory->new(new FullyQualified(static::class));
+        $filterObject = ConfigConverterTools::createObject(static::class);
 
-        $filterObject->args = $builderFactory->args([$this->value]);
+        ConfigConverterTools::addArgumentsToConstructor([$this->value], $filterObject);
 
         return $filterObject;
     }

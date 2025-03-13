@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
-use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use UnexpectedValueException;
 
@@ -58,8 +57,8 @@ final class PrettyFormatter extends Formatter
     /**
      * @internal
      */
-    public function toPhpExpr(BuilderFactory $builderFactory): Expr
+    public function toPhpExpr(): Expr
     {
-        return $this->toPhpExprForNamedFormatter($builderFactory);
+        return $this->toPhpExprForNamedFormatter();
     }
 }
