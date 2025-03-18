@@ -49,6 +49,7 @@
             <xs:attribute name="classname" type="xs:string" use="optional"/>
             <xs:attribute name="status" type="xs:string" use="optional"/>
             <xs:attribute name="file" type="xs:string" use="optional"/>
+            <xs:attribute name="line" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
