@@ -75,7 +75,7 @@
         ],
         "behat": "LANG=C bin/behat  --rerun",
         "behat-progress": "LANG=C bin/behat --format=progress",
-        "phpstan": "phpstan",
+        "phpstan": "phpstan --memory-limit=-1",
         "phpunit": "phpunit",
         "cs": "php-cs-fixer fix --dry-run --verbose --diff",
         "cs-fix": "php-cs-fixer fix"
