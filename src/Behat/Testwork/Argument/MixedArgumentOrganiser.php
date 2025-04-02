@@ -55,7 +55,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         list($named, $typehinted, $numbered) = $this->splitArguments($parameters, $arguments);
 
-        $someArgumentsAreKnowned = $this->hasKnownedArgument($numbered);
+        $someArgumentsAreKnown = $this->hasKnownArgument($numbered);
 
         $arguments =
             $this->prepareNamedArguments($parameters, $named) +
@@ -65,7 +65,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         // If a parameter was a TableNode or a PystringNode, but has been throwned out of the arguments,
         // then it's an error in the feature file.
-        if ($someArgumentsAreKnowned && !$this->hasKnownedArgument($arguments)) {
+        if ($someArgumentsAreKnown && !$this->hasKnownArgument($arguments)) {
             throw new \InvalidArgumentException(
                 'You have passed a TableNode or PystringNode as an argument, but it was not used in the function. This is probably an error in your feature file.'
             );
@@ -78,7 +78,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * return true if the arguments array contain a TableNode or PyStringNode
      * @param array<mixed> $arguments
      */
-    private function hasKnownedArgument(array $arguments): bool
+    private function hasKnownArgument(array $arguments): bool
     {
         foreach ($arguments as $argument) {
             if ($argument instanceof TableNode || $argument instanceof PyStringNode) {
