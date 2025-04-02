@@ -53,7 +53,7 @@ Feature: Support PHP 7 Throwable
 
       --- Failed scenarios:
 
-          features/fatal_errors.feature:6
+          features/fatal_errors.feature:6 (on line 7)
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)

@@ -73,7 +73,7 @@ final class ListPrinter
      * @param integer        $resultCode
      * @param ScenarioStat[] $scenarioStats
      */
-    public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats)
+    public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null)
     {
         if (!count($scenarioStats)) {
             return;
@@ -83,9 +83,21 @@ final class ListPrinter
         $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
-        foreach ($scenarioStats as $stat) {
+        foreach ($scenarioStats as $key => $stat) {
             $path = $this->relativizePaths((string) $stat);
-            $printer->writeln(sprintf('    {+%s}%s{-%s}', $style, $path, $style));
+
+            $stepStat = isset($stepStats[$key]) ? $stepStats[$key] : null;
+            $stepLine = $stepStat ? $this->extractLineNumber((string) $stepStat) : null;
+
+            if ($stepLine !== null) {
+                $lineNumber = $this->translator->trans('on_line_number', ['%line%' => $stepLine], 'output');
+                
+                $lineHelper = ' (' . $lineNumber . ')';
+            } else {
+                $lineHelper = '';
+            }
+
+            $printer->writeln(sprintf('    {+%s}%s%s{-%s}', $style, $path, $lineHelper, $style));
         }
 
         $printer->writeln();
@@ -295,6 +307,12 @@ final class ListPrinter
         }
 
         return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
+    }
+
+    
+    private function extractLineNumber(string $path): ?string
+    {
+        return explode(':', $path)[1] ?? null;
     }
 
     private function getLocationFromScope(?HookScope $scope): ?string
