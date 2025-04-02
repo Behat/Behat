@@ -10,6 +10,9 @@
 
 namespace Behat\Testwork\Argument;
 
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunctionAbstract;
@@ -52,13 +55,38 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
         list($named, $typehinted, $numbered) = $this->splitArguments($parameters, $arguments);
 
+        $someArgumentsAreKnowned = $this->hasKnownedArgument($numbered);
+
         $arguments =
             $this->prepareNamedArguments($parameters, $named) +
             $this->prepareTypehintedArguments($parameters, $typehinted) +
             $this->prepareNumberedArguments($parameters, $numbered) +
             $this->prepareDefaultArguments($parameters);
 
+        // If a parameter was a TableNode or a PystringNode, but has been throwned out of the arguments,
+        // then it's an error in the feature file.
+        if ($someArgumentsAreKnowned && !$this->hasKnownedArgument($arguments)) {
+            throw new InvalidArgumentException(
+                'You have passed a TableNode or PystringNode as an argument, but it was not used in the function. This is probably an error in your feature file.'
+            );
+        }
+
         return $this->reorderArguments($parameters, $arguments);
+    }
+
+    /**
+     * return true if the arguments array contain a TableNode or PyStringNode
+     * @param array<mixed> $arguments
+     */
+    private function hasKnownedArgument(array $arguments): bool
+    {
+        foreach ($arguments as $argument) {
+            if ($argument instanceof TableNode || $argument instanceof PyStringNode) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
