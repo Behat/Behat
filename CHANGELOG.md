@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.20.0] - 2025-04-02
+
+## Changed
+
+* Remove dependency on file location in Gherkin package. The (internal) service container parameters `gherkin.paths.lib`
+  and `gherkin.paths.i18n` are no longer defined or used. Minimum behat/gherkin version is now ^4.12.0.
+  By @carlos-granados in [#1604](https://github.com/Behat/Behat/pull/1604).
+
+## Added
+
+* `--allow-no-tests` CLI option to pass even if no specifications found by @Kingdutch in [#1420](https://github.com/Behat/Behat/pull/1420)
+* `--convert-config` CLI option to convert the yaml config to php by @carlos-granados in [#1605](https://github.com/Behat/Behat/pull/1605)
+
+## Internal
+
+* Apply PSR-12 and PER-CS2.0 code styles by @carlos-granados in [#1599](https://github.com/Behat/Behat/pull/1599)
+  and [#1606](https://github.com/Behat/Behat/pull/1606)
+
 ## [3.19.0] - 2025-02-13
 
 ### Changed
@@ -1203,6 +1221,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.20.0]: https://github.com/Behat/Behat/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/Behat/Behat/compare/v3.18.1...v3.19.0
 [3.18.1]: https://github.com/Behat/Behat/compare/v3.18.0...v3.18.1
 [3.18.0]: https://github.com/Behat/Behat/compare/v3.17.0...v3.18.0
