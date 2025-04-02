@@ -33,8 +33,18 @@ Feature: Step Arguments
               $this->input = $string;
           }
 
+          #[Given('/^an untyped pystring:$/')]
+          public function anUntypedPystring(PyStringNode $string) {
+              $this->input = $string;
+          }
+
           #[Given('/^a table:$/')]
           public function aTable(TableNode $table) {
+              $this->input = $table;
+          }
+
+          #[Given('/^an untyped table:$/')]
+          public function anUntypedTable($table) {
               $this->input = $table;
           }
 
@@ -52,6 +62,10 @@ Feature: Step Arguments
           public function iHaveNumberAndNumber($number1, $number2) {
               \PHPUnit\Framework\Assert::assertEquals(13, intval($number1));
               \PHPUnit\Framework\Assert::assertEquals(243, intval($number2));
+          }
+
+          #[Given('/^a step with no argument$/')]
+          public function aStepWithNoArgument(): void {
           }
       }
       """
@@ -153,6 +167,72 @@ Feature: Step Arguments
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+
+  Scenario: given TableNode argument that is not defined in context
+    Given a file named "features/knowned-argument-exception.feature" with:
+      """
+      Feature: Tables
+        Scenario:
+          Given a step with no argument
+            | item1 | item2 | item3 |
+            | super | mega  | extra |
+            | hyper | mini  | XXL   |
+      """
+    When I run "behat --no-colors -f progress features/knowned-argument-exception.feature"
+    Then it should fail with:
+      """
+      You have passed a TableNode or PystringNode as an argument, but it was not used in the function. This is probably an error in your feature file.
+      """
+      
+    Given a file named "features/knowned-argument-exception.feature" with:
+      """
+      Feature: Tables
+        Scenario:
+          Given an untyped table:
+            | item1 | item2 | item3 |
+            | super | mega  | extra |
+            | hyper | mini  | XXL   |
+      """
+    When I run "behat --no-colors -f progress features/knowned-argument-exception.feature"
+    Then it should pass
+
+  Scenario: given PyStringNode argument that is not defined in context
+    Given a file named "features/knowned-argument-exception.feature" with:
+      """
+      Feature: PystringNodes
+        Scenario:
+          Given a step with no argument
+            '''
+            <word1>
+              w
+               o
+          r
+           <word2>
+               d
+            '''
+      """
+    When I run "behat --no-colors -f progress features/knowned-argument-exception.feature"
+    Then it should fail with:
+      """
+      You have passed a TableNode or PystringNode as an argument, but it was not used in the function. This is probably an error in your feature file.
+      """
+      
+    Given a file named "features/knowned-argument-exception.feature" with:
+      """
+      Feature: PystringNodes
+        Scenario:
+          Given an untyped pystring:
+            '''
+            <word1>
+              w
+               o
+          r
+           <word2>
+               d
+            '''
+      """
+    When I run "behat --no-colors -f progress features/knowned-argument-exception.feature"
+    Then it should pass
 
   Scenario: Named arguments
     Given a file named "features/named_args.feature" with:
