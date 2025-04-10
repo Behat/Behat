@@ -288,6 +288,48 @@ Feature: Convert config
       """
     And the temp "extensions.yaml" file should have been removed
 
+  Scenario: Class references for known extensions and contexts
+    Given I copy the "class_references.yaml" file to the temp folder
+    When  I run behat with the following additional options:
+      | option   | value                                  |
+      | --config | {SYSTEM_TMP_DIR}/class_references.yaml |
+    Then the temp "class_references.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Extension;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+      use MyContext;
+      use Some\Behat\Extension\ExplicitlyReferencedExtension;
+      use test\MyApp\Contexts\MyFirstContext;
+      use test\MyApp\Contexts\MySecondContext;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withExtension(new Extension('class_references_loader.php'))
+              ->withExtension(new Extension(ExplicitlyReferencedExtension::class))
+              ->withExtension(new Extension('Some\ShorthandExtension'))
+              ->withSuite((new Suite('named_contexts'))
+                  ->withContexts(
+                      'UnknownContext',
+                      MyContext::class,
+                      MyFirstContext::class,
+                      MySecondContext::class
+                  ))
+              ->withSuite((new Suite('contexts_with_args'))
+                  ->addContext('UnknownContext')
+                  ->addContext(
+                      MyFirstContext::class,
+                      [
+                          'param1',
+                      ]
+                  )
+                  ->addContext(MySecondContext::class)));
+      """
+    And the temp "class_references.yaml" file should have been removed
+
   Scenario: Profile filters
     When I copy the "profile_filters.yaml" file to the temp folder
     When I run behat with the following additional options:

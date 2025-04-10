@@ -14,9 +14,24 @@ class UsedClassesCollector extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        if (!$node instanceof Node\Name\FullyQualified) {
-            return null;
+        if ($node instanceof Node\Name\FullyQualified) {
+            return $this->importClass($node);
         }
+
+        if ($node instanceof Node\Expr\ClassConstFetch && $node->class instanceof Node\Name) {
+            // E.g. a `MyClass::class` argument
+            return new Node\Expr\ClassConstFetch(
+                $this->importClass($node->class),
+                $node->name,
+                $node->getAttributes(),
+            );
+        }
+
+        return null;
+    }
+
+    private function importClass(Node\Name $node): Node\Name
+    {
         $className = $node->toString();
         $shortName = $node->getLast();
 
