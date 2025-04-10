@@ -182,6 +182,41 @@ Feature: Convert config
       """
     And the temp "suite_contexts.yaml" file should have been removed
 
+  Scenario: Suite contexts with arguments
+    When I copy the "suite_contexts_with_args.yaml" file to the temp folder
+    When I run behat with the following additional options:
+      | option   | value                                          |
+      | --config | {SYSTEM_TMP_DIR}/suite_contexts_with_args.yaml |
+    Then the temp "suite_contexts_with_args.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withSuite((new Suite('my_suite'))
+                  ->addContext('MyContext')
+                  ->addContext(
+                      'App\AContextWithPositionalArgs',
+                      [
+                          'First Arg',
+                          'Second Arg',
+                      ]
+                  )
+                  ->addContext(
+                      'App\AContextWithNamedArgs',
+                      [
+                          'param1' => 'Something',
+                          'param2' => 'Else',
+                      ]
+                  )
+                  ->addContext('App\AnotherContext')));
+      """
+    And the temp "suite_contexts.yaml" file should have been removed
+
   Scenario: Suite paths
     When I copy the "suite_paths.yaml" file to the temp folder
     When I run behat with the following additional options:
@@ -378,4 +413,3 @@ Feature: Convert config
       """
     And the temp "full_configuration.yaml" file should have been removed
     And the temp "imported.yaml" file should have been removed
-
