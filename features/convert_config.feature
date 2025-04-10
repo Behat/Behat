@@ -403,6 +403,7 @@ Feature: Convert config
   Scenario: Full configuration
     When I copy the "full_configuration.yaml" file to the temp folder
     And I copy the "imported.yaml" file to the temp folder
+    And the "MY_SECRET_PASSWORD" environment variable is set to "sesame"
     When I run behat with the following additional options:
       | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/full_configuration.yaml |
@@ -437,7 +438,12 @@ Feature: Convert config
               ->withPrintUnusedDefinitions(true)
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
-                  ->withContexts('MyContext')
+                  ->addContext(
+                      'MyContext',
+                      [
+                          'password' => '%env(MY_SECRET_PASSWORD)%',
+                      ]
+                  )
                   ->withPaths('one.feature')
                   ->withFilter(new TagFilter('@run'))))
           ->withProfile((new Profile('other'))
