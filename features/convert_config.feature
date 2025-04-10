@@ -303,6 +303,7 @@ Feature: Convert config
       use Behat\Config\Suite;
       use MyContext;
       use Some\Behat\Extension\ExplicitlyReferencedExtension;
+      use Some\ShorthandExtension\ServiceContainer\ShorthandExtension;
       use test\MyApp\Contexts\MyFirstContext;
       use test\MyApp\Contexts\MySecondContext;
 
@@ -310,7 +311,7 @@ Feature: Convert config
           ->withProfile((new Profile('default'))
               ->withExtension(new Extension('class_references_loader.php'))
               ->withExtension(new Extension(ExplicitlyReferencedExtension::class))
-              ->withExtension(new Extension('Some\ShorthandExtension'))
+              ->withExtension(new Extension(ShorthandExtension::class))
               ->withSuite((new Suite('named_contexts'))
                   ->withContexts(
                       'UnknownContext',
