@@ -220,6 +220,7 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference('output.node.printer.pretty.width_calculator'),
             '%paths.base%',
         ]);
+        $definition->addMethodCall(('setConfigurablePathPrinter'), [new Reference('configurable.path.printer')]);
         $container->setDefinition('output.node.printer.pretty.path', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyScenarioPrinter', [
@@ -367,6 +368,7 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%',
         ]);
+        $definition->addMethodCall(('setConfigurablePathPrinter'), [new Reference('configurable.path.printer')]);
         $container->setDefinition('output.node.printer.list', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyStatisticsPrinter', [

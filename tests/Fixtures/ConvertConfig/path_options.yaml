@@ -1,0 +1,3 @@
+default:
+    path_options:
+        print_absolute_paths: true

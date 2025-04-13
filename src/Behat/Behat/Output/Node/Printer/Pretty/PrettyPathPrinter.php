@@ -18,6 +18,7 @@ use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 
 /**
  * Prints paths for scenarios, examples, backgrounds and steps.
@@ -30,21 +31,23 @@ final class PrettyPathPrinter
      * @var WidthCalculator
      */
     private $widthCalculator;
-    /**
-     * @var string
-     */
-    private $basePath;
+
+    private ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * Initializes printer.
      *
      * @param WidthCalculator $widthCalculator
-     * @param string          $basePath
+     * @param string          $basePath deprecated, will be removed in next major version
      */
-    public function __construct(WidthCalculator $widthCalculator, $basePath)
+    public function __construct(WidthCalculator $widthCalculator, string $basePath)
     {
         $this->widthCalculator = $widthCalculator;
-        $this->basePath = $basePath;
+    }
+
+    public function setConfigurablePathPrinter(ConfigurablePathPrinter $configurablePathPrinter)
+    {
+        $this->configurablePathPrinter = $configurablePathPrinter;
     }
 
     /**
@@ -65,7 +68,7 @@ final class PrettyPathPrinter
             return;
         }
 
-        $fileAndLine = sprintf('%s:%s', $this->relativizePaths($feature->getFile()), $scenario->getLine());
+        $fileAndLine = sprintf('%s:%s', $this->configurablePathPrinter->processPathsInText($feature->getFile()), $scenario->getLine());
         $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario, $indentation);
         $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation, 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));
@@ -117,21 +120,5 @@ final class PrettyPathPrinter
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $stepWidth));
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $path));
-    }
-
-    /**
-     * Transforms path to relative.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function relativizePaths($path)
-    {
-        if (!$this->basePath) {
-            return $path;
-        }
-
-        return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
     }
 }

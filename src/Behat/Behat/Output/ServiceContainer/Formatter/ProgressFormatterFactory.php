@@ -104,6 +104,7 @@ class ProgressFormatterFactory implements FormatterFactory
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%',
         ]);
+        $definition->addMethodCall(('setConfigurablePathPrinter'), [new Reference('configurable.path.printer')]);
         $container->setDefinition('output.node.printer.list', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Progress\ProgressStepPrinter', [

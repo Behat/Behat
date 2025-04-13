@@ -118,6 +118,7 @@ final class ExceptionExtension implements Extension
             '%paths.base%',
             $verbosity,
         ]);
+        $definition->addMethodCall(('setConfigurablePathPrinter'), [new Reference('configurable.path.printer')]);
         $container->setDefinition(self::PRESENTER_ID, $definition);
     }
 

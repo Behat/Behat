@@ -29,6 +29,8 @@ final class Profile implements ConfigConverterInterface
     private const FORMATTERS_SETTING = 'formatters';
     private const DEFINITIONS_SETTING = 'definitions';
     private const PRINT_UNUSED_DEFINITIONS_SETTING = 'print_unused_definitions';
+    private const PATH_OPTIONS_SETTING = 'path_options';
+    private const PRINT_ABSOLUTE_PATHS_SETTING = 'print_absolute_paths';
 
     private const DISABLE_FORMATTER_FUNCTION = 'disableFormatter';
     private const FORMATTER_FUNCTION = 'withFormatter';
@@ -36,6 +38,8 @@ final class Profile implements ConfigConverterInterface
     private const UNUSED_DEFINITIONS_FUNCTION = 'withPrintUnusedDefinitions';
     private const EXTENSION_FUNCTION = 'withExtension';
     private const SUITE_FUNCTION = 'withSuite';
+    private const PATH_OPTIONS_FUNCTION = 'withPathOptions';
+    private const PRINT_ABSOLUTE_PATHS_PARAMETER = 'printAbsolutePaths';
 
     public function __construct(
         private string $name,
@@ -102,6 +106,13 @@ final class Profile implements ConfigConverterInterface
         return $this;
     }
 
+    public function withPathOptions(bool $printAbsolutePaths): self
+    {
+        $this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING] = $printAbsolutePaths;
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;
@@ -118,6 +129,7 @@ final class Profile implements ConfigConverterInterface
         $this->addFormattersToExpr($expr);
         $this->addFiltersToExpr($expr);
         $this->addUnusedDefinitionsToExpr($expr);
+        $this->addPathOptionsToExpr($expr);
         $this->addExtensionsToExpr($expr);
         $this->addSuitesToExpr($expr);
 
@@ -212,6 +224,22 @@ final class Profile implements ConfigConverterInterface
         unset($this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]);
         if ($this->settings[self::DEFINITIONS_SETTING] === []) {
             unset($this->settings[self::DEFINITIONS_SETTING]);
+        }
+    }
+
+    private function addPathOptionsToExpr(Expr &$expr): void
+    {
+        if (!isset($this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING])) {
+            return;
+        }
+        $expr = ConfigConverterTools::addMethodCall(
+            self::PATH_OPTIONS_FUNCTION,
+            [self::PRINT_ABSOLUTE_PATHS_PARAMETER => $this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING]],
+            $expr
+        );
+        unset($this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING]);
+        if ($this->settings[self::PATH_OPTIONS_SETTING] === []) {
+            unset($this->settings[self::PATH_OPTIONS_SETTING]);
         }
     }
 

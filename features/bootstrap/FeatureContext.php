@@ -457,6 +457,24 @@ EOL;
         );
     }
 
+    /**
+     * Checks whether last command output contains provided string including absolute paths
+     *
+     * @Then the output with absolute paths should contain:
+     *
+     * @param PyStringNode $text PyString text instance
+     */
+    public function theOutputWithAbsolutePathsShouldContain(PyStringNode $text)
+    {
+        if (str_contains($this->getOutput(false), $this->getExpectedOutput($text))) {
+            return;
+        }
+
+        throw new UnexpectedValueException(
+            $this->getOutputDiff($text, false)
+        );
+    }
+
     private function getExpectedOutput(PyStringNode $expectedText)
     {
         $text = strtr($expectedText, [
@@ -559,7 +577,7 @@ EOL;
         return $this->process->getExitCode();
     }
 
-    private function getOutput()
+    private function getOutput(bool $removeAbsolutePaths = true): string
     {
         $output = $this->process->getErrorOutput() . $this->process->getOutput();
 
@@ -569,7 +587,11 @@ EOL;
         }
 
         // Remove location of the project
-        $output = str_replace(realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR, '', $output);
+        $output = str_replace(
+            realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR,
+            $removeAbsolutePaths ? '' : 'BASE_PATH/',
+            $output
+        );
 
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
@@ -620,11 +642,11 @@ EOL;
         };
     }
 
-    private function getOutputDiff(PyStringNode $expectedText): string
+    private function getOutputDiff(PyStringNode $expectedText, bool $removeaAbsolutePaths = true): string
     {
         $differ = new Differ(new DiffOnlyOutputBuilder());
 
-        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
+        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput($removeaAbsolutePaths));
     }
 
     private static function clearDirectory($path)

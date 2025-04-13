@@ -13,6 +13,8 @@ parameters:
                 - src/Behat/Behat/Definition/Printer/ConsoleDefinitionPrinter.php
                 - src/Behat/Behat/EventDispatcher/Cli/StopOnFailureController.php
                 - src/Behat/Behat/Output/Node/Printer/ListPrinter.php
+                - src/Behat/Behat/Output/Node/Printer/Pretty/PrettyPathPrinter.php
                 - src/Behat/Behat/Tester/Runtime/RuntimeFeatureTester.php
                 - src/Behat/Behat/Transformation/Transformation/ReturnTypeTransformation.php
+                - src/Behat/Testwork/Exception/ExceptionPresenter.php
                 - src/Behat/Testwork/Ordering/Cli/OrderController.php

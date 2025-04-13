@@ -34,6 +34,7 @@ use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
 use Behat\Testwork\Ordering\ServiceContainer\OrderingExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
@@ -83,6 +84,7 @@ final class ApplicationFactory extends BaseFactory
             new AutoloaderExtension(['' => '%paths.base%/features/bootstrap']),
             new SuiteExtension($processor),
             new OutputExtension('pretty', $this->getDefaultFormatterFactories($processor), $processor),
+            new PathOptionsExtension(),
             new ExceptionExtension($processor),
             new GherkinExtension($processor),
             new CallExtension($processor),
