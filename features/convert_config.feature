@@ -182,6 +182,41 @@ Feature: Convert config
       """
     And the temp "suite_contexts.yaml" file should have been removed
 
+  Scenario: Suite contexts with arguments
+    When I copy the "suite_contexts_with_args.yaml" file to the temp folder
+    When I run behat with the following additional options:
+      | option   | value                                          |
+      | --config | {SYSTEM_TMP_DIR}/suite_contexts_with_args.yaml |
+    Then the temp "suite_contexts_with_args.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withSuite((new Suite('my_suite'))
+                  ->addContext('MyContext')
+                  ->addContext(
+                      'App\AContextWithPositionalArgs',
+                      [
+                          'First Arg',
+                          'Second Arg',
+                      ]
+                  )
+                  ->addContext(
+                      'App\AContextWithNamedArgs',
+                      [
+                          'param1' => 'Something',
+                          'param2' => 'Else',
+                      ]
+                  )
+                  ->addContext('App\AnotherContext')));
+      """
+    And the temp "suite_contexts.yaml" file should have been removed
+
   Scenario: Suite paths
     When I copy the "suite_paths.yaml" file to the temp folder
     When I run behat with the following additional options:
@@ -252,6 +287,49 @@ Feature: Convert config
               ])));
       """
     And the temp "extensions.yaml" file should have been removed
+
+  Scenario: Class references for known extensions and contexts
+    Given I copy the "class_references.yaml" file to the temp folder
+    When  I run behat with the following additional options:
+      | option   | value                                  |
+      | --config | {SYSTEM_TMP_DIR}/class_references.yaml |
+    Then the temp "class_references.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Extension;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+      use MyContext;
+      use Some\Behat\Extension\ExplicitlyReferencedExtension;
+      use Some\ShorthandExtension\ServiceContainer\ShorthandExtension;
+      use test\MyApp\Contexts\MyFirstContext;
+      use test\MyApp\Contexts\MySecondContext;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withExtension(new Extension('class_references_loader.php'))
+              ->withExtension(new Extension(ExplicitlyReferencedExtension::class))
+              ->withExtension(new Extension(ShorthandExtension::class))
+              ->withSuite((new Suite('named_contexts'))
+                  ->withContexts(
+                      'UnknownContext',
+                      MyContext::class,
+                      MyFirstContext::class,
+                      MySecondContext::class
+                  ))
+              ->withSuite((new Suite('contexts_with_args'))
+                  ->addContext('UnknownContext')
+                  ->addContext(
+                      MyFirstContext::class,
+                      [
+                          'param1',
+                      ]
+                  )
+                  ->addContext(MySecondContext::class)));
+      """
+    And the temp "class_references.yaml" file should have been removed
 
   Scenario: Profile filters
     When I copy the "profile_filters.yaml" file to the temp folder
@@ -325,6 +403,7 @@ Feature: Convert config
   Scenario: Full configuration
     When I copy the "full_configuration.yaml" file to the temp folder
     And I copy the "imported.yaml" file to the temp folder
+    And the "MY_SECRET_PASSWORD" environment variable is set to "sesame"
     When I run behat with the following additional options:
       | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/full_configuration.yaml |
@@ -359,7 +438,12 @@ Feature: Convert config
               ->withPrintUnusedDefinitions(true)
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
-                  ->withContexts('MyContext')
+                  ->addContext(
+                      'MyContext',
+                      [
+                          'password' => '%env(MY_SECRET_PASSWORD)%',
+                      ]
+                  )
                   ->withPaths('one.feature')
                   ->withFilter(new TagFilter('@run'))))
           ->withProfile((new Profile('other'))
@@ -378,4 +462,3 @@ Feature: Convert config
       """
     And the temp "full_configuration.yaml" file should have been removed
     And the temp "imported.yaml" file should have been removed
-

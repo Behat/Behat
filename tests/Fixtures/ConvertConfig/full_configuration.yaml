@@ -14,7 +14,8 @@ default:
     suites:
         my_suite:
             contexts:
-                - MyContext
+                - MyContext:
+                    password: '%env(MY_SECRET_PASSWORD)%'
             paths:
                 - "one.feature"
             filters:

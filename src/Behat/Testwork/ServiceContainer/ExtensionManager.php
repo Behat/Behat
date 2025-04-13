@@ -131,11 +131,9 @@ final class ExtensionManager
     /**
      * Attempts to guess full extension class from relative.
      *
-     * @param string $locator
-     *
-     * @return string
+     * @internal
      */
-    private function getFullExtensionClass($locator)
+    public static function guessFullExtensionClassName(string $locator): string
     {
         $parts = explode('\\', $locator);
         $name = preg_replace('/Extension$/', '', end($parts)) . 'Extension';
@@ -171,7 +169,7 @@ final class ExtensionManager
             return new $class();
         }
 
-        if (class_exists($class = $this->getFullExtensionClass($locator))) {
+        if (class_exists($class = self::guessFullExtensionClassName($locator))) {
             return new $class();
         }
 
