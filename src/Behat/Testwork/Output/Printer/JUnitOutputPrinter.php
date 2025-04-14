@@ -103,6 +103,16 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     }
 
     /**
+     * Adds attributes to the current <testcase> node.
+     *
+     * @param array $testcaseAttributes
+     */
+    public function addCurrentTestCaseAttributes(array $testcaseAttributes)
+    {
+        $this->addAttributesToNode($this->currentTestcase, $testcaseAttributes);
+    }
+
+    /**
      * Add a testcase child element.
      *
      * @param string $nodeName
