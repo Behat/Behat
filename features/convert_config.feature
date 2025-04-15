@@ -402,8 +402,16 @@ Feature: Convert config
           ->withProfile((new Profile('with_options'))
               ->withFormatter((new JUnitFormatter())
                   ->withOutputPath('build/logs/junit'))
-              ->withFormatter(new ProgressFormatter(showOutput: ShowOutputOption::OnFail))
-              ->withFormatter(new PrettyFormatter(expand: true, showOutput: ShowOutputOption::No)));
+              ->withFormatter((new ProgressFormatter(showOutput: ShowOutputOption::OnFail))
+                  ->withOutputVerbosity(3))
+              ->withFormatter((new PrettyFormatter(expand: true, showOutput: ShowOutputOption::No))
+                  ->withOutputStyles([
+                      'failed' => [
+                          'white',
+                          'red',
+                          'blink',
+                      ],
+                  ])));
       """
     And the temp "formatters.yaml" file should have been removed
 

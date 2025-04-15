@@ -18,6 +18,9 @@ with_options:
         progress:
             timer: true
             show_output: on-fail
+            output_verbosity: 3
         pretty:
             expand: true
             show_output: no
+            output_styles:
+                failed: [ white, red, blink ]
