@@ -20,6 +20,7 @@ return [
         'undefined_count'         => '[1,Inf] %count% undefined',
         'skipped_count'           => '[1,Inf] %count% skipped',
         'unused_definitions'      => '{0} No unused definitions|{1} 1 unused definition:|]1,Inf] %count% unused definitions:',
+        'on_line_number'          => 'on line %line%',
     ],
     'bg'    => [
         'snippet_context_choice'  => 'В сет <snippet_undefined><snippet_keyword>%count%</snippet_keyword> има недекларирани стъпки. Изберете в кой Context да бъдат създадени:</snippet_undefined>',
@@ -112,6 +113,7 @@ return [
         'undefined_count'        => '[1,Inf] %count% indéfinis',
         'skipped_count'          => '[1,Inf] %count% ignorés',
         'unused_definitions'     => '{0} Aucune définition inutilisée|{1} 1 définition inutilisée:|]1,Inf] %count% définitions inutilisées:',
+        'on_line_number'          => 'à la ligne %line%',
     ],
     'hu'    => [
         'snippet_context_choice'  => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> sorozat meghatározatlan lépéseket tartalmaz. Válaszd ki a környezetet kódrészlet készítéséhez:</snippet_undefined>',
