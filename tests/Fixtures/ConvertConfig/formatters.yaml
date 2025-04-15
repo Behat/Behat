@@ -11,7 +11,13 @@ default:
     extensions:
         custom_extension.php: ~
 
-with_junit:
+with_options:
     formatters:
         junit:
             output_path: build/logs/junit
+        progress:
+            timer: true
+            show_output: on-fail
+        pretty:
+            expand: true
+            show_output: no

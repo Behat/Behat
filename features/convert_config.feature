@@ -385,6 +385,7 @@ Feature: Convert config
       use Behat\Config\Formatter\JUnitFormatter;
       use Behat\Config\Formatter\PrettyFormatter;
       use Behat\Config\Formatter\ProgressFormatter;
+      use Behat\Config\Formatter\ShowOutputOption;
       use Behat\Config\Profile;
 
       return (new Config())
@@ -398,9 +399,11 @@ Feature: Convert config
               ]))
                   ->withOutputVerbosity(2))
               ->withExtension(new Extension('custom_extension.php')))
-          ->withProfile((new Profile('with_junit'))
+          ->withProfile((new Profile('with_options'))
               ->withFormatter((new JUnitFormatter())
-                  ->withOutputPath('build/logs/junit')));
+                  ->withOutputPath('build/logs/junit'))
+              ->withFormatter(new ProgressFormatter(showOutput: ShowOutputOption::OnFail))
+              ->withFormatter(new PrettyFormatter(expand: true, showOutput: ShowOutputOption::No)));
       """
     And the temp "formatters.yaml" file should have been removed
 
