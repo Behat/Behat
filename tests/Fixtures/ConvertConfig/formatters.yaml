@@ -10,3 +10,8 @@ default:
             other_property: value
     extensions:
         custom_extension.php: ~
+
+with_junit:
+    formatters:
+        junit:
+            output_path: build/logs/junit
