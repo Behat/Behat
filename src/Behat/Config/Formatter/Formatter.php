@@ -6,7 +6,10 @@ namespace Behat\Config\Formatter;
 
 use Behat\Config\ConfigConverterInterface;
 use Behat\Config\Converter\ConfigConverterTools;
+use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use PhpParser\Node\Expr;
+use ReflectionClass;
+use ReflectionClassConstant;
 
 class Formatter implements FormatterConfigInterface, ConfigConverterInterface
 {
@@ -132,6 +135,9 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
         foreach ($this->settings as $settingName => $setting) {
             $functionName = Formatter::FORMATTER_FUNCTION_NAMES_PER_SETTING[$settingName] ?? null;
             if ($functionName !== null) {
+                if ($settingName === self::OUTPUT_VERBOSITY_SETTING) {
+                    $setting = ConfigConverterTools::findReferenceToClassConstant(OutputFactory::class, $setting);
+                }
                 $expr = ConfigConverterTools::addMethodCall(
                     $functionName,
                     [$setting],
