@@ -387,6 +387,7 @@ Feature: Convert config
       use Behat\Config\Formatter\ProgressFormatter;
       use Behat\Config\Formatter\ShowOutputOption;
       use Behat\Config\Profile;
+      use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 
       return (new Config())
           ->withProfile((new Profile('default'))
@@ -397,13 +398,13 @@ Feature: Convert config
               ->withFormatter((new Formatter('custom_formatter', [
                   'other_property' => 'value',
               ]))
-                  ->withOutputVerbosity(2))
+                  ->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
               ->withExtension(new Extension('custom_extension.php')))
           ->withProfile((new Profile('with_options'))
               ->withFormatter((new JUnitFormatter())
                   ->withOutputPath('build/logs/junit'))
               ->withFormatter((new ProgressFormatter(showOutput: ShowOutputOption::OnFail))
-                  ->withOutputVerbosity(3))
+                  ->withOutputVerbosity(OutputFactory::VERBOSITY_VERY_VERBOSE))
               ->withFormatter((new PrettyFormatter(expand: true, showOutput: ShowOutputOption::No))
                   ->withOutputStyles([
                       'failed' => [
@@ -436,6 +437,7 @@ Feature: Convert config
       use Behat\Config\Formatter\ProgressFormatter;
       use Behat\Config\Profile;
       use Behat\Config\Suite;
+      use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 
       return (new Config())
           ->import('imported.php')
@@ -447,7 +449,7 @@ Feature: Convert config
               ->withFormatter((new Formatter('custom_formatter', [
                   'other_property' => 'value',
               ]))
-                  ->withOutputVerbosity(2))
+                  ->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
               ->withFilter(new NameFilter('john'))
               ->withFilter(new RoleFilter('admin'))
               ->withPrintUnusedDefinitions(true)
