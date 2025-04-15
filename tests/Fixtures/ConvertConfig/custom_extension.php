@@ -53,6 +53,7 @@ class CustomFormatter implements Formatter
 
     public static function getSubscribedEvents()
     {
+        return [];
     }
 
     public function getName()

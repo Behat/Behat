@@ -156,7 +156,7 @@ final class Profile implements ConfigConverterInterface
                 $formatter = match ($name) {
                     PrettyFormatter::NAME => $formatterSettings === true ? new PrettyFormatter() : new PrettyFormatter(...$formatterSettings),
                     ProgressFormatter::NAME => $formatterSettings === true ? new ProgressFormatter() : new ProgressFormatter(...$formatterSettings),
-                    JUnitFormatter::NAME => new JUnitFormatter(),
+                    JUnitFormatter::NAME => $formatterSettings === true ? new JUnitFormatter() : new JUnitFormatter(...$formatterSettings),
                     default => $formatterSettings === true ? new Formatter($name) : new Formatter($name, $formatterSettings),
                 };
                 $expr = ConfigConverterTools::addMethodCall(
