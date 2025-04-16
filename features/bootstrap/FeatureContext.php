@@ -498,6 +498,15 @@ EOL;
                 },
                 $text
             );
+
+            // texts with absolute paths
+            $text = preg_replace_callback(
+                '/\{BASE_PATH\}[^\n "]+/',
+                function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                },
+                $text
+            );
         }
 
         return $text;
@@ -559,7 +568,7 @@ EOL;
         return $this->process->getExitCode();
     }
 
-    private function getOutput()
+    private function getOutput(): string
     {
         $output = $this->process->getErrorOutput() . $this->process->getOutput();
 
@@ -569,7 +578,11 @@ EOL;
         }
 
         // Remove location of the project
-        $output = str_replace(realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR, '', $output);
+        $output = str_replace(
+            realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR,
+            '{BASE_PATH}',
+            $output
+        );
 
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);

@@ -416,6 +416,24 @@ Feature: Convert config
       """
     And the temp "formatters.yaml" file should have been removed
 
+  Scenario: path options
+    When I copy the "path_options.yaml" file to the temp folder
+    When I run behat with the following additional options:
+      | option   | value                                    |
+      | --config | {SYSTEM_TMP_DIR}/path_options.yaml |
+    Then the temp "path_options.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withPathOptions(printAbsolutePaths: true));
+      """
+    And the temp "path_options.yaml" file should have been removed
+
   Scenario: Full configuration
     When I copy the "full_configuration.yaml" file to the temp folder
     And I copy the "imported.yaml" file to the temp folder
@@ -453,6 +471,7 @@ Feature: Convert config
               ->withFilter(new NameFilter('john'))
               ->withFilter(new RoleFilter('admin'))
               ->withPrintUnusedDefinitions(true)
+              ->withPathOptions(printAbsolutePaths: true)
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
                   ->addContext(

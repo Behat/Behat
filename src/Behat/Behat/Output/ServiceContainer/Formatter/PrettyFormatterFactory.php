@@ -18,6 +18,7 @@ use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -219,6 +220,7 @@ class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Pretty\PrettyPathPrinter', [
             new Reference('output.node.printer.pretty.width_calculator'),
             '%paths.base%',
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition('output.node.printer.pretty.path', $definition);
 
@@ -366,6 +368,7 @@ class PrettyFormatterFactory implements FormatterFactory
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%',
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition('output.node.printer.list', $definition);
 

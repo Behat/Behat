@@ -28,6 +28,7 @@ use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -45,10 +46,8 @@ final class ListPrinter
      * @var TranslatorInterface
      */
     private $translator;
-    /**
-     * @var string
-     */
-    private $basePath;
+
+    private ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
@@ -58,11 +57,12 @@ final class ListPrinter
         ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
         TranslatorInterface $translator,
-        $basePath,
+        string $basePath,
+        ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
         $this->resultConverter = $resultConverter;
         $this->translator = $translator;
-        $this->basePath = $basePath;
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
     }
 
     /**
@@ -84,7 +84,7 @@ final class ListPrinter
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($scenarioStats as $stat) {
-            $path = $this->relativizePaths((string) $stat);
+            $path = $this->configurablePathPrinter->processPathsInText((string) $stat);
             $printer->writeln(sprintf('    {+%s}%s{-%s}', $style, $path, $style));
         }
 
@@ -178,7 +178,7 @@ final class ListPrinter
         ?string $error,
         ?ShowOutputOption $showOutput,
     ) {
-        $path = $this->relativizePaths($path);
+        $path = $this->configurablePathPrinter->processPathsInText($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
 
         $pad = function ($line) { return '      ' . $line; };
@@ -210,7 +210,7 @@ final class ListPrinter
                 $hookStat->getName(),
                 $style,
                 $location ? " \"$location\"" : '',
-                $this->relativizePaths($hookStat->getPath())
+                $this->configurablePathPrinter->processPathsInText($hookStat->getPath())
             )
         );
 
@@ -250,7 +250,7 @@ final class ListPrinter
                 $stat->getScenarioText(),
                 $style,
                 str_pad(' ', $maxLength - mb_strlen($stat->getScenarioText(), 'utf8')),
-                $this->relativizePaths($stat->getScenarioPath())
+                $this->configurablePathPrinter->processPathsInText($stat->getScenarioPath())
             )
         );
 
@@ -261,7 +261,7 @@ final class ListPrinter
                 $stat->getStepText(),
                 $style,
                 str_pad(' ', $maxLength - mb_strlen($stat->getStepText(), 'utf8') - 2),
-                $this->relativizePaths($stat->getStepPath())
+                $this->configurablePathPrinter->processPathsInText($stat->getStepPath())
             )
         );
 
@@ -281,22 +281,6 @@ final class ListPrinter
         $printer->writeln();
     }
 
-    /**
-     * Transforms path to relative.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function relativizePaths($path)
-    {
-        if (!$this->basePath) {
-            return $path;
-        }
-
-        return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
-    }
-
     private function getLocationFromScope(?HookScope $scope): ?string
     {
         if ($scope !== null) {
@@ -304,12 +288,12 @@ final class ListPrinter
                 $scope instanceof BeforeSuiteScope, $scope instanceof AfterSuiteScope =>
                 $scope->getSuite()->getName(),
                 $scope instanceof BeforeFeatureScope, $scope instanceof AfterFeatureScope =>
-                    $this->relativizePaths($scope->getFeature()->getFile()),
+                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()),
                 $scope instanceof BeforeScenarioScope, $scope instanceof AfterScenarioScope =>
-                    $this->relativizePaths($scope->getFeature()->getFile()) .
+                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()) .
                     ':' . $scope->getScenario()->getLine(),
                 $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
-                    $this->relativizePaths($scope->getFeature()->getFile()) .
+                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()) .
                     ':' . $scope->getStep()->getLine(),
                 default => null,
             };
