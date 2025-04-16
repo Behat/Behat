@@ -47,4 +47,10 @@ class FeatureContext implements Context
     {
         throw new \Exception('Exception is thrown');
     }
+
+    #[When('I trim NULL')]
+    public function iTrimNull()
+    {
+        trim(null);
+    }
 }

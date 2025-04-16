@@ -1,5 +1,9 @@
 default: ~
 
-ignore-notice-and-warning:
+ignore-all-but-error:
     calls:
-        error_reporting: 32757
+        error_reporting: 24565
+
+ignore-deprecations:
+    calls:
+        error_reporting: 22527

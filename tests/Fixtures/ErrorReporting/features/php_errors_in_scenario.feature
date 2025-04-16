@@ -14,3 +14,6 @@ Feature: E_NOTICE in scenario
     When I push "foo" to that array
     And I access array index 0
     Then I should get "foo"
+
+  Scenario: Trigger PHP deprecation
+    When I trim NULL
