@@ -60,7 +60,7 @@ final class SpecificationFinder
      *
      * @return list<SpecificationIterator<T>>
      */
-    public function findSuitesSpecifications(array $suites, $locator = null)
+    public function findSuitesSpecifications(array $suites, ?string $locator = null)
     {
         $iterators = [];
         foreach ($suites as $suite) {

@@ -1,7 +1,7 @@
 Feature: Tags
   In order to run only needed features
   As a Behat user
-  I need to Behat support features & scenario/outline tags
+  I need Behat to support features & scenario/outline tags
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:

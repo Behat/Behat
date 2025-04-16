@@ -1,7 +1,7 @@
-Feature: Name filters
+Feature: Path filters
   In order to run only needed features
   As a Behat user
-  I need Behat to support features & scenario/outline names filtering
+  I need Behat to support path(s) filtering
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -24,13 +24,10 @@ Feature: Name filters
           #[Given('/^Some fast step N(\d+)$/')]
           public function someFastStepN($num) {}
       }
-    """
+     """
     And a file named "features/feature1.feature" with:
       """
       Feature: First Feature
-
-        Background:
-          Given Some slow step N11
 
         Scenario: First Scenario
           Given Some slow step N12
@@ -51,20 +48,51 @@ Feature: Name filters
           And Some fast step N23
       """
 
-  Scenario: First Name
-    When I run "behat --no-colors -f pretty --name First"
+  Scenario: First feature file only
+    When I run "behat --no-colors -f pretty features/feature1.feature"
     Then it should pass with:
       """
       Feature: First Feature
 
-        Background:                # features/feature1.feature:3
-          Given Some slow step N11 # FeatureContext::someSlowStepN()
-
-        Scenario: First Scenario   # features/feature1.feature:6
+        Scenario: First Scenario   # features/feature1.feature:3
           Given Some slow step N12 # FeatureContext::someSlowStepN()
           And Some normal step N13 # FeatureContext::someNormalStepN()
 
-        Scenario: Second Scenario  # features/feature1.feature:10
+        Scenario: Second Scenario  # features/feature1.feature:7
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      2 scenarios (2 passed)
+      3 steps (3 passed)
+      """
+
+  Scenario: Second feature file only
+    When I run "behat --no-colors -f pretty features/feature2.feature"
+    Then it should pass with:
+      """
+      Feature: Second Feature
+
+        Background:                  # features/feature2.feature:3
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
+
+        Scenario: First Scenario   # features/feature2.feature:6
+          Given Some slow step N22 # FeatureContext::someSlowStepN()
+          And Some fast step N23   # FeatureContext::someFastStepN()
+
+      1 scenario (1 passed)
+      3 steps (3 passed)
+      """
+
+  Scenario: Both feature files
+    When I run "behat --no-colors -f pretty features/feature1.feature features/feature2.feature"
+    Then it should pass with:
+      """
+      Feature: First Feature
+
+        Scenario: First Scenario   # features/feature1.feature:3
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario: Second Scenario  # features/feature1.feature:7
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
       Feature: Second Feature
@@ -77,37 +105,5 @@ Feature: Name filters
           And Some fast step N23   # FeatureContext::someFastStepN()
 
       3 scenarios (3 passed)
-      8 steps (8 passed)
-      """
-
-  Scenario: Second Name
-    When I run "behat --no-colors -f pretty --name 'Second Scenario'"
-    Then it should pass with:
-      """
-      Feature: First Feature
-
-        Background:                # features/feature1.feature:3
-          Given Some slow step N11 # FeatureContext::someSlowStepN()
-
-        Scenario: Second Scenario  # features/feature1.feature:10
-          Given Some fast step N14 # FeatureContext::someFastStepN()
-
-      1 scenario (1 passed)
-      2 steps (2 passed)
-      """
-
-  Scenario: RegEx
-    When I run "behat --no-colors -f pretty --name '/nd Scenario$/'"
-    Then it should pass with:
-      """
-      Feature: First Feature
-
-        Background:                # features/feature1.feature:3
-          Given Some slow step N11 # FeatureContext::someSlowStepN()
-
-        Scenario: Second Scenario  # features/feature1.feature:10
-          Given Some fast step N14 # FeatureContext::someFastStepN()
-
-      1 scenario (1 passed)
-      2 steps (2 passed)
+      6 steps (6 passed)
       """
