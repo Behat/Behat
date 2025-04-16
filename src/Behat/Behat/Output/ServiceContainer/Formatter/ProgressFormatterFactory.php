@@ -14,6 +14,7 @@ use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -103,8 +104,8 @@ class ProgressFormatterFactory implements FormatterFactory
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%',
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
-        $definition->addMethodCall(('setConfigurablePathPrinter'), [new Reference('configurable.path.printer')]);
         $container->setDefinition('output.node.printer.list', $definition);
 
         $definition = new Definition('Behat\Behat\Output\Node\Printer\Progress\ProgressStepPrinter', [

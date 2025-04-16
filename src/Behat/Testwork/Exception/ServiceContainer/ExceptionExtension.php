@@ -12,6 +12,7 @@ namespace Behat\Testwork\Exception\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -117,8 +118,8 @@ final class ExceptionExtension implements Extension
         $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', [
             '%paths.base%',
             $verbosity,
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
-        $definition->addMethodCall(('setConfigurablePathPrinter'), [new Reference('configurable.path.printer')]);
         $container->setDefinition(self::PRESENTER_ID, $definition);
     }
 

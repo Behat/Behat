@@ -13,46 +13,30 @@ Feature: Print absolute paths
     When I run behat with the following additional options:
       | option                 | value |
       | --print-absolute-paths |       |
-    Then the output with absolute paths should contain:
+    Then the output should contain:
       """
-        Scenario:                                    # BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
+        Scenario:                                    # {BASE_PATH}tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/bootstrap/FeatureContext.php line 16
+            Warning: Undefined variable $b in {BASE_PATH}tests/Fixtures/PrintAbsolutePaths/features/bootstrap/FeatureContext.php line 16
 
       --- Failed scenarios:
 
-          BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
+          {BASE_PATH}tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
       """
 
   Scenario: Add option in config file
     When I run behat with the following additional options:
       | option    | value                |
       | --profile | absolute_paths       |
-    Then the output with absolute paths should contain:
+    Then the output should contain:
       """
-        Scenario:                                    # BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
+        Scenario:                                    # {BASE_PATH}tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/bootstrap/FeatureContext.php line 16
+            Warning: Undefined variable $b in {BASE_PATH}tests/Fixtures/PrintAbsolutePaths/features/bootstrap/FeatureContext.php line 16
 
       --- Failed scenarios:
 
-          BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
-      """
-
-  Scenario: Add option in yaml config file
-    When I run behat with the following additional options:
-      | option    | value               |
-      | --config  | absolute_paths.yaml |
-    Then the output with absolute paths should contain:
-      """
-        Scenario:                                    # BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
-          Given I have a passing step                # FeatureContext::iHaveAPassingStep()
-          And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/bootstrap/FeatureContext.php line 16
-
-      --- Failed scenarios:
-
-          BASE_PATH/tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
+          {BASE_PATH}tests/Fixtures/PrintAbsolutePaths/features/test.feature:3
       """

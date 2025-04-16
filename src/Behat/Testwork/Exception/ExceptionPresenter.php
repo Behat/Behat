@@ -41,13 +41,9 @@ final class ExceptionPresenter
     public function __construct(
         ?string $basePath = null,
         private int $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL,
+        ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
-        $this->defaultVerbosity = $defaultVerbosity;
-    }
-
-    public function setConfigurablePathPrinter(ConfigurablePathPrinter $configurablePathPrinter)
-    {
-        $this->configurablePathPrinter = $configurablePathPrinter;
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
     }
 
     /**

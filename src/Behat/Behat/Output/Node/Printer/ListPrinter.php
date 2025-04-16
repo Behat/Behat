@@ -51,21 +51,18 @@ final class ListPrinter
 
     /**
      * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
-     * @param string $basePath deprecated , will be removed in the next major version
+     * @param string $basePath
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
         TranslatorInterface $translator,
         string $basePath,
+        ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
         $this->resultConverter = $resultConverter;
         $this->translator = $translator;
-    }
-
-    public function setConfigurablePathPrinter(ConfigurablePathPrinter $configurablePathPrinter)
-    {
-        $this->configurablePathPrinter = $configurablePathPrinter;
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
     }
 
     /**

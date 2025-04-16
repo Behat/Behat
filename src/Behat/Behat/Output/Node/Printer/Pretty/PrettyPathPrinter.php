@@ -38,16 +38,15 @@ final class PrettyPathPrinter
      * Initializes printer.
      *
      * @param WidthCalculator $widthCalculator
-     * @param string          $basePath deprecated, will be removed in next major version
+     * @param string          $basePath
      */
-    public function __construct(WidthCalculator $widthCalculator, string $basePath)
-    {
+    public function __construct(
+        WidthCalculator $widthCalculator,
+        string $basePath,
+        ?ConfigurablePathPrinter $configurablePathPrinter = null,
+    ) {
         $this->widthCalculator = $widthCalculator;
-    }
-
-    public function setConfigurablePathPrinter(ConfigurablePathPrinter $configurablePathPrinter)
-    {
-        $this->configurablePathPrinter = $configurablePathPrinter;
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
     }
 
     /**

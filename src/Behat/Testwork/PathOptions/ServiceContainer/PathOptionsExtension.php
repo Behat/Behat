@@ -25,6 +25,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class PathOptionsExtension implements Extension
 {
+    public const CONFIGURABLE_PATH_PRINTER_ID = 'configurable.path.printer';
+
     public function getConfigKey()
     {
         return 'path_options';
@@ -60,13 +62,13 @@ final class PathOptionsExtension implements Extension
             '%paths.base%',
             $printAbsolutePaths,
         ]);
-        $container->setDefinition('configurable.path.printer', $definition);
+        $container->setDefinition(self::CONFIGURABLE_PATH_PRINTER_ID, $definition);
     }
 
     private function loadPathOptionsController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\PathOptions\Cli\PathOptionsController', [
-            new Reference('configurable.path.printer'),
+            new Reference(self::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.path', $definition);

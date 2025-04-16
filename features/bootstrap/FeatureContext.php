@@ -457,24 +457,6 @@ EOL;
         );
     }
 
-    /**
-     * Checks whether last command output contains provided string including absolute paths
-     *
-     * @Then the output with absolute paths should contain:
-     *
-     * @param PyStringNode $text PyString text instance
-     */
-    public function theOutputWithAbsolutePathsShouldContain(PyStringNode $text)
-    {
-        if (str_contains($this->getOutput(false), $this->getExpectedOutput($text))) {
-            return;
-        }
-
-        throw new UnexpectedValueException(
-            $this->getOutputDiff($text, false)
-        );
-    }
-
     private function getExpectedOutput(PyStringNode $expectedText)
     {
         $text = strtr($expectedText, [
@@ -511,6 +493,15 @@ EOL;
             // error stacktrace
             $text = preg_replace_callback(
                 '/#\d+ [^:]+:/',
+                function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                },
+                $text
+            );
+
+            // texts with absolute paths
+            $text = preg_replace_callback(
+                '/\{BASE_PATH\}[^\n "]+/',
                 function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 },
@@ -577,7 +568,7 @@ EOL;
         return $this->process->getExitCode();
     }
 
-    private function getOutput(bool $removeAbsolutePaths = true): string
+    private function getOutput(): string
     {
         $output = $this->process->getErrorOutput() . $this->process->getOutput();
 
@@ -589,7 +580,7 @@ EOL;
         // Remove location of the project
         $output = str_replace(
             realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR,
-            $removeAbsolutePaths ? '' : 'BASE_PATH/',
+            '{BASE_PATH}',
             $output
         );
 
@@ -642,11 +633,11 @@ EOL;
         };
     }
 
-    private function getOutputDiff(PyStringNode $expectedText, bool $removeaAbsolutePaths = true): string
+    private function getOutputDiff(PyStringNode $expectedText): string
     {
         $differ = new Differ(new DiffOnlyOutputBuilder());
 
-        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput($removeaAbsolutePaths));
+        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
     private static function clearDirectory($path)
