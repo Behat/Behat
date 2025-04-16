@@ -1,0 +1,5 @@
+default: ~
+
+ignore-notice-and-warning:
+    calls:
+        error_reporting: 32757
