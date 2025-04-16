@@ -26,7 +26,7 @@ Feature: Error Reporting
 
     002 Scenario: Trigger PHP deprecation # features/php_errors_in_scenario.feature:18
           When I trim NULL                # features/php_errors_in_scenario.feature:19
-            8192: trim(): Passing null to parameter #1 ($string) of type string is deprecated in features/bootstrap/FeatureContext.php line 54
+            Deprecated: trim(): Passing null to parameter #1 ($string) of type string is deprecated in features/bootstrap/FeatureContext.php line 54
 
     3 scenarios (1 passed, 2 failed)
     9 steps (6 passed, 2 failed, 1 skipped)
