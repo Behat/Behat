@@ -120,6 +120,7 @@ final class TesterOptions implements ConfigConverterInterface
                 $functionName = self::FUNCTION_NAMES_PER_SETTING[$group][$settingName] ?? null;
                 if ($functionName) {
                     $expr = ConfigConverterTools::addMethodCall(
+                        self::class,
                         $functionName,
                         [$setting],
                         $expr,

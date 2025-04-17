@@ -366,7 +366,7 @@ Feature: Convert config
 
       return (new Config())
           ->withProfile((new Profile('default'))
-              ->withPrintUnusedDefinitions(true));
+              ->withPrintUnusedDefinitions());
       """
     And the temp "unused_definitions.yaml" file should have been removed
 
@@ -457,9 +457,9 @@ Feature: Convert config
                   ->withStrictResultInterpretation(false)))
           ->withProfile((new Profile('complete'))
               ->withTesterOptions((new TesterOptions())
-                  ->withStrictResultInterpretation(true)
+                  ->withStrictResultInterpretation()
                   ->withStopOnFailure(false)
-                  ->withSkipAllTests(true)
+                  ->withSkipAllTests()
                   ->withErrorReporting(24565)));
       """
     And the temp "tester_options.yaml" file should have been removed
@@ -501,10 +501,10 @@ Feature: Convert config
                   ->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
               ->withFilter(new NameFilter('john'))
               ->withFilter(new RoleFilter('admin'))
-              ->withPrintUnusedDefinitions(true)
+              ->withPrintUnusedDefinitions()
               ->withPathOptions(printAbsolutePaths: true)
               ->withTesterOptions((new TesterOptions())
-                  ->withStrictResultInterpretation(true))
+                  ->withStrictResultInterpretation())
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
                   ->addContext(

@@ -8,7 +8,7 @@ return (new Config())
     ->withProfile(new Profile('default'))
     ->withProfile((new Profile('stop-on-failure'))
         ->withTesterOptions((new TesterOptions())
-            ->withStopOnFailure(true)))
+            ->withStopOnFailure()))
     ->withProfile((new Profile('no-stop-on-failure'))
         ->withTesterOptions((new TesterOptions())
             ->withStopOnFailure(false)));

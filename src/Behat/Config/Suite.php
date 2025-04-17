@@ -117,7 +117,7 @@ final class Suite implements ConfigConverterInterface
 
         if (!$hasAnyWithArguments) {
             // All the contexts are just class names, we can add them as a single `->withContexts` call
-            $expr = ConfigConverterTools::addMethodCall(self::WITH_CONTEXTS_FUNCTION, $contexts, $expr);
+            $expr = ConfigConverterTools::addMethodCall(self::class, self::WITH_CONTEXTS_FUNCTION, $contexts, $expr);
             return;
         }
 
@@ -131,9 +131,9 @@ final class Suite implements ConfigConverterInterface
                     array_shift($contextConfig),
                 ];
             } else {
-                $args = [$contextConfig];
+                $args = [$contextConfig, []];
             }
-            $expr = ConfigConverterTools::addMethodCall(self::ADD_CONTEXT_FUNCTION, $args, $expr);
+            $expr = ConfigConverterTools::addMethodCall(self::class, self::ADD_CONTEXT_FUNCTION, $args, $expr);
         }
     }
 
@@ -141,6 +141,7 @@ final class Suite implements ConfigConverterInterface
     {
         if (isset($this->settings[self::PATHS_SETTING])) {
             $expr = ConfigConverterTools::addMethodCall(
+                self::class,
                 self::PATHS_FUNCTION,
                 $this->settings[self::PATHS_SETTING],
                 $expr
@@ -162,6 +163,7 @@ final class Suite implements ConfigConverterInterface
                 };
                 if ($filter !== null) {
                     $expr = ConfigConverterTools::addMethodCall(
+                        self::class,
                         self::FILTER_FUNCTION,
                         [$filter->toPhpExpr()],
                         $expr

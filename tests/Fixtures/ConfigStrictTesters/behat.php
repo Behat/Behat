@@ -8,7 +8,7 @@ return (new Config())
     ->withProfile(new Profile('default'))
     ->withProfile((new Profile('with-strict'))
         ->withTesterOptions((new TesterOptions())
-            ->withStrictResultInterpretation(true)))
+            ->withStrictResultInterpretation()))
     ->withProfile((new Profile('not-strict'))
         ->withTesterOptions((new TesterOptions())
             ->withStrictResultInterpretation(false)));

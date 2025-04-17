@@ -163,6 +163,7 @@ final class Profile implements ConfigConverterInterface
         foreach ($this->settings[self::FORMATTERS_SETTING] as $name => $formatterSettings) {
             if ($formatterSettings === false) {
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::DISABLE_FORMATTER_FUNCTION,
                     [$name],
                     $expr
@@ -184,6 +185,7 @@ final class Profile implements ConfigConverterInterface
                     default => $formatterSettings === true ? new Formatter($name) : new Formatter($name, $formatterSettings),
                 };
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::FORMATTER_FUNCTION,
                     [$formatter->toPhpExpr()],
                     $expr
@@ -208,6 +210,7 @@ final class Profile implements ConfigConverterInterface
             };
             if ($filter !== null) {
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::FILTER_FUNCTION,
                     [$filter->toPhpExpr()],
                     $expr
@@ -229,6 +232,7 @@ final class Profile implements ConfigConverterInterface
             return;
         }
         $expr = ConfigConverterTools::addMethodCall(
+            self::class,
             self::UNUSED_DEFINITIONS_FUNCTION,
             [$this->settings[self::DEFINITIONS_SETTING][self::PRINT_UNUSED_DEFINITIONS_SETTING]],
             $expr
@@ -245,6 +249,7 @@ final class Profile implements ConfigConverterInterface
             return;
         }
         $expr = ConfigConverterTools::addMethodCall(
+            self::class,
             self::PATH_OPTIONS_FUNCTION,
             [self::PRINT_ABSOLUTE_PATHS_PARAMETER => $this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING]],
             $expr
@@ -263,6 +268,7 @@ final class Profile implements ConfigConverterInterface
         }
 
         $expr = ConfigConverterTools::addMethodCall(
+            self::class,
             self::TESTER_OPTIONS_FUNCTION,
             [$optionsObject->toPhpExpr()],
             $expr,
@@ -278,6 +284,7 @@ final class Profile implements ConfigConverterInterface
             $extensionObject = new Extension($name, $extensionSettings ?? []);
 
             $expr = ConfigConverterTools::addMethodCall(
+                self::class,
                 self::EXTENSION_FUNCTION,
                 [$extensionObject->toPhpExpr()],
                 $expr
@@ -294,6 +301,7 @@ final class Profile implements ConfigConverterInterface
         foreach ($this->settings[self::SUITES_SETTING] as $name => $suiteSettings) {
             $suiteObject = new Suite($name, $suiteSettings ?? []);
             $expr = ConfigConverterTools::addMethodCall(
+                self::class,
                 self::SUITE_FUNCTION,
                 [$suiteObject->toPhpExpr()],
                 $expr
