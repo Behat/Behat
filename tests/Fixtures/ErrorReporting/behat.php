@@ -8,7 +8,7 @@ return (new Config())
     ->withProfile(new Profile('default'))
     ->withProfile((new Profile('ignore-all-but-error'))
         ->withTesterOptions((new TesterOptions())
-            ->withErrorReporting(24565)))
+            ->withErrorReporting(E_ALL & ~(E_WARNING | E_NOTICE | E_DEPRECATED))))
     ->withProfile((new Profile('ignore-deprecations'))
         ->withTesterOptions((new TesterOptions())
-            ->withErrorReporting(22527)));
+            ->withErrorReporting(E_ALL & ~E_DEPRECATED)));

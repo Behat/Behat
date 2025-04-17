@@ -451,7 +451,7 @@ Feature: Convert config
           ->withProfile(new Profile('default'))
           ->withProfile((new Profile('ignore-errors'))
               ->withTesterOptions((new TesterOptions())
-                  ->withErrorReporting(22527)))
+                  ->withErrorReporting(E_ALL & ~E_DEPRECATED)))
           ->withProfile((new Profile('not-strict'))
               ->withTesterOptions((new TesterOptions())
                   ->withStrictResultInterpretation(false)))
@@ -460,7 +460,7 @@ Feature: Convert config
                   ->withStrictResultInterpretation()
                   ->withStopOnFailure(false)
                   ->withSkipAllTests()
-                  ->withErrorReporting(24565)));
+                  ->withErrorReporting(E_ALL & ~(E_WARNING | E_NOTICE | E_DEPRECATED))));
       """
     And the temp "tester_options.yaml" file should have been removed
 
@@ -518,7 +518,7 @@ Feature: Convert config
           ->withProfile((new Profile('other'))
               ->disableFormatter('pretty')
               ->withTesterOptions((new TesterOptions())
-                  ->withErrorReporting(1)))
+                  ->withErrorReporting(E_ERROR)))
           ->withPreferredProfile('other');
       """
     And the temp "imported.php" file should be like:

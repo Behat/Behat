@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Behat\Tests\Config\Converter;
 
 use Behat\Config\Converter\ConfigConverterTools;
+use Behat\Config\TesterOptions;
 use PhpParser\PrettyPrinter\Standard;
 use PHPUnit\Framework\TestCase;
 
@@ -165,5 +166,85 @@ final class ConfigConverterToolsTest extends TestCase
         $expr = ConfigConverterTools::createObject($class);
         $this->expectExceptionMessage($expect);
         ConfigConverterTools::addMethodCall($class, $method, $args, $expr);
+    }
+
+    public static function providerErrorReportingToConstants(): array
+    {
+        $OLD_E_STRICT = 2048;
+        $E_ALL_WITH_STRICT = E_ALL | $OLD_E_STRICT;
+
+        return [
+            [E_ALL, 'E_ALL'],
+            [0, '0'],
+            [E_ALL & ~E_DEPRECATED, 'E_ALL & ~E_DEPRECATED'],
+            [E_ALL & ~(E_DEPRECATED | E_USER_DEPRECATED), 'E_ALL & ~(E_DEPRECATED | E_USER_DEPRECATED)'],
+            [
+                E_ALL & ~(E_DEPRECATED | E_USER_DEPRECATED | E_WARNING),
+                'E_ALL & ~(E_WARNING | E_DEPRECATED | E_USER_DEPRECATED)',
+            ],
+            [
+                E_NOTICE,
+                'E_NOTICE',
+            ],
+            [
+                E_WARNING | E_NOTICE,
+                'E_WARNING | E_NOTICE',
+            ],
+            [
+                E_WARNING | E_NOTICE | E_DEPRECATED,
+                'E_WARNING | E_NOTICE | E_DEPRECATED',
+            ],
+            [
+                // Their config value includes bits that are not defined as PHP error levels.
+                E_WARNING | 65536,
+                'E_WARNING | 65536',
+            ],
+            [
+                // We can safely ignore the old E_STRICT value
+                E_ALL & ~$OLD_E_STRICT,
+                'E_ALL',
+            ],
+            [
+                // We can safely ignore the old E_STRICT value
+                $E_ALL_WITH_STRICT,
+                'E_ALL',
+            ],
+            [
+                // We can safely ignore the old E_STRICT value
+                $E_ALL_WITH_STRICT & ~E_DEPRECATED,
+                'E_ALL & ~E_DEPRECATED',
+            ],
+            [
+                // We can safely ignore the old E_STRICT value
+                $OLD_E_STRICT | E_WARNING,
+                'E_WARNING',
+            ],
+            [
+                // I guess users can still use environment vars for this...?
+                '%env(BEHAT_ERR_REPORTING)%',
+                "'%env(BEHAT_ERR_REPORTING)%'",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerErrorReportingToConstants
+     */
+    public function testErrorReportingToConstants(mixed $reporting, string $expect): void
+    {
+        // Can be used with any method, but might as well test with the one that has the expected signature
+        $expr = ConfigConverterTools::createObject(TesterOptions::class);
+        $expr = ConfigConverterTools::addMethodCall(
+            TesterOptions::class,
+            'withErrorReporting',
+            [ConfigConverterTools::errorReportingToConstants($reporting)],
+            $expr,
+        );
+
+        $printer = new Standard();
+        $this->assertSame(
+            '(new \\' . TesterOptions::class . '())->withErrorReporting(' . $expect . ')',
+            $printer->prettyPrintExpr($expr),
+        );
     }
 }

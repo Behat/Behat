@@ -132,4 +132,79 @@ class ConfigConverterTools
         // Can't find a constant for it, just return the original value
         return $settingValue;
     }
+
+    public static function errorReportingToConstants(mixed $value): Expr
+    {
+        $builderFactory = self::getBuilderFactory();
+
+        if (! is_int($value)) {
+            return $builderFactory->val($value);
+        }
+
+        // First remove the old E_STRICT value from both E_ALL and from the actual configured value.
+        // This will make the behaviour consistent across all supported PHP versions. Since 8.4.0,
+        // use of E_STRICT is deprecated and the value is no longer included in E_ALL. However,
+        // the bit may still be set in the error_reporting integer in a user's YAML file.
+        // Since 8.0, PHP cannot actually ever trigger an E_STRICT error, so the setting of the bit
+        // is actually irrelevant and we can safely ignore it.
+        $value = $value & ~2048;
+
+        if ($value === (E_ALL & ~2048)) {
+            // The value is equivalent to E_ALL (with or without the E_STRICT bit set, it doesn't matter).
+            return $builderFactory->constFetch('E_ALL');
+        }
+
+        if ($value === 0) {
+            // error_reporting is disabled
+            return $builderFactory->val(0);
+        }
+
+        // Split the value into constant expressions for the bit flags that are on and off.
+        $flagsOn = $flagsOff = [];
+        $remainingValue = $value;
+        foreach (self::listErrorLevelConstants() as $constName => $constValue) {
+            $remainingValue = $remainingValue & ~$constValue;
+
+            if ($value & $constValue) {
+                $flagsOn[] = $builderFactory->constFetch($constName);
+            } else {
+                $flagsOff[] = $builderFactory->constFetch($constName);
+            }
+        }
+
+        if ($remainingValue !== 0) {
+            // This is an edge case, their value includes a number that is not defined as a PHP error_reporting level
+            // Keep it as a constant value so that the configuration doesn't change and the user can review it
+            $flagsOn[] = $builderFactory->val($remainingValue);
+        }
+
+        if (count($flagsOff) < count($flagsOn)) {
+            // Most flags are on, it will be more readable and future-proof to start from E_ALL and negate
+            return new Expr\BinaryOp\BitwiseAnd(
+                $builderFactory->constFetch('E_ALL'),
+                new Expr\BitwiseNot(self::buildBitwiseFlagExpression(...$flagsOff)),
+            );
+        }
+
+        // Most flags are off, so just specify the ones that are on
+        return self::buildBitwiseFlagExpression(...$flagsOn);
+    }
+
+    private static function listErrorLevelConstants(): iterable
+    {
+        foreach (get_defined_constants(true)['Core'] as $constName => $constValue) {
+            if (str_starts_with($constName, 'E_') && $constName !== 'E_ALL' && $constName !== 'E_STRICT') {
+                yield $constName => $constValue;
+            }
+        }
+    }
+
+    private static function buildBitwiseFlagExpression(Expr ...$expressions): Expr
+    {
+        $expr = array_shift($expressions);
+        while ($expressions !== []) {
+            $expr = new Expr\BinaryOp\BitwiseOr($expr, array_shift($expressions));
+        }
+        return $expr;
+    }
 }

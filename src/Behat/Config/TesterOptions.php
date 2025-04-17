@@ -118,6 +118,9 @@ final class TesterOptions implements ConfigConverterInterface
         foreach ($this->settings as $group => $groupSettings) {
             foreach ($groupSettings as $settingName => $setting) {
                 $functionName = self::FUNCTION_NAMES_PER_SETTING[$group][$settingName] ?? null;
+                if ($settingName === self::ERROR_REPORTING_SETTING) {
+                    $setting = ConfigConverterTools::errorReportingToConstants($setting);
+                }
                 if ($functionName) {
                     $expr = ConfigConverterTools::addMethodCall(
                         self::class,
