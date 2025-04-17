@@ -1,130 +1,80 @@
 Feature: Error Reporting
-  In order to ignore E_NOTICE warnings of code I depend upon
+  In order to ignore or detect PHP warnings in code I depend upon
   As a feature developer
   I need to have an ability to set a custom error level for steps to be executed in
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
+    Given I set the working directory to the "ErrorReporting" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value    |
+      | --no-colors |          |
+      | --format    | progress |
 
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
 
-      class FeatureContext implements Context
-      {
-          private $array;
-          private $result;
-
-          #[Given('/^I have an empty array$/')]
-          public function iHaveAnEmptyArray()
-          {
-              $this->array = array();
-          }
-
-          #[When('/^I access array index (\d+)$/')]
-          public function iAccessArrayIndex($arg1)
-          {
-              $index = intval($arg1);
-              $this->result = $this->array[$index];
-          }
-
-          #[Then('/^I should get NULL$/')]
-          public function iShouldGetNull()
-          {
-              PHPUnit\Framework\Assert::assertNull($this->result);
-          }
-
-          #[When('/^I push "([^"]*)" to that array$/')]
-          public function iPushToThatArray($arg1)
-          {
-              array_push($this->array, $arg1);
-          }
-
-          #[Then('/^I should get "([^"]*)"$/')]
-          public function iShouldGet($arg1)
-          {
-              PHPUnit\Framework\Assert::assertEquals($arg1, $this->result);
-          }
-
-          #[When('an exception is thrown')]
-          public function anExceptionIsThrown()
-          {
-              throw new \Exception('Exception is thrown');
-          }
-      }
-      """
-    And a file named "features/e_notice_in_scenario.feature" with:
-      """
-      Feature: E_NOTICE in scenario
-        In order to test the BEHAT_ERROR_REPORTING constant
-        As a contributor of behat
-        I need to have a FeatureContext that throws E_NOTICE within steps.
-
-        Background:
-          Given I have an empty array
-
-        Scenario: Access undefined index
-          When I access array index 0
-          Then I should get NULL
-
-        Scenario: Access defined index
-          When I push "foo" to that array
-          And I access array index 0
-          Then I should get "foo"
-      """
-    And a file named "features/exception_in_scenario.feature" with:
-      """
-      Feature: Error in scenario
-        In order to test the error stacktraces
-        As a contributor of behat
-        I need to have a FeatureContext that triggers an error within steps.
-
-        Scenario: Exception thrown
-          When an exception is thrown
-
-      """
-
-  Scenario: With default error reporting
-    When I run "behat -f progress --no-colors features/e_notice_in_scenario.feature"
-    Then it should fail
-    And the output should contain:
+  Scenario: With default error reporting reports all PHP errors and deprecations
+    When I run behat with the following additional options:
+      | option                                  | value   |
+      | --profile                               | default |
+      | features/php_errors_in_scenario.feature |         |
+    Then it should fail with:
     """
     --- Failed steps:
 
-    001 Scenario: Access undefined index # features/e_notice_in_scenario.feature:9
-          When I access array index 0    # features/e_notice_in_scenario.feature:10
-            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 26
+    001 Scenario: Access undefined index # features/php_errors_in_scenario.feature:9
+          When I access array index 0    # features/php_errors_in_scenario.feature:10
+            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
 
-    2 scenarios (1 passed, 1 failed)
-    7 steps (5 passed, 1 failed, 1 skipped)
+    002 Scenario: Trigger PHP deprecation # features/php_errors_in_scenario.feature:18
+          When I trim NULL                # features/php_errors_in_scenario.feature:19
+            Deprecated: trim(): Passing null to parameter #1 ($string) of type string is deprecated in features/bootstrap/FeatureContext.php line 54
+
+    3 scenarios (1 passed, 2 failed)
+    9 steps (6 passed, 2 failed, 1 skipped)
     """
 
-  Scenario: With error reporting ignoring E_NOTICE and E_WARNING
-    Given a file named "behat.yml" with:
-      """
-      default:
-        calls:
-          error_reporting: 32757
-      """
-    When I run "behat -f progress --no-colors features/e_notice_in_scenario.feature"
-    Then it should pass
+  Scenario: With error reporting ignoring E_NOTICE, E_WARNING and E_DEPRECATED
+    When I run behat with the following additional options:
+      | option                                  | value                |
+      | --profile                               | ignore-all-but-error |
+      | features/php_errors_in_scenario.feature |                      |
+    Then it should pass with:
+    """
+    .......
+
+    3 scenarios (3 passed)
+    9 steps (9 passed)
+    """
+
+  Scenario: With error reporting only ignoring deprecations
+    When I run behat with the following additional options:
+      | option                                  | value   |
+      | --profile                               | ignore-deprecations |
+      | features/php_errors_in_scenario.feature |         |
+    Then it should fail with:
+    """
+    --- Failed steps:
+
+    001 Scenario: Access undefined index # features/php_errors_in_scenario.feature:9
+          When I access array index 0    # features/php_errors_in_scenario.feature:10
+            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 24
+
+    3 scenarios (2 passed, 1 failed)
+    9 steps (7 passed, 1 failed, 1 skipped)
+    """
 
   Scenario: With very verbose error reporting
-    When I run "behat -f progress --no-colors -vv features/exception_in_scenario.feature"
-    Then it should fail
-    And the output should contain:
+    When I run behat with the following additional options:
+      | option                                 | value   |
+      | --profile                              | default |
+      | -vv                                    |         |
+      | features/exception_in_scenario.feature |         |
+    Then it should fail with:
     """
     --- Failed steps:
 
     001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
           When an exception is thrown # features/exception_in_scenario.feature:7
-            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:50
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:48
             Stack trace:
 
     1 scenario (1 failed)
@@ -132,15 +82,18 @@ Feature: Error Reporting
     """
 
   Scenario: With debug verbose error reporting
-    When I run "behat -f progress --no-colors -vvv features/exception_in_scenario.feature"
-    Then it should fail
-    And the output should contain:
+    When I run behat with the following additional options:
+      | option                                 | value   |
+      | --profile                              | default |
+      | -vvv                                   |         |
+      | features/exception_in_scenario.feature |         |
+    Then it should fail with:
     """
     --- Failed steps:
 
     001 Scenario: Exception thrown    # features/exception_in_scenario.feature:6
           When an exception is thrown # features/exception_in_scenario.feature:7
-            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:50
+            Exception: Exception is thrown in features/bootstrap/FeatureContext.php:48
             Stack trace:
             #0 {BASE_PATH}src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(110): FeatureContext->anExceptionIsThrown()
             #1 {BASE_PATH}src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(
