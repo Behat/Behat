@@ -1,0 +1,17 @@
+default: ~
+
+ignore-errors:
+    calls:
+        error_reporting: 22527
+
+not-strict:
+    testers:
+        strict: false
+
+complete:
+    calls:
+        error_reporting: 24565
+    testers:
+        strict: true
+        stop_on_failure: false
+        skip: true

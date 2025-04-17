@@ -1,9 +1,0 @@
-default: ~
-
-stop-on-failure:
-    testers:
-        stop_on_failure: true
-
-no-stop-on-failure:
-    testers:
-        stop_on_failure: false

@@ -1,9 +1,0 @@
-default: ~
-
-with-strict:
-  testers:
-    strict: true
-
-not-strict:
-  testers:
-    strict: false

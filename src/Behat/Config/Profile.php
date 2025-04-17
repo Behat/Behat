@@ -40,6 +40,7 @@ final class Profile implements ConfigConverterInterface
     private const SUITE_FUNCTION = 'withSuite';
     private const PATH_OPTIONS_FUNCTION = 'withPathOptions';
     private const PRINT_ABSOLUTE_PATHS_PARAMETER = 'printAbsolutePaths';
+    private const TESTER_OPTIONS_FUNCTION = 'withTesterOptions';
 
     public function __construct(
         private string $name,
@@ -113,6 +114,16 @@ final class Profile implements ConfigConverterInterface
         return $this;
     }
 
+    public function withTesterOptions(TesterOptions $options): self
+    {
+        // Tester options are split between multiple settings keys due to implementation details in Behat
+        foreach ($options->toArray() as $group => $groupSettings) {
+            $this->settings[$group] = $groupSettings;
+        }
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->settings;
@@ -130,6 +141,7 @@ final class Profile implements ConfigConverterInterface
         $this->addFiltersToExpr($expr);
         $this->addUnusedDefinitionsToExpr($expr);
         $this->addPathOptionsToExpr($expr);
+        $this->addTesterOptionsToExpr($expr);
         $this->addExtensionsToExpr($expr);
         $this->addSuitesToExpr($expr);
 
@@ -241,6 +253,20 @@ final class Profile implements ConfigConverterInterface
         if ($this->settings[self::PATH_OPTIONS_SETTING] === []) {
             unset($this->settings[self::PATH_OPTIONS_SETTING]);
         }
+    }
+
+    private function addTesterOptionsToExpr(Expr &$expr): void
+    {
+        $optionsObject = TesterOptions::consumeSettingsFromProfile($this->settings);
+        if ($optionsObject === null) {
+            return;
+        }
+
+        $expr = ConfigConverterTools::addMethodCall(
+            self::TESTER_OPTIONS_FUNCTION,
+            [$optionsObject->toPhpExpr()],
+            $expr,
+        );
     }
 
     private function addExtensionsToExpr(Expr &$expr): void
