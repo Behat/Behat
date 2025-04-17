@@ -139,6 +139,7 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
                     $setting = ConfigConverterTools::findReferenceToClassConstant(OutputFactory::class, $setting);
                 }
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     $functionName,
                     [$setting],
                     $expr

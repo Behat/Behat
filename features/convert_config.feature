@@ -366,7 +366,7 @@ Feature: Convert config
 
       return (new Config())
           ->withProfile((new Profile('default'))
-              ->withPrintUnusedDefinitions(true));
+              ->withPrintUnusedDefinitions());
       """
     And the temp "unused_definitions.yaml" file should have been removed
 
@@ -434,6 +434,36 @@ Feature: Convert config
       """
     And the temp "path_options.yaml" file should have been removed
 
+  Scenario: Tester options
+    Given I copy the "tester_options.yaml" file to the temp folder
+    When I run behat with the following additional options:
+      | option   | value                                    |
+      | --config | {SYSTEM_TMP_DIR}/tester_options.yaml |
+    Then the temp "tester_options.php" file should be like:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\TesterOptions;
+
+      return (new Config())
+          ->withProfile(new Profile('default'))
+          ->withProfile((new Profile('ignore-errors'))
+              ->withTesterOptions((new TesterOptions())
+                  ->withErrorReporting(E_ALL & ~E_DEPRECATED)))
+          ->withProfile((new Profile('not-strict'))
+              ->withTesterOptions((new TesterOptions())
+                  ->withStrictResultInterpretation(false)))
+          ->withProfile((new Profile('complete'))
+              ->withTesterOptions((new TesterOptions())
+                  ->withStrictResultInterpretation()
+                  ->withStopOnFailure(false)
+                  ->withSkipAllTests()
+                  ->withErrorReporting(E_ALL & ~(E_WARNING | E_NOTICE | E_DEPRECATED))));
+      """
+    And the temp "tester_options.yaml" file should have been removed
+
   Scenario: Full configuration
     When I copy the "full_configuration.yaml" file to the temp folder
     And I copy the "imported.yaml" file to the temp folder
@@ -455,6 +485,7 @@ Feature: Convert config
       use Behat\Config\Formatter\ProgressFormatter;
       use Behat\Config\Profile;
       use Behat\Config\Suite;
+      use Behat\Config\TesterOptions;
       use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 
       return (new Config())
@@ -470,8 +501,10 @@ Feature: Convert config
                   ->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
               ->withFilter(new NameFilter('john'))
               ->withFilter(new RoleFilter('admin'))
-              ->withPrintUnusedDefinitions(true)
+              ->withPrintUnusedDefinitions()
               ->withPathOptions(printAbsolutePaths: true)
+              ->withTesterOptions((new TesterOptions())
+                  ->withStrictResultInterpretation())
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
                   ->addContext(
@@ -483,7 +516,9 @@ Feature: Convert config
                   ->withPaths('one.feature')
                   ->withFilter(new TagFilter('@run'))))
           ->withProfile((new Profile('other'))
-              ->disableFormatter('pretty'))
+              ->disableFormatter('pretty')
+              ->withTesterOptions((new TesterOptions())
+                  ->withErrorReporting(E_ERROR)))
           ->withPreferredProfile('other');
       """
     And the temp "imported.php" file should be like:

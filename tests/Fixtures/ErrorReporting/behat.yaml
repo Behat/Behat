@@ -1,9 +1,0 @@
-default: ~
-
-ignore-all-but-error:
-    calls:
-        error_reporting: 24565
-
-ignore-deprecations:
-    calls:
-        error_reporting: 22527

@@ -71,6 +71,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
         foreach ($this->settings as $settingsName => $settings) {
             if ($settingsName === self::PREFERRED_PROFILE_NAME_SETTING) {
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::PREFERRED_PROFILE_FUNCTION,
                     [$settings],
                     $expr
@@ -82,6 +83,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
                     $arguments = [$settings];
                 }
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::IMPORT_FUNCTION,
                     $arguments,
                     $expr
@@ -89,6 +91,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
             } else {
                 $profile = new Profile($settingsName, $settings ?? []);
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::PROFILE_FUNCTION,
                     [$profile->toPhpExpr()],
                     $expr
