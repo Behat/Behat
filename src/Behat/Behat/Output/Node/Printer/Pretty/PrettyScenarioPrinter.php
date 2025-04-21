@@ -41,8 +41,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Initializes printer.
      *
-     * @param integer           $indentation
-     * @param integer           $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(PrettyPathPrinter $pathPrinter, $indentation = 2, $subIndentation = 2)
     {

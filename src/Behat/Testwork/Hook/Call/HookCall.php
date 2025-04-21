@@ -29,7 +29,7 @@ final class HookCall extends EnvironmentCall
     /**
      * Initializes hook call.
      *
-     * @param null|integer $errorReportingLevel
+     * @param null|int $errorReportingLevel
      */
     public function __construct(HookScope $scope, Hook $hook, $errorReportingLevel = null)
     {

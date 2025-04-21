@@ -72,7 +72,7 @@ final class Timer
     /**
      * Returns number of minutes passed.
      *
-     * @return integer
+     * @return int
      */
     public function getMinutes()
     {

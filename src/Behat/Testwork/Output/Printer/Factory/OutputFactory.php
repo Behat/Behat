@@ -36,7 +36,7 @@ abstract class OutputFactory
      */
     private $outputDecorated = null;
     /**
-     * @var integer
+     * @var int
      */
     private $verbosityLevel = 0;
 
@@ -101,7 +101,7 @@ abstract class OutputFactory
     /**
      * Sets output verbosity level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setOutputVerbosity($level)
     {
@@ -111,7 +111,7 @@ abstract class OutputFactory
     /**
      * Returns output verbosity level.
      *
-     * @return integer
+     * @return int
      */
     public function getOutputVerbosity()
     {

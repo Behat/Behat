@@ -119,7 +119,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
      *
-     * @param string|integer $argumentIndex
+     * @param string|int $argumentIndex
      *
      * @return null|string
      */
@@ -153,7 +153,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns appropriate closure for filtering parameter by index.
      *
-     * @param string|integer $index
+     * @param string|int $index
      *
      * @return Closure
      */
@@ -179,7 +179,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns closure to filter parameter by position.
      *
-     * @param integer $index
+     * @param int $index
      *
      * @return Closure
      */

@@ -35,8 +35,7 @@ final class ExceptionPresenter
     /**
      * Initializes presenter.
      *
-     * @param ?string  $basePath deprecated, will be removed in next major version
-     * @param integer $defaultVerbosity
+     * @param ?string $basePath deprecated, will be removed in next major version
      */
     public function __construct(
         ?string $basePath = null,
@@ -62,7 +61,7 @@ final class ExceptionPresenter
     /**
      * Sets default verbosity to a specified level.
      *
-     * @param integer $defaultVerbosity
+     * @param int $defaultVerbosity
      */
     public function setDefaultVerbosity($defaultVerbosity)
     {

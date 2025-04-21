@@ -47,7 +47,7 @@ final class LazyFeatureIterator implements SpecificationIterator
      */
     private $filters = [];
     /**
-     * @var integer
+     * @var int
      */
     private $position = 0;
     /**

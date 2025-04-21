@@ -83,14 +83,14 @@ interface OutputPrinter
     /**
      * Sets output verbosity level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setOutputVerbosity($level);
 
     /**
      * Returns output verbosity level.
      *
-     * @return integer
+     * @return int
      *
      * @deprecated since 3.1, to be removed in 4.0
      */

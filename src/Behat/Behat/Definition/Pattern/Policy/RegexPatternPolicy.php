@@ -100,7 +100,7 @@ final class RegexPatternPolicy implements PatternPolicy
      * @param string $stepText
      * @param string $stepRegex
      *
-     * @return integer
+     * @return int
      */
     private function countPlaceholders($stepText, $stepRegex)
     {

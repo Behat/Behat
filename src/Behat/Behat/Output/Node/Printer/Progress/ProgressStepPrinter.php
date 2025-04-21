@@ -33,7 +33,7 @@ final class ProgressStepPrinter implements StepPrinter
      */
     private $resultConverter;
     /**
-     * @var integer
+     * @var int
      */
     private $stepsPrinted = 0;
 

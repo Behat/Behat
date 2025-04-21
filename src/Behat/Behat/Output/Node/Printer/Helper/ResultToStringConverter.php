@@ -32,7 +32,7 @@ final class ResultToStringConverter
     /**
      * Converts provided result code to a string.
      *
-     * @param integer $resultCode
+     * @param int $resultCode
      *
      * @return string
      */

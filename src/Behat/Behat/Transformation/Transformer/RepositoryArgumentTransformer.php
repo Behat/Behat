@@ -92,7 +92,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply simple argument transformations in priority order.
      *
      * @param SimpleArgumentTransformation[] $transformations
-     * @param integer|string                 $index
+     * @param int|string                     $index
      */
     private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
@@ -112,7 +112,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply normal (non-simple) argument transformations.
      *
      * @param Transformation[] $transformations
-     * @param integer|string   $index
+     * @param int|string       $index
      */
     private function applyNormalTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
@@ -127,7 +127,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     /**
      * Transforms argument value using registered transformers.
      *
-     * @param integer|string $index
+     * @param int|string $index
      */
     private function transform(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
     {

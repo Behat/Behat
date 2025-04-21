@@ -62,7 +62,7 @@ final class ArgumentAutowirer
      *
      * Argument is wireable if it was not previously set and it has a class type-hint.
      *
-     * @param integer             $index
+     * @param int $index
      *
      * @return bool
      */

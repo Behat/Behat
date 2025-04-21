@@ -93,7 +93,7 @@ final class ExceptionExtension implements Extension
     /**
      * Loads exception presenter.
      *
-     * @param integer          $verbosity
+     * @param int $verbosity
      */
     protected function loadPresenter(ContainerBuilder $container, $verbosity)
     {

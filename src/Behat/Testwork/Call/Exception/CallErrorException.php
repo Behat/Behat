@@ -33,10 +33,10 @@ final class CallErrorException extends ErrorException
     /**
      * Initializes error handler exception.
      *
-     * @param integer $level   error level
-     * @param string  $message error message
-     * @param string  $file    error file
-     * @param integer $line    error line
+     * @param int    $level   error level
+     * @param string $message error message
+     * @param string $file    error file
+     * @param int    $line    error line
      */
     public function __construct($level, $message, $file, $line)
     {

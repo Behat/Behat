@@ -32,7 +32,7 @@ interface ExceptionStringer
     /**
      * Strings provided exception.
      *
-     * @param integer   $verbosity
+     * @param int $verbosity
      *
      * @return string
      */

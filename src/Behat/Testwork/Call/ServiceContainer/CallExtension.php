@@ -96,7 +96,7 @@ final class CallExtension implements Extension
     /**
      * Loads prebuilt call handlers.
      *
-     * @param integer          $errorReporting
+     * @param int $errorReporting
      */
     protected function loadCallHandlers(ContainerBuilder $container, $errorReporting)
     {

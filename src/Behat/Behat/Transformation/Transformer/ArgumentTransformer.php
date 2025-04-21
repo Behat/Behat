@@ -22,7 +22,7 @@ interface ArgumentTransformer
     /**
      * Checks if transformer supports argument.
      *
-     * @param integer|string $argumentIndex
+     * @param int|string $argumentIndex
      *
      * @return bool
      */
@@ -31,7 +31,7 @@ interface ArgumentTransformer
     /**
      * Transforms argument value using transformation and returns a new one.
      *
-     * @param integer|string $argumentIndex
+     * @param int|string $argumentIndex
      */
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
 }

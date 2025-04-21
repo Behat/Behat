@@ -82,8 +82,6 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns amount of results.
-     *
-     * @return integer
      */
     public function count(): int
     {

@@ -36,8 +36,8 @@ final class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * Initializes printer.
      *
-     * @param integer $indentation
-     * @param integer $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct($indentation = 0, $subIndentation = 2)
     {

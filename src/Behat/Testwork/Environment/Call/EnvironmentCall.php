@@ -34,14 +34,14 @@ class EnvironmentCall implements Call
      */
     private $arguments;
     /**
-     * @var null|integer
+     * @var null|int
      */
     private $errorReportingLevel;
 
     /**
      * Initializes call.
      *
-     * @param null|integer $errorReportingLevel
+     * @param null|int $errorReportingLevel
      */
     public function __construct(
         Environment $environment,

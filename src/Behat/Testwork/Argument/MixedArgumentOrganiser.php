@@ -451,7 +451,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Marks an argument at provided position as defined.
      *
-     * @param integer $position
+     * @param int $position
      */
     private function markArgumentDefined($position)
     {
@@ -461,7 +461,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if an argument at provided position is defined.
      *
-     * @param integer $position
+     * @param int $position
      *
      * @return bool
      */

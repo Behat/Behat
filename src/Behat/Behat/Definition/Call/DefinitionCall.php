@@ -37,7 +37,7 @@ final class DefinitionCall extends EnvironmentCall
     /**
      * Initializes definition call.
      *
-     * @param null|integer $errorReportingLevel
+     * @param null|int $errorReportingLevel
      */
     public function __construct(
         Environment $environment,

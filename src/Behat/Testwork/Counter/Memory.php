@@ -25,7 +25,7 @@ final class Memory
     /**
      * Returns current memory usage.
      *
-     * @return integer
+     * @return int
      */
     public function getMemoryUsage()
     {
@@ -45,7 +45,7 @@ final class Memory
     /**
      * Humanizes usage information.
      *
-     * @param integer $bytes
+     * @param int $bytes
      *
      * @return string
      */

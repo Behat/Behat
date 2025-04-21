@@ -24,7 +24,7 @@ use Exception;
 final class RuntimeCallHandler implements CallHandler
 {
     /**
-     * @var integer
+     * @var int
      */
     private $errorReportingLevel;
     /**
@@ -39,7 +39,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Initializes executor.
      *
-     * @param integer $errorReportingLevel
+     * @param int $errorReportingLevel
      */
     public function __construct($errorReportingLevel = E_ALL)
     {
@@ -66,10 +66,10 @@ final class RuntimeCallHandler implements CallHandler
      *
      * @see set_error_handler()
      *
-     * @param integer $level
-     * @param string  $message
-     * @param string  $file
-     * @param integer $line
+     * @param int    $level
+     * @param string $message
+     * @param string $file
+     * @param int    $line
      *
      * @return bool
      *
@@ -143,7 +143,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Checks if provided error level is not reportable.
      *
-     * @param integer $level
+     * @param int $level
      *
      * @return bool
      */

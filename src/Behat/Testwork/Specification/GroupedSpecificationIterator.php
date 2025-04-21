@@ -32,7 +32,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
      */
     private $iterators;
     /**
-     * @var integer
+     * @var int
      */
     private $position = 0;
 

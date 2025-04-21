@@ -26,16 +26,16 @@ final class Pattern
      */
     private $pattern;
     /**
-     * @var integer
+     * @var int
      */
     private $placeholderCount;
 
     /**
      * Initializes pattern.
      *
-     * @param string  $canonicalText
-     * @param string  $pattern
-     * @param integer $placeholderCount
+     * @param string $canonicalText
+     * @param string $pattern
+     * @param int    $placeholderCount
      */
     public function __construct($canonicalText, $pattern, $placeholderCount = 0)
     {
@@ -67,7 +67,7 @@ final class Pattern
     /**
      * Returns pattern placeholder count.
      *
-     * @return integer
+     * @return int
      */
     public function getPlaceholderCount()
     {

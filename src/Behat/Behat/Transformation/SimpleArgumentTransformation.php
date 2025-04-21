@@ -33,14 +33,14 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Returns transformation priority.
      *
-     * @return integer
+     * @return int
      */
     public function getPriority();
 
     /**
      * Checks if transformation supports argument.
      *
-     * @param integer|string $argumentIndex
+     * @param int|string $argumentIndex
      *
      * @return bool
      */
@@ -49,7 +49,7 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Transforms argument value using transformation and returns a new one.
      *
-     * @param integer|string $argumentIndex
+     * @param int|string $argumentIndex
      */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
 }

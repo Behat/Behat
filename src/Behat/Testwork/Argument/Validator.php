@@ -39,7 +39,7 @@ final class Validator
     /**
      * Validates given argument.
      *
-     * @param integer             $parameterIndex
+     * @param int $parameterIndex
      */
     private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments)
     {

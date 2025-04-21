@@ -52,8 +52,8 @@ final class PrettyOutlinePrinter implements OutlinePrinter
     private $subIndentText;
 
     /**
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         ScenarioPrinter $scenarioPrinter,

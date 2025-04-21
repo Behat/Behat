@@ -132,7 +132,7 @@ return (new PhpCsFixer\Config())
                 'throws',
             ],
         ],
-//        'phpdoc_scalar' => true,
+        'phpdoc_scalar' => true,
 //        'phpdoc_summary' => true,
         'phpdoc_tag_type' => [
             'tags' => [

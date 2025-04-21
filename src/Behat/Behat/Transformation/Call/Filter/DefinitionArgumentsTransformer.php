@@ -79,7 +79,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * Transforms call argument using registered transformers.
      *
-     * @param integer|string $index
+     * @param int|string $index
      */
     private function transformArgument(DefinitionCall $definitionCall, $index, $value)
     {

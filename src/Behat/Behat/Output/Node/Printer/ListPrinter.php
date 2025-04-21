@@ -68,7 +68,7 @@ final class ListPrinter
      * Prints scenarios list.
      *
      * @param string         $intro
-     * @param integer        $resultCode
+     * @param int            $resultCode
      * @param ScenarioStat[] $scenarioStats
      */
     public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats)
@@ -92,9 +92,9 @@ final class ListPrinter
     /**
      * Prints step list.
      *
-     * @param string        $intro
-     * @param integer       $resultCode
-     * @param StepStat[]    $stepStats
+     * @param string     $intro
+     * @param int        $resultCode
+     * @param StepStat[] $stepStats
      */
     public function printStepList(
         OutputPrinter $printer,

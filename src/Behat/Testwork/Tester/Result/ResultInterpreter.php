@@ -38,7 +38,7 @@ final class ResultInterpreter
     /**
      * Interprets result as a UNIX return code (0 for success, 1 for failure).
      *
-     * @return integer
+     * @return int
      */
     public function interpretResult(TestResult $result)
     {

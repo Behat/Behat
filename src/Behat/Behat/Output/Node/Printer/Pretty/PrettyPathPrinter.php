@@ -49,7 +49,7 @@ final class PrettyPathPrinter
     /**
      * Prints scenario path comment.
      *
-     * @param integer     $indentation
+     * @param int $indentation
      */
     public function printScenarioPath(Formatter $formatter, FeatureNode $feature, Scenario $scenario, $indentation)
     {
@@ -72,7 +72,7 @@ final class PrettyPathPrinter
     /**
      * Prints step path comment.
      *
-     * @param integer    $indentation
+     * @param int $indentation
      */
     public function printStepPath(
         Formatter $formatter,
@@ -98,8 +98,8 @@ final class PrettyPathPrinter
     /**
      * Prints defined step path.
      *
-     * @param integer           $scenarioWidth
-     * @param integer           $stepWidth
+     * @param int $scenarioWidth
+     * @param int $stepWidth
      */
     private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth)
     {

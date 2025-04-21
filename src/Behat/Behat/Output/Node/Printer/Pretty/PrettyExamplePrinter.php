@@ -36,7 +36,7 @@ final class PrettyExamplePrinter implements ExamplePrinter
     /**
      * Initializes printer.
      *
-     * @param integer           $indentation
+     * @param int $indentation
      */
     public function __construct(PrettyPathPrinter $pathPrinter, $indentation = 6)
     {
