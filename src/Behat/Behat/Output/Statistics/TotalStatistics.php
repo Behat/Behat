@@ -127,7 +127,7 @@ final class TotalStatistics implements Statistics
             return;
         }
 
-        $this->scenarioCounters[$stat->getResultCode()]++;
+        ++$this->scenarioCounters[$stat->getResultCode()];
 
         if (TestResult::FAILED === $stat->getResultCode()) {
             $this->failedScenarioStats[] = $stat;
@@ -143,7 +143,7 @@ final class TotalStatistics implements Statistics
      */
     public function registerStepStat(StepStat $stat)
     {
-        $this->stepCounters[$stat->getResultCode()]++;
+        ++$this->stepCounters[$stat->getResultCode()];
 
         if (TestResult::FAILED === $stat->getResultCode()) {
             $this->failedStepStats[] = $stat;

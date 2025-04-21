@@ -166,7 +166,7 @@ final class LazyFeatureIterator implements SpecificationIterator
     {
         while (!count($this->features) && $this->position < count($this->paths)) {
             $this->features = $this->parseFeature($this->paths[$this->position]);
-            $this->position++;
+            ++$this->position;
         }
 
         $this->currentFeature = array_shift($this->features);

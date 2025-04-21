@@ -86,7 +86,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
             if ($this->iterators[$this->position]->valid()) {
                 break;
             }
-            $this->position++;
+            ++$this->position;
         }
     }
 
@@ -98,7 +98,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
 
         $this->iterators[$this->position]->next();
         while (!$this->iterators[$this->position]->valid()) {
-            $this->position++;
+            ++$this->position;
 
             if (!isset($this->iterators[$this->position])) {
                 break;

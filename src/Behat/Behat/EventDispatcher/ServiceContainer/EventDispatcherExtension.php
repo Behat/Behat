@@ -49,7 +49,7 @@ class EventDispatcherExtension extends BaseExtension
         $definition = new Definition('Behat\Behat\EventDispatcher\Cli\StopOnFailureController', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
-        $definition->addMethodCall(('setStopOnFailureHandler'), [new Reference(TestworkTesterExtension::STOP_ON_FAILURE_ID)]);
+        $definition->addMethodCall('setStopOnFailureHandler', [new Reference(TestworkTesterExtension::STOP_ON_FAILURE_ID)]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 100]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.stop_on_failure', $definition);
     }

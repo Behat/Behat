@@ -46,7 +46,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
         // so we need to accept both possibilities
         if (!$argumentArgumentValue instanceof TableNode && !is_array($argumentArgumentValue)) {
             return false;
-        };
+        }
 
         if (!str_starts_with($this->pattern, 'column:')) {
             return false;

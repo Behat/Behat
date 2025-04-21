@@ -55,7 +55,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         return $this->pattern === 'table:' . implode(',', $argumentArgumentValue->getRow(0))
             || $this->pattern === 'table:*';

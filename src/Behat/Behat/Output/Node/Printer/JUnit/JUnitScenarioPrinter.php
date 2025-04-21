@@ -97,7 +97,7 @@ final class JUnitScenarioPrinter
     {
         $currentOutline = $this->outlineStoreListener->getCurrentOutline($scenario);
         if ($currentOutline === $this->lastOutline) {
-            $this->outlineStepCount++;
+            ++$this->outlineStepCount;
         } else {
             $this->lastOutline = $currentOutline;
             $this->outlineStepCount = 1;

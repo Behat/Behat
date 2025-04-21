@@ -135,13 +135,13 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
             return $value;
         }
 
-        if ($transformation instanceof SimpleArgumentTransformation &&
-            $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+        if ($transformation instanceof SimpleArgumentTransformation
+            && $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
             return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
         }
 
-        if ($transformation instanceof PatternTransformation &&
-            $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
+        if ($transformation instanceof PatternTransformation
+            && $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
             return $transformation->transformArgument($this, $this->callCenter, $definitionCall, $value);
         }
 

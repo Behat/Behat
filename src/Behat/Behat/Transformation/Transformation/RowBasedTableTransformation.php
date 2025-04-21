@@ -56,7 +56,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         // What we're doing here is checking that we have a 2 column table.
         // This bit checks we have two columns

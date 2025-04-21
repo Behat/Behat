@@ -87,8 +87,8 @@ final class PrettyStepPrinter implements StepPrinter
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments(), $result);
         $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
-        if ($showOutput === null || $showOutput === ShowOutputOption::Yes ||
-            ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
+        if ($showOutput === null || $showOutput === ShowOutputOption::Yes
+            || ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
             $this->printStdOut($formatter->getOutputPrinter(), $result);
         }
         $this->printException($formatter->getOutputPrinter(), $result);

@@ -78,8 +78,8 @@ final class ProgressStepPrinter implements StepPrinter
         }
 
         $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
-        if ($showOutput === ShowOutputOption::Yes ||
-            ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
+        if ($showOutput === ShowOutputOption::Yes
+            || ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
             $this->printStdOut($formatter->getOutputPrinter(), $result);
         }
 

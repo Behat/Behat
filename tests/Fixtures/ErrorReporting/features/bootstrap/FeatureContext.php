@@ -44,7 +44,7 @@ class FeatureContext implements Context
     #[When('an exception is thrown')]
     public function anExceptionIsThrown()
     {
-        throw new \Exception('Exception is thrown');
+        throw new Exception('Exception is thrown');
     }
 
     #[When('I trim NULL')]

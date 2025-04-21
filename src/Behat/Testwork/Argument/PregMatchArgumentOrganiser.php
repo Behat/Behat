@@ -55,13 +55,13 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
         $arguments = [];
 
         $keys = array_keys($cleanMatch);
-        for ($keyIndex = 0; $keyIndex < count($keys); $keyIndex++) {
+        for ($keyIndex = 0; $keyIndex < count($keys); ++$keyIndex) {
             $key = $keys[$keyIndex];
 
             $arguments[$key] = $cleanMatch[$key];
 
             if ($this->isKeyAStringAndNexOneIsAnInteger($keyIndex, $keys)) {
-                $keyIndex += 1;
+                ++$keyIndex;
             }
         }
 

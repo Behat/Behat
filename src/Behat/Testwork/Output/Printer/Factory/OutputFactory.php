@@ -31,10 +31,8 @@ abstract class OutputFactory
      * @var array
      */
     private $outputStyles = [];
-    /**
-     * @var bool|null
-     */
-    private $outputDecorated = null;
+
+    private ?bool $outputDecorated = null;
     /**
      * @var int
      */

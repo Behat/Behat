@@ -58,7 +58,7 @@ class ConfigConverterTools
                 // by name even if we were given them as positional.
                 $hasRemovedAny = true;
             } else {
-                $result[($hasRemovedAny ? $parameter->getName() : $argKey)] = $argValue;
+                $result[$hasRemovedAny ? $parameter->getName() : $argKey] = $argValue;
             }
 
             // Record that this argument has been used

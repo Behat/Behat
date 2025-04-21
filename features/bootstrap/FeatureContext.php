@@ -86,7 +86,7 @@ class FeatureContext implements Context
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
-            throw new \RuntimeException('Unable to find the PHP executable.');
+            throw new RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
         $this->tempDir = $dir;
@@ -556,7 +556,7 @@ EOL;
 
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
     {
-        $dom = new DomDocument();
+        $dom = new DOMDocument();
         $dom->load($xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);

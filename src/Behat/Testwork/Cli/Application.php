@@ -102,8 +102,8 @@ final class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $isXdebugAllowed = $input->hasParameterOption('--xdebug') ||
-            (extension_loaded('xdebug') && xdebug_is_debugger_active());
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug')
+            || (extension_loaded('xdebug') && xdebug_is_debugger_active());
 
         if (!$isXdebugAllowed) {
             $xdebugHandler = new XdebugHandler('behat');

@@ -174,11 +174,11 @@ final class ExtensionManager
         }
 
         if (file_exists($locator)) {
-            return require($locator);
+            return require $locator;
         }
 
         if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
-            return require($path);
+            return require $path;
         }
 
         throw new ExtensionInitializationException(sprintf(

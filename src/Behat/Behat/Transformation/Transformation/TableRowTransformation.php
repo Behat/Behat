@@ -55,7 +55,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         return $this->pattern === 'row:' . implode(',', $argumentArgumentValue->getRow(0));
     }

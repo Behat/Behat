@@ -57,6 +57,6 @@ final class Memory
             return 'Can not calculate memory usage';
         }
 
-        return sprintf('%.2f%s', ($bytes / pow(1024, floor($e))), $this->units[$e]);
+        return sprintf('%.2f%s', $bytes / pow(1024, floor($e)), $this->units[$e]);
     }
 }

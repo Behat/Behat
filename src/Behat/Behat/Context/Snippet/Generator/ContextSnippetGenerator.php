@@ -135,7 +135,7 @@ TPL;
     private function getMethodArguments(StepNode $step, int $tokenCount): array
     {
         $args = [];
-        for ($i = 0; $i < $tokenCount; $i++) {
+        for ($i = 0; $i < $tokenCount; ++$i) {
             $args[] = '$arg' . ($i + 1);
         }
 
@@ -157,9 +157,9 @@ TPL;
 
         $keywordType = $step->getKeywordType();
         assert(
-            $keywordType === DefinitionCall\Given::KEYWORD ||
-            $keywordType === DefinitionCall\When::KEYWORD ||
-            $keywordType === DefinitionCall\Then::KEYWORD
+            $keywordType === DefinitionCall\Given::KEYWORD
+            || $keywordType === DefinitionCall\When::KEYWORD
+            || $keywordType === DefinitionCall\Then::KEYWORD
         );
         $usedClasses[] = match ($keywordType) {
             DefinitionCall\Given::KEYWORD => Given::class,

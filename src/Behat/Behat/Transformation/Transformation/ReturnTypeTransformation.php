@@ -193,7 +193,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns closure to filter parameter by typehinted class.
      */
-    private function getClassReflection(): closure
+    private function getClassReflection(): Closure
     {
         return function (ReflectionParameter $parameter): ?ReflectionClass {
             $t = $parameter->getType();

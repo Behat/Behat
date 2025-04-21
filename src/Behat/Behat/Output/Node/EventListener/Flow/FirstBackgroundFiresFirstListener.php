@@ -30,7 +30,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 class FirstBackgroundFiresFirstListener implements EventListener
 {
     /**
-     * @var \Behat\Testwork\Output\Node\EventListener\EventListener
+     * @var EventListener
      */
     private $descendant;
     /**

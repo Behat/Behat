@@ -48,6 +48,7 @@ class TestworkEventDispatcherTest extends TestCase
         $dispatcher = new TestworkEventDispatcher();
         $event = new class extends Event {
             public $name;
+
             public function setName($name): void
             {
                 $this->name = $name;
