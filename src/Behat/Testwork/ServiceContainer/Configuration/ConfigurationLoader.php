@@ -13,6 +13,7 @@ namespace Behat\Testwork\ServiceContainer\Configuration;
 use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Symfony\Component\Yaml\Yaml;
+use Closure;
 
 use function str_ends_with;
 
@@ -221,9 +222,9 @@ final class ConfigurationLoader
      *
      * Prevents access to $this/self from included files.
      */
-    private function getPHPConfigObjectClosure(string $configPath): \Closure
+    private function getPHPConfigObjectClosure(string $configPath): Closure
     {
-        return \Closure::bind(function () use ($configPath): mixed {
+        return Closure::bind(function () use ($configPath): mixed {
             $config = require $configPath;
 
             return $config;

@@ -22,6 +22,7 @@ use Behat\Hook\BeforeStep;
 use Behat\Hook\BeforeSuite;
 use Behat\Hook\Hook;
 use ReflectionMethod;
+use ReflectionAttribute;
 
 final class HookAttributeReader implements AttributeReader
 {
@@ -54,7 +55,7 @@ final class HookAttributeReader implements AttributeReader
 
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        $attributes = $method->getAttributes(Hook::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Hook::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {

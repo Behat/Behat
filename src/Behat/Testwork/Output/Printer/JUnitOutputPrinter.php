@@ -58,7 +58,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         }
         $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
-        $this->domDocument = new \DOMDocument(self::XML_VERSION, self::XML_ENCODING);
+        $this->domDocument = new DOMDocument(self::XML_VERSION, self::XML_ENCODING);
         $this->domDocument->formatOutput = true;
 
         $this->testSuites = $this->domDocument->createElement('testsuites');
@@ -111,7 +111,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         $this->addAttributesToNode($childNode, $nodeAttributes);
     }
 
-    private function addAttributesToNode(\DOMElement $node, array $attributes)
+    private function addAttributesToNode(DOMElement $node, array $attributes)
     {
         foreach ($attributes as $name => $value) {
             $node->setAttribute($name, $value ?? '');
@@ -140,7 +140,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      */
     public function flush()
     {
-        if ($this->domDocument instanceof \DOMDocument) {
+        if ($this->domDocument instanceof DOMDocument) {
             try {
                 $this->getWritingStream()->write(
                     $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),

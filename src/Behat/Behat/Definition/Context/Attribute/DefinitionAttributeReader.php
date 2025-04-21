@@ -15,6 +15,7 @@ use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Step as Attribute;
 use Behat\Behat\Definition\Call;
 use ReflectionMethod;
+use ReflectionAttribute;
 
 /**
  * Reads definition Attributes from the context class.
@@ -47,7 +48,7 @@ final class DefinitionAttributeReader implements AttributeReader
 
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        $attributes = $method->getAttributes(Attribute\Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Attribute\Definition::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {

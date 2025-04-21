@@ -15,6 +15,7 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Exception\WrongContextClassException;
 use Behat\Testwork\Environment\StaticEnvironment;
+use ReflectionClass;
 
 /**
  * Context environment based on a list of context classes.
@@ -47,7 +48,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
             ), $contextClass);
         }
 
-        $reflClass = new \ReflectionClass($contextClass);
+        $reflClass = new ReflectionClass($contextClass);
 
         if (!$reflClass->implementsInterface('Behat\Behat\Context\Context')) {
             throw new WrongContextClassException(sprintf(

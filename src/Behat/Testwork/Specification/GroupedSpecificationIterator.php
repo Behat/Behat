@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Specification;
 
 use Behat\Testwork\Suite\Suite;
+use ReturnTypeWillChange;
 
 /**
  * Iterates over specification iterators grouped by their suite.
@@ -112,7 +113,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         return isset($this->iterators[$this->position]) && $this->iterators[$this->position]->valid();
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->iterators[$this->position]->current();

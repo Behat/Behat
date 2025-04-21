@@ -10,10 +10,12 @@
 
 namespace Behat\Step;
 
+use Attribute;
+
 /**
  * Represents an Attribute for Then steps.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Then implements Definition
 {
     /**

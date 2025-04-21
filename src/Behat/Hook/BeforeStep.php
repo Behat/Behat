@@ -10,10 +10,12 @@
 
 namespace Behat\Hook;
 
+use Attribute;
+
 /**
  * Represents an Attribute for BeforeStep hook.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class BeforeStep implements Hook
 {
     /**

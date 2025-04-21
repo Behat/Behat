@@ -14,6 +14,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Exception\UnknownTranslationResourceException;
 use Behat\Behat\Context\TranslatableContext;
 use Symfony\Component\Translation\Translator;
+use ReflectionClass;
 
 /**
  * Reads translation resources from translatable contexts.
@@ -40,7 +41,7 @@ final class TranslatableContextReader implements ContextReader
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        $reflClass = new \ReflectionClass($contextClass);
+        $reflClass = new ReflectionClass($contextClass);
 
         if (!$reflClass->implementsInterface('Behat\Behat\Context\TranslatableContext')) {
             return [];

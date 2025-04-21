@@ -232,7 +232,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * @return ReflectionClass[]
      */
-    private function getReflectionClassesFromParameter(\ReflectionParameter $parameter): array
+    private function getReflectionClassesFromParameter(ReflectionParameter $parameter): array
     {
         $classes = [];
 
@@ -253,7 +253,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         foreach ($types as $type) {
 
             // ReflectionUnionType::getTypes is only documented as returning ReflectionType[]
-            if (!$type instanceof \ReflectionNamedType) {
+            if (!$type instanceof ReflectionNamedType) {
                 continue;
             }
 

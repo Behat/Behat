@@ -12,6 +12,8 @@ namespace Behat\Testwork\Exception\Stringer;
 
 use Exception;
 use Throwable;
+use PHPUnit_Framework_Exception;
+use PHPUnit_Framework_TestFailure;
 
 /**
  * Strings PHPUnit assertion exceptions.
@@ -24,7 +26,7 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
 {
     public function supportsException(Exception $exception)
     {
-        return $exception instanceof \PHPUnit_Framework_Exception
+        return $exception instanceof PHPUnit_Framework_Exception
             || $exception instanceof \PHPUnit\Framework\Exception;
     }
 
@@ -70,9 +72,9 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
                 return trim(\PHPUnit\Framework\TestFailure::exceptionToString($exception));
             }
 
-            if (class_exists(\PHPUnit_Framework_TestFailure::class)) {
+            if (class_exists(PHPUnit_Framework_TestFailure::class)) {
                 // PHPUnit < 6 (support ended in 2016)
-                return trim(\PHPUnit_Framework_TestFailure::exceptionToString($exception));
+                return trim(PHPUnit_Framework_TestFailure::exceptionToString($exception));
             }
 
             // PHPUnit must be present, because we got a PHPUnit exception. So it must be a newer version with a

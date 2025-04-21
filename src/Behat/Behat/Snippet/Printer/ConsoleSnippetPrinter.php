@@ -16,6 +16,8 @@ use Behat\Gherkin\Node\StepNode;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function count;
+
 /**
  * Behat console-based snippet printer.
  *
@@ -98,7 +100,7 @@ class ConsoleSnippetPrinter implements SnippetPrinter
             return;
         }
 
-        $message = $this->translator->trans('snippet_proposal_use', ['%count%' => \count($usedClasses)], 'output');
+        $message = $this->translator->trans('snippet_proposal_use', ['%count%' => count($usedClasses)], 'output');
 
         $this->output->writeln('--- ' . $message . PHP_EOL);
 

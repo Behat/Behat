@@ -109,7 +109,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         $type = $reflection->getReturnType();
 
         // Skip ReflectionUnionType as they can't be relied on for a transform
-        if (null === $type || !($type instanceof \ReflectionNamedType) || $type->isBuiltin()) {
+        if (null === $type || !($type instanceof ReflectionNamedType) || $type->isBuiltin()) {
             return null;
         }
 

@@ -15,6 +15,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Testwork\Call\Callee;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionException;
 
 /**
  * Reads context callees by Attributes using registered Attribute readers.
@@ -80,7 +81,7 @@ final class AttributeContextReader implements ContextReader
             if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
                 $callees = array_merge($callees, $reader->readCallees($contextClass, $prototype));
             }
-        } catch (\ReflectionException) {
+        } catch (ReflectionException) {
         }
 
         return $callees;

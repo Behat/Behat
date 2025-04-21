@@ -14,6 +14,7 @@ use ErrorException;
 use ParseError;
 use Throwable;
 use TypeError;
+use ReflectionProperty;
 
 /**
  * Fatal Throwable Error.
@@ -48,7 +49,7 @@ class FatalThrowableError extends ErrorException
 
     private function setTrace($trace)
     {
-        $traceReflector = new \ReflectionProperty('Exception', 'trace');
+        $traceReflector = new ReflectionProperty('Exception', 'trace');
         $traceReflector->setAccessible(true);
         $traceReflector->setValue($this, $trace);
     }

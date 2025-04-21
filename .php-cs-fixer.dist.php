@@ -29,17 +29,9 @@ return (new PhpCsFixer\Config())
 //            'single_line' => true,
 //        ],
 //        'class_reference_name_casing' => true,
-//        'clean_namespace' => true,
 //        'declare_parentheses' => true,
 //        'echo_tag_syntax' => true,
-//        'empty_loop_body' => ['style' => 'braces'],
-//        'empty_loop_condition' => true,
 //        'fully_qualified_strict_types' => true,
-//        'global_namespace_import' => [
-//            'import_classes' => false,
-//            'import_constants' => false,
-//            'import_functions' => false,
-//        ],
 //        'include' => true,
 //        'increment_style' => true,
 //        'integer_literal_case' => true,
@@ -169,6 +161,11 @@ return (new PhpCsFixer\Config())
                 ['Given', 'When', 'Then'],
                 ...\PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer::OPTION_GROUPS_DEFAULT,
             ],
+        ],
+        'global_namespace_import' => [ //override Symfony
+            'import_classes' => true,
+            'import_constants' => true,
+            'import_functions' => true,
         ],
 
         'function_declaration' => true, // overrides @PER-CS2.0
