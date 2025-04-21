@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\HelperContainer\Call\Filter;
 
-use Behat\Behat\Definition\Definition;
-use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Definition\Definition;
 use Behat\Behat\HelperContainer\ArgumentAutowirer;
+use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\UnsupportedCallException;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\Transformation;

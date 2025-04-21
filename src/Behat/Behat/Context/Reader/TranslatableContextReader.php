@@ -13,8 +13,8 @@ namespace Behat\Behat\Context\Reader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Exception\UnknownTranslationResourceException;
 use Behat\Behat\Context\TranslatableContext;
-use Symfony\Component\Translation\Translator;
 use ReflectionClass;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Reads translation resources from translatable contexts.

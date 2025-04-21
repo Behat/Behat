@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Definition\Pattern\Policy;
 
-use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Behat\Definition\Exception\InvalidPatternException;
+use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Transliterator\Transliterator;
 
 /**

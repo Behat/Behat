@@ -11,8 +11,8 @@
 namespace Behat\Behat\Output\Statistics;
 
 use Behat\Behat\Tester\Result\StepResult;
-use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Counter\Memory;
+use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**

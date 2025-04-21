@@ -3,10 +3,10 @@
 namespace Behat\Tests\Testwork\Argument;
 
 use Behat\Testwork\Argument\MixedArgumentOrganiser;
-use PHPUnit\Framework\TestCase;
-use ReflectionFunction;
 use DateTime;
 use DateTimeInterface;
+use PHPUnit\Framework\TestCase;
+use ReflectionFunction;
 use stdClass;
 
 final class MixedArgumentOrganiserTest extends TestCase

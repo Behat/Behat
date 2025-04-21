@@ -2,10 +2,10 @@
 
 namespace Behat\Tests\Definition\Pattern;
 
+use Behat\Behat\Definition\Exception\UnknownPatternException;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Pattern\Policy\PatternPolicy;
 use PHPUnit\Framework\TestCase;
-use Behat\Behat\Definition\Exception\UnknownPatternException;
 
 /**
  * @author Julien Deniau <julien.deniau@mapado.com>

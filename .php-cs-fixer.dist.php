@@ -35,7 +35,6 @@ return (new PhpCsFixer\Config())
 //        'include' => true,
 //        'increment_style' => true,
 //        'integer_literal_case' => true,
-//        'lambda_not_used_import' => true,
 //        'magic_constant_casing' => true,
 //        'magic_method_casing' => true,
 //        'native_function_casing' => true,
@@ -86,9 +85,8 @@ return (new PhpCsFixer\Config())
 //                'yield_from',
 //            ],
 //        ],
-//        'no_unneeded_import_alias' => true,
 //        'no_unset_cast' => true,
-//        'no_unused_imports' => true,
+        'no_unused_imports' => true,
 //        'no_useless_concat_operator' => true,
 //        'no_useless_nullsafe_operator' => true,
 //        'normalize_index_brace' => true,
@@ -97,14 +95,14 @@ return (new PhpCsFixer\Config())
 //        'operator_linebreak' => [
 //            'only_booleans' => true,
 //        ],
-//        'ordered_imports' => [
-//            'imports_order' => [
-//                'class',
-//                'function',
-//                'const',
-//            ],
-//            'sort_algorithm' => 'alpha',
-//        ],
+        'ordered_imports' => [
+            'imports_order' => [
+                'class',
+                'function',
+                'const',
+            ],
+            'sort_algorithm' => 'alpha',
+        ],
 //        'ordered_types' => [
 //            'null_adjustment' => 'always_last',
 //            'sort_algorithm' => 'none',
@@ -138,7 +136,6 @@ return (new PhpCsFixer\Config())
 //        'semicolon_after_instruction' => true,
 //        'simple_to_complex_string_variable' => true,
 //        'single_class_element_per_statement' => true,
-//        'single_import_per_statement' => true,
 //        'single_line_throw' => true,
 //        'single_quote' => true,
         'single_space_around_construct' => true,

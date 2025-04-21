@@ -12,8 +12,8 @@ namespace Behat\Testwork\ServiceContainer\Configuration;
 
 use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use Symfony\Component\Yaml\Yaml;
 use Closure;
+use Symfony\Component\Yaml\Yaml;
 
 use function str_ends_with;
 

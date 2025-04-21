@@ -6,7 +6,6 @@ namespace Behat\Config;
 
 use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 
 use function is_string;

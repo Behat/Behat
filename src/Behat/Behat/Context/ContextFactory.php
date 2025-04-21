@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\Context;
 
-use Behat\Testwork\Argument\Validator;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Testwork\Argument\ArgumentOrganiser;
+use Behat\Testwork\Argument\Validator;
 use ReflectionClass;
 
 /**

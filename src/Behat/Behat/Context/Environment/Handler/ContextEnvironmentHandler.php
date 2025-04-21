@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\Context\Environment\Handler;
 
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactoryAdapter;
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\NullFactory;
+use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
+use Behat\Behat\Context\Argument\SuiteScopedResolverFactoryAdapter;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\ContextClass\ClassResolver;
 use Behat\Behat\Context\ContextFactory;

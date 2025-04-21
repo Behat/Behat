@@ -12,9 +12,9 @@ namespace Behat\Testwork\Call\Exception;
 
 use ErrorException;
 use ParseError;
+use ReflectionProperty;
 use Throwable;
 use TypeError;
-use ReflectionProperty;
 
 /**
  * Fatal Throwable Error.

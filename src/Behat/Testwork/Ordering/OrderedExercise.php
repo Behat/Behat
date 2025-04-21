@@ -15,8 +15,6 @@ use Behat\Testwork\Ordering\Orderer\Orderer;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
-use Behat\Testwork\Tester\Setup\Setup;
-use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Exercise that is ordered according to a specified algorithm.

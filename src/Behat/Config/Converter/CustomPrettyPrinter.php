@@ -2,9 +2,9 @@
 
 namespace Behat\Config\Converter;
 
-use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\PrettyPrinter\Standard;
 
 class CustomPrettyPrinter extends Standard
 {

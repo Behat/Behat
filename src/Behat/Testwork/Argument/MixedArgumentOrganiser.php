@@ -10,11 +10,11 @@
 
 namespace Behat\Testwork\Argument;
 
-use ReflectionFunctionAbstract;
 use ReflectionClass;
+use ReflectionException;
+use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionException;
 use ReflectionUnionType;
 
 /**

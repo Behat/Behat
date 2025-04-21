@@ -11,9 +11,9 @@
 namespace Behat\Testwork\Exception\Stringer;
 
 use Exception;
-use Throwable;
 use PHPUnit_Framework_Exception;
 use PHPUnit_Framework_TestFailure;
+use Throwable;
 
 /**
  * Strings PHPUnit assertion exceptions.

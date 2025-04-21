@@ -12,7 +12,6 @@ namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Transformation\Context\Factory\TransformationCalleeFactory;
-use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
 

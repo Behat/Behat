@@ -10,10 +10,10 @@
 
 namespace Behat\Testwork\Ordering\Cli;
 
+use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Ordering\Exception\InvalidOrderException;
 use Behat\Testwork\Ordering\OrderedExercise;
 use Behat\Testwork\Ordering\Orderer\Orderer;
-use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

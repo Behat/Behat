@@ -14,7 +14,6 @@ use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Behat\Testwork\Hook\Scope\SuiteScope;
 use Behat\Testwork\Suite\Suite;
-use ReflectionMethod;
 
 /**
  * Represents suite hook executed in the runtime.

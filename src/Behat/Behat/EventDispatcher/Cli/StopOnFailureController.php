@@ -10,20 +10,8 @@
 
 namespace Behat\Behat\EventDispatcher\Cli;
 
-use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
-use Behat\Behat\EventDispatcher\Event\ExampleTested;
-use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\Cli\Controller;
-use Behat\Testwork\EventDispatcher\Event\AfterExerciseAborted;
-use Behat\Testwork\EventDispatcher\Event\AfterSuiteAborted;
-use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
-use Behat\Testwork\EventDispatcher\Event\SuiteTested;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Handler\StopOnFailureHandler;
-use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
-use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
-use Behat\Testwork\Tester\Result\Interpretation\StrictInterpretation;
-use Behat\Testwork\Tester\Result\ResultInterpreter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

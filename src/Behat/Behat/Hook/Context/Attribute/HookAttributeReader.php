@@ -21,8 +21,8 @@ use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
 use Behat\Hook\BeforeSuite;
 use Behat\Hook\Hook;
-use ReflectionMethod;
 use ReflectionAttribute;
+use ReflectionMethod;
 
 final class HookAttributeReader implements AttributeReader
 {

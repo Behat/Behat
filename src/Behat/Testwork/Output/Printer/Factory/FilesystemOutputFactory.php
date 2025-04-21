@@ -12,9 +12,9 @@ namespace Behat\Testwork\Output\Printer\Factory;
 
 use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Behat\Testwork\Output\Exception\MissingOutputPathException;
+use LogicException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
-use LogicException;
 
 /**
  * Creates an output stream for the filesystem.

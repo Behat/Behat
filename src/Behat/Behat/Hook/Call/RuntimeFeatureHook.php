@@ -17,7 +17,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
-use ReflectionMethod;
 
 /**
  * Represents a feature hook.

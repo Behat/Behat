@@ -5,9 +5,9 @@ namespace Behat\Tests\Testwork\Subject;
 use Behat\Testwork\Specification\GroupedSpecificationIterator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
 use Behat\Testwork\Specification\SpecificationArrayIterator;
-use PHPUnit\Framework\TestCase;
-use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Suite\Suite;
+use PHPUnit\Framework\TestCase;
 
 class GroupedSubjectIteratorTest extends TestCase
 {

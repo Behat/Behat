@@ -11,10 +11,10 @@
 namespace Behat\Behat\Definition\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
-use ReflectionMethod;
 use Behat\Behat\Definition\Call\Given;
-use Behat\Behat\Definition\Call\When;
 use Behat\Behat\Definition\Call\Then;
+use Behat\Behat\Definition\Call\When;
+use ReflectionMethod;
 
 /**
  * Reads definition annotations from the context class.

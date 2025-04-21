@@ -20,8 +20,8 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
-use ReflectionParameter;
 use ReflectionNamedType;
+use ReflectionParameter;
 
 /**
  * By-type object transformation.

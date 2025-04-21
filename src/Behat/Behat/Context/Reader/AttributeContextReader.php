@@ -14,8 +14,8 @@ use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Testwork\Call\Callee;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionException;
+use ReflectionMethod;
 
 /**
  * Reads context callees by Attributes using registered Attribute readers.

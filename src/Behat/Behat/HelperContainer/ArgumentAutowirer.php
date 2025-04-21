@@ -13,10 +13,10 @@ namespace Behat\Behat\HelperContainer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionException;
 
 /**
  * Automatically wires arguments of a given function from inside the container by using type-hints.

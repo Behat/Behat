@@ -12,10 +12,10 @@ namespace Behat\Behat\Definition\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Step as Attribute;
 use Behat\Behat\Definition\Call;
-use ReflectionMethod;
+use Behat\Step as Attribute;
 use ReflectionAttribute;
+use ReflectionMethod;
 
 /**
  * Reads definition Attributes from the context class.
