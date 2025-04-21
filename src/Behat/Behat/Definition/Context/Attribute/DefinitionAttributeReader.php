@@ -28,8 +28,8 @@ final class DefinitionAttributeReader implements AttributeReader
      */
     private static $attributeToCallMap = [
         Attribute\Given::class => Call\Given::class,
-        Attribute\When::class  => Call\When::class,
-        Attribute\Then::class  => Call\Then::class,
+        Attribute\When::class => Call\When::class,
+        Attribute\Then::class => Call\Then::class,
     ];
 
     /**

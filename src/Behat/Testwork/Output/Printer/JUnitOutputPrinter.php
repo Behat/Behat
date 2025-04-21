@@ -26,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class JUnitOutputPrinter extends StreamOutputPrinter
 {
-    public const XML_VERSION  = '1.0';
+    public const XML_VERSION = '1.0';
     public const XML_ENCODING = 'UTF-8';
 
     private ?DOMDocument $domDocument = null;

@@ -74,11 +74,11 @@ final class TotalStatistics implements Statistics
     public function resetAllCounters()
     {
         $this->scenarioCounters = $this->stepCounters = [
-            TestResult::PASSED    => 0,
-            TestResult::FAILED    => 0,
+            TestResult::PASSED => 0,
+            TestResult::FAILED => 0,
             TestResult::UNDEFINED => 0,
-            TestResult::PENDING   => 0,
-            TestResult::SKIPPED   => 0,
+            TestResult::PENDING => 0,
+            TestResult::SKIPPED => 0,
         ];
     }
 

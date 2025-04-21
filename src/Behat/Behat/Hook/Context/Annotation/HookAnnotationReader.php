@@ -29,14 +29,14 @@ final class HookAnnotationReader implements AnnotationReader
      * @var string[]
      */
     private static $classes = [
-        'beforesuite'    => 'Behat\Testwork\Hook\Call\BeforeSuite',
-        'aftersuite'     => 'Behat\Testwork\Hook\Call\AfterSuite',
-        'beforefeature'  => 'Behat\Behat\Hook\Call\BeforeFeature',
-        'afterfeature'   => 'Behat\Behat\Hook\Call\AfterFeature',
+        'beforesuite' => 'Behat\Testwork\Hook\Call\BeforeSuite',
+        'aftersuite' => 'Behat\Testwork\Hook\Call\AfterSuite',
+        'beforefeature' => 'Behat\Behat\Hook\Call\BeforeFeature',
+        'afterfeature' => 'Behat\Behat\Hook\Call\AfterFeature',
         'beforescenario' => 'Behat\Behat\Hook\Call\BeforeScenario',
-        'afterscenario'  => 'Behat\Behat\Hook\Call\AfterScenario',
-        'beforestep'     => 'Behat\Behat\Hook\Call\BeforeStep',
-        'afterstep'      => 'Behat\Behat\Hook\Call\AfterStep',
+        'afterscenario' => 'Behat\Behat\Hook\Call\AfterScenario',
+        'beforestep' => 'Behat\Behat\Hook\Call\BeforeStep',
+        'afterstep' => 'Behat\Behat\Hook\Call\AfterStep',
     ];
 
     /**

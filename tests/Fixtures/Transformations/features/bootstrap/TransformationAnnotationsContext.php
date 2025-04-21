@@ -14,9 +14,9 @@ class TransformationAnnotationsContext implements Context
     /** @Transform table:username,age */
     public function createUserFromTable(TableNode $table): User
     {
-        $hash     = $table->getHash();
+        $hash = $table->getHash();
         $username = $hash[0]['username'];
-        $age      = $hash[0]['age'];
+        $age = $hash[0]['age'];
 
         return new User($username, $age);
     }
@@ -24,9 +24,9 @@ class TransformationAnnotationsContext implements Context
     /** @Transform table:%username@,age# */
     public function createUserFromTableWithSymbol(TableNode $table): User
     {
-        $hash     = $table->getHash();
+        $hash = $table->getHash();
         $username = $hash[0]['%username@'];
-        $age      = $hash[0]['age#'];
+        $age = $hash[0]['age#'];
 
         return new User($username, $age);
     }
@@ -34,9 +34,9 @@ class TransformationAnnotationsContext implements Context
     /** @Transform table:логин,возраст */
     public function createUserFromTableInRussian(TableNode $table)
     {
-        $hash     = $table->getHash();
+        $hash = $table->getHash();
         $username = $hash[0]['логин'];
-        $age      = $hash[0]['возраст'];
+        $age = $hash[0]['возраст'];
 
         return new User($username, $age);
     }
@@ -44,9 +44,9 @@ class TransformationAnnotationsContext implements Context
     /** @Transform rowtable:username,age */
     public function createUserFromRowTable(TableNode $table): User
     {
-        $hash     = $table->getRowsHash();
+        $hash = $table->getRowsHash();
         $username = $hash['username'];
-        $age      = $hash['age'];
+        $age = $hash['age'];
 
         return new User($username, $age);
     }
@@ -54,9 +54,9 @@ class TransformationAnnotationsContext implements Context
     /** @Transform rowtable:--username,age */
     public function createUserFromRowTableWithSymbol(TableNode $table): User
     {
-        $hash     = $table->getRowsHash();
+        $hash = $table->getRowsHash();
         $username = $hash['--username'];
-        $age      = $hash['age'];
+        $age = $hash['age'];
 
         return new User($username, $age);
     }
@@ -64,9 +64,9 @@ class TransformationAnnotationsContext implements Context
     /** @Transform rowtable:логин,возраст */
     public function createUserFromRowTableInRussian(TableNode $table)
     {
-        $hash     = $table->getRowsHash();
+        $hash = $table->getRowsHash();
         $username = $hash['логин'];
-        $age      = $hash['возраст'];
+        $age = $hash['возраст'];
 
         return new User($username, $age);
     }

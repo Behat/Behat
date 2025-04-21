@@ -140,7 +140,7 @@ final class GherkinExtension implements Extension
         $container->setParameter(
             'suite.generic.default_settings',
             [
-                'paths'    => ['%paths.base%/features'],
+                'paths' => ['%paths.base%/features'],
                 'contexts' => ['FeatureContext'],
             ]
         );

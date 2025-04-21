@@ -32,8 +32,8 @@ final class DefinitionAnnotationReader implements AnnotationReader
      */
     private static $classes = [
         'given' => Given::class,
-        'when'  => When::class,
-        'then'  => Then::class,
+        'when' => When::class,
+        'then' => Then::class,
     ];
 
     /**

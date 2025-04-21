@@ -72,7 +72,7 @@ class JUnitSetupPrinter implements SetupPrinter
 
                 $attributes = [
                     'message' => $message,
-                    'type'    => $messageType,
+                    'type' => $messageType,
                 ];
 
                 $outputPrinter->addTestcaseChild('failure', $attributes);

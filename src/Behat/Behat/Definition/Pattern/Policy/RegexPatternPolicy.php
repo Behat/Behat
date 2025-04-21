@@ -26,8 +26,8 @@ final class RegexPatternPolicy implements PatternPolicy
      */
     private static $replacePatterns = [
         "/(?<=\W|^)\\\'(?:((?!\\').)*)\\\'(?=\W|$)/" => "'([^']*)'", // Single quoted strings
-        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/'          => "\"([^\"]*)\"", // Double quoted strings
-        '/(?<=\W|^)(\d+)(?=\W|$)/'                   => "(\\d+)", // Numbers
+        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/' => "\"([^\"]*)\"", // Double quoted strings
+        '/(?<=\W|^)(\d+)(?=\W|$)/' => "(\\d+)", // Numbers
     ];
 
     /**

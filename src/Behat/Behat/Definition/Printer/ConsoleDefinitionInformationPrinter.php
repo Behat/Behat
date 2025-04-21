@@ -99,7 +99,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
             $indent . '<info>{type}</info> <def_regex>{regex}</def_regex>',
             [
                 '{suite}' => $suite ? $suite->getName() : '',
-                '{type}'  => $this->getDefinitionType($definition),
+                '{type}' => $this->getDefinitionType($definition),
                 '{regex}' => $pattern,
             ]
         );
@@ -121,7 +121,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
                 $lines[] = strtr(
                     $indent . '{description}',
                     [
-                        '{space}'       => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
+                        '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
                         '{description}' => $descriptionLine,
                     ]
                 );
@@ -144,7 +144,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
             $indent . '`{path}`',
             [
                 '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
-                '{path}'  => $definition->getPath(),
+                '{path}' => $definition->getPath(),
             ]
         );
 

@@ -325,7 +325,7 @@ EOL;
 
         if (!str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
             $hasError = true;
-            $outputMessage[] =  $this->getOutputDiff($text);
+            $outputMessage[] = $this->getOutputDiff($text);
         } else {
             $outputMessage[] = 'Output is as expected.';
         }

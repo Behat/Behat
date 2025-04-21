@@ -77,10 +77,10 @@ final class JUnitScenarioPrinter
         $outputPrinter = $formatter->getOutputPrinter();
 
         $testCaseAttributes = [
-            'name'      => $name,
+            'name' => $name,
             'classname' => $feature->getTitle(),
-            'status'    => $this->resultConverter->convertResultToString($result),
-            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
+            'status' => $this->resultConverter->convertResultToString($result),
+            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
         ];
 
         if ($file) {

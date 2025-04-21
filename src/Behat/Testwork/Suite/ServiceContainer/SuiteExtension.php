@@ -75,9 +75,9 @@ final class SuiteExtension implements Extension
     {
         $builder = $builder
             ->defaultValue(['default' => [
-                'enabled'    => true,
-                'type'       => null,
-                'settings'   => [],
+                'enabled' => true,
+                'type' => null,
+                'settings' => [],
             ]])
             ->treatNullLike([])
             ->treatFalseLike([])
@@ -168,7 +168,7 @@ final class SuiteExtension implements Extension
             }
 
             $configuredSuites[$name] = [
-                'type'     => $config['type'],
+                'type' => $config['type'],
                 'settings' => $config['settings'],
             ];
         }
