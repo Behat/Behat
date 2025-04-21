@@ -137,7 +137,7 @@ class ConfigConverterTools
     {
         $builderFactory = self::getBuilderFactory();
 
-        if (! is_int($value)) {
+        if (!is_int($value)) {
             return $builderFactory->val($value);
         }
 

@@ -26,10 +26,10 @@ final class PrettyFormatter extends Formatter
      *                                     formatter output (yes, no, on-fail)
      */
     public function __construct(
-        bool             $timer = true,
-        bool             $expand = false,
-        bool             $paths = true,
-        bool             $multiline = true,
+        bool $timer = true,
+        bool $expand = false,
+        bool $paths = true,
+        bool $multiline = true,
         ShowOutputOption $showOutput = ShowOutputOption::Yes,
         ...$baseOptions,
     ) {

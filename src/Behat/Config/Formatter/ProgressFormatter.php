@@ -18,7 +18,7 @@ final class ProgressFormatter extends Formatter
      *                                     formatter output (yes, no, on-fail, in-summary)
      */
     public function __construct(
-        bool             $timer = true,
+        bool $timer = true,
         ShowOutputOption $showOutput = ShowOutputOption::InSummary,
         ...$baseOptions,
     ) {

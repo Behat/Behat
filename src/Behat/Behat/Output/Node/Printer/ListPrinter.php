@@ -285,16 +285,20 @@ final class ListPrinter
     {
         if ($scope !== null) {
             return match (true) {
-                $scope instanceof BeforeSuiteScope, $scope instanceof AfterSuiteScope =>
-                $scope->getSuite()->getName(),
-                $scope instanceof BeforeFeatureScope, $scope instanceof AfterFeatureScope =>
-                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()),
-                $scope instanceof BeforeScenarioScope, $scope instanceof AfterScenarioScope =>
-                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()) .
-                    ':' . $scope->getScenario()->getLine(),
-                $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
-                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()) .
-                    ':' . $scope->getStep()->getLine(),
+                $scope instanceof BeforeSuiteScope,
+                $scope instanceof AfterSuiteScope => $scope->getSuite()->getName(),
+                $scope instanceof BeforeFeatureScope,
+                $scope instanceof AfterFeatureScope => $this->configurablePathPrinter->processPathsInText(
+                    $scope->getFeature()->getFile()
+                ),
+                $scope instanceof BeforeScenarioScope,
+                $scope instanceof AfterScenarioScope => $this->configurablePathPrinter->processPathsInText(
+                    $scope->getFeature()->getFile()
+                ) . ':' . $scope->getScenario()->getLine(),
+                $scope instanceof BeforeStepScope,
+                $scope instanceof AfterStepScope => $this->configurablePathPrinter->processPathsInText(
+                    $scope->getFeature()->getFile()
+                ) . ':' . $scope->getStep()->getLine(),
                 default => null,
             };
         }

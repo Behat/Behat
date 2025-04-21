@@ -79,11 +79,9 @@ return (new PhpCsFixer\Config())
 //        ],
 //        'no_leading_namespace_whitespace' => true,
 //        'no_mixed_echo_print' => true,
-//        'no_multiline_whitespace_around_double_arrow' => true,
+        'no_multiline_whitespace_around_double_arrow' => true,
 //        'no_null_property_initialization' => true,
 //        'no_short_bool_cast' => true,
-//        'no_singleline_whitespace_before_semicolons' => true,
-//        'no_spaces_around_offset' => true,
 //        'no_superfluous_phpdoc_tags' => [
 //            'allow_hidden_params' => true,
 //            'remove_inheritdoc' => true,
@@ -110,11 +108,9 @@ return (new PhpCsFixer\Config())
 //        'no_unused_imports' => true,
 //        'no_useless_concat_operator' => true,
 //        'no_useless_nullsafe_operator' => true,
-//        'no_whitespace_before_comma_in_array' => true,
 //        'normalize_index_brace' => true,
 //        'nullable_type_declaration' => true,
 //        'nullable_type_declaration_for_default_null_value' => true,
-//        'object_operator_without_whitespace' => true,
 //        'operator_linebreak' => [
 //            'only_booleans' => true,
 //        ],
@@ -175,7 +171,6 @@ return (new PhpCsFixer\Config())
 //        'simple_to_complex_string_variable' => true,
 //        'single_class_element_per_statement' => true,
 //        'single_import_per_statement' => true,
-//        'single_line_comment_spacing' => true,
 //        'single_line_comment_style' => [
 //            'comment_types' => [
 //                'hash',
@@ -183,21 +178,15 @@ return (new PhpCsFixer\Config())
 //        ],
 //        'single_line_throw' => true,
 //        'single_quote' => true,
-//        'single_space_around_construct' => true,
-//        'space_after_semicolon' => [
-//            'remove_in_empty_for_expressions' => true,
-//        ],
+        'single_space_around_construct' => true,
 //        'standardize_increment' => true,
 //        'standardize_not_equals' => true,
 //        'statement_indentation' => [
 //            'stick_comment_to_next_continuous_control_statement' => true,
 //        ],
 //        'switch_continue_to_break' => true,
-//        'trim_array_spaces' => true,
-//        'type_declaration_spaces' => true,
-//        'types_spaces' => true,
-//        'unary_operator_spaces' => true,
-//        'whitespace_after_comma_in_array' => true,
+        'type_declaration_spaces' => true,
+        'unary_operator_spaces' => true,
 //        'yoda_style' => true,
 
         'concat_space' => false, // override Symfony
