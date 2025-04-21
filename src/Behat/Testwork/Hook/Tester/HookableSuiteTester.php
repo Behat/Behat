@@ -26,6 +26,7 @@ use Behat\Testwork\Tester\SuiteTester;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template TSpec
+ *
  * @implements SuiteTester<TSpec>
  */
 final class HookableSuiteTester implements SuiteTester

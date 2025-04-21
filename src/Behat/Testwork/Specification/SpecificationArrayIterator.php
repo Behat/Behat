@@ -19,8 +19,11 @@ use Behat\Testwork\Suite\Suite;
  * Return instance of this class from locator if specifications cannot be searched lazily.
  *
  * @author Christophe Coevoet <stof@notk.org>
+ *
  * @template T
+ *
  * @implements SpecificationIterator<T>
+ *
  * @extends ArrayIterator<int, T>
  */
 final class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator

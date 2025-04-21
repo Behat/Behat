@@ -27,6 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template TSpec
+ *
  * @implements SuiteTester<TSpec>
  */
 final class EventDispatchingSuiteTester implements SuiteTester

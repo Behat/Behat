@@ -62,6 +62,7 @@ class FeatureContext implements Context
      * Cleans test folders in the temporary directory.
      *
      * @BeforeSuite
+     *
      * @AfterSuite
      */
     public static function cleanTestFolders()

@@ -27,6 +27,7 @@ use Behat\Testwork\Tester\SuiteTester;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template TSpec
+ *
  * @implements Exercise<TSpec>
  */
 final class RuntimeExercise implements Exercise

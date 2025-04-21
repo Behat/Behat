@@ -25,7 +25,7 @@ final class JUnitDurationListener implements EventListener
     /** @var array<string, float> */
     private $featureResultStore = [];
 
-    /** @inheritdoc */
+    /** {@inheritdoc} */
     public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureBeforeScenarioEvent($event);

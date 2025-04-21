@@ -23,6 +23,7 @@ interface Orderer
      * @template T
      *
      * @param SpecificationIterator<T>[] $scenarioIterators
+     *
      * @return SpecificationIterator<T>[]
      */
     public function order(array $scenarioIterators);

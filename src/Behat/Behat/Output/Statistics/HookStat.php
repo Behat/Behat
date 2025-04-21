@@ -61,17 +61,11 @@ final class HookStat
         $this->scope = $scope;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         return null === $this->error;

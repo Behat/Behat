@@ -9,7 +9,6 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PER-CS2.0' => true,
 
-//        'align_multiline_comment' => true,
 //        'backtick_to_shell_exec' => true,
         'binary_operator_spaces' => true,
 //        'blank_line_before_statement' => [
@@ -36,11 +35,6 @@ return (new PhpCsFixer\Config())
 //        'empty_loop_body' => ['style' => 'braces'],
 //        'empty_loop_condition' => true,
 //        'fully_qualified_strict_types' => true,
-//        'general_phpdoc_tag_rename' => [
-//            'replacements' => [
-//                'inheritDocs' => 'inheritDoc',
-//            ],
-//        ],
 //        'global_namespace_import' => [
 //            'import_classes' => false,
 //            'import_constants' => false,
@@ -58,9 +52,7 @@ return (new PhpCsFixer\Config())
 //        'no_alias_language_construct_call' => true,
 //        'no_alternative_syntax' => true,
 //        'no_binary_string' => true,
-//        'no_blank_lines_after_phpdoc' => true,
-//        'no_empty_comment' => true,
-//        'no_empty_phpdoc' => true,
+        'no_blank_lines_after_phpdoc' => true,
 //        'no_empty_statement' => true,
 //        'no_extra_blank_lines' => [
 //            'tokens' => [
@@ -129,53 +121,31 @@ return (new PhpCsFixer\Config())
 //        'php_unit_fqcn_annotation' => true,
 //        'php_unit_method_casing' => true,
 //        'phpdoc_align' => true,
-//        'phpdoc_annotation_without_dot' => true,
-//        'phpdoc_indent' => true,
-//        'phpdoc_inline_tag_normalizer' => true,
-//        'phpdoc_no_access' => true,
-//        'phpdoc_no_alias_tag' => true,
-//        'phpdoc_no_package' => true,
-//        'phpdoc_no_useless_inheritdoc' => true,
-//        'phpdoc_order' => [
-//            'order' => [
-//                'param',
-//                'return',
-//                'throws',
-//            ],
-//        ],
-//        'phpdoc_return_self_reference' => true,
+        'phpdoc_annotation_without_dot' => true,
+        'phpdoc_inline_tag_normalizer' => true,
+        'phpdoc_no_useless_inheritdoc' => true,
+        'phpdoc_order' => [
+            'order' => [
+                'param',
+                'return',
+                'throws',
+            ],
+        ],
 //        'phpdoc_scalar' => true,
-//        'phpdoc_separation' => [
-//            'groups' => [
-//                ['Annotation', 'NamedArgumentConstructor', 'Target'],
-//                ...PhpdocSeparationFixer::OPTION_GROUPS_DEFAULT,
-//            ],
-//        ],
-//        'phpdoc_single_line_var_spacing' => true,
 //        'phpdoc_summary' => true,
-//        'phpdoc_tag_type' => [
-//            'tags' => [
-//                'inheritDoc' => 'inline',
-//            ],
-//        ],
-//        'phpdoc_to_comment' => true,
-//        'phpdoc_trim' => true,
-//        'phpdoc_trim_consecutive_blank_line_separation' => true,
-//        'phpdoc_types' => true,
+        'phpdoc_tag_type' => [
+            'tags' => [
+                'inheritDoc' => 'inline',
+            ],
+        ],
 //        'phpdoc_types_order' => [
 //            'null_adjustment' => 'always_last',
 //            'sort_algorithm' => 'none',
 //        ],
-//        'phpdoc_var_without_name' => true,
 //        'semicolon_after_instruction' => true,
 //        'simple_to_complex_string_variable' => true,
 //        'single_class_element_per_statement' => true,
 //        'single_import_per_statement' => true,
-//        'single_line_comment_style' => [
-//            'comment_types' => [
-//                'hash',
-//            ],
-//        ],
 //        'single_line_throw' => true,
 //        'single_quote' => true,
         'single_space_around_construct' => true,
@@ -190,6 +160,13 @@ return (new PhpCsFixer\Config())
 //        'yoda_style' => true,
 
         'concat_space' => false, // override Symfony
+        'phpdoc_separation' => [ // override Symfony
+            'groups' => [
+                ['Annotation', 'NamedArgumentConstructor', 'Target'],
+                ['Given', 'When', 'Then'],
+                ...\PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer::OPTION_GROUPS_DEFAULT,
+            ],
+        ],
 
         'function_declaration' => true, // overrides @PER-CS2.0
         'method_argument_space' => [ // overrides @PER-CS2.0

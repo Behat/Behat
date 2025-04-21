@@ -101,6 +101,7 @@ final class JUnitOutlineStoreListener implements EventListener
 
     /**
      * @param ExampleNode $scenario
+     *
      * @return OutlineNode
      */
     public function getCurrentOutline(ExampleNode $scenario)

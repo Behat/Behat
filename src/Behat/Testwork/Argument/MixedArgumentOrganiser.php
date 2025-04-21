@@ -216,6 +216,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Filtered out superfluous parameters for matching up typehinted arguments.
      *
      * @param  ReflectionParameter[] $parameters Constructor Arguments
+     *
      * @return ReflectionParameter[]             Filtered $parameters
      */
     private function filterApplicableTypehintedParameters(array $parameters): array
@@ -286,6 +287,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  mixed[]               &$candidates Resolved arguments
      * @param  mixed[]               &$arguments  Argument mapping
      * @param  callable              $predicate   Callable predicate to apply to each candidate
+     *
      * @return void
      */
     private function applyPredicateToTypehintedArguments(
@@ -309,6 +311,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  mixed[]             &$candidates Resolved arguments
      * @param  mixed[]             &$arguments  Argument mapping
      * @param  callable            $predicate   Callable predicate to apply to each candidate
+     *
      * @return bool Returns true if a candidate has been matched to the given parameter, otherwise false
      */
     public function matchParameterToCandidateUsingPredicate(
@@ -341,6 +344,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param  ReflectionClass $reflectionClass Typehinted argument
      * @param  mixed           $candidate       Resolved argument
+     *
      * @return bool
      */
     private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
@@ -353,6 +357,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param  ReflectionClass $reflectionClass Typehinted argument
      * @param  mixed           $candidate       Resolved argument
+     *
      * @return bool
      */
     private function isInstancePredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)

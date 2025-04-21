@@ -48,7 +48,7 @@ final class DefinitionAttributeReader implements AttributeReader
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {

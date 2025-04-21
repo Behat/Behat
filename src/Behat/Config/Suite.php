@@ -42,7 +42,6 @@ final class Suite implements ConfigConverterInterface
     /**
      * @param array<mixed> $constructorArgs
      */
-
     public function addContext(string $context, array $constructorArgs = []): self
     {
         $this->settings[self::CONTEXTS_SETTING][][$context] = $constructorArgs;

@@ -30,7 +30,9 @@ final class RandomOrderer implements Orderer
 
     /**
      * @template T
+     *
      * @param SpecificationIterator<T>[] $scenarioIterators
+     *
      * @return SpecificationIterator<T>[]
      */
     private function orderFeatures(array $scenarioIterators)

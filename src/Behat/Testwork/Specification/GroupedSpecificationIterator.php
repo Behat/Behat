@@ -18,6 +18,7 @@ use Behat\Testwork\Suite\Suite;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template T
+ *
  * @implements SpecificationIterator<T>
  */
 final class GroupedSpecificationIterator implements SpecificationIterator

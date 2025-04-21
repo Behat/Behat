@@ -24,6 +24,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  *
  * @template TSpec
+ *
  * @implements Exercise<TSpec>
  */
 final class OrderedExercise implements Exercise
@@ -84,6 +85,7 @@ final class OrderedExercise implements Exercise
 
     /**
      * @param SpecificationIterator<TSpec>[] $iterators
+     *
      * @return SpecificationIterator<TSpec>[]
      */
     private function order(array $iterators)

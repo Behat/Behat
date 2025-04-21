@@ -55,7 +55,7 @@ final class HookAttributeReader implements AttributeReader
     }
 
     /**
-     * @{inheritdoc}
+     * {@inheritdoc}
      */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {

@@ -90,6 +90,7 @@ final class TurnipPatternPolicy implements PatternPolicy
 
     /**
      * @param string $pattern
+     *
      * @return string
      */
     private function createTransformedRegex($pattern)

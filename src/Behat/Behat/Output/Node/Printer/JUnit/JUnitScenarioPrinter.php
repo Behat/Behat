@@ -60,9 +60,6 @@ final class JUnitScenarioPrinter
         $this->durationListener = $durationListener;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
         $name = implode(' ', array_map(function ($l) {
@@ -95,6 +92,7 @@ final class JUnitScenarioPrinter
 
     /**
      * @param ExampleNode $scenario
+     *
      * @return string
      */
     private function buildExampleName(ExampleNode $scenario)

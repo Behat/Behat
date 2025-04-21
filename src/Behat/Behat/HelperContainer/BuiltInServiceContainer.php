@@ -91,9 +91,9 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      *
      * @param string $id
      *
-     * @throws WrongServicesConfigurationException
-     *
      * @return array|string
+     *
+     * @throws WrongServicesConfigurationException
      */
     private function getAndValidateServiceSchema($id)
     {
