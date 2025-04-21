@@ -21,7 +21,7 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 
 /**
- * Listens for Outline events store the current one
+ * Listens for Outline events store the current one.
  *
  * @author James Watson <james@sitepulse.org>
  */

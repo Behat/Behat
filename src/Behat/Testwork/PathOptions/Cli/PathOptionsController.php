@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Configures the printing of paths in the output
+ * Configures the printing of paths in the output.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

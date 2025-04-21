@@ -11,7 +11,7 @@
 namespace Behat\Hook;
 
 /**
- * Represents an Attribute for BeforeFeature hook
+ * Represents an Attribute for BeforeFeature hook.
  */
 #[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 final class BeforeFeature implements Hook

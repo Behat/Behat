@@ -38,7 +38,7 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
     private $result;
 
     /**
-     * Initializes event
+     * Initializes event.
      */
     public function __construct(
         Environment $env,

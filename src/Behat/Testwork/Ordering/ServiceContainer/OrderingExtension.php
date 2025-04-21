@@ -111,7 +111,7 @@ final class OrderingExtension implements Extension
     }
 
     /**
-     * Loads exercise wrapper that enables ordering
+     * Loads exercise wrapper that enables ordering.
      */
     private function loadOrderedExercise(ContainerBuilder $container)
     {
@@ -123,7 +123,7 @@ final class OrderingExtension implements Extension
     }
 
     /**
-     * Defines default orderers
+     * Defines default orderers.
      */
     private function loadDefaultOrderers(ContainerBuilder $container)
     {

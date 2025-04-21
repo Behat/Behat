@@ -77,7 +77,7 @@ class EventDispatcherExtension implements Extension
     }
 
     /**
-     * Loads sigint controller
+     * Loads sigint controller.
      */
     protected function loadSigintController(ContainerBuilder $container)
     {

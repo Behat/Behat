@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Prints unused definitions
+ * Prints unused definitions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */

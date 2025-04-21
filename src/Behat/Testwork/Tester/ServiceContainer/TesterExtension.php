@@ -40,7 +40,7 @@ abstract class TesterExtension implements Extension
     public const STOP_ON_FAILURE_ID = 'tester.stop_on_failure';
 
     /**
-     * Available extension points
+     * Available extension points.
      */
     public const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
     public const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
@@ -161,7 +161,7 @@ abstract class TesterExtension implements Extension
     }
 
     /**
-     * Loads result interpreter controller
+     * Loads result interpreter controller.
      */
     protected function loadResultInterpreter(ContainerBuilder $container)
     {

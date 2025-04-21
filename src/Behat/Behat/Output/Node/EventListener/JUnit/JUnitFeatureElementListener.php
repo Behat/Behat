@@ -73,7 +73,7 @@ final class JUnitFeatureElementListener implements EventListener
 
     /**
      * Captures any failures in suite setup.
-     * They will be printed later when the first scenario is printed
+     * They will be printed later when the first scenario is printed.
      */
     private function captureSuiteSetupEvent(Formatter $formatter, Event $event): void
     {

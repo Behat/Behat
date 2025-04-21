@@ -136,7 +136,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * Generate XML from the DOMDocument and parse to the the writing stream
+     * Generate XML from the DOMDocument and parse to the the writing stream.
      */
     public function flush()
     {

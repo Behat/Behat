@@ -18,7 +18,7 @@ use Behat\Testwork\Environment\Environment;
 
 /**
  * Enable ticks during step testing to allow SigintController in Testwork
- * to handle an interupt (on PHP7)
+ * to handle an interupt (on PHP7).
  *
  * @see Behat\Testwork\EventDispatcher\Cli\SigintController
  * @deprecated since the way signals are handled changed to use pcntl_signal_dispatch

@@ -37,7 +37,7 @@ use Symfony\Component\DependencyInjection\Reference;
 final class ContextExtension implements Extension
 {
     /**
-     * Available services
+     * Available services.
      */
     public const FACTORY_ID = 'context.factory';
     public const CONTEXT_SNIPPET_GENERATOR_ID = 'snippet.generator.context';
@@ -227,7 +227,7 @@ final class ContextExtension implements Extension
     }
 
     /**
-     * Loads AnnotatedContextReader
+     * Loads AnnotatedContextReader.
      */
     private function loadAnnotatedContextReader(ContainerBuilder $container)
     {
@@ -244,7 +244,7 @@ final class ContextExtension implements Extension
     }
 
     /**
-     * Loads AttributedContextReader
+     * Loads AttributedContextReader.
      */
     private function loadAttributedContextReader(ContainerBuilder $container)
     {
@@ -260,7 +260,7 @@ final class ContextExtension implements Extension
     }
 
     /**
-     * Loads TranslatableContextReader
+     * Loads TranslatableContextReader.
      */
     private function loadTranslatableContextReader(ContainerBuilder $container)
     {
@@ -277,7 +277,7 @@ final class ContextExtension implements Extension
     }
 
     /**
-     * Loads DocBlockHelper
+     * Loads DocBlockHelper.
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {

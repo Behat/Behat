@@ -250,7 +250,7 @@ final class DefinitionExtension implements Extension
     }
 
     /**
-     * Loads DocBlockHelper
+     * Loads DocBlockHelper.
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {

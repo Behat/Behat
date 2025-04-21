@@ -109,7 +109,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 
     /**
      * The priority of this transformer needs to be less that the priority of the other table transformers because
-     * we want to be able to transform whole tables or whole rows before we attempt to transform any column
+     * we want to be able to transform whole tables or whole rows before we attempt to transform any column.
      */
     public function getPriority()
     {

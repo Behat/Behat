@@ -180,7 +180,7 @@ EOL;
     }
 
     /**
-     * Sets specified ENV variable
+     * Sets specified ENV variable.
      *
      * @When /^the "([^"]*)" environment variable is set to "([^"]*)"$/
      */
@@ -190,7 +190,7 @@ EOL;
     }
 
     /**
-     * Sets the BEHAT_PARAMS env variable
+     * Sets the BEHAT_PARAMS env variable.
      *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
      */
@@ -233,7 +233,7 @@ EOL;
     }
 
     /**
-     * Runs behat command with provided parameters
+     * Runs behat command with provided parameters.
      *
      * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
@@ -273,7 +273,7 @@ EOL;
     }
 
     /**
-     * Runs behat command with provided parameters in interactive mode
+     * Runs behat command with provided parameters in interactive mode.
      *
      * @When /^I answer "([^"]+)" when running "behat(?: ((?:\"|[^"])*))?"$/
      *
@@ -291,7 +291,7 @@ EOL;
     }
 
     /**
-     * Runs behat command in debug mode
+     * Runs behat command in debug mode.
      *
      * @When /^I run behat in debug mode$/
      */

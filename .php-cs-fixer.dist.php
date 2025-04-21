@@ -133,7 +133,7 @@ return (new PhpCsFixer\Config())
             ],
         ],
         'phpdoc_scalar' => true,
-//        'phpdoc_summary' => true,
+        'phpdoc_summary' => true,
         'phpdoc_tag_type' => [
             'tags' => [
                 'inheritDoc' => 'inline',

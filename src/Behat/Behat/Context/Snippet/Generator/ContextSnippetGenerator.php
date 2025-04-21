@@ -147,7 +147,7 @@ TPL;
     }
 
     /**
-     * Returns an array of classes used by the snippet template
+     * Returns an array of classes used by the snippet template.
      *
      * @return string[]
      */

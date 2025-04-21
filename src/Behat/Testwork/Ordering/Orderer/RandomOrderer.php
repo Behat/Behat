@@ -14,7 +14,7 @@ use Behat\Testwork\Specification\SpecificationArrayIterator;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Prioritises Suites and Features into random order
+ * Prioritises Suites and Features into random order.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */

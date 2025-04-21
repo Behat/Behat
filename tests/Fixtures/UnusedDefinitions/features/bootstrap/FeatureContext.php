@@ -35,7 +35,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * This is a step that is never used and should be removed
+     * This is a step that is never used and should be removed.
      */
     #[Then('I call a step not used in any feature')]
     public function stepNotUsedInAnyFeature(): void

@@ -40,7 +40,7 @@ class TesterExtension extends BaseExtension
     public const STEP_TESTER_ID = 'tester.step';
 
     /**
-     * Available extension points
+     * Available extension points.
      */
     public const SCENARIO_TESTER_WRAPPER_TAG = 'tester.scenario.wrapper';
     public const OUTLINE_TESTER_WRAPPER_TAG = 'tester.outline.wrapper';

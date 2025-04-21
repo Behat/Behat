@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Preloads scenarios and then modifies the order when --order is passed
+ * Preloads scenarios and then modifies the order when --order is passed.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
@@ -79,7 +79,7 @@ final class OrderController implements Controller
     }
 
     /**
-     * Register a new available controller
+     * Register a new available controller.
      */
     public function registerOrderer(Orderer $orderer)
     {

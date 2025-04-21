@@ -140,7 +140,7 @@ final class AnnotatedContextReader implements ContextReader
     }
 
     /**
-     * Merges multiline strings (strings ending with "\")
+     * Merges multiline strings (strings ending with "\").
      *
      * @param string $docBlock
      *

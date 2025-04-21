@@ -31,7 +31,7 @@ final class TesterOptions implements ConfigConverterInterface
     ];
 
     /**
-     * Used when converting config to PHP, to move relevant Profile settings into this object
+     * Used when converting config to PHP, to move relevant Profile settings into this object.
      *
      * @internal
      */
@@ -70,7 +70,7 @@ final class TesterOptions implements ConfigConverterInterface
     }
 
     /**
-     * Behat will convert PHP warnings / errors during steps to exceptions if they match this error_reporting level
+     * Behat will convert PHP warnings / errors during steps to exceptions if they match this error_reporting level.
      */
     public function withErrorReporting(int $errorReporting): self
     {
@@ -81,7 +81,7 @@ final class TesterOptions implements ConfigConverterInterface
 
 
     /**
-     * Control whether Behat should fail on undefined or pending steps (equivalent to the `--strict` CLI flag)
+     * Control whether Behat should fail on undefined or pending steps (equivalent to the `--strict` CLI flag).
      */
     public function withStrictResultInterpretation(bool $strict = true): self
     {
@@ -91,7 +91,7 @@ final class TesterOptions implements ConfigConverterInterface
     }
 
     /**
-     * Control whether Behat should actually execute steps (equivalent to the `--dry-run` CLI flag)
+     * Control whether Behat should actually execute steps (equivalent to the `--dry-run` CLI flag).
      */
     public function withSkipAllTests(bool $skip = true): self
     {
@@ -101,7 +101,7 @@ final class TesterOptions implements ConfigConverterInterface
     }
 
     /**
-     * Control whether Behat should stop after the first failing scenario (equivalent to `--stop-on-failure` on CLI)
+     * Control whether Behat should stop after the first failing scenario (equivalent to `--stop-on-failure` on CLI).
      */
     public function withStopOnFailure(bool $stopOnFailure = true): self
     {

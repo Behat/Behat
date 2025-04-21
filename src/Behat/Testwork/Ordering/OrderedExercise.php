@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
- * Exercise that is ordered according to a specified algorithm
+ * Exercise that is ordered according to a specified algorithm.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  *
@@ -74,7 +74,7 @@ final class OrderedExercise implements Exercise
     }
 
     /**
-     * Replace the algorithm being used for prioritisation
+     * Replace the algorithm being used for prioritisation.
      */
     public function setOrderer(Orderer $orderer)
     {
