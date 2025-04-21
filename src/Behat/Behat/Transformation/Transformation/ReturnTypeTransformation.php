@@ -46,7 +46,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
@@ -102,7 +102,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Extracts parameters from provided definition call.
      *
-     * @return null|string
+     * @return string|null
      */
     private static function getReturnClass(ReflectionFunctionAbstract $reflection)
     {
@@ -121,7 +121,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @param string|int $argumentIndex
      *
-     * @return null|string
+     * @return string|null
      */
     private function getParameterClassNameByIndex(DefinitionCall $definitionCall, $argumentIndex)
     {

@@ -44,7 +44,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {

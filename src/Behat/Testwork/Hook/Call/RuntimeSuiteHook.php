@@ -26,10 +26,10 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $scopeName
-     * @param null|string $filterString
+     * @param string                               $scopeName
+     * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
-     * @param null|string $description
+     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */

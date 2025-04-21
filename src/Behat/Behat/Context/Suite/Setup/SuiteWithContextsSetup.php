@@ -30,7 +30,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      */
     private $autoloader;
     /**
-     * @var null|FilesystemLogger
+     * @var FilesystemLogger|null
      */
     private $logger;
     /**
@@ -179,7 +179,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     private function generateClass(Suite $suite, $class)
     {

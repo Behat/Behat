@@ -36,7 +36,7 @@ final class DefinitionTranslator
     /**
      * Attempts to translate definition using translator and produce translated one on success.
      *
-     * @param null|string $language
+     * @param string|null $language
      *
      * @return Definition|TranslatedDefinition
      */

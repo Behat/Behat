@@ -26,7 +26,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
      */
     private $basePath;
     /**
-     * @var null|FilesystemLogger
+     * @var FilesystemLogger|null
      */
     private $logger;
 

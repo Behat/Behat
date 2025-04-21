@@ -72,7 +72,7 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * Proxies event to the listener.
      *
-     * @param null|string $eventName
+     * @param string|null $eventName
      */
     public function listenEvent(Event $event, $eventName = null)
     {

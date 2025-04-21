@@ -106,7 +106,7 @@ final class RepositorySearchEngine implements SearchEngine
      * @param string              $stepText
      * @param ArgumentInterface[] $multiline
      *
-     * @return null|SearchResult
+     * @return SearchResult|null
      */
     private function match(Definition $definition, $stepText, array $multiline)
     {

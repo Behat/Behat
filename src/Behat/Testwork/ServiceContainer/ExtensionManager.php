@@ -39,7 +39,7 @@ final class ExtensionManager
      * Initializes manager.
      *
      * @param Extension[] $extensions     List of default extensions
-     * @param null|string $extensionsPath Base path where to search custom extension files
+     * @param string|null $extensionsPath Base path where to search custom extension files
      */
     public function __construct(array $extensions, $extensionsPath = null)
     {
@@ -53,7 +53,7 @@ final class ExtensionManager
     /**
      * Sets path to directory in which manager will try to find extension files.
      *
-     * @param null|string $path
+     * @param string|null $path
      */
     public function setExtensionsPath($path)
     {

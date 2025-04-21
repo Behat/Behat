@@ -20,11 +20,11 @@ use Behat\Testwork\Counter\Exception\TimerException;
 final class Timer
 {
     /**
-     * @var null|float
+     * @var float|null
      */
     private $starTime;
     /**
-     * @var null|float
+     * @var float|null
      */
     private $stopTime;
 

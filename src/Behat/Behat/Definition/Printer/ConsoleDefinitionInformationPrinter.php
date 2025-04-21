@@ -21,7 +21,7 @@ use Behat\Testwork\Suite\Suite;
 final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter implements UnusedDefinitionPrinter
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $searchCriterion;
 

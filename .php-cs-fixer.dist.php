@@ -141,10 +141,10 @@ return (new PhpCsFixer\Config())
         ],
         'phpdoc_trim' => true,
         'phpdoc_trim_consecutive_blank_line_separation' => true,
-//        'phpdoc_types_order' => [
-//            'null_adjustment' => 'always_last',
-//            'sort_algorithm' => 'none',
-//        ],
+        'phpdoc_types_order' => [
+            'null_adjustment' => 'always_last',
+            'sort_algorithm' => 'none',
+        ],
 //        'semicolon_after_instruction' => true,
 //        'simple_to_complex_string_variable' => true,
 //        'single_class_element_per_statement' => true,

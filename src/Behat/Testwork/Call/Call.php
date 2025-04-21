@@ -41,7 +41,7 @@ interface Call
     /**
      * Returns call error reporting level.
      *
-     * @return null|int
+     * @return int|null
      */
     public function getErrorReportingLevel();
 }

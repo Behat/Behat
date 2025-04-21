@@ -170,7 +170,7 @@ final class ExerciseController implements Controller
      * Finds specification iterators for all provided suites using locator.
      *
      * @param Suite[]     $suites
-     * @param null|string $locator
+     * @param string|null $locator
      *
      * @return SpecificationIterator[]
      */

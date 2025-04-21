@@ -49,7 +49,7 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
     /**
      * Extract callable from exception.
      *
-     * @return null|array
+     * @return array|null
      */
     private function extractNonExistentCallable(Error $exception)
     {

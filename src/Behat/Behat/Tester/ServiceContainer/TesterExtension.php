@@ -216,7 +216,7 @@ class TesterExtension extends BaseExtension
     /**
      * Loads rerun controller.
      *
-     * @param null|string      $cachePath
+     * @param string|null $cachePath
      */
     protected function loadRerunController(ContainerBuilder $container, $cachePath)
     {

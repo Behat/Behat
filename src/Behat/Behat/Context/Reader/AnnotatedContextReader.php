@@ -178,11 +178,11 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Reads callee from provided doc line using registered annotation readers.
      *
-     * @param string           $class
-     * @param string           $docLine
-     * @param null|string      $description
+     * @param string      $class
+     * @param string      $docLine
+     * @param string|null $description
      *
-     * @return null|Callee
+     * @return Callee|null
      */
     private function readDocLineCallee($class, ReflectionMethod $method, $docLine, $description = null)
     {

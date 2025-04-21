@@ -63,7 +63,7 @@ final class SyntaxController implements Controller
     /**
      * Executes controller.
      *
-     * @return null|int
+     * @return int|null
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

@@ -24,7 +24,7 @@ abstract class OutputFactory
     public const VERBOSITY_DEBUG = 4;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $outputPath;
     /**
@@ -32,7 +32,7 @@ abstract class OutputFactory
      */
     private $outputStyles = [];
     /**
-     * @var null|bool
+     * @var bool|null
      */
     private $outputDecorated = null;
     /**
@@ -53,7 +53,7 @@ abstract class OutputFactory
     /**
      * Returns output path.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getOutputPath()
     {
@@ -91,7 +91,7 @@ abstract class OutputFactory
     /**
      * Returns output decoration status.
      *
-     * @return null|bool
+     * @return bool|null
      */
     public function isOutputDecorated()
     {

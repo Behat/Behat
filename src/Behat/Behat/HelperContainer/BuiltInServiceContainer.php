@@ -128,7 +128,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates a factory method.
      *
-     * @return null|ReflectionMethod
+     * @return ReflectionMethod|null
      */
     private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema)
     {

@@ -30,7 +30,7 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
      *
      * @param string      $scopeName
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($scopeName, $callable, $description = null)
     {

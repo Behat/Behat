@@ -127,7 +127,7 @@ final class TranslatorExtension implements Extension
     /**
      * Tries to guess default user cli language.
      *
-     * @return null|string
+     * @return string|null
      */
     private function getDefaultLanguage()
     {

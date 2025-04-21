@@ -120,7 +120,7 @@ final class SnippetRegistry implements SnippetRepository
     }
 
     /**
-     * @return null|Snippet
+     * @return Snippet|null
      */
     private function generateSnippet(Environment $environment, StepNode $step)
     {

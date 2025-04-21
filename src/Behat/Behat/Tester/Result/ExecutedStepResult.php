@@ -27,7 +27,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      */
     private $searchResult;
     /**
-     * @var null|CallResult
+     * @var CallResult|null
      */
     private $callResult;
 
@@ -76,7 +76,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     }
 
     /**
-     * @return self::PENDING | self::FAILED | self::PASSED
+     * @return self::PENDING|self::FAILED|self::PASSED
      */
     public function getResultCode()
     {

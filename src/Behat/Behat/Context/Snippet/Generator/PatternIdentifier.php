@@ -24,7 +24,7 @@ interface PatternIdentifier
      *
      * @param string $contextClass
      *
-     * @return null|string
+     * @return string|null
      */
     public function guessPatternType($contextClass);
 }

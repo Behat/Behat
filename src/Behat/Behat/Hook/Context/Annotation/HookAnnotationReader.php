@@ -46,7 +46,7 @@ final class HookAnnotationReader implements AnnotationReader
      * @param string           $docLine
      * @param string           $description
      *
-     * @return null|RuntimeHook
+     * @return RuntimeHook|null
      */
     public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {

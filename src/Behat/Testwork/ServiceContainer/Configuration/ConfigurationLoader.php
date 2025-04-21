@@ -24,11 +24,11 @@ use function str_ends_with;
 final class ConfigurationLoader
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $configurationPath;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $environmentVariable;
     /**
@@ -59,7 +59,7 @@ final class ConfigurationLoader
     /**
      * Sets environment variable name.
      *
-     * @param null|string $variable
+     * @param string|null $variable
      */
     public function setEnvironmentVariableName($variable)
     {
@@ -69,7 +69,7 @@ final class ConfigurationLoader
     /**
      * Returns environment variable name.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getEnvironmentVariableName()
     {
@@ -79,7 +79,7 @@ final class ConfigurationLoader
     /**
      * Sets configuration file path.
      *
-     * @param null|string $path
+     * @param string|null $path
      */
     public function setConfigurationFilePath($path)
     {
@@ -89,7 +89,7 @@ final class ConfigurationLoader
     /**
      * Returns configuration file path.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getConfigurationFilePath()
     {

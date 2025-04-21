@@ -44,7 +44,7 @@ interface OutputPrinter
     /**
      * Returns output path.
      *
-     * @return null|string
+     * @return string|null
      *
      * @deprecated since 3.1, to be removed in 4.0
      */
@@ -74,7 +74,7 @@ interface OutputPrinter
     /**
      * Returns output decoration status.
      *
-     * @return null|bool
+     * @return bool|null
      *
      * @deprecated since 3.1, to be removed in 4.0
      */

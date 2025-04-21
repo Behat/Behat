@@ -32,7 +32,7 @@ final class RuntimeTransformation extends RuntimeCallee implements Transformatio
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {

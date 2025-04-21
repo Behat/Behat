@@ -112,7 +112,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Returns buffered stdout.
      *
-     * @return null|string
+     * @return string|null
      */
     private function getBufferedStdOut()
     {

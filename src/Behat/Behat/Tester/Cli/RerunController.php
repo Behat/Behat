@@ -31,7 +31,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class RerunController implements Controller
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $cachePath;
     /**
@@ -46,7 +46,7 @@ final class RerunController implements Controller
     /**
      * Initializes controller.
      *
-     * @param null|string              $cachePath
+     * @param string|null $cachePath
      */
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -162,7 +162,7 @@ final class RerunController implements Controller
     /**
      * Returns cache filename (if exists).
      *
-     * @return null|string
+     * @return string|null
      */
     private function getFileName()
     {

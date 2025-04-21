@@ -30,7 +30,7 @@ interface AnnotationReader
      * @param string           $docLine
      * @param string           $description
      *
-     * @return null|Callee
+     * @return Callee|null
      */
     public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description);
 }

@@ -42,7 +42,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
