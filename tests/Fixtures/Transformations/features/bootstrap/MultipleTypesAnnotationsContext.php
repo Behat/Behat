@@ -52,7 +52,7 @@ class MultipleTypesAnnotationsContext implements Context
     public function itShouldBeOfType(string $type)
     {
         if (gettype($this->value) != $type && get_class($this->value) != $type) {
-            throw new Exception("Expected " . $type . ", got " . gettype($this->value) . " (value: " . var_export($this->value, true) . ")");
+            throw new Exception('Expected ' . $type . ', got ' . gettype($this->value) . ' (value: ' . var_export($this->value, true) . ')');
         }
     }
 }

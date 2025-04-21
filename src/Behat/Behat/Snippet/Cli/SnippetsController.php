@@ -77,13 +77,13 @@ final class SnippetsController implements Controller
                 '--append-snippets',
                 null,
                 InputOption::VALUE_NONE,
-                "Appends snippets for undefined steps into main context."
+                'Appends snippets for undefined steps into main context.'
             )
             ->addOption(
                 '--no-snippets',
                 null,
                 InputOption::VALUE_NONE,
-                "Do not print snippets for undefined steps after stats."
+                'Do not print snippets for undefined steps after stats.'
             );
     }
 

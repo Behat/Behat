@@ -87,7 +87,7 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     private function importClass($class, $contextFileContent)
     {
-        $replaceWith = "\$1" . 'use ' . $class . ";\n\$2;";
+        $replaceWith = '$1use ' . $class . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
     }
@@ -104,7 +104,7 @@ final class ContextSnippetAppender implements SnippetAppender
         }
 
         $steps = $snippet->getSteps();
-        $reason = sprintf("`<comment>%s</comment>` definition added", $steps[0]->getText());
+        $reason = sprintf('`<comment>%s</comment>` definition added', $steps[0]->getText());
 
         $this->logger->fileUpdated($path, $reason);
     }

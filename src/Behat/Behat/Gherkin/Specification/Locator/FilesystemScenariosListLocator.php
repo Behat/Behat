@@ -41,7 +41,7 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
 
     public function getLocatorExamples()
     {
-        return ["a scenarios list file <comment>(*.scenarios)</comment>."];
+        return ['a scenarios list file <comment>(*.scenarios)</comment>.'];
     }
 
     public function locateSpecifications(Suite $suite, $locator)

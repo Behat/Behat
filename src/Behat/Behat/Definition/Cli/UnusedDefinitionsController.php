@@ -50,7 +50,7 @@ final class UnusedDefinitionsController implements Controller
                 '--print-unused-definitions',
                 null,
                 InputOption::VALUE_NONE,
-                "Reports definitions that were never used."
+                'Reports definitions that were never used.'
             )
         ;
     }

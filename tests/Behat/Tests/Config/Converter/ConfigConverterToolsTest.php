@@ -100,7 +100,7 @@ final class ConfigConverterToolsTest extends TestCase
                 $object::class,
                 'withSomething',
                 ['something' => true],
-                "(new %CLASS%())->withSomething(something: true)",
+                '(new %CLASS%())->withSomething(something: true)',
             ],
         ];
     }

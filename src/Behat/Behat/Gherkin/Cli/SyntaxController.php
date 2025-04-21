@@ -55,8 +55,8 @@ final class SyntaxController implements Controller
                 '--story-syntax',
                 null,
                 InputOption::VALUE_NONE,
-                "Print <comment>*.feature</comment> example." . PHP_EOL .
-                "Use <info>--lang</info> to see specific language."
+                'Print <comment>*.feature</comment> example.' . PHP_EOL .
+                'Use <info>--lang</info> to see specific language.'
             );
     }
 

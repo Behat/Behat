@@ -76,7 +76,7 @@ class PatternTransformerTest extends TestCase
         $testedInstance->registerPatternPolicy($policy);
 
         $this->expectException(UnknownPatternException::class);
-        $this->expectExceptionMessage("Can not find policy for a pattern `hello world`.");
+        $this->expectExceptionMessage('Can not find policy for a pattern `hello world`.');
         $regex = $testedInstance->transformPatternToRegex('hello world');
     }
 }

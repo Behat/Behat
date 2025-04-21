@@ -66,11 +66,11 @@ final class AvailableDefinitionsController implements Controller
             '--definitions',
             '-d',
             InputOption::VALUE_REQUIRED,
-            "Print all available step definitions:" . PHP_EOL .
-            "- use <info>--definitions l</info> to just list definition expressions." . PHP_EOL .
-            "- use <info>--definitions i</info> to show definitions with extended info." . PHP_EOL .
+            'Print all available step definitions:' . PHP_EOL .
+            '- use <info>--definitions l</info> to just list definition expressions.' . PHP_EOL .
+            '- use <info>--definitions i</info> to show definitions with extended info.' . PHP_EOL .
             "- use <info>--definitions 'needle'</info> to find specific definitions." . PHP_EOL .
-            "Use <info>--lang</info> to see definitions in specific language."
+            'Use <info>--lang</info> to see definitions in specific language.'
         );
     }
 

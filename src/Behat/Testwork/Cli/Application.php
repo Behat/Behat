@@ -128,7 +128,7 @@ final class Application extends BaseApplication
 
         if ($path = $input->getParameterOption(['--config', '-c'])) {
             if (!is_file($path)) {
-                throw new ConfigurationLoadingException("The requested config file does not exist");
+                throw new ConfigurationLoadingException('The requested config file does not exist');
             }
 
             $this->configurationLoader->setConfigurationFilePath($path);

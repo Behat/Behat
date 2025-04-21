@@ -56,13 +56,13 @@ final class ContextSnippetsController implements Controller
                 '--snippets-for',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                "Specifies which context class to generate snippets for."
+                'Specifies which context class to generate snippets for.'
             )
             ->addOption(
                 '--snippets-type',
                 null,
                 InputOption::VALUE_REQUIRED,
-                "Specifies which type of snippets (turnip, regex) to generate."
+                'Specifies which type of snippets (turnip, regex) to generate.'
             );
     }
 

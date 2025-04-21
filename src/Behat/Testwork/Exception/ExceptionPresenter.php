@@ -113,7 +113,7 @@ final class ExceptionPresenter
         }
 
         return sprintf(
-            "%s: %s in %s:%d%sStack trace:%s%s",
+            '%s: %s in %s:%d%sStack trace:%s%s',
             get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),

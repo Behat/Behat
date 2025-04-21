@@ -97,7 +97,7 @@ return (new PhpCsFixer\Config())
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',
         ],
-//        'single_quote' => true,
+        'single_quote' => true,
         'standardize_increment' => true,
         'type_declaration_spaces' => true,
         'unary_operator_spaces' => true,
