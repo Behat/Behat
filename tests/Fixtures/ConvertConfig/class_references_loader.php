@@ -31,7 +31,6 @@ class CreateClassNamesExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
     }
-
 }
 
 // These are the classes that are referenced from the class_references YAML.

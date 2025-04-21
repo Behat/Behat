@@ -131,7 +131,6 @@ final class OrderingExtension implements Extension
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.reverse', $definition);
 
-
         $definition = new Definition('Behat\Testwork\Ordering\Orderer\RandomOrderer');
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.random', $definition);

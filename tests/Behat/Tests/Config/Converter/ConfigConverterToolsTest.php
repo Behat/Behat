@@ -16,27 +16,22 @@ final class ConfigConverterToolsTest extends TestCase
         $object = new class {
             public function takesNoArgs(): void
             {
-
             }
 
             public function withSomething(bool $something): void
             {
-
             }
 
             public function withSingleDefault(bool $value = true): void
             {
-
             }
 
             public function withVariadic(string ...$args): void
             {
-
             }
 
             public function withMultipleArgs(string $first, string $second = 'b', string $third = 'c'): void
             {
-
             }
         };
 
@@ -127,7 +122,6 @@ final class ConfigConverterToolsTest extends TestCase
         $obj = new class {
             public function withThings(string $one, string $two): void
             {
-
             }
         };
 

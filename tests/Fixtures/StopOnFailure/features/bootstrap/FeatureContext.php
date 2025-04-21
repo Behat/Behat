@@ -20,5 +20,4 @@ class FeatureContext implements Context
     {
         throw new Exception("step failed as supposed");
     }
-
 }

@@ -128,7 +128,6 @@ abstract class TesterExtension implements Extension
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
 
-
     /**
      * Loads stop on failure handler.
      */

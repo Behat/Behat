@@ -84,5 +84,4 @@ final class StopOnFailureController implements Controller
 
         return null;
     }
-
 }

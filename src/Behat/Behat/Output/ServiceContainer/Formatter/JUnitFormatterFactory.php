@@ -94,7 +94,6 @@ final class JUnitFormatterFactory implements FormatterFactory
      */
     private function loadRootNodeListener(ContainerBuilder $container)
     {
-
         $definition = new Definition(
             'Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener',
             [

@@ -61,7 +61,6 @@ final class TesterOptions implements ConfigConverterInterface
     public function __construct(
         private array $settings = [],
     ) {
-
     }
 
     public function toArray(): array
@@ -78,7 +77,6 @@ final class TesterOptions implements ConfigConverterInterface
 
         return $this;
     }
-
 
     /**
      * Control whether Behat should fail on undefined or pending steps (equivalent to the `--strict` CLI flag).
@@ -143,6 +141,4 @@ final class TesterOptions implements ConfigConverterInterface
 
         return $expr;
     }
-
-
 }

@@ -29,7 +29,6 @@ final class StopOnFailureHandler
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly ResultInterpreter $resultInterpreter,
     ) {
-
     }
 
     public function registerListeners()

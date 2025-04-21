@@ -31,7 +31,6 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      */
     private $pattern;
 
-
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);

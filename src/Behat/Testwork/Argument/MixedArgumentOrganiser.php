@@ -226,7 +226,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
             },
             ARRAY_FILTER_USE_BOTH
         );
-
     }
 
     /**
@@ -251,7 +250,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         }
 
         foreach ($types as $type) {
-
             // ReflectionUnionType::getTypes is only documented as returning ReflectionType[]
             if (!$type instanceof ReflectionNamedType) {
                 continue;
