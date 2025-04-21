@@ -28,6 +28,7 @@ class CustomPrettyPrinter extends Standard
         }
         $result .= ')';
         $this->outdent();
+
         return $result;
     }
 }

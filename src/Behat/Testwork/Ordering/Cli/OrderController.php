@@ -75,6 +75,7 @@ final class OrderController implements Controller
         }
 
         $this->exercise->setOrderer($this->orderers[$orderer]);
+
         return null;
     }
 

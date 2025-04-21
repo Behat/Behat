@@ -73,6 +73,7 @@ class OutputController implements Controller
 
         $this->configureFormatters($formats, $input, $output);
         $this->configureOutputs($formats, $outputs, $output->isDecorated());
+
         return null;
     }
 

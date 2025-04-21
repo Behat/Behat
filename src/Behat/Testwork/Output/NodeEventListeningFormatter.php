@@ -113,6 +113,7 @@ final class NodeEventListeningFormatter implements Formatter
         if ($value !== null && $name === ShowOutputOption::OPTION_NAME) {
             return ShowOutputOption::from($value);
         }
+
         return $value;
     }
 }

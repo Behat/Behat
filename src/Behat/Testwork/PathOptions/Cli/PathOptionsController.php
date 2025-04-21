@@ -44,6 +44,7 @@ class PathOptionsController implements Controller
         $printAbsolutePaths = $input->getOption('print-absolute-paths');
 
         $this->configurePrintPaths($printAbsolutePaths);
+
         return null;
     }
 

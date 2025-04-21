@@ -62,6 +62,7 @@ final class StrictController implements Controller
         }
 
         $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
+
         return null;
     }
 }

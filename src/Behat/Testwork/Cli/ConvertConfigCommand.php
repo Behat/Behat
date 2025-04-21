@@ -45,6 +45,7 @@ final class ConvertConfigCommand extends BaseCommand
         $this->output->writeln(['', 'Starting conversion']);
         $this->convertFile($configPath);
         $this->output->writeln(['Conversion finished', '']);
+
         return 0;
     }
 

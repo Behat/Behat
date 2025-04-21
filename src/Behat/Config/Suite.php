@@ -117,6 +117,7 @@ final class Suite implements ConfigConverterInterface
         if (!$hasAnyWithArguments) {
             // All the contexts are just class names, we can add them as a single `->withContexts` call
             $expr = ConfigConverterTools::addMethodCall(self::class, self::WITH_CONTEXTS_FUNCTION, $contexts, $expr);
+
             return;
         }
 

@@ -73,6 +73,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         if (!isset($this->regexCache[$pattern])) {
             $this->regexCache[$pattern] = $this->createTransformedRegex($pattern);
         }
+
         return $this->regexCache[$pattern];
     }
 

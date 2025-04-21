@@ -140,6 +140,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         if ($argument instanceof TableNode) {
             return (string) $argument;
         }
+
         return '';
     }
 

@@ -188,6 +188,7 @@ final class PrettyStepPrinter implements StepPrinter
         if ($argument instanceof TableNode) {
             return (string) $argument;
         }
+
         return '';
     }
 

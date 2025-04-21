@@ -55,6 +55,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 
         if ($argumentArgumentValue instanceof TableNode) {
             $tableHeadings = $argumentArgumentValue->getRow(0);
+
             return array_intersect($columnNames, $tableHeadings) !== [];
         }
         foreach ($argumentArgumentValue as $row) {
@@ -68,6 +69,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
                 return false;
             }
         }
+
         return true;
     }
 

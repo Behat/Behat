@@ -81,6 +81,7 @@ final class StopOnFailureController implements Controller
         }
 
         $this->stopOnFailureHandler->registerListeners();
+
         return null;
     }
 

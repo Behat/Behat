@@ -48,6 +48,7 @@ final class VerbosityController implements Controller
         if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
             $this->exceptionPresenter->setDefaultVerbosity($output->getVerbosity());
         }
+
         return null;
     }
 }

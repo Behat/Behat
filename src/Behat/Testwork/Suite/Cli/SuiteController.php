@@ -75,6 +75,7 @@ final class SuiteController implements Controller
                 $config['settings']
             );
         }
+
         return null;
     }
 }

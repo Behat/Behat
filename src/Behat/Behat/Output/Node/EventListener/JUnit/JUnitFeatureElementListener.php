@@ -100,6 +100,7 @@ final class JUnitFeatureElementListener implements EventListener
     {
         if ($event instanceof BeforeFeatureTested) {
             $this->featurePrinter->printHeader($formatter, $event->getFeature());
+
             return;
         }
         if ($event instanceof AfterFeatureSetup) {
@@ -129,6 +130,7 @@ final class JUnitFeatureElementListener implements EventListener
     {
         if ($event instanceof AfterScenarioSetup) {
             $this->afterScenarioSetup = $event;
+
             return;
         }
         if (!$event instanceof AfterScenarioTested) {

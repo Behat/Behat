@@ -47,6 +47,7 @@ final class GherkinTranslationsController implements Controller
         foreach (require ($i18nPath) as $lang => $messages) {
             $this->translator->addResource('array', $messages, $lang, 'output');
         }
+
         return null;
     }
 }

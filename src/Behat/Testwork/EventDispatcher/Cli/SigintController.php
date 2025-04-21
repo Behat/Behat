@@ -50,6 +50,7 @@ final class SigintController implements Controller
 
             pcntl_signal(SIGINT, [$this, 'abortExercise']);
         }
+
         return null;
     }
 

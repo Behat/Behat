@@ -91,6 +91,7 @@ final class RerunController implements Controller
         if (!$this->getFileName() || !file_exists($this->getFileName())) {
             if ($input->getOption('rerun-only')) {
                 $output->writeln('No failure found, exiting.');
+
                 return 0;
             }
 
@@ -98,6 +99,7 @@ final class RerunController implements Controller
         }
 
         $input->setArgument('paths', $this->getFileName());
+
         return null;
     }
 

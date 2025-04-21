@@ -103,6 +103,7 @@ final class SnippetsController implements Controller
         if (!$input->getOption('no-snippets')) {
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUndefinedSteps'], -995);
         }
+
         return null;
     }
 

@@ -256,6 +256,7 @@ final class ContextExtension implements Extension
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID . '.cached', $definition);
+
         return $definition;
     }
 

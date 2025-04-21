@@ -130,6 +130,7 @@ final class ConfigConverterToolsTest extends TestCase
 
             }
         };
+
         return [
             'undefined class' => [
                 'This\Is\Not\A\Class',

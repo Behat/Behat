@@ -101,6 +101,7 @@ final class FilterController implements Controller
         if (count($filters)) {
             $this->gherkin->setFilters($filters);
         }
+
         return null;
     }
 }

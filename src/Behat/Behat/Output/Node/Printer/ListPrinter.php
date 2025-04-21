@@ -294,6 +294,7 @@ final class ListPrinter
                 default => null,
             };
         }
+
         return null;
     }
 }

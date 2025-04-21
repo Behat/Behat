@@ -147,6 +147,7 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
                 unset($this->settings[$settingName]);
             }
         }
+
         return $expr;
     }
 }

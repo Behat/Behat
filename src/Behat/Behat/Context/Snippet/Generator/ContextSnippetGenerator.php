@@ -193,6 +193,7 @@ TPL;
     {
         $pattern = str_replace('%', '%%', $pattern);
         $pattern = str_replace('\\\\', '\\\\\\\\', $pattern);
+
         return str_replace("'", "\'", $pattern);
     }
 
