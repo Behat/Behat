@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.21.1] - 2025-04-22
+
+### Fixed
+
+* ExceptionPresenter was causing a TypeError when constructed with a null $basePath by @acoulton in [#1631](https://github.com/Behat/Behat/pull/1631)
+
 ## [3.21.0] - 2025-04-18
 
 ### Fixed
@@ -1241,6 +1247,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.21.1]: https://github.com/Behat/Behat/compare/v3.21.0...v3.21.1
+[3.21.0]: https://github.com/Behat/Behat/compare/v3.20.0...v3.21.0
 [3.20.0]: https://github.com/Behat/Behat/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/Behat/Behat/compare/v3.18.1...v3.19.0
 [3.18.1]: https://github.com/Behat/Behat/compare/v3.18.0...v3.18.1

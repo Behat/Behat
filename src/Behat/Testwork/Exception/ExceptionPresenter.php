@@ -35,7 +35,7 @@ final class ExceptionPresenter
     /**
      * Initializes presenter.
      *
-     * @param string  $basePath deprecated, will be removed in next major version
+     * @param ?string  $basePath deprecated, will be removed in next major version
      * @param integer $defaultVerbosity
      */
     public function __construct(
@@ -43,7 +43,12 @@ final class ExceptionPresenter
         private int $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL,
         ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
-        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
+        // Historically, this class accepted a null (or not present) value for basePath. This was never passed by Behat,
+        // but was used by third parties to force the class to render exception traces with absolute file paths.
+        // The ConfigurablePathPrinter requires a value, but it is not used if printAbsolutePaths is true.
+        // Therefore, if the user provided null we can safely cast to '' (the working directory) and tell the printer
+        // to show absolute paths.
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath ?? '', printAbsolutePaths: $basePath === null);
     }
 
     /**
