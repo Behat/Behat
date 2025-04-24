@@ -52,9 +52,6 @@ class ProgressFormatterFactory implements FormatterFactory
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildFormatter(ContainerBuilder $container)
     {
         $this->loadRootNodeListener($container);
@@ -63,9 +60,6 @@ class ProgressFormatterFactory implements FormatterFactory
         $this->loadFormatter($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processFormatter(ContainerBuilder $container)
     {
         $this->processListenerWrappers($container);

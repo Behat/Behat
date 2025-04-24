@@ -35,9 +35,6 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $this->searchCriterion = $criterion;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printDefinitions(Suite $suite, $definitions)
     {
         $this->printDefinitionsWithOptionalSuite($definitions, $suite);

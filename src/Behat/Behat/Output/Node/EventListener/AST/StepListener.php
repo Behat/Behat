@@ -37,9 +37,6 @@ final class StepListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureScenarioOnScenarioEvent($event);

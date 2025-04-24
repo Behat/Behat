@@ -33,41 +33,26 @@ final class ContextSnippet implements Snippet
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType(): string
     {
         return 'context';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getHash(): string
     {
         return md5($this->template);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSnippet(): string
     {
         return sprintf($this->template, $this->step->getKeywordType());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStep(): StepNode
     {
         return $this->step;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTarget(): string
     {
         return $this->contextClass;

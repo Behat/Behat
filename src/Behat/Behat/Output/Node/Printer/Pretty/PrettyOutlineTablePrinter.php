@@ -71,9 +71,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, array $results)
     {
         $this->scenarioPrinter->printHeader($formatter, $feature, $outline);
@@ -82,9 +79,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
         $this->printExamplesTableHeader($formatter->getOutputPrinter(), $outline->getExampleTable());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();

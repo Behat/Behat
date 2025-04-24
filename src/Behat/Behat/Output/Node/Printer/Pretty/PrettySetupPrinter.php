@@ -72,9 +72,6 @@ final class PrettySetupPrinter implements SetupPrinter
         $this->newlineAfter = $newlineAfter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printSetup(Formatter $formatter, Setup $setup)
     {
         if (!$setup instanceof HookedSetup) {
@@ -86,9 +83,6 @@ final class PrettySetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
         if (!$teardown instanceof HookedTeardown) {

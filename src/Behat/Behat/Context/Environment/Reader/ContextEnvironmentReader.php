@@ -37,17 +37,11 @@ final class ContextEnvironmentReader implements EnvironmentReader
         $this->contextReaders[] = $contextReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironment(Environment $environment)
     {
         return $environment instanceof ContextEnvironment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readEnvironmentCallees(Environment $environment)
     {
         if (!$environment instanceof ContextEnvironment) {

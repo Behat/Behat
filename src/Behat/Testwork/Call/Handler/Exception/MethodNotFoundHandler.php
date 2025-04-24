@@ -24,9 +24,6 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
 {
     public const PATTERN = '/^Call to undefined method ([^:]+)::([^\)]+)\(\)$/';
 
-    /**
-     * {@inheritdoc}
-     */
     final public function supportsException($exception)
     {
         if (!$exception instanceof Error) {
@@ -36,9 +33,6 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
         return null !== $this->extractNonExistentCallable($exception);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function handleException($exception)
     {
         assert($exception instanceof Error);

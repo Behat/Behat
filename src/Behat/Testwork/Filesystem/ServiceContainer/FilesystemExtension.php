@@ -30,39 +30,24 @@ final class FilesystemExtension implements Extension
      */
     public const LOGGER_ID = 'filesystem.logger';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'filesystem';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadFilesystemLogger($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }

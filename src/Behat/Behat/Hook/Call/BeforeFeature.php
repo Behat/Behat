@@ -31,9 +31,6 @@ final class BeforeFeature extends RuntimeFeatureHook
         parent::__construct(FeatureScope::BEFORE, $filterString, $callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'BeforeFeature';

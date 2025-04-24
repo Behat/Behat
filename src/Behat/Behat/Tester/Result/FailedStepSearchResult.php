@@ -34,9 +34,6 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
         $this->searchException = $searchException;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasException()
     {
         return true;
@@ -50,9 +47,6 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
         return $this->searchException;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return false;

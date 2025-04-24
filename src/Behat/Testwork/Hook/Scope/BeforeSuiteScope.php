@@ -40,25 +40,16 @@ final class BeforeSuiteScope implements SuiteScope
         $this->iterator = $iterator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return self::BEFORE;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->environment->getSuite();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEnvironment()
     {
         return $this->environment;

@@ -48,17 +48,11 @@ class {className} implements Context
 
 PHP;
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuiteAndClass(Suite $suite, $contextClass)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateClass(Suite $suite, $contextClass)
     {
         $fqn = $contextClass;

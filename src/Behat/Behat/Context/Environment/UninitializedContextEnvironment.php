@@ -59,25 +59,16 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
         $this->contextClasses[$contextClass] = $arguments ?: [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasContexts()
     {
         return count($this->contextClasses) > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getContextClasses()
     {
         return array_keys($this->contextClasses);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasContextClass($class)
     {
         return isset($this->contextClasses[$class]);

@@ -32,17 +32,11 @@ final class ContextSnippetAppender implements SnippetAppender
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSnippet(AggregateSnippet $snippet)
     {
         return 'context' === $snippet->getType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function appendSnippet(AggregateSnippet $snippet)
     {
         foreach ($snippet->getTargets() as $contextClass) {

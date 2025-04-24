@@ -24,9 +24,6 @@ abstract class ScenarioTested extends LifecycleEvent implements ScenarioLikeTest
     public const BEFORE_TEARDOWN = 'tester.scenario_tested.before_teardown';
     public const AFTER = 'tester.scenario_tested.after';
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getNode()
     {
         return $this->getScenario();

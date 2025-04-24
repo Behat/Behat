@@ -51,9 +51,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         $this->basePath = $basePath;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocatorExamples()
     {
         return [
@@ -65,9 +62,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function locateSpecifications(Suite $suite, $locator)
     {
         if (!$suite->hasSetting('paths')) {

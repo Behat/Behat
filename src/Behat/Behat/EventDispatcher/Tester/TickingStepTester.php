@@ -43,17 +43,11 @@ final class TickingStepTester implements StepTester
         $this->baseTester = $baseTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         return $this->baseTester->setUp($env, $feature, $step, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         declare(ticks=1);
@@ -61,9 +55,6 @@ final class TickingStepTester implements StepTester
         return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         return $this->baseTester->tearDown($env, $feature, $step, $skip, $result);

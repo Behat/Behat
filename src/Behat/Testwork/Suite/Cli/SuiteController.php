@@ -43,9 +43,6 @@ final class SuiteController implements Controller
         $this->suiteConfigurations = $suiteConfigurations;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption(

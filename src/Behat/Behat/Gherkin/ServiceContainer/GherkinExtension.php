@@ -58,24 +58,15 @@ final class GherkinExtension implements Extension
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'gherkin';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $childrenBuilder = $builder
@@ -101,9 +92,6 @@ final class GherkinExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadParameters($container);
@@ -120,9 +108,6 @@ final class GherkinExtension implements Extension
         $this->loadFilesystemRerunScenariosListLocator($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processLoaders($container);

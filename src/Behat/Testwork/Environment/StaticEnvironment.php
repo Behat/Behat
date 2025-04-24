@@ -33,17 +33,11 @@ class StaticEnvironment implements Environment
         $this->suite = $suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function bindCallee(Callee $callee)
     {
         return $callee->getCallable();

@@ -48,9 +48,6 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
         $this->output = $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         if (!$this->input->isInteractive()) {

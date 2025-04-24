@@ -30,9 +30,6 @@ use ReflectionNamedType;
  */
 final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         $returnClass = self::getReturnClass($method);
@@ -56,9 +53,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         $returnClass = self::getReturnClass($this->getReflection());
@@ -72,9 +66,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         return $parameterClass === $returnClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $call = new TransformationCall(
@@ -93,25 +84,16 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         return $result->getReturn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 80;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'ReturnTypeTransform';

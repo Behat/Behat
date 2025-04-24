@@ -71,17 +71,11 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->position = 0;
@@ -95,9 +89,6 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         if (!isset($this->iterators[$this->position])) {
@@ -116,26 +107,17 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return isset($this->iterators[$this->position]) && $this->iterators[$this->position]->valid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->iterators[$this->position]->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): int
     {
         return $this->position + $this->iterators[$this->position]->key();

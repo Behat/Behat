@@ -46,8 +46,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @deprecated as part of SuiteScopedResolverFactory deprecation. Would be removed in 4.0
      *
      * @throws WrongServicesConfigurationException
@@ -70,8 +68,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws WrongServicesConfigurationException
      * @throws WrongContainerClassException
      */

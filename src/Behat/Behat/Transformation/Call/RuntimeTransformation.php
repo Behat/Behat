@@ -41,17 +41,11 @@ final class RuntimeTransformation extends RuntimeCallee implements Transformatio
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'Transform ' . $this->getPattern();

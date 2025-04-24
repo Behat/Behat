@@ -44,9 +44,6 @@ final class OutlineListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->printAndCaptureOutlineHeaderOnBeforeEvent($formatter, $event);

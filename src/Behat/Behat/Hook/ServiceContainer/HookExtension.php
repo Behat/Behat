@@ -25,9 +25,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class HookExtension extends BaseExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         parent::load($container, $config);

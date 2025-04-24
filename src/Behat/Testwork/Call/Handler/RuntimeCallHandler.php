@@ -47,17 +47,11 @@ final class RuntimeCallHandler implements CallHandler
         $this->validator = new Validator();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCall(Call $call)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handleCall(Call $call)
     {
         $this->startErrorAndOutputBuffering($call);

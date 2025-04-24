@@ -51,9 +51,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario)
     {
         if ($scenario instanceof TaggedNodeInterface) {
@@ -66,9 +63,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         $this->printDescription($formatter->getOutputPrinter(), $scenario->getTitle());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();

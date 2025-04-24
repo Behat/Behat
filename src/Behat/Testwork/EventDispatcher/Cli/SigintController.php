@@ -39,9 +39,6 @@ final class SigintController implements Controller
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
     }

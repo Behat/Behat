@@ -87,41 +87,26 @@ final class NodeEventListeningFormatter implements Formatter
         $this->listener->listenEvent($this, $event, $eventName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputPrinter()
     {
         return $this->printer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setParameter($name, $value)
     {
         $this->parameters[$name] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParameter($name)
     {
         $value = $this->parameters[$name] ?? null;

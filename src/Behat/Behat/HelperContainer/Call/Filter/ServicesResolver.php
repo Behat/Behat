@@ -30,9 +30,6 @@ use Psr\Container\ContainerInterface;
  */
 final class ServicesResolver implements CallFilter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCall(Call $call)
     {
         return ($call instanceof DefinitionCall || $call instanceof TransformationCall)

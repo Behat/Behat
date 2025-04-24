@@ -21,9 +21,6 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
  */
 final class ContextInterfaceBasedContextIdentifier implements TargetContextIdentifier
 {
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         foreach ($environment->getContextClasses() as $class) {

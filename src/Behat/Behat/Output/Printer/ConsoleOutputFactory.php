@@ -21,9 +21,6 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  */
 final class ConsoleOutputFactory extends BaseFactory
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function createOutputFormatter()
     {
         $formatter = new ConsoleFormatter($this->isOutputDecorated());

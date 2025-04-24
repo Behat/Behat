@@ -44,9 +44,6 @@ final class FeatureListener implements EventListener
         $this->setupPrinter = $setupPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if (!$event instanceof FeatureTested) {

@@ -53,16 +53,10 @@ final class AutoloaderExtension implements Extension
         return 'autoload';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder = $builder
@@ -83,9 +77,6 @@ final class AutoloaderExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadAutoloader($container);
@@ -93,9 +84,6 @@ final class AutoloaderExtension implements Extension
         $this->setLoaderPrefixes($container, $config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processLoaderPrefixes($container);

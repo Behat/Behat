@@ -39,17 +39,11 @@ final class FilesystemRerunScenariosListLocator implements SpecificationLocator
         $this->gherkin = $gherkin;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocatorExamples()
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function locateSpecifications(Suite $suite, $locator)
     {
         if (null === $locator || !is_file($locator) || 'rerun' !== pathinfo($locator, PATHINFO_EXTENSION)) {

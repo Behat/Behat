@@ -55,9 +55,6 @@ final class StrictController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->strict && !$input->getOption('strict')) {

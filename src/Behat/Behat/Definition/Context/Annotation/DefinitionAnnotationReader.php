@@ -36,9 +36,6 @@ final class DefinitionAnnotationReader implements AnnotationReader
         'then' => Then::class,
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function readCallee($contextClass, ReflectionMethod $method, $docLine, $description)
     {
         if (!preg_match(self::$regex, $docLine, $match)) {

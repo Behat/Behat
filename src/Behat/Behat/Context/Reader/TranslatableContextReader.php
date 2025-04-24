@@ -36,8 +36,6 @@ final class TranslatableContextReader implements ContextReader
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see TranslatableContext
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)

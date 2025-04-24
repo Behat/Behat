@@ -60,17 +60,11 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         return count($this->repository->getEnvironmentTransformations($definitionCall->getEnvironment())) > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $environment = $definitionCall->getEnvironment();
@@ -84,9 +78,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         return $newValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateRegex($suiteName, $pattern, $language)
     {
         $translatedPattern = $this->translator->trans($pattern, [], $suiteName, $language);

@@ -48,31 +48,19 @@ final class HelperContainerExtension implements Extension
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'helper_container';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', [
@@ -86,9 +74,6 @@ final class HelperContainerExtension implements Extension
         $container->setDefinition(CallExtension::CALL_FILTER_TAG . '.helper_container', $definition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::HELPER_CONTAINER_TAG);

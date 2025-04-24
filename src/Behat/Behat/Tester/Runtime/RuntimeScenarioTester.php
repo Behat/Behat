@@ -48,17 +48,11 @@ final class RuntimeScenarioTester implements ScenarioTester
         $this->backgroundTester = $backgroundTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip = false)
     {
         $results = [];
@@ -75,9 +69,6 @@ final class RuntimeScenarioTester implements ScenarioTester
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

@@ -40,17 +40,11 @@ final class BuiltInServiceContainer implements PsrContainerInterface
         $this->schema = $schema;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($id): bool
     {
         return array_key_exists($id, $this->schema);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($id)
     {
         if (!$this->has($id)) {

@@ -36,9 +36,6 @@ final class SuiteScopedResolverFactoryAdapter implements ArgumentResolverFactory
         $this->factory = $factory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createArgumentResolvers(Environment $environment)
     {
         return $this->factory->generateArgumentResolvers($environment->getSuite());

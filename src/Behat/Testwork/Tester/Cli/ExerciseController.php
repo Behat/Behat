@@ -75,9 +75,6 @@ final class ExerciseController implements Controller
         $this->skip = $skip;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $locatorsExamples = implode(PHP_EOL, array_map(

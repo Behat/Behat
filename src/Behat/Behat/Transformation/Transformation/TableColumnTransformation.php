@@ -116,17 +116,11 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
         return 30;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'TableColumnTransform ' . $this->pattern;

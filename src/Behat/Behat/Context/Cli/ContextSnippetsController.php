@@ -49,9 +49,6 @@ final class ContextSnippetsController implements Controller
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(SymfonyCommand $command)
     {
         $command
@@ -69,9 +66,6 @@ final class ContextSnippetsController implements Controller
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->generator->setContextIdentifier(

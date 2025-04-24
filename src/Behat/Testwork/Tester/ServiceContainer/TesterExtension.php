@@ -60,24 +60,15 @@ abstract class TesterExtension implements Extension
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'testers';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $childrenBuilder = $builder
@@ -100,9 +91,6 @@ abstract class TesterExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadExerciseController($container, $config['skip']);
@@ -114,9 +102,6 @@ abstract class TesterExtension implements Extension
         $this->loadSpecificationTester($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processExerciseWrappers($container);

@@ -95,6 +95,6 @@ Feature: Error Reporting
           When an exception is thrown # features/exception_in_scenario.feature:7
             Exception: Exception is thrown in features/bootstrap/FeatureContext.php:48
             Stack trace:
-            #0 {BASE_PATH}src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(110): FeatureContext->anExceptionIsThrown()
-            #1 {BASE_PATH}src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(64): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(
+            #0 {BASE_PATH}src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(102): FeatureContext->anExceptionIsThrown()
+            #1 {BASE_PATH}src/Behat/Testwork/Call/Handler/RuntimeCallHandler.php(58): Behat\Testwork\Call\Handler\RuntimeCallHandler->executeCall(
     """

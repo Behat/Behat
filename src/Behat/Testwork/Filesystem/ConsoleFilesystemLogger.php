@@ -39,9 +39,6 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         $this->output = $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function directoryCreated($path, $reason)
     {
         $this->output->writeln(
@@ -53,9 +50,6 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fileCreated($path, $reason)
     {
         $this->output->writeln(
@@ -67,9 +61,6 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fileUpdated($path, $reason)
     {
         $this->output->writeln(

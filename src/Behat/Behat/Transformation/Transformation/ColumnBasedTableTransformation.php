@@ -32,9 +32,6 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
      */
     private $pattern;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -54,9 +51,6 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         if (!$argumentArgumentValue instanceof TableNode) {
@@ -67,9 +61,6 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
             || $this->pattern === 'table:*';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $call = new TransformationCall(
@@ -88,25 +79,16 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
         return $result->getReturn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 50;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'ColumnTableTransform ' . $this->pattern;

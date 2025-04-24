@@ -50,9 +50,6 @@ final class EventDispatchingExercise implements Exercise
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(array $iterators, $skip)
     {
         $event = new BeforeExerciseCompleted($iterators);
@@ -68,17 +65,11 @@ final class EventDispatchingExercise implements Exercise
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(array $iterators, $skip = false)
     {
         return $this->baseExercise->test($iterators, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         $event = new BeforeExerciseTeardown($iterators, $result);

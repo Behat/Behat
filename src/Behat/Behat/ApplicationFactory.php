@@ -55,26 +55,17 @@ final class ApplicationFactory extends BaseFactory
      */
     public const VERSION = '3.13.0';
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getName()
     {
         return 'behat';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getVersion()
     {
         // Get the currently installed behat version from composer's runtime API
         return InstalledVersions::getVersion('behat/behat');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultExtensions()
     {
         $processor = new ServiceProcessor();
@@ -106,17 +97,11 @@ final class ApplicationFactory extends BaseFactory
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEnvironmentVariableName()
     {
         return 'BEHAT_PARAMS';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getConfigPath()
     {
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;

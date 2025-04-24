@@ -52,17 +52,11 @@ final class RuntimeExercise implements Exercise
         $this->suiteTester = $suiteTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(array $iterators, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(array $iterators, $skip = false)
     {
         $results = [];
@@ -81,9 +75,6 @@ final class RuntimeExercise implements Exercise
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

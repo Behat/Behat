@@ -50,9 +50,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, $spec, $skip)
     {
         $event = new BeforeFeatureTested($env, $spec);
@@ -68,17 +65,11 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, $spec, $skip)
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $event = new BeforeFeatureTeardown($env, $spec, $result);

@@ -42,17 +42,11 @@ final class RuntimeOutlineTester implements OutlineTester
         $this->scenarioTester = $scenarioTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip = false)
     {
         $results = [];
@@ -69,9 +63,6 @@ final class RuntimeOutlineTester implements OutlineTester
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

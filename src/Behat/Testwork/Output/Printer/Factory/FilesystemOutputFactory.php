@@ -38,9 +38,6 @@ class FilesystemOutputFactory extends OutputFactory
         $output->setVerbosity($verbosity);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createOutput($stream = null)
     {
         if ($this->getOutputPath() === null) {

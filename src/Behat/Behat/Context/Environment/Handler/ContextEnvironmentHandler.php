@@ -71,17 +71,11 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         $this->classResolvers[] = $resolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return $suite->hasSetting('contexts');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildEnvironment(Suite $suite)
     {
         $environment = new UninitializedContextEnvironment($suite);
@@ -92,17 +86,11 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         return $environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
         return $environment instanceof UninitializedContextEnvironment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
         if (!$environment instanceof UninitializedContextEnvironment) {

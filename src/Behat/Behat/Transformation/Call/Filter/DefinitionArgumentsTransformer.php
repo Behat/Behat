@@ -36,17 +36,11 @@ final class DefinitionArgumentsTransformer implements CallFilter
         $this->argumentTransformers[] = $transformer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCall(Call $call)
     {
         return $call instanceof DefinitionCall;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterCall(Call $call)
     {
         if (!$call instanceof DefinitionCall) {

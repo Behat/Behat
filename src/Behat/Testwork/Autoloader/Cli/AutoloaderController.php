@@ -40,9 +40,6 @@ final class AutoloaderController implements Controller
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->loader->register();

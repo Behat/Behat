@@ -55,17 +55,11 @@ final class SuiteWithContextsSetup implements SuiteSetup
         $this->classGenerators[] = $generator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return $suite->hasSetting('contexts');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setupSuite(Suite $suite)
     {
         foreach ($this->getNormalizedContextClasses($suite) as $class) {

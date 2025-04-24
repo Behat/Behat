@@ -26,39 +26,24 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class GherkinTranslationsExtension implements Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'gherkin_translations';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadController($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }

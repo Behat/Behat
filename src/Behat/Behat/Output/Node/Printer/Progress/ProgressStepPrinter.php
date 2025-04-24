@@ -47,9 +47,6 @@ final class ProgressStepPrinter implements StepPrinter
         $this->resultConverter = $resultConverter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $printer = $formatter->getOutputPrinter();

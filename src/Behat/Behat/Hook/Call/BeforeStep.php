@@ -31,9 +31,6 @@ final class BeforeStep extends RuntimeStepHook
         parent::__construct(StepScope::BEFORE, $filterString, $callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'BeforeStep';

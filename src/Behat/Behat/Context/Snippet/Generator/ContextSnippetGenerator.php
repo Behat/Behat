@@ -81,9 +81,6 @@ TPL;
         $this->patternIdentifier = $identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step): bool
     {
         if (!$environment instanceof ContextEnvironment) {
@@ -97,9 +94,6 @@ TPL;
         return null !== $this->contextIdentifier->guessTargetContextClass($environment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateSnippet(Environment $environment, StepNode $step): Snippet
     {
         if (!$environment instanceof ContextEnvironment) {

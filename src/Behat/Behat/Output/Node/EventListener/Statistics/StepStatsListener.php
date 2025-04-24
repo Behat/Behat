@@ -48,9 +48,6 @@ final class StepStatsListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);

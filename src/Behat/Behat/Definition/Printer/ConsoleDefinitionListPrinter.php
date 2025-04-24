@@ -19,9 +19,6 @@ use Behat\Testwork\Suite\Suite;
  */
 final class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function printDefinitions(Suite $suite, $definitions)
     {
         $output = [];

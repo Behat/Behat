@@ -40,9 +40,6 @@ abstract class StepTested extends LifecycleEvent implements GherkinNodeTested
      */
     abstract public function getStep();
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getNode()
     {
         return $this->getStep();

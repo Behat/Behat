@@ -45,9 +45,6 @@ final class JUnitOutlineStoreListener implements EventListener
         $this->suitePrinter = $suitePrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureOutlineOnBeforeOutlineEvent($event);

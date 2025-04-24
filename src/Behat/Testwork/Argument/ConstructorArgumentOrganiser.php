@@ -35,9 +35,6 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
         $this->baseOrganiser = $organiser;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
         if (!$function instanceof ReflectionMethod) {

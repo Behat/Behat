@@ -31,9 +31,6 @@ final class JUnitFormatterFactory implements FormatterFactory
     public const ROOT_LISTENER_ID = 'output.node.listener.junit';
     public const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildFormatter(ContainerBuilder $container)
     {
         $this->loadRootNodeListener($container);
@@ -42,9 +39,6 @@ final class JUnitFormatterFactory implements FormatterFactory
         $this->loadFormatter($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processFormatter(ContainerBuilder $container)
     {
     }

@@ -36,9 +36,6 @@ final class ContextReaderCachedPerSuite implements ContextReader
         $this->childReader = $childReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         $key = $this->generateCacheKey($environment, $contextClass);

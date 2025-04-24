@@ -61,9 +61,6 @@ final class OutlineTableListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if ($event instanceof StepTested) {

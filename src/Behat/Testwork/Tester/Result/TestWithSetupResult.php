@@ -43,17 +43,11 @@ final class TestWithSetupResult implements TestResult
         $this->teardown = $teardown;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResultCode()
     {
         if (!$this->setup->isSuccessful()) {

@@ -38,8 +38,6 @@ final class ServicesResolver implements ArgumentResolver
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ContainerExceptionInterface
      */
     public function resolveArguments(ReflectionClass $classReflection, array $arguments)

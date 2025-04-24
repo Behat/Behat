@@ -32,9 +32,6 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      */
     private $pattern;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -54,9 +51,6 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         if (!$argumentArgumentValue instanceof TableNode) {
@@ -66,9 +60,6 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
         return $this->pattern === 'row:' . implode(',', $argumentArgumentValue->getRow(0));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $rows = [];
@@ -92,25 +83,16 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
         return $rows;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 50;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'TableRowTransform ' . $this->pattern;

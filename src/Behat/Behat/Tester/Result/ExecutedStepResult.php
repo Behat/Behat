@@ -60,25 +60,16 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return $this->callResult;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStepDefinition()
     {
         return $this->searchResult->getMatchedDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasException()
     {
         return null !== $this->getException();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getException()
     {
         return $this->callResult->getException();
@@ -100,9 +91,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return self::PASSED;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();

@@ -64,8 +64,6 @@ final class RepositorySearchEngine implements SearchEngine
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws AmbiguousMatchException
      */
     public function searchDefinition(

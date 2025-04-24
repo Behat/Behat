@@ -42,9 +42,6 @@ final class StatisticsListener implements EventListener
         $this->printer = $statisticsPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->startTimerOnBeforeExercise($eventName);

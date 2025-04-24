@@ -61,9 +61,6 @@ final class JUnitFeatureElementListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureSuiteSetupEvent($formatter, $event);

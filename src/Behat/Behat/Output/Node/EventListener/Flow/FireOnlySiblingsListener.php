@@ -54,9 +54,6 @@ class FireOnlySiblingsListener implements EventListener
         $this->descendant = $descendant;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if ($this->beforeEventName === $eventName) {

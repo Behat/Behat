@@ -49,9 +49,6 @@ final class HookStatsListener implements EventListener
         $this->exceptionPresenter = $exceptionPresenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureHookStatsOnEvent($event);

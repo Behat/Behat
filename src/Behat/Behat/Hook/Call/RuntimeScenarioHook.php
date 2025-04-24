@@ -25,9 +25,6 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof ScenarioScope) {

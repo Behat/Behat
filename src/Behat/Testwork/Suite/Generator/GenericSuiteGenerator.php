@@ -32,17 +32,11 @@ final class GenericSuiteGenerator implements SuiteGenerator
         $this->defaultSettings = $defaultSettings;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsTypeAndSettings($type, array $settings)
     {
         return null === $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateSuite($suiteName, array $settings)
     {
         return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings));

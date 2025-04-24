@@ -42,9 +42,6 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
         $this->listPrinter = $listPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStatistics(Formatter $formatter, Statistics $statistics)
     {
         $printer = $formatter->getOutputPrinter();

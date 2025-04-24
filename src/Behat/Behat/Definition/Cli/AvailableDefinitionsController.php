@@ -60,9 +60,6 @@ final class AvailableDefinitionsController implements Controller
         $this->infoPrinter = $infoPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption(
@@ -77,9 +74,6 @@ final class AvailableDefinitionsController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (null === $argument = $input->getOption('definitions')) {

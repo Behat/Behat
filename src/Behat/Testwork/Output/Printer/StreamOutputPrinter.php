@@ -34,93 +34,60 @@ class StreamOutputPrinter implements OutputPrinter
         return $this->outputFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputPath($path)
     {
         $this->outputFactory->setOutputPath($path);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputPath()
     {
         return $this->outputFactory->getOutputPath();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputStyles(array $styles)
     {
         $this->outputFactory->setOutputStyles($styles);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputStyles()
     {
         return $this->outputFactory->getOutputStyles();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputDecorated($decorated)
     {
         $this->outputFactory->setOutputDecorated($decorated);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isOutputDecorated()
     {
         return $this->outputFactory->isOutputDecorated();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputVerbosity($level)
     {
         $this->outputFactory->setOutputVerbosity($level);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputVerbosity()
     {
         return $this->outputFactory->getOutputVerbosity();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function write($messages)
     {
         $this->getWritingStream()->write($messages, false);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function writeln($messages = '')
     {
         $this->getWritingStream()->write($messages, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function flush()
     {
         $this->output = null;

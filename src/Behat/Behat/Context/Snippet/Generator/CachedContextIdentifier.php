@@ -36,9 +36,6 @@ final class CachedContextIdentifier implements TargetContextIdentifier
         $this->decoratedIdentifier = $identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         $suiteKey = $environment->getSuite()->getName();

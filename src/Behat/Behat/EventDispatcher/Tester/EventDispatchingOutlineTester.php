@@ -47,9 +47,6 @@ final class EventDispatchingOutlineTester implements OutlineTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
@@ -65,17 +62,11 @@ final class EventDispatchingOutlineTester implements OutlineTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         return $this->baseTester->test($env, $feature, $outline, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);

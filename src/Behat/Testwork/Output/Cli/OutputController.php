@@ -38,9 +38,6 @@ class OutputController implements Controller
         $this->manager = $manager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command

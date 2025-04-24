@@ -73,9 +73,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events)
     {
         $rowNum = array_search($example, $outline->getExamples()) + 1;

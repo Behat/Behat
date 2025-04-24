@@ -49,9 +49,6 @@ final class HookableFeatureTester implements SpecificationTester
         $this->hookDispatcher = $hookDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, $spec, $skip)
     {
         $setup = $this->baseTester->setUp($env, $spec, $skip);
@@ -66,17 +63,11 @@ final class HookableFeatureTester implements SpecificationTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, $spec, $skip)
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);

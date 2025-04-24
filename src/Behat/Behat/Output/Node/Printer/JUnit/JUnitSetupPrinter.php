@@ -30,9 +30,6 @@ class JUnitSetupPrinter implements SetupPrinter
         $this->exceptionPresenter = $exceptionPresenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printSetup(Formatter $formatter, Setup $setup)
     {
         if (!$setup->isSuccessful()) {
@@ -42,9 +39,6 @@ class JUnitSetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
         if (!$teardown->isSuccessful()) {

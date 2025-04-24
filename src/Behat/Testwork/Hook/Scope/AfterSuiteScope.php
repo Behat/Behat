@@ -46,41 +46,26 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
         $this->result = $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return self::AFTER;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->environment->getSuite();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEnvironment()
     {
         return $this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSpecificationIterator()
     {
         return $this->iterator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTestResult()
     {
         return $this->result;

@@ -77,7 +77,7 @@ return (new PhpCsFixer\Config())
 //        'no_short_bool_cast' => true,
         'no_superfluous_phpdoc_tags' => [
             'allow_hidden_params' => true,
-            'remove_inheritdoc' => false,
+            'remove_inheritdoc' => true,
         ],
 //        'no_trailing_comma_in_singleline' => true,
 //        'no_unneeded_braces' => [

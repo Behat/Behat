@@ -31,9 +31,6 @@ final class AfterFeature extends RuntimeFeatureHook
         parent::__construct(FeatureScope::AFTER, $filterString, $callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'AfterFeature';

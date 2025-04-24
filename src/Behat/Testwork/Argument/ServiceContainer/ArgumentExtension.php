@@ -31,31 +31,19 @@ final class ArgumentExtension implements Extension
     public const PREG_MATCH_ARGUMENT_ORGANISER_ID = 'argument.preg_match_organiser';
     public const CONSTRUCTOR_ARGUMENT_ORGANISER_ID = 'argument.constructor_organiser';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'argument';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Testwork\Argument\MixedArgumentOrganiser');
@@ -72,9 +60,6 @@ final class ArgumentExtension implements Extension
         $container->setDefinition(self::CONSTRUCTOR_ARGUMENT_ORGANISER_ID, $definition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }

@@ -38,9 +38,6 @@ final class HookedTeardown implements Teardown
         $this->hookCallResults = $hookCallResults;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         if ($this->hookCallResults->hasExceptions()) {
@@ -50,9 +47,6 @@ final class HookedTeardown implements Teardown
         return $this->teardown->isSuccessful();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasOutput()
     {
         return $this->hookCallResults->hasStdOuts() || $this->hookCallResults->hasExceptions();

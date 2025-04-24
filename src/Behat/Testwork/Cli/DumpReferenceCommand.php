@@ -40,9 +40,6 @@ final class DumpReferenceCommand extends BaseCommand
         parent::__construct('dump-reference');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $dumper = new YamlReferenceDumper();

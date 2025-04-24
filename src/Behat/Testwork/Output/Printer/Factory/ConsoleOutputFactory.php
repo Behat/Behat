@@ -72,9 +72,6 @@ class ConsoleOutputFactory extends OutputFactory
         return $stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createOutput($stream = null)
     {
         $stream = $stream ?: $this->createOutputStream();

@@ -21,17 +21,11 @@ use Exception;
  */
 class PendingExceptionStringer implements ExceptionStringer
 {
-    /**
-     * {@inheritdoc}
-     */
     public function supportsException(Exception $exception)
     {
         return $exception instanceof PendingException;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function stringException(Exception $exception, $verbosity)
     {
         return trim($exception->getMessage());

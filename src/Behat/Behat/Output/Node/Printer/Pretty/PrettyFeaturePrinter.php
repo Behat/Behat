@@ -45,9 +45,6 @@ final class PrettyFeaturePrinter implements FeaturePrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature)
     {
         $this->printTags($formatter->getOutputPrinter(), $feature->getTags());
@@ -56,9 +53,6 @@ final class PrettyFeaturePrinter implements FeaturePrinter
         $this->printDescription($formatter->getOutputPrinter(), $feature);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
     }

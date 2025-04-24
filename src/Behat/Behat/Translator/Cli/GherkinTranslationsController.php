@@ -36,9 +36,6 @@ final class GherkinTranslationsController implements Controller
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(SymfonyCommand $command)
     {
     }

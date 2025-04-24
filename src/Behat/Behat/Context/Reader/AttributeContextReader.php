@@ -36,9 +36,6 @@ final class AttributeContextReader implements ContextReader
         $this->readers[] = $reader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         $reflection = new ReflectionClass($contextClass);

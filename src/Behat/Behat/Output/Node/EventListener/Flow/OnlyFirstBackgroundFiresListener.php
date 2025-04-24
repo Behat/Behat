@@ -56,9 +56,6 @@ class OnlyFirstBackgroundFiresListener implements EventListener
         $this->descendant = $descendant;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->flushStatesIfBeginningOfTheFeature($eventName);

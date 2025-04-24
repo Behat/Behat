@@ -23,9 +23,6 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 abstract class RuntimeStepHook extends RuntimeFilterableHook
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof StepScope) {

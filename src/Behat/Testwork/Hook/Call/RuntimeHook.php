@@ -39,17 +39,11 @@ abstract class RuntimeHook extends RuntimeCallee implements Hook
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getScopeName()
     {
         return $this->scopeName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getName();

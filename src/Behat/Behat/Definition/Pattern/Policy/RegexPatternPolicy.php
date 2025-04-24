@@ -30,17 +30,11 @@ final class RegexPatternPolicy implements PatternPolicy
         '/(?<=\W|^)(\d+)(?=\W|$)/' => "(\\d+)", // Numbers
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsPatternType($type)
     {
         return 'regex' === $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generatePattern($stepText)
     {
         $canonicalText = $this->generateCanonicalText($stepText);
@@ -50,17 +44,11 @@ final class RegexPatternPolicy implements PatternPolicy
         return new Pattern($canonicalText, '/^' . $stepRegex . '$/', $placeholderCount);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsPattern($pattern)
     {
         return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', $pattern);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformPatternToRegex($pattern)
     {
         if (false === @preg_match($pattern, 'anything')) {

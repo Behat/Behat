@@ -57,41 +57,26 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         $this->contexts[get_class($context)] = $context;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setServiceContainer(?ContainerInterface $container = null)
     {
         $this->serviceContainer = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasContexts()
     {
         return count($this->contexts) > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getContextClasses()
     {
         return array_keys($this->contexts);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasContextClass($class)
     {
         return isset($this->contexts[$class]);
@@ -130,17 +115,11 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         return $this->contexts[$class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getServiceContainer()
     {
         return $this->serviceContainer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function bindCallee(Callee $callee)
     {
         $callable = $callee->getCallable();

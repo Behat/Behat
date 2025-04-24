@@ -36,9 +36,6 @@ final class CompositeFactory implements SuiteScopedResolverFactory
         $this->factories[] = $factory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateArgumentResolvers(Suite $suite)
     {
         return array_reduce(

@@ -30,24 +30,15 @@ final class TranslatorExtension implements Extension
      */
     public const TRANSLATOR_ID = 'translator';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'translation';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $defaultLanguage = $this->getDefaultLanguage() ?: 'en';
@@ -68,18 +59,12 @@ final class TranslatorExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadTranslator($container, $config['locale'], $config['fallback_locale']);
         $this->loadController($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }

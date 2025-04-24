@@ -47,9 +47,6 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
@@ -65,17 +62,11 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, $skip)
     {
         return $this->baseTester->test($env, $feature, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);

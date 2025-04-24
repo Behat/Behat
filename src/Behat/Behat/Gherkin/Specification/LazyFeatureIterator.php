@@ -73,50 +73,32 @@ final class LazyFeatureIterator implements SpecificationIterator
         $this->filters = array_merge($this->getSuiteFilters($suite), $filters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->position = 0;
         $this->moveToNextAvailableFeature();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         $this->moveToNextAvailableFeature();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return null !== $this->currentFeature;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): int
     {
         return $this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current(): FeatureNode
     {
         return $this->currentFeature;

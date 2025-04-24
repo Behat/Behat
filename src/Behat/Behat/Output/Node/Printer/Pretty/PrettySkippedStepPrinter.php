@@ -73,9 +73,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);

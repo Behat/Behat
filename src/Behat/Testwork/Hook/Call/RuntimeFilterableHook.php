@@ -49,9 +49,6 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
         return $this->filterString;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return trim($this->getName() . ' ' . $this->getFilterString());

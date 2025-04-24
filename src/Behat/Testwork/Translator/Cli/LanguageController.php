@@ -37,9 +37,6 @@ final class LanguageController implements Controller
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption(

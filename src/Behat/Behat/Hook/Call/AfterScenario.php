@@ -31,9 +31,6 @@ final class AfterScenario extends RuntimeScenarioHook
         parent::__construct(ScenarioScope::AFTER, $filterString, $callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'AfterScenario';

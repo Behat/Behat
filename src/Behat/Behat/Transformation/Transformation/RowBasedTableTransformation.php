@@ -33,9 +33,6 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
      */
     private $pattern;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -55,9 +52,6 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         if (!$argumentArgumentValue instanceof TableNode) {
@@ -83,9 +77,6 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $call = new TransformationCall(
@@ -104,25 +95,16 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
         return $result->getReturn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 50;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'RowTableTransform ' . $this->pattern;

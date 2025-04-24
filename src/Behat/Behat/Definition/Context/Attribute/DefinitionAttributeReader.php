@@ -45,9 +45,6 @@ final class DefinitionAttributeReader implements AttributeReader
         $this->docBlockHelper = $docBlockHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
         $attributes = $method->getAttributes(Attribute\Definition::class, \ReflectionAttribute::IS_INSTANCEOF);

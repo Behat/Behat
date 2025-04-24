@@ -43,9 +43,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
         $this->throwIfInstanceMethod($callable, 'Feature');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof FeatureScope) {

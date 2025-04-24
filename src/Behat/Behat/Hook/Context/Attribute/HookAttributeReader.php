@@ -52,9 +52,6 @@ final class HookAttributeReader implements AttributeReader
         $this->docBlockHelper = $docBlockHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
         $attributes = $method->getAttributes(Hook::class, \ReflectionAttribute::IS_INSTANCEOF);

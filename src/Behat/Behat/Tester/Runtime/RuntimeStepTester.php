@@ -54,17 +54,11 @@ final class RuntimeStepTester implements StepTester
         $this->callCenter = $callCenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false)
     {
         try {
@@ -77,9 +71,6 @@ final class RuntimeStepTester implements StepTester
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         return new SuccessfulTeardown();

@@ -22,18 +22,12 @@ use Throwable;
  */
 final class PHPUnitExceptionStringer implements ExceptionStringer
 {
-    /**
-     * {@inheritdoc}
-     */
     public function supportsException(Exception $exception)
     {
         return $exception instanceof \PHPUnit_Framework_Exception
             || $exception instanceof \PHPUnit\Framework\Exception;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function stringException(Exception $exception, $verbosity)
     {
         // PHPUnit assertion exceptions do not include detailed expected / observed info in their messages. Instead,
