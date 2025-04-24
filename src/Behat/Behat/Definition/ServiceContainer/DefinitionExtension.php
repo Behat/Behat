@@ -56,8 +56,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Initializes compiler pass.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -122,8 +120,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition finder.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFinder(ContainerBuilder $container)
     {
@@ -133,8 +129,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition repository.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRepository(ContainerBuilder $container)
     {
@@ -146,8 +140,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition writer.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadWriter(ContainerBuilder $container)
     {
@@ -160,8 +152,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition pattern transformer.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadPatternTransformer(ContainerBuilder $container)
     {
@@ -171,8 +161,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition translator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefinitionTranslator(ContainerBuilder $container)
     {
@@ -184,8 +172,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads default search engines.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultSearchEngines(ContainerBuilder $container)
     {
@@ -201,8 +187,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads default pattern policies.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
@@ -217,8 +201,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAnnotationReader(ContainerBuilder $container)
     {
@@ -229,8 +211,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition Attribute reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAttributeReader(ContainerBuilder $container)
     {
@@ -243,8 +223,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition printers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefinitionPrinters(ContainerBuilder $container)
     {
@@ -288,8 +266,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads DocBlockHelper
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {
@@ -300,8 +276,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Processes all search engines in the container.
-     *
-     * @param ContainerBuilder $container
      */
     private function processSearchEngines(ContainerBuilder $container)
     {
@@ -315,8 +289,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Processes all pattern policies.
-     *
-     * @param ContainerBuilder $container
      */
     private function processPatternPolicies(ContainerBuilder $container)
     {

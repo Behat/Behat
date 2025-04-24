@@ -37,9 +37,6 @@ final class SyntaxController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param KeywordsDumper      $dumper
-     * @param TranslatorInterface $translator
      */
     public function __construct(KeywordsDumper $dumper, TranslatorInterface $translator)
     {
@@ -50,8 +47,6 @@ final class SyntaxController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -67,9 +62,6 @@ final class SyntaxController implements Controller
 
     /**
      * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return null|integer
      */

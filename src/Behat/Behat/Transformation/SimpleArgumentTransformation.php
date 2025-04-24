@@ -25,7 +25,6 @@ interface SimpleArgumentTransformation extends Transformation
      * Checks if transformation supports given pattern.
      *
      * @param string           $pattern
-     * @param ReflectionMethod $method
      *
      * @return bool
      */
@@ -41,9 +40,7 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Checks if transformation supports argument.
      *
-     * @param DefinitionCall $definitionCall
      * @param integer|string $argumentIndex
-     * @param mixed          $argumentArgumentValue
      *
      * @return bool
      */
@@ -52,12 +49,7 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Transforms argument value using transformation and returns a new one.
      *
-     * @param CallCenter     $callCenter
-     * @param DefinitionCall $definitionCall
      * @param integer|string $argumentIndex
-     * @param mixed          $argumentValue
-     *
-     * @return mixed
      */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
 }

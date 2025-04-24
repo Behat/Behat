@@ -36,8 +36,6 @@ final class RuntimeOutlineTester implements OutlineTester
 
     /**
      * Initializes tester.
-     *
-     * @param ScenarioTester $scenarioTester
      */
     public function __construct(ScenarioTester $scenarioTester)
     {

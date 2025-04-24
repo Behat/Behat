@@ -44,7 +44,6 @@ final class RuntimeExercise implements Exercise
     /**
      * Initializes tester.
      *
-     * @param EnvironmentManager $envManager
      * @param SuiteTester<TSpec> $suiteTester
      */
     public function __construct(EnvironmentManager $envManager, SuiteTester $suiteTester)

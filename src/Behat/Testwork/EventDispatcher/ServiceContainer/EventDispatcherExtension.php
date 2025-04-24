@@ -44,8 +44,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -95,8 +93,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads sigint controller
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadSigintController(ContainerBuilder $container)
     {
@@ -109,8 +105,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatcher(ContainerBuilder $container)
     {
@@ -120,8 +114,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event-dispatching exercise.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingExercise(ContainerBuilder $container)
     {
@@ -135,8 +127,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event-dispatching suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
     {
@@ -150,8 +140,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Registers all available event subscribers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSubscribers(ContainerBuilder $container)
     {

@@ -31,8 +31,6 @@ class FilesystemOutputFactory extends OutputFactory
 
     /**
      * Configure output stream parameters.
-     *
-     * @param OutputInterface $output
      */
     protected function configureOutputStream(OutputInterface $output)
     {

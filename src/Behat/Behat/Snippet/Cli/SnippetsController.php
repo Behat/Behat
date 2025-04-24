@@ -54,11 +54,6 @@ final class SnippetsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SnippetRegistry          $registry
-     * @param SnippetWriter            $writer
-     * @param ConsoleSnippetPrinter    $printer
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         SnippetRegistry $registry,
@@ -74,8 +69,6 @@ final class SnippetsController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -115,8 +108,6 @@ final class SnippetsController implements Controller
 
     /**
      * Registers undefined step.
-     *
-     * @param AfterStepTested $event
      */
     public function registerUndefinedStep(AfterStepTested $event)
     {

@@ -39,8 +39,6 @@ final class DefinitionAttributeReader implements AttributeReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {

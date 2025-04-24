@@ -52,7 +52,6 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
     /**
      * Checks if Feature matches specified filter.
      *
-     * @param StepNode $step
      * @param string   $filterString
      *
      * @return bool

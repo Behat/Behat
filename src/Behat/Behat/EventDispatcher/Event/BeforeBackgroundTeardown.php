@@ -39,11 +39,6 @@ final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeT
 
     /**
      * Initializes event.
-     *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
-     * @param TestResult     $result
      */
     public function __construct(
         Environment $env,

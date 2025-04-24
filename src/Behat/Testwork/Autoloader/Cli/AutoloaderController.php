@@ -30,8 +30,6 @@ final class AutoloaderController implements Controller
 
     /**
      * Initializes controller
-     *
-     * @param ClassLoader $loader
      */
     public function __construct(ClassLoader $loader)
     {

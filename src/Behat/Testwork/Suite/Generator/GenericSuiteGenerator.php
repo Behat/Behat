@@ -26,8 +26,6 @@ final class GenericSuiteGenerator implements SuiteGenerator
 
     /**
      * Initializes suite generator.
-     *
-     * @param array $defaultSettings
      */
     public function __construct(array $defaultSettings = [])
     {
@@ -52,8 +50,6 @@ final class GenericSuiteGenerator implements SuiteGenerator
 
     /**
      * Merges provided settings into default ones.
-     *
-     * @param array $settings
      *
      * @return array
      */

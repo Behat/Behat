@@ -34,8 +34,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Initialises container using provided service configuration.
-     *
-     * @param array $schema
      */
     public function __construct(array $schema)
     {
@@ -69,8 +67,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      * Creates an instance of given service.
      *
      * @param string $id
-     *
-     * @return mixed
      */
     private function createInstance($id)
     {
@@ -128,8 +124,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates arguments from schema.
      *
-     * @param array $schema
-     *
      * @return array
      */
     private function getAndValidateArguments(array $schema)
@@ -139,9 +133,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Gets and validates a factory method.
-     *
-     * @param ReflectionClass $reflection
-     * @param array           $schema
      *
      * @return null|ReflectionMethod
      */
@@ -162,7 +153,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Checks if factory method exists.
      *
-     * @param ReflectionClass $class
      * @param string          $methodName
      *
      * @throws WrongServicesConfigurationException
@@ -180,8 +170,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Checks if factory method is static.
-     *
-     * @param ReflectionMethod $method
      *
      * @throws WrongServicesConfigurationException
      */

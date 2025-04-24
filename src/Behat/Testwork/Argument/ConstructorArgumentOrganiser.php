@@ -29,8 +29,6 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Initializes organiser.
-     *
-     * @param ArgumentOrganiser $organiser
      */
     public function __construct(ArgumentOrganiser $organiser)
     {
@@ -62,7 +60,6 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks that all provided constructor arguments are present in the constructor.
      *
-     * @param ReflectionMethod $constructor
      * @param mixed[]          $passedArguments
      * @param mixed[]          $organisedArguments
      *

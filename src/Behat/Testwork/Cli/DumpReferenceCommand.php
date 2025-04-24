@@ -32,8 +32,6 @@ final class DumpReferenceCommand extends BaseCommand
 
     /**
      * Initializes dumper.
-     *
-     * @param ExtensionManager $extensionManager
      */
     public function __construct(ExtensionManager $extensionManager)
     {

@@ -35,8 +35,6 @@ final class FilterController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Gherkin $gherkin
      */
     public function __construct(Gherkin $gherkin)
     {
@@ -45,8 +43,6 @@ final class FilterController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {

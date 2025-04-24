@@ -52,11 +52,6 @@ final class JUnitFeatureElementListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param FeaturePrinter $featurePrinter
-     * @param JUnitScenarioPrinter $scenarioPrinter
-     * @param StepPrinter $stepPrinter
-     * @param SetupPrinter $setupPrinter
      */
     public function __construct(
         private FeaturePrinter $featurePrinter,

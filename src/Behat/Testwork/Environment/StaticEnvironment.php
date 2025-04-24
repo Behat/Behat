@@ -27,8 +27,6 @@ class StaticEnvironment implements Environment
 
     /**
      * Initializes environment.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {

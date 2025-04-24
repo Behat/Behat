@@ -26,8 +26,6 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Initialises organiser.
-     *
-     * @param ArgumentOrganiser $organiser
      */
     public function __construct(ArgumentOrganiser $organiser)
     {
@@ -51,8 +49,6 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      * represents all arguments with numbered indexes. This method removes
      * duplication and also drops the first full match element from the
      * array.
-     *
-     * @param array $match
      *
      * @return mixed[]
      */

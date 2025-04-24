@@ -30,8 +30,6 @@ final class DefinitionArgumentsTransformer implements CallFilter
 
     /**
      * Registers new argument transformer.
-     *
-     * @param ArgumentTransformer $transformer
      */
     public function registerArgumentTransformer(ArgumentTransformer $transformer)
     {
@@ -87,11 +85,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * Transforms call argument using registered transformers.
      *
-     * @param DefinitionCall $definitionCall
      * @param integer|string $index
-     * @param mixed          $value
-     *
-     * @return mixed
      */
     private function transformArgument(DefinitionCall $definitionCall, $index, $value)
     {

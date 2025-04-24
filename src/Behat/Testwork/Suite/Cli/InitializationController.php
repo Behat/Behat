@@ -36,9 +36,6 @@ final class InitializationController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository   $repository
-     * @param SuiteBootstrapper $bootstrapper
      */
     public function __construct(SuiteRepository $repository, SuiteBootstrapper $bootstrapper)
     {

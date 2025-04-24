@@ -28,8 +28,6 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
 
     /**
      * Initializes result.
-     *
-     * @param SearchException $searchException
      */
     public function __construct(SearchException $searchException)
     {

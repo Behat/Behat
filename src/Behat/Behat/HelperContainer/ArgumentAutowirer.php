@@ -32,8 +32,6 @@ final class ArgumentAutowirer
 
     /**
      * Initialises wirer.
-     *
-     * @param PsrContainerInterface $container
      */
     public function __construct(PsrContainerInterface $container)
     {
@@ -42,9 +40,6 @@ final class ArgumentAutowirer
 
     /**
      * Autowires given arguments using provided container.
-     *
-     * @param ReflectionFunctionAbstract $reflection
-     * @param array $arguments
      *
      * @return array
      *
@@ -67,9 +62,7 @@ final class ArgumentAutowirer
      *
      * Argument is wireable if it was not previously set and it has a class type-hint.
      *
-     * @param array               $arguments
      * @param integer             $index
-     * @param ReflectionParameter $parameter
      *
      * @return bool
      */

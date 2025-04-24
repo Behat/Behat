@@ -22,7 +22,6 @@ interface ArgumentOrganiser
     /**
      * Organises arguments using function reflection.
      *
-     * @param ReflectionFunctionAbstract $function
      * @param mixed[]                    $arguments
      *
      * @return mixed[]

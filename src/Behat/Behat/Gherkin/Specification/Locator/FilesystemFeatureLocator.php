@@ -43,7 +43,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     /**
      * Initializes loader.
      *
-     * @param Gherkin $gherkin
      * @param string  $basePath
      */
     public function __construct(Gherkin $gherkin, $basePath)
@@ -93,8 +92,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
 
     /**
      * Returns array of feature paths configured for the provided suite.
-     *
-     * @param Suite $suite
      *
      * @return string[]
      *

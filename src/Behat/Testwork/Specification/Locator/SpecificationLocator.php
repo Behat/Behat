@@ -35,7 +35,6 @@ interface SpecificationLocator
     /**
      * Locates specifications and wraps them into iterator.
      *
-     * @param Suite  $suite
      * @param string|null $locator
      *
      * @return SpecificationIterator<T>

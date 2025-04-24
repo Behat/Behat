@@ -152,8 +152,6 @@ final class ApplicationFactory extends BaseFactory
     /**
      * Returns default formatter factories.
      *
-     * @param ServiceProcessor $processor
-     *
      * @return FormatterFactory[]
      */
     private function getDefaultFormatterFactories(ServiceProcessor $processor)

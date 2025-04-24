@@ -52,8 +52,6 @@ interface OutputPrinter
 
     /**
      * Sets output styles.
-     *
-     * @param array $styles
      */
     public function setOutputStyles(array $styles);
 

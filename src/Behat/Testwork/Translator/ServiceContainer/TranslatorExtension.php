@@ -87,7 +87,6 @@ final class TranslatorExtension implements Extension
     /**
      * Loads translator service.
      *
-     * @param ContainerBuilder $container
      * @param string           $locale
      * @param string           $fallbackLocale
      */
@@ -130,8 +129,6 @@ final class TranslatorExtension implements Extension
 
     /**
      * Loads translator controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {

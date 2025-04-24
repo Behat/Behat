@@ -43,8 +43,6 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * Initializes environment.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {
@@ -53,8 +51,6 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
 
     /**
      * Registers context instance in the environment.
-     *
-     * @param Context $context
      */
     public function registerContext(Context $context)
     {

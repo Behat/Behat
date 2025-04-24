@@ -49,8 +49,6 @@ class TransformationExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -101,8 +99,6 @@ class TransformationExtension implements Extension
 
     /**
      * Loads definition arguments transformer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
     {
@@ -113,8 +109,6 @@ class TransformationExtension implements Extension
 
     /**
      * Loads default transformers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefaultTransformers(ContainerBuilder $container)
     {
@@ -130,8 +124,6 @@ class TransformationExtension implements Extension
 
     /**
      * Loads transformation context annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadAnnotationReader(ContainerBuilder $container)
     {
@@ -154,8 +146,6 @@ class TransformationExtension implements Extension
 
     /**
      * Loads transformations repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
@@ -167,8 +157,6 @@ class TransformationExtension implements Extension
 
     /**
      * Processes all available argument transformers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processArgumentsTransformers(ContainerBuilder $container)
     {

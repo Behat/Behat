@@ -35,7 +35,6 @@ final class TranslatedDefinition implements Definition
     /**
      * Initialises translated definition.
      *
-     * @param Definition $definition
      * @param string     $translatedPattern
      * @param string     $language
      */

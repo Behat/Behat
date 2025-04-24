@@ -46,9 +46,7 @@ final class RerunController implements Controller
     /**
      * Initializes controller.
      *
-     * @param EventDispatcherInterface $eventDispatcher
      * @param null|string              $cachePath
-     * @param string                   $basepath
      */
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -61,8 +59,6 @@ final class RerunController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -107,8 +103,6 @@ final class RerunController implements Controller
 
     /**
      * Records scenario if it is failed.
-     *
-     * @param AfterScenarioTested $event
      */
     public function collectFailedScenario(AfterScenarioTested $event)
     {
@@ -149,8 +143,6 @@ final class RerunController implements Controller
 
     /**
      * Generates cache key.
-     *
-     * @param InputInterface $input
      *
      * @return string
      */

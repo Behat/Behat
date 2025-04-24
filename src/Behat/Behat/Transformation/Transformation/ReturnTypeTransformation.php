@@ -120,8 +120,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Extracts parameters from provided definition call.
      *
-     * @param ReflectionFunctionAbstract $reflection
-     *
      * @return null|string
      */
     private static function getReturnClass(ReflectionFunctionAbstract $reflection)
@@ -139,7 +137,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
      *
-     * @param DefinitionCall $definitionCall
      * @param string|integer $argumentIndex
      *
      * @return null|string
@@ -163,8 +160,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
 
     /**
      * Extracts parameters from provided definition call.
-     *
-     * @param DefinitionCall $definitionCall
      *
      * @return ReflectionParameter[]
      */
@@ -215,8 +210,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
 
     /**
      * Returns closure to filter parameter by typehinted class.
-     *
-     * @return Closure
      */
     private function getClassReflection(): closure
     {

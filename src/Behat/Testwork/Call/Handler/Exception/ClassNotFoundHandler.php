@@ -57,8 +57,6 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
     /**
      * Extracts missing class name from the exception.
      *
-     * @param Error $exception
-     *
      * @return null|string
      */
     private function extractNonExistentClass(Error $exception)

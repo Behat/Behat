@@ -91,8 +91,6 @@ final class JUnitScenarioPrinter
     }
 
     /**
-     * @param ExampleNode $scenario
-     *
      * @return string
      */
     private function buildExampleName(ExampleNode $scenario)

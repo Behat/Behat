@@ -52,9 +52,6 @@ final class PrettyOutlinePrinter implements OutlinePrinter
     private $subIndentText;
 
     /**
-     * @param ScenarioPrinter         $scenarioPrinter
-     * @param StepPrinter             $stepPrinter
-     * @param ResultToStringConverter $resultConverter
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */
@@ -94,8 +91,6 @@ final class PrettyOutlinePrinter implements OutlinePrinter
     /**
      * Prints outline steps.
      *
-     * @param Formatter   $formatter
-     * @param OutlineNode $outline
      * @param StepNode[]  $steps
      */
     private function printExamplesSteps(Formatter $formatter, OutlineNode $outline, array $steps)
@@ -109,9 +104,6 @@ final class PrettyOutlinePrinter implements OutlinePrinter
 
     /**
      * Prints examples table header.
-     *
-     * @param OutputPrinter    $printer
-     * @param ExampleTableNode $table
      */
     private function printExamplesTableHeader(OutputPrinter $printer, ExampleTableNode $table)
     {

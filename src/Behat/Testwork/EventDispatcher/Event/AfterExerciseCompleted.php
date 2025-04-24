@@ -38,8 +38,6 @@ final class AfterExerciseCompleted extends ExerciseCompleted implements AfterTes
      * Initializes event.
      *
      * @param SpecificationIterator<mixed>[] $specificationIterators
-     * @param TestResult              $result
-     * @param Teardown                $teardown
      */
     public function __construct(array $specificationIterators, TestResult $result, Teardown $teardown)
     {

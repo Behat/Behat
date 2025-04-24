@@ -53,6 +53,7 @@ return (new PhpCsFixer\Config())
 //        'no_alternative_syntax' => true,
 //        'no_binary_string' => true,
         'no_blank_lines_after_phpdoc' => true,
+        'no_empty_phpdoc' => true,
 //        'no_empty_statement' => true,
 //        'no_extra_blank_lines' => [
 //            'tokens' => [
@@ -74,10 +75,10 @@ return (new PhpCsFixer\Config())
         'no_multiline_whitespace_around_double_arrow' => true,
 //        'no_null_property_initialization' => true,
 //        'no_short_bool_cast' => true,
-//        'no_superfluous_phpdoc_tags' => [
-//            'allow_hidden_params' => true,
-//            'remove_inheritdoc' => true,
-//        ],
+        'no_superfluous_phpdoc_tags' => [
+            'allow_hidden_params' => true,
+            'remove_inheritdoc' => false,
+        ],
 //        'no_trailing_comma_in_singleline' => true,
 //        'no_unneeded_braces' => [
 //            'namespaces' => true,
@@ -138,6 +139,8 @@ return (new PhpCsFixer\Config())
                 'inheritDoc' => 'inline',
             ],
         ],
+        'phpdoc_trim' => true,
+        'phpdoc_trim_consecutive_blank_line_separation' => true,
 //        'phpdoc_types_order' => [
 //            'null_adjustment' => 'always_last',
 //            'sort_algorithm' => 'none',

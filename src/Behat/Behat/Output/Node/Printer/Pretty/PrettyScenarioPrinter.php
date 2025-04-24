@@ -41,7 +41,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Initializes printer.
      *
-     * @param PrettyPathPrinter $pathPrinter
      * @param integer           $indentation
      * @param integer           $subIndentation
      */
@@ -78,7 +77,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario tags.
      *
-     * @param OutputPrinter $printer
      * @param string[]      $tags
      */
     private function printTags(OutputPrinter $printer, array $tags)
@@ -94,7 +92,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario keyword.
      *
-     * @param OutputPrinter $printer
      * @param string        $keyword
      */
     private function printKeyword(OutputPrinter $printer, $keyword)
@@ -105,7 +102,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario title (first line of long title).
      *
-     * @param OutputPrinter $printer
      * @param string|null   $longTitle
      */
     private function printTitle(OutputPrinter $printer, $longTitle)
@@ -121,7 +117,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario description (other lines of long title).
      *
-     * @param OutputPrinter $printer
      * @param string|null   $longTitle
      */
     private function printDescription(OutputPrinter $printer, $longTitle)

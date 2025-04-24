@@ -50,7 +50,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Initializes handler.
      *
-     * @param ContextFactory                                     $factory
      * @param ArgumentResolverFactory|SuiteScopedResolverFactory $resolverFactory
      */
     public function __construct(ContextFactory $factory, $resolverFactory = null)
@@ -66,8 +65,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 
     /**
      * Registers context class resolver.
-     *
-     * @param ClassResolver $resolver
      */
     public function registerClassResolver(ClassResolver $resolver)
     {
@@ -129,8 +126,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Returns normalized suite context settings.
      *
-     * @param Suite $suite
-     *
      * @return array
      */
     private function getNormalizedContextSettings(Suite $suite)
@@ -153,8 +148,6 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 
     /**
      * Returns array of context classes configured for the provided suite.
-     *
-     * @param Suite $suite
      *
      * @return array<class-string<Context>|array<class-string<Context>,array>>
      *

@@ -30,8 +30,6 @@ final class CompositeFactory implements SuiteScopedResolverFactory
 
     /**
      * Registers factory.
-     *
-     * @param SuiteScopedResolverFactory $factory
      */
     public function registerFactory(SuiteScopedResolverFactory $factory)
     {

@@ -62,8 +62,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
     {
@@ -90,8 +88,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures current scenario title and path on scenario BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOnBeforeFeatureEvent(Event $event)
     {
@@ -114,8 +110,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures step stats on step AFTER event.
-     *
-     * @param Event $event
      */
     private function captureStepStatsOnAfterEvent(Event $event)
     {

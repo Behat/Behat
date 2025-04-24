@@ -73,7 +73,6 @@ final class SpecificationFinder
     /**
      * Creates suite specification iterator for provided locator.
      *
-     * @param Suite       $suite
      * @param null|string $locator
      *
      * @return list<SpecificationIterator<T>>

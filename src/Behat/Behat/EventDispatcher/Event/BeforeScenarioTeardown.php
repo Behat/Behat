@@ -39,11 +39,6 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
 
     /**
      * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
      */
     public function __construct(
         Environment $env,

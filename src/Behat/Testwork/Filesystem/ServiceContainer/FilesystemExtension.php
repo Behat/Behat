@@ -69,8 +69,6 @@ final class FilesystemExtension implements Extension
 
     /**
      * Loads filesystem logger.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadFilesystemLogger(ContainerBuilder $container)
     {

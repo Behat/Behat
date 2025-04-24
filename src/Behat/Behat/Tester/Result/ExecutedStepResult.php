@@ -33,9 +33,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
 
     /**
      * Initialize test result.
-     *
-     * @param SearchResult $searchResult
-     * @param CallResult   $callResult
      */
     public function __construct(SearchResult $searchResult, CallResult $callResult)
     {

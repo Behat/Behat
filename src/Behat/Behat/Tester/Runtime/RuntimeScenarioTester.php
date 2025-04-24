@@ -41,9 +41,6 @@ final class RuntimeScenarioTester implements ScenarioTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepContainerTester $containerTester
-     * @param BackgroundTester    $backgroundTester
      */
     public function __construct(StepContainerTester $containerTester, BackgroundTester $backgroundTester)
     {
@@ -89,8 +86,6 @@ final class RuntimeScenarioTester implements ScenarioTester
     /**
      * Tests background of the provided feature against provided environment.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
      * @param bool     $skip
      *
      * @return TestResult

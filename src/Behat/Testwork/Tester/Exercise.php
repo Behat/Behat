@@ -49,7 +49,6 @@ interface Exercise
      *
      * @param SpecificationIterator<TSpec>[] $iterators
      * @param bool                 $skip
-     * @param TestResult              $result
      *
      * @return Teardown
      */

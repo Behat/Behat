@@ -30,8 +30,6 @@ final class AttributeContextReader implements ContextReader
 
     /**
      * Registers attribute reader.
-     *
-     * @param AttributeReader $reader
      */
     public function registerAttributeReader(AttributeReader $reader)
     {

@@ -39,8 +39,6 @@ final class JUnitOutlineStoreListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param SuitePrinter $suitePrinter
      */
     public function __construct(SuitePrinter $suitePrinter)
     {
@@ -60,8 +58,6 @@ final class JUnitOutlineStoreListener implements EventListener
 
     /**
      * Captures outline into the ivar on outline BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureOutlineOnBeforeOutlineEvent(Event $event)
     {
@@ -75,10 +71,6 @@ final class JUnitOutlineStoreListener implements EventListener
         }
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param Event     $event
-     */
     private function printHeaderOnBeforeSuiteTestedEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof BeforeSuiteTested) {
@@ -87,10 +79,6 @@ final class JUnitOutlineStoreListener implements EventListener
         $this->suitePrinter->printHeader($formatter, $event->getSuite());
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param Event     $event
-     */
     private function printFooterOnAfterSuiteTestedEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof AfterSuiteTested) {
@@ -100,8 +88,6 @@ final class JUnitOutlineStoreListener implements EventListener
     }
 
     /**
-     * @param ExampleNode $scenario
-     *
      * @return OutlineNode
      */
     public function getCurrentOutline(ExampleNode $scenario)

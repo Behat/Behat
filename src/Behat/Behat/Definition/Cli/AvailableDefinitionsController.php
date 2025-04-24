@@ -47,11 +47,6 @@ final class AvailableDefinitionsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository                     $suiteRepository
-     * @param DefinitionWriter                    $writer
-     * @param ConsoleDefinitionListPrinter        $listPrinter
-     * @param ConsoleDefinitionInformationPrinter $infoPrinter
      */
     public function __construct(
         SuiteRepository $suiteRepository,

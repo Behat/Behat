@@ -39,7 +39,6 @@ final class GroupedSpecificationIterator implements SpecificationIterator
     /**
      * Initializes iterator.
      *
-     * @param Suite                          $suite
      * @param list<SpecificationIterator<T>> $specificationIterators
      */
     public function __construct(Suite $suite, array $specificationIterators)

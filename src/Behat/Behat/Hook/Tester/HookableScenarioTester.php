@@ -39,9 +39,6 @@ final class HookableScenarioTester implements ScenarioTester
 
     /**
      * Initializes tester.
-     *
-     * @param ScenarioTester $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
     public function __construct(ScenarioTester $baseTester, HookDispatcher $hookDispatcher)
     {

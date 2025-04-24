@@ -62,7 +62,6 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Checks if Feature matches specified filter.
      *
-     * @param Suite  $suite
      * @param string $filterString
      *
      * @return bool

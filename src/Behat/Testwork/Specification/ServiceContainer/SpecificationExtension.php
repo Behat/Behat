@@ -41,8 +41,6 @@ final class SpecificationExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -89,8 +87,6 @@ final class SpecificationExtension implements Extension
 
     /**
      * Loads specification finder.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFinder(ContainerBuilder $container)
     {
@@ -100,8 +96,6 @@ final class SpecificationExtension implements Extension
 
     /**
      * Processes specification locators.
-     *
-     * @param ContainerBuilder $container
      */
     private function processLocators(ContainerBuilder $container)
     {

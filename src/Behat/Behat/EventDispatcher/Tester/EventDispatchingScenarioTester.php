@@ -57,8 +57,6 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     /**
      * Initializes tester.
      *
-     * @param ScenarioTester           $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      * @param string                   $beforeEventName
      * @param string                   $afterSetupEventName
      * @param string                   $beforeTeardownEventName

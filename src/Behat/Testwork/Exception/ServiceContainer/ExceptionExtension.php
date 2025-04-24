@@ -45,8 +45,6 @@ final class ExceptionExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -110,7 +108,6 @@ final class ExceptionExtension implements Extension
     /**
      * Loads exception presenter.
      *
-     * @param ContainerBuilder $container
      * @param integer          $verbosity
      */
     protected function loadPresenter(ContainerBuilder $container, $verbosity)
@@ -125,8 +122,6 @@ final class ExceptionExtension implements Extension
 
     /**
      * Loads default stringer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefaultStringers(ContainerBuilder $container)
     {
@@ -141,8 +136,6 @@ final class ExceptionExtension implements Extension
 
     /**
      * Processes all available exception stringers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processStringers(ContainerBuilder $container)
     {

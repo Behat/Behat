@@ -69,8 +69,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
     /**
      * Adds a new <testsuite> node.
-     *
-     * @param array $testsuiteAttributes
      */
     public function addTestsuite(array $testsuiteAttributes = [])
     {
@@ -92,8 +90,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
     /**
      * Adds a new <testcase> node.
-     *
-     * @param array $testcaseAttributes
      */
     public function addTestcase(array $testcaseAttributes = [])
     {
@@ -106,7 +102,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      * Add a testcase child element.
      *
      * @param string $nodeName
-     * @param array  $nodeAttributes
      * @param string $nodeValue
      */
     public function addTestcaseChild($nodeName, array $nodeAttributes = [], $nodeValue = null)

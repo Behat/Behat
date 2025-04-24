@@ -27,7 +27,6 @@ interface SpecificationTester
     /**
      * Sets up specification for a test.
      *
-     * @param Environment $env
      * @param TSpec       $spec
      * @param bool     $skip
      *
@@ -38,7 +37,6 @@ interface SpecificationTester
     /**
      * Tests provided specification.
      *
-     * @param Environment $env
      * @param TSpec       $spec
      * @param bool     $skip
      *
@@ -49,10 +47,8 @@ interface SpecificationTester
     /**
      * Tears down specification after a test.
      *
-     * @param Environment $env
      * @param TSpec       $spec
      * @param bool     $skip
-     * @param TestResult  $result
      *
      * @return Teardown
      */

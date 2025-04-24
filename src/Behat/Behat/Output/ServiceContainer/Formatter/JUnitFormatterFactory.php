@@ -51,8 +51,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads printer helpers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadPrinterHelpers(ContainerBuilder $container)
     {
@@ -62,8 +60,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads the printers used to print the basic JUnit report.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadCorePrinters(ContainerBuilder $container)
     {
@@ -101,8 +97,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads the node listeners required for JUnit printers to work.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRootNodeListener(ContainerBuilder $container)
     {
@@ -138,8 +132,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads formatter itself.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFormatter(ContainerBuilder $container)
     {

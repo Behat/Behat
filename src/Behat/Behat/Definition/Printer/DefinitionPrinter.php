@@ -23,7 +23,6 @@ interface DefinitionPrinter
     /**
      * Prints definition.
      *
-     * @param Suite        $suite
      * @param Definition[] $definitions
      */
     public function printDefinitions(Suite $suite, $definitions);

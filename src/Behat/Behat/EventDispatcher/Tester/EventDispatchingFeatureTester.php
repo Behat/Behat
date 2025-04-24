@@ -43,7 +43,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
      * Initializes tester.
      *
      * @param SpecificationTester<FeatureNode> $baseTester
-     * @param EventDispatcherInterface         $eventDispatcher
      */
     public function __construct(SpecificationTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {

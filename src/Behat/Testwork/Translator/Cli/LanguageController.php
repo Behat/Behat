@@ -31,8 +31,6 @@ final class LanguageController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Translator $translator
      */
     public function __construct(Translator $translator)
     {

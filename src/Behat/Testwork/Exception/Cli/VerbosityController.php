@@ -30,8 +30,6 @@ final class VerbosityController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param ExceptionPresenter $exceptionPresenter
      */
     public function __construct(ExceptionPresenter $exceptionPresenter)
     {
@@ -40,8 +38,6 @@ final class VerbosityController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {

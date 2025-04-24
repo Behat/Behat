@@ -33,8 +33,6 @@ final class SigintController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {

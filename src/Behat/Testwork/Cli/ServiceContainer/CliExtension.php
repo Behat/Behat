@@ -43,8 +43,6 @@ final class CliExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -94,8 +92,6 @@ final class CliExtension implements Extension
 
     /**
      * Loads application command.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadCommand(ContainerBuilder $container)
     {
@@ -112,8 +108,6 @@ final class CliExtension implements Extension
 
     /**
      * Processes all controllers in container.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processControllers(ContainerBuilder $container)
     {

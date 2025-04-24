@@ -26,16 +26,12 @@ interface EnvironmentReader
     /**
      * Checks if reader supports an environment.
      *
-     * @param Environment $environment
-     *
      * @return bool
      */
     public function supportsEnvironment(Environment $environment);
 
     /**
      * Reads callees from an environment.
-     *
-     * @param Environment $environment
      *
      * @return Callee[]
      */

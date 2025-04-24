@@ -35,8 +35,6 @@ final class RuntimeBackgroundTester implements BackgroundTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepContainerTester $containerTester
      */
     public function __construct(StepContainerTester $containerTester)
     {

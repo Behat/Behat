@@ -31,7 +31,6 @@ class SuiteException extends InvalidArgumentException implements TestworkExcepti
      *
      * @param string         $message
      * @param string         $name
-     * @param Exception|null $previous
      */
     public function __construct($message, $name, ?Exception $previous = null)
     {

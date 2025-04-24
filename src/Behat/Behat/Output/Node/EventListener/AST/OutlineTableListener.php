@@ -83,8 +83,6 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Captures step tested event.
-     *
-     * @param StepTested $event
      */
     private function captureStepEvent(StepTested $event)
     {
@@ -97,8 +95,6 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Captures outline into the ivar on outline BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureOutlineOnBeforeOutlineEvent(Event $event)
     {
@@ -112,8 +108,6 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Captures example setup on example BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureExampleSetupOnBeforeEvent(Event $event)
     {
@@ -141,8 +135,6 @@ final class OutlineTableListener implements EventListener
     /**
      * Prints outline header (if has not been printed yet) on example AFTER event.
      *
-     * @param Formatter $formatter
-     * @param Event     $event
      * @param string    $eventName
      */
     private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
@@ -165,8 +157,6 @@ final class OutlineTableListener implements EventListener
     /**
      * Prints example row on example AFTER event.
      *
-     * @param Formatter $formatter
-     * @param Event     $event
      * @param string    $eventName
      */
     private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
@@ -199,9 +189,6 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Prints outline footer on outline AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
     {

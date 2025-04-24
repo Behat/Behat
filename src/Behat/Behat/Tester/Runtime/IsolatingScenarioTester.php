@@ -39,9 +39,6 @@ final class IsolatingScenarioTester implements ScenarioTester
 
     /**
      * Initialises tester.
-     *
-     * @param ScenarioTester     $decoratedTester
-     * @param EnvironmentManager $envManager
      */
     public function __construct(ScenarioTester $decoratedTester, EnvironmentManager $envManager)
     {

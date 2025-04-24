@@ -47,10 +47,6 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     /**
      * Checks if transformer supports argument.
      *
-     * @param RegexGenerator $regexGenerator
-     * @param DefinitionCall $definitionCall
-     * @param mixed          $argumentValue
-     *
      * @return bool
      */
     public function supportsDefinitionAndArgument(
@@ -69,13 +65,6 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
 
     /**
      * Transforms argument value using transformation and returns a new one.
-     *
-     * @param RegexGenerator $regexGenerator
-     * @param CallCenter     $callCenter
-     * @param DefinitionCall $definitionCall
-     * @param mixed          $argumentValue
-     *
-     * @return mixed
      *
      * @throws Exception If transformation throws exception
      */
@@ -126,10 +115,6 @@ final class PatternTransformation extends RuntimeCallee implements Transformatio
     }
 
     /**
-     * @param $regexPattern
-     * @param $argumentValue
-     * @param $match
-     *
      * @return bool
      */
     private function match($regexPattern, $argumentValue, &$match)

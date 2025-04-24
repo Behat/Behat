@@ -27,9 +27,6 @@ interface ScenarioTester
     /**
      * Sets up example for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
      * @param bool     $skip
      *
      * @return Setup
@@ -39,9 +36,6 @@ interface ScenarioTester
     /**
      * Tests example.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
      * @param bool     $skip
      *
      * @return TestResult
@@ -51,11 +45,7 @@ interface ScenarioTester
     /**
      * Tears down example after a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
      * @param bool     $skip
-     * @param TestResult  $result
      *
      * @return Teardown
      */

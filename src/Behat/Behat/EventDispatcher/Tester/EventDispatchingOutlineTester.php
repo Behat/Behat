@@ -40,9 +40,6 @@ final class EventDispatchingOutlineTester implements OutlineTester
 
     /**
      * Initializes tester.
-     *
-     * @param OutlineTester            $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(OutlineTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {

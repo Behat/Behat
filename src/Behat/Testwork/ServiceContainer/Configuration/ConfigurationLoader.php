@@ -234,7 +234,6 @@ final class ConfigurationLoader
      * Loads configs for provided config and profile.
      *
      * @param string $basePath
-     * @param array  $config
      * @param string $profile
      *
      * @return array
@@ -273,11 +272,6 @@ final class ConfigurationLoader
 
     /**
      * Get the name of the requested profile, after considering any preferred profile name.
-     *
-     * @param array $config
-     * @param string $profile
-     *
-     * @return string
      */
     private function getProfileName(array $config, string $profile): string
     {
@@ -292,7 +286,6 @@ final class ConfigurationLoader
      * Loads all provided imports.
      *
      * @param string $basePath
-     * @param array  $paths
      * @param string $profile
      *
      * @return array

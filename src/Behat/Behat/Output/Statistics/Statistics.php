@@ -48,22 +48,16 @@ interface Statistics
 
     /**
      * Registers scenario stat.
-     *
-     * @param ScenarioStat $stat
      */
     public function registerScenarioStat(ScenarioStat $stat);
 
     /**
      * Registers step stat.
-     *
-     * @param StepStat $stat
      */
     public function registerStepStat(StepStat $stat);
 
     /**
      * Registers hook stat.
-     *
-     * @param HookStat $stat
      */
     public function registerHookStat(HookStat $stat);
 

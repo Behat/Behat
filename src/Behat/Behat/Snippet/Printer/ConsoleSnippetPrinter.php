@@ -36,9 +36,6 @@ class ConsoleSnippetPrinter implements SnippetPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param OutputInterface     $output
-     * @param TranslatorInterface $translator
      */
     public function __construct(OutputInterface $output, TranslatorInterface $translator)
     {

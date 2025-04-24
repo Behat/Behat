@@ -46,12 +46,6 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param StepResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(
         Environment $env,

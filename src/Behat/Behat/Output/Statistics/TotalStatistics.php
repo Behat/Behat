@@ -120,8 +120,6 @@ final class TotalStatistics implements Statistics
 
     /**
      * Registers scenario stat.
-     *
-     * @param ScenarioStat $stat
      */
     public function registerScenarioStat(ScenarioStat $stat)
     {
@@ -142,8 +140,6 @@ final class TotalStatistics implements Statistics
 
     /**
      * Registers step stat.
-     *
-     * @param StepStat $stat
      */
     public function registerStepStat(StepStat $stat)
     {
@@ -160,8 +156,6 @@ final class TotalStatistics implements Statistics
 
     /**
      * Registers hook stat.
-     *
-     * @param HookStat $stat
      */
     public function registerHookStat(HookStat $stat)
     {

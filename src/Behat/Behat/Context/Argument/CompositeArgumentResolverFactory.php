@@ -28,8 +28,6 @@ final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
 
     /**
      * Registers factory.
-     *
-     * @param ArgumentResolverFactory $factory
      */
     public function registerFactory(ArgumentResolverFactory $factory)
     {

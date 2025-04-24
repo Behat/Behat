@@ -31,8 +31,6 @@ final class AutowiringResolver implements ArgumentResolver
 
     /**
      * Initialises resolver.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {

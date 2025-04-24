@@ -33,9 +33,7 @@ final class SearchResult
     /**
      * Registers search match.
      *
-     * @param null|Definition $definition
      * @param null|string     $matchedText
-     * @param null|array      $arguments
      */
     public function __construct(?Definition $definition = null, $matchedText = null, ?array $arguments = null)
     {

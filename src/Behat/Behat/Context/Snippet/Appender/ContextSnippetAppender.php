@@ -101,7 +101,6 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * Logs snippet addition to the provided path (if logger is given).
      *
-     * @param AggregateSnippet $snippet
      * @param string           $path
      */
     private function logSnippetAddition(AggregateSnippet $snippet, $path)

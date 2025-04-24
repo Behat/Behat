@@ -37,7 +37,6 @@ final class StrictController implements Controller
     /**
      * Initializes controller.
      *
-     * @param ResultInterpreter $resultInterpreter
      * @param bool           $strict
      */
     public function __construct(ResultInterpreter $resultInterpreter, $strict = false)

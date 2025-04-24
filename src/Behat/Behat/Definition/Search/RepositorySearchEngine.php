@@ -50,11 +50,6 @@ final class RepositorySearchEngine implements SearchEngine
 
     /**
      * Initializes search engine.
-     *
-     * @param DefinitionRepository $repository
-     * @param PatternTransformer   $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param ArgumentOrganiser    $argumentOrganiser
      */
     public function __construct(
         DefinitionRepository $repository,
@@ -110,7 +105,6 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Attempts to match provided definition against a step text.
      *
-     * @param Definition          $definition
      * @param string              $stepText
      * @param ArgumentInterface[] $multiline
      *

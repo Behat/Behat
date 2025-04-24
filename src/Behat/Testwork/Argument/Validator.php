@@ -25,7 +25,6 @@ final class Validator
     /**
      * Validates that all arguments are in place, throws exception otherwise.
      *
-     * @param ReflectionFunctionAbstract $function
      * @param mixed[]                    $arguments
      *
      * @throws UnknownParameterValueException
@@ -40,9 +39,7 @@ final class Validator
     /**
      * Validates given argument.
      *
-     * @param ReflectionParameter $parameter
      * @param integer             $parameterIndex
-     * @param array               $givenArguments
      */
     private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments)
     {
@@ -67,8 +64,6 @@ final class Validator
 
     /**
      * Returns function path for a provided reflection.
-     *
-     * @param ReflectionFunctionAbstract $function
      *
      * @return string
      */

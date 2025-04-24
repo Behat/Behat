@@ -66,7 +66,6 @@ final class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * Prints feature tags.
      *
-     * @param OutputPrinter $printer
      * @param string[]      $tags
      */
     private function printTags(OutputPrinter $printer, array $tags)
@@ -81,9 +80,6 @@ final class PrettyFeaturePrinter implements FeaturePrinter
 
     /**
      * Prints feature title using provided printer.
-     *
-     * @param OutputPrinter $printer
-     * @param FeatureNode   $feature
      */
     private function printTitle(OutputPrinter $printer, FeatureNode $feature)
     {
@@ -98,9 +94,6 @@ final class PrettyFeaturePrinter implements FeaturePrinter
 
     /**
      * Prints feature description using provided printer.
-     *
-     * @param OutputPrinter $printer
-     * @param FeatureNode   $feature
      */
     private function printDescription(OutputPrinter $printer, FeatureNode $feature)
     {

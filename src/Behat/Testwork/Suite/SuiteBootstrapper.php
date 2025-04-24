@@ -26,8 +26,6 @@ final class SuiteBootstrapper
 
     /**
      * Registers suite setup.
-     *
-     * @param SuiteSetup $setup
      */
     public function registerSuiteSetup(SuiteSetup $setup)
     {
@@ -46,8 +44,6 @@ final class SuiteBootstrapper
 
     /**
      * Bootstraps provided suite using registered setup.
-     *
-     * @param Suite $suite
      */
     public function bootstrapSuite(Suite $suite)
     {

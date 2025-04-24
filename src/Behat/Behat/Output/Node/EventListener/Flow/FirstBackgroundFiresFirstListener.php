@@ -44,8 +44,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param EventListener $descendant
      */
     public function __construct(EventListener $descendant)
     {
@@ -101,8 +99,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * Checks if provided event should be postponed until background is printed.
      *
-     * @param Event $event
-     *
      * @return bool
      */
     private function isEventDelayedUntilFirstBackgroundPrinted(Event $event)
@@ -117,7 +113,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * Fires delayed events on AFTER background event.
      *
-     * @param Formatter $formatter
      * @param string    $eventName
      */
     private function fireDelayedEventsOnAfterBackground(Formatter $formatter, $eventName)

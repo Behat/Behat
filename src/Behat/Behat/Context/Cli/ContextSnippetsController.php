@@ -42,9 +42,6 @@ final class ContextSnippetsController implements Controller
 
     /**
      * Initialises controller.
-     *
-     * @param ContextSnippetGenerator $generator
-     * @param TranslatorInterface     $translator
      */
     public function __construct(ContextSnippetGenerator $generator, TranslatorInterface $translator)
     {

@@ -46,8 +46,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads stop on failure controller.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadStopOnFailureController(ContainerBuilder $container)
     {
@@ -61,8 +59,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching background tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingBackgroundTester(ContainerBuilder $container)
     {
@@ -76,8 +72,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching feature tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingFeatureTester(ContainerBuilder $container)
     {
@@ -91,8 +85,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching outline tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingOutlineTester(ContainerBuilder $container)
     {
@@ -106,8 +98,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching scenario tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingScenarioTester(ContainerBuilder $container)
     {
@@ -125,8 +115,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching example tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingExampleTester(ContainerBuilder $container)
     {
@@ -144,8 +132,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching step tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingStepTester(ContainerBuilder $container)
     {
@@ -166,8 +152,6 @@ class EventDispatcherExtension extends BaseExtension
      * @todo Remove this method in next major
      *
      * @deprecated
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadTickingStepTester(ContainerBuilder $container)
     {

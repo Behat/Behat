@@ -41,8 +41,6 @@ final class ProgressStepPrinter implements StepPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
      */
     public function __construct(ResultToStringConverter $resultConverter)
     {

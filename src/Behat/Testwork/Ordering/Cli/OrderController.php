@@ -46,8 +46,6 @@ final class OrderController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param SymfonyCommand $command
      */
     public function configure(SymfonyCommand $command)
     {
@@ -61,9 +59,6 @@ final class OrderController implements Controller
 
     /**
      * Executes controller.
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
      *
      * @return null|integer
      */
@@ -85,8 +80,6 @@ final class OrderController implements Controller
 
     /**
      * Register a new available controller
-     *
-     * @param Orderer $orderer
      */
     public function registerOrderer(Orderer $orderer)
     {

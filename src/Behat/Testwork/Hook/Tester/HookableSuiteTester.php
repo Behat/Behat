@@ -44,7 +44,6 @@ final class HookableSuiteTester implements SuiteTester
      * Initializes tester.
      *
      * @param SuiteTester<TSpec> $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
     public function __construct(SuiteTester $baseTester, HookDispatcher $hookDispatcher)
     {

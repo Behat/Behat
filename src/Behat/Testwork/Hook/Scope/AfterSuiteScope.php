@@ -37,9 +37,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     /**
      * Initializes scope.
      *
-     * @param Environment           $environment
      * @param SpecificationIterator<mixed> $iterator
-     * @param TestResult            $result
      */
     public function __construct(Environment $environment, SpecificationIterator $iterator, TestResult $result)
     {

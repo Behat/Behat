@@ -62,8 +62,6 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * Initializes specifications.
      *
-     * @param Suite             $suite
-     * @param Gherkin           $gherkin
      * @param string[]          $paths
      * @param FeatureFilterInterface[] $filters
      */
@@ -127,8 +125,6 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * Returns list of filters from suite settings.
      *
-     * @param Suite $suite
-     *
      * @return FeatureFilterInterface[]
      */
     private function getSuiteFilters(Suite $suite)
@@ -150,7 +146,6 @@ final class LazyFeatureIterator implements SpecificationIterator
      *
      * @param string $type
      * @param string $filterString
-     * @param Suite  $suite
      *
      * @return FeatureFilterInterface
      *

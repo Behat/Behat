@@ -41,9 +41,6 @@ class EnvironmentCall implements Call
     /**
      * Initializes call.
      *
-     * @param Environment  $environment
-     * @param Callee       $callee
-     * @param array        $arguments
      * @param null|integer $errorReportingLevel
      */
     public function __construct(

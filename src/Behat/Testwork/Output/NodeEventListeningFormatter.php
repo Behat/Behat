@@ -49,9 +49,6 @@ final class NodeEventListeningFormatter implements Formatter
      *
      * @param string        $name
      * @param string        $description
-     * @param array         $parameters
-     * @param OutputPrinter $printer
-     * @param EventListener $listener
      */
     public function __construct($name, $description, array $parameters, OutputPrinter $printer, EventListener $listener)
     {
@@ -75,7 +72,6 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * Proxies event to the listener.
      *
-     * @param Event       $event
      * @param null|string $eventName
      */
     public function listenEvent(Event $event, $eventName = null)

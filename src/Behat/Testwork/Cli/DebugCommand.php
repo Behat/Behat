@@ -38,10 +38,6 @@ final class DebugCommand extends BaseCommand
 
     /**
      * Initialises command.
-     *
-     * @param Application         $application
-     * @param ConfigurationLoader $configurationLoader
-     * @param ExtensionManager    $extensionManager
      */
     public function __construct(
         Application $application,

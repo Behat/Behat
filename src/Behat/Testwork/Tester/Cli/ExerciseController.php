@@ -59,10 +59,6 @@ final class ExerciseController implements Controller
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository     $suiteRepository
-     * @param SpecificationFinder $specificationFinder
-     * @param Exercise            $exercise
-     * @param ResultInterpreter   $resultInterpreter
      * @param bool             $skip
      */
     public function __construct(
@@ -135,8 +131,6 @@ final class ExerciseController implements Controller
     /**
      * Finds exercise specifications.
      *
-     * @param InputInterface $input
-     *
      * @return SpecificationIterator[]
      */
     private function findSpecifications(InputInterface $input)
@@ -147,7 +141,6 @@ final class ExerciseController implements Controller
     /**
      * Tests exercise specifications.
      *
-     * @param InputInterface          $input
      * @param SpecificationIterator[] $specifications
      *
      * @return TestResult

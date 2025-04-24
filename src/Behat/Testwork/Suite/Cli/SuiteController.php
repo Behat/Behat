@@ -36,9 +36,6 @@ final class SuiteController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRegistry $registry
-     * @param array         $suiteConfigurations
      */
     public function __construct(SuiteRegistry $registry, array $suiteConfigurations)
     {

@@ -32,7 +32,6 @@ final class BeforeSuiteScope implements SuiteScope
     /**
      * Initializes scope.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<mixed> $iterator
      */
     public function __construct(Environment $env, SpecificationIterator $iterator)

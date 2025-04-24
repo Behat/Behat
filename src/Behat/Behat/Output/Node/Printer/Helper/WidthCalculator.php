@@ -24,7 +24,6 @@ final class WidthCalculator
     /**
      * Calculates scenario width.
      *
-     * @param Scenario $scenario
      * @param integer  $indentation
      * @param integer  $subIndentation
      *
@@ -45,7 +44,6 @@ final class WidthCalculator
     /**
      * Calculates outline examples width.
      *
-     * @param ExampleNode $example
      * @param integer     $indentation
      * @param integer     $subIndentation
      *
@@ -66,7 +64,6 @@ final class WidthCalculator
     /**
      * Calculates scenario header width.
      *
-     * @param Scenario $scenario
      * @param integer  $indentation
      *
      * @return integer
@@ -89,7 +86,6 @@ final class WidthCalculator
     /**
      * Calculates step width.
      *
-     * @param StepNode $step
      * @param integer  $indentation
      *
      * @return integer

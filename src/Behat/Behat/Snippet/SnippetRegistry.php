@@ -40,8 +40,6 @@ final class SnippetRegistry implements SnippetRepository
 
     /**
      * Registers snippet generator.
-     *
-     * @param SnippetGenerator $generator
      */
     public function registerSnippetGenerator(SnippetGenerator $generator)
     {
@@ -51,9 +49,6 @@ final class SnippetRegistry implements SnippetRepository
 
     /**
      * Generates and registers snippet.
-     *
-     * @param Environment $environment
-     * @param StepNode    $step
      *
      * @return void
      */
@@ -125,9 +120,6 @@ final class SnippetRegistry implements SnippetRepository
     }
 
     /**
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
      * @return null|Snippet
      */
     private function generateSnippet(Environment $environment, StepNode $step)

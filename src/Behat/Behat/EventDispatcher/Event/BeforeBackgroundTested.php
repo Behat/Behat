@@ -34,10 +34,6 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
 
     /**
      * Initializes event.
-     *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
      */
     public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background)
     {

@@ -44,8 +44,6 @@ interface Suite
      * Returns setting value by its key.
      *
      * @param string $key
-     *
-     * @return mixed
      */
     public function getSetting($key);
 }

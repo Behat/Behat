@@ -43,7 +43,6 @@ final class HookAnnotationReader implements AnnotationReader
      * Loads step callees (if exist) associated with specific method.
      *
      * @param string           $contextClass
-     * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
      *

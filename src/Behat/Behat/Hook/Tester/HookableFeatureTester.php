@@ -42,7 +42,6 @@ final class HookableFeatureTester implements SpecificationTester
      * Initializes tester.
      *
      * @param SpecificationTester<FeatureNode> $baseTester
-     * @param HookDispatcher                   $hookDispatcher
      */
     public function __construct(SpecificationTester $baseTester, HookDispatcher $hookDispatcher)
     {

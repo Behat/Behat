@@ -22,8 +22,6 @@ interface TargetContextIdentifier
     /**
      * Attempts to guess the target context class from the environment.
      *
-     * @param ContextEnvironment $environment
-     *
      * @return null|string
      */
     public function guessTargetContextClass(ContextEnvironment $environment);

@@ -33,9 +33,7 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
     /**
      * Initializes event.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<mixed> $iterator
-     * @param Setup                 $setup
      */
     public function __construct(Environment $env, SpecificationIterator $iterator, Setup $setup)
     {

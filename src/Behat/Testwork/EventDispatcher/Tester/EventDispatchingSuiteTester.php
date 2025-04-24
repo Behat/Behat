@@ -45,7 +45,6 @@ final class EventDispatchingSuiteTester implements SuiteTester
      * Initializes tester.
      *
      * @param SuiteTester<TSpec>       $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {

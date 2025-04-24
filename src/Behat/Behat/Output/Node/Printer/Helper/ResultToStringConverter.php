@@ -22,8 +22,6 @@ final class ResultToStringConverter
     /**
      * Converts provided test result to a string.
      *
-     * @param TestResult $result
-     *
      * @return string
      */
     public function convertResultToString(TestResult $result)

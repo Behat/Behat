@@ -93,8 +93,6 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Executes single call.
      *
-     * @param Call $call
-     *
      * @return CallResult
      */
     private function executeCall(Call $call)
@@ -129,8 +127,6 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Starts error handler and stdout buffering.
-     *
-     * @param Call $call
      */
     private function startErrorAndOutputBuffering(Call $call)
     {

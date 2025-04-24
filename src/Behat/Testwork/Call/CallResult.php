@@ -23,9 +23,6 @@ final class CallResult
      * @var Call
      */
     private $call;
-    /**
-     * @var mixed
-     */
     private $return;
     /**
      * @var null|Exception
@@ -39,9 +36,6 @@ final class CallResult
     /**
      * Initializes call result.
      *
-     * @param Call           $call
-     * @param mixed          $return
-     * @param null|Exception $exception
      * @param null|string    $stdOut
      */
     public function __construct(Call $call, $return, ?Exception $exception = null, $stdOut = null)
@@ -64,8 +58,6 @@ final class CallResult
 
     /**
      * Returns call return value.
-     *
-     * @return mixed
      */
     public function getReturn()
     {

@@ -35,8 +35,6 @@ final class EnvironmentManager
 
     /**
      * Registers environment handler.
-     *
-     * @param EnvironmentHandler $handler
      */
     public function registerEnvironmentHandler(EnvironmentHandler $handler)
     {
@@ -45,8 +43,6 @@ final class EnvironmentManager
 
     /**
      * Registers environment reader.
-     *
-     * @param EnvironmentReader $reader
      */
     public function registerEnvironmentReader(EnvironmentReader $reader)
     {
@@ -55,8 +51,6 @@ final class EnvironmentManager
 
     /**
      * Builds new environment for provided test suite.
-     *
-     * @param Suite $suite
      *
      * @return Environment
      *
@@ -79,9 +73,6 @@ final class EnvironmentManager
     /**
      * Creates new isolated test environment using built one.
      *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
      * @return Environment
      *
      * @throws EnvironmentIsolationException If appropriate environment handler is not found
@@ -102,8 +93,6 @@ final class EnvironmentManager
 
     /**
      * Reads all callees from environment using registered environment readers.
-     *
-     * @param Environment $environment
      *
      * @return Callee[]
      */

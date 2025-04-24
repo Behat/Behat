@@ -65,8 +65,6 @@ final class GherkinTranslationsExtension implements Extension
 
     /**
      * Loads translator controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {

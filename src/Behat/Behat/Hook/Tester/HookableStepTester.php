@@ -39,9 +39,6 @@ final class HookableStepTester implements StepTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepTester     $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
     public function __construct(StepTester $baseTester, HookDispatcher $hookDispatcher)
     {

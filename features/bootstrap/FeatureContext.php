@@ -193,8 +193,6 @@ EOL;
      * Sets the BEHAT_PARAMS env variable
      *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
-     *
-     * @param PyStringNode $value
      */
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {

@@ -40,9 +40,6 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
 
     /**
      * Initializes tester.
-     *
-     * @param BackgroundTester         $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(BackgroundTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {

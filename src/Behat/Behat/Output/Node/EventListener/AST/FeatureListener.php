@@ -37,9 +37,6 @@ final class FeatureListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param FeaturePrinter $featurePrinter
-     * @param SetupPrinter   $setupPrinter
      */
     public function __construct(FeaturePrinter $featurePrinter, SetupPrinter $setupPrinter)
     {
@@ -62,9 +59,6 @@ final class FeatureListener implements EventListener
 
     /**
      * Prints feature header on BEFORE event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printHeaderOnBeforeEvent(Formatter $formatter, Event $event)
     {
@@ -78,9 +72,6 @@ final class FeatureListener implements EventListener
 
     /**
      * Prints feature footer on AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
     {

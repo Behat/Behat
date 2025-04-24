@@ -47,9 +47,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Initialize tester.
-     *
-     * @param DefinitionFinder $definitionFinder
-     * @param CallCenter       $callCenter
      */
     public function __construct(DefinitionFinder $definitionFinder, CallCenter $callCenter)
     {
@@ -91,10 +88,6 @@ final class RuntimeStepTester implements StepTester
     /**
      * Searches for a definition.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     *
      * @return SearchResult
      */
     private function searchDefinition(Environment $env, FeatureNode $feature, StepNode $step)
@@ -105,10 +98,6 @@ final class RuntimeStepTester implements StepTester
     /**
      * Tests found definition.
      *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
-     * @param SearchResult $search
      * @param bool      $skip
      *
      * @return StepResult
@@ -142,11 +131,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Creates definition call.
-     *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param SearchResult $search
-     * @param StepNode     $step
      *
      * @return DefinitionCall
      */

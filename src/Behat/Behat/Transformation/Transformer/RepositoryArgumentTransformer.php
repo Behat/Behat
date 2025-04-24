@@ -47,11 +47,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
 
     /**
      * Initializes transformer.
-     *
-     * @param TransformationRepository $repository
-     * @param CallCenter               $callCenter
-     * @param PatternTransformer       $patternTransformer
-     * @param TranslatorInterface      $translator
      */
     public function __construct(
         TransformationRepository $repository,
@@ -106,11 +101,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply simple argument transformations in priority order.
      *
      * @param SimpleArgumentTransformation[] $transformations
-     * @param DefinitionCall                 $definitionCall
      * @param integer|string                 $index
-     * @param mixed                          $value
-     *
-     * @return mixed
      */
     private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
@@ -130,11 +121,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply normal (non-simple) argument transformations.
      *
      * @param Transformation[] $transformations
-     * @param DefinitionCall   $definitionCall
      * @param integer|string   $index
-     * @param mixed            $value
-     *
-     * @return mixed
      */
     private function applyNormalTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
@@ -149,12 +136,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     /**
      * Transforms argument value using registered transformers.
      *
-     * @param Transformation $transformation
-     * @param DefinitionCall $definitionCall
      * @param integer|string $index
-     * @param mixed          $value
-     *
-     * @return mixed
      */
     private function transform(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
     {

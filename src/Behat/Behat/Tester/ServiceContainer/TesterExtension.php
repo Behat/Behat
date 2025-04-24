@@ -55,8 +55,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -111,8 +109,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads specification tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadSpecificationTester(ContainerBuilder $container)
     {
@@ -131,8 +127,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads scenario tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
@@ -161,8 +155,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads outline tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadOutlineTester(ContainerBuilder $container)
     {
@@ -176,8 +168,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads example tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
@@ -206,8 +196,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads background tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
@@ -224,8 +212,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads step tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadStepTester(ContainerBuilder $container)
     {
@@ -239,7 +225,6 @@ class TesterExtension extends BaseExtension
     /**
      * Loads rerun controller.
      *
-     * @param ContainerBuilder $container
      * @param null|string      $cachePath
      */
     protected function loadRerunController(ContainerBuilder $container, $cachePath)
@@ -256,8 +241,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads pending exception stringer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadPendingExceptionStringer(ContainerBuilder $container)
     {
@@ -268,8 +251,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered scenario tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processScenarioTesterWrappers(ContainerBuilder $container)
     {
@@ -278,8 +259,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered outline tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processOutlineTesterWrappers(ContainerBuilder $container)
     {
@@ -288,8 +267,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered example tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processExampleTesterWrappers(ContainerBuilder $container)
     {
@@ -298,8 +275,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered background tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processBackgroundTesterWrappers(ContainerBuilder $container)
     {
@@ -308,8 +283,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered step tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processStepTesterWrappers(ContainerBuilder $container)
     {

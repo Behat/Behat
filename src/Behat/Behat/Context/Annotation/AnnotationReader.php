@@ -27,7 +27,6 @@ interface AnnotationReader
      * Reads all callees associated with a provided method.
      *
      * @param string           $contextClass
-     * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
      *

@@ -56,9 +56,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter         $textPainter
-     * @param ResultToStringConverter $resultConverter
-     * @param PrettyPathPrinter       $pathPrinter
      * @param integer                 $indentation
      * @param integer                 $subIndentation
      */
@@ -89,10 +86,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter $printer
      * @param string        $stepType
      * @param string        $stepText
-     * @param StepResult    $result
      */
     private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
@@ -113,7 +108,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Prints step multiline arguments.
      *
-     * @param Formatter           $formatter
      * @param ArgumentInterface[] $arguments
      */
     private function printArguments(Formatter $formatter, array $arguments)
@@ -131,7 +125,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Returns argument string for provided argument.
      *
-     * @param ArgumentInterface $argument
      * @param bool           $collapse
      *
      * @return string

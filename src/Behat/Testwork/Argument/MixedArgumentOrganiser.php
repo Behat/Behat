@@ -29,7 +29,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Organises arguments using function reflection.
      *
-     * @param ReflectionFunctionAbstract $function
      * @param mixed[]                    $arguments
      *
      * @return mixed[]
@@ -98,7 +97,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks that provided argument key is a string and it matches some parameter name.
      *
-     * @param mixed    $argumentKey
      * @param string[] $parameterNames
      *
      * @return bool
@@ -112,7 +110,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Check if a given value is typehinted in the argument list.
      *
      * @param  ReflectionParameter[] $parameters
-     * @param  mixed                 $value
      *
      * @return bool
      */
@@ -421,7 +418,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Reorders arguments based on their respective parameters order.
      *
      * @param ReflectionParameter[] $parameters
-     * @param array                 $arguments
      *
      * @return mixed[]
      */

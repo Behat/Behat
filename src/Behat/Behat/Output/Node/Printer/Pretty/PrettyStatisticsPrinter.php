@@ -35,9 +35,6 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param CounterPrinter $counterPrinter
-     * @param ListPrinter    $listPrinter
      */
     public function __construct(CounterPrinter $counterPrinter, ListPrinter $listPrinter)
     {

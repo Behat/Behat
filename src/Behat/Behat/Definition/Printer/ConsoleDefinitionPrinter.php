@@ -94,9 +94,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     /**
      * Translates definition using translator.
      *
-     * @param Suite      $suite
-     * @param Definition $definition
-     *
      * @return Definition
      */
     final protected function translateDefinition(Suite $suite, Definition $definition)

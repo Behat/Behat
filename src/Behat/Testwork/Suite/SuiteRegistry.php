@@ -41,8 +41,6 @@ final class SuiteRegistry implements SuiteRepository
 
     /**
      * Registers suite generator.
-     *
-     * @param SuiteGenerator $generator
      */
     public function registerSuiteGenerator(SuiteGenerator $generator)
     {
@@ -55,7 +53,6 @@ final class SuiteRegistry implements SuiteRepository
      *
      * @param string $name
      * @param string $type
-     * @param array  $settings
      *
      * @throws SuiteConfigurationException
      */

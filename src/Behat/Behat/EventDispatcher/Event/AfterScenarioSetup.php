@@ -39,11 +39,6 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
 
     /**
      * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param Setup       $setup
      */
     public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario, Setup $setup)
     {

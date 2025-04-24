@@ -50,8 +50,6 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
@@ -60,8 +58,6 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Registers annotation reader.
-     *
-     * @param AnnotationReader $reader
      */
     public function registerAnnotationReader(AnnotationReader $reader)
     {
@@ -89,7 +85,6 @@ final class AnnotatedContextReader implements ContextReader
      * Loads callees associated with specific method.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      *
      * @return Callee[]
      */
@@ -118,7 +113,6 @@ final class AnnotatedContextReader implements ContextReader
      * Reads callees from the method doc block.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      * @param string           $docBlock
      *
      * @return Callee[]
@@ -188,7 +182,6 @@ final class AnnotatedContextReader implements ContextReader
      * Reads callee from provided doc line using registered annotation readers.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      * @param string           $docLine
      * @param null|string      $description
      *

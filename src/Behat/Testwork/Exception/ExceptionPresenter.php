@@ -53,8 +53,6 @@ final class ExceptionPresenter
 
     /**
      * Registers exception stringer.
-     *
-     * @param ExceptionStringer $stringer
      */
     public function registerExceptionStringer(ExceptionStringer $stringer)
     {

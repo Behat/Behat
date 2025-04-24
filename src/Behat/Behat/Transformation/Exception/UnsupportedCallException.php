@@ -29,7 +29,6 @@ final class UnsupportedCallException extends InvalidArgumentException implements
      * Initializes exception.
      *
      * @param string $message
-     * @param Call   $call
      */
     public function __construct($message, Call $call)
     {

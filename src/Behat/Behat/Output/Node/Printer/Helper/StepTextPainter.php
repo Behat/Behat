@@ -32,9 +32,6 @@ final class StepTextPainter
 
     /**
      * Initializes painter.
-     *
-     * @param PatternTransformer      $patternTransformer
-     * @param ResultToStringConverter $resultConverter
      */
     public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
     {
@@ -46,8 +43,6 @@ final class StepTextPainter
      * Colorizes step text arguments according to definition.
      *
      * @param string     $text
-     * @param Definition $definition
-     * @param TestResult $result
      *
      * @return string
      */

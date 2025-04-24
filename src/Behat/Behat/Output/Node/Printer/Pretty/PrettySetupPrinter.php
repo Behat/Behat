@@ -54,8 +54,6 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Initializes printer.
      *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
      * @param integer                 $indentation
      * @param bool                 $newlineBefore
      * @param bool                 $newlineAfter
@@ -104,9 +102,6 @@ final class PrettySetupPrinter implements SetupPrinter
 
     /**
      * Prints setup hook call result.
-     *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      */
     private function printSetupHookCallResult(OutputPrinter $printer, CallResult $callResult)
     {
@@ -136,9 +131,6 @@ final class PrettySetupPrinter implements SetupPrinter
 
     /**
      * Prints teardown hook call result.
-     *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      */
     private function printTeardownHookCallResult(OutputPrinter $printer, CallResult $callResult)
     {
@@ -169,8 +161,6 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints hook call output (if has some).
      *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      * @param string        $indentText
      */
     private function printHookCallStdOut(OutputPrinter $printer, CallResult $callResult, $indentText)
@@ -194,8 +184,6 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints hook call exception (if has some).
      *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      * @param string        $indentText
      */
     private function printHookCallException(OutputPrinter $printer, CallResult $callResult, $indentText)

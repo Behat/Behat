@@ -37,8 +37,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param array $defaultPaths
      */
     public function __construct(array $defaultPaths = [])
     {
@@ -105,8 +103,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Loads Symfony2 autoloader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAutoloader(ContainerBuilder $container)
     {
@@ -116,8 +112,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Loads controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {
@@ -131,9 +125,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Sets provided prefixes to container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $prefixes
      */
     private function setLoaderPrefixes(ContainerBuilder $container, array $prefixes)
     {
@@ -142,8 +133,6 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Processes container loader prefixes.
-     *
-     * @param ContainerBuilder $container
      */
     private function processLoaderPrefixes(ContainerBuilder $container)
     {

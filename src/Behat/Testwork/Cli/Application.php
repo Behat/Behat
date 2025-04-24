@@ -46,8 +46,6 @@ final class Application extends BaseApplication
      *
      * @param string              $name
      * @param string              $version
-     * @param ConfigurationLoader $configLoader
-     * @param ExtensionManager    $extensionManager
      */
     public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
     {
@@ -155,8 +153,6 @@ final class Application extends BaseApplication
     /**
      * Configures container based on provided config file and profile.
      *
-     * @param InputInterface $input
-     *
      * @return array
      */
     private function loadConfiguration(InputInterface $input)
@@ -169,9 +165,6 @@ final class Application extends BaseApplication
     /**
      * Creates main command for application.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return SymfonyCommand
      */
     private function createCommand(InputInterface $input, OutputInterface $output)
@@ -181,9 +174,6 @@ final class Application extends BaseApplication
 
     /**
      * Creates container instance, loads extensions and freezes it.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return ContainerInterface
      */

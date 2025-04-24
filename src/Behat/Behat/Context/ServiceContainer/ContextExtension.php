@@ -68,8 +68,6 @@ final class ContextExtension implements Extension
 
     /**
      * Initializes compiler pass.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -133,8 +131,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads context factory.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFactory(ContainerBuilder $container)
     {
@@ -146,8 +142,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads argument resolver factory used in the environment handler.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadArgumentResolverFactory(ContainerBuilder $container)
     {
@@ -157,8 +151,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads context environment handlers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadEnvironmentHandler(ContainerBuilder $container)
     {
@@ -172,8 +164,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads context environment readers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadEnvironmentReader(ContainerBuilder $container)
     {
@@ -184,8 +174,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads context environment setup.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSuiteSetup(ContainerBuilder $container)
     {
@@ -199,8 +187,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads context snippet appender.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSnippetAppender(ContainerBuilder $container)
     {
@@ -213,8 +199,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads context snippet generators.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSnippetGenerators(ContainerBuilder $container)
     {
@@ -225,9 +209,6 @@ final class ContextExtension implements Extension
         $container->setDefinition(self::CONTEXT_SNIPPET_GENERATOR_ID, $definition);
     }
 
-    /**
-     * @param ContainerBuilder $container
-     */
     protected function loadSnippetsController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Context\Cli\ContextSnippetsController', [
@@ -240,8 +221,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads default context class generators.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultClassGenerators(ContainerBuilder $container)
     {
@@ -252,8 +231,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads default context readers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultContextReaders(ContainerBuilder $container)
     {
@@ -266,8 +243,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads AnnotatedContextReader
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAnnotatedContextReader(ContainerBuilder $container)
     {
@@ -285,8 +260,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads AttributedContextReader
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAttributedContextReader(ContainerBuilder $container)
     {
@@ -303,8 +276,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads TranslatableContextReader
-     *
-     * @param ContainerBuilder $container
      */
     private function loadTranslatableContextReader(ContainerBuilder $container)
     {
@@ -322,8 +293,6 @@ final class ContextExtension implements Extension
 
     /**
      * Loads DocBlockHelper
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {
@@ -334,8 +303,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all class resolvers.
-     *
-     * @param ContainerBuilder $container
      */
     private function processClassResolvers(ContainerBuilder $container)
     {
@@ -364,8 +331,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all argument resolvers.
-     *
-     * @param ContainerBuilder $container
      */
     private function processArgumentResolvers(ContainerBuilder $container)
     {
@@ -379,8 +344,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all context initializers.
-     *
-     * @param ContainerBuilder $container
      */
     private function processContextInitializers(ContainerBuilder $container)
     {
@@ -394,8 +357,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all context readers.
-     *
-     * @param ContainerBuilder $container
      */
     private function processContextReaders(ContainerBuilder $container)
     {
@@ -409,8 +370,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all class generators.
-     *
-     * @param ContainerBuilder $container
      */
     private function processClassGenerators(ContainerBuilder $container)
     {
@@ -424,8 +383,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all annotation readers.
-     *
-     * @param ContainerBuilder $container
      */
     private function processAnnotationReaders(ContainerBuilder $container)
     {
@@ -439,8 +396,6 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all attribute readers.
-     *
-     * @param ContainerBuilder $container
      */
     private function processAttributeReaders(ContainerBuilder $container)
     {

@@ -74,8 +74,6 @@ class HookExtension implements Extension
 
     /**
      * Loads hook dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDispatcher(ContainerBuilder $container)
     {
@@ -88,8 +86,6 @@ class HookExtension implements Extension
 
     /**
      * Loads hook repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
@@ -101,8 +97,6 @@ class HookExtension implements Extension
 
     /**
      * Loads hookable testers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
