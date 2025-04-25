@@ -18,7 +18,7 @@ namespace Behat\Behat\Definition\Pattern;
 final class Pattern
 {
     public function __construct(
-        private string $canonicalText,
+        private string $suggestedMethodName,
         private string $pattern,
         private int $placeholderCount = 0,
     ) {
@@ -26,10 +26,17 @@ final class Pattern
 
     /**
      * Returns canonical step text.
+     *
+     * @deprecated see getSuggestedMethodName
      */
     public function getCanonicalText(): string
     {
-        return $this->canonicalText;
+        return $this->suggestedMethodName;
+    }
+
+    public function getSuggestedMethodName(): string
+    {
+        return $this->suggestedMethodName;
     }
 
     public function getPattern(): string

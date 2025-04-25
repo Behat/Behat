@@ -45,7 +45,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     ];
 
     public function __construct(
-        private readonly StepMethodNameGenerator $canonicalTextGenerator = new SimpleStepMethodNameGenerator(),
+        private readonly StepMethodNameGenerator $methodNameGenerator = new SimpleStepMethodNameGenerator(),
     ) {
     }
 
@@ -62,15 +62,15 @@ final class TurnipPatternPolicy implements PatternPolicy
             $pattern = preg_replace_callback(
                 $replacePattern,
                 function () use (&$count) { return ':arg' . ++$count; },
-                $pattern,
+                $pattern
             );
         }
         $pattern = $this->escapeAlternationSyntax($pattern);
-        $canonicalText = $this->canonicalTextGenerator->generate(
+        $methodName = $this->methodNameGenerator->generate(
             preg_replace(self::$placeholderPatterns, '', $stepText),
         );
 
-        return new Pattern($canonicalText, $pattern, $count);
+        return new Pattern($methodName, $pattern, $count);
     }
 
     public function supportsPattern($pattern)
@@ -117,7 +117,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         return preg_replace_callback(
             self::PLACEHOLDER_REGEXP,
             [$this, 'replaceTokenWithRegexCaptureGroup'],
-            $regex,
+            $regex
         );
     }
 
@@ -125,7 +125,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     {
         if (strlen($tokenMatch[1]) > 32) {
             throw new InvalidPatternException(
-                "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used.",
+                "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used."
             );
         }
 
