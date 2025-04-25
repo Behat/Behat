@@ -37,9 +37,6 @@ final class StepListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureScenarioOnScenarioEvent($event);
@@ -50,8 +47,6 @@ final class StepListener implements EventListener
 
     /**
      * Captures scenario into the ivar on scenario/background/example BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOnScenarioEvent(Event $event)
     {
@@ -89,9 +84,6 @@ final class StepListener implements EventListener
 
     /**
      * Prints step on AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printStepOnAfterEvent(Formatter $formatter, Event $event)
     {

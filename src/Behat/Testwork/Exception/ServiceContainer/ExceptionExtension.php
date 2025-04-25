@@ -45,32 +45,21 @@ final class ExceptionExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'exceptions';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder
@@ -89,9 +78,6 @@ final class ExceptionExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadPresenter($container, $config['verbosity']);
@@ -99,9 +85,6 @@ final class ExceptionExtension implements Extension
         $this->loadVerbosityController($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processStringers($container);
@@ -110,8 +93,7 @@ final class ExceptionExtension implements Extension
     /**
      * Loads exception presenter.
      *
-     * @param ContainerBuilder $container
-     * @param integer          $verbosity
+     * @param int $verbosity
      */
     protected function loadPresenter(ContainerBuilder $container, $verbosity)
     {
@@ -125,8 +107,6 @@ final class ExceptionExtension implements Extension
 
     /**
      * Loads default stringer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefaultStringers(ContainerBuilder $container)
     {
@@ -141,8 +121,6 @@ final class ExceptionExtension implements Extension
 
     /**
      * Processes all available exception stringers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processStringers(ContainerBuilder $container)
     {

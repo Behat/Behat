@@ -28,17 +28,12 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
 
     /**
      * Initializes result.
-     *
-     * @param SearchException $searchException
      */
     public function __construct(SearchException $searchException)
     {
         $this->searchException = $searchException;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasException()
     {
         return true;
@@ -52,9 +47,6 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
         return $this->searchException;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return false;

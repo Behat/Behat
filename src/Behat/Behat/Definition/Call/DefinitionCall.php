@@ -37,12 +37,7 @@ final class DefinitionCall extends EnvironmentCall
     /**
      * Initializes definition call.
      *
-     * @param Environment  $environment
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
-     * @param Definition   $definition
-     * @param array        $arguments
-     * @param null|integer $errorReportingLevel
+     * @param int|null $errorReportingLevel
      */
     public function __construct(
         Environment $environment,

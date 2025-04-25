@@ -1,7 +1,6 @@
 <?php
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Exception\PendingException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -45,7 +44,7 @@ class FeatureContext implements Context
     #[When('an exception is thrown')]
     public function anExceptionIsThrown()
     {
-        throw new \Exception('Exception is thrown');
+        throw new Exception('Exception is thrown');
     }
 
     #[When('I trim NULL')]

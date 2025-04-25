@@ -11,8 +11,8 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
+use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -56,32 +56,21 @@ final class DefinitionExtension implements Extension
 
     /**
      * Initializes compiler pass.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'definitions';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder
@@ -92,9 +81,6 @@ final class DefinitionExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadFinder($container);
@@ -111,9 +97,6 @@ final class DefinitionExtension implements Extension
         $this->loadDocblockHelper($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processSearchEngines($container);
@@ -122,8 +105,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition finder.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFinder(ContainerBuilder $container)
     {
@@ -133,8 +114,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition repository.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRepository(ContainerBuilder $container)
     {
@@ -146,8 +125,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition writer.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadWriter(ContainerBuilder $container)
     {
@@ -160,8 +137,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition pattern transformer.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadPatternTransformer(ContainerBuilder $container)
     {
@@ -171,8 +146,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition translator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefinitionTranslator(ContainerBuilder $container)
     {
@@ -184,8 +157,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads default search engines.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultSearchEngines(ContainerBuilder $container)
     {
@@ -201,8 +172,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads default pattern policies.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
@@ -217,8 +186,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAnnotationReader(ContainerBuilder $container)
     {
@@ -229,8 +196,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition Attribute reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAttributeReader(ContainerBuilder $container)
     {
@@ -243,8 +208,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition printers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefinitionPrinters(ContainerBuilder $container)
     {
@@ -287,9 +250,7 @@ final class DefinitionExtension implements Extension
     }
 
     /**
-     * Loads DocBlockHelper
-     *
-     * @param ContainerBuilder $container
+     * Loads DocBlockHelper.
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {
@@ -300,8 +261,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Processes all search engines in the container.
-     *
-     * @param ContainerBuilder $container
      */
     private function processSearchEngines(ContainerBuilder $container)
     {
@@ -315,8 +274,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Processes all pattern policies.
-     *
-     * @param ContainerBuilder $container
      */
     private function processPatternPolicies(ContainerBuilder $container)
     {

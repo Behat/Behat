@@ -22,9 +22,6 @@ final class FixedPatternIdentifier implements PatternIdentifier
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessPatternType($contextClass): ?string
     {
         return $this->patternType;

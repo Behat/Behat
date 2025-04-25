@@ -35,8 +35,7 @@ final class ExceptionPresenter
     /**
      * Initializes presenter.
      *
-     * @param ?string  $basePath deprecated, will be removed in next major version
-     * @param integer $defaultVerbosity
+     * @param ?string $basePath deprecated, will be removed in next major version
      */
     public function __construct(
         ?string $basePath = null,
@@ -53,8 +52,6 @@ final class ExceptionPresenter
 
     /**
      * Registers exception stringer.
-     *
-     * @param ExceptionStringer $stringer
      */
     public function registerExceptionStringer(ExceptionStringer $stringer)
     {
@@ -64,7 +61,7 @@ final class ExceptionPresenter
     /**
      * Sets default verbosity to a specified level.
      *
-     * @param integer $defaultVerbosity
+     * @param int $defaultVerbosity
      */
     public function setDefaultVerbosity($defaultVerbosity)
     {
@@ -116,7 +113,7 @@ final class ExceptionPresenter
         }
 
         return sprintf(
-            "%s: %s in %s:%d%sStack trace:%s%s",
+            '%s: %s in %s:%d%sStack trace:%s%s',
             get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),

@@ -26,7 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class JUnitOutputPrinter extends StreamOutputPrinter
 {
-    public const XML_VERSION  = '1.0';
+    public const XML_VERSION = '1.0';
     public const XML_ENCODING = 'UTF-8';
 
     private ?DOMDocument $domDocument = null;
@@ -58,7 +58,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         }
         $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
-        $this->domDocument = new \DOMDocument(self::XML_VERSION, self::XML_ENCODING);
+        $this->domDocument = new DOMDocument(self::XML_VERSION, self::XML_ENCODING);
         $this->domDocument->formatOutput = true;
 
         $this->testSuites = $this->domDocument->createElement('testsuites');
@@ -69,8 +69,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
     /**
      * Adds a new <testsuite> node.
-     *
-     * @param array $testsuiteAttributes
      */
     public function addTestsuite(array $testsuiteAttributes = [])
     {
@@ -89,11 +87,8 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         $this->addAttributesToNode($this->currentTestsuite, $testsuiteAttributes);
     }
 
-
     /**
      * Adds a new <testcase> node.
-     *
-     * @param array $testcaseAttributes
      */
     public function addTestcase(array $testcaseAttributes = [])
     {
@@ -106,7 +101,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      * Add a testcase child element.
      *
      * @param string $nodeName
-     * @param array  $nodeAttributes
      * @param string $nodeValue
      */
     public function addTestcaseChild($nodeName, array $nodeAttributes = [], $nodeValue = null)
@@ -116,7 +110,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         $this->addAttributesToNode($childNode, $nodeAttributes);
     }
 
-    private function addAttributesToNode(\DOMElement $node, array $attributes)
+    private function addAttributesToNode(DOMElement $node, array $attributes)
     {
         foreach ($attributes as $name => $value) {
             $node->setAttribute($name, $value ?? '');
@@ -141,11 +135,11 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * Generate XML from the DOMDocument and parse to the the writing stream
+     * Generate XML from the DOMDocument and parse to the the writing stream.
      */
     public function flush()
     {
-        if ($this->domDocument instanceof \DOMDocument) {
+        if ($this->domDocument instanceof DOMDocument) {
             try {
                 $this->getWritingStream()->write(
                     $this->domDocument->saveXML(null, LIBXML_NOEMPTYTAG),

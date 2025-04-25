@@ -6,7 +6,6 @@ namespace Behat\Config;
 
 use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 
 use function is_string;
@@ -65,7 +64,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
      */
     public function toPhpExpr(): Expr
     {
-        $configObject =  ConfigConverterTools::createObject(self::class);
+        $configObject = ConfigConverterTools::createObject(self::class);
         $expr = $configObject;
 
         foreach ($this->settings as $settingsName => $settings) {

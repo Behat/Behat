@@ -28,8 +28,6 @@ final class DefinitionRepository
 
     /**
      * Initializes repository.
-     *
-     * @param EnvironmentManager $environmentManager
      */
     public function __construct(EnvironmentManager $environmentManager)
     {
@@ -38,8 +36,6 @@ final class DefinitionRepository
 
     /**
      * Returns all available definitions for a specific environment.
-     *
-     * @param Environment $environment
      *
      * @return Definition[]
      *

@@ -28,17 +28,12 @@ final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
 
     /**
      * Registers factory.
-     *
-     * @param ArgumentResolverFactory $factory
      */
     public function registerFactory(ArgumentResolverFactory $factory)
     {
         $this->factories[] = $factory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createArgumentResolvers(Environment $environment)
     {
         return array_reduce(

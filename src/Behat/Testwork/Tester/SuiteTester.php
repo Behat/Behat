@@ -28,7 +28,6 @@ interface SuiteTester
     /**
      * Sets up suite for a test.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<TSpec> $iterator
      * @param bool               $skip
      *
@@ -39,7 +38,6 @@ interface SuiteTester
     /**
      * Tests provided suite specifications.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<TSpec> $iterator
      * @param bool               $skip
      *
@@ -50,10 +48,8 @@ interface SuiteTester
     /**
      * Tears down suite after a test.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<TSpec> $iterator
      * @param bool               $skip
-     * @param TestResult            $result
      *
      * @return Teardown
      */

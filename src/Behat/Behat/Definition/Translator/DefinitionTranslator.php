@@ -27,8 +27,6 @@ final class DefinitionTranslator
 
     /**
      * Initialises definition translator.
-     *
-     * @param TranslatorInterface $translator
      */
     public function __construct(TranslatorInterface $translator)
     {
@@ -38,9 +36,7 @@ final class DefinitionTranslator
     /**
      * Attempts to translate definition using translator and produce translated one on success.
      *
-     * @param Suite       $suite
-     * @param Definition  $definition
-     * @param null|string $language
+     * @param string|null $language
      *
      * @return Definition|TranslatedDefinition
      */

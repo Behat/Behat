@@ -32,17 +32,12 @@ class OutputController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param OutputManager $manager
      */
     public function __construct(OutputManager $manager)
     {
         $this->manager = $manager;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command
@@ -78,15 +73,12 @@ class OutputController implements Controller
 
         $this->configureFormatters($formats, $input, $output);
         $this->configureOutputs($formats, $outputs, $output->isDecorated());
+
         return null;
     }
 
     /**
      * Configures formatters based on container, input and output configurations.
-     *
-     * @param array           $formats
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function configureFormatters(array $formats, InputInterface $input, OutputInterface $output)
     {
@@ -96,8 +88,6 @@ class OutputController implements Controller
 
     /**
      * Enables formatters.
-     *
-     * @param array $formats
      */
     protected function enableFormatters(array $formats)
     {
@@ -111,9 +101,6 @@ class OutputController implements Controller
 
     /**
      * Sets formatters parameters based on input & output.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function setFormattersParameters(InputInterface $input, OutputInterface $output)
     {
@@ -155,8 +142,6 @@ class OutputController implements Controller
     /**
      * Initializes multiple formatters with different outputs.
      *
-     * @param array   $formats
-     * @param array   $outputs
      * @param bool $decorated
      */
     private function configureOutputs(array $formats, array $outputs, $decorated = false)

@@ -66,7 +66,7 @@ class StepStat
     /**
      * Returns step error (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getError()
     {
@@ -76,7 +76,7 @@ class StepStat
     /**
      * Returns step output (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

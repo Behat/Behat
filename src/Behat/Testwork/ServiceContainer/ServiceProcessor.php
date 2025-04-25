@@ -25,7 +25,6 @@ final class ServiceProcessor
     /**
      * Finds and sorts (by priority) service references by provided tag.
      *
-     * @param ContainerBuilder $container
      * @param string           $tag
      *
      * @return Reference[]
@@ -51,7 +50,6 @@ final class ServiceProcessor
      * The wrappers are applied by descending priority.
      * The first argument of the wrapper service receives the inner service.
      *
-     * @param ContainerBuilder $container
      * @param string           $target     The id of the service being decorated
      * @param string           $wrapperTag The tag used by wrappers
      */

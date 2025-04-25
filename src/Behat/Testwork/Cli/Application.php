@@ -46,8 +46,6 @@ final class Application extends BaseApplication
      *
      * @param string              $name
      * @param string              $version
-     * @param ConfigurationLoader $configLoader
-     * @param ExtensionManager    $extensionManager
      */
     public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
     {
@@ -100,12 +98,12 @@ final class Application extends BaseApplication
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $isXdebugAllowed = $input->hasParameterOption('--xdebug') ||
-            (extension_loaded('xdebug') && xdebug_is_debugger_active());
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug')
+            || (extension_loaded('xdebug') && xdebug_is_debugger_active());
 
         if (!$isXdebugAllowed) {
             $xdebugHandler = new XdebugHandler('behat');
@@ -130,7 +128,7 @@ final class Application extends BaseApplication
 
         if ($path = $input->getParameterOption(['--config', '-c'])) {
             if (!is_file($path)) {
-                throw new ConfigurationLoadingException("The requested config file does not exist");
+                throw new ConfigurationLoadingException('The requested config file does not exist');
             }
 
             $this->configurationLoader->setConfigurationFilePath($path);
@@ -155,8 +153,6 @@ final class Application extends BaseApplication
     /**
      * Configures container based on provided config file and profile.
      *
-     * @param InputInterface $input
-     *
      * @return array
      */
     private function loadConfiguration(InputInterface $input)
@@ -169,9 +165,6 @@ final class Application extends BaseApplication
     /**
      * Creates main command for application.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return SymfonyCommand
      */
     private function createCommand(InputInterface $input, OutputInterface $output)
@@ -181,9 +174,6 @@ final class Application extends BaseApplication
 
     /**
      * Creates container instance, loads extensions and freezes it.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return ContainerInterface
      */

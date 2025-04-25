@@ -31,8 +31,6 @@ final class ServicesResolver implements ArgumentResolver
 
     /**
      * Initialises resolver.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -40,8 +38,6 @@ final class ServicesResolver implements ArgumentResolver
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ContainerExceptionInterface
      */
     public function resolveArguments(ReflectionClass $classReflection, array $arguments)
@@ -54,10 +50,6 @@ final class ServicesResolver implements ArgumentResolver
      *
      * Convention is strings starting with `@` are considered services and
      * are expected to be present in the container.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
      *
      * @throws ContainerExceptionInterface
      */

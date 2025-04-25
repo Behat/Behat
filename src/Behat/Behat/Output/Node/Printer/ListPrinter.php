@@ -20,8 +20,8 @@ use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
-use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\StepStat;
+use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
@@ -51,7 +51,6 @@ final class ListPrinter
 
     /**
      * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
-     * @param string $basePath
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
@@ -68,9 +67,8 @@ final class ListPrinter
     /**
      * Prints scenarios list.
      *
-     * @param OutputPrinter  $printer
      * @param string         $intro
-     * @param integer        $resultCode
+     * @param int            $resultCode
      * @param ScenarioStat[] $scenarioStats
      */
     public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats)
@@ -94,9 +92,9 @@ final class ListPrinter
     /**
      * Prints step list.
      *
-     * @param string        $intro
-     * @param integer       $resultCode
-     * @param StepStat[]    $stepStats
+     * @param string     $intro
+     * @param int        $resultCode
+     * @param StepStat[] $stepStats
      */
     public function printStepList(
         OutputPrinter $printer,
@@ -160,12 +158,6 @@ final class ListPrinter
 
     /**
      * Prints hook stat.
-     *
-     * @param string        $name
-     * @param string        $path
-     * @param string        $style
-     * @param null|string   $stdOut
-     * @param null|string   $error
      *
      * @deprecated Remove in 4.0
      */
@@ -285,19 +277,24 @@ final class ListPrinter
     {
         if ($scope !== null) {
             return match (true) {
-                $scope instanceof BeforeSuiteScope, $scope instanceof AfterSuiteScope =>
-                $scope->getSuite()->getName(),
-                $scope instanceof BeforeFeatureScope, $scope instanceof AfterFeatureScope =>
-                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()),
-                $scope instanceof BeforeScenarioScope, $scope instanceof AfterScenarioScope =>
-                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()) .
-                    ':' . $scope->getScenario()->getLine(),
-                $scope instanceof BeforeStepScope, $scope instanceof AfterStepScope =>
-                    $this->configurablePathPrinter->processPathsInText($scope->getFeature()->getFile()) .
-                    ':' . $scope->getStep()->getLine(),
+                $scope instanceof BeforeSuiteScope,
+                $scope instanceof AfterSuiteScope => $scope->getSuite()->getName(),
+                $scope instanceof BeforeFeatureScope,
+                $scope instanceof AfterFeatureScope => $this->configurablePathPrinter->processPathsInText(
+                    $scope->getFeature()->getFile()
+                ),
+                $scope instanceof BeforeScenarioScope,
+                $scope instanceof AfterScenarioScope => $this->configurablePathPrinter->processPathsInText(
+                    $scope->getFeature()->getFile()
+                ) . ':' . $scope->getScenario()->getLine(),
+                $scope instanceof BeforeStepScope,
+                $scope instanceof AfterStepScope => $this->configurablePathPrinter->processPathsInText(
+                    $scope->getFeature()->getFile()
+                ) . ':' . $scope->getStep()->getLine(),
                 default => null,
             };
         }
+
         return null;
     }
 }

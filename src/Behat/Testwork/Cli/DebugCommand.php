@@ -38,10 +38,6 @@ final class DebugCommand extends BaseCommand
 
     /**
      * Initialises command.
-     *
-     * @param Application         $application
-     * @param ConfigurationLoader $configurationLoader
-     * @param ExtensionManager    $extensionManager
      */
     public function __construct(
         Application $application,
@@ -55,9 +51,6 @@ final class DebugCommand extends BaseCommand
         parent::__construct('debug');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(sprintf('%s version %s', $this->application->getName(), $this->application->getVersion()));

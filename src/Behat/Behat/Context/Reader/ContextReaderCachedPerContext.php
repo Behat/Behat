@@ -30,17 +30,12 @@ final class ContextReaderCachedPerContext implements ContextReader
 
     /**
      * Initializes reader.
-     *
-     * @param ContextReader $childReader
      */
     public function __construct(ContextReader $childReader)
     {
         $this->childReader = $childReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         if (isset($this->cachedCallees[$contextClass])) {

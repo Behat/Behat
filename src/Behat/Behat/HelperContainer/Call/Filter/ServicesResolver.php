@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\HelperContainer\Call\Filter;
 
-use Behat\Behat\Definition\Definition;
-use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Definition\Definition;
 use Behat\Behat\HelperContainer\ArgumentAutowirer;
+use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\UnsupportedCallException;
 use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\Transformation;
@@ -30,9 +30,6 @@ use Psr\Container\ContainerInterface;
  */
 final class ServicesResolver implements CallFilter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCall(Call $call)
     {
         return ($call instanceof DefinitionCall || $call instanceof TransformationCall)
@@ -41,8 +38,6 @@ final class ServicesResolver implements CallFilter
 
     /**
      * Filters a call and returns a new one.
-     *
-     * @param Call $call
      *
      * @return Call
      *
@@ -64,9 +59,7 @@ final class ServicesResolver implements CallFilter
     /**
      * Gets container from the call.
      *
-     * @param Call $call
-     *
-     * @return null|ContainerInterface
+     * @return ContainerInterface|null
      *
      * @throws UnsupportedCallException if given call is not EnvironmentCall or environment is not ServiceContainerEnvironment
      */
@@ -94,9 +87,6 @@ final class ServicesResolver implements CallFilter
     /**
      * Repackages old calls with new arguments, but only if two differ.
      *
-     * @param Call $call
-     * @param array $arguments
-     *
      * @return Call
      *
      * @throws UnsupportedCallException if given call is not DefinitionCall or TransformationCall
@@ -112,9 +102,6 @@ final class ServicesResolver implements CallFilter
 
     /**
      * Repackages old calls with new arguments.
-     *
-     * @param Call  $call
-     * @param array $newArguments
      *
      * @return DefinitionCall|TransformationCall
      *
@@ -142,9 +129,6 @@ final class ServicesResolver implements CallFilter
     /**
      * Repackages definition call with new arguments.
      *
-     * @param DefinitionCall $call
-     * @param array $newArguments
-     *
      * @return DefinitionCall
      *
      * @throws UnsupportedCallException
@@ -165,9 +149,6 @@ final class ServicesResolver implements CallFilter
 
     /**
      * Repackages transformation call with new arguments.
-     *
-     * @param TransformationCall $call
-     * @param array $newArguments
      *
      * @return TransformationCall
      *

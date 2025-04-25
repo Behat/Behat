@@ -8,8 +8,6 @@ use Behat\Config\ConfigConverterInterface;
 use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use PhpParser\Node\Expr;
-use ReflectionClass;
-use ReflectionClassConstant;
 
 class Formatter implements FormatterConfigInterface, ConfigConverterInterface
 {
@@ -147,6 +145,7 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
                 unset($this->settings[$settingName]);
             }
         }
+
         return $expr;
     }
 }

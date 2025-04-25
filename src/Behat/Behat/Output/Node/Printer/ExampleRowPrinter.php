@@ -25,9 +25,6 @@ interface ExampleRowPrinter
     /**
      * Prints example row result using provided printer.
      *
-     * @param Formatter         $formatter
-     * @param OutlineNode       $outline
-     * @param ExampleNode       $example
      * @param AfterStepTested[] $events
      */
     public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events);

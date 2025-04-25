@@ -73,5 +73,4 @@ final class PathOptionsExtension implements Extension
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.path', $definition);
     }
-
 }

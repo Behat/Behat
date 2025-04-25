@@ -32,9 +32,6 @@ final class CounterPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
-     * @param TranslatorInterface     $translator
      */
     public function __construct(ResultToStringConverter $resultConverter, TranslatorInterface $translator)
     {
@@ -45,9 +42,7 @@ final class CounterPrinter
     /**
      * Prints scenario and step counters.
      *
-     * @param OutputPrinter $printer
      * @param string        $intro
-     * @param array         $stats
      */
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {

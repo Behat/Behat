@@ -33,7 +33,6 @@ final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
      * Initializes event.
      *
      * @param SpecificationIterator<mixed>[] $specificationIterators
-     * @param Setup                   $setup
      */
     public function __construct(array $specificationIterators, Setup $setup)
     {

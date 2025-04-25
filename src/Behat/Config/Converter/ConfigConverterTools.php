@@ -22,6 +22,7 @@ class ConfigConverterTools
         $builderFactory = self::getBuilderFactory();
         $arguments = self::removeDefaultArguments((new ReflectionClass($class))->getMethod($methodName), $arguments);
         $args = $builderFactory->args(self::replaceClassReferences($arguments));
+
         return $builderFactory->methodCall($expr, $methodName, $args);
     }
 
@@ -57,7 +58,7 @@ class ConfigConverterTools
                 // by name even if we were given them as positional.
                 $hasRemovedAny = true;
             } else {
-                $result[($hasRemovedAny ? $parameter->getName() : $argKey)] = $argValue;
+                $result[$hasRemovedAny ? $parameter->getName() : $argKey] = $argValue;
             }
 
             // Record that this argument has been used
@@ -82,6 +83,7 @@ class ConfigConverterTools
     public static function createObject(string $className): New_
     {
         $builderFactory = self::getBuilderFactory();
+
         return $builderFactory->new(new FullyQualified($className));
     }
 
@@ -94,6 +96,7 @@ class ConfigConverterTools
     public static function createUseStatement(string $className): Use_
     {
         $builderFactory = self::getBuilderFactory();
+
         return $builderFactory->use($className)->getNode();
     }
 
@@ -102,6 +105,7 @@ class ConfigConverterTools
         if (!self::$builderFactory instanceof BuilderFactory) {
             self::$builderFactory = new BuilderFactory();
         }
+
         return self::$builderFactory;
     }
 
@@ -118,6 +122,7 @@ class ConfigConverterTools
     private static function getClassConstReference(string $className, string $constantName): Expr
     {
         $builderFactory = self::getBuilderFactory();
+
         return $builderFactory->classConstFetch($className, $constantName);
     }
 
@@ -129,6 +134,7 @@ class ConfigConverterTools
                 return ConfigConverterTools::getClassConstReference($className, $constantName);
             }
         }
+
         // Can't find a constant for it, just return the original value
         return $settingValue;
     }
@@ -137,7 +143,7 @@ class ConfigConverterTools
     {
         $builderFactory = self::getBuilderFactory();
 
-        if (! is_int($value)) {
+        if (!is_int($value)) {
             return $builderFactory->val($value);
         }
 
@@ -205,6 +211,7 @@ class ConfigConverterTools
         while ($expressions !== []) {
             $expr = new Expr\BinaryOp\BitwiseOr($expr, array_shift($expressions));
         }
+
         return $expr;
     }
 }

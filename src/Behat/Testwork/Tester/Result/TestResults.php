@@ -40,9 +40,6 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
         $this->results = $results;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();
@@ -61,17 +58,11 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
         return $resultCode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count(): int
     {
         return count($this->results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->results);

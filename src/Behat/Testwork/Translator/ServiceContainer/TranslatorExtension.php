@@ -30,24 +30,15 @@ final class TranslatorExtension implements Extension
      */
     public const TRANSLATOR_ID = 'translator';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'translation';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $defaultLanguage = $this->getDefaultLanguage() ?: 'en';
@@ -68,18 +59,12 @@ final class TranslatorExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadTranslator($container, $config['locale'], $config['fallback_locale']);
         $this->loadController($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }
@@ -87,7 +72,6 @@ final class TranslatorExtension implements Extension
     /**
      * Loads translator service.
      *
-     * @param ContainerBuilder $container
      * @param string           $locale
      * @param string           $fallbackLocale
      */
@@ -130,8 +114,6 @@ final class TranslatorExtension implements Extension
 
     /**
      * Loads translator controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {
@@ -145,7 +127,7 @@ final class TranslatorExtension implements Extension
     /**
      * Tries to guess default user cli language.
      *
-     * @return null|string
+     * @return string|null
      */
     private function getDefaultLanguage()
     {

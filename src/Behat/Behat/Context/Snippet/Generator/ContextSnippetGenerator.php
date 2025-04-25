@@ -81,9 +81,6 @@ TPL;
         $this->patternIdentifier = $identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step): bool
     {
         if (!$environment instanceof ContextEnvironment) {
@@ -97,9 +94,6 @@ TPL;
         return null !== $this->contextIdentifier->guessTargetContextClass($environment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateSnippet(Environment $environment, StepNode $step): Snippet
     {
         if (!$environment instanceof ContextEnvironment) {
@@ -141,7 +135,7 @@ TPL;
     private function getMethodArguments(StepNode $step, int $tokenCount): array
     {
         $args = [];
-        for ($i = 0; $i < $tokenCount; $i++) {
+        for ($i = 0; $i < $tokenCount; ++$i) {
             $args[] = '$arg' . ($i + 1);
         }
 
@@ -153,7 +147,7 @@ TPL;
     }
 
     /**
-     * Returns an array of classes used by the snippet template
+     * Returns an array of classes used by the snippet template.
      *
      * @return string[]
      */
@@ -163,9 +157,9 @@ TPL;
 
         $keywordType = $step->getKeywordType();
         assert(
-            $keywordType === DefinitionCall\Given::KEYWORD ||
-            $keywordType === DefinitionCall\When::KEYWORD ||
-            $keywordType === DefinitionCall\Then::KEYWORD
+            $keywordType === DefinitionCall\Given::KEYWORD
+            || $keywordType === DefinitionCall\When::KEYWORD
+            || $keywordType === DefinitionCall\Then::KEYWORD
         );
         $usedClasses[] = match ($keywordType) {
             DefinitionCall\Given::KEYWORD => Given::class,
@@ -199,6 +193,7 @@ TPL;
     {
         $pattern = str_replace('%', '%%', $pattern);
         $pattern = str_replace('\\\\', '\\\\\\\\', $pattern);
+
         return str_replace("'", "\'", $pattern);
     }
 

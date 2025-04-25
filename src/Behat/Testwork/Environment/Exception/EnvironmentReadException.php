@@ -29,7 +29,6 @@ final class EnvironmentReadException extends RuntimeException implements Environ
      * Initializes exception.
      *
      * @param string      $message
-     * @param Environment $environment
      */
     public function __construct($message, Environment $environment)
     {

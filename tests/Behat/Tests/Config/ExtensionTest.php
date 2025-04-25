@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Behat\Tests\Config;
 
-use Behat\Config\Config;
 use Behat\Config\Extension;
 use PHPUnit\Framework\TestCase;
 

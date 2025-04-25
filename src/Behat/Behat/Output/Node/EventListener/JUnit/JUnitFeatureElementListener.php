@@ -52,11 +52,6 @@ final class JUnitFeatureElementListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param FeaturePrinter $featurePrinter
-     * @param JUnitScenarioPrinter $scenarioPrinter
-     * @param StepPrinter $stepPrinter
-     * @param SetupPrinter $setupPrinter
      */
     public function __construct(
         private FeaturePrinter $featurePrinter,
@@ -66,9 +61,6 @@ final class JUnitFeatureElementListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureSuiteSetupEvent($formatter, $event);
@@ -81,7 +73,7 @@ final class JUnitFeatureElementListener implements EventListener
 
     /**
      * Captures any failures in suite setup.
-     * They will be printed later when the first scenario is printed
+     * They will be printed later when the first scenario is printed.
      */
     private function captureSuiteSetupEvent(Formatter $formatter, Event $event): void
     {
@@ -108,6 +100,7 @@ final class JUnitFeatureElementListener implements EventListener
     {
         if ($event instanceof BeforeFeatureTested) {
             $this->featurePrinter->printHeader($formatter, $event->getFeature());
+
             return;
         }
         if ($event instanceof AfterFeatureSetup) {
@@ -137,6 +130,7 @@ final class JUnitFeatureElementListener implements EventListener
     {
         if ($event instanceof AfterScenarioSetup) {
             $this->afterScenarioSetup = $event;
+
             return;
         }
         if (!$event instanceof AfterScenarioTested) {

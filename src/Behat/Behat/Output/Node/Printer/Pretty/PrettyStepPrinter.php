@@ -62,12 +62,8 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter         $textPainter
-     * @param ResultToStringConverter $resultConverter
-     * @param PrettyPathPrinter       $pathPrinter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         StepTextPainter $textPainter,
@@ -85,17 +81,14 @@ final class PrettyStepPrinter implements StepPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments(), $result);
         $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
-        if ($showOutput === null || $showOutput === ShowOutputOption::Yes ||
-            ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
+        if ($showOutput === null || $showOutput === ShowOutputOption::Yes
+            || ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
             $this->printStdOut($formatter->getOutputPrinter(), $result);
         }
         $this->printException($formatter->getOutputPrinter(), $result);
@@ -104,10 +97,8 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter $printer
      * @param string        $stepType
      * @param string        $stepText
-     * @param StepResult    $result
      */
     private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
@@ -123,9 +114,7 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step multiline arguments.
      *
-     * @param Formatter           $formatter
      * @param ArgumentInterface[] $arguments
-     * @param StepResult          $result
      */
     private function printArguments(Formatter $formatter, array $arguments, StepResult $result)
     {
@@ -141,9 +130,6 @@ final class PrettyStepPrinter implements StepPrinter
 
     /**
      * Prints step output (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param StepResult    $result
      */
     private function printStdOut(OutputPrinter $printer, StepResult $result)
     {
@@ -167,9 +153,6 @@ final class PrettyStepPrinter implements StepPrinter
 
     /**
      * Prints step exception (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param StepResult    $result
      */
     private function printException(OutputPrinter $printer, StepResult $result)
     {
@@ -187,7 +170,6 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Returns argument string for provided argument.
      *
-     * @param ArgumentInterface $argument
      * @param bool           $collapse
      *
      * @return string
@@ -206,6 +188,7 @@ final class PrettyStepPrinter implements StepPrinter
         if ($argument instanceof TableNode) {
             return (string) $argument;
         }
+
         return '';
     }
 

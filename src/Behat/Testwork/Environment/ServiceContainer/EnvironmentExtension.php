@@ -44,48 +44,31 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'environments';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadManager($container);
         $this->loadStaticEnvironmentHandler($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processHandlers($container);
@@ -94,8 +77,6 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Loads environment manager.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadManager(ContainerBuilder $container)
     {
@@ -105,8 +86,6 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Loads static environments handler.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadStaticEnvironmentHandler(ContainerBuilder $container)
     {
@@ -117,8 +96,6 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Processes all environment handlers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processHandlers(ContainerBuilder $container)
     {
@@ -132,8 +109,6 @@ final class EnvironmentExtension implements Extension
 
     /**
      * Processes all environment readers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processReaders(ContainerBuilder $container)
     {

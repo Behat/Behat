@@ -15,8 +15,8 @@ use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\Statistics;
+use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
@@ -48,9 +48,6 @@ final class StepStatsListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
@@ -62,8 +59,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
     {
@@ -90,8 +85,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures current scenario title and path on scenario BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOnBeforeFeatureEvent(Event $event)
     {
@@ -114,8 +107,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures step stats on step AFTER event.
-     *
-     * @param Event $event
      */
     private function captureStepStatsOnAfterEvent(Event $event)
     {

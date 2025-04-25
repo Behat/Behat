@@ -28,7 +28,7 @@ final class Extension implements ExtensionConfigInterface
 
     public function toPhpExpr(): Expr
     {
-        $extensionObject =  ConfigConverterTools::createObject(self::class);
+        $extensionObject = ConfigConverterTools::createObject(self::class);
 
         $name = $this->name;
         if (!class_exists($name)) {

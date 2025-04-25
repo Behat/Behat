@@ -23,7 +23,7 @@ Feature: Unused definitions
       `FeatureContext::stepUsedInSecondFeature()`
 
       [Then|*] I call a step not used in any feature
-      This is a step that is never used and should be removed
+      This is a step that is never used and should be removed.
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 
@@ -36,7 +36,7 @@ Feature: Unused definitions
       --- 1 unused definition:
 
       [Then|*] I call a step not used in any feature
-      This is a step that is never used and should be removed
+      This is a step that is never used and should be removed.
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 
@@ -49,7 +49,7 @@ Feature: Unused definitions
       --- 1 unused definition:
 
       [Then|*] I call a step not used in any feature
-      This is a step that is never used and should be removed
+      This is a step that is never used and should be removed.
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 
@@ -62,7 +62,7 @@ Feature: Unused definitions
       --- 1 unused definition:
 
       [Then|*] I call a step not used in any feature
-      This is a step that is never used and should be removed
+      This is a step that is never used and should be removed.
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 

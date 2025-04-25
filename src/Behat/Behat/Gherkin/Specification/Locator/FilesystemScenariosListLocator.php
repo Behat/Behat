@@ -33,25 +33,17 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
 
     /**
      * Initializes locator.
-     *
-     * @param Gherkin $gherkin
      */
     public function __construct(Gherkin $gherkin)
     {
         $this->gherkin = $gherkin;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocatorExamples()
     {
-        return ["a scenarios list file <comment>(*.scenarios)</comment>."];
+        return ['a scenarios list file <comment>(*.scenarios)</comment>.'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function locateSpecifications(Suite $suite, $locator)
     {
         if (null === $locator || !is_file($locator) || 'scenarios' !== pathinfo($locator, PATHINFO_EXTENSION)) {

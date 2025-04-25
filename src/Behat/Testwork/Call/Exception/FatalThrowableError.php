@@ -12,6 +12,7 @@ namespace Behat\Testwork\Call\Exception;
 
 use ErrorException;
 use ParseError;
+use ReflectionProperty;
 use Throwable;
 use TypeError;
 
@@ -48,7 +49,7 @@ class FatalThrowableError extends ErrorException
 
     private function setTrace($trace)
     {
-        $traceReflector = new \ReflectionProperty('Exception', 'trace');
+        $traceReflector = new ReflectionProperty('Exception', 'trace');
         $traceReflector->setAccessible(true);
         $traceReflector->setValue($this, $trace);
     }

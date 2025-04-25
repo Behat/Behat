@@ -30,7 +30,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      */
     private $autoloader;
     /**
-     * @var null|FilesystemLogger
+     * @var FilesystemLogger|null
      */
     private $logger;
     /**
@@ -40,9 +40,6 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Initializes setup.
-     *
-     * @param ClassLoader           $autoloader
-     * @param null|FilesystemLogger $logger
      */
     public function __construct(ClassLoader $autoloader, ?FilesystemLogger $logger = null)
     {
@@ -52,25 +49,17 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Registers class generator.
-     *
-     * @param ClassGenerator $generator
      */
     public function registerClassGenerator(ClassGenerator $generator)
     {
         $this->classGenerators[] = $generator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return $suite->hasSetting('contexts');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setupSuite(Suite $suite)
     {
         foreach ($this->getNormalizedContextClasses($suite) as $class) {
@@ -89,8 +78,6 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Returns normalized context classes.
      *
-     * @param Suite $suite
-     *
      * @return string[]
      */
     private function getNormalizedContextClasses(Suite $suite)
@@ -105,8 +92,6 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Returns array of context classes configured for the provided suite.
-     *
-     * @param Suite $suite
      *
      * @return array<string|array>
      *
@@ -192,10 +177,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Generates class using registered class generators.
      *
-     * @param Suite  $suite
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     private function generateClass(Suite $suite, $class)
     {

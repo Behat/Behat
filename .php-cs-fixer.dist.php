@@ -7,20 +7,22 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRules([
-        '@PER-CS2.0' => true,
-        'function_declaration' => true, // overrides @PER-CS2.0
-        'method_argument_space' => [ // overrides @PER-CS2.0
-            'on_multiline' => 'ignore',
+        '@Symfony' => true,
+        'concat_space' => false, // override Symfony
+        'global_namespace_import' => [ //override Symfony
+            'import_classes' => true,
+            'import_constants' => true,
+            'import_functions' => true,
         ],
-        'single_line_empty_body' => false, // overrides @PER-CS2.0
-        'trailing_comma_in_multiline' => [ // overrides @PER-CS2.0
-            'after_heredoc' => true,
-            'elements' => [
-                'array_destructuring',
-                'arrays',
-                'match',
-                'parameters',
+        'phpdoc_align' => false, //override Symfony
+        'phpdoc_separation' => [ // override Symfony
+            'groups' => [
+                ['Annotation', 'NamedArgumentConstructor', 'Target'],
+                ['Given', 'When', 'Then'],
+                ...\PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer::OPTION_GROUPS_DEFAULT,
             ],
         ],
+        'single_line_throw' => false, //override Symfony
+        'yoda_style' => false, //override Symfony
     ])
     ->setFinder($finder);

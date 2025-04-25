@@ -42,7 +42,6 @@ final class Suite implements ConfigConverterInterface
     /**
      * @param array<mixed> $constructorArgs
      */
-
     public function addContext(string $context, array $constructorArgs = []): self
     {
         $this->settings[self::CONTEXTS_SETTING][][$context] = $constructorArgs;
@@ -118,6 +117,7 @@ final class Suite implements ConfigConverterInterface
         if (!$hasAnyWithArguments) {
             // All the contexts are just class names, we can add them as a single `->withContexts` call
             $expr = ConfigConverterTools::addMethodCall(self::class, self::WITH_CONTEXTS_FUNCTION, $contexts, $expr);
+
             return;
         }
 

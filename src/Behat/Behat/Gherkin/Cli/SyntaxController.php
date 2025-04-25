@@ -37,9 +37,6 @@ final class SyntaxController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param KeywordsDumper      $dumper
-     * @param TranslatorInterface $translator
      */
     public function __construct(KeywordsDumper $dumper, TranslatorInterface $translator)
     {
@@ -50,8 +47,6 @@ final class SyntaxController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -60,18 +55,15 @@ final class SyntaxController implements Controller
                 '--story-syntax',
                 null,
                 InputOption::VALUE_NONE,
-                "Print <comment>*.feature</comment> example." . PHP_EOL .
-                "Use <info>--lang</info> to see specific language."
+                'Print <comment>*.feature</comment> example.' . PHP_EOL .
+                'Use <info>--lang</info> to see specific language.'
             );
     }
 
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return int|null
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {

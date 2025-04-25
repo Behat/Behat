@@ -40,10 +40,6 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
 
     /**
      * Initialises identifier.
-     *
-     * @param TranslatorInterface $translator
-     * @param InputInterface      $input
-     * @param OutputInterface     $output
      */
     public function __construct(TranslatorInterface $translator, InputInterface $input, OutputInterface $output)
     {
@@ -52,9 +48,6 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
         $this->output = $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         if (!$this->input->isInteractive()) {

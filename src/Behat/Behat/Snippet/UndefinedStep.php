@@ -31,9 +31,6 @@ final class UndefinedStep
 
     /**
      * Initializes undefined step.
-     *
-     * @param Environment $environment
-     * @param StepNode    $step
      */
     public function __construct(Environment $environment, StepNode $step)
     {

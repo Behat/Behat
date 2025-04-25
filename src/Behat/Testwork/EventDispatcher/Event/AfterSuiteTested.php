@@ -38,10 +38,7 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
     /**
      * Initializes event.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<mixed> $iterator
-     * @param TestResult            $result
-     * @param Teardown              $teardown
      */
     public function __construct(
         Environment $env,

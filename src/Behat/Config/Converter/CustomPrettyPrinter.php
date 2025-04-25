@@ -2,9 +2,9 @@
 
 namespace Behat\Config\Converter;
 
-use PhpParser\PrettyPrinter\Standard;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\PrettyPrinter\Standard;
 
 class CustomPrettyPrinter extends Standard
 {
@@ -18,9 +18,9 @@ class CustomPrettyPrinter extends Standard
 
     protected function pExpr_MethodCall(MethodCall $node): string
     {
-        $result =  $this->pDereferenceLhs($node->var);
+        $result = $this->pDereferenceLhs($node->var);
         $this->indent();
-        $result .=  $this->nl . '->' . $this->pObjectProperty($node->name) . '(';
+        $result .= $this->nl . '->' . $this->pObjectProperty($node->name) . '(';
         if (count($node->args) > 1) {
             $result .= $this->pCommaSeparatedMultiline($node->args, false) . $this->nl;
         } else {
@@ -28,6 +28,7 @@ class CustomPrettyPrinter extends Standard
         }
         $result .= ')';
         $this->outdent();
+
         return $result;
     }
 }

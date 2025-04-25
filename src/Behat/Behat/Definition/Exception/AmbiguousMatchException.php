@@ -31,7 +31,7 @@ final class AmbiguousMatchException extends RuntimeException implements SearchEx
      */
     public function __construct($text, array $matches)
     {
-        $message = sprintf("Ambiguous match of \"%s\":", $text);
+        $message = sprintf('Ambiguous match of "%s":', $text);
         foreach ($matches as $definition) {
             $message .= sprintf(
                 "\nto `%s` from %s",

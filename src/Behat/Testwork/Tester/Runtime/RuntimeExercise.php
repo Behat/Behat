@@ -27,6 +27,7 @@ use Behat\Testwork\Tester\SuiteTester;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template TSpec
+ *
  * @implements Exercise<TSpec>
  */
 final class RuntimeExercise implements Exercise
@@ -43,7 +44,6 @@ final class RuntimeExercise implements Exercise
     /**
      * Initializes tester.
      *
-     * @param EnvironmentManager $envManager
      * @param SuiteTester<TSpec> $suiteTester
      */
     public function __construct(EnvironmentManager $envManager, SuiteTester $suiteTester)
@@ -52,17 +52,11 @@ final class RuntimeExercise implements Exercise
         $this->suiteTester = $suiteTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(array $iterators, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(array $iterators, $skip = false)
     {
         $results = [];
@@ -81,9 +75,6 @@ final class RuntimeExercise implements Exercise
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

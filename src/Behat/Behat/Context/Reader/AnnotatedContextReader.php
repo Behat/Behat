@@ -50,8 +50,6 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
@@ -60,17 +58,12 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Registers annotation reader.
-     *
-     * @param AnnotationReader $reader
      */
     public function registerAnnotationReader(AnnotationReader $reader)
     {
         $this->readers[] = $reader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         $reflection = new ReflectionClass($contextClass);
@@ -89,7 +82,6 @@ final class AnnotatedContextReader implements ContextReader
      * Loads callees associated with specific method.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      *
      * @return Callee[]
      */
@@ -118,7 +110,6 @@ final class AnnotatedContextReader implements ContextReader
      * Reads callees from the method doc block.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      * @param string           $docBlock
      *
      * @return Callee[]
@@ -149,7 +140,7 @@ final class AnnotatedContextReader implements ContextReader
     }
 
     /**
-     * Merges multiline strings (strings ending with "\")
+     * Merges multiline strings (strings ending with "\").
      *
      * @param string $docBlock
      *
@@ -187,12 +178,11 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Reads callee from provided doc line using registered annotation readers.
      *
-     * @param string           $class
-     * @param ReflectionMethod $method
-     * @param string           $docLine
-     * @param null|string      $description
+     * @param string      $class
+     * @param string      $docLine
+     * @param string|null $description
      *
-     * @return null|Callee
+     * @return Callee|null
      */
     private function readDocLineCallee($class, ReflectionMethod $method, $docLine, $description = null)
     {

@@ -36,9 +36,6 @@ final class PrettyPathPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param WidthCalculator $widthCalculator
-     * @param string          $basePath
      */
     public function __construct(
         WidthCalculator $widthCalculator,
@@ -52,10 +49,7 @@ final class PrettyPathPrinter
     /**
      * Prints scenario path comment.
      *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param integer     $indentation
+     * @param int $indentation
      */
     public function printScenarioPath(Formatter $formatter, FeatureNode $feature, Scenario $scenario, $indentation)
     {
@@ -78,11 +72,7 @@ final class PrettyPathPrinter
     /**
      * Prints step path comment.
      *
-     * @param Formatter  $formatter
-     * @param Scenario   $scenario
-     * @param StepNode   $step
-     * @param StepResult $result
-     * @param integer    $indentation
+     * @param int $indentation
      */
     public function printStepPath(
         Formatter $formatter,
@@ -108,10 +98,8 @@ final class PrettyPathPrinter
     /**
      * Prints defined step path.
      *
-     * @param OutputPrinter     $printer
-     * @param DefinedStepResult $result
-     * @param integer           $scenarioWidth
-     * @param integer           $stepWidth
+     * @param int $scenarioWidth
+     * @param int $stepWidth
      */
     private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth)
     {

@@ -3,8 +3,11 @@
 namespace Behat\Tests\Testwork\Argument;
 
 use Behat\Testwork\Argument\MixedArgumentOrganiser;
+use DateTime;
+use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 use ReflectionFunction;
+use stdClass;
 
 final class MixedArgumentOrganiserTest extends TestCase
 {
@@ -18,7 +21,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItOrganisesNothingIfNoArgs(): void
     {
         $r = new ReflectionFunction(
-            static function (\DateTimeInterface $d) {}
+            static function (DateTimeInterface $d) {}
         );
         $args = [];
 
@@ -49,8 +52,8 @@ final class MixedArgumentOrganiserTest extends TestCase
             static function ($date) {}
         );
         $args = [
-            'date' => $date = new \DateTime(),
-            'x' => new \stdClass(),
+            'date' => $date = new DateTime(),
+            'x' => new stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -61,11 +64,11 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItMatchesArgsByType(): void
     {
         $r = new ReflectionFunction(
-            static function (\DateTimeInterface $d) {}
+            static function (DateTimeInterface $d) {}
         );
         $args = [
-            'x' => $date = new \DateTime(),
-            'y' => new \stdClass(),
+            'x' => $date = new DateTime(),
+            'y' => new stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -76,10 +79,10 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItMatchesArgsByNameOverType(): void
     {
         $r = new ReflectionFunction(
-            static function (\DateTimeInterface $a, $date) {}
+            static function (DateTimeInterface $a, $date) {}
         );
         $args = [
-            'date' => $date = new \DateTime(),
+            'date' => $date = new DateTime(),
             'x' => 1,
         ];
 
@@ -100,7 +103,7 @@ final class MixedArgumentOrganiserTest extends TestCase
 PHP
         );
         $args = [
-            'date' => $date = new \DateTime(),
+            'date' => $date = new DateTime(),
             'x' => 1,
         ];
 

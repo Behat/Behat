@@ -26,25 +26,17 @@ final class GenericSuiteGenerator implements SuiteGenerator
 
     /**
      * Initializes suite generator.
-     *
-     * @param array $defaultSettings
      */
     public function __construct(array $defaultSettings = [])
     {
         $this->defaultSettings = $defaultSettings;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsTypeAndSettings($type, array $settings)
     {
         return null === $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateSuite($suiteName, array $settings)
     {
         return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings));
@@ -52,8 +44,6 @@ final class GenericSuiteGenerator implements SuiteGenerator
 
     /**
      * Merges provided settings into default ones.
-     *
-     * @param array $settings
      *
      * @return array
      */

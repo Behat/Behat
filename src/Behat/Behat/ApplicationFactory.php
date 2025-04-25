@@ -14,11 +14,11 @@ use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
+use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
 use Behat\Behat\Hook\ServiceContainer\HookExtension;
 use Behat\Behat\Output\ServiceContainer\Formatter\JUnitFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\PrettyFormatterFactory;
 use Behat\Behat\Output\ServiceContainer\Formatter\ProgressFormatterFactory;
-use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Behat\Transformation\ServiceContainer\TransformationExtension;
@@ -55,26 +55,17 @@ final class ApplicationFactory extends BaseFactory
      */
     public const VERSION = '3.13.0';
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getName()
     {
         return 'behat';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getVersion()
     {
         // Get the currently installed behat version from composer's runtime API
         return InstalledVersions::getVersion('behat/behat');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultExtensions()
     {
         $processor = new ServiceProcessor();
@@ -106,17 +97,11 @@ final class ApplicationFactory extends BaseFactory
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEnvironmentVariableName()
     {
         return 'BEHAT_PARAMS';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getConfigPath()
     {
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -151,8 +136,6 @@ final class ApplicationFactory extends BaseFactory
 
     /**
      * Returns default formatter factories.
-     *
-     * @param ServiceProcessor $processor
      *
      * @return FormatterFactory[]
      */

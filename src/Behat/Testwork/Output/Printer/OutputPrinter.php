@@ -20,11 +20,11 @@ interface OutputPrinter
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    public const VERBOSITY_NORMAL       = 1;
+    public const VERBOSITY_NORMAL = 1;
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    public const VERBOSITY_VERBOSE      = 2;
+    public const VERBOSITY_VERBOSE = 2;
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
@@ -32,7 +32,7 @@ interface OutputPrinter
     /**
      * @deprecated since 3.1, to be removed in 4.0
      */
-    public const VERBOSITY_DEBUG        = 4;
+    public const VERBOSITY_DEBUG = 4;
 
     /**
      * Sets output path.
@@ -44,7 +44,7 @@ interface OutputPrinter
     /**
      * Returns output path.
      *
-     * @return null|string
+     * @return string|null
      *
      * @deprecated since 3.1, to be removed in 4.0
      */
@@ -52,8 +52,6 @@ interface OutputPrinter
 
     /**
      * Sets output styles.
-     *
-     * @param array $styles
      */
     public function setOutputStyles(array $styles);
 
@@ -76,7 +74,7 @@ interface OutputPrinter
     /**
      * Returns output decoration status.
      *
-     * @return null|bool
+     * @return bool|null
      *
      * @deprecated since 3.1, to be removed in 4.0
      */
@@ -85,14 +83,14 @@ interface OutputPrinter
     /**
      * Sets output verbosity level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setOutputVerbosity($level);
 
     /**
      * Returns output verbosity level.
      *
-     * @return integer
+     * @return int
      *
      * @deprecated since 3.1, to be removed in 4.0
      */

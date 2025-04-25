@@ -35,10 +35,6 @@ final class TestWithSetupResult implements TestResult
 
     /**
      * Initializes test result.
-     *
-     * @param Setup      $setup
-     * @param TestResult $result
-     * @param Teardown   $teardown
      */
     public function __construct(Setup $setup, TestResult $result, Teardown $teardown)
     {
@@ -47,17 +43,11 @@ final class TestWithSetupResult implements TestResult
         $this->teardown = $teardown;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResultCode()
     {
         if (!$this->setup->isSuccessful()) {

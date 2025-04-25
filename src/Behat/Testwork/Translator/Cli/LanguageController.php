@@ -31,17 +31,12 @@ final class LanguageController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Translator $translator
      */
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption(
@@ -59,6 +54,7 @@ final class LanguageController implements Controller
         }
 
         $this->translator->setLocale($input->getOption('lang'));
+
         return null;
     }
 }

@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Definition\Pattern\Policy;
 
-use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Behat\Definition\Exception\InvalidPatternException;
+use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Transliterator\Transliterator;
 
 /**
@@ -41,17 +41,11 @@ final class TurnipPatternPolicy implements PatternPolicy
         "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/",
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsPatternType($type)
     {
         return null === $type || 'turnip' === $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generatePattern($stepText)
     {
         $count = 0;
@@ -69,27 +63,23 @@ final class TurnipPatternPolicy implements PatternPolicy
         return new Pattern($canonicalText, $pattern, $count);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsPattern($pattern)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformPatternToRegex($pattern)
     {
         if (!isset($this->regexCache[$pattern])) {
             $this->regexCache[$pattern] = $this->createTransformedRegex($pattern);
         }
+
         return $this->regexCache[$pattern];
     }
 
     /**
      * @param string $pattern
+     *
      * @return string
      */
     private function createTransformedRegex($pattern)

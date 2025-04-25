@@ -26,8 +26,6 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
 
     /**
      * Initializes step result.
-     *
-     * @param SearchResult $searchResult
      */
     public function __construct(SearchResult $searchResult)
     {
@@ -44,17 +42,11 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
         return $this->searchResult;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStepDefinition()
     {
         return $this->searchResult->getMatchedDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return false;

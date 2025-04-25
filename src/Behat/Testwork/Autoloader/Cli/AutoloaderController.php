@@ -29,9 +29,7 @@ final class AutoloaderController implements Controller
     private $loader;
 
     /**
-     * Initializes controller
-     *
-     * @param ClassLoader $loader
+     * Initializes controller.
      */
     public function __construct(ClassLoader $loader)
     {
@@ -42,12 +40,10 @@ final class AutoloaderController implements Controller
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->loader->register();
+
         return null;
     }
 }

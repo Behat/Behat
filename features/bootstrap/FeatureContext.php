@@ -12,13 +12,13 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
-use Behat\Step\When;
 use Behat\Step\Then;
+use Behat\Step\When;
 use PHPUnit\Framework\Assert;
-use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\Process;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
+use Symfony\Component\Process\PhpExecutableFinder;
+use Symfony\Component\Process\Process;
 
 /**
  * Behat test suite context.
@@ -62,6 +62,7 @@ class FeatureContext implements Context
      * Cleans test folders in the temporary directory.
      *
      * @BeforeSuite
+     *
      * @AfterSuite
      */
     public static function cleanTestFolders()
@@ -85,7 +86,7 @@ class FeatureContext implements Context
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
-            throw new \RuntimeException('Unable to find the PHP executable.');
+            throw new RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
         $this->tempDir = $dir;
@@ -179,7 +180,7 @@ EOL;
     }
 
     /**
-     * Sets specified ENV variable
+     * Sets specified ENV variable.
      *
      * @When /^the "([^"]*)" environment variable is set to "([^"]*)"$/
      */
@@ -189,11 +190,9 @@ EOL;
     }
 
     /**
-     * Sets the BEHAT_PARAMS env variable
+     * Sets the BEHAT_PARAMS env variable.
      *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
-     *
-     * @param PyStringNode $value
      */
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {
@@ -234,7 +233,7 @@ EOL;
     }
 
     /**
-     * Runs behat command with provided parameters
+     * Runs behat command with provided parameters.
      *
      * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
@@ -274,7 +273,7 @@ EOL;
     }
 
     /**
-     * Runs behat command with provided parameters in interactive mode
+     * Runs behat command with provided parameters in interactive mode.
      *
      * @When /^I answer "([^"]+)" when running "behat(?: ((?:\"|[^"])*))?"$/
      *
@@ -292,7 +291,7 @@ EOL;
     }
 
     /**
-     * Runs behat command in debug mode
+     * Runs behat command in debug mode.
      *
      * @When /^I run behat in debug mode$/
      */
@@ -325,7 +324,7 @@ EOL;
 
         if (!str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
             $hasError = true;
-            $outputMessage[] =  $this->getOutputDiff($text);
+            $outputMessage[] = $this->getOutputDiff($text);
         } else {
             $outputMessage[] = 'Output is as expected.';
         }
@@ -557,7 +556,7 @@ EOL;
 
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
     {
-        $dom = new DomDocument();
+        $dom = new DOMDocument();
         $dom->load($xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
@@ -591,7 +590,7 @@ EOL;
         $output = str_replace('Warning: Undefined array key', 'Notice: Undefined offset:', $output);
         $output = preg_replace('/Class "([^"]+)" not found/', 'Class \'$1\' not found', $output);
 
-        return trim(preg_replace("/ +$/m", '', $output));
+        return trim(preg_replace('/ +$/m', '', $output));
     }
 
     private function createFile($filename, $content)

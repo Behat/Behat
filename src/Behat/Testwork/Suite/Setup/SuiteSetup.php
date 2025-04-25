@@ -25,16 +25,12 @@ interface SuiteSetup
     /**
      * Checks if setup supports provided suite.
      *
-     * @param Suite $suite
-     *
      * @return bool
      */
     public function supportsSuite(Suite $suite);
 
     /**
      * Sets up provided suite.
-     *
-     * @param Suite $suite
      */
     public function setupSuite(Suite $suite);
 }

@@ -11,8 +11,8 @@
 namespace Behat\Behat\Output\Statistics;
 
 use Behat\Behat\Tester\Result\StepResult;
-use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Counter\Memory;
+use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -81,8 +81,6 @@ final class PhaseStatistics implements Statistics
 
     /**
      * Registers scenario stat.
-     *
-     * @param ScenarioStat $stat
      */
     public function registerScenarioStat(ScenarioStat $stat)
     {
@@ -91,8 +89,6 @@ final class PhaseStatistics implements Statistics
 
     /**
      * Registers step stat.
-     *
-     * @param StepStat $stat
      */
     public function registerStepStat(StepStat $stat)
     {
@@ -101,8 +97,6 @@ final class PhaseStatistics implements Statistics
 
     /**
      * Registers hook stat.
-     *
-     * @param HookStat $stat
      */
     public function registerHookStat(HookStat $stat)
     {

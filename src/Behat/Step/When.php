@@ -10,10 +10,12 @@
 
 namespace Behat\Step;
 
+use Attribute;
+
 /**
- * Represents an Attribute for When steps
+ * Represents an Attribute for When steps.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class When implements Definition
 {
     /**

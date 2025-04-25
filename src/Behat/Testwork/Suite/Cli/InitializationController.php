@@ -36,9 +36,6 @@ final class InitializationController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository   $repository
-     * @param SuiteBootstrapper $bootstrapper
      */
     public function __construct(SuiteRepository $repository, SuiteBootstrapper $bootstrapper)
     {
@@ -46,9 +43,6 @@ final class InitializationController implements Controller
         $this->bootstrapper = $bootstrapper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption(
@@ -59,9 +53,6 @@ final class InitializationController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('init')) {

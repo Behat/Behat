@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Prints unused definitions
+ * Prints unused definitions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
@@ -50,7 +50,7 @@ final class UnusedDefinitionsController implements Controller
                 '--print-unused-definitions',
                 null,
                 InputOption::VALUE_NONE,
-                "Reports definitions that were never used."
+                'Reports definitions that were never used.'
             )
         ;
     }
@@ -64,6 +64,7 @@ final class UnusedDefinitionsController implements Controller
             $this->eventDispatcher->addListener(SuiteTested::AFTER, [$this, 'registerDefinitionUsages'], -999);
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUnusedDefinitions'], -999);
         }
+
         return null;
     }
 

@@ -18,12 +18,11 @@ use Behat\Testwork\Environment\Environment;
 
 /**
  * Enable ticks during step testing to allow SigintController in Testwork
- * to handle an interupt (on PHP7)
+ * to handle an interupt (on PHP7).
  *
  * @see Behat\Testwork\EventDispatcher\Cli\SigintController
- *
- * @deprecated Since the way signals are handled changed to use pcntl_signal_dispatch
- *   this class is no longer needed.
+ * @deprecated since the way signals are handled changed to use pcntl_signal_dispatch
+ *   this class is no longer needed
  *
  * @todo Remove this class in the next major version
  *
@@ -38,25 +37,17 @@ final class TickingStepTester implements StepTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepTester  $baseTester
      */
     public function __construct(StepTester $baseTester)
     {
         $this->baseTester = $baseTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         return $this->baseTester->setUp($env, $feature, $step, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         declare(ticks=1);
@@ -64,9 +55,6 @@ final class TickingStepTester implements StepTester
         return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         return $this->baseTester->tearDown($env, $feature, $step, $skip, $result);

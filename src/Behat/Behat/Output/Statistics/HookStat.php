@@ -45,8 +45,8 @@ final class HookStat
      *
      * @param string      $name
      * @param string      $path
-     * @param null|string $error
-     * @param null|string $stdOut
+     * @param string|null $error
+     * @param string|null $stdOut
      */
     public function __construct($name, $path, $error = null, $stdOut = null)
     {
@@ -61,17 +61,11 @@ final class HookStat
         $this->scope = $scope;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         return null === $this->error;
@@ -80,7 +74,7 @@ final class HookStat
     /**
      * Returns hook standard output (if has some).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

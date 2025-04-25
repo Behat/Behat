@@ -10,10 +10,12 @@
 
 namespace Behat\Transformation;
 
+use Attribute;
+
 /**
- * Represents an Attribute for a Transform transformation
+ * Represents an Attribute for a Transform transformation.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Transform
 {
     public function __construct(

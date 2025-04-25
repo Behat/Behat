@@ -32,17 +32,11 @@ final class ContextSnippetAppender implements SnippetAppender
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSnippet(AggregateSnippet $snippet)
     {
         return 'context' === $snippet->getType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function appendSnippet(AggregateSnippet $snippet)
     {
         foreach ($snippet->getTargets() as $contextClass) {
@@ -93,7 +87,7 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     private function importClass($class, $contextFileContent)
     {
-        $replaceWith = "\$1" . 'use ' . $class . ";\n\$2;";
+        $replaceWith = '$1use ' . $class . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
     }
@@ -101,7 +95,6 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * Logs snippet addition to the provided path (if logger is given).
      *
-     * @param AggregateSnippet $snippet
      * @param string           $path
      */
     private function logSnippetAddition(AggregateSnippet $snippet, $path)
@@ -111,7 +104,7 @@ final class ContextSnippetAppender implements SnippetAppender
         }
 
         $steps = $snippet->getSteps();
-        $reason = sprintf("`<comment>%s</comment>` definition added", $steps[0]->getText());
+        $reason = sprintf('`<comment>%s</comment>` definition added', $steps[0]->getText());
 
         $this->logger->fileUpdated($path, $reason);
     }

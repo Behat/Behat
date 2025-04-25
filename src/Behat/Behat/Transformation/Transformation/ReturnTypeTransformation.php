@@ -20,8 +20,8 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
-use ReflectionParameter;
 use ReflectionNamedType;
+use ReflectionParameter;
 
 /**
  * By-type object transformation.
@@ -30,9 +30,6 @@ use ReflectionNamedType;
  */
 final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         $returnClass = self::getReturnClass($method);
@@ -49,16 +46,13 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         $returnClass = self::getReturnClass($this->getReflection());
@@ -72,9 +66,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         return $parameterClass === $returnClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $call = new TransformationCall(
@@ -93,25 +84,16 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         return $result->getReturn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 80;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'ReturnTypeTransform';
@@ -120,16 +102,14 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Extracts parameters from provided definition call.
      *
-     * @param ReflectionFunctionAbstract $reflection
-     *
-     * @return null|string
+     * @return string|null
      */
     private static function getReturnClass(ReflectionFunctionAbstract $reflection)
     {
         $type = $reflection->getReturnType();
 
         // Skip ReflectionUnionType as they can't be relied on for a transform
-        if (null === $type || !($type instanceof \ReflectionNamedType) || $type->isBuiltin()) {
+        if (null === $type || !($type instanceof ReflectionNamedType) || $type->isBuiltin()) {
             return null;
         }
 
@@ -139,10 +119,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
      *
-     * @param DefinitionCall $definitionCall
-     * @param string|integer $argumentIndex
+     * @param string|int $argumentIndex
      *
-     * @return null|string
+     * @return string|null
      */
     private function getParameterClassNameByIndex(DefinitionCall $definitionCall, $argumentIndex)
     {
@@ -164,8 +143,6 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Extracts parameters from provided definition call.
      *
-     * @param DefinitionCall $definitionCall
-     *
      * @return ReflectionParameter[]
      */
     private function getCallParameters(DefinitionCall $definitionCall)
@@ -176,7 +153,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns appropriate closure for filtering parameter by index.
      *
-     * @param string|integer $index
+     * @param string|int $index
      *
      * @return Closure
      */
@@ -202,7 +179,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
     /**
      * Returns closure to filter parameter by position.
      *
-     * @param integer $index
+     * @param int $index
      *
      * @return Closure
      */
@@ -215,10 +192,8 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
 
     /**
      * Returns closure to filter parameter by typehinted class.
-     *
-     * @return Closure
      */
-    private function getClassReflection(): closure
+    private function getClassReflection(): Closure
     {
         return function (ReflectionParameter $parameter): ?ReflectionClass {
             $t = $parameter->getType();

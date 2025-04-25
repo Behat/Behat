@@ -45,8 +45,6 @@ final class CallCenter
 
     /**
      * Registers call filter.
-     *
-     * @param CallFilter $filter
      */
     public function registerCallFilter(CallFilter $filter)
     {
@@ -55,8 +53,6 @@ final class CallCenter
 
     /**
      * Registers call handler.
-     *
-     * @param CallHandler $handler
      */
     public function registerCallHandler(CallHandler $handler)
     {
@@ -65,8 +61,6 @@ final class CallCenter
 
     /**
      * Registers call result filter.
-     *
-     * @param ResultFilter $filter
      */
     public function registerResultFilter(ResultFilter $filter)
     {
@@ -75,8 +69,6 @@ final class CallCenter
 
     /**
      * Registers result exception handler.
-     *
-     * @param ExceptionHandler $handler
      */
     public function registerExceptionHandler(ExceptionHandler $handler)
     {
@@ -85,8 +77,6 @@ final class CallCenter
 
     /**
      * Handles call and its result using registered filters and handlers.
-     *
-     * @param Call $call
      *
      * @return CallResult
      */
@@ -101,8 +91,6 @@ final class CallCenter
 
     /**
      * Filters call using registered filters and returns a filtered one.
-     *
-     * @param Call $call
      *
      * @return Call
      */
@@ -121,8 +109,6 @@ final class CallCenter
 
     /**
      * Handles call using registered call handlers.
-     *
-     * @param Call $call
      *
      * @return CallResult
      *
@@ -146,8 +132,6 @@ final class CallCenter
 
     /**
      * Filters call result using registered filters and returns a filtered one.
-     *
-     * @param CallResult $result
      *
      * @return CallResult
      */

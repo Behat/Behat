@@ -49,9 +49,6 @@ final class NodeEventListeningFormatter implements Formatter
      *
      * @param string        $name
      * @param string        $description
-     * @param array         $parameters
-     * @param OutputPrinter $printer
-     * @param EventListener $listener
      */
     public function __construct($name, $description, array $parameters, OutputPrinter $printer, EventListener $listener)
     {
@@ -75,8 +72,7 @@ final class NodeEventListeningFormatter implements Formatter
     /**
      * Proxies event to the listener.
      *
-     * @param Event       $event
-     * @param null|string $eventName
+     * @param string|null $eventName
      */
     public function listenEvent(Event $event, $eventName = null)
     {
@@ -91,47 +87,33 @@ final class NodeEventListeningFormatter implements Formatter
         $this->listener->listenEvent($this, $event, $eventName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputPrinter()
     {
         return $this->printer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setParameter($name, $value)
     {
         $this->parameters[$name] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParameter($name)
     {
         $value = $this->parameters[$name] ?? null;
         if ($value !== null && $name === ShowOutputOption::OPTION_NAME) {
             return ShowOutputOption::from($value);
         }
+
         return $value;
     }
 }

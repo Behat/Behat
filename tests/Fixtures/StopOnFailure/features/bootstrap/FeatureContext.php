@@ -18,7 +18,6 @@ class FeatureContext implements Context
      */
     public function failing()
     {
-        throw new Exception("step failed as supposed");
+        throw new Exception('step failed as supposed');
     }
-
 }

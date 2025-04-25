@@ -47,7 +47,7 @@ final class LazyFeatureIterator implements SpecificationIterator
      */
     private $filters = [];
     /**
-     * @var integer
+     * @var int
      */
     private $position = 0;
     /**
@@ -62,8 +62,6 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * Initializes specifications.
      *
-     * @param Suite             $suite
-     * @param Gherkin           $gherkin
      * @param string[]          $paths
      * @param FeatureFilterInterface[] $filters
      */
@@ -75,50 +73,32 @@ final class LazyFeatureIterator implements SpecificationIterator
         $this->filters = array_merge($this->getSuiteFilters($suite), $filters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->position = 0;
         $this->moveToNextAvailableFeature();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         $this->moveToNextAvailableFeature();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return null !== $this->currentFeature;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): int
     {
         return $this->position;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function current(): FeatureNode
     {
         return $this->currentFeature;
@@ -126,8 +106,6 @@ final class LazyFeatureIterator implements SpecificationIterator
 
     /**
      * Returns list of filters from suite settings.
-     *
-     * @param Suite $suite
      *
      * @return FeatureFilterInterface[]
      */
@@ -150,7 +128,6 @@ final class LazyFeatureIterator implements SpecificationIterator
      *
      * @param string $type
      * @param string $filterString
-     * @param Suite  $suite
      *
      * @return FeatureFilterInterface
      *
@@ -189,7 +166,7 @@ final class LazyFeatureIterator implements SpecificationIterator
     {
         while (!count($this->features) && $this->position < count($this->paths)) {
             $this->features = $this->parseFeature($this->paths[$this->position]);
-            $this->position++;
+            ++$this->position;
         }
 
         $this->currentFeature = array_shift($this->features);

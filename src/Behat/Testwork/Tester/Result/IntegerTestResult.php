@@ -32,9 +32,6 @@ final class IntegerTestResult implements TestResult
         $this->resultCode = $resultCode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();

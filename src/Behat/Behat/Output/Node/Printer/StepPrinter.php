@@ -24,11 +24,6 @@ interface StepPrinter
 {
     /**
      * Prints step using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param Scenario   $scenario
-     * @param StepNode   $step
-     * @param StepResult $result
      */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result);
 }

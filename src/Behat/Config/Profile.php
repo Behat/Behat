@@ -17,7 +17,6 @@ use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 
 final class Profile implements ConfigConverterInterface
@@ -132,7 +131,7 @@ final class Profile implements ConfigConverterInterface
     /**
      * @internal
      */
-    public function toPhpExpr(): Node\Expr
+    public function toPhpExpr(): Expr
     {
         $profileObject = ConfigConverterTools::createObject(self::class);
         $expr = $profileObject;

@@ -29,7 +29,6 @@ final class EnvironmentBuildException extends RuntimeException implements Enviro
      * Initializes exception.
      *
      * @param string $message
-     * @param Suite  $suite
      */
     public function __construct($message, Suite $suite)
     {

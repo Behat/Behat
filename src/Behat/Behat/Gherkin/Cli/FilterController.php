@@ -35,8 +35,6 @@ final class FilterController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Gherkin $gherkin
      */
     public function __construct(Gherkin $gherkin)
     {
@@ -45,8 +43,6 @@ final class FilterController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -55,29 +51,29 @@ final class FilterController implements Controller
                 '--name',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only execute the feature elements which match part" . PHP_EOL .
-                "of the given name or regex."
+                'Only execute the feature elements which match part' . PHP_EOL .
+                'of the given name or regex.'
             )
             ->addOption(
                 '--tags',
                 null,
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                "Only execute the features or scenarios with tags" . PHP_EOL .
-                "matching tag filter expression."
+                'Only execute the features or scenarios with tags' . PHP_EOL .
+                'matching tag filter expression.'
             )
             ->addOption(
                 '--role',
                 null,
                 InputOption::VALUE_REQUIRED,
-                "Only execute the features with actor role matching" . PHP_EOL .
-                "a wildcard."
+                'Only execute the features with actor role matching' . PHP_EOL .
+                'a wildcard.'
             )
             ->addOption(
                 '--narrative',
                 null,
                 InputOption::VALUE_REQUIRED,
-                "Only execute the features with actor description" . PHP_EOL .
-                "matching a regex."
+                'Only execute the features with actor description' . PHP_EOL .
+                'matching a regex.'
             )
         ;
     }
@@ -105,6 +101,7 @@ final class FilterController implements Controller
         if (count($filters)) {
             $this->gherkin->setFilters($filters);
         }
+
         return null;
     }
 }

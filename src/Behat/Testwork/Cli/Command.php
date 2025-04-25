@@ -55,7 +55,7 @@ final class Command extends BaseCommand
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return integer Return code of one of the processors or 0 if none of them returned integer
+     * @return int Return code of one of the processors or 0 if none of them returned integer
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
