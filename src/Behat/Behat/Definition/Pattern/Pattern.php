@@ -17,31 +17,11 @@ namespace Behat\Behat\Definition\Pattern;
  */
 final class Pattern
 {
-    /**
-     * @var string
-     */
-    private $canonicalText;
-    /**
-     * @var string
-     */
-    private $pattern;
-    /**
-     * @var int
-     */
-    private $placeholderCount;
-
-    /**
-     * Initializes pattern.
-     *
-     * @param string $canonicalText
-     * @param string $pattern
-     * @param int    $placeholderCount
-     */
-    public function __construct($canonicalText, $pattern, $placeholderCount = 0)
-    {
-        $this->canonicalText = $canonicalText;
-        $this->pattern = $pattern;
-        $this->placeholderCount = $placeholderCount;
+    public function __construct(
+        private string $canonicalText,
+        private string $pattern,
+        private int $placeholderCount = 0,
+    ) {
     }
 
     /**
