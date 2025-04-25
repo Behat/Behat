@@ -12,7 +12,10 @@ namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
-use Behat\Transliterator\Transliterator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameGenerator;
+use Behat\Behat\Definition\Pattern\StepMethodNameGenerator;
+
+use function preg_replace;
 
 /**
  * Defines a way to handle turnip patterns.
@@ -41,6 +44,11 @@ final class TurnipPatternPolicy implements PatternPolicy
         "/(?<!\w|\.|\,)\-?\d+(?:[\.\,]\d+)?(?!\w|\.|\,)/",
     ];
 
+    public function __construct(
+        private readonly StepMethodNameGenerator $canonicalTextGenerator = new SimpleStepMethodNameGenerator(),
+    ) {
+    }
+
     public function supportsPatternType($type)
     {
         return null === $type || 'turnip' === $type;
@@ -54,11 +62,13 @@ final class TurnipPatternPolicy implements PatternPolicy
             $pattern = preg_replace_callback(
                 $replacePattern,
                 function () use (&$count) { return ':arg' . ++$count; },
-                $pattern
+                $pattern,
             );
         }
         $pattern = $this->escapeAlternationSyntax($pattern);
-        $canonicalText = $this->generateCanonicalText($stepText);
+        $canonicalText = $this->canonicalTextGenerator->generate(
+            preg_replace(self::$placeholderPatterns, '', $stepText),
+        );
 
         return new Pattern($canonicalText, $pattern, $count);
     }
@@ -94,23 +104,6 @@ final class TurnipPatternPolicy implements PatternPolicy
     }
 
     /**
-     * Generates canonical text for step text.
-     *
-     * @param string $stepText
-     *
-     * @return string
-     */
-    private function generateCanonicalText($stepText)
-    {
-        $canonicalText = preg_replace(self::$placeholderPatterns, '', $stepText);
-        $canonicalText = Transliterator::transliterate($canonicalText, ' ');
-        $canonicalText = preg_replace('/[^a-zA-Z\_\ ]/', '', $canonicalText);
-        $canonicalText = str_replace(' ', '', ucwords($canonicalText));
-
-        return $canonicalText;
-    }
-
-    /**
      * Replaces turnip tokens with regex capture groups.
      *
      * @param string $regex
@@ -124,7 +117,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         return preg_replace_callback(
             self::PLACEHOLDER_REGEXP,
             [$this, 'replaceTokenWithRegexCaptureGroup'],
-            $regex
+            $regex,
         );
     }
 
@@ -132,7 +125,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     {
         if (strlen($tokenMatch[1]) > 32) {
             throw new InvalidPatternException(
-                "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used."
+                "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used.",
             );
         }
 
