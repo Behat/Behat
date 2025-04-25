@@ -133,7 +133,7 @@ Feature: I18n Attributes
       --- FeatureContext не содержит необходимых определений. Вы можете добавить их используя шаблоны:
 
           #[Then('/^Добавить "([^"]*)" число$/')]
-          public function dobavitChislo($arg1): void
+          public function stepDefinition1($arg1): void
           {
               throw new PendingException();
           }
@@ -176,7 +176,7 @@ Feature: I18n Attributes
       --- FeatureContext не содержит необходимых определений. Вы можете добавить их используя шаблоны:
 
           #[Then('/^Добавить "([^"]*)" число$/')]
-          public function dobavitChislo($arg1): void
+          public function stepDefinition1($arg1): void
           {
               throw new PendingException();
           }
@@ -219,7 +219,7 @@ Feature: I18n Attributes
       --- FeatureContext has missing steps. Define them with these snippets:
 
           #[Then('/^Добавить "([^"]*)" число$/')]
-          public function dobavitChislo($arg1): void
+          public function stepDefinition1($arg1): void
           {
               throw new PendingException();
           }
@@ -262,7 +262,7 @@ Feature: I18n Attributes
       --- FeatureContext has missing steps. Define them with these snippets:
 
           #[Then('/^Добавить "([^"]*)" число$/')]
-          public function dobavitChislo($arg1): void
+          public function stepDefinition1($arg1): void
           {
               throw new PendingException();
           }

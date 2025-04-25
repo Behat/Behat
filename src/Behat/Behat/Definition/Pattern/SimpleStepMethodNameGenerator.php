@@ -12,20 +12,23 @@ class SimpleStepMethodNameGenerator implements StepMethodNameGenerator
      */
     public static function cleanupMethodName(string $name): string
     {
-        if (0 !== strlen($name)) {
-            $name[0] = strtolower($name[0]);
-
-            return $name;
+        if ($name === '') {
+            return 'stepDefinition1';
         }
 
-        return 'stepDefinition1';
+        return mb_lcfirst($name);
     }
 
     public function generate(string $stepTextWithoutPlaceholders): string
     {
-        $name = preg_replace('/[^a-zA-Z\_\ ]/', '', $stepTextWithoutPlaceholders);
+        // Put the text in title case first so that it will become CamelCase when we strip strings
+        $name = mb_convert_case($stepTextWithoutPlaceholders, MB_CASE_TITLE);
 
-        $name = str_replace(' ', '', ucwords($name));
+        // Remove characters that are never valid in a method name
+        $name = preg_replace('/[^a-zA-Z0-9_\x80-\xff]/u', '', $name);
+
+        // Remove leading digits (these are the only characters that are valid in a name except at the beginning)
+        $name = preg_replace('/^[0-9]+/', '', $name);
 
         return self::cleanupMethodName($name);
     }
