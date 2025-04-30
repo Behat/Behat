@@ -2,7 +2,7 @@
 
 namespace Behat\Behat\Definition\Pattern;
 
-class SimpleStepMethodNameSuggester implements StepMethodNameSuggester
+final class SimpleStepMethodNameSuggester implements StepMethodNameSuggester
 {
     public const DEFAULT_NAME = 'stepDefinition1';
 

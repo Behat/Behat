@@ -5,7 +5,7 @@ namespace Behat\Tests\Definition\Pattern;
 use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use PHPUnit\Framework\TestCase;
 
-class SimpleStepMethodNameSuggesterTest extends TestCase
+final class SimpleStepMethodNameSuggesterTest extends TestCase
 {
     public static function providerValidMethodNames(): array
     {
