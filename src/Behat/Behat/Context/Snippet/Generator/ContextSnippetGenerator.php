@@ -14,7 +14,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Behat\Definition\Call as DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
-use Behat\Behat\Definition\Pattern\SimpleStepMethodNameGenerator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use Behat\Behat\Snippet\Exception\EnvironmentSnippetGenerationException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Behat\Snippet\Snippet;
@@ -109,23 +109,17 @@ TPL;
         $stepText = $step->getText();
         $pattern = $this->patternTransformer->generatePattern($patternType, $stepText);
 
-        $methodName = $this->getMethodName($contextClass, $pattern->getSuggestedMethodName(), $pattern->getPattern());
+        $methodName = $this->getUniqueMethodName(
+            $contextClass,
+            $pattern->getPattern(),
+            $pattern->getSuggestedMethodName() ?: SimpleStepMethodNameSuggester::DEFAULT_NAME,
+        );
         $methodArguments = $this->getMethodArguments($step, $pattern->getPlaceholderCount());
         $snippetTemplate = $this->getSnippetTemplate($pattern->getPattern(), $methodName, $methodArguments);
 
         $usedClasses = $this->getUsedClasses($step);
 
         return new ContextSnippet($step, $snippetTemplate, $contextClass, $usedClasses);
-    }
-
-    /**
-     * Generates method name using step text and regex.
-     */
-    private function getMethodName(string $contextClass, string $canonicalText, string $pattern): string
-    {
-        $methodName = SimpleStepMethodNameGenerator::cleanupMethodName($canonicalText);
-
-        return $this->getUniqueMethodName($contextClass, $pattern, $methodName);
     }
 
     /**

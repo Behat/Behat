@@ -12,7 +12,7 @@ class SimpleStepMethodNameSuggesterTest extends TestCase
         return [
             // note, placeholders will have already been removed from the incoming text
             // These cases all produce names that are valid for PHP without special handling
-            'empty string' => ['', 'stepDefinition1'],
+            'empty string' => ['', SimpleStepMethodNameSuggester::DEFAULT_NAME],
             'single word' => ['wait', 'wait'],
             'single word, caps' => ['Wait', 'wait'],
             'multiple words' => ['wait for the page to load', 'waitForThePageToLoad'],
@@ -26,8 +26,8 @@ class SimpleStepMethodNameSuggesterTest extends TestCase
             'cannot contain hyphens' => ['two - three people', 'twoThreePeople'],
             'cannot contain periods' => ['some. thing.', 'someThing'],
             'cannot contain UTF8 characters outside the valid range' => ['Добавить something', 'something'],
-            'only extended UTF8' => ['Добавить  число', 'stepDefinition1'],
-            'only invalid characters' => ['0-2', 'stepDefinition1'],
+            'only extended UTF8' => ['Добавить  число',  SimpleStepMethodNameSuggester::DEFAULT_NAME],
+            'only invalid characters' => ['0-2',  SimpleStepMethodNameSuggester::DEFAULT_NAME],
         ];
     }
 
