@@ -2,10 +2,10 @@
 
 namespace Behat\Tests\Definition\Pattern;
 
-use Behat\Behat\Definition\Pattern\SimpleStepMethodNameGenerator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use PHPUnit\Framework\TestCase;
 
-class SimpleStepMethodNameGeneratorTest extends TestCase
+class SimpleStepMethodNameSuggesterTest extends TestCase
 {
     public static function providerValidMethodNames(): array
     {
@@ -36,6 +36,6 @@ class SimpleStepMethodNameGeneratorTest extends TestCase
      */
     public function testGeneratesValidMethodNames(string $stepText, string $expect)
     {
-        $this->assertSame($expect, (new SimpleStepMethodNameGenerator())->generate($stepText));
+        $this->assertSame($expect, (new SimpleStepMethodNameSuggester())->suggest($stepText));
     }
 }

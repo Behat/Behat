@@ -11,7 +11,7 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Behat\Definition\Pattern\SimpleStepMethodNameGenerator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
@@ -42,7 +42,7 @@ final class DefinitionExtension implements Extension
     public const PATTERN_TRANSFORMER_ID = 'definition.pattern_transformer';
     public const WRITER_ID = 'definition.writer';
     public const DEFINITION_TRANSLATOR_ID = 'definition.translator';
-    public const STEP_METHOD_NAME_GENERATOR_ID = 'definition.step_method_name_generator_id';
+    public const STEP_METHOD_NAME_SUGGESTER_ID = 'definition.step_method_name_suggester_id';
 
     /*
      * Available extension points
@@ -91,7 +91,7 @@ final class DefinitionExtension implements Extension
         $this->loadPatternTransformer($container);
         $this->loadDefinitionTranslator($container);
         $this->loadDefaultSearchEngines($container);
-        $this->loadStepMethodNameGenerator($container);
+        $this->loadStepMethodNameSuggester($container);
         $this->loadDefaultPatternPolicies($container);
         $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
@@ -173,10 +173,10 @@ final class DefinitionExtension implements Extension
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
     }
 
-    private function loadStepMethodNameGenerator(ContainerBuilder $container)
+    private function loadStepMethodNameSuggester(ContainerBuilder $container): void
     {
-        $definition = new Definition(SimpleStepMethodNameGenerator::class);
-        $container->setDefinition(self::STEP_METHOD_NAME_GENERATOR_ID, $definition);
+        $definition = new Definition(SimpleStepMethodNameSuggester::class);
+        $container->setDefinition(self::STEP_METHOD_NAME_SUGGESTER_ID, $definition);
     }
 
     /**
@@ -185,13 +185,13 @@ final class DefinitionExtension implements Extension
     private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy', [
-            new Reference(self::STEP_METHOD_NAME_GENERATOR_ID),
+            new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
         ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 50]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.turnip', $definition);
 
         $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy', [
-            new Reference(self::STEP_METHOD_NAME_GENERATOR_ID),
+            new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
         ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 60]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.regex', $definition);

@@ -12,8 +12,8 @@ namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
-use Behat\Behat\Definition\Pattern\SimpleStepMethodNameGenerator;
-use Behat\Behat\Definition\Pattern\StepMethodNameGenerator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
+use Behat\Behat\Definition\Pattern\StepMethodNameSuggester;
 
 use function preg_replace;
 
@@ -45,7 +45,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     ];
 
     public function __construct(
-        private readonly StepMethodNameGenerator $methodNameGenerator = new SimpleStepMethodNameGenerator(),
+        private readonly StepMethodNameSuggester $methodNameSuggester = new SimpleStepMethodNameSuggester(),
     ) {
     }
 
@@ -66,7 +66,7 @@ final class TurnipPatternPolicy implements PatternPolicy
             );
         }
         $pattern = $this->escapeAlternationSyntax($pattern);
-        $methodName = $this->methodNameGenerator->generate(
+        $methodName = $this->methodNameSuggester->suggest(
             preg_replace(self::$placeholderPatterns, '', $stepText),
         );
 

@@ -12,8 +12,8 @@ namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
-use Behat\Behat\Definition\Pattern\SimpleStepMethodNameGenerator;
-use Behat\Behat\Definition\Pattern\StepMethodNameGenerator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
+use Behat\Behat\Definition\Pattern\StepMethodNameSuggester;
 
 use function array_keys;
 use function preg_replace;
@@ -35,7 +35,7 @@ final class RegexPatternPolicy implements PatternPolicy
     ];
 
     public function __construct(
-        private readonly StepMethodNameGenerator $methodNameGenerator = new SimpleStepMethodNameGenerator(),
+        private readonly StepMethodNameSuggester $methodNameSuggester = new SimpleStepMethodNameSuggester(),
     ) {
     }
 
@@ -46,7 +46,7 @@ final class RegexPatternPolicy implements PatternPolicy
 
     public function generatePattern($stepText)
     {
-        $methodName = $this->methodNameGenerator->generate(
+        $methodName = $this->methodNameSuggester->suggest(
             preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),
         );
         $stepRegex = $this->generateRegex($stepText);
