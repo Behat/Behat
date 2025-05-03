@@ -12,7 +12,11 @@ namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
-use Behat\Transliterator\Transliterator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
+use Behat\Behat\Definition\Pattern\StepMethodNameSuggester;
+
+use function array_keys;
+use function preg_replace;
 
 /**
  * Defines a way to handle regex patterns.
@@ -30,6 +34,11 @@ final class RegexPatternPolicy implements PatternPolicy
         '/(?<=\W|^)(\d+)(?=\W|$)/' => '(\\d+)', // Numbers
     ];
 
+    public function __construct(
+        private readonly StepMethodNameSuggester $methodNameSuggester = new SimpleStepMethodNameSuggester(),
+    ) {
+    }
+
     public function supportsPatternType($type)
     {
         return 'regex' === $type;
@@ -37,11 +46,13 @@ final class RegexPatternPolicy implements PatternPolicy
 
     public function generatePattern($stepText)
     {
-        $canonicalText = $this->generateCanonicalText($stepText);
+        $methodName = $this->methodNameSuggester->suggest(
+            preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),
+        );
         $stepRegex = $this->generateRegex($stepText);
         $placeholderCount = $this->countPlaceholders($stepText, $stepRegex);
 
-        return new Pattern($canonicalText, '/^' . $stepRegex . '$/', $placeholderCount);
+        return new Pattern($methodName, '/^' . $stepRegex . '$/', $placeholderCount);
     }
 
     public function supportsPattern($pattern)
@@ -75,23 +86,6 @@ final class RegexPatternPolicy implements PatternPolicy
             array_values(self::$replacePatterns),
             $this->escapeStepText($stepText)
         );
-    }
-
-    /**
-     * Generates canonical text for step text.
-     *
-     * @param string $stepText
-     *
-     * @return string
-     */
-    private function generateCanonicalText($stepText)
-    {
-        $canonicalText = preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText));
-        $canonicalText = Transliterator::transliterate($canonicalText, ' ');
-        $canonicalText = preg_replace('/[^a-zA-Z\_\ ]/', '', $canonicalText);
-        $canonicalText = str_replace(' ', '', ucwords($canonicalText));
-
-        return $canonicalText;
     }
 
     /**

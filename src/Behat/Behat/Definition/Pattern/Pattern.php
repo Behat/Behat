@@ -17,59 +17,34 @@ namespace Behat\Behat\Definition\Pattern;
  */
 final class Pattern
 {
-    /**
-     * @var string
-     */
-    private $canonicalText;
-    /**
-     * @var string
-     */
-    private $pattern;
-    /**
-     * @var int
-     */
-    private $placeholderCount;
-
-    /**
-     * Initializes pattern.
-     *
-     * @param string $canonicalText
-     * @param string $pattern
-     * @param int    $placeholderCount
-     */
-    public function __construct($canonicalText, $pattern, $placeholderCount = 0)
-    {
-        $this->canonicalText = $canonicalText;
-        $this->pattern = $pattern;
-        $this->placeholderCount = $placeholderCount;
+    public function __construct(
+        private string $suggestedMethodName,
+        private string $pattern,
+        private int $placeholderCount = 0,
+    ) {
     }
 
     /**
      * Returns canonical step text.
      *
-     * @return string
+     * @deprecated see getSuggestedMethodName
      */
-    public function getCanonicalText()
+    public function getCanonicalText(): string
     {
-        return $this->canonicalText;
+        return $this->suggestedMethodName;
     }
 
-    /**
-     * Returns pattern.
-     *
-     * @return string
-     */
-    public function getPattern()
+    public function getSuggestedMethodName(): string
+    {
+        return $this->suggestedMethodName;
+    }
+
+    public function getPattern(): string
     {
         return $this->pattern;
     }
 
-    /**
-     * Returns pattern placeholder count.
-     *
-     * @return int
-     */
-    public function getPlaceholderCount()
+    public function getPlaceholderCount(): int
     {
         return $this->placeholderCount;
     }
