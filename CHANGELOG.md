@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.22.0] - 2025-05-05
+
+### Changed
+
+* Suggested method names for new step definitions will no longer be transliterated to ASCII.
+  Users working in languages whose characters are mostly outside the allowed UTF-8 range
+  will see generic `stepDefinitionX` names. We have provided an extension point for custom
+  suggestion implementations, and would consider providing an official extension. If this
+  affects you, please open a discussion on the Behat repository.
+  By @acoulton in [#1633](https://github.com/Behat/Behat/pull/1633)
+* The behat/transliterator package is no longer required and will shortly be archived.
+
+### Internal
+
+* Update all code style to Symfony coding style (with small variations) by @carlos-granados in [#1628](https://github.com/Behat/Behat/pull/1628)
+
 ## [3.21.1] - 2025-04-22
 
 ### Fixed
@@ -1247,6 +1263,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.22.0]: https://github.com/Behat/Behat/compare/v3.21.1...v3.22.0
 [3.21.1]: https://github.com/Behat/Behat/compare/v3.21.0...v3.21.1
 [3.21.0]: https://github.com/Behat/Behat/compare/v3.20.0...v3.21.0
 [3.20.0]: https://github.com/Behat/Behat/compare/v3.19.0...v3.20.0
