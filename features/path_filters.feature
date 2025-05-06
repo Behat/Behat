@@ -25,7 +25,7 @@ Feature: Path filters
           public function someFastStepN($num) {}
       }
      """
-    And a file named "features/feature1.feature" with:
+    And a file named "features/a/feature1.feature" with:
       """
       Feature: First Feature
 
@@ -36,7 +36,7 @@ Feature: Path filters
         Scenario: Second Scenario
           Given Some fast step N14
       """
-    And a file named "features/feature2.feature" with:
+    And a file named "features/a/feature2.feature" with:
       """
       Feature: Second Feature
 
@@ -47,18 +47,29 @@ Feature: Path filters
           Given Some slow step N22
           And Some fast step N23
       """
+    And a file named "features/b/feature1.feature" with:
+      """
+      Feature: Third Feature
+
+        Scenario: First Scenario
+          Given Some fast step N14
+
+        Scenario: Second Scenario
+          Given Some fast step N14
+          And Some fast step N14
+      """
 
   Scenario: First feature file only
-    When I run "behat --no-colors -f pretty features/feature1.feature"
+    When I run "behat --no-colors -f pretty features/a/feature1.feature"
     Then it should pass with:
       """
       Feature: First Feature
 
-        Scenario: First Scenario   # features/feature1.feature:3
+        Scenario: First Scenario   # features/a/feature1.feature:3
           Given Some slow step N12 # FeatureContext::someSlowStepN()
           And Some normal step N13 # FeatureContext::someNormalStepN()
 
-        Scenario: Second Scenario  # features/feature1.feature:7
+        Scenario: Second Scenario  # features/a/feature1.feature:7
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
       2 scenarios (2 passed)
@@ -66,15 +77,15 @@ Feature: Path filters
       """
 
   Scenario: Second feature file only
-    When I run "behat --no-colors -f pretty features/feature2.feature"
+    When I run "behat --no-colors -f pretty features/a/feature2.feature"
     Then it should pass with:
       """
       Feature: Second Feature
 
-        Background:                  # features/feature2.feature:3
+        Background:                  # features/a/feature2.feature:3
           Given Some normal step N21 # FeatureContext::someNormalStepN()
 
-        Scenario: First Scenario   # features/feature2.feature:6
+        Scenario: First Scenario   # features/a/feature2.feature:6
           Given Some slow step N22 # FeatureContext::someSlowStepN()
           And Some fast step N23   # FeatureContext::someFastStepN()
 
@@ -83,24 +94,24 @@ Feature: Path filters
       """
 
   Scenario: Both feature files
-    When I run "behat --no-colors -f pretty features/feature1.feature features/feature2.feature"
+    When I run "behat --no-colors -f pretty features/a/feature1.feature features/a/feature2.feature"
     Then it should pass with:
       """
       Feature: First Feature
 
-        Scenario: First Scenario   # features/feature1.feature:3
+        Scenario: First Scenario   # features/a/feature1.feature:3
           Given Some slow step N12 # FeatureContext::someSlowStepN()
           And Some normal step N13 # FeatureContext::someNormalStepN()
 
-        Scenario: Second Scenario  # features/feature1.feature:7
+        Scenario: Second Scenario  # features/a/feature1.feature:7
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
       Feature: Second Feature
 
-        Background:                  # features/feature2.feature:3
+        Background:                  # features/a/feature2.feature:3
           Given Some normal step N21 # FeatureContext::someNormalStepN()
 
-        Scenario: First Scenario   # features/feature2.feature:6
+        Scenario: First Scenario   # features/a/feature2.feature:6
           Given Some slow step N22 # FeatureContext::someSlowStepN()
           And Some fast step N23   # FeatureContext::someFastStepN()
 
@@ -108,13 +119,74 @@ Feature: Path filters
       6 steps (6 passed)
       """
 
-    Scenario: Single scenario from single feature file
-      When I run "behat --no-colors -f pretty features/feature1.feature:7"
+    Scenario: Single nested directory
+      When I run "behat --no-colors -f pretty features/a"
       Then it should pass with:
       """
       Feature: First Feature
 
-        Scenario: Second Scenario  # features/feature1.feature:7
+        Scenario: First Scenario   # features/a/feature1.feature:3
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario: Second Scenario  # features/a/feature1.feature:7
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      Feature: Second Feature
+
+        Background:                  # features/a/feature2.feature:3
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
+
+        Scenario: First Scenario   # features/a/feature2.feature:6
+          Given Some slow step N22 # FeatureContext::someSlowStepN()
+          And Some fast step N23   # FeatureContext::someFastStepN()
+
+      3 scenarios (3 passed)
+      6 steps (6 passed)
+      """
+
+  Scenario: Directory with nested directories
+    When I run "behat --no-colors -f pretty features"
+    Then it should pass with:
+      """
+      Feature: First Feature
+
+        Scenario: First Scenario   # features/a/feature1.feature:3
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario: Second Scenario  # features/a/feature1.feature:7
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      Feature: Second Feature
+
+        Background:                  # features/a/feature2.feature:3
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
+
+        Scenario: First Scenario   # features/a/feature2.feature:6
+          Given Some slow step N22 # FeatureContext::someSlowStepN()
+          And Some fast step N23   # FeatureContext::someFastStepN()
+
+      Feature: Third Feature
+
+        Scenario: First Scenario   # features/b/feature1.feature:3
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+        Scenario: Second Scenario  # features/b/feature1.feature:6
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+          And Some fast step N14   # FeatureContext::someFastStepN()
+
+      5 scenarios (5 passed)
+      9 steps (9 passed)
+      """
+
+    Scenario: Single scenario from single feature file
+      When I run "behat --no-colors -f pretty features/a/feature1.feature:7"
+      Then it should pass with:
+      """
+      Feature: First Feature
+
+        Scenario: Second Scenario  # features/a/feature1.feature:7
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
       1 scenario (1 passed)
@@ -122,20 +194,20 @@ Feature: Path filters
       """
 
   Scenario: Single scenario from each feature file
-    When I run "behat --no-colors -f pretty features/feature1.feature:7 features/feature2.feature:6"
+    When I run "behat --no-colors -f pretty features/a/feature1.feature:7 features/a/feature2.feature:6"
     Then it should pass with:
       """
       Feature: First Feature
 
-        Scenario: Second Scenario  # features/feature1.feature:7
+        Scenario: Second Scenario  # features/a/feature1.feature:7
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
       Feature: Second Feature
 
-        Background:                  # features/feature2.feature:3
+        Background:                  # features/a/feature2.feature:3
           Given Some normal step N21 # FeatureContext::someNormalStepN()
 
-        Scenario: First Scenario   # features/feature2.feature:6
+        Scenario: First Scenario   # features/a/feature2.feature:6
           Given Some slow step N22 # FeatureContext::someSlowStepN()
           And Some fast step N23   # FeatureContext::someFastStepN()
 
