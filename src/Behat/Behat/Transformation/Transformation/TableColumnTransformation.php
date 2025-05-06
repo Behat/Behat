@@ -46,7 +46,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
         // so we need to accept both possibilities
         if (!$argumentArgumentValue instanceof TableNode && !is_array($argumentArgumentValue)) {
             return false;
-        };
+        }
 
         if (!str_starts_with($this->pattern, 'column:')) {
             return false;
@@ -55,6 +55,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 
         if ($argumentArgumentValue instanceof TableNode) {
             $tableHeadings = $argumentArgumentValue->getRow(0);
+
             return array_intersect($columnNames, $tableHeadings) !== [];
         }
         foreach ($argumentArgumentValue as $row) {
@@ -68,6 +69,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
                 return false;
             }
         }
+
         return true;
     }
 
@@ -109,24 +111,18 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 
     /**
      * The priority of this transformer needs to be less that the priority of the other table transformers because
-     * we want to be able to transform whole tables or whole rows before we attempt to transform any column
+     * we want to be able to transform whole tables or whole rows before we attempt to transform any column.
      */
     public function getPriority()
     {
         return 30;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'TableColumnTransform ' . $this->pattern;

@@ -23,17 +23,11 @@ interface FeaturePrinter
 {
     /**
      * Prints feature header using provided formatter.
-     *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature);
 
     /**
      * Prints feature footer using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param TestResult $result
      */
     public function printFooter(Formatter $formatter, TestResult $result);
 }

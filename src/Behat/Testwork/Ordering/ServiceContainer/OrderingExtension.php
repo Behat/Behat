@@ -37,8 +37,6 @@ final class OrderingExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -47,8 +45,6 @@ final class OrderingExtension implements Extension
 
     /**
      * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
      *
      * @api
      */
@@ -79,8 +75,6 @@ final class OrderingExtension implements Extension
      * before any extension `configure()` method is called. This allows extensions
      * to hook into the configuration of other extensions providing such an
      * extension point.
-     *
-     * @param ExtensionManager $extensionManager
      */
     public function initialize(ExtensionManager $extensionManager)
     {
@@ -88,8 +82,6 @@ final class OrderingExtension implements Extension
 
     /**
      * Setups configuration for the extension.
-     *
-     * @param ArrayNodeDefinition $builder
      */
     public function configure(ArrayNodeDefinition $builder)
     {
@@ -97,9 +89,6 @@ final class OrderingExtension implements Extension
 
     /**
      * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array $config
      */
     public function load(ContainerBuilder $container, array $config)
     {
@@ -110,8 +99,6 @@ final class OrderingExtension implements Extension
 
     /**
      * Loads order controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadOrderController(ContainerBuilder $container)
     {
@@ -124,9 +111,7 @@ final class OrderingExtension implements Extension
     }
 
     /**
-     * Loads exercise wrapper that enables ordering
-     *
-     * @param ContainerBuilder $container
+     * Loads exercise wrapper that enables ordering.
      */
     private function loadOrderedExercise(ContainerBuilder $container)
     {
@@ -138,16 +123,13 @@ final class OrderingExtension implements Extension
     }
 
     /**
-     * Defines default orderers
-     *
-     * @param ContainerBuilder $container
+     * Defines default orderers.
      */
     private function loadDefaultOrderers(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Testwork\Ordering\Orderer\ReverseOrderer');
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.reverse', $definition);
-
 
         $definition = new Definition('Behat\Testwork\Ordering\Orderer\RandomOrderer');
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);

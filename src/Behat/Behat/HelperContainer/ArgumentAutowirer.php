@@ -13,10 +13,10 @@ namespace Behat\Behat\HelperContainer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionException;
 
 /**
  * Automatically wires arguments of a given function from inside the container by using type-hints.
@@ -32,8 +32,6 @@ final class ArgumentAutowirer
 
     /**
      * Initialises wirer.
-     *
-     * @param PsrContainerInterface $container
      */
     public function __construct(PsrContainerInterface $container)
     {
@@ -42,9 +40,6 @@ final class ArgumentAutowirer
 
     /**
      * Autowires given arguments using provided container.
-     *
-     * @param ReflectionFunctionAbstract $reflection
-     * @param array $arguments
      *
      * @return array
      *
@@ -67,9 +62,7 @@ final class ArgumentAutowirer
      *
      * Argument is wireable if it was not previously set and it has a class type-hint.
      *
-     * @param array               $arguments
-     * @param integer             $index
-     * @param ReflectionParameter $parameter
+     * @param int $index
      *
      * @return bool
      */
@@ -105,7 +98,6 @@ final class ArgumentAutowirer
             new ReflectionClass($typeString);
 
             return $typeString;
-
         } catch (ReflectionException $e) {
             return null;
         }

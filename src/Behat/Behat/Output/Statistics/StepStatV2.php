@@ -87,7 +87,7 @@ final class StepStatV2 extends StepStat
     /**
      * Returns step error (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getError()
     {
@@ -97,7 +97,7 @@ final class StepStatV2 extends StepStat
     /**
      * Returns step output (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

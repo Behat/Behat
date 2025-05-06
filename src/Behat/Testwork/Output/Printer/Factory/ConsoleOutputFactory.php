@@ -36,8 +36,6 @@ class ConsoleOutputFactory extends OutputFactory
 
     /**
      * Configure output stream parameters.
-     *
-     * @param OutputInterface $output
      */
     protected function configureOutputStream(OutputInterface $output)
     {
@@ -74,9 +72,6 @@ class ConsoleOutputFactory extends OutputFactory
         return $stream;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createOutput($stream = null)
     {
         $stream = $stream ?: $this->createOutputStream();

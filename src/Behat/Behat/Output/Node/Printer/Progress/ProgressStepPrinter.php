@@ -33,7 +33,7 @@ final class ProgressStepPrinter implements StepPrinter
      */
     private $resultConverter;
     /**
-     * @var integer
+     * @var int
      */
     private $stepsPrinted = 0;
 
@@ -41,17 +41,12 @@ final class ProgressStepPrinter implements StepPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
      */
     public function __construct(ResultToStringConverter $resultConverter)
     {
         $this->resultConverter = $resultConverter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $printer = $formatter->getOutputPrinter();
@@ -83,8 +78,8 @@ final class ProgressStepPrinter implements StepPrinter
         }
 
         $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
-        if ($showOutput === ShowOutputOption::Yes ||
-            ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
+        if ($showOutput === ShowOutputOption::Yes
+            || ($showOutput === ShowOutputOption::OnFail && !$result->isPassed())) {
             $this->printStdOut($formatter->getOutputPrinter(), $result);
         }
 

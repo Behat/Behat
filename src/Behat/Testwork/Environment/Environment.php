@@ -30,8 +30,6 @@ interface Environment
     /**
      * Creates callable using provided Callee.
      *
-     * @param Callee $callee
-     *
      * @return callable
      */
     public function bindCallee(Callee $callee);

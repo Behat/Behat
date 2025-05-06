@@ -30,17 +30,12 @@ final class GherkinTranslationsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param Translator $translator
      */
     public function __construct(Translator $translator)
     {
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(SymfonyCommand $command)
     {
     }
@@ -49,9 +44,10 @@ final class GherkinTranslationsController implements Controller
     {
         $i18nPath = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . DIRECTORY_SEPARATOR . 'i18n.php';
 
-        foreach (require($i18nPath) as $lang => $messages) {
+        foreach (require ($i18nPath) as $lang => $messages) {
             $this->translator->addResource('array', $messages, $lang, 'output');
         }
+
         return null;
     }
 }

@@ -19,7 +19,8 @@ final class Suite implements ConfigConverterInterface
     private const PATHS_SETTING = 'paths';
     private const FILTERS_SETTING = 'filters';
 
-    private const CONTEXTS_FUNCTION = 'withContexts';
+    private const WITH_CONTEXTS_FUNCTION = 'withContexts';
+    private const ADD_CONTEXT_FUNCTION = 'addContext';
     private const PATHS_FUNCTION = 'withPaths';
     private const FILTER_FUNCTION = 'withFilter';
 
@@ -41,7 +42,6 @@ final class Suite implements ConfigConverterInterface
     /**
      * @param array<mixed> $constructorArgs
      */
-
     public function addContext(string $context, array $constructorArgs = []): self
     {
         $this->settings[self::CONTEXTS_SETTING][][$context] = $constructorArgs;
@@ -104,13 +104,36 @@ final class Suite implements ConfigConverterInterface
 
     private function addContextsToExpr(Expr &$expr): void
     {
-        if (isset($this->settings[self::CONTEXTS_SETTING])) {
-            $expr = ConfigConverterTools::addMethodCall(
-                self::CONTEXTS_FUNCTION,
-                $this->settings[self::CONTEXTS_SETTING],
-                $expr
-            );
-            unset($this->settings[self::CONTEXTS_SETTING]);
+        if (!isset($this->settings[self::CONTEXTS_SETTING])) {
+            return;
+        }
+
+        $contexts = $this->settings[self::CONTEXTS_SETTING];
+        unset($this->settings[self::CONTEXTS_SETTING]);
+
+        // Contexts can be configured with or without constructor arguments.
+        $hasAnyWithArguments = (bool) array_filter($contexts, fn ($c) => is_array($c));
+
+        if (!$hasAnyWithArguments) {
+            // All the contexts are just class names, we can add them as a single `->withContexts` call
+            $expr = ConfigConverterTools::addMethodCall(self::class, self::WITH_CONTEXTS_FUNCTION, $contexts, $expr);
+
+            return;
+        }
+
+        // One or more contexts has constructor arguments. We need to preserve the existing order, in case any are
+        // registering hooks. Therefore, we need to add each one individually.
+        foreach ($contexts as $contextConfig) {
+            if (is_array($contextConfig)) {
+                // The structure is [$context => $constructorArgs]
+                $args = [
+                    array_key_first($contextConfig),
+                    array_shift($contextConfig),
+                ];
+            } else {
+                $args = [$contextConfig, []];
+            }
+            $expr = ConfigConverterTools::addMethodCall(self::class, self::ADD_CONTEXT_FUNCTION, $args, $expr);
         }
     }
 
@@ -118,6 +141,7 @@ final class Suite implements ConfigConverterInterface
     {
         if (isset($this->settings[self::PATHS_SETTING])) {
             $expr = ConfigConverterTools::addMethodCall(
+                self::class,
                 self::PATHS_FUNCTION,
                 $this->settings[self::PATHS_SETTING],
                 $expr
@@ -139,6 +163,7 @@ final class Suite implements ConfigConverterInterface
                 };
                 if ($filter !== null) {
                     $expr = ConfigConverterTools::addMethodCall(
+                        self::class,
                         self::FILTER_FUNCTION,
                         [$filter->toPhpExpr()],
                         $expr

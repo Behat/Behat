@@ -276,9 +276,9 @@ Feature: Snippets generation and addition
       Feature: Step Pattern
 
         Scenario:                         # features/coffee.feature:2
-          Then 5 should have value of £10 # FeatureContext::shouldHaveValueOfPs()
+          Then 5 should have value of £10 # FeatureContext::shouldHaveValueOf£()
             TODO: write pending definition
-          And 7 should have value of £7.2 # FeatureContext::shouldHaveValueOfPs()
+          And 7 should have value of £7.2 # FeatureContext::shouldHaveValueOf£()
 
       1 scenario (1 pending)
       2 steps (1 pending, 1 skipped)
@@ -310,7 +310,7 @@ Feature: Snippets generation and addition
       --- FeatureContext has missing steps. Define them with these snippets:
 
           #[Given('I have a package v2.5')]
-          public function iHaveAPackageV(): void
+          public function iHaveAPackageV25(): void
           {
               throw new PendingException();
           }

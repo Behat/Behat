@@ -24,18 +24,11 @@ interface ExamplePrinter
 {
     /**
      * Prints example header using provided printer.
-     *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param ExampleNode $example
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, ExampleNode $example);
 
     /**
      * Prints example footer using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param TestResult $result
      */
     public function printFooter(Formatter $formatter, TestResult $result);
 }

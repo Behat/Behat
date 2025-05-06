@@ -11,8 +11,9 @@
 namespace Behat\Behat\Definition\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
+use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
@@ -41,6 +42,7 @@ final class DefinitionExtension implements Extension
     public const PATTERN_TRANSFORMER_ID = 'definition.pattern_transformer';
     public const WRITER_ID = 'definition.writer';
     public const DEFINITION_TRANSLATOR_ID = 'definition.translator';
+    public const STEP_METHOD_NAME_SUGGESTER_ID = 'definition.step_method_name_suggester_id';
 
     /*
      * Available extension points
@@ -56,32 +58,21 @@ final class DefinitionExtension implements Extension
 
     /**
      * Initializes compiler pass.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'definitions';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder
@@ -92,9 +83,6 @@ final class DefinitionExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadFinder($container);
@@ -103,6 +91,7 @@ final class DefinitionExtension implements Extension
         $this->loadPatternTransformer($container);
         $this->loadDefinitionTranslator($container);
         $this->loadDefaultSearchEngines($container);
+        $this->loadStepMethodNameSuggester($container);
         $this->loadDefaultPatternPolicies($container);
         $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
@@ -111,9 +100,6 @@ final class DefinitionExtension implements Extension
         $this->loadDocblockHelper($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processSearchEngines($container);
@@ -122,8 +108,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition finder.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFinder(ContainerBuilder $container)
     {
@@ -133,8 +117,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition repository.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRepository(ContainerBuilder $container)
     {
@@ -146,8 +128,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition writer.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadWriter(ContainerBuilder $container)
     {
@@ -160,8 +140,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition pattern transformer.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadPatternTransformer(ContainerBuilder $container)
     {
@@ -171,8 +149,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition translator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefinitionTranslator(ContainerBuilder $container)
     {
@@ -184,8 +160,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads default search engines.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultSearchEngines(ContainerBuilder $container)
     {
@@ -199,26 +173,32 @@ final class DefinitionExtension implements Extension
         $container->setDefinition(self::SEARCH_ENGINE_TAG . '.repository', $definition);
     }
 
+    private function loadStepMethodNameSuggester(ContainerBuilder $container): void
+    {
+        $definition = new Definition(SimpleStepMethodNameSuggester::class);
+        $container->setDefinition(self::STEP_METHOD_NAME_SUGGESTER_ID, $definition);
+    }
+
     /**
      * Loads default pattern policies.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy');
+        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy', [
+            new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
+        ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 50]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.turnip', $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy');
+        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy', [
+            new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
+        ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 60]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.regex', $definition);
     }
 
     /**
      * Loads definition annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAnnotationReader(ContainerBuilder $container)
     {
@@ -229,8 +209,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition Attribute reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAttributeReader(ContainerBuilder $container)
     {
@@ -243,8 +221,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Loads definition printers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadDefinitionPrinters(ContainerBuilder $container)
     {
@@ -287,9 +263,7 @@ final class DefinitionExtension implements Extension
     }
 
     /**
-     * Loads DocBlockHelper
-     *
-     * @param ContainerBuilder $container
+     * Loads DocBlockHelper.
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {
@@ -300,8 +274,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Processes all search engines in the container.
-     *
-     * @param ContainerBuilder $container
      */
     private function processSearchEngines(ContainerBuilder $container)
     {
@@ -315,8 +287,6 @@ final class DefinitionExtension implements Extension
 
     /**
      * Processes all pattern policies.
-     *
-     * @param ContainerBuilder $container
      */
     private function processPatternPolicies(ContainerBuilder $container)
     {

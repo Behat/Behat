@@ -12,8 +12,9 @@ namespace Behat\Behat\Definition\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Step as Attribute;
 use Behat\Behat\Definition\Call;
+use Behat\Step as Attribute;
+use ReflectionAttribute;
 use ReflectionMethod;
 
 /**
@@ -28,8 +29,8 @@ final class DefinitionAttributeReader implements AttributeReader
      */
     private static $attributeToCallMap = [
         Attribute\Given::class => Call\Given::class,
-        Attribute\When::class  => Call\When::class,
-        Attribute\Then::class  => Call\Then::class,
+        Attribute\When::class => Call\When::class,
+        Attribute\Then::class => Call\Then::class,
     ];
 
     /**
@@ -39,20 +40,15 @@ final class DefinitionAttributeReader implements AttributeReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
         $this->docBlockHelper = $docBlockHelper;
     }
 
-    /**
-     * @{inheritdoc}
-     */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        $attributes = $method->getAttributes(Attribute\Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Attribute\Definition::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {

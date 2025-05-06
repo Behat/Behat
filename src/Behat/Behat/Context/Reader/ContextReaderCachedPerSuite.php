@@ -30,17 +30,12 @@ final class ContextReaderCachedPerSuite implements ContextReader
 
     /**
      * Initializes reader.
-     *
-     * @param ContextReader $childReader
      */
     public function __construct(ContextReader $childReader)
     {
         $this->childReader = $childReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         $key = $this->generateCacheKey($environment, $contextClass);
@@ -58,7 +53,6 @@ final class ContextReaderCachedPerSuite implements ContextReader
     /**
      * Generates cache key.
      *
-     * @param ContextEnvironment $environment
      * @param string             $contextClass
      *
      * @return string

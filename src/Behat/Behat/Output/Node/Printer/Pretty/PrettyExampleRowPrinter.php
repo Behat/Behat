@@ -56,10 +56,8 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Initializes printer.
      *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
@@ -75,9 +73,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events)
     {
         $rowNum = array_search($example, $outline->getExamples()) + 1;
@@ -91,8 +86,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Creates wrapper-closure for the example table.
      *
-     * @param OutlineNode   $outline
-     * @param ExampleNode   $example
      * @param AfterStepTested[] $stepEvents
      *
      * @return callable
@@ -124,7 +117,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     /**
      * Prints step events exceptions (if has some).
      *
-     * @param OutputPrinter $printer
      * @param AfterTested[] $events
      */
     private function printStepExceptionsAndStdOut(OutputPrinter $printer, array $events)
@@ -139,9 +131,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
 
     /**
      * Prints step exception (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param AfterTested   $event
      */
     private function printStepException(OutputPrinter $printer, AfterTested $event)
     {
@@ -166,9 +155,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
 
     /**
      * Prints step output (if has one).
-     *
-     * @param OutputPrinter $printer
-     * @param StepResult    $result
      */
     private function printStepStdOut(OutputPrinter $printer, StepResult $result)
     {

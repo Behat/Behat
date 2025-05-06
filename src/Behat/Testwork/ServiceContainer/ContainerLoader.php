@@ -38,10 +38,6 @@ final class ContainerLoader
 
     /**
      * Initialize extension.
-     *
-     * @param ExtensionManager       $extensionManager
-     * @param null|ConfigurationTree $configuration
-     * @param null|Processor         $processor
      */
     public function __construct(
         ExtensionManager $extensionManager,
@@ -55,9 +51,6 @@ final class ContainerLoader
 
     /**
      * Loads container extension.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $configs
      */
     public function load(ContainerBuilder $container, array $configs)
     {
@@ -70,8 +63,6 @@ final class ContainerLoader
     /**
      * Processes config against extensions.
      *
-     * @param array $configs
-     *
      * @return array
      */
     private function processConfig(array $configs)
@@ -83,9 +74,6 @@ final class ContainerLoader
 
     /**
      * Initializes extensions using provided config.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $configs
      *
      * @return array
      */
@@ -126,9 +114,6 @@ final class ContainerLoader
     /**
      * Loads all extensions into container using provided config.
      *
-     * @param ContainerBuilder $container
-     * @param array            $config
-     *
      * @throws ExtensionException
      */
     private function loadExtensions(ContainerBuilder $container, array $config)
@@ -159,10 +144,6 @@ final class ContainerLoader
 
     /**
      * Loads extension configuration.
-     *
-     * @param ContainerBuilder $container
-     * @param Extension        $extension
-     * @param array            $config
      */
     private function loadExtension(ContainerBuilder $container, Extension $extension, array $config)
     {

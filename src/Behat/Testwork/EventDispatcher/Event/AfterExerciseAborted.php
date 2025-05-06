@@ -17,9 +17,6 @@ namespace Behat\Testwork\EventDispatcher\Event;
  */
 final class AfterExerciseAborted extends ExerciseCompleted
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getSpecificationIterators()
     {
         return [];

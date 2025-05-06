@@ -33,31 +33,19 @@ class HookExtension implements Extension
     public const DISPATCHER_ID = 'hook.dispatcher';
     public const REPOSITORY_ID = 'hook.repository';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'hooks';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadDispatcher($container);
@@ -65,17 +53,12 @@ class HookExtension implements Extension
         $this->loadHookableTesters($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }
 
     /**
      * Loads hook dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDispatcher(ContainerBuilder $container)
     {
@@ -88,8 +71,6 @@ class HookExtension implements Extension
 
     /**
      * Loads hook repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
@@ -101,8 +82,6 @@ class HookExtension implements Extension
 
     /**
      * Loads hookable testers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {

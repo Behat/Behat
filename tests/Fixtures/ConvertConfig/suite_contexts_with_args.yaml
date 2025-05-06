@@ -1,0 +1,12 @@
+default:
+    suites:
+        my_suite:
+            contexts:
+                - MyContext
+                - App\AContextWithPositionalArgs:
+                    - First Arg
+                    - Second Arg
+                - App\AContextWithNamedArgs:
+                      param1: Something
+                      param2: Else
+                - App\AnotherContext

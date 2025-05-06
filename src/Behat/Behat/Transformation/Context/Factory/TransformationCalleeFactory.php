@@ -23,7 +23,7 @@ use Behat\Behat\Transformation\Transformation\TokenNameTransformation;
 use ReflectionMethod;
 
 /**
- * Generates the callee for a transformation
+ * Generates the callee for a transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *

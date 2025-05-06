@@ -54,17 +54,11 @@ final class RuntimeFeatureTester implements SpecificationTester
         $this->outlineTester = $outlineTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, $spec, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, $spec, $skip = false)
     {
         $results = [];
@@ -83,9 +77,6 @@ final class RuntimeFeatureTester implements SpecificationTester
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

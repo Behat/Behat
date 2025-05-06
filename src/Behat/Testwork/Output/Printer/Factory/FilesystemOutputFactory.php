@@ -12,6 +12,7 @@ namespace Behat\Testwork\Output\Printer\Factory;
 
 use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Behat\Testwork\Output\Exception\MissingOutputPathException;
+use LogicException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -31,8 +32,6 @@ class FilesystemOutputFactory extends OutputFactory
 
     /**
      * Configure output stream parameters.
-     *
-     * @param OutputInterface $output
      */
     protected function configureOutputStream(OutputInterface $output)
     {
@@ -40,9 +39,6 @@ class FilesystemOutputFactory extends OutputFactory
         $output->setVerbosity($verbosity);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createOutput($stream = null)
     {
         if ($this->getOutputPath() === null) {
@@ -60,7 +56,7 @@ class FilesystemOutputFactory extends OutputFactory
         }
 
         if (null === $this->fileName) {
-            throw new \LogicException('Unable to create file, no file name specified');
+            throw new LogicException('Unable to create file, no file name specified');
         }
 
         $filePath = $this->getOutputPath() . '/' . $this->fileName;

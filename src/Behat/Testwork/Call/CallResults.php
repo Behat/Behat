@@ -41,9 +41,6 @@ final class CallResults implements Countable, IteratorAggregate
     /**
      * Merges results from provided collection into the current one.
      *
-     * @param CallResults $first
-     * @param CallResults $second
-     *
      * @return CallResults
      */
     public static function merge(CallResults $first, CallResults $second)
@@ -85,8 +82,6 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns amount of results.
-     *
-     * @return integer
      */
     public function count(): int
     {
@@ -95,8 +90,6 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns collection iterator.
-     *
-     * @return ArrayIterator
      */
     public function getIterator(): ArrayIterator
     {

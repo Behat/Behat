@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Specification;
 
 use Behat\Testwork\Suite\Suite;
+use ReturnTypeWillChange;
 
 /**
  * Iterates over specification iterators grouped by their suite.
@@ -18,6 +19,7 @@ use Behat\Testwork\Suite\Suite;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template T
+ *
  * @implements SpecificationIterator<T>
  */
 final class GroupedSpecificationIterator implements SpecificationIterator
@@ -31,14 +33,13 @@ final class GroupedSpecificationIterator implements SpecificationIterator
      */
     private $iterators;
     /**
-     * @var integer
+     * @var int
      */
     private $position = 0;
 
     /**
      * Initializes iterator.
      *
-     * @param Suite                          $suite
      * @param list<SpecificationIterator<T>> $specificationIterators
      */
     public function __construct(Suite $suite, array $specificationIterators)
@@ -71,17 +72,11 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         $this->position = 0;
@@ -91,13 +86,10 @@ final class GroupedSpecificationIterator implements SpecificationIterator
             if ($this->iterators[$this->position]->valid()) {
                 break;
             }
-            $this->position++;
+            ++$this->position;
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         if (!isset($this->iterators[$this->position])) {
@@ -106,7 +98,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
 
         $this->iterators[$this->position]->next();
         while (!$this->iterators[$this->position]->valid()) {
-            $this->position++;
+            ++$this->position;
 
             if (!isset($this->iterators[$this->position])) {
                 break;
@@ -116,26 +108,17 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return isset($this->iterators[$this->position]) && $this->iterators[$this->position]->valid();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->iterators[$this->position]->current();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): int
     {
         return $this->position + $this->iterators[$this->position]->key();

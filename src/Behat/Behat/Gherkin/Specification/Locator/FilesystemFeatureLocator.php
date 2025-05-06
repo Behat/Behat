@@ -43,7 +43,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     /**
      * Initializes loader.
      *
-     * @param Gherkin $gherkin
      * @param string  $basePath
      */
     public function __construct(Gherkin $gherkin, $basePath)
@@ -52,23 +51,17 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         $this->basePath = $basePath;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocatorExamples()
     {
         return [
-            "a dir <comment>(features/)</comment>",
-            "a feature <comment>(*.feature)</comment>",
-            "a scenario at specific line <comment>(*.feature:10)</comment>.",
-            "all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.",
-            "all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>.",
+            'a dir <comment>(features/)</comment>',
+            'a feature <comment>(*.feature)</comment>',
+            'a scenario at specific line <comment>(*.feature:10)</comment>.',
+            'all scenarios at or after a specific line <comment>(*.feature:10-*)</comment>.',
+            'all scenarios at a line within a specific range <comment>(*.feature:10-20)</comment>.',
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function locateSpecifications(Suite $suite, $locator)
     {
         if (!$suite->hasSetting('paths')) {
@@ -93,8 +86,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
 
     /**
      * Returns array of feature paths configured for the provided suite.
-     *
-     * @param Suite $suite
      *
      * @return string[]
      *

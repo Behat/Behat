@@ -56,7 +56,6 @@ final class OutputExtension implements Extension
      *
      * @param string                $defaultFormatter
      * @param FormatterFactory[]    $formatterFactories
-     * @param null|ServiceProcessor $processor
      */
     public function __construct($defaultFormatter, array $formatterFactories, ?ServiceProcessor $processor = null)
     {
@@ -67,32 +66,21 @@ final class OutputExtension implements Extension
 
     /**
      * Registers formatter factory.
-     *
-     * @param FormatterFactory $factory
      */
     public function registerFormatterFactory(FormatterFactory $factory)
     {
         $this->factories[] = $factory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'formatters';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder = $builder
@@ -118,9 +106,6 @@ final class OutputExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadOutputController($container);
@@ -128,9 +113,6 @@ final class OutputExtension implements Extension
         $this->loadManager($container, $config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processFormatters($container);
@@ -139,8 +121,6 @@ final class OutputExtension implements Extension
 
     /**
      * Loads output controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadOutputController(ContainerBuilder $container)
     {
@@ -153,9 +133,6 @@ final class OutputExtension implements Extension
 
     /**
      * Loads output manager.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $formatters
      */
     private function loadManager(ContainerBuilder $container, array $formatters)
     {
@@ -179,8 +156,6 @@ final class OutputExtension implements Extension
 
     /**
      * Loads default formatters using registered factories.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFormatters(ContainerBuilder $container)
     {
@@ -191,8 +166,6 @@ final class OutputExtension implements Extension
 
     /**
      * Processes formatters using registered factories.
-     *
-     * @param ContainerBuilder $container
      */
     private function processFormatters(ContainerBuilder $container)
     {
@@ -203,8 +176,6 @@ final class OutputExtension implements Extension
 
     /**
      * Processes all available output formatters.
-     *
-     * @param ContainerBuilder $container
      */
     private function processDynamicallyRegisteredFormatters(ContainerBuilder $container)
     {

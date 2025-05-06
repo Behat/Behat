@@ -4,16 +4,12 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Hook\Scope\StepScope;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
-use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Hook\Call\HookCall;
-use Behat\Testwork\Hook\Hook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
-use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\Teardown;
 
@@ -30,9 +26,6 @@ class JUnitSetupPrinter implements SetupPrinter
         $this->exceptionPresenter = $exceptionPresenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printSetup(Formatter $formatter, Setup $setup)
     {
         if (!$setup->isSuccessful()) {
@@ -42,9 +35,6 @@ class JUnitSetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
         if (!$teardown->isSuccessful()) {
@@ -72,11 +62,10 @@ class JUnitSetupPrinter implements SetupPrinter
 
                 $attributes = [
                     'message' => $message,
-                    'type'    => $messageType,
+                    'type' => $messageType,
                 ];
 
                 $outputPrinter->addTestcaseChild('failure', $attributes);
-
             }
         }
     }

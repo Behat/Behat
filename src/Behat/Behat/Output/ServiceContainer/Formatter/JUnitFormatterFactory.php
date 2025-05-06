@@ -31,9 +31,6 @@ final class JUnitFormatterFactory implements FormatterFactory
     public const ROOT_LISTENER_ID = 'output.node.listener.junit';
     public const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildFormatter(ContainerBuilder $container)
     {
         $this->loadRootNodeListener($container);
@@ -42,17 +39,12 @@ final class JUnitFormatterFactory implements FormatterFactory
         $this->loadFormatter($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processFormatter(ContainerBuilder $container)
     {
     }
 
     /**
      * Loads printer helpers.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadPrinterHelpers(ContainerBuilder $container)
     {
@@ -62,8 +54,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads the printers used to print the basic JUnit report.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadCorePrinters(ContainerBuilder $container)
     {
@@ -101,12 +91,9 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads the node listeners required for JUnit printers to work.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRootNodeListener(ContainerBuilder $container)
     {
-
         $definition = new Definition(
             'Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener',
             [
@@ -138,8 +125,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Loads formatter itself.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFormatter(ContainerBuilder $container)
     {

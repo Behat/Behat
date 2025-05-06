@@ -45,39 +45,28 @@ final class SuiteExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'suites';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder = $builder
             ->defaultValue(['default' => [
-                'enabled'    => true,
-                'type'       => null,
-                'settings'   => [],
+                'enabled' => true,
+                'type' => null,
+                'settings' => [],
             ]])
             ->treatNullLike([])
             ->treatFalseLike([])
@@ -131,9 +120,6 @@ final class SuiteExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->setSuiteConfigurations($container, $config);
@@ -144,9 +130,6 @@ final class SuiteExtension implements Extension
         $this->loadGenericSuiteGenerator($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processGenerators($container);
@@ -155,9 +138,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Generates and sets suites parameter to container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $suites
      */
     private function setSuiteConfigurations(ContainerBuilder $container, array $suites)
     {
@@ -168,7 +148,7 @@ final class SuiteExtension implements Extension
             }
 
             $configuredSuites[$name] = [
-                'type'     => $config['type'],
+                'type' => $config['type'],
                 'settings' => $config['settings'],
             ];
         }
@@ -178,8 +158,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Loads suite registry controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRegistryController(ContainerBuilder $container)
     {
@@ -193,8 +171,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Loads suite bootstrap controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadBootstrapController(ContainerBuilder $container)
     {
@@ -208,8 +184,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Loads suite registry.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRegistry(ContainerBuilder $container)
     {
@@ -219,8 +193,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Loads suite bootstrapper.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadBootstrapper(ContainerBuilder $container)
     {
@@ -230,8 +202,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Loads generic suite generator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadGenericSuiteGenerator(ContainerBuilder $container)
     {
@@ -246,8 +216,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Processes suite generators.
-     *
-     * @param ContainerBuilder $container
      */
     private function processGenerators(ContainerBuilder $container)
     {
@@ -261,8 +229,6 @@ final class SuiteExtension implements Extension
 
     /**
      * Processes suite setups.
-     *
-     * @param ContainerBuilder $container
      */
     private function processSetups(ContainerBuilder $container)
     {

@@ -39,9 +39,6 @@ final class HookableScenarioTester implements ScenarioTester
 
     /**
      * Initializes tester.
-     *
-     * @param ScenarioTester $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
     public function __construct(ScenarioTester $baseTester, HookDispatcher $hookDispatcher)
     {
@@ -49,9 +46,6 @@ final class HookableScenarioTester implements ScenarioTester
         $this->hookDispatcher = $hookDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
@@ -66,17 +60,11 @@ final class HookableScenarioTester implements ScenarioTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);

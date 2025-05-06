@@ -11,7 +11,7 @@
 namespace Behat\Testwork\Ordering\Orderer;
 
 /**
- * Null implementation of Orderer that does no ordering
+ * Null implementation of Orderer that does no ordering.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */

@@ -31,8 +31,6 @@ final class NoSpecificationsIterator extends EmptyIterator implements Specificat
 
     /**
      * Initializes iterator.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {

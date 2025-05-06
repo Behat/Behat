@@ -14,6 +14,7 @@ use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -45,17 +46,12 @@ class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildFormatter(ContainerBuilder $container)
     {
         $this->loadRootNodeListener($container);
@@ -64,9 +60,6 @@ class ProgressFormatterFactory implements FormatterFactory
         $this->loadFormatter($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function processFormatter(ContainerBuilder $container)
     {
         $this->processListenerWrappers($container);
@@ -74,8 +67,6 @@ class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Loads progress formatter node event listener.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
@@ -87,8 +78,6 @@ class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Loads feature, scenario and step printers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadCorePrinters(ContainerBuilder $container)
     {
@@ -103,6 +92,7 @@ class ProgressFormatterFactory implements FormatterFactory
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%',
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition('output.node.printer.list', $definition);
 
@@ -120,8 +110,6 @@ class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Loads printer helpers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadPrinterHelpers(ContainerBuilder $container)
     {
@@ -131,8 +119,6 @@ class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Loads formatter itself.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadFormatter(ContainerBuilder $container)
     {
@@ -186,8 +172,6 @@ class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Processes all registered pretty formatter node listener wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processListenerWrappers(ContainerBuilder $container)
     {

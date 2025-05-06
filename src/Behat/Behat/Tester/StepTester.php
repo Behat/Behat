@@ -27,9 +27,6 @@ interface StepTester
     /**
      * Sets up step for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      * @param bool     $skip
      *
      * @return Setup
@@ -39,9 +36,6 @@ interface StepTester
     /**
      * Tests step.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      * @param bool     $skip
      *
      * @return StepResult
@@ -51,11 +45,7 @@ interface StepTester
     /**
      * Tears down step after a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      * @param bool     $skip
-     * @param StepResult  $result
      *
      * @return Teardown
      */

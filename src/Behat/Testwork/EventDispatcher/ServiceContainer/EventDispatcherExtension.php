@@ -44,39 +44,25 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'events';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadSigintController($container);
@@ -85,18 +71,13 @@ class EventDispatcherExtension implements Extension
         $this->loadEventDispatchingSuiteTester($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processSubscribers($container);
     }
 
     /**
-     * Loads sigint controller
-     *
-     * @param ContainerBuilder $container
+     * Loads sigint controller.
      */
     protected function loadSigintController(ContainerBuilder $container)
     {
@@ -109,8 +90,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatcher(ContainerBuilder $container)
     {
@@ -120,8 +99,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event-dispatching exercise.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingExercise(ContainerBuilder $container)
     {
@@ -135,8 +112,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Loads event-dispatching suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
     {
@@ -150,8 +125,6 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Registers all available event subscribers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSubscribers(ContainerBuilder $container)
     {

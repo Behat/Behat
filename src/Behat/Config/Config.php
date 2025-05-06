@@ -6,7 +6,6 @@ namespace Behat\Config;
 
 use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 
 use function is_string;
@@ -65,12 +64,13 @@ final class Config implements ConfigInterface, ConfigConverterInterface
      */
     public function toPhpExpr(): Expr
     {
-        $configObject =  ConfigConverterTools::createObject(self::class);
+        $configObject = ConfigConverterTools::createObject(self::class);
         $expr = $configObject;
 
         foreach ($this->settings as $settingsName => $settings) {
             if ($settingsName === self::PREFERRED_PROFILE_NAME_SETTING) {
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::PREFERRED_PROFILE_FUNCTION,
                     [$settings],
                     $expr
@@ -82,6 +82,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
                     $arguments = [$settings];
                 }
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::IMPORT_FUNCTION,
                     $arguments,
                     $expr
@@ -89,6 +90,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
             } else {
                 $profile = new Profile($settingsName, $settings ?? []);
                 $expr = ConfigConverterTools::addMethodCall(
+                    self::class,
                     self::PROFILE_FUNCTION,
                     [$profile->toPhpExpr()],
                     $expr

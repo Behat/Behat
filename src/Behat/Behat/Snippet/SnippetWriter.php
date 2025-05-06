@@ -27,8 +27,6 @@ final class SnippetWriter
 
     /**
      * Registers snippet appender.
-     *
-     * @param SnippetAppender $appender
      */
     public function registerSnippetAppender(SnippetAppender $appender)
     {
@@ -50,7 +48,6 @@ final class SnippetWriter
     /**
      * Prints snippets using provided printer.
      *
-     * @param SnippetPrinter     $printer
      * @param AggregateSnippet[] $snippets
      */
     public function printSnippets(SnippetPrinter $printer, array $snippets)
@@ -77,7 +74,6 @@ final class SnippetWriter
     /**
      * Prints undefined steps using provided printer.
      *
-     * @param SnippetPrinter  $printer
      * @param UndefinedStep[] $undefinedSteps
      */
     public function printUndefinedSteps(SnippetPrinter $printer, array $undefinedSteps)
@@ -101,8 +97,6 @@ final class SnippetWriter
 
     /**
      * Appends snippet to appropriate targets.
-     *
-     * @param AggregateSnippet $snippet
      */
     private function appendSnippet(AggregateSnippet $snippet)
     {

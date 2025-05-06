@@ -25,7 +25,6 @@ final class JUnitDurationListener implements EventListener
     /** @var array<string, float> */
     private $featureResultStore = [];
 
-    /** @inheritdoc */
     public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureBeforeScenarioEvent($event);
@@ -37,6 +36,7 @@ final class JUnitDurationListener implements EventListener
     public function getDuration(ScenarioLikeInterface $scenario): string
     {
         $key = $this->getHash($scenario);
+
         return array_key_exists($key, $this->resultStore)
             ? number_format($this->resultStore[$key], 3, '.', '')
             : '';
@@ -45,6 +45,7 @@ final class JUnitDurationListener implements EventListener
     public function getFeatureDuration(FeatureNode $feature): string
     {
         $key = $this->getHash($feature);
+
         return array_key_exists($key, $this->featureResultStore)
             ? number_format($this->featureResultStore[$key], 3, '.', '')
             : '';

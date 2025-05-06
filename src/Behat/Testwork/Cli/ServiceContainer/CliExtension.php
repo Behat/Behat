@@ -43,8 +43,6 @@ final class CliExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -61,32 +59,20 @@ final class CliExtension implements Extension
         return 'cli';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadCommand($container);
         $this->loadSyntheticServices($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processControllers($container);
@@ -94,8 +80,6 @@ final class CliExtension implements Extension
 
     /**
      * Loads application command.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadCommand(ContainerBuilder $container)
     {
@@ -112,8 +96,6 @@ final class CliExtension implements Extension
 
     /**
      * Processes all controllers in container.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processControllers(ContainerBuilder $container)
     {

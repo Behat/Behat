@@ -44,11 +44,6 @@ final class AfterStepScope implements StepScope, AfterTestScope
 
     /**
      * Initializes scope.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param StepResult  $result
      */
     public function __construct(Environment $env, FeatureNode $feature, StepNode $step, StepResult $result)
     {

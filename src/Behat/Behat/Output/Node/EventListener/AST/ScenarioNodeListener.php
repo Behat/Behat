@@ -34,9 +34,6 @@ final class ScenarioNodeListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if (!$event instanceof ScenarioLikeTested) {

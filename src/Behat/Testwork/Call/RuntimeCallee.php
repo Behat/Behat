@@ -27,7 +27,7 @@ class RuntimeCallee implements Callee
      */
     private $callable;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $description;
     /**

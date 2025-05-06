@@ -59,10 +59,6 @@ final class ExerciseController implements Controller
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository     $suiteRepository
-     * @param SpecificationFinder $specificationFinder
-     * @param Exercise            $exercise
-     * @param ResultInterpreter   $resultInterpreter
      * @param bool             $skip
      */
     public function __construct(
@@ -79,9 +75,6 @@ final class ExerciseController implements Controller
         $this->skip = $skip;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $locatorsExamples = implode(PHP_EOL, array_map(
@@ -136,7 +129,7 @@ final class ExerciseController implements Controller
     /**
      * Finds exercise specifications.
      *
-     * @param null|list<string> $paths
+     * @param list<string>|null $paths
      *
      * @return SpecificationIterator[]
      */
@@ -159,7 +152,6 @@ final class ExerciseController implements Controller
     /**
      * Tests exercise specifications.
      *
-     * @param InputInterface          $input
      * @param SpecificationIterator[] $specifications
      *
      * @return TestResult
@@ -192,7 +184,6 @@ final class ExerciseController implements Controller
      * Finds specification iterators for all provided suites using locator.
      *
      * @param Suite[]     $suites
-     * @param null|string $locator
      *
      * @return SpecificationIterator[]
      */
@@ -203,10 +194,6 @@ final class ExerciseController implements Controller
 
     /**
      * Extracts unique paths from input argument. Returns null if no paths were supplied.
-     *
-     * @param InputInterface $input
-     *
-     * @return array|null
      */
     private function extractUniquePaths(InputInterface $input): ?array
     {

@@ -33,9 +33,6 @@ final class ScenarioStatsListener implements EventListener
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
@@ -45,8 +42,6 @@ final class ScenarioStatsListener implements EventListener
 
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
     {
@@ -73,8 +68,6 @@ final class ScenarioStatsListener implements EventListener
 
     /**
      * Captures scenario or example stats on their AFTER event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOrExampleStatsOnAfterEvent(Event $event)
     {

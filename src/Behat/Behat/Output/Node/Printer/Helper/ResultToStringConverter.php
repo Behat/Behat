@@ -22,8 +22,6 @@ final class ResultToStringConverter
     /**
      * Converts provided test result to a string.
      *
-     * @param TestResult $result
-     *
      * @return string
      */
     public function convertResultToString(TestResult $result)
@@ -34,7 +32,7 @@ final class ResultToStringConverter
     /**
      * Converts provided result code to a string.
      *
-     * @param integer $resultCode
+     * @param int $resultCode
      *
      * @return string
      */

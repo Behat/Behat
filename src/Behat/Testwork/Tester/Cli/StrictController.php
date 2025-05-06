@@ -37,7 +37,6 @@ final class StrictController implements Controller
     /**
      * Initializes controller.
      *
-     * @param ResultInterpreter $resultInterpreter
      * @param bool           $strict
      */
     public function __construct(ResultInterpreter $resultInterpreter, $strict = false)
@@ -56,9 +55,6 @@ final class StrictController implements Controller
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->strict && !$input->getOption('strict')) {
@@ -66,6 +62,7 @@ final class StrictController implements Controller
         }
 
         $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
+
         return null;
     }
 }

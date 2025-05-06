@@ -42,9 +42,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param Statistics         $statistics
-     * @param ExceptionPresenter $exceptionPresenter
      */
     public function __construct(Statistics $statistics, ExceptionPresenter $exceptionPresenter)
     {
@@ -52,9 +49,6 @@ final class HookStatsListener implements EventListener
         $this->exceptionPresenter = $exceptionPresenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureHookStatsOnEvent($event);
@@ -62,8 +56,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures hook stats on hooked event.
-     *
-     * @param Event $event
      */
     private function captureHookStatsOnEvent(Event $event)
     {
@@ -78,8 +70,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures before hook stats.
-     *
-     * @param HookedSetup $setup
      */
     private function captureBeforeHookStats(HookedSetup $setup)
     {
@@ -92,8 +82,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures before hook stats.
-     *
-     * @param HookedTeardown $teardown
      */
     private function captureAfterHookStats(HookedTeardown $teardown)
     {
@@ -106,8 +94,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures hook call result.
-     *
-     * @param CallResult $hookCallResult
      */
     private function captureHookStat(CallResult $hookCallResult)
     {

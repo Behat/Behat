@@ -13,10 +13,10 @@ namespace Behat\Behat\Transformation\Transformer;
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Translator\TranslatorInterface;
-use Behat\Behat\Transformation\SimpleArgumentTransformation;
-use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\RegexGenerator;
+use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Behat\Transformation\Transformation;
+use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Testwork\Call\CallCenter;
@@ -47,11 +47,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
 
     /**
      * Initializes transformer.
-     *
-     * @param TransformationRepository $repository
-     * @param CallCenter               $callCenter
-     * @param PatternTransformer       $patternTransformer
-     * @param TranslatorInterface      $translator
      */
     public function __construct(
         TransformationRepository $repository,
@@ -65,17 +60,11 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         $this->translator = $translator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         return count($this->repository->getEnvironmentTransformations($definitionCall->getEnvironment())) > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $environment = $definitionCall->getEnvironment();
@@ -89,9 +78,6 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         return $newValue;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateRegex($suiteName, $pattern, $language)
     {
         $translatedPattern = $this->translator->trans($pattern, [], $suiteName, $language);
@@ -106,11 +92,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply simple argument transformations in priority order.
      *
      * @param SimpleArgumentTransformation[] $transformations
-     * @param DefinitionCall                 $definitionCall
-     * @param integer|string                 $index
-     * @param mixed                          $value
-     *
-     * @return mixed
+     * @param int|string                     $index
      */
     private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
@@ -130,11 +112,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Apply normal (non-simple) argument transformations.
      *
      * @param Transformation[] $transformations
-     * @param DefinitionCall   $definitionCall
-     * @param integer|string   $index
-     * @param mixed            $value
-     *
-     * @return mixed
+     * @param int|string       $index
      */
     private function applyNormalTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
@@ -149,12 +127,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     /**
      * Transforms argument value using registered transformers.
      *
-     * @param Transformation $transformation
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $index
-     * @param mixed          $value
-     *
-     * @return mixed
+     * @param int|string $index
      */
     private function transform(DefinitionCall $definitionCall, Transformation $transformation, $index, $value)
     {
@@ -162,13 +135,13 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
             return $value;
         }
 
-        if ($transformation instanceof SimpleArgumentTransformation &&
-            $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+        if ($transformation instanceof SimpleArgumentTransformation
+            && $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
             return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
         }
 
-        if ($transformation instanceof PatternTransformation &&
-            $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
+        if ($transformation instanceof PatternTransformation
+            && $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
             return $transformation->transformArgument($this, $this->callCenter, $definitionCall, $value);
         }
 

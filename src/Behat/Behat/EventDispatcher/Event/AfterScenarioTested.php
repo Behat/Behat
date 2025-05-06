@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
-use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -43,13 +42,7 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     private $teardown;
 
     /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * Initializes event.
      */
     public function __construct(
         Environment $env,

@@ -29,8 +29,6 @@ final class DefinitionFinder
 
     /**
      * Registers definition search engine.
-     *
-     * @param SearchEngine $searchEngine
      */
     public function registerSearchEngine(SearchEngine $searchEngine)
     {
@@ -39,10 +37,6 @@ final class DefinitionFinder
 
     /**
      * Searches definition for a provided step in a provided environment.
-     *
-     * @param Environment $environment
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      *
      * @return SearchResult
      */

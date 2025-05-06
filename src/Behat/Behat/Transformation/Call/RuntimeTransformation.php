@@ -32,7 +32,7 @@ final class RuntimeTransformation extends RuntimeCallee implements Transformatio
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
@@ -41,17 +41,11 @@ final class RuntimeTransformation extends RuntimeCallee implements Transformatio
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'Transform ' . $this->getPattern();

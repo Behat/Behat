@@ -54,11 +54,6 @@ final class SnippetsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SnippetRegistry          $registry
-     * @param SnippetWriter            $writer
-     * @param ConsoleSnippetPrinter    $printer
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         SnippetRegistry $registry,
@@ -74,8 +69,6 @@ final class SnippetsController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
@@ -84,13 +77,13 @@ final class SnippetsController implements Controller
                 '--append-snippets',
                 null,
                 InputOption::VALUE_NONE,
-                "Appends snippets for undefined steps into main context."
+                'Appends snippets for undefined steps into main context.'
             )
             ->addOption(
                 '--no-snippets',
                 null,
                 InputOption::VALUE_NONE,
-                "Do not print snippets for undefined steps after stats."
+                'Do not print snippets for undefined steps after stats.'
             );
     }
 
@@ -110,13 +103,12 @@ final class SnippetsController implements Controller
         if (!$input->getOption('no-snippets')) {
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUndefinedSteps'], -995);
         }
+
         return null;
     }
 
     /**
      * Registers undefined step.
-     *
-     * @param AfterStepTested $event
      */
     public function registerUndefinedStep(AfterStepTested $event)
     {

@@ -31,17 +31,12 @@ final class AutowiringResolver implements ArgumentResolver
 
     /**
      * Initialises resolver.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->autowirer = new ArgumentAutowirer($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function resolveArguments(ReflectionClass $classReflection, array $arguments)
     {
         if ($constructor = $classReflection->getConstructor()) {

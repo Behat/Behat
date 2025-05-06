@@ -34,25 +34,17 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Initialises container using provided service configuration.
-     *
-     * @param array $schema
      */
     public function __construct(array $schema)
     {
         $this->schema = $schema;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($id): bool
     {
         return array_key_exists($id, $this->schema);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($id)
     {
         if (!$this->has($id)) {
@@ -69,8 +61,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      * Creates an instance of given service.
      *
      * @param string $id
-     *
-     * @return mixed
      */
     private function createInstance($id)
     {
@@ -91,9 +81,9 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      *
      * @param string $id
      *
-     * @throws WrongServicesConfigurationException
-     *
      * @return array|string
+     *
+     * @throws WrongServicesConfigurationException
      */
     private function getAndValidateServiceSchema($id)
     {
@@ -128,8 +118,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates arguments from schema.
      *
-     * @param array $schema
-     *
      * @return array
      */
     private function getAndValidateArguments(array $schema)
@@ -140,10 +128,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates a factory method.
      *
-     * @param ReflectionClass $reflection
-     * @param array           $schema
-     *
-     * @return null|ReflectionMethod
+     * @return ReflectionMethod|null
      */
     private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema)
     {
@@ -162,7 +147,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Checks if factory method exists.
      *
-     * @param ReflectionClass $class
      * @param string          $methodName
      *
      * @throws WrongServicesConfigurationException
@@ -180,8 +164,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Checks if factory method is static.
-     *
-     * @param ReflectionMethod $method
      *
      * @throws WrongServicesConfigurationException
      */

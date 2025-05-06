@@ -14,6 +14,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\ContextSnippet;
 use Behat\Behat\Definition\Call as DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use Behat\Behat\Snippet\Exception\EnvironmentSnippetGenerationException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Behat\Snippet\Snippet;
@@ -81,9 +82,6 @@ TPL;
         $this->patternIdentifier = $identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step): bool
     {
         if (!$environment instanceof ContextEnvironment) {
@@ -97,9 +95,6 @@ TPL;
         return null !== $this->contextIdentifier->guessTargetContextClass($environment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateSnippet(Environment $environment, StepNode $step): Snippet
     {
         if (!$environment instanceof ContextEnvironment) {
@@ -114,23 +109,17 @@ TPL;
         $stepText = $step->getText();
         $pattern = $this->patternTransformer->generatePattern($patternType, $stepText);
 
-        $methodName = $this->getMethodName($contextClass, $pattern->getCanonicalText(), $pattern->getPattern());
+        $methodName = $this->getUniqueMethodName(
+            $contextClass,
+            $pattern->getPattern(),
+            $pattern->getSuggestedMethodName() ?: SimpleStepMethodNameSuggester::DEFAULT_NAME,
+        );
         $methodArguments = $this->getMethodArguments($step, $pattern->getPlaceholderCount());
         $snippetTemplate = $this->getSnippetTemplate($pattern->getPattern(), $methodName, $methodArguments);
 
         $usedClasses = $this->getUsedClasses($step);
 
         return new ContextSnippet($step, $snippetTemplate, $contextClass, $usedClasses);
-    }
-
-    /**
-     * Generates method name using step text and regex.
-     */
-    private function getMethodName(string $contextClass, string $canonicalText, string $pattern): string
-    {
-        $methodName = $this->deduceMethodName($canonicalText);
-
-        return $this->getUniqueMethodName($contextClass, $pattern, $methodName);
     }
 
     /**
@@ -141,7 +130,7 @@ TPL;
     private function getMethodArguments(StepNode $step, int $tokenCount): array
     {
         $args = [];
-        for ($i = 0; $i < $tokenCount; $i++) {
+        for ($i = 0; $i < $tokenCount; ++$i) {
             $args[] = '$arg' . ($i + 1);
         }
 
@@ -153,7 +142,7 @@ TPL;
     }
 
     /**
-     * Returns an array of classes used by the snippet template
+     * Returns an array of classes used by the snippet template.
      *
      * @return string[]
      */
@@ -163,9 +152,9 @@ TPL;
 
         $keywordType = $step->getKeywordType();
         assert(
-            $keywordType === DefinitionCall\Given::KEYWORD ||
-            $keywordType === DefinitionCall\When::KEYWORD ||
-            $keywordType === DefinitionCall\Then::KEYWORD
+            $keywordType === DefinitionCall\Given::KEYWORD
+            || $keywordType === DefinitionCall\When::KEYWORD
+            || $keywordType === DefinitionCall\Then::KEYWORD
         );
         $usedClasses[] = match ($keywordType) {
             DefinitionCall\Given::KEYWORD => Given::class,
@@ -199,22 +188,8 @@ TPL;
     {
         $pattern = str_replace('%', '%%', $pattern);
         $pattern = str_replace('\\\\', '\\\\\\\\', $pattern);
+
         return str_replace("'", "\'", $pattern);
-    }
-
-    /**
-     * Generates definition method name based on the step text.
-     */
-    private function deduceMethodName(string $canonicalText): string
-    {
-        // check that method name is not empty
-        if (0 !== strlen($canonicalText)) {
-            $canonicalText[0] = strtolower($canonicalText[0]);
-
-            return $canonicalText;
-        }
-
-        return 'stepDefinition1';
     }
 
     /**
@@ -224,7 +199,7 @@ TPL;
     {
         $reflection = new ReflectionClass($contextClass);
         $number = $this->getMethodNumberFromTheMethodName($name);
-        list($name, $number) = $this->getMethodNameNotExistentInContext($reflection, $name, $number);
+        [$name, $number] = $this->getMethodNameNotExistentInContext($reflection, $name, $number);
 
         return $this->getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number);
     }

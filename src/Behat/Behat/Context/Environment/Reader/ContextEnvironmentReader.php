@@ -31,25 +31,17 @@ final class ContextEnvironmentReader implements EnvironmentReader
 
     /**
      * Registers context loader.
-     *
-     * @param ContextReader $contextReader
      */
     public function registerContextReader(ContextReader $contextReader)
     {
         $this->contextReaders[] = $contextReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironment(Environment $environment)
     {
         return $environment instanceof ContextEnvironment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readEnvironmentCallees(Environment $environment)
     {
         if (!$environment instanceof ContextEnvironment) {
@@ -73,7 +65,6 @@ final class ContextEnvironmentReader implements EnvironmentReader
     /**
      * Reads callees from a specific suite's context.
      *
-     * @param ContextEnvironment $environment
      * @param string             $contextClass
      *
      * @return Callee[]

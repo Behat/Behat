@@ -24,9 +24,6 @@ final class FixedContextIdentifier implements TargetContextIdentifier
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment): ?string
     {
         if ($environment->hasContextClass($this->contextClass)) {

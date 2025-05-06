@@ -34,9 +34,6 @@ final class HookDispatcher
 
     /**
      * Initializes hook dispatcher.
-     *
-     * @param HookRepository $repository
-     * @param CallCenter     $callCenter
      */
     public function __construct(HookRepository $repository, CallCenter $callCenter)
     {
@@ -46,8 +43,6 @@ final class HookDispatcher
 
     /**
      * Dispatches hooks for a specified event.
-     *
-     * @param HookScope $scope
      *
      * @return CallResults
      */
@@ -63,9 +58,6 @@ final class HookDispatcher
 
     /**
      * Dispatches single event hook.
-     *
-     * @param HookScope $scope
-     * @param Hook      $hook
      *
      * @return CallResult
      */

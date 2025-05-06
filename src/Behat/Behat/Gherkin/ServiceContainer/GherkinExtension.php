@@ -20,7 +20,6 @@ use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
 use Behat\Testwork\Translator\ServiceContainer\TranslatorExtension;
-use ReflectionClass;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -52,32 +51,21 @@ final class GherkinExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'gherkin';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $childrenBuilder = $builder
@@ -103,9 +91,6 @@ final class GherkinExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadParameters($container);
@@ -122,9 +107,6 @@ final class GherkinExtension implements Extension
         $this->loadFilesystemRerunScenariosListLocator($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processLoaders($container);
@@ -132,15 +114,13 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads default container parameters.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadParameters(ContainerBuilder $container)
     {
         $container->setParameter(
             'suite.generic.default_settings',
             [
-                'paths'    => ['%paths.base%/features'],
+                'paths' => ['%paths.base%/features'],
                 'contexts' => ['FeatureContext'],
             ]
         );
@@ -148,8 +128,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads gherkin service.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadGherkin(ContainerBuilder $container)
     {
@@ -159,8 +137,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads keyword services.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadKeywords(ContainerBuilder $container)
     {
@@ -176,8 +152,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads gherkin parser.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadParser(ContainerBuilder $container)
     {
@@ -195,7 +169,6 @@ final class GherkinExtension implements Extension
     /**
      * Loads gherkin loaders.
      *
-     * @param ContainerBuilder $container
      * @param string           $cachePath
      */
     private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
@@ -218,9 +191,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads profile-level gherkin filters.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $filters
      */
     private function loadProfileFilters(ContainerBuilder $container, array $filters)
     {
@@ -233,8 +203,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads syntax controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSyntaxController(ContainerBuilder $container)
     {
@@ -248,8 +216,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads filter controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilterController(ContainerBuilder $container)
     {
@@ -262,8 +228,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads suite with paths setup.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadSuiteWithPathsSetup(ContainerBuilder $container)
     {
@@ -277,8 +241,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads filesystem feature locator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilesystemFeatureLocator(ContainerBuilder $container)
     {
@@ -292,8 +254,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads filesystem scenarios list locator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilesystemScenariosListLocator(ContainerBuilder $container)
     {
@@ -306,8 +266,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Loads filesystem rerun scenarios list locator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFilesystemRerunScenariosListLocator(ContainerBuilder $container)
     {
@@ -320,8 +278,6 @@ final class GherkinExtension implements Extension
 
     /**
      * Processes all available gherkin loaders.
-     *
-     * @param ContainerBuilder $container
      */
     private function processLoaders(ContainerBuilder $container)
     {

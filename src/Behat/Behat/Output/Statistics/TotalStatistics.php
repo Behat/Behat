@@ -74,11 +74,11 @@ final class TotalStatistics implements Statistics
     public function resetAllCounters()
     {
         $this->scenarioCounters = $this->stepCounters = [
-            TestResult::PASSED    => 0,
-            TestResult::FAILED    => 0,
+            TestResult::PASSED => 0,
+            TestResult::FAILED => 0,
             TestResult::UNDEFINED => 0,
-            TestResult::PENDING   => 0,
-            TestResult::SKIPPED   => 0,
+            TestResult::PENDING => 0,
+            TestResult::SKIPPED => 0,
         ];
     }
 
@@ -120,8 +120,6 @@ final class TotalStatistics implements Statistics
 
     /**
      * Registers scenario stat.
-     *
-     * @param ScenarioStat $stat
      */
     public function registerScenarioStat(ScenarioStat $stat)
     {
@@ -129,7 +127,7 @@ final class TotalStatistics implements Statistics
             return;
         }
 
-        $this->scenarioCounters[$stat->getResultCode()]++;
+        ++$this->scenarioCounters[$stat->getResultCode()];
 
         if (TestResult::FAILED === $stat->getResultCode()) {
             $this->failedScenarioStats[] = $stat;
@@ -142,12 +140,10 @@ final class TotalStatistics implements Statistics
 
     /**
      * Registers step stat.
-     *
-     * @param StepStat $stat
      */
     public function registerStepStat(StepStat $stat)
     {
-        $this->stepCounters[$stat->getResultCode()]++;
+        ++$this->stepCounters[$stat->getResultCode()];
 
         if (TestResult::FAILED === $stat->getResultCode()) {
             $this->failedStepStats[] = $stat;
@@ -160,8 +156,6 @@ final class TotalStatistics implements Statistics
 
     /**
      * Registers hook stat.
-     *
-     * @param HookStat $stat
      */
     public function registerHookStat(HookStat $stat)
     {

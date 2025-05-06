@@ -40,7 +40,7 @@ class TesterExtension extends BaseExtension
     public const STEP_TESTER_ID = 'tester.step';
 
     /**
-     * Available extension points
+     * Available extension points.
      */
     public const SCENARIO_TESTER_WRAPPER_TAG = 'tester.scenario.wrapper';
     public const OUTLINE_TESTER_WRAPPER_TAG = 'tester.outline.wrapper';
@@ -55,8 +55,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
@@ -65,9 +63,6 @@ class TesterExtension extends BaseExtension
         parent::__construct($this->processor);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         parent::configure($builder);
@@ -84,9 +79,6 @@ class TesterExtension extends BaseExtension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         parent::load($container, $config);
@@ -95,9 +87,6 @@ class TesterExtension extends BaseExtension
         $this->loadPendingExceptionStringer($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         parent::process($container);
@@ -111,8 +100,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads specification tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadSpecificationTester(ContainerBuilder $container)
     {
@@ -131,8 +118,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads scenario tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
@@ -161,8 +146,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads outline tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadOutlineTester(ContainerBuilder $container)
     {
@@ -176,8 +159,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads example tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
@@ -206,8 +187,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads background tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
@@ -224,8 +203,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads step tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadStepTester(ContainerBuilder $container)
     {
@@ -239,8 +216,7 @@ class TesterExtension extends BaseExtension
     /**
      * Loads rerun controller.
      *
-     * @param ContainerBuilder $container
-     * @param null|string      $cachePath
+     * @param string|null $cachePath
      */
     protected function loadRerunController(ContainerBuilder $container, $cachePath)
     {
@@ -256,8 +232,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Loads pending exception stringer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadPendingExceptionStringer(ContainerBuilder $container)
     {
@@ -268,8 +242,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered scenario tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processScenarioTesterWrappers(ContainerBuilder $container)
     {
@@ -278,8 +250,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered outline tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processOutlineTesterWrappers(ContainerBuilder $container)
     {
@@ -288,8 +258,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered example tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processExampleTesterWrappers(ContainerBuilder $container)
     {
@@ -298,8 +266,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered background tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processBackgroundTesterWrappers(ContainerBuilder $container)
     {
@@ -308,8 +274,6 @@ class TesterExtension extends BaseExtension
 
     /**
      * Processes all registered step tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processStepTesterWrappers(ContainerBuilder $container)
     {

@@ -21,6 +21,7 @@ use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
 use Behat\Hook\BeforeSuite;
 use Behat\Hook\Hook;
+use ReflectionAttribute;
 use ReflectionMethod;
 
 final class HookAttributeReader implements AttributeReader
@@ -46,20 +47,15 @@ final class HookAttributeReader implements AttributeReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
         $this->docBlockHelper = $docBlockHelper;
     }
 
-    /**
-     * @{inheritdoc}
-     */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        $attributes = $method->getAttributes(Hook::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Hook::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {

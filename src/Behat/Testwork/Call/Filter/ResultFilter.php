@@ -25,16 +25,12 @@ interface ResultFilter
     /**
      * Checks if filter supports call result.
      *
-     * @param CallResult $result
-     *
      * @return bool
      */
     public function supportsResult(CallResult $result);
 
     /**
      * Filters call result and returns a new result.
-     *
-     * @param CallResult $result
      *
      * @return CallResult
      */

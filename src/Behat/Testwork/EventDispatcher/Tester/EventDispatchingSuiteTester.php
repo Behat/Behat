@@ -15,7 +15,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterSuiteSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTeardown;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SuiteTester;
@@ -27,6 +26,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @template TSpec
+ *
  * @implements SuiteTester<TSpec>
  */
 final class EventDispatchingSuiteTester implements SuiteTester
@@ -44,7 +44,6 @@ final class EventDispatchingSuiteTester implements SuiteTester
      * Initializes tester.
      *
      * @param SuiteTester<TSpec>       $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {

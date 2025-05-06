@@ -14,7 +14,6 @@ use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Behat\Testwork\Hook\Scope\SuiteScope;
 use Behat\Testwork\Suite\Suite;
-use ReflectionMethod;
 
 /**
  * Represents suite hook executed in the runtime.
@@ -26,10 +25,10 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $scopeName
-     * @param null|string $filterString
+     * @param string                               $scopeName
+     * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
-     * @param null|string $description
+     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
@@ -40,9 +39,6 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
         $this->throwIfInstanceMethod($callable, 'Suite');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof SuiteScope) {
@@ -62,7 +58,6 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Checks if Feature matches specified filter.
      *
-     * @param Suite  $suite
      * @param string $filterString
      *
      * @return bool

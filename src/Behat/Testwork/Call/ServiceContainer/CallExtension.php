@@ -44,32 +44,21 @@ final class CallExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'calls';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $builder
@@ -81,18 +70,12 @@ final class CallExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadCallCenter($container);
         $this->loadCallHandlers($container, $config['error_reporting']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processCallFilters($container);
@@ -103,8 +86,6 @@ final class CallExtension implements Extension
 
     /**
      * Loads call center service.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadCallCenter(ContainerBuilder $container)
     {
@@ -115,8 +96,7 @@ final class CallExtension implements Extension
     /**
      * Loads prebuilt call handlers.
      *
-     * @param ContainerBuilder $container
-     * @param integer          $errorReporting
+     * @param int $errorReporting
      */
     protected function loadCallHandlers(ContainerBuilder $container, $errorReporting)
     {
@@ -127,8 +107,6 @@ final class CallExtension implements Extension
 
     /**
      * Registers all call filters to the CallCenter.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processCallFilters(ContainerBuilder $container)
     {
@@ -142,8 +120,6 @@ final class CallExtension implements Extension
 
     /**
      * Registers all call handlers to the CallCenter.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processCallHandlers(ContainerBuilder $container)
     {
@@ -157,8 +133,6 @@ final class CallExtension implements Extension
 
     /**
      * Registers all call result filters to the CallCenter.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processResultFilters(ContainerBuilder $container)
     {
@@ -172,8 +146,6 @@ final class CallExtension implements Extension
 
     /**
      * Registers all exception handlers to the CallCenter.
-     *
-     * @param ContainerBuilder $container
      */
     private function processExceptionHandlers(ContainerBuilder $container)
     {

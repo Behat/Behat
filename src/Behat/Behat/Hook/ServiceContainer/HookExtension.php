@@ -25,9 +25,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class HookExtension extends BaseExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         parent::load($container, $config);
@@ -38,8 +35,6 @@ final class HookExtension extends BaseExtension
 
     /**
      * Loads hookable testers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
@@ -82,8 +77,6 @@ final class HookExtension extends BaseExtension
 
     /**
      * Loads hook annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAnnotationReader(ContainerBuilder $container)
     {
@@ -94,8 +87,6 @@ final class HookExtension extends BaseExtension
 
     /**
      * Loads hook attribute reader.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadAttributeReader(ContainerBuilder $container)
     {

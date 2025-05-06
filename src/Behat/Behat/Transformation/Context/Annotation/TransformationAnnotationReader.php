@@ -12,7 +12,6 @@ namespace Behat\Behat\Transformation\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Transformation\Context\Factory\TransformationCalleeFactory;
-use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\Transformation;
 use ReflectionMethod;
 
@@ -34,7 +33,6 @@ class TransformationAnnotationReader implements AnnotationReader
      * Loads step callees (if exist) associated with specific method.
      *
      * @param string           $contextClass
-     * @param ReflectionMethod $method
      * @param string           $docLine
      * @param string           $description
      */

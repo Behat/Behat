@@ -27,9 +27,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class EventDispatcherExtension extends BaseExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         parent::load($container, $config);
@@ -46,23 +43,19 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads stop on failure controller.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadStopOnFailureController(ContainerBuilder $container)
     {
         $definition = new Definition('Behat\Behat\EventDispatcher\Cli\StopOnFailureController', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
-        $definition->addMethodCall(('setStopOnFailureHandler'), [new Reference(TestworkTesterExtension::STOP_ON_FAILURE_ID)]);
+        $definition->addMethodCall('setStopOnFailureHandler', [new Reference(TestworkTesterExtension::STOP_ON_FAILURE_ID)]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 100]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.stop_on_failure', $definition);
     }
 
     /**
      * Loads event-dispatching background tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingBackgroundTester(ContainerBuilder $container)
     {
@@ -76,8 +69,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching feature tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingFeatureTester(ContainerBuilder $container)
     {
@@ -91,8 +82,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching outline tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingOutlineTester(ContainerBuilder $container)
     {
@@ -106,8 +95,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching scenario tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingScenarioTester(ContainerBuilder $container)
     {
@@ -125,8 +112,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching example tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingExampleTester(ContainerBuilder $container)
     {
@@ -144,8 +129,6 @@ class EventDispatcherExtension extends BaseExtension
 
     /**
      * Loads event-dispatching step tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingStepTester(ContainerBuilder $container)
     {
@@ -166,8 +149,6 @@ class EventDispatcherExtension extends BaseExtension
      * @todo Remove this method in next major
      *
      * @deprecated
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadTickingStepTester(ContainerBuilder $container)
     {

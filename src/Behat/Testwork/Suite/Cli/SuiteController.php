@@ -36,9 +36,6 @@ final class SuiteController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRegistry $registry
-     * @param array         $suiteConfigurations
      */
     public function __construct(SuiteRegistry $registry, array $suiteConfigurations)
     {
@@ -46,9 +43,6 @@ final class SuiteController implements Controller
         $this->suiteConfigurations = $suiteConfigurations;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command->addOption(
@@ -81,6 +75,7 @@ final class SuiteController implements Controller
                 $config['settings']
             );
         }
+
         return null;
     }
 }

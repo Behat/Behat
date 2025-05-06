@@ -56,7 +56,6 @@ final class SpecificationFinder
      * Finds all specifications for all provided suites matching provided locator and wraps them into a spec iterator.
      *
      * @param Suite[]     $suites
-     * @param null|string $locator
      *
      * @return list<SpecificationIterator<T>>
      */
@@ -73,8 +72,7 @@ final class SpecificationFinder
     /**
      * Creates suite specification iterator for provided locator.
      *
-     * @param Suite       $suite
-     * @param null|string $locator
+     * @param string|null $locator
      *
      * @return list<SpecificationIterator<T>>
      */

@@ -17,7 +17,6 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Call\Exception\BadCallbackException;
 use Behat\Testwork\Hook\Call\RuntimeFilterableHook;
 use Behat\Testwork\Hook\Scope\HookScope;
-use ReflectionMethod;
 
 /**
  * Represents a feature hook.
@@ -29,10 +28,10 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $scopeName
-     * @param null|string $filterString
+     * @param string                               $scopeName
+     * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
-     * @param null|string $description
+     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
@@ -43,9 +42,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
         $this->throwIfInstanceMethod($callable, 'Feature');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof FeatureScope) {
@@ -60,7 +56,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     }
 
     /**
-     * @param FeatureNode $feature
      * @param string      $filterString
      *
      * @return bool
@@ -81,7 +76,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches tag filter.
      *
-     * @param FeatureNode $feature
      * @param string      $filterString
      *
      * @return bool
@@ -96,7 +90,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches name filter.
      *
-     * @param FeatureNode $feature
      * @param string      $filterString
      *
      * @return bool

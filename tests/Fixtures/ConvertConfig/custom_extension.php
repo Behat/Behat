@@ -4,8 +4,8 @@ use Behat\Behat\Output\Printer\ConsoleOutputFactory;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Output\Printer\StreamOutputPrinter;
-use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\ServiceContainer\Extension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -53,6 +53,7 @@ class CustomFormatter implements Formatter
 
     public static function getSubscribedEvents()
     {
+        return [];
     }
 
     public function getName()

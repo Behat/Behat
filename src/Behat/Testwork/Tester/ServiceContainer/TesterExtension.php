@@ -40,7 +40,7 @@ abstract class TesterExtension implements Extension
     public const STOP_ON_FAILURE_ID = 'tester.stop_on_failure';
 
     /**
-     * Available extension points
+     * Available extension points.
      */
     public const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
     public const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
@@ -54,32 +54,21 @@ abstract class TesterExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'testers';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $childrenBuilder = $builder
@@ -102,9 +91,6 @@ abstract class TesterExtension implements Extension
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadExerciseController($container, $config['skip']);
@@ -116,9 +102,6 @@ abstract class TesterExtension implements Extension
         $this->loadSpecificationTester($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processExerciseWrappers($container);
@@ -130,7 +113,6 @@ abstract class TesterExtension implements Extension
     /**
      * Loads exercise cli controllers.
      *
-     * @param ContainerBuilder $container
      * @param bool          $skip
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
@@ -145,7 +127,6 @@ abstract class TesterExtension implements Extension
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 0]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
-
 
     /**
      * Loads stop on failure handler.
@@ -166,7 +147,6 @@ abstract class TesterExtension implements Extension
     /**
      * Loads exercise cli controllers.
      *
-     * @param ContainerBuilder $container
      * @param bool          $strict
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
@@ -180,9 +160,7 @@ abstract class TesterExtension implements Extension
     }
 
     /**
-     * Loads result interpreter controller
-     *
-     * @param ContainerBuilder $container
+     * Loads result interpreter controller.
      */
     protected function loadResultInterpreter(ContainerBuilder $container)
     {
@@ -196,8 +174,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads exercise tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadExercise(ContainerBuilder $container)
     {
@@ -210,8 +186,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
@@ -223,15 +197,11 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads specification tester.
-     *
-     * @param ContainerBuilder $container
      */
     abstract protected function loadSpecificationTester(ContainerBuilder $container);
 
     /**
      * Processes all registered exercise wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processExerciseWrappers(ContainerBuilder $container)
     {
@@ -240,8 +210,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered suite tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSuiteTesterWrappers(ContainerBuilder $container)
     {
@@ -250,8 +218,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered specification tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSpecificationTesterWrappers(ContainerBuilder $container)
     {
@@ -260,8 +226,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered result interpretations.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processResultInterpretations(ContainerBuilder $container)
     {

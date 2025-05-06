@@ -25,16 +25,12 @@ interface CallFilter
     /**
      * Checks if filter supports a call.
      *
-     * @param Call $call
-     *
      * @return bool
      */
     public function supportsCall(Call $call);
 
     /**
      * Filters a call and returns a new one.
-     *
-     * @param Call $call
      *
      * @return Call
      */

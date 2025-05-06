@@ -46,7 +46,6 @@ class FireOnlySiblingsListener implements EventListener
      *
      * @param string        $beforeEventName
      * @param string        $afterEventName
-     * @param EventListener $descendant
      */
     public function __construct($beforeEventName, $afterEventName, EventListener $descendant)
     {
@@ -55,9 +54,6 @@ class FireOnlySiblingsListener implements EventListener
         $this->descendant = $descendant;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if ($this->beforeEventName === $eventName) {

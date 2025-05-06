@@ -4,6 +4,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.22.0] - 2025-05-05
+
+### Changed
+
+* Suggested method names for new step definitions will no longer be transliterated to ASCII.
+  Users working in languages whose characters are mostly outside the allowed UTF-8 range
+  will see generic `stepDefinitionX` names. We have provided an extension point for custom
+  suggestion implementations, and would consider providing an official extension. If this
+  affects you, please open a discussion on the Behat repository.
+  By @acoulton in [#1633](https://github.com/Behat/Behat/pull/1633)
+* The behat/transliterator package is no longer required and will shortly be archived.
+
+### Internal
+
+* Update all code style to Symfony coding style (with small variations) by @carlos-granados in [#1628](https://github.com/Behat/Behat/pull/1628)
+
+## [3.21.1] - 2025-04-22
+
+### Fixed
+
+* ExceptionPresenter was causing a TypeError when constructed with a null $basePath by @acoulton in [#1631](https://github.com/Behat/Behat/pull/1631)
+
+## [3.21.0] - 2025-04-18
+
+### Fixed
+
+* JUnit formatter options were being lost when converting config to PHP by @acoulton in [#1622](https://github.com/Behat/Behat/pull/1622)
+* Contexts with constructor arguments were not properly converted to PHP configuration by @acoulton in [#1619](https://github.com/Behat/Behat/pull/1619)
+
+### Added
+
+* New CLI and configuration option to print all paths as absolute paths by @carlos-granados in [#1620](https://github.com/Behat/Behat/pull/1620)
+* Expose PHP configuration interface for tester and error_reporting options by @acoulton in [#1626](https://github.com/Behat/Behat/pull/1626)
+* Improve config conversion to PHP to generate class references instead of string names; reference extensions by their
+  fully qualified class names; convert output_verbosity values to constants; and convert tester and error_reporting
+  configuration to PHP by @acoulton in [#1619](https://github.com/Behat/Behat/pull/1619), [#1623](https://github.com/Behat/Behat/pull/1623)
+  and [#1626](https://github.com/Behat/Behat/pull/1626)
+
+### Internal
+
+* Refactor features for configurable tester / error_reporting options by @acoulton in [#1625](https://github.com/Behat/Behat/pull/1625)
+
+## [3.20.0] - 2025-04-02
+
+### Changed
+
+* Remove dependency on file location in Gherkin package. The (internal) service container parameters `gherkin.paths.lib`
+  and `gherkin.paths.i18n` are no longer defined or used. Minimum behat/gherkin version is now ^4.12.0.
+  By @carlos-granados in [#1604](https://github.com/Behat/Behat/pull/1604).
+
+### Added
+
+* `--allow-no-tests` CLI option to pass even if no specifications found by @Kingdutch in [#1420](https://github.com/Behat/Behat/pull/1420)
+* `--convert-config` CLI option to convert the yaml config to php by @carlos-granados in [#1605](https://github.com/Behat/Behat/pull/1605)
+
+### Internal
+
+* Apply PSR-12 and PER-CS2.0 code styles by @carlos-granados in [#1599](https://github.com/Behat/Behat/pull/1599)
+  and [#1606](https://github.com/Behat/Behat/pull/1606)
+
 ## [3.19.0] - 2025-02-13
 
 ### Changed
@@ -1203,6 +1263,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.22.0]: https://github.com/Behat/Behat/compare/v3.21.1...v3.22.0
+[3.21.1]: https://github.com/Behat/Behat/compare/v3.21.0...v3.21.1
+[3.21.0]: https://github.com/Behat/Behat/compare/v3.20.0...v3.21.0
+[3.20.0]: https://github.com/Behat/Behat/compare/v3.19.0...v3.20.0
 [3.19.0]: https://github.com/Behat/Behat/compare/v3.18.1...v3.19.0
 [3.18.1]: https://github.com/Behat/Behat/compare/v3.18.0...v3.18.1
 [3.18.0]: https://github.com/Behat/Behat/compare/v3.17.0...v3.18.0

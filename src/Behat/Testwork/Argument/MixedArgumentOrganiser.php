@@ -10,11 +10,11 @@
 
 namespace Behat\Testwork\Argument;
 
-use ReflectionFunctionAbstract;
 use ReflectionClass;
+use ReflectionException;
+use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionException;
 use ReflectionUnionType;
 
 /**
@@ -29,7 +29,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Organises arguments using function reflection.
      *
-     * @param ReflectionFunctionAbstract $function
      * @param mixed[]                    $arguments
      *
      * @return mixed[]
@@ -98,7 +97,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks that provided argument key is a string and it matches some parameter name.
      *
-     * @param mixed    $argumentKey
      * @param string[] $parameterNames
      *
      * @return bool
@@ -112,7 +110,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Check if a given value is typehinted in the argument list.
      *
      * @param  ReflectionParameter[] $parameters
-     * @param  mixed                 $value
      *
      * @return bool
      */
@@ -216,6 +213,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Filtered out superfluous parameters for matching up typehinted arguments.
      *
      * @param  ReflectionParameter[] $parameters Constructor Arguments
+     *
      * @return ReflectionParameter[]             Filtered $parameters
      */
     private function filterApplicableTypehintedParameters(array $parameters): array
@@ -228,13 +226,12 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
             },
             ARRAY_FILTER_USE_BOTH
         );
-
     }
 
     /**
      * @return ReflectionClass[]
      */
-    private function getReflectionClassesFromParameter(\ReflectionParameter $parameter): array
+    private function getReflectionClassesFromParameter(ReflectionParameter $parameter): array
     {
         $classes = [];
 
@@ -253,9 +250,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         }
 
         foreach ($types as $type) {
-
             // ReflectionUnionType::getTypes is only documented as returning ReflectionType[]
-            if (!$type instanceof \ReflectionNamedType) {
+            if (!$type instanceof ReflectionNamedType) {
                 continue;
             }
 
@@ -286,6 +282,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  mixed[]               &$candidates Resolved arguments
      * @param  mixed[]               &$arguments  Argument mapping
      * @param  callable              $predicate   Callable predicate to apply to each candidate
+     *
      * @return void
      */
     private function applyPredicateToTypehintedArguments(
@@ -309,6 +306,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  mixed[]             &$candidates Resolved arguments
      * @param  mixed[]             &$arguments  Argument mapping
      * @param  callable            $predicate   Callable predicate to apply to each candidate
+     *
      * @return bool Returns true if a candidate has been matched to the given parameter, otherwise false
      */
     public function matchParameterToCandidateUsingPredicate(
@@ -341,6 +339,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param  ReflectionClass $reflectionClass Typehinted argument
      * @param  mixed           $candidate       Resolved argument
+     *
      * @return bool
      */
     private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
@@ -353,6 +352,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param  ReflectionClass $reflectionClass Typehinted argument
      * @param  mixed           $candidate       Resolved argument
+     *
      * @return bool
      */
     private function isInstancePredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
@@ -416,7 +416,6 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Reorders arguments based on their respective parameters order.
      *
      * @param ReflectionParameter[] $parameters
-     * @param array                 $arguments
      *
      * @return mixed[]
      */
@@ -450,7 +449,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Marks an argument at provided position as defined.
      *
-     * @param integer $position
+     * @param int $position
      */
     private function markArgumentDefined($position)
     {
@@ -460,7 +459,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if an argument at provided position is defined.
      *
-     * @param integer $position
+     * @param int $position
      *
      * @return bool
      */

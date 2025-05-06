@@ -10,10 +10,12 @@
 
 namespace Behat\Hook;
 
+use Attribute;
+
 /**
- * Represents an Attribute for AfterFeature hook
+ * Represents an Attribute for AfterFeature hook.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class AfterFeature implements Hook
 {
     /**

@@ -21,7 +21,7 @@ use Behat\Testwork\Suite\Suite;
 final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter implements UnusedDefinitionPrinter
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $searchCriterion;
 
@@ -35,9 +35,6 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
         $this->searchCriterion = $criterion;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printDefinitions(Suite $suite, $definitions)
     {
         $this->printDefinitionsWithOptionalSuite($definitions, $suite);
@@ -99,7 +96,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
             $indent . '<info>{type}</info> <def_regex>{regex}</def_regex>',
             [
                 '{suite}' => $suite ? $suite->getName() : '',
-                '{type}'  => $this->getDefinitionType($definition),
+                '{type}' => $this->getDefinitionType($definition),
                 '{regex}' => $pattern,
             ]
         );
@@ -121,7 +118,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
                 $lines[] = strtr(
                     $indent . '{description}',
                     [
-                        '{space}'       => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
+                        '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
                         '{description}' => $descriptionLine,
                     ]
                 );
@@ -144,7 +141,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
             $indent . '`{path}`',
             [
                 '{space}' => $suite ? str_pad('', mb_strlen($suite->getName(), 'utf8') + 1) : '',
-                '{path}'  => $definition->getPath(),
+                '{path}' => $definition->getPath(),
             ]
         );
 

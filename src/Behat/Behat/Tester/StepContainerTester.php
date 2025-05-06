@@ -31,8 +31,6 @@ final class StepContainerTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepTester $stepTester
      */
     public function __construct(StepTester $stepTester)
     {
@@ -42,9 +40,6 @@ final class StepContainerTester
     /**
      * Tests container.
      *
-     * @param Environment            $env
-     * @param FeatureNode            $feature
-     * @param StepContainerInterface $container
      * @param bool                $skip
      *
      * @return TestResult[]

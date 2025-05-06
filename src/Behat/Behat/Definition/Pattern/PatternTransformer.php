@@ -33,8 +33,6 @@ final class PatternTransformer
 
     /**
      * Registers pattern policy.
-     *
-     * @param PatternPolicy $policy
      */
     public function registerPatternPolicy(PatternPolicy $policy)
     {

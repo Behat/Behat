@@ -35,9 +35,6 @@ final class StatisticsListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param Statistics        $statistics
-     * @param StatisticsPrinter $statisticsPrinter
      */
     public function __construct(Statistics $statistics, StatisticsPrinter $statisticsPrinter)
     {
@@ -45,9 +42,6 @@ final class StatisticsListener implements EventListener
         $this->printer = $statisticsPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->startTimerOnBeforeExercise($eventName);
@@ -71,7 +65,6 @@ final class StatisticsListener implements EventListener
     /**
      * Prints statistics on after exercise event.
      *
-     * @param Formatter $formatter
      * @param string    $eventName
      */
     private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, $eventName)

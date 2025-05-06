@@ -11,10 +11,10 @@
 namespace Behat\Behat\HelperContainer\Argument;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
-use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
 use Behat\Behat\HelperContainer\BuiltInServiceContainer;
+use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\WrongContainerClassException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
@@ -39,8 +39,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
 
     /**
      * Initialises factory.
-     *
-     * @param TaggedContainerInterface $container
      */
     public function __construct(TaggedContainerInterface $container)
     {
@@ -48,8 +46,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @deprecated as part of SuiteScopedResolverFactory deprecation. Would be removed in 4.0
      *
      * @throws WrongServicesConfigurationException
@@ -72,8 +68,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws WrongServicesConfigurationException
      * @throws WrongContainerClassException
      */
@@ -98,10 +92,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Creates container from the setting passed.
      *
-     * @param mixed $settings
-     *
-     * @return mixed
-     *
      * @throws WrongServicesConfigurationException
      */
     private function createContainer($settings)
@@ -124,8 +114,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      *
      * @param string $settings
      *
-     * @return mixed
-     *
      * @throws WrongServicesConfigurationException
      */
     private function createContainerFromString($settings)
@@ -140,8 +128,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Creates built-in service container with provided settings.
      *
-     * @param array $settings
-     *
      * @return BuiltInServiceContainer
      */
     private function createContainerFromArray(array $settings)
@@ -153,8 +139,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * Loads container from string.
      *
      * @param string $name
-     *
-     * @return mixed
      *
      * @throws WrongServicesConfigurationException
      */
@@ -175,8 +159,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * Creates container from string-based class spec.
      *
      * @param string $classSpec
-     *
-     * @return mixed
      */
     private function createContainerFromClassSpec($classSpec)
     {
@@ -192,7 +174,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Checks if container implements the correct interface and creates resolver using it.
      *
-     * @param mixed $container
      * @param bool  $autowire
      *
      * @return ArgumentResolver[]

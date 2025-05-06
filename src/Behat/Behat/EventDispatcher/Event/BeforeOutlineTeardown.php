@@ -38,11 +38,6 @@ final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardow
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param TestResult  $result
      */
     public function __construct(
         Environment $env,

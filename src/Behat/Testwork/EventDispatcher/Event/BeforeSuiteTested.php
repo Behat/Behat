@@ -28,7 +28,6 @@ final class BeforeSuiteTested extends SuiteTested implements BeforeTested
     /**
      * Initializes event.
      *
-     * @param Environment           $env
      * @param SpecificationIterator<mixed> $iterator
      */
     public function __construct(Environment $env, SpecificationIterator $iterator)

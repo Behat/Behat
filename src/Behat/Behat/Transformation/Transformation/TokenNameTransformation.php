@@ -31,10 +31,6 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      */
     private $pattern;
 
-
-    /**
-     * {@inheritdoc}
-     */
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -45,7 +41,7 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
@@ -54,17 +50,11 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         return ':' . $argumentIndex === $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $call = new TransformationCall(
@@ -83,25 +73,16 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
         return $result->getReturn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 50;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'TokenNameTransform ' . $this->pattern;

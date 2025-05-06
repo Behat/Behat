@@ -12,7 +12,11 @@ namespace Behat\Behat\Definition\Pattern\Policy;
 
 use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
-use Behat\Transliterator\Transliterator;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
+use Behat\Behat\Definition\Pattern\StepMethodNameSuggester;
+
+use function array_keys;
+use function preg_replace;
 
 /**
  * Defines a way to handle regex patterns.
@@ -26,41 +30,36 @@ final class RegexPatternPolicy implements PatternPolicy
      */
     private static $replacePatterns = [
         "/(?<=\W|^)\\\'(?:((?!\\').)*)\\\'(?=\W|$)/" => "'([^']*)'", // Single quoted strings
-        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/'          => "\"([^\"]*)\"", // Double quoted strings
-        '/(?<=\W|^)(\d+)(?=\W|$)/'                   => "(\\d+)", // Numbers
+        '/(?<=\W|^)\"(?:[^\"]*)\"(?=\W|$)/' => '"([^"]*)"', // Double quoted strings
+        '/(?<=\W|^)(\d+)(?=\W|$)/' => '(\\d+)', // Numbers
     ];
 
-    /**
-     * {@inheritdoc}
-     */
+    public function __construct(
+        private readonly StepMethodNameSuggester $methodNameSuggester = new SimpleStepMethodNameSuggester(),
+    ) {
+    }
+
     public function supportsPatternType($type)
     {
         return 'regex' === $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generatePattern($stepText)
     {
-        $canonicalText = $this->generateCanonicalText($stepText);
+        $methodName = $this->methodNameSuggester->suggest(
+            preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),
+        );
         $stepRegex = $this->generateRegex($stepText);
         $placeholderCount = $this->countPlaceholders($stepText, $stepRegex);
 
-        return new Pattern($canonicalText, '/^' . $stepRegex . '$/', $placeholderCount);
+        return new Pattern($methodName, '/^' . $stepRegex . '$/', $placeholderCount);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsPattern($pattern)
     {
         return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', $pattern);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformPatternToRegex($pattern)
     {
         if (false === @preg_match($pattern, 'anything')) {
@@ -90,29 +89,12 @@ final class RegexPatternPolicy implements PatternPolicy
     }
 
     /**
-     * Generates canonical text for step text.
-     *
-     * @param string $stepText
-     *
-     * @return string
-     */
-    private function generateCanonicalText($stepText)
-    {
-        $canonicalText = preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText));
-        $canonicalText = Transliterator::transliterate($canonicalText, ' ');
-        $canonicalText = preg_replace('/[^a-zA-Z\_\ ]/', '', $canonicalText);
-        $canonicalText = str_replace(' ', '', ucwords($canonicalText));
-
-        return $canonicalText;
-    }
-
-    /**
      * Counts regex placeholders using provided text.
      *
      * @param string $stepText
      * @param string $stepRegex
      *
-     * @return integer
+     * @return int
      */
     private function countPlaceholders($stepText, $stepRegex)
     {
