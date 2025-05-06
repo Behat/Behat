@@ -107,3 +107,38 @@ Feature: Path filters
       3 scenarios (3 passed)
       6 steps (6 passed)
       """
+
+    Scenario: Single scenario from single feature file
+      When I run "behat --no-colors -f pretty features/feature1.feature:7"
+      Then it should pass with:
+      """
+      Feature: First Feature
+
+        Scenario: Second Scenario  # features/feature1.feature:7
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
+  Scenario: Single scenario from each feature file
+    When I run "behat --no-colors -f pretty features/feature1.feature:7 features/feature2.feature:6"
+    Then it should pass with:
+      """
+      Feature: First Feature
+
+        Scenario: Second Scenario  # features/feature1.feature:7
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      Feature: Second Feature
+
+        Background:                  # features/feature2.feature:3
+          Given Some normal step N21 # FeatureContext::someNormalStepN()
+
+        Scenario: First Scenario   # features/feature2.feature:6
+          Given Some slow step N22 # FeatureContext::someSlowStepN()
+          And Some fast step N23   # FeatureContext::someFastStepN()
+
+      2 scenarios (2 passed)
+      4 steps (4 passed)
+      """
