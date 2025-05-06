@@ -54,6 +54,8 @@ class JUnitStepPrinter implements StepPrinter
 
         $attributes = ['message' => $message];
 
+        $outputPrinter->addCurrentTestCaseAttributes(['line' => $step->getLine()]);
+
         switch ($result->getResultCode()) {
             case TestResult::FAILED:
                 $outputPrinter->addTestcaseChild('failure', $attributes);
