@@ -1,12 +1,11 @@
 <?php
+
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Hook\Scope\StepScope;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
-use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Hook\Call\HookCall;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
@@ -19,7 +18,6 @@ use Behat\Testwork\Tester\Setup\Teardown;
  */
 class JUnitSetupPrinter implements SetupPrinter
 {
-
     /** @var ExceptionPresenter */
     private $exceptionPresenter;
 
@@ -28,9 +26,6 @@ class JUnitSetupPrinter implements SetupPrinter
         $this->exceptionPresenter = $exceptionPresenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printSetup(Formatter $formatter, Setup $setup)
     {
         if (!$setup->isSuccessful()) {
@@ -40,9 +35,6 @@ class JUnitSetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
         if (!$teardown->isSuccessful()) {
@@ -52,35 +44,28 @@ class JUnitSetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param CallResults $results
-     * @param string $messageType
-     */
-    private function handleHookCalls(Formatter $formatter, CallResults $results, $messageType)
+    private function handleHookCalls(Formatter $formatter, CallResults $results, string $messageType): void
     {
-        /** @var CallResult $hookCallResult */
         foreach ($results as $hookCallResult) {
             if ($hookCallResult->hasException()) {
-                /** @var HookCall $call */
                 $call = $hookCallResult->getCall();
                 $scope = $call->getScope();
-                /** @var JUnitOutputPrinter $outputPrinter */
                 $outputPrinter = $formatter->getOutputPrinter();
+                assert($outputPrinter instanceof JUnitOutputPrinter);
 
-                $message = '';
+                $callee = $call->getCallee();
+                $message = $callee->getName();
                 if ($scope instanceof StepScope) {
-                    $message .= $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText() . ': ';
+                    $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
                 }
-                $message .= $this->exceptionPresenter->presentException($hookCallResult->getException());
+                $message .= ': ' . $this->exceptionPresenter->presentException($hookCallResult->getException());
 
-                $attributes = array(
+                $attributes = [
                     'message' => $message,
-                    'type'    => $messageType,
-                );
+                    'type' => $messageType,
+                ];
 
                 $outputPrinter->addTestcaseChild('failure', $attributes);
-
             }
         }
     }

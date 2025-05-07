@@ -31,9 +31,6 @@ final class AggregatePatternIdentifier implements PatternIdentifier
         $this->identifiers = $identifiers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessPatternType($contextClass)
     {
         foreach ($this->identifiers as $identifier) {

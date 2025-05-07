@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
-use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
@@ -38,12 +37,7 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
     private $setup;
 
     /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param Setup       $setup
+     * Initializes event.
      */
     public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario, Setup $setup)
     {
@@ -65,9 +59,7 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

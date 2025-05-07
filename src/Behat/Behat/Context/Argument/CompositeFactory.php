@@ -26,21 +26,16 @@ final class CompositeFactory implements SuiteScopedResolverFactory
     /**
      * @var SuiteScopedResolverFactory[]
      */
-    private $factories = array();
+    private $factories = [];
 
     /**
      * Registers factory.
-     *
-     * @param SuiteScopedResolverFactory $factory
      */
     public function registerFactory(SuiteScopedResolverFactory $factory)
     {
         $this->factories[] = $factory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function generateArgumentResolvers(Suite $suite)
     {
         return array_reduce(
@@ -48,7 +43,7 @@ final class CompositeFactory implements SuiteScopedResolverFactory
             function (array $resolvers, SuiteScopedResolverFactory $factory) use ($suite) {
                 return array_merge($resolvers, $factory->generateArgumentResolvers($suite));
             },
-            array()
+            []
         );
     }
 }

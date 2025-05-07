@@ -23,26 +23,20 @@ final class CallResult
      * @var Call
      */
     private $call;
-    /**
-     * @var mixed
-     */
     private $return;
     /**
-     * @var null|Exception
+     * @var Exception|null
      */
     private $exception;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $stdOut;
 
     /**
      * Initializes call result.
      *
-     * @param Call           $call
-     * @param mixed          $return
-     * @param null|Exception $exception
-     * @param null|string    $stdOut
+     * @param string|null $stdOut
      */
     public function __construct(Call $call, $return, ?Exception $exception = null, $stdOut = null)
     {
@@ -64,8 +58,6 @@ final class CallResult
 
     /**
      * Returns call return value.
-     *
-     * @return mixed
      */
     public function getReturn()
     {
@@ -75,8 +67,8 @@ final class CallResult
     /**
      * Check if call thrown exception.
      *
-     * @psalm-assert-if-true Exception $this->exception
-     * @psalm-assert-if-true Exception $this->getException()
+     * @phpstan-assert-if-true Exception $this->exception
+     * @phpstan-assert-if-true Exception $this->getException()
      *
      * @return bool
      */
@@ -88,7 +80,7 @@ final class CallResult
     /**
      * Returns exception thrown by call (if any).
      *
-     * @return null|Exception
+     * @return Exception|null
      */
     public function getException()
     {
@@ -108,7 +100,7 @@ final class CallResult
     /**
      * Returns stdOut produced by call (if any).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

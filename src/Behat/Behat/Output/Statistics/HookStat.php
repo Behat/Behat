@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Behat\Testwork\Hook\Scope\HookScope;
+
 /**
  * Represents hook stat.
  *
@@ -33,14 +35,18 @@ final class HookStat
      * @var string|null
      */
     private $stdOut;
+    /**
+     * @var HookScope|null
+     */
+    private $scope;
 
     /**
      * Initializes hook stat.
      *
      * @param string      $name
      * @param string      $path
-     * @param null|string $error
-     * @param null|string $stdOut
+     * @param string|null $error
+     * @param string|null $stdOut
      */
     public function __construct($name, $path, $error = null, $stdOut = null)
     {
@@ -50,17 +56,16 @@ final class HookStat
         $this->stdOut = $stdOut;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function setScope(HookScope $scope)
+    {
+        $this->scope = $scope;
+    }
+
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         return null === $this->error;
@@ -69,7 +74,7 @@ final class HookStat
     /**
      * Returns hook standard output (if has some).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {
@@ -94,5 +99,10 @@ final class HookStat
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function getScope(): HookScope
+    {
+        return $this->scope;
     }
 }

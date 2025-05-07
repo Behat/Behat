@@ -3,7 +3,11 @@ name: Build
 on:
   push:
     branches: [master]
-  pull_request: ~
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
   release:
     types: [created]
   workflow_dispatch: ~
@@ -30,13 +34,13 @@ jobs:
             symfony-version: ''
 
           # MacOS on latest PHP only
-          - php: 8.2
+          - php: 8.4
             os: macos-latest
             composer-mode: update
             symfony-version: ''
 
           # Windows on latest PHP only
-          - php: 8.2
+          - php: 8.4
             os: windows-latest
             composer-mode: update
             symfony-version: ''
@@ -69,11 +73,6 @@ jobs:
           composer config --global --no-plugins allow-plugins.symfony/flex true &&
           composer global require symfony/flex
 
-      # until psalm is updated to v5 which is compatible with Symfony 7
-      - name: Remove vimeo/psalm
-        if: matrix.symfony-version == '7.0'
-        run: composer remove vimeo/psalm --no-update --dev
-
       - name: Install latest dependencies
         if: matrix.composer-mode == 'update'
         env:
@@ -90,12 +89,31 @@ jobs:
       - name: Run tests (Behat)
         run: ./bin/behat -fprogress --strict
 
-      - name: Run tests (Behat for PHP 8.0)
-        if: matrix.php >= 8.0
-        run: ./bin/behat -fprogress --strict --tags=@php8
-
   static-analysis:
     name: Static analysis
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.1, 8.4]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          ini-values: "zend.exception_ignore_args=Off"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan
+
+  coding-standard:
+    name: Coding standards
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -103,23 +121,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: "8.1"
           ini-values: "zend.exception_ignore_args=Off"
           coverage: none
 
-      # until psalm is updated to v5 which is compatible with Symfony 7
-      - name: Force symfony version for psalm compatibility
-        run: |
-          composer config --global --no-plugins allow-plugins.symfony/flex true &&
-          composer global require symfony/flex
-
       - name: Install dependencies
-        env:
-          SYMFONY_REQUIRE: 5.4.*
         run: composer update
 
-      - name: Run Psalm
-        run: ./vendor/bin/psalm --output-format=github
+      - name: Run PHP CS Fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --verbose --diff
 
   build-phar:
     name: Build PHAR file
@@ -169,9 +179,6 @@ jobs:
           php-version: "${{ matrix.php }}"
           ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
           coverage: none
-
-      - name: Install dependencies
-        run: composer install
 
       - uses: actions/download-artifact@v4
         with:

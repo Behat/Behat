@@ -29,17 +29,12 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Initializes organiser.
-     *
-     * @param ArgumentOrganiser $organiser
      */
     public function __construct(ArgumentOrganiser $organiser)
     {
         $this->baseOrganiser = $organiser;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
         if (!$function instanceof ReflectionMethod) {
@@ -62,7 +57,6 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks that all provided constructor arguments are present in the constructor.
      *
-     * @param ReflectionMethod $constructor
      * @param mixed[]          $passedArguments
      * @param mixed[]          $organisedArguments
      *
@@ -71,7 +65,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     private function validateArguments(
         ReflectionMethod $constructor,
         array $passedArguments,
-        array $organisedArguments
+        array $organisedArguments,
     ) {
         foreach ($passedArguments as $key => $val) {
             if (array_key_exists($key, $organisedArguments)) {

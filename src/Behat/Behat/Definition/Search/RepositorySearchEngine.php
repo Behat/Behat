@@ -50,17 +50,12 @@ final class RepositorySearchEngine implements SearchEngine
 
     /**
      * Initializes search engine.
-     *
-     * @param DefinitionRepository $repository
-     * @param PatternTransformer   $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param ArgumentOrganiser    $argumentOrganiser
      */
     public function __construct(
         DefinitionRepository $repository,
         PatternTransformer $patternTransformer,
         DefinitionTranslator $translator,
-        ArgumentOrganiser $argumentOrganiser
+        ArgumentOrganiser $argumentOrganiser,
     ) {
         $this->repository = $repository;
         $this->patternTransformer = $patternTransformer;
@@ -69,21 +64,19 @@ final class RepositorySearchEngine implements SearchEngine
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws AmbiguousMatchException
      */
     public function searchDefinition(
         Environment $environment,
         FeatureNode $feature,
-        StepNode $step
+        StepNode $step,
     ) {
         $suite = $environment->getSuite();
         $language = $feature->getLanguage();
         $stepText = $step->getText();
         $multi = $step->getArguments();
 
-        $definitions = array();
+        $definitions = [];
         $result = null;
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
@@ -94,7 +87,10 @@ final class RepositorySearchEngine implements SearchEngine
             }
 
             $result = $newResult;
-            $definitions[] = $newResult->getMatchedDefinition();
+            $matchedDefinition = $newResult->getMatchedDefinition();
+            if ($matchedDefinition instanceof Definition) {
+                $definitions[] = $matchedDefinition;
+            }
         }
 
         if (count($definitions) > 1) {
@@ -107,11 +103,10 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Attempts to match provided definition against a step text.
      *
-     * @param Definition          $definition
      * @param string              $stepText
      * @param ArgumentInterface[] $multiline
      *
-     * @return null|SearchResult
+     * @return SearchResult|null
      */
     private function match(Definition $definition, $stepText, array $multiline)
     {

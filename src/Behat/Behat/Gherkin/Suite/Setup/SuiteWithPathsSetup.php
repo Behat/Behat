@@ -26,7 +26,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
      */
     private $basePath;
     /**
-     * @var null|FilesystemLogger
+     * @var FilesystemLogger|null
      */
     private $logger;
 
@@ -34,7 +34,6 @@ final class SuiteWithPathsSetup implements SuiteSetup
      * Initializes setup.
      *
      * @param string                $basePath
-     * @param null|FilesystemLogger $logger
      */
     public function __construct($basePath, ?FilesystemLogger $logger = null)
     {
@@ -42,17 +41,11 @@ final class SuiteWithPathsSetup implements SuiteSetup
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return $suite->hasSetting('paths') && is_array($suite->getSetting('paths'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setupSuite(Suite $suite)
     {
         foreach ($suite->getSetting('paths') as $locator) {
@@ -102,7 +95,8 @@ final class SuiteWithPathsSetup implements SuiteSetup
     private function isAbsolutePath($file)
     {
         if ($file[0] == '/' || $file[0] == '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
+            || (
+                strlen($file) > 3 && ctype_alpha($file[0])
                 && $file[1] == ':'
                 && ($file[2] == '\\' || $file[2] == '/')
             )

@@ -38,9 +38,6 @@ final class AggregateContextIdentifier implements TargetContextIdentifier
         $this->identifiers = $identifiers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         foreach ($this->identifiers as $identifier) {

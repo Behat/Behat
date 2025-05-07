@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
@@ -60,14 +60,11 @@ final class JUnitScenarioPrinter
         $this->durationListener = $durationListener;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
         $name = implode(' ', array_map(function ($l) {
             return trim($l);
-        }, explode("\n", $scenario->getTitle())));
+        }, explode("\n", $scenario->getTitle() ?? '')));
 
         if ($scenario instanceof ExampleNode) {
             $name = $this->buildExampleName($scenario);
@@ -76,12 +73,12 @@ final class JUnitScenarioPrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $testCaseAttributes = array(
-            'name'      => $name,
+        $testCaseAttributes = [
+            'name' => $name,
             'classname' => $feature->getTitle(),
-            'status'    => $this->resultConverter->convertResultToString($result),
-            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
-        );
+            'status' => $this->resultConverter->convertResultToString($result),
+            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
+        ];
 
         if ($file) {
             $cwd = realpath(getcwd());
@@ -94,20 +91,20 @@ final class JUnitScenarioPrinter
     }
 
     /**
-     * @param ExampleNode $scenario
      * @return string
      */
     private function buildExampleName(ExampleNode $scenario)
     {
         $currentOutline = $this->outlineStoreListener->getCurrentOutline($scenario);
         if ($currentOutline === $this->lastOutline) {
-            $this->outlineStepCount++;
+            ++$this->outlineStepCount;
         } else {
             $this->lastOutline = $currentOutline;
             $this->outlineStepCount = 1;
         }
 
         $name = $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
+
         return $name;
     }
 }

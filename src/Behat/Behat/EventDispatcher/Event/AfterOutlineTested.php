@@ -43,19 +43,13 @@ final class AfterOutlineTested extends OutlineTested implements AfterTested
 
     /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
-     * @param TestResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(
         Environment $env,
         FeatureNode $feature,
         OutlineNode $outline,
         TestResult $result,
-        Teardown $teardown
+        Teardown $teardown,
     ) {
         parent::__construct($env);
 

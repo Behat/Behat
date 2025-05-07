@@ -35,25 +35,17 @@ final class RuntimeBackgroundTester implements BackgroundTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepContainerTester $containerTester
      */
     public function __construct(StepContainerTester $containerTester)
     {
         $this->containerTester = $containerTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, $skip)
     {
         $background = $feature->getBackground();
@@ -74,9 +66,6 @@ final class RuntimeBackgroundTester implements BackgroundTester
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

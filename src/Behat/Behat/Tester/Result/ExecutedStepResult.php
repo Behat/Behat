@@ -27,15 +27,12 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      */
     private $searchResult;
     /**
-     * @var null|CallResult
+     * @var CallResult|null
      */
     private $callResult;
 
     /**
      * Initialize test result.
-     *
-     * @param SearchResult $searchResult
-     * @param CallResult   $callResult
      */
     public function __construct(SearchResult $searchResult, CallResult $callResult)
     {
@@ -63,32 +60,23 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return $this->callResult;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStepDefinition()
     {
         return $this->searchResult->getMatchedDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasException()
     {
         return null !== $this->getException();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getException()
     {
         return $this->callResult->getException();
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::PENDING|self::FAILED|self::PASSED
      */
     public function getResultCode()
     {
@@ -103,9 +91,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return self::PASSED;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();

@@ -20,6 +20,8 @@ use Behat\Testwork\Environment\Environment;
  * Enhances environment call with definition information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @method Definition getCallee()
  */
 final class DefinitionCall extends EnvironmentCall
 {
@@ -35,12 +37,7 @@ final class DefinitionCall extends EnvironmentCall
     /**
      * Initializes definition call.
      *
-     * @param Environment  $environment
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
-     * @param Definition   $definition
-     * @param array        $arguments
-     * @param null|integer $errorReportingLevel
+     * @param int|null $errorReportingLevel
      */
     public function __construct(
         Environment $environment,
@@ -48,7 +45,7 @@ final class DefinitionCall extends EnvironmentCall
         StepNode $step,
         Definition $definition,
         array $arguments,
-        $errorReportingLevel = null
+        $errorReportingLevel = null,
     ) {
         parent::__construct($environment, $definition, $arguments, $errorReportingLevel);
 

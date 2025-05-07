@@ -29,7 +29,6 @@ final class CallHandlingException extends RuntimeException implements CallExcept
      * Initializes exception.
      *
      * @param string $message
-     * @param Call   $callable
      */
     public function __construct($message, Call $callable)
     {

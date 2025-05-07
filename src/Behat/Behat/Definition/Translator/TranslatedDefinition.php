@@ -35,7 +35,6 @@ final class TranslatedDefinition implements Definition
     /**
      * Initialises translated definition.
      *
-     * @param Definition $definition
      * @param string     $translatedPattern
      * @param string     $language
      */
@@ -46,17 +45,11 @@ final class TranslatedDefinition implements Definition
         $this->language = $language;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return $this->definition->getType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->translatedPattern;
@@ -82,57 +75,41 @@ final class TranslatedDefinition implements Definition
         return $this->language;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription()
     {
         return $this->definition->getDescription();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPath()
     {
         return $this->definition->getPath();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isAMethod()
     {
         return $this->definition->isAMethod();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isAnInstanceMethod()
     {
         return $this->definition->isAnInstanceMethod();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCallable()
     {
         return $this->definition->getCallable();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReflection()
     {
         return $this->definition->getReflection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function getOriginalDefinition(): Definition
+    {
+        return $this->definition;
+    }
+
     public function __toString()
     {
         return $this->definition->__toString();

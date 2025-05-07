@@ -19,6 +19,8 @@ use EmptyIterator;
  * Return an instance of this class from locator if no specifications are found.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationIterator<never>
  */
 final class NoSpecificationsIterator extends EmptyIterator implements SpecificationIterator
 {
@@ -29,8 +31,6 @@ final class NoSpecificationsIterator extends EmptyIterator implements Specificat
 
     /**
      * Initializes iterator.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {

@@ -48,6 +48,7 @@ class TestworkEventDispatcherTest extends TestCase
         $dispatcher = new TestworkEventDispatcher();
         $event = new class extends Event {
             public $name;
+
             public function setName($name): void
             {
                 $this->name = $name;
@@ -94,7 +95,7 @@ class TestworkEventDispatcherTest extends TestCase
      */
     public function createListenerSpy()
     {
-        return new class() {
+        return new class {
             public $receivedEvents = [];
 
             public function __invoke(Event $event)

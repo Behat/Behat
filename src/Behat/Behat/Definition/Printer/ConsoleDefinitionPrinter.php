@@ -30,10 +30,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      */
     private $output;
     /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
      * @var DefinitionTranslator
      */
     private $translator;
@@ -43,32 +39,26 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     private $keywords;
 
     /**
-     * Initializes printer.
-     *
-     * @param OutputInterface     $output
-     * @param PatternTransformer  $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param KeywordsInterface   $keywords
+     * @param PatternTransformer $patternTransformer deprecated, will be removed in the next major version
      */
     public function __construct(
         OutputInterface $output,
         PatternTransformer $patternTransformer,
         DefinitionTranslator $translator,
-        KeywordsInterface $keywords
+        KeywordsInterface $keywords,
     ) {
         $this->output = $output;
-        $this->patternTransformer = $patternTransformer;
         $this->translator = $translator;
         $this->keywords = $keywords;
 
         $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
         $output->getFormatter()->setStyle(
             'def_regex_capture',
-            new OutputFormatterStyle('yellow', null, array('bold'))
+            new OutputFormatterStyle('yellow', null, ['bold'])
         );
         $output->getFormatter()->setStyle(
             'def_dimmed',
-            new OutputFormatterStyle('black', null, array('bold'))
+            new OutputFormatterStyle('black', null, ['bold'])
         );
     }
 
@@ -77,8 +67,11 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @param string $text
      */
-    final protected function write($text)
+    final protected function write($text, bool $lineBreakBefore = false)
     {
+        if ($lineBreakBefore) {
+            $this->output->writeln('');
+        }
         $this->output->writeln($text);
         $this->output->writeln('');
     }
@@ -87,7 +80,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
     {
         $this->keywords->setLanguage($this->translator->getLocale());
 
-        $method = 'get'.ucfirst($definition->getType()).'Keywords';
+        $method = 'get' . ucfirst($definition->getType()) . 'Keywords';
 
         $keywords = explode('|', $this->keywords->$method());
 
@@ -95,20 +88,22 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
             return current($keywords);
         }
 
-        return 1 < count($keywords) ? '['.implode('|', $keywords).']' : implode('|', $keywords);
+        return 1 < count($keywords) ? '[' . implode('|', $keywords) . ']' : implode('|', $keywords);
     }
 
     /**
      * Translates definition using translator.
-     *
-     * @param Suite      $suite
-     * @param Definition $definition
      *
      * @return Definition
      */
     final protected function translateDefinition(Suite $suite, Definition $definition)
     {
         return $this->translator->translateDefinition($suite, $definition);
+    }
+
+    final protected function translateInfoText(string $infoText, array $parameters): string
+    {
+        return $this->translator->translateInfoText($infoText, $parameters);
     }
 
     /**

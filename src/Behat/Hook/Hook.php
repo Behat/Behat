@@ -12,10 +12,11 @@ namespace Behat\Hook;
 
 /**
  * Marker interface for all Attributes regarding
- * Hooks
+ * Hooks.
  *
  * @internal Only meant as marker, not as an extension point
  */
 interface Hook
 {
+    public function getFilterString(): ?string;
 }

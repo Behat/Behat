@@ -25,38 +25,36 @@ use Behat\Testwork\Tester\SuiteTester;
  * Tester executing suite tests in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
+ *
+ * @implements SuiteTester<TSpec>
  */
 final class RuntimeSuiteTester implements SuiteTester
 {
     /**
-     * @var SpecificationTester
+     * @var SpecificationTester<TSpec>
      */
     private $specTester;
 
     /**
      * Initializes tester.
      *
-     * @param SpecificationTester $specTester
+     * @param SpecificationTester<TSpec> $specTester
      */
     public function __construct(SpecificationTester $specTester)
     {
         $this->specTester = $specTester;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($iterator as $specification) {
             $setup = $this->specTester->setUp($env, $specification, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;
@@ -70,9 +68,6 @@ final class RuntimeSuiteTester implements SuiteTester
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

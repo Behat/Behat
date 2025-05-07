@@ -10,15 +10,15 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
-use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\ExceptionResult;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Prints step with optional results.
@@ -40,11 +40,6 @@ class JUnitStepPrinter implements StepPrinter
 
     /**
      * Prints step using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param Scenario   $scenario
-     * @param StepNode   $step
-     * @param StepResult $result
      */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
@@ -57,7 +52,7 @@ class JUnitStepPrinter implements StepPrinter
             $message .= ': ' . $this->exceptionPresenter->presentException($result->getException());
         }
 
-        $attributes = array('message' => $message);
+        $attributes = ['message' => $message];
 
         switch ($result->getResultCode()) {
             case TestResult::FAILED:
@@ -69,7 +64,7 @@ class JUnitStepPrinter implements StepPrinter
                 $outputPrinter->addTestcaseChild('error', $attributes);
                 break;
 
-            case StepResult::UNDEFINED:
+            case TestResult::UNDEFINED:
                 $attributes['type'] = 'undefined';
                 $outputPrinter->addTestcaseChild('error', $attributes);
                 break;

@@ -19,7 +19,6 @@ use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,9 +39,6 @@ final class EventDispatchingStepTester implements StepTester
 
     /**
      * Initializes tester.
-     *
-     * @param StepTester               $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(StepTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
@@ -50,9 +46,6 @@ final class EventDispatchingStepTester implements StepTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         $event = new BeforeStepTested($env, $feature, $step);
@@ -68,17 +61,11 @@ final class EventDispatchingStepTester implements StepTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         $event = new BeforeStepTeardown($env, $feature, $step, $result);

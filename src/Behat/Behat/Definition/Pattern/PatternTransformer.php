@@ -24,22 +24,20 @@ final class PatternTransformer
     /**
      * @var PatternPolicy[]
      */
-    private $policies = array();
+    private $policies = [];
 
     /**
      * @var string[]
      */
-    private $patternToRegexpCache = array();
+    private $patternToRegexpCache = [];
 
     /**
      * Registers pattern policy.
-     *
-     * @param PatternPolicy $policy
      */
     public function registerPatternPolicy(PatternPolicy $policy)
     {
         $this->policies[] = $policy;
-        $this->patternToRegexpCache = array();
+        $this->patternToRegexpCache = [];
     }
 
     /**

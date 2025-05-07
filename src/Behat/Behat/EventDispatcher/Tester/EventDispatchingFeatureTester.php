@@ -14,8 +14,8 @@ use Behat\Behat\EventDispatcher\Event\AfterFeatureSetup;
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTeardown;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -24,11 +24,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Feature tester dispatching BEFORE/AFTER events during tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationTester<FeatureNode>
  */
 final class EventDispatchingFeatureTester implements SpecificationTester
 {
     /**
-     * @var SpecificationTester
+     * @var SpecificationTester<FeatureNode>
      */
     private $baseTester;
     /**
@@ -39,8 +41,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     /**
      * Initializes tester.
      *
-     * @param SpecificationTester      $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param SpecificationTester<FeatureNode> $baseTester
      */
     public function __construct(SpecificationTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
@@ -48,9 +49,6 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, $spec, $skip)
     {
         $event = new BeforeFeatureTested($env, $spec);
@@ -66,17 +64,11 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, $spec, $skip)
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $event = new BeforeFeatureTeardown($env, $spec, $result);

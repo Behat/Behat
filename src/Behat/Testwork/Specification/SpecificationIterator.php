@@ -17,6 +17,10 @@ use Iterator;
  * Iterates over test specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template-covariant T
+ *
+ * @extends Iterator<int, T>
  */
 interface SpecificationIterator extends Iterator
 {

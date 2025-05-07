@@ -31,17 +31,12 @@ final class SuiteListener implements EventListener
 
     /**
      * Initializes listener.
-     *
-     * @param SetupPrinter $setupPrinter
      */
     public function __construct(SetupPrinter $setupPrinter)
     {
         $this->setupPrinter = $setupPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if ($event instanceof AfterSuiteSetup) {

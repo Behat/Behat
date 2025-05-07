@@ -11,9 +11,11 @@
 namespace Behat\Behat\Tester\Runtime;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Definition\Call\RuntimeDefinition;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Behat\Definition\SearchResult;
+use Behat\Behat\Definition\Translator\TranslatedDefinition;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\FailedStepSearchResult;
 use Behat\Behat\Tester\Result\SkippedStepResult;
@@ -45,9 +47,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Initialize tester.
-     *
-     * @param DefinitionFinder $definitionFinder
-     * @param CallCenter       $callCenter
      */
     public function __construct(DefinitionFinder $definitionFinder, CallCenter $callCenter)
     {
@@ -55,17 +54,11 @@ final class RuntimeStepTester implements StepTester
         $this->callCenter = $callCenter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false)
     {
         try {
@@ -78,9 +71,6 @@ final class RuntimeStepTester implements StepTester
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
     {
         return new SuccessfulTeardown();
@@ -88,10 +78,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Searches for a definition.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      *
      * @return SearchResult
      */
@@ -103,10 +89,6 @@ final class RuntimeStepTester implements StepTester
     /**
      * Tests found definition.
      *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param StepNode     $step
-     * @param SearchResult $search
      * @param bool      $skip
      *
      * @return StepResult
@@ -115,6 +97,17 @@ final class RuntimeStepTester implements StepTester
     {
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
+        }
+
+        $definition = $search->getMatchedDefinition();
+        // If the definition found is a translated definition, we need to mark the original definition
+        if ($definition instanceof TranslatedDefinition) {
+            $definition = $definition->getOriginalDefinition();
+        }
+        // If a definition has been found, we mark it as used even if it may be skipped,
+        // as we want to count skipped definitions as used
+        if ($definition instanceof RuntimeDefinition) {
+            $definition->markAsUsed();
         }
 
         if ($skip) {
@@ -129,11 +122,6 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Creates definition call.
-     *
-     * @param Environment  $env
-     * @param FeatureNode  $feature
-     * @param SearchResult $search
-     * @param StepNode     $step
      *
      * @return DefinitionCall
      */

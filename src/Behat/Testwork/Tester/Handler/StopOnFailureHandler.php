@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Tester\Handler;
 
-
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
@@ -28,15 +27,14 @@ final class StopOnFailureHandler
 {
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly ResultInterpreter $resultInterpreter
+        private readonly ResultInterpreter $resultInterpreter,
     ) {
-
     }
-    
+
     public function registerListeners()
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'exitOnFailure'), -100);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'exitOnFailure'), -100);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, [$this, 'exitOnFailure'], -100);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, [$this, 'exitOnFailure'], -100);
     }
 
     /**

@@ -10,8 +10,12 @@
 
 namespace Behat\Testwork\ServiceContainer\Configuration;
 
+use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
+use Closure;
 use Symfony\Component\Yaml\Yaml;
+
+use function str_ends_with;
 
 /**
  * Loads configuration from different sources.
@@ -21,11 +25,11 @@ use Symfony\Component\Yaml\Yaml;
 final class ConfigurationLoader
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $configurationPath;
     /**
-     * @var null|string
+     * @var string|null
      */
     private $environmentVariable;
     /**
@@ -35,11 +39,11 @@ final class ConfigurationLoader
     /**
      * @var array
      */
-    private $debugInformation = array(
+    private $debugInformation = [
         'environment_variable_name' => 'none',
         'environment_variable_content' => 'none',
-        'configuration_file_path' => 'none'
-    );
+        'configuration_file_path' => 'none',
+    ];
 
     /**
      * Constructs reader.
@@ -56,7 +60,7 @@ final class ConfigurationLoader
     /**
      * Sets environment variable name.
      *
-     * @param null|string $variable
+     * @param string|null $variable
      */
     public function setEnvironmentVariableName($variable)
     {
@@ -66,7 +70,7 @@ final class ConfigurationLoader
     /**
      * Returns environment variable name.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getEnvironmentVariableName()
     {
@@ -76,7 +80,7 @@ final class ConfigurationLoader
     /**
      * Sets configuration file path.
      *
-     * @param null|string $path
+     * @param string|null $path
      */
     public function setConfigurationFilePath($path)
     {
@@ -86,7 +90,7 @@ final class ConfigurationLoader
     /**
      * Returns configuration file path.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getConfigurationFilePath()
     {
@@ -104,7 +108,7 @@ final class ConfigurationLoader
      */
     public function loadConfiguration($profile = 'default')
     {
-        $configs = array();
+        $configs = [];
         $this->profileFound = false;
 
         // first is ENV config
@@ -151,7 +155,7 @@ final class ConfigurationLoader
      */
     protected function loadEnvironmentConfiguration()
     {
-        $configs = array();
+        $configs = [];
 
         if (!$this->environmentVariable) {
             return $configs;
@@ -187,6 +191,8 @@ final class ConfigurationLoader
      * @return array
      *
      * @throws ConfigurationLoadingException If config file is not found
+     *
+     * @phpstan-impure
      */
     protected function loadFileConfiguration($configPath, $profile)
     {
@@ -195,23 +201,47 @@ final class ConfigurationLoader
         }
 
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
-        $config = (array) Yaml::parse(file_get_contents($configPath));
+
+        if (str_ends_with($configPath, '.php')) {
+            $phpConfig = $this->getPHPConfigObjectClosure($configPath)();
+
+            if (!$phpConfig instanceof ConfigInterface) {
+                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
+            }
+
+            $config = $phpConfig->toArray();
+        } else {
+            $config = (array) Yaml::parse(file_get_contents($configPath));
+        }
 
         return $this->loadConfigs($basePath, $config, $profile);
+    }
+
+    /**
+     * Scope isolated include.
+     *
+     * Prevents access to $this/self from included files.
+     */
+    private function getPHPConfigObjectClosure(string $configPath): Closure
+    {
+        return Closure::bind(function () use ($configPath): mixed {
+            $config = require $configPath;
+
+            return $config;
+        }, null, null);
     }
 
     /**
      * Loads configs for provided config and profile.
      *
      * @param string $basePath
-     * @param array  $config
      * @param string $profile
      *
      * @return array
      */
     private function loadConfigs($basePath, array $config, $profile)
     {
-        $configs = array();
+        $configs = [];
 
         $profile = $this->getProfileName($config, $profile);
 
@@ -243,11 +273,6 @@ final class ConfigurationLoader
 
     /**
      * Get the name of the requested profile, after considering any preferred profile name.
-     *
-     * @param array $config
-     * @param string $profile
-     *
-     * @return string
      */
     private function getProfileName(array $config, string $profile): string
     {
@@ -262,14 +287,13 @@ final class ConfigurationLoader
      * Loads all provided imports.
      *
      * @param string $basePath
-     * @param array  $paths
      * @param string $profile
      *
      * @return array
      */
     private function loadImports($basePath, array $paths, $profile)
     {
-        $configs = array();
+        $configs = [];
         foreach ($paths as $path) {
             foreach ($this->parseImport($basePath, $path, $profile) as $importConfig) {
                 $configs[] = $importConfig;

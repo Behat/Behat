@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Call\RuntimeHook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
@@ -53,18 +54,16 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Initializes printer.
      *
-     * @param ResultToStringConverter $resultConverter
-     * @param ExceptionPresenter      $exceptionPresenter
-     * @param integer                 $indentation
-     * @param bool                 $newlineBefore
-     * @param bool                 $newlineAfter
+     * @param int  $indentation
+     * @param bool $newlineBefore
+     * @param bool $newlineAfter
      */
     public function __construct(
         ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
         $indentation = 0,
         $newlineBefore = false,
-        $newlineAfter = false
+        $newlineAfter = false,
     ) {
         $this->resultConverter = $resultConverter;
         $this->exceptionPresenter = $exceptionPresenter;
@@ -73,9 +72,6 @@ final class PrettySetupPrinter implements SetupPrinter
         $this->newlineAfter = $newlineAfter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printSetup(Formatter $formatter, Setup $setup)
     {
         if (!$setup instanceof HookedSetup) {
@@ -87,9 +83,6 @@ final class PrettySetupPrinter implements SetupPrinter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
         if (!$teardown instanceof HookedTeardown) {
@@ -103,9 +96,6 @@ final class PrettySetupPrinter implements SetupPrinter
 
     /**
      * Prints setup hook call result.
-     *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      */
     private function printSetupHookCallResult(OutputPrinter $printer, CallResult $callResult)
     {
@@ -118,6 +108,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $hook = $callResult->getCall()->getCallee();
         $path = $hook->getPath();
 
+        assert($hook instanceof RuntimeHook);
         $printer->writeln(
             sprintf('%s┌─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
         );
@@ -134,9 +125,6 @@ final class PrettySetupPrinter implements SetupPrinter
 
     /**
      * Prints teardown hook call result.
-     *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      */
     private function printTeardownHookCallResult(OutputPrinter $printer, CallResult $callResult)
     {
@@ -154,6 +142,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $this->printHookCallStdOut($printer, $callResult, $this->indentText);
         $this->printHookCallException($printer, $callResult, $this->indentText);
 
+        assert($hook instanceof RuntimeHook);
         $printer->writeln(
             sprintf('%s└─ {+%s}@%s{-%s} {+comment}# %s{-comment}', $this->indentText, $style, $hook, $style, $path)
         );
@@ -166,8 +155,6 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints hook call output (if has some).
      *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      * @param string        $indentText
      */
     private function printHookCallStdOut(OutputPrinter $printer, CallResult $callResult, $indentText)
@@ -178,7 +165,9 @@ final class PrettySetupPrinter implements SetupPrinter
 
         $pad = function ($line) use ($indentText) {
             return sprintf(
-                '%s│  {+stdout}%s{-stdout}', $indentText, $line
+                '%s│  {+stdout}%s{-stdout}',
+                $indentText,
+                $line
             );
         };
 
@@ -189,8 +178,6 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints hook call exception (if has some).
      *
-     * @param OutputPrinter $printer
-     * @param CallResult    $callResult
      * @param string        $indentText
      */
     private function printHookCallException(OutputPrinter $printer, CallResult $callResult, $indentText)
@@ -201,7 +188,9 @@ final class PrettySetupPrinter implements SetupPrinter
 
         $pad = function ($l) use ($indentText) {
             return sprintf(
-                '%s╳  {+exception}%s{-exception}', $indentText, $l
+                '%s╳  {+exception}%s{-exception}',
+                $indentText,
+                $l
             );
         };
 

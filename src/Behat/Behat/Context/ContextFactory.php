@@ -10,10 +10,10 @@
 
 namespace Behat\Behat\Context;
 
-use Behat\Testwork\Argument\Validator;
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Initializer\ContextInitializer;
 use Behat\Testwork\Argument\ArgumentOrganiser;
+use Behat\Testwork\Argument\Validator;
 use ReflectionClass;
 
 /**
@@ -30,11 +30,11 @@ final class ContextFactory
     /**
      * @var ArgumentResolver[]
      */
-    private $argumentResolvers = array();
+    private $argumentResolvers = [];
     /**
      * @var ContextInitializer[]
      */
-    private $contextInitializers = array();
+    private $contextInitializers = [];
     /**
      * @var Validator
      */
@@ -42,8 +42,6 @@ final class ContextFactory
 
     /**
      * Initialises factory.
-     *
-     * @param ArgumentOrganiser $argumentOrganiser
      */
     public function __construct(ArgumentOrganiser $argumentOrganiser)
     {
@@ -53,8 +51,6 @@ final class ContextFactory
 
     /**
      * Registers context argument resolver.
-     *
-     * @param ArgumentResolver $resolver
      */
     public function registerArgumentResolver(ArgumentResolver $resolver)
     {
@@ -63,8 +59,6 @@ final class ContextFactory
 
     /**
      * Registers context initializer.
-     *
-     * @param ContextInitializer $initializer
      */
     public function registerContextInitializer(ContextInitializer $initializer)
     {
@@ -75,12 +69,11 @@ final class ContextFactory
      * Creates and initializes context class.
      *
      * @param string             $class
-     * @param array              $arguments
      * @param ArgumentResolver[] $singleUseResolvers
      *
      * @return Context
      */
-    public function createContext($class, array $arguments = array(), array $singleUseResolvers = array())
+    public function createContext($class, array $arguments = [], array $singleUseResolvers = [])
     {
         $reflection = new ReflectionClass($class);
         $resolvers = array_merge($singleUseResolvers, $this->argumentResolvers);
@@ -94,8 +87,6 @@ final class ContextFactory
     /**
      * Resolves arguments for a specific class using registered argument resolvers.
      *
-     * @param ReflectionClass    $reflection
-     * @param array              $arguments
      * @param ArgumentResolver[] $resolvers
      *
      * @return mixed[]
@@ -121,11 +112,6 @@ final class ContextFactory
 
     /**
      * Creates context instance.
-     *
-     * @param ReflectionClass $reflection
-     * @param array           $arguments
-     *
-     * @return mixed
      */
     private function createInstance(ReflectionClass $reflection, array $arguments)
     {
@@ -138,8 +124,6 @@ final class ContextFactory
 
     /**
      * Initializes context class and returns new context instance.
-     *
-     * @param Context $context
      */
     private function initializeInstance(Context $context)
     {

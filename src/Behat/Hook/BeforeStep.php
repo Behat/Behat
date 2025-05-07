@@ -10,19 +10,26 @@
 
 namespace Behat\Hook;
 
+use Attribute;
+
 /**
- * Represents an Attribute for BeforeStep hook
+ * Represents an Attribute for BeforeStep hook.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class BeforeStep implements Hook
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $filterString;
 
     public function __construct($filterString = null)
     {
         $this->filterString = $filterString;
+    }
+
+    public function getFilterString(): ?string
+    {
+        return $this->filterString;
     }
 }

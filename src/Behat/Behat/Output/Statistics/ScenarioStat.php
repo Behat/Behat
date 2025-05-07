@@ -10,6 +10,9 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Result\TestResults;
+
 /**
  * Behat scenario stat.
  *
@@ -18,30 +21,14 @@ namespace Behat\Behat\Output\Statistics;
 final class ScenarioStat
 {
     /**
-     * @var string
+     * @param TestResult::*|TestResults::NO_TESTS $resultCode
      */
-    private $title;
-    /**
-     * @var string
-     */
-    private $path;
-    /**
-     * @var integer
-     */
-    private $resultCode;
-
-    /**
-     * Initializes scenario stat.
-     *
-     * @param string  $title
-     * @param string  $path
-     * @param integer $resultCode
-     */
-    public function __construct($title, $path, $resultCode)
-    {
-        $this->title = $title;
-        $this->path = $path;
-        $this->resultCode = $resultCode;
+    public function __construct(
+        private ?string $title,
+        private string $path,
+        private int $resultCode,
+    ) {
+        $this->title = null;
     }
 
     /**
@@ -67,7 +54,7 @@ final class ScenarioStat
     /**
      * Returns scenario result code.
      *
-     * @return integer
+     * @return TestResult::*|TestResults::NO_TESTS
      */
     public function getResultCode()
     {

@@ -30,7 +30,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 class FirstBackgroundFiresFirstListener implements EventListener
 {
     /**
-     * @var \Behat\Testwork\Output\Node\EventListener\EventListener
+     * @var EventListener
      */
     private $descendant;
     /**
@@ -38,30 +38,25 @@ class FirstBackgroundFiresFirstListener implements EventListener
      */
     private $firstBackgroundEnded = false;
     /**
-     * @var Event[]
+     * @var array<array{0: Event, 1: string}>
      */
-    private $delayedUntilBackgroundEnd = array();
+    private $delayedUntilBackgroundEnd = [];
 
     /**
      * Initializes listener.
-     *
-     * @param EventListener $descendant
      */
     public function __construct(EventListener $descendant)
     {
         $this->descendant = $descendant;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->flushStatesIfBeginningOfTheFeature($eventName);
         $this->markFirstBackgroundPrintedAfterBackground($eventName);
 
         if ($this->isEventDelayedUntilFirstBackgroundPrinted($event)) {
-            $this->delayedUntilBackgroundEnd[] = array($event, $eventName);
+            $this->delayedUntilBackgroundEnd[] = [$event, $eventName];
 
             return;
         }
@@ -101,8 +96,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * Checks if provided event should be postponed until background is printed.
      *
-     * @param Event $event
-     *
      * @return bool
      */
     private function isEventDelayedUntilFirstBackgroundPrinted(Event $event)
@@ -117,7 +110,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * Fires delayed events on AFTER background event.
      *
-     * @param Formatter $formatter
      * @param string    $eventName
      */
     private function fireDelayedEventsOnAfterBackground(Formatter $formatter, $eventName)
@@ -132,6 +124,6 @@ class FirstBackgroundFiresFirstListener implements EventListener
             $this->descendant->listenEvent($formatter, $event, $eventName);
         }
 
-        $this->delayedUntilBackgroundEnd = array();
+        $this->delayedUntilBackgroundEnd = [];
     }
 }

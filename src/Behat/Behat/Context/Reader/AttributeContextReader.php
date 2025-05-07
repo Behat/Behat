@@ -12,7 +12,9 @@ namespace Behat\Behat\Context\Reader;
 
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
+use Behat\Testwork\Call\Callee;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 
 /**
@@ -25,30 +27,22 @@ final class AttributeContextReader implements ContextReader
     /**
      * @var AttributeReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * Registers attribute reader.
-     *
-     * @param AttributeReader $reader
      */
     public function registerAttributeReader(AttributeReader $reader)
     {
         $this->readers[] = $reader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        if (\PHP_MAJOR_VERSION < 8) {
-            return [];
-        }
-
         $reflection = new ReflectionClass($contextClass);
 
-        $callees = array();
+        $callees = [];
+
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->readMethodCallees($reflection->getName(), $method) as $callee) {
                 $callees[] = $callee;
@@ -61,8 +55,33 @@ final class AttributeContextReader implements ContextReader
     private function readMethodCallees(string $contextClass, ReflectionMethod $method)
     {
         $callees = [];
+
         foreach ($this->readers as $reader) {
-            $callees = array_merge($callees, $reader->readCallees($contextClass, $method));
+            $callees = array_merge(
+                $this->readParentCallees($contextClass, $method, $reader, $callees),
+                $reader->readCallees($contextClass, $method)
+            );
+        }
+
+        return $callees;
+    }
+
+    /**
+     * @return array<int, Callee>
+     */
+    private function readParentCallees(
+        string $contextClass,
+        ReflectionMethod $method,
+        AttributeReader $reader,
+        array $callees,
+    ): array {
+        try {
+            $prototype = $method->getPrototype();
+
+            if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
+                $callees = array_merge($callees, $reader->readCallees($contextClass, $prototype));
+            }
+        } catch (ReflectionException) {
         }
 
         return $callees;

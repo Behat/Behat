@@ -12,35 +12,30 @@ Feature: Pretty Formatter
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I add (\d+)/
-           */
+          #[When('/I add (\d+)/')]
           public function iAdd($num) {
               $this->value += $num;
           }
 
-          /**
-           * @When /^Something not done yet$/
-           */
+          #[When('/^Something not done yet$/')]
           public function somethingNotDoneYet() {
               throw new PendingException();
           }
@@ -134,9 +129,7 @@ Feature: Pretty Formatter
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^Something new$/
-           */
+          #[Then('/^Something new$/')]
           public function somethingNew(): void
           {
               throw new PendingException();
@@ -149,28 +142,25 @@ Feature: Pretty Formatter
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $value;
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($num) {
               $this->value = $num;
           }
 
-          /**
-           * @Then /I must have (\d+)/
-           */
+          #[Then('/I must have (\d+)/')]
           public function iMustHave($num) {
               PHPUnit\Framework\Assert::assertEquals($num, $this->value);
           }
 
-          /**
-           * @When /I (add|subtract) the value (\d+)/
-           */
+          #[When('/I (add|subtract) the value (\d+)/')]
           public function iAddOrSubtract($op, $num) {
               if ($op == 'add')
                 $this->value += $num;
@@ -238,21 +228,19 @@ Feature: Pretty Formatter
         use Behat\Behat\Context\Context;
         use Behat\Gherkin\Node\PyStringNode,
             Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
         class FeatureContext implements Context
         {
             private $value = 10;
 
-            /**
-             * @Then /I must have "([^"]+)"/
-             */
+            #[Then('/I must have "([^"]+)"/')]
             public function iMustHave($num) {
                 PHPUnit\Framework\Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
             }
 
-            /**
-             * @When /I add "([^"]+)"/
-             */
+            #[When('/I add "([^"]+)"/')]
             public function iAdd($num) {
                 $this->value += intval(preg_replace('/[^\d]+/', '', $num));
             }
@@ -422,12 +410,11 @@ Feature: Pretty Formatter
 
       use Behat\Behat\Context\Context;
       use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Step\Given;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^.*$/
-           */
+          #[Given('/^.*$/')]
           public function anything() {
               throw new PendingException();
           }

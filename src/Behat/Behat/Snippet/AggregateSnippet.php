@@ -23,7 +23,7 @@ final class AggregateSnippet
     /**
      * @var Snippet[]
      */
-    private $snippets;
+    private array $snippets;
 
     /**
      * Initializes snippet.
@@ -37,30 +37,24 @@ final class AggregateSnippet
 
     /**
      * Returns snippet type.
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return current($this->snippets)->getType();
     }
 
     /**
      * Returns snippet unique ID (step type independent).
-     *
-     * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return current($this->snippets)->getHash();
     }
 
     /**
      * Returns definition snippet text.
-     *
-     * @return string
      */
-    public function getSnippet()
+    public function getSnippet(): string
     {
         return current($this->snippets)->getSnippet();
     }
@@ -70,7 +64,7 @@ final class AggregateSnippet
      *
      * @return StepNode[]
      */
-    public function getSteps()
+    public function getSteps(): array
     {
         return array_unique(
             array_map(
@@ -88,7 +82,7 @@ final class AggregateSnippet
      *
      * @return string[]
      */
-    public function getTargets()
+    public function getTargets(): array
     {
         return array_unique(
             array_map(
@@ -105,23 +99,25 @@ final class AggregateSnippet
      *
      * @return string[]
      */
-    public function getUsedClasses()
+    public function getUsedClasses(): array
     {
         if (empty($this->snippets)) {
-            return array();
+            return [];
         }
 
         return array_unique(
             array_merge(
-                ...array_map(
-                    function (Snippet $snippet) {
-                        if (!$snippet instanceof ContextSnippet) {
-                            return array();
-                        }
+                ...array_values(
+                    array_map(
+                        function (Snippet $snippet) {
+                            if (!$snippet instanceof ContextSnippet) {
+                                return [];
+                            }
 
-                        return $snippet->getUsedClasses();
-                    },
-                    $this->snippets
+                            return $snippet->getUsedClasses();
+                        },
+                        $this->snippets
+                    )
                 )
             )
         );

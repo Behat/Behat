@@ -26,18 +26,12 @@ interface OutlineTablePrinter
     /**
      * Prints outline header using provided printer and first row example step results.
      *
-     * @param Formatter    $formatter
-     * @param FeatureNode  $feature
-     * @param OutlineNode  $outline
      * @param StepResult[] $results
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, array $results);
 
     /**
      * Prints outline footer using provided printer.
-     *
-     * @param Formatter  $formatter
-     * @param TestResult $result
      */
     public function printFooter(Formatter $formatter, TestResult $result);
 }

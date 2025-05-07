@@ -9,47 +9,40 @@ Feature: Preferred Profiles
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $result;
           private $numbers;
 
-          /**
-           * @Given /I have basic calculator/
-           */
+          #[Given('/I have basic calculator/')]
           public function iHaveBasicCalculator() {
               $this->result  = 0;
               $this->numbers = array();
           }
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($number) {
               $this->numbers[] = intval($number);
           }
 
-          /**
-           * @When /I add/
-           */
+          #[When('/I add/')]
           public function iAdd() {
               $this->result  = array_sum($this->numbers);
               $this->numbers = array();
           }
 
-          /**
-           * @When /I sub/
-           */
+          #[When('/I sub/')]
           public function iSub() {
               $this->result  = array_shift($this->numbers);
               $this->result -= array_sum($this->numbers);
               $this->numbers = array();
           }
 
-          /**
-           * @Then /The result should be (\d+)/
-           */
+          #[Then('/The result should be (\d+)/')]
           public function theResultShouldBe($result) {
               PHPUnit\Framework\Assert::assertEquals($result, $this->result);
           }
@@ -73,13 +66,21 @@ Feature: Preferred Profiles
             | 5       | 3       | 8      |
             | 5       | 5       | 10     |
       """
-    And a file named "pretty.yml" with:
+    And a file named "pretty.php" with:
       """
-      pretty_without_paths:
-        formatters:
-          progress: false
-          pretty:
-            paths: false
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Formatter\PrettyFormatter;
+      use Behat\Config\Formatter\ProgressFormatter;
+
+      $profile = (new Profile('pretty_without_paths'))
+        ->disableFormatter(ProgressFormatter::NAME)
+        ->withFormatter(new PrettyFormatter(paths: false))
+      ;
+
+      return (new Config())->withProfile($profile);
 
       """
     And a file named "behat.yml" with:
@@ -95,7 +96,7 @@ Feature: Preferred Profiles
         progress
 
       imports:
-        - pretty.yml
+        - pretty.php
       """
 
   Scenario:

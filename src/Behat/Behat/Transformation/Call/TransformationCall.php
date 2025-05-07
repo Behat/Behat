@@ -29,17 +29,12 @@ final class TransformationCall extends EnvironmentCall
 
     /**
      * Initializes call.
-     *
-     * @param Environment    $environment
-     * @param Definition     $definition
-     * @param Transformation $transformation
-     * @param array          $arguments
      */
     public function __construct(
         Environment $environment,
         Definition $definition,
         Transformation $transformation,
-        array $arguments
+        array $arguments,
     ) {
         parent::__construct($environment, $transformation, $arguments);
 

@@ -10,10 +10,13 @@
 
 namespace Behat\Testwork\Exception;
 
+use Behat\Testwork\Call\Exception\FatalThrowableError;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Exception;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Presents exceptions as strings using registered stringers.
@@ -23,43 +26,32 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ExceptionPresenter
 {
     /**
-     * @var string
-     */
-    private $basePath;
-
-    /**
      * @var ExceptionStringer[]
      */
-    private $stringers = array();
-    /**
-     * @var integer
-     */
-    private $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL;
+    private $stringers = [];
+
+    private ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * Initializes presenter.
      *
-     * @param string  $basePath
-     * @param integer $defaultVerbosity
+     * @param ?string $basePath deprecated, will be removed in next major version
      */
-    public function __construct($basePath = null, $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL)
-    {
-        if (null !== $basePath) {
-            $realBasePath = realpath($basePath);
-
-            if ($realBasePath) {
-                $basePath = $realBasePath;
-            }
-        }
-
-        $this->basePath = $basePath;
-        $this->defaultVerbosity = $defaultVerbosity;
+    public function __construct(
+        ?string $basePath = null,
+        private int $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL,
+        ?ConfigurablePathPrinter $configurablePathPrinter = null,
+    ) {
+        // Historically, this class accepted a null (or not present) value for basePath. This was never passed by Behat,
+        // but was used by third parties to force the class to render exception traces with absolute file paths.
+        // The ConfigurablePathPrinter requires a value, but it is not used if printAbsolutePaths is true.
+        // Therefore, if the user provided null we can safely cast to '' (the working directory) and tell the printer
+        // to show absolute paths.
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath ?? '', printAbsolutePaths: $basePath === null);
     }
 
     /**
      * Registers exception stringer.
-     *
-     * @param ExceptionStringer $stringer
      */
     public function registerExceptionStringer(ExceptionStringer $stringer)
     {
@@ -69,7 +61,7 @@ final class ExceptionPresenter
     /**
      * Sets default verbosity to a specified level.
      *
-     * @param integer $defaultVerbosity
+     * @param int $defaultVerbosity
      */
     public function setDefaultVerbosity($defaultVerbosity)
     {
@@ -78,19 +70,18 @@ final class ExceptionPresenter
 
     /**
      * Presents exception as a string.
-     *
-     * @param Exception $exception
-     * @param integer   $verbosity
-     *
-     * @return string
      */
-    public function presentException(Exception $exception, $verbosity = null)
+    public function presentException(Throwable $exception, ?int $verbosity = null): string
     {
         $verbosity = $verbosity ?: $this->defaultVerbosity;
 
+        if (!$exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        }
+
         foreach ($this->stringers as $stringer) {
             if ($stringer->supportsException($exception)) {
-                return $this->relativizePaths($stringer->stringException($exception, $verbosity));
+                return $this->configurablePathPrinter->processPathsInText($stringer->stringException($exception, $verbosity));
             }
         }
 
@@ -99,10 +90,10 @@ final class ExceptionPresenter
                 $exception = $this->removeBehatCallsFromTrace($exception);
             }
 
-            return $this->relativizePaths(trim($exception));
+            return $this->configurablePathPrinter->processPathsInText(trim($exception));
         }
 
-        return trim($this->relativizePaths($exception->getMessage()) . ' (' . get_class($exception) . ')');
+        return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . get_class($exception) . ')');
     }
 
     private function removeBehatCallsFromTrace(Exception $exception)
@@ -114,15 +105,15 @@ final class ExceptionPresenter
             }
 
             $traceOutput .= sprintf(
-                '#%d %s: %s()'.PHP_EOL,
+                '#%d %s: %s()' . PHP_EOL,
                 $i,
-                isset($trace['file']) ? $trace['file'].'('.$trace['line'].')' : '[internal function]',
-                isset($trace['class']) ? $trace['class'].$trace['type'].$trace['function'] : $trace['function']
+                isset($trace['file']) ? $trace['file'] . '(' . $trace['line'] . ')' : '[internal function]',
+                isset($trace['class']) ? $trace['class'] . $trace['type'] . $trace['function'] : $trace['function']
             );
         }
 
         return sprintf(
-            "%s: %s in %s:%d%sStack trace:%s%s",
+            '%s: %s in %s:%d%sStack trace:%s%s',
             get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),
@@ -131,21 +122,5 @@ final class ExceptionPresenter
             PHP_EOL,
             $traceOutput
         );
-    }
-
-    /**
-     * Relativizes absolute paths in the text.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    private function relativizePaths($text)
-    {
-        if (!$this->basePath) {
-            return $text;
-        }
-
-        return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $text);
     }
 }

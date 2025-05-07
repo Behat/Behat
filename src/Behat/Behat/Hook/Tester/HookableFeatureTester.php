@@ -12,6 +12,7 @@ namespace Behat\Behat\Hook\Tester;
 
 use Behat\Behat\Hook\Scope\AfterFeatureScope;
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
+use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
@@ -23,11 +24,13 @@ use Behat\Testwork\Tester\SpecificationTester;
  * Feature tester which dispatches hooks during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements SpecificationTester<FeatureNode>
  */
 final class HookableFeatureTester implements SpecificationTester
 {
     /**
-     * @var SpecificationTester
+     * @var SpecificationTester<FeatureNode>
      */
     private $baseTester;
     /**
@@ -38,8 +41,7 @@ final class HookableFeatureTester implements SpecificationTester
     /**
      * Initializes tester.
      *
-     * @param SpecificationTester $baseTester
-     * @param HookDispatcher      $hookDispatcher
+     * @param SpecificationTester<FeatureNode> $baseTester
      */
     public function __construct(SpecificationTester $baseTester, HookDispatcher $hookDispatcher)
     {
@@ -47,9 +49,6 @@ final class HookableFeatureTester implements SpecificationTester
         $this->hookDispatcher = $hookDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, $spec, $skip)
     {
         $setup = $this->baseTester->setUp($env, $spec, $skip);
@@ -64,17 +63,11 @@ final class HookableFeatureTester implements SpecificationTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, $spec, $skip)
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, $spec, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);

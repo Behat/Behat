@@ -20,6 +20,7 @@ interface TestResult
     public const PASSED = 0;
     public const SKIPPED = 10;
     public const PENDING = 20;
+    public const UNDEFINED = 30;
     public const FAILED = 99;
 
     /**
@@ -32,7 +33,7 @@ interface TestResult
     /**
      * Returns tester result code.
      *
-     * @return integer
+     * @return TestResult::*|TestResults::NO_TESTS
      */
     public function getResultCode();
 }

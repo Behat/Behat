@@ -47,17 +47,12 @@ final class AvailableDefinitionsController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository                     $suiteRepository
-     * @param DefinitionWriter                    $writer
-     * @param ConsoleDefinitionListPrinter        $listPrinter
-     * @param ConsoleDefinitionInformationPrinter $infoPrinter
      */
     public function __construct(
         SuiteRepository $suiteRepository,
         DefinitionWriter $writer,
         ConsoleDefinitionListPrinter $listPrinter,
-        ConsoleDefinitionInformationPrinter $infoPrinter
+        ConsoleDefinitionInformationPrinter $infoPrinter,
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->writer = $writer;
@@ -65,23 +60,20 @@ final class AvailableDefinitionsController implements Controller
         $this->infoPrinter = $infoPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
-        $command->addOption('--definitions', '-d', InputOption::VALUE_REQUIRED,
-            "Print all available step definitions:" . PHP_EOL .
-            "- use <info>--definitions l</info> to just list definition expressions." . PHP_EOL .
-            "- use <info>--definitions i</info> to show definitions with extended info." . PHP_EOL .
+        $command->addOption(
+            '--definitions',
+            '-d',
+            InputOption::VALUE_REQUIRED,
+            'Print all available step definitions:' . PHP_EOL .
+            '- use <info>--definitions l</info> to just list definition expressions.' . PHP_EOL .
+            '- use <info>--definitions i</info> to show definitions with extended info.' . PHP_EOL .
             "- use <info>--definitions 'needle'</info> to find specific definitions." . PHP_EOL .
-            "Use <info>--lang</info> to see definitions in specific language."
+            'Use <info>--lang</info> to see definitions in specific language.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (null === $argument = $input->getOption('definitions')) {

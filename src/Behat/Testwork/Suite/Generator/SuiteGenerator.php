@@ -25,8 +25,7 @@ interface SuiteGenerator
     /**
      * Checks if generator support provided suite type and settings.
      *
-     * @param string $type
-     * @param array  $settings
+     * @param string|null $type
      *
      * @return bool
      */
@@ -36,7 +35,6 @@ interface SuiteGenerator
      * Generate suite with provided name and settings.
      *
      * @param string $suiteName
-     * @param array  $settings
      *
      * @return Suite
      */

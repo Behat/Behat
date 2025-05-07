@@ -23,19 +23,11 @@ use Behat\Testwork\Suite\Suite;
  */
 final class JUnitSuitePrinter implements SuitePrinter
 {
-    /**
-     * @var PhaseStatistics
-     */
-    private $statistics;
-
-    public function __construct(?PhaseStatistics $statistics = null)
-    {
-        $this->statistics = $statistics;
+    public function __construct(
+        private ?PhaseStatistics $statistics = null,
+    ) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printHeader(Formatter $formatter, Suite $suite)
     {
         if ($this->statistics) {
@@ -47,9 +39,6 @@ final class JUnitSuitePrinter implements SuitePrinter
         $outputPrinter->createNewFile($suite->getName());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printFooter(Formatter $formatter, Suite $suite)
     {
         $formatter->getOutputPrinter()->flush();

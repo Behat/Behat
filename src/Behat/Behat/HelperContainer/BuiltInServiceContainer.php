@@ -34,25 +34,17 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Initialises container using provided service configuration.
-     *
-     * @param array $schema
      */
     public function __construct(array $schema)
     {
         $this->schema = $schema;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has($id): bool
     {
         return array_key_exists($id, $this->schema);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function get($id)
     {
         if (!$this->has($id)) {
@@ -69,8 +61,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      * Creates an instance of given service.
      *
      * @param string $id
-     *
-     * @return mixed
      */
     private function createInstance($id)
     {
@@ -91,20 +81,20 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      *
      * @param string $id
      *
-     * @throws WrongServicesConfigurationException
-     *
      * @return array|string
+     *
+     * @throws WrongServicesConfigurationException
      */
     private function getAndValidateServiceSchema($id)
     {
         $schema = $this->schema[$id];
 
         if (null === $schema) {
-            $schema = array('class' => $id);
+            $schema = ['class' => $id];
         }
 
         if (is_string($schema)) {
-            $schema = array('class' => $schema);
+            $schema = ['class' => $schema];
         }
 
         $schema['class'] = $this->getAndValidateClass($id, $schema);
@@ -115,13 +105,8 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Gets and validates a class from schema.
-     *
-     * @param string       $id
-     * @param string|array $schema
-     *
-     * @return string
      */
-    private function getAndValidateClass($id, array $schema)
+    private function getAndValidateClass(string $id, array $schema): string
     {
         if (!isset($schema['class'])) {
             $schema['class'] = $id;
@@ -133,22 +118,17 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates arguments from schema.
      *
-     * @param array $schema
-     *
      * @return array
      */
     private function getAndValidateArguments(array $schema)
     {
-        return isset($schema['arguments']) ? (array)$schema['arguments'] : array();
+        return isset($schema['arguments']) ? (array) $schema['arguments'] : [];
     }
 
     /**
      * Gets and validates a factory method.
      *
-     * @param ReflectionClass $reflection
-     * @param array           $schema
-     *
-     * @return null|ReflectionMethod
+     * @return ReflectionMethod|null
      */
     private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema)
     {
@@ -167,7 +147,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Checks if factory method exists.
      *
-     * @param ReflectionClass $class
      * @param string          $methodName
      *
      * @throws WrongServicesConfigurationException
@@ -185,8 +164,6 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Checks if factory method is static.
-     *
-     * @param ReflectionMethod $method
      *
      * @throws WrongServicesConfigurationException
      */

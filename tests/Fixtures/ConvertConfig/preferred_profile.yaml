@@ -1,0 +1,8 @@
+default:
+
+another:
+    formatters:
+        pretty: false
+
+preferredProfileName:
+    another

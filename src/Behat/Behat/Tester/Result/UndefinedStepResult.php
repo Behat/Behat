@@ -17,16 +17,13 @@ namespace Behat\Behat\Tester\Result;
  */
 final class UndefinedStepResult implements StepResult
 {
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return false;
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::UNDEFINED
      */
     public function getResultCode()
     {

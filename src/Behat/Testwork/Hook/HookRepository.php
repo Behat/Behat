@@ -29,8 +29,6 @@ final class HookRepository
 
     /**
      * Initializes repository.
-     *
-     * @param EnvironmentManager $environmentManager
      */
     public function __construct(EnvironmentManager $environmentManager)
     {
@@ -39,8 +37,6 @@ final class HookRepository
 
     /**
      * Returns all available hooks for a specific environment.
-     *
-     * @param Environment $environment
      *
      * @return Hook[]
      */
@@ -56,8 +52,6 @@ final class HookRepository
 
     /**
      * Returns hooks for a specific event.
-     *
-     * @param HookScope $scope
      *
      * @return Hook[]
      */

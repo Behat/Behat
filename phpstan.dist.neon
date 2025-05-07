@@ -1,0 +1,18 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    ignoreErrors:
+        -
+            identifier: class.notFound
+            paths:
+                - src/Behat/Testwork/Exception/Stringer/PHPUnitExceptionStringer.php
+        -
+            identifier: constructor.unusedParameter
+            paths:
+                - src/Behat/Behat/Definition/Printer/ConsoleDefinitionPrinter.php
+                - src/Behat/Behat/EventDispatcher/Cli/StopOnFailureController.php
+                - src/Behat/Behat/Output/Node/Printer/ListPrinter.php
+                - src/Behat/Behat/Tester/Runtime/RuntimeFeatureTester.php
+                - src/Behat/Behat/Transformation/Transformation/ReturnTypeTransformation.php
+                - src/Behat/Testwork/Ordering/Cli/OrderController.php

@@ -18,7 +18,6 @@ use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -57,8 +56,6 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     /**
      * Initializes tester.
      *
-     * @param ScenarioTester           $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      * @param string                   $beforeEventName
      * @param string                   $afterSetupEventName
      * @param string                   $beforeTeardownEventName
@@ -70,7 +67,7 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         $beforeEventName,
         $afterSetupEventName,
         $beforeTeardownEventName,
-        $afterEventName
+        $afterEventName,
     ) {
         $this->baseTester = $baseTester;
         $this->eventDispatcher = $eventDispatcher;
@@ -80,9 +77,6 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         $this->afterEventName = $afterEventName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         $event = new BeforeScenarioTested($env, $feature, $scenario);
@@ -98,17 +92,11 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         $event = new BeforeScenarioTeardown($env, $feature, $scenario, $result);

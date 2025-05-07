@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Behat\Behat\Tester\Result\StepResult;
+
 /**
  * Second iteration of Behat step stat, with a scenario information.
  *
@@ -18,56 +20,18 @@ namespace Behat\Behat\Output\Statistics;
 final class StepStatV2 extends StepStat
 {
     /**
-     * @var string
+     * @param StepResult::* $resultCode
      */
-    private $scenarioTitle;
-    /**
-     * @var string
-     */
-    private $scenarioPath;
-    /**
-     * @var string
-     */
-    private $stepText;
-    /**
-     * @var string
-     */
-    private $stepPath;
-    /**
-     * @var integer
-     */
-    private $resultCode;
-    /**
-     * @var null|string
-     */
-    private $error;
-    /**
-     * @var null|string
-     */
-    private $stdOut;
-
-    /**
-     * Initializes step stat.
-     *
-     * @param string      $scenarioTitle
-     * @param string      $scenarioPath
-     * @param string      $stepText
-     * @param string      $stepPath
-     * @param integer     $resultCode
-     * @param null|string $error
-     * @param null|string $stdOut
-     */
-    public function __construct($scenarioTitle, $scenarioPath, $stepText, $stepPath, $resultCode, $error = null, $stdOut = null)
-    {
+    public function __construct(
+        private string $scenarioTitle,
+        private string $scenarioPath,
+        private string $stepText,
+        private string $stepPath,
+        private int $resultCode,
+        private ?string $error = null,
+        private ?string $stdOut = null,
+    ) {
         parent::__construct($stepText, $stepPath, $resultCode, $error, $stdOut);
-
-        $this->scenarioTitle = $scenarioTitle;
-        $this->scenarioPath = $scenarioPath;
-        $this->stepText = $stepText;
-        $this->stepPath = $stepPath;
-        $this->resultCode = $resultCode;
-        $this->error = $error;
-        $this->stdOut = $stdOut;
     }
 
     /**
@@ -113,7 +77,7 @@ final class StepStatV2 extends StepStat
     /**
      * Returns step result code.
      *
-     * @return integer
+     * @return StepResult::*
      */
     public function getResultCode()
     {
@@ -123,7 +87,7 @@ final class StepStatV2 extends StepStat
     /**
      * Returns step error (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getError()
     {
@@ -133,7 +97,7 @@ final class StepStatV2 extends StepStat
     /**
      * Returns step output (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

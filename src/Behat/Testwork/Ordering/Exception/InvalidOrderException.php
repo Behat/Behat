@@ -14,9 +14,10 @@ use Behat\Testwork\Exception\TestworkException;
 use RuntimeException;
 
 /**
- * Represents exception throw during attempt to prioritise execution with a non-existent algorithm
+ * Represents exception throw during attempt to prioritise execution with a non-existent algorithm.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
 final class InvalidOrderException extends RuntimeException implements TestworkException
-{}
+{
+}

@@ -10,9 +10,10 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Counter\Memory;
 use Behat\Testwork\Counter\Timer;
-
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Collects and provided exercise statistics.
@@ -47,29 +48,23 @@ interface Statistics
 
     /**
      * Registers scenario stat.
-     *
-     * @param ScenarioStat $stat
      */
     public function registerScenarioStat(ScenarioStat $stat);
 
     /**
      * Registers step stat.
-     *
-     * @param StepStat $stat
      */
     public function registerStepStat(StepStat $stat);
 
     /**
      * Registers hook stat.
-     *
-     * @param HookStat $stat
      */
     public function registerHookStat(HookStat $stat);
 
     /**
      * Returns counters for different scenario result codes.
      *
-     * @return array[]
+     * @return array<TestResult::*, int>
      */
     public function getScenarioStatCounts();
 
@@ -90,7 +85,7 @@ interface Statistics
     /**
      * Returns counters for different step result codes.
      *
-     * @return array[]
+     * @return array<StepResult::*, int>
      */
     public function getStepStatCounts();
 

@@ -26,20 +26,20 @@ final class ExtensionManager
     /**
      * @var Extension[]
      */
-    private $extensions = array();
+    private $extensions = [];
     /**
      * @var Extension[string]
      */
-    private $locatedExtensions = array();
-    private $debugInformation = array(
-        'extensions_list' => array()
-    );
+    private $locatedExtensions = [];
+    private $debugInformation = [
+        'extensions_list' => [],
+    ];
 
     /**
      * Initializes manager.
      *
      * @param Extension[] $extensions     List of default extensions
-     * @param null|string $extensionsPath Base path where to search custom extension files
+     * @param string|null $extensionsPath Base path where to search custom extension files
      */
     public function __construct(array $extensions, $extensionsPath = null)
     {
@@ -53,7 +53,7 @@ final class ExtensionManager
     /**
      * Sets path to directory in which manager will try to find extension files.
      *
-     * @param null|string $path
+     * @param string|null $path
      */
     public function setExtensionsPath($path)
     {
@@ -131,11 +131,9 @@ final class ExtensionManager
     /**
      * Attempts to guess full extension class from relative.
      *
-     * @param string $locator
-     *
-     * @return string
+     * @internal
      */
-    private function getFullExtensionClass($locator)
+    public static function guessFullExtensionClassName(string $locator): string
     {
         $parts = explode('\\', $locator);
         $name = preg_replace('/Extension$/', '', end($parts)) . 'Extension';
@@ -146,13 +144,9 @@ final class ExtensionManager
     /**
      * Initializes extension by id.
      *
-     * @param string $locator
-     *
-     * @return Extension
-     *
      * @throws ExtensionInitializationException
      */
-    private function initialize($locator)
+    private function initialize(string $locator): Extension
     {
         if (isset($this->locatedExtensions[$locator])) {
             return $this->locatedExtensions[$locator];
@@ -167,28 +161,24 @@ final class ExtensionManager
     /**
      * Instantiates extension from its locator.
      *
-     * @param string $locator
-     *
-     * @return Extension
-     *
      * @throws ExtensionInitializationException
      */
-    private function instantiateExtension($locator)
+    private function instantiateExtension(string $locator): mixed
     {
         if (class_exists($class = $locator)) {
-            return new $class;
+            return new $class();
         }
 
-        if (class_exists($class = $this->getFullExtensionClass($locator))) {
-            return new $class;
+        if (class_exists($class = self::guessFullExtensionClassName($locator))) {
+            return new $class();
         }
 
         if (file_exists($locator)) {
-            return require($locator);
+            return require $locator;
         }
 
         if (file_exists($path = $this->extensionsPath . DIRECTORY_SEPARATOR . $locator)) {
-            return require($path);
+            return require $path;
         }
 
         throw new ExtensionInitializationException(sprintf(
@@ -200,12 +190,9 @@ final class ExtensionManager
     /**
      * Validates extension instance.
      *
-     * @param Extension $extension
-     * @param string    $locator
-     *
      * @throws ExtensionInitializationException
      */
-    private function validateExtensionInstance($extension, $locator)
+    private function validateExtensionInstance(mixed $extension, string $locator): void
     {
         if (null === $extension) {
             throw new ExtensionInitializationException(sprintf(

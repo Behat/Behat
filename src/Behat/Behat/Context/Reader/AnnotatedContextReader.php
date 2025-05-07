@@ -30,18 +30,18 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * @var string[]
      */
-    private static $ignoreAnnotations = array(
+    private static $ignoreAnnotations = [
         '@param',
         '@return',
         '@throws',
         '@see',
         '@uses',
-        '@todo'
-    );
+        '@todo',
+    ];
     /**
      * @var AnnotationReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * @var DocBlockHelper
@@ -50,8 +50,6 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
@@ -60,22 +58,17 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Registers annotation reader.
-     *
-     * @param AnnotationReader $reader
      */
     public function registerAnnotationReader(AnnotationReader $reader)
     {
         $this->readers[] = $reader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         $reflection = new ReflectionClass($contextClass);
 
-        $callees = array();
+        $callees = [];
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->readMethodCallees($reflection->getName(), $method) as $callee) {
                 $callees[] = $callee;
@@ -89,13 +82,12 @@ final class AnnotatedContextReader implements ContextReader
      * Loads callees associated with specific method.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      *
      * @return Callee[]
      */
     private function readMethodCallees($class, ReflectionMethod $method)
     {
-        $callees = array();
+        $callees = [];
 
         // read parent annotations
         try {
@@ -118,14 +110,13 @@ final class AnnotatedContextReader implements ContextReader
      * Reads callees from the method doc block.
      *
      * @param string           $class
-     * @param ReflectionMethod $method
      * @param string           $docBlock
      *
      * @return Callee[]
      */
     private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock)
     {
-        $callees = array();
+        $callees = [];
         $description = $this->docBlockHelper->extractDescription($docBlock);
         $docBlock = $this->mergeMultilines($docBlock);
 
@@ -149,7 +140,7 @@ final class AnnotatedContextReader implements ContextReader
     }
 
     /**
-     * Merges multiline strings (strings ending with "\")
+     * Merges multiline strings (strings ending with "\").
      *
      * @param string $docBlock
      *
@@ -187,12 +178,11 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Reads callee from provided doc line using registered annotation readers.
      *
-     * @param string           $class
-     * @param ReflectionMethod $method
-     * @param string           $docLine
-     * @param null|string      $description
+     * @param string      $class
+     * @param string      $docLine
+     * @param string|null $description
      *
-     * @return null|Callee
+     * @return Callee|null
      */
     private function readDocLineCallee($class, ReflectionMethod $method, $docLine, $description = null)
     {

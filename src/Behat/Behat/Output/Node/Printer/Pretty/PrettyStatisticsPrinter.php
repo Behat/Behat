@@ -35,9 +35,6 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param CounterPrinter $counterPrinter
-     * @param ListPrinter    $listPrinter
      */
     public function __construct(CounterPrinter $counterPrinter, ListPrinter $listPrinter)
     {
@@ -45,12 +42,12 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
         $this->listPrinter = $listPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStatistics(Formatter $formatter, Statistics $statistics)
     {
         $printer = $formatter->getOutputPrinter();
+
+        $hookStats = $statistics->getFailedHookStats();
+        $this->listPrinter->printFailedHooksList($printer, 'failed_hooks_title', $hookStats, true);
 
         $scenarioStats = $statistics->getSkippedScenarios();
         $this->listPrinter->printScenariosList($printer, 'skipped_scenarios_title', TestResult::SKIPPED, $scenarioStats);

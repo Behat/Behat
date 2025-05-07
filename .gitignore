@@ -5,3 +5,5 @@ behat.yml
 vendor
 composer.lock
 .phpunit.result.cache
+phpstan.neon
+.php-cs-fixer.cache

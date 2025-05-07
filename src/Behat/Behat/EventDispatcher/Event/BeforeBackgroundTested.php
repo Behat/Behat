@@ -12,7 +12,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 
@@ -34,10 +34,6 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
 
     /**
      * Initializes event.
-     *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
      */
     public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background)
     {
@@ -60,7 +56,9 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
     /**
      * Returns scenario node.
      *
-     * @return ScenarioInterface
+     * @deprecated Use getBackground() instead
+     *
+     * @return ScenarioLikeInterface
      */
     public function getScenario()
     {

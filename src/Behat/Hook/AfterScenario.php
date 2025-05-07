@@ -10,19 +10,26 @@
 
 namespace Behat\Hook;
 
+use Attribute;
+
 /**
- * Represents an Attribute for AfterScenario hook
+ * Represents an Attribute for AfterScenario hook.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class AfterScenario implements Hook
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $filterString;
 
     public function __construct($filterString = null)
     {
         $this->filterString = $filterString;
+    }
+
+    public function getFilterString(): ?string
+    {
+        return $this->filterString;
     }
 }

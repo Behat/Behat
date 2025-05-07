@@ -32,9 +32,6 @@ final class DefinitionWriter
 
     /**
      * Initializes writer.
-     *
-     * @param EnvironmentManager   $environmentManager
-     * @param DefinitionRepository $repository
      */
     public function __construct(EnvironmentManager $environmentManager, DefinitionRepository $repository)
     {
@@ -45,7 +42,6 @@ final class DefinitionWriter
     /**
      * Prints definitions for provided suite using printer.
      *
-     * @param DefinitionPrinter $printer
      * @param Suite             $suite
      */
     public function printSuiteDefinitions(DefinitionPrinter $printer, $suite)

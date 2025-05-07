@@ -32,13 +32,10 @@ final class SuiteController implements Controller
     /**
      * @var array
      */
-    private $suiteConfigurations = array();
+    private $suiteConfigurations = [];
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRegistry $registry
-     * @param array         $suiteConfigurations
      */
     public function __construct(SuiteRegistry $registry, array $suiteConfigurations)
     {
@@ -46,19 +43,16 @@ final class SuiteController implements Controller
         $this->suiteConfigurations = $suiteConfigurations;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
-        $command->addOption('--suite', '-s', InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--suite',
+            '-s',
+            InputOption::VALUE_REQUIRED,
             'Only execute a specific suite.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $exerciseSuiteName = $input->getOption('suite');
@@ -76,8 +70,12 @@ final class SuiteController implements Controller
             }
 
             $this->registry->registerSuiteConfiguration(
-                $name, $config['type'], $config['settings']
+                $name,
+                $config['type'],
+                $config['settings']
             );
         }
+
+        return null;
     }
 }

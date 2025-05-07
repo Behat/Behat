@@ -25,6 +25,9 @@ Feature: Rerun with multiple suite
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
@@ -35,44 +38,32 @@ Feature: Rerun with multiple suite
               $this->parameters = $parameters;
           }
 
-          /**
-           * @Given /^I have (\d+) (apples|bananas)$/
-           */
+          #[Given('/^I have (\d+) (apples|bananas)$/')]
           public function iHaveFruit($count, $fruit) {
               $this->fruits[$fruit] = intval($count);
           }
 
-          /**
-           * @When /^I ate (\d+) (apples|bananas)$/
-           */
+          #[When('/^I ate (\d+) (apples|bananas)$/')]
           public function iAteFruit($count, $fruit) {
               $this->fruits[$fruit] -= intval($count);
           }
 
-          /**
-           * @When /^I found (\d+) (apples|bananas)$/
-           */
+          #[When('/^I found (\d+) (apples|bananas)$/')]
           public function iFoundFruit($count, $fruit) {
               $this->fruits[$fruit] += intval($count);
           }
 
-          /**
-           * @Then /^I should have (\d+) (apples|bananas)$/
-           */
+          #[Then('/^I should have (\d+) (apples|bananas)$/')]
           public function iShouldHaveFruit($count, $fruit) {
               PHPUnit\Framework\Assert::assertEquals(intval($count), $this->fruits[$fruit]);
           }
 
-          /**
-           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
-           */
+          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
           public function contextParameterShouldBeEqualTo($key, $val) {
               PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
           }
 
-          /**
-           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
-           */
+          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
           public function contextParameterShouldBeArrayWithElements($key, $count) {
               PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
               PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));

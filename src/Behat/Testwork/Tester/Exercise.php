@@ -19,13 +19,15 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Prepares and tests provided exercise specifications.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
  */
 interface Exercise
 {
     /**
      * Sets up exercise for a test.
      *
-     * @param SpecificationIterator[] $iterators
+     * @param SpecificationIterator<TSpec>[] $iterators
      * @param bool                 $skip
      *
      * @return Setup
@@ -35,7 +37,7 @@ interface Exercise
     /**
      * Tests suites specifications.
      *
-     * @param SpecificationIterator[] $iterators
+     * @param SpecificationIterator<TSpec>[] $iterators
      * @param bool                 $skip
      *
      * @return TestResult
@@ -45,9 +47,8 @@ interface Exercise
     /**
      * Tears down exercise after a test.
      *
-     * @param SpecificationIterator[] $iterators
+     * @param SpecificationIterator<TSpec>[] $iterators
      * @param bool                 $skip
-     * @param TestResult              $result
      *
      * @return Teardown
      */

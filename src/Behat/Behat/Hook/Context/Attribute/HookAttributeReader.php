@@ -21,6 +21,7 @@ use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
 use Behat\Hook\BeforeSuite;
 use Behat\Hook\Hook;
+use ReflectionAttribute;
 use ReflectionMethod;
 
 final class HookAttributeReader implements AttributeReader
@@ -28,7 +29,7 @@ final class HookAttributeReader implements AttributeReader
     /**
      * @var string[]
      */
-    private const KNOWN_ATTRIBUTES = array(
+    private const KNOWN_ATTRIBUTES = [
         AfterFeature::class => 'Behat\Behat\Hook\Call\AfterFeature',
         AfterScenario::class => 'Behat\Behat\Hook\Call\AfterScenario',
         AfterStep::class => 'Behat\Behat\Hook\Call\AfterStep',
@@ -37,7 +38,7 @@ final class HookAttributeReader implements AttributeReader
         BeforeStep::class => 'Behat\Behat\Hook\Call\BeforeStep',
         BeforeSuite::class => 'Behat\Testwork\Hook\Call\BeforeSuite',
         AfterSuite::class => 'Behat\Testwork\Hook\Call\AfterSuite',
-    );
+    ];
 
     /**
      * @var DocBlockHelper
@@ -46,38 +47,26 @@ final class HookAttributeReader implements AttributeReader
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
     public function __construct(DocBlockHelper $docBlockHelper)
     {
         $this->docBlockHelper = $docBlockHelper;
     }
 
-    /**
-     * @{inheritdoc}
-     */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        if (\PHP_MAJOR_VERSION < 8) {
-            return [];
-        }
-
-        /**
-         * @psalm-suppress UndefinedClass (ReflectionAttribute is PHP 8.0 only)
-         */
-        $attributes = $method->getAttributes(Hook::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Hook::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {
             $class = self::KNOWN_ATTRIBUTES[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $callable = [$contextClass, $method->getName()];
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callees[] = new $class($attribute->newInstance()->filterString, $callable, $description);
+            $callees[] = new $class($attribute->newInstance()->getFilterString(), $callable, $description);
         }
 
         return $callees;

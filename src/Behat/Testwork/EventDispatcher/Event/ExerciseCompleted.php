@@ -13,7 +13,6 @@ namespace Behat\Testwork\EventDispatcher\Event;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 
-
 /**
  * Represents an exercise event.
  *
@@ -29,7 +28,7 @@ abstract class ExerciseCompleted extends Event
     /**
      * Returns specification iterators.
      *
-     * @return SpecificationIterator[]
+     * @return SpecificationIterator<mixed>[]
      */
     abstract public function getSpecificationIterators();
 }

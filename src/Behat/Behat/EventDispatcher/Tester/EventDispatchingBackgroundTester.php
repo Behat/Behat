@@ -18,7 +18,6 @@ use Behat\Behat\EventDispatcher\Event\BeforeBackgroundTested;
 use Behat\Behat\Tester\BackgroundTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -40,9 +39,6 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
 
     /**
      * Initializes tester.
-     *
-     * @param BackgroundTester         $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(BackgroundTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
@@ -50,9 +46,6 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, $skip)
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
@@ -68,17 +61,11 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, $skip)
     {
         return $this->baseTester->test($env, $feature, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);

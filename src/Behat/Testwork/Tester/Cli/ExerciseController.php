@@ -59,10 +59,6 @@ final class ExerciseController implements Controller
     /**
      * Initializes controller.
      *
-     * @param SuiteRepository     $suiteRepository
-     * @param SpecificationFinder $specificationFinder
-     * @param Exercise            $exercise
-     * @param ResultInterpreter   $resultInterpreter
      * @param bool             $skip
      */
     public function __construct(
@@ -70,7 +66,7 @@ final class ExerciseController implements Controller
         SpecificationFinder $specificationFinder,
         Exercise $exercise,
         ResultInterpreter $resultInterpreter,
-        $skip = false
+        $skip = false,
     ) {
         $this->suiteRepository = $suiteRepository;
         $this->specificationFinder = $specificationFinder;
@@ -79,35 +75,44 @@ final class ExerciseController implements Controller
         $this->skip = $skip;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $locatorsExamples = implode(PHP_EOL, array_map(
             function ($locator) {
                 return '- ' . $locator;
-            }, $this->specificationFinder->getExampleLocators()
+            },
+            $this->specificationFinder->getExampleLocators()
         ));
 
         $command
-            ->addArgument('paths', InputArgument::OPTIONAL,
+            ->addArgument(
+                'paths',
+                InputArgument::OPTIONAL,
                 'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
             )
-            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+            ->addOption(
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
+            )
+            ->addOption(
+                '--allow-no-tests',
+                null,
+                InputOption::VALUE_NONE,
+                'Will not fail if no specifications are found.'
             );
     }
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $specs = $this->findSpecifications($input);
         $result = $this->testSpecifications($input, $specs);
 
-        if ($input->getArgument('paths') && TestResults::NO_TESTS === $result->getResultCode()) {
+        if ($input->getArgument('paths') && !$input->getOption('allow-no-tests') && TestResults::NO_TESTS === $result->getResultCode()) {
             throw new WrongPathsException(
                 sprintf(
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
@@ -123,8 +128,6 @@ final class ExerciseController implements Controller
     /**
      * Finds exercise specifications.
      *
-     * @param InputInterface $input
-     *
      * @return SpecificationIterator[]
      */
     private function findSpecifications(InputInterface $input)
@@ -135,7 +138,6 @@ final class ExerciseController implements Controller
     /**
      * Tests exercise specifications.
      *
-     * @param InputInterface          $input
      * @param SpecificationIterator[] $specifications
      *
      * @return TestResult
@@ -168,7 +170,7 @@ final class ExerciseController implements Controller
      * Finds specification iterators for all provided suites using locator.
      *
      * @param Suite[]     $suites
-     * @param null|string $locator
+     * @param string|null $locator
      *
      * @return SpecificationIterator[]
      */

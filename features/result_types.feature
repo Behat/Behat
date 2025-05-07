@@ -44,25 +44,19 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given /^I have magically created (\d+)\$$/
-           */
+          #[Given('/^I have magically created (\d+)\$$/')]
           public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I have chose "([^"]*)" in coffee machine$/
-           */
+          #[When('/^I have chose "([^"]*)" in coffee machine$/')]
           public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have "([^"]*)"$/
-           */
+          #[Then('/^I should have "([^"]*)"$/')]
           public function iShouldHave($arg1): void
           {
               throw new PendingException();
@@ -78,25 +72,19 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Given /^I have magically created (\d+)\$$/
-           */
+          #[Given('/^I have magically created (\d+)\$$/')]
           public function iHaveMagicallyCreated($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I have chose "([^"]*)" in coffee machine$/
-           */
+          #[When('/^I have chose "([^"]*)" in coffee machine$/')]
           public function iHaveChoseInCoffeeMachine($arg1): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have "([^"]*)"$/
-           */
+          #[Then('/^I should have "([^"]*)"$/')]
           public function iShouldHave($arg1): void
           {
               throw new PendingException();
@@ -126,19 +114,17 @@ Feature: Different result types
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^human have ordered very very very hot "([^"]*)"$/
-           */
+          #[Given('/^human have ordered very very very hot "([^"]*)"$/')]
           public function humanOrdered($arg1): void {
               throw new PendingException;
           }
 
-          /**
-           * @When the coffee will be ready
-           */
+          #[When('the coffee will be ready')]
           public function theCoffeeWillBeReady(): void {
               throw new PendingException;
           }
@@ -160,13 +146,16 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^I should say "([^"]*)"$/
-           */
+          #[Then('/^I should say "([^"]*)"$/')]
           public function iShouldSay($arg1): void
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """
     When I run "behat --no-colors --strict -f progress features/coffee.feature --snippets-for=FeatureContext --snippets-type=regex"
     Then it should fail with:
@@ -184,9 +173,7 @@ Feature: Different result types
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^I should say "([^"]*)"$/
-           */
+          #[Then('/^I should say "([^"]*)"$/')]
           public function iShouldSay($arg1): void
           {
               throw new PendingException();
@@ -220,21 +207,19 @@ Feature: Different result types
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
 
       class FeatureContext implements Context
       {
           private $money = 0;
 
-          /**
-           * @Given /^I have thrown (\d+)\$ into machine$/
-           */
+          #[Given('/^I have thrown (\d+)\$ into machine$/')]
           public function pay($money) {
               $this->money += $money;
           }
 
-          /**
-           * @Then /^I should see (\d+)\$ on the screen$/
-           */
+          #[Then('/^I should see (\d+)\$ on the screen$/')]
           public function iShouldSee($money) {
               PHPUnit\Framework\Assert::assertEquals($money, $this->money);
           }
@@ -290,39 +275,40 @@ Feature: Different result types
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $money = 0;
 
-          /** @Given /^human bought coffee$/ */
+          #[Given('/^human bought coffee$/')]
           public function humanBoughtCoffee() {}
 
-          /** @Given /^I have water$/ */
+          #[Given('/^I have water$/')]
           public function water() {}
 
-          /** @Given /^I have no water$/ */
+          #[Given('/^I have no water$/')]
           public function noWater() {
               throw new Exception('NO water in coffee machine!!!');
           }
 
-          /** @Given /^I have electricity$/ */
+          #[Given('/^I have electricity$/')]
           public function haveElectricity() {}
 
-          /** @Given /^I have no electricity$/ */
+          #[Given('/^I have no electricity$/')]
           public function haveNoElectricity() {
               throw new Exception('NO electricity in coffee machine!!!');
           }
 
-          /** @When /^I boil water$/ */
+          #[When('/^I boil water$/')]
           public function boilWater() {}
 
-          /** @Then /^the coffee should be almost done$/ */
+          #[Then('/^the coffee should be almost done$/')]
           public function coffeeAlmostDone() {}
 
-          /**
-           * @Then /^I should see (\d+)\$ on the screen$/
-           */
+          #[Then('/^I should see (\d+)\$ on the screen$/')]
           public function iShouldSee($money) {
               PHPUnit\Framework\Assert::assertEquals($money, $this->money);
           }
@@ -367,22 +353,22 @@ Feature: Different result types
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
 
       class FeatureContext implements Context
       {
-          /** @Given /^human have chosen "([^"]*)"$/ */
+          #[Given('/^human have chosen "([^"]*)"$/')]
           public function chosen($arg1): void {
               throw new PendingException;
           }
 
-          /** @Given /^human have chosen "Latte"$/ */
+          #[Given('/^human have chosen "Latte"$/')]
           public function chosenLatte(): void {
               throw new PendingException;
           }
 
-          /**
-           * @Then /^I should make him "([^"]*)"$/
-           */
+          #[Then('/^I should make him "([^"]*)"$/')]
           public function iShouldSee($money): void {
               throw new PendingException;
           }
@@ -425,15 +411,16 @@ Feature: Different result types
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
 
       class FeatureContext implements Context
       {
-          /** @Given /^customer bought coffee$/ */
+          #[Given('/^customer bought coffee$/')]
           public function chosen($arg1) {
               // do something
           }
 
-          /** @Given /^customer bought coffee$/ */
+          #[Given('/^customer bought coffee$/')]
           public function chosenLatte() {
               // do something else
           }
@@ -466,15 +453,16 @@ Feature: Different result types
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
 
       class FeatureContext implements Context
       {
-          /** @Given /^customer bought coffee$/ */
+          #[Given('/^customer bought coffee$/')]
           public function chosen() {
               trigger_error("some warning", E_USER_WARNING);
           }
 
-          /** @Given /^customer bought another one coffee$/ */
+          #[Given('/^customer bought another one coffee$/')]
           public function chosenLatte() {
               // do something else
           }
@@ -490,7 +478,7 @@ Feature: Different result types
 
       001 Scenario: Redundant menu       # features/coffee.feature:6
             Given customer bought coffee # features/coffee.feature:7
-              User Warning: some warning in features/bootstrap/FeatureContext.php line 12
+              User Warning: some warning in features/bootstrap/FeatureContext.php line 13
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)

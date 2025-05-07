@@ -20,6 +20,8 @@ use IteratorAggregate;
  * Used to compose formatter event listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements IteratorAggregate<int, EventListener>
  */
 class ChainEventListener implements EventListener, Countable, IteratorAggregate
 {
@@ -38,9 +40,6 @@ class ChainEventListener implements EventListener, Countable, IteratorAggregate
         $this->listeners = $listeners;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         foreach ($this->listeners as $listener) {
@@ -48,17 +47,11 @@ class ChainEventListener implements EventListener, Countable, IteratorAggregate
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count(): int
     {
         return count($this->listeners);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->listeners);

@@ -40,7 +40,7 @@ abstract class TesterExtension implements Extension
     public const STOP_ON_FAILURE_ID = 'tester.stop_on_failure';
 
     /**
-     * Available extension points
+     * Available extension points.
      */
     public const EXERCISE_WRAPPER_TAG = 'tester.exercise.wrapper';
     public const SUITE_TESTER_WRAPPER_TAG = 'tester.suite.wrapper';
@@ -54,55 +54,43 @@ abstract class TesterExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
     public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'testers';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $childrenBuilder = $builder
             ->addDefaultsIfNotSet()
             ->children()
-                    ->scalarNode('stop_on_failure')
-                    ->defaultValue(null)
-                ->end()
+        ;
+        $childrenBuilder
+                ->scalarNode('stop_on_failure')
+                ->defaultValue(null)
+        ;
+        $childrenBuilder
                 ->booleanNode('strict')
                     ->info('Sets the strict mode for result interpretation')
                     ->defaultFalse()
-                ->end()
+        ;
+        $childrenBuilder
                 ->booleanNode('skip')
                     ->info('Tells tester to skip all tests')
                     ->defaultFalse()
-                ->end()
-            ->end()
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadExerciseController($container, $config['skip']);
@@ -114,9 +102,6 @@ abstract class TesterExtension implements Extension
         $this->loadSpecificationTester($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processExerciseWrappers($container);
@@ -128,32 +113,30 @@ abstract class TesterExtension implements Extension
     /**
      * Loads exercise cli controllers.
      *
-     * @param ContainerBuilder $container
      * @param bool          $skip
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', array(
+        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', [
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
             new Reference(self::RESULT_INTERPRETER_ID),
-            $skip
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 0));
+            $skip,
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 0]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.exercise', $definition);
     }
-    
-    
+
     /**
      * Loads stop on failure handler.
      */
     private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', array(
+        $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            new Reference(TesterExtension::RESULT_INTERPRETER_ID)
-        ));
+            new Reference(TesterExtension::RESULT_INTERPRETER_ID),
+        ]);
 
         if ($stopOnFailure === true) {
             $definition->addMethodCall('registerListeners');
@@ -164,23 +147,20 @@ abstract class TesterExtension implements Extension
     /**
      * Loads exercise cli controllers.
      *
-     * @param ContainerBuilder $container
      * @param bool          $strict
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', array(
+        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', [
             new Reference(self::RESULT_INTERPRETER_ID),
-            $strict
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 300));
+            $strict,
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 300]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.strict', $definition);
     }
 
     /**
-     * Loads result interpreter controller
-     *
-     * @param ContainerBuilder $container
+     * Loads result interpreter controller.
      */
     protected function loadResultInterpreter(ContainerBuilder $container)
     {
@@ -194,42 +174,34 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads exercise tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', array(
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', [
             new Reference(EnvironmentExtension::MANAGER_ID),
-            new Reference(self::SUITE_TESTER_ID)
-        ));
+            new Reference(self::SUITE_TESTER_ID),
+        ]);
         $container->setDefinition(self::EXERCISE_ID, $definition);
     }
 
     /**
      * Loads suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', array(
-            new Reference(self::SPECIFICATION_TESTER_ID)
-        ));
+        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', [
+            new Reference(self::SPECIFICATION_TESTER_ID),
+        ]);
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);
     }
 
     /**
      * Loads specification tester.
-     *
-     * @param ContainerBuilder $container
      */
     abstract protected function loadSpecificationTester(ContainerBuilder $container);
 
     /**
      * Processes all registered exercise wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processExerciseWrappers(ContainerBuilder $container)
     {
@@ -238,8 +210,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered suite tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSuiteTesterWrappers(ContainerBuilder $container)
     {
@@ -248,8 +218,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered specification tester wrappers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSpecificationTesterWrappers(ContainerBuilder $container)
     {
@@ -258,8 +226,6 @@ abstract class TesterExtension implements Extension
 
     /**
      * Processes all registered result interpretations.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processResultInterpretations(ContainerBuilder $container)
     {
@@ -267,7 +233,7 @@ abstract class TesterExtension implements Extension
         $definition = $container->getDefinition(self::RESULT_INTERPRETER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerResultInterpretation', array($reference));
+            $definition->addMethodCall('registerResultInterpretation', [$reference]);
         }
     }
 }

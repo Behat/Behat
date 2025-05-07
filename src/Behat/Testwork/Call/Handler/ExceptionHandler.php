@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\Call\Handler;
 
+use Throwable;
+
 /**
  * Handles exceptions.
  *
@@ -22,7 +24,7 @@ interface ExceptionHandler
     /**
      * Checks if handler supports exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return bool
      */
@@ -31,9 +33,9 @@ interface ExceptionHandler
     /**
      * Handles exception and returns new one if necessary.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @return \Throwable
+     * @return Throwable
      */
     public function handleException($exception);
 }

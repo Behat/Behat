@@ -36,9 +36,6 @@ final class InitializationController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param SuiteRepository   $repository
-     * @param SuiteBootstrapper $bootstrapper
      */
     public function __construct(SuiteRepository $repository, SuiteBootstrapper $bootstrapper)
     {
@@ -46,19 +43,16 @@ final class InitializationController implements Controller
         $this->bootstrapper = $bootstrapper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
-        $command->addOption('--init', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--init',
+            null,
+            InputOption::VALUE_NONE,
             'Initialize all registered test suites.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('init')) {

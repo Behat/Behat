@@ -1,4 +1,5 @@
 <?php
+
 namespace Behat\Behat\Output\Node\EventListener\JUnit;
 
 use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
@@ -16,15 +17,14 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class JUnitDurationListener implements EventListener
 {
     /** @var array<string, Timer> */
-    private $scenarioTimerStore = array();
+    private $scenarioTimerStore = [];
     /** @var array<string, Timer> */
-    private $featureTimerStore = array();
+    private $featureTimerStore = [];
     /** @var array<string, float> */
-    private $resultStore = array();
+    private $resultStore = [];
     /** @var array<string, float> */
-    private $featureResultStore = array();
+    private $featureResultStore = [];
 
-    /** @inheritdoc */
     public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureBeforeScenarioEvent($event);
@@ -36,6 +36,7 @@ final class JUnitDurationListener implements EventListener
     public function getDuration(ScenarioLikeInterface $scenario): string
     {
         $key = $this->getHash($scenario);
+
         return array_key_exists($key, $this->resultStore)
             ? number_format($this->resultStore[$key], 3, '.', '')
             : '';
@@ -44,6 +45,7 @@ final class JUnitDurationListener implements EventListener
     public function getFeatureDuration(FeatureNode $feature): string
     {
         $key = $this->getHash($feature);
+
         return array_key_exists($key, $this->featureResultStore)
             ? number_format($this->featureResultStore[$key], 3, '.', '')
             : '';
@@ -74,8 +76,8 @@ final class JUnitDurationListener implements EventListener
         }
 
         $key = $this->getHash($event->getScenario());
-        $timer = $this->scenarioTimerStore[$key];
-        if ($timer instanceof Timer) {
+        if (isset($this->scenarioTimerStore[$key])) {
+            $timer = $this->scenarioTimerStore[$key];
             $timer->stop();
             $this->resultStore[$key] = $timer->getTime();
             unset($this->scenarioTimerStore[$key]);
@@ -89,8 +91,8 @@ final class JUnitDurationListener implements EventListener
         }
 
         $key = $this->getHash($event->getFeature());
-        $timer = $this->featureTimerStore[$key];
-        if ($timer instanceof Timer) {
+        if (isset($this->featureTimerStore[$key])) {
+            $timer = $this->featureTimerStore[$key];
             $timer->stop();
             $this->featureResultStore[$key] = $timer->getTime();
             unset($this->featureTimerStore[$key]);

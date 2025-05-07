@@ -27,32 +27,16 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
 
-    /**
-     * @var FilesystemLogger
-     */
-    private $logger;
-
-    /**
-     * Initializes appender.
-     *
-     * @param null|FilesystemLogger $logger
-     */
-    public function __construct(?FilesystemLogger $logger = null)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private ?FilesystemLogger $logger = null,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSnippet(AggregateSnippet $snippet)
     {
         return 'context' === $snippet->getType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function appendSnippet(AggregateSnippet $snippet)
     {
         foreach ($snippet->getTargets() as $contextClass) {
@@ -65,7 +49,7 @@ final class ContextSnippetAppender implements SnippetAppender
                 }
             }
 
-            $generated = rtrim(strtr($snippet->getSnippet(), array('\\' => '\\\\', '$' => '\\$')));
+            $generated = rtrim(strtr($snippet->getSnippet(), ['\\' => '\\\\', '$' => '\\$']));
             $content = preg_replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
             $path = $reflection->getFileName();
 
@@ -103,7 +87,7 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     private function importClass($class, $contextFileContent)
     {
-        $replaceWith = "\$1" . 'use ' . $class . ";\n\$2;";
+        $replaceWith = '$1use ' . $class . ";\n\$2;";
 
         return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
     }
@@ -111,7 +95,6 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * Logs snippet addition to the provided path (if logger is given).
      *
-     * @param AggregateSnippet $snippet
      * @param string           $path
      */
     private function logSnippetAddition(AggregateSnippet $snippet, $path)
@@ -121,7 +104,7 @@ final class ContextSnippetAppender implements SnippetAppender
         }
 
         $steps = $snippet->getSteps();
-        $reason = sprintf("`<comment>%s</comment>` definition added", $steps[0]->getText());
+        $reason = sprintf('`<comment>%s</comment>` definition added', $steps[0]->getText());
 
         $this->logger->fileUpdated($path, $reason);
     }

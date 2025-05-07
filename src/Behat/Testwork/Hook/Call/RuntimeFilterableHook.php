@@ -20,7 +20,7 @@ use Behat\Testwork\Hook\FilterableHook;
 abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHook
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $filterString;
 
@@ -28,9 +28,9 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
      * Initializes hook.
      *
      * @param string      $scopeName
-     * @param null|string $filterString
+     * @param string|null $filterString
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($scopeName, $filterString, $callable, $description = null)
     {
@@ -42,16 +42,13 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
     /**
      * Returns hook filter string (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getFilterString()
     {
         return $this->filterString;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return trim($this->getName() . ' ' . $this->getFilterString());

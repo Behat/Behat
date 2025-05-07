@@ -37,39 +37,33 @@ final class SyntaxController implements Controller
 
     /**
      * Initializes controller.
-     *
-     * @param KeywordsDumper      $dumper
-     * @param TranslatorInterface $translator
      */
     public function __construct(KeywordsDumper $dumper, TranslatorInterface $translator)
     {
-        $dumper->setKeywordsDumperFunction(array($this, 'dumpKeywords'));
+        $dumper->setKeywordsDumperFunction([$this, 'dumpKeywords']);
         $this->keywordsDumper = $dumper;
         $this->translator = $translator;
     }
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
         $command
             ->addOption(
-                '--story-syntax', null, InputOption::VALUE_NONE,
-                "Print <comment>*.feature</comment> example." . PHP_EOL .
-                "Use <info>--lang</info> to see specific language."
+                '--story-syntax',
+                null,
+                InputOption::VALUE_NONE,
+                'Print <comment>*.feature</comment> example.' . PHP_EOL .
+                'Use <info>--lang</info> to see specific language.'
             );
     }
 
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return int|null
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -77,7 +71,7 @@ final class SyntaxController implements Controller
             return null;
         }
 
-        $output->getFormatter()->setStyle('gherkin_keyword', new OutputFormatterStyle('green', null, array('bold')));
+        $output->getFormatter()->setStyle('gherkin_keyword', new OutputFormatterStyle('green', null, ['bold']));
         $output->getFormatter()->setStyle('gherkin_comment', new OutputFormatterStyle('yellow'));
 
         $story = $this->keywordsDumper->dump($this->translator->getLocale());

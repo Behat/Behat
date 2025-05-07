@@ -10,7 +10,7 @@
 
 namespace Behat\Testwork\Tester\Result;
 
-use Exception;
+use Throwable;
 
 /**
  * Represents a result, that possibly produced an exception.
@@ -29,7 +29,7 @@ interface ExceptionResult extends TestResult
     /**
      * Returns exception that test result has.
      *
-     * @return null|Exception
+     * @return Throwable|null
      */
     public function getException();
 }

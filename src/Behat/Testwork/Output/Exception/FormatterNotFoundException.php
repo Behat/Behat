@@ -33,6 +33,7 @@ class FormatterNotFoundException extends InvalidArgumentException implements Out
     public function __construct($message, $name)
     {
         parent::__construct($message);
+        $this->name = $name;
     }
 
     /**

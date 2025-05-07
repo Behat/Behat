@@ -29,13 +29,15 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
      */
     private $pattern;
 
+    private bool $used = false;
+
     /**
      * Initializes definition.
      *
      * @param string      $type
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($type, $pattern, $callable, $description = null)
     {
@@ -45,27 +47,34 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return $this->type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return $this->getType() . ' ' . $this->getPattern();
+    }
+
+    /**
+     * @internal
+     */
+    public function markAsUsed(): void
+    {
+        $this->used = true;
+    }
+
+    /**
+     * @internal
+     */
+    public function hasBeenUsed(): bool
+    {
+        return $this->used;
     }
 }

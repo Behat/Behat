@@ -31,50 +31,35 @@ final class ArgumentExtension implements Extension
     public const PREG_MATCH_ARGUMENT_ORGANISER_ID = 'argument.preg_match_organiser';
     public const CONSTRUCTOR_ARGUMENT_ORGANISER_ID = 'argument.constructor_organiser';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'argument';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Behat\Testwork\Argument\MixedArgumentOrganiser');
         $container->setDefinition(self::MIXED_ARGUMENT_ORGANISER_ID, $definition);
 
-        $definition = new Definition('Behat\Testwork\Argument\PregMatchArgumentOrganiser', array(
-            new Reference(self::MIXED_ARGUMENT_ORGANISER_ID)
-        ));
+        $definition = new Definition('Behat\Testwork\Argument\PregMatchArgumentOrganiser', [
+            new Reference(self::MIXED_ARGUMENT_ORGANISER_ID),
+        ]);
         $container->setDefinition(self::PREG_MATCH_ARGUMENT_ORGANISER_ID, $definition);
 
-        $definition = new Definition('Behat\Testwork\Argument\ConstructorArgumentOrganiser', array(
-            new Reference(self::MIXED_ARGUMENT_ORGANISER_ID)
-        ));
+        $definition = new Definition('Behat\Testwork\Argument\ConstructorArgumentOrganiser', [
+            new Reference(self::MIXED_ARGUMENT_ORGANISER_ID),
+        ]);
         $container->setDefinition(self::CONSTRUCTOR_ARGUMENT_ORGANISER_ID, $definition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }

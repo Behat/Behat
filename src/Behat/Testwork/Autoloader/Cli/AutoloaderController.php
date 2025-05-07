@@ -29,27 +29,21 @@ final class AutoloaderController implements Controller
     private $loader;
 
     /**
-     * Initializes controller
-     *
-     * @param ClassLoader $loader
+     * Initializes controller.
      */
     public function __construct(ClassLoader $loader)
     {
         $this->loader = $loader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->loader->register();
+
+        return null;
     }
 }

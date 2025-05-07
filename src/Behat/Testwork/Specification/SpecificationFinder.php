@@ -17,18 +17,20 @@ use Behat\Testwork\Suite\Suite;
  * Finds test specifications for provided suites using registered locators.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template T
  */
 final class SpecificationFinder
 {
     /**
-     * @var SpecificationLocator[]
+     * @var SpecificationLocator<T>[]
      */
-    private $specificationLocators = array();
+    private $specificationLocators = [];
 
     /**
      * Registers specification locator.
      *
-     * @param SpecificationLocator $locator
+     * @param SpecificationLocator<T> $locator
      */
     public function registerSpecificationLocator(SpecificationLocator $locator)
     {
@@ -42,7 +44,7 @@ final class SpecificationFinder
      */
     public function getExampleLocators()
     {
-        $examples = array();
+        $examples = [];
         foreach ($this->specificationLocators as $locator) {
             $examples = array_merge($examples, $locator->getLocatorExamples());
         }
@@ -54,13 +56,13 @@ final class SpecificationFinder
      * Finds all specifications for all provided suites matching provided locator and wraps them into a spec iterator.
      *
      * @param Suite[]     $suites
-     * @param null|string $locator
+     * @param string|null $locator
      *
-     * @return SpecificationIterator[]
+     * @return list<SpecificationIterator<T>>
      */
     public function findSuitesSpecifications(array $suites, $locator = null)
     {
-        $iterators = array();
+        $iterators = [];
         foreach ($suites as $suite) {
             $iterators = array_merge($iterators, $this->findSuiteSpecifications($suite, $locator));
         }
@@ -71,14 +73,13 @@ final class SpecificationFinder
     /**
      * Creates suite specification iterator for provided locator.
      *
-     * @param Suite       $suite
-     * @param null|string $locator
+     * @param string|null $locator
      *
-     * @return SpecificationIterator[]
+     * @return list<SpecificationIterator<T>>
      */
     private function findSuiteSpecifications(Suite $suite, $locator = null)
     {
-        $iterators = array();
+        $iterators = [];
         foreach ($this->specificationLocators as $specificationLocator) {
             $iterators[] = $specificationLocator->locateSpecifications($suite, $locator);
         }

@@ -25,17 +25,14 @@ use ReflectionMethod;
  */
 final class TableRowTransformation extends RuntimeCallee implements SimpleArgumentTransformation
 {
-    public const PATTERN_REGEX = '/^row\:[[:print:]]+$/';
+    public const PATTERN_REGEX = '/^row\:[[:print:]]+$/u';
 
     /**
      * @var string
      */
     private $pattern;
 
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -45,7 +42,7 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
@@ -54,30 +51,24 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
-        };
+        }
 
         return $this->pattern === 'row:' . implode(',', $argumentArgumentValue->getRow(0));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
-        $rows = array();
+        $rows = [];
         foreach ($argumentValue as $row) {
             $call = new TransformationCall(
                 $definitionCall->getEnvironment(),
                 $definitionCall->getCallee(),
                 $this,
-                array($row)
+                [$row]
             );
 
             $result = $callCenter->makeCall($call);
@@ -92,25 +83,16 @@ final class TableRowTransformation extends RuntimeCallee implements SimpleArgume
         return $rows;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 50;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->pattern;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'TableRowTransform ' . $this->pattern;

@@ -27,25 +27,17 @@ class StaticEnvironment implements Environment
 
     /**
      * Initializes environment.
-     *
-     * @param Suite $suite
      */
     public function __construct(Suite $suite)
     {
         $this->suite = $suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function bindCallee(Callee $callee)
     {
         return $callee->getCallable();

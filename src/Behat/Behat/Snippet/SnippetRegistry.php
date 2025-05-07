@@ -24,15 +24,15 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * @var SnippetGenerator[]
      */
-    private $generators = array();
+    private $generators = [];
     /**
      * @var UndefinedStep[]
      */
-    private $undefinedSteps = array();
+    private $undefinedSteps = [];
     /**
      * @var AggregateSnippet[]
      */
-    private $snippets = array();
+    private $snippets = [];
     /**
      * @var bool
      */
@@ -40,8 +40,6 @@ final class SnippetRegistry implements SnippetRepository
 
     /**
      * Registers snippet generator.
-     *
-     * @param SnippetGenerator $generator
      */
     public function registerSnippetGenerator(SnippetGenerator $generator)
     {
@@ -52,10 +50,7 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * Generates and registers snippet.
      *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
-     * @return null|Snippet
+     * @return void
      */
     public function registerUndefinedStep(Environment $environment, StepNode $step)
     {
@@ -96,7 +91,7 @@ final class SnippetRegistry implements SnippetRepository
             return null;
         }
 
-        $snippetsSet = array();
+        $snippetsSet = [];
         foreach ($this->undefinedSteps as $i => $undefinedStep) {
             $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
 
@@ -105,7 +100,7 @@ final class SnippetRegistry implements SnippetRepository
             }
 
             if (!isset($snippetsSet[$snippet->getHash()])) {
-                $snippetsSet[$snippet->getHash()] = array();
+                $snippetsSet[$snippet->getHash()] = [];
             }
 
             $snippetsSet[$snippet->getHash()][] = $snippet;
@@ -125,10 +120,7 @@ final class SnippetRegistry implements SnippetRepository
     }
 
     /**
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
-     * @return null|Snippet
+     * @return Snippet|null
      */
     private function generateSnippet(Environment $environment, StepNode $step)
     {

@@ -33,11 +33,10 @@ final class StrictController implements Controller
      * @var bool
      */
     private $strict;
-    
+
     /**
      * Initializes controller.
      *
-     * @param ResultInterpreter $resultInterpreter
      * @param bool           $strict
      */
     public function __construct(ResultInterpreter $resultInterpreter, $strict = false)
@@ -46,25 +45,24 @@ final class StrictController implements Controller
         $this->strict = $strict;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
-        $command->addOption('--strict', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--strict',
+            null,
+            InputOption::VALUE_NONE,
             'Passes only if all tests are explicitly passing.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->strict && !$input->getOption('strict')) {
-            return;
+            return null;
         }
 
         $this->resultInterpreter->registerResultInterpretation(new StrictInterpretation());
+
+        return null;
     }
 }

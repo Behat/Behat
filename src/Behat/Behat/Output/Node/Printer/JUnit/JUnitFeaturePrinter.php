@@ -13,7 +13,6 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Statistics\PhaseStatistics;
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
@@ -26,30 +25,14 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class JUnitFeaturePrinter implements FeaturePrinter
 {
-    /**
-     * @var PhaseStatistics
-     */
-    private $statistics;
+    private ?FeatureNode $currentFeature = null;
 
-    /**
-     * @var FeatureNode
-     */
-    private $currentFeature;
-
-    /**
-     * @var JUnitDurationListener|null
-     */
-    private $durationListener;
-
-    public function __construct(PhaseStatistics $statistics, ?JUnitDurationListener $durationListener = null)
-    {
-        $this->statistics = $statistics;
-        $this->durationListener = $durationListener;
+    public function __construct(
+        private PhaseStatistics $statistics,
+        private ?JUnitDurationListener $durationListener = null,
+    ) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature)
     {
         $this->statistics->reset();
@@ -59,9 +42,6 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         $outputPrinter->addTestsuite();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
         $stats = $this->statistics->getScenarioStatCounts();
@@ -69,20 +49,20 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         if (0 === count($stats)) {
             $totalCount = 0;
         } else {
-            $totalCount = array_sum($stats);
+            $totalCount = (int) array_sum($stats);
         }
 
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $outputPrinter->extendTestsuiteAttributes(array(
+        $outputPrinter->extendTestsuiteAttributes([
             'name' => $this->currentFeature->getTitle(),
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
-            'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
+            'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
             'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
-        ));
+        ]);
 
         $this->statistics->reset();
         $this->currentFeature = null;

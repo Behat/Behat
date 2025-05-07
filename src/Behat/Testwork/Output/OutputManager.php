@@ -27,12 +27,10 @@ final class OutputManager
     /**
      * @var Formatter[]
      */
-    private $formatters = array();
+    private $formatters = [];
 
     /**
      * Initializes manager.
-     *
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
@@ -41,8 +39,6 @@ final class OutputManager
 
     /**
      * Registers formatter.
-     *
-     * @param Formatter $formatter
      */
     public function registerFormatter(Formatter $formatter)
     {
@@ -131,7 +127,7 @@ final class OutputManager
      */
     public function disableAllFormatters()
     {
-        array_map(array($this, 'disableFormatter'), array_keys($this->formatters));
+        array_map([$this, 'disableFormatter'], array_keys($this->formatters));
     }
 
     /**
@@ -139,7 +135,6 @@ final class OutputManager
      *
      * @param string $formatter
      * @param string $parameterName
-     * @param mixed  $parameterValue
      */
     public function setFormatterParameter($formatter, $parameterName, $parameterValue)
     {
@@ -172,7 +167,6 @@ final class OutputManager
      * Sets provided formatter parameters.
      *
      * @param string $formatter
-     * @param array  $parameters
      */
     public function setFormatterParameters($formatter, array $parameters)
     {
@@ -185,7 +179,6 @@ final class OutputManager
      * Sets provided parameter to all registered formatters.
      *
      * @param string $parameterName
-     * @param mixed  $parameterValue
      */
     public function setFormattersParameter($parameterName, $parameterValue)
     {
@@ -196,8 +189,6 @@ final class OutputManager
 
     /**
      * Sets provided parameters to all registered formatters.
-     *
-     * @param array $parameters
      */
     public function setFormattersParameters(array $parameters)
     {

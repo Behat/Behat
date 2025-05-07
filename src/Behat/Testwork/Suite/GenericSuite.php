@@ -26,13 +26,12 @@ final class GenericSuite implements Suite
     /**
      * @var array
      */
-    private $settings = array();
+    private $settings = [];
 
     /**
      * Initializes suite.
      *
      * @param string $name
-     * @param array  $settings
      */
     public function __construct($name, array $settings)
     {
@@ -76,8 +75,6 @@ final class GenericSuite implements Suite
      * Returns setting value by its key.
      *
      * @param string $key
-     *
-     * @return mixed
      *
      * @throws ParameterNotFoundException If setting is not set
      */

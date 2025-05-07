@@ -30,54 +30,41 @@ final class TranslatorExtension implements Extension
      */
     public const TRANSLATOR_ID = 'translator';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'translation';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $defaultLanguage = $this->getDefaultLanguage() ?: 'en';
 
-        $builder
+        $childrenBuilder = $builder
             ->addDefaultsIfNotSet()
             ->children()
+        ;
+        $childrenBuilder
                 ->scalarNode('locale')
                     ->info('Sets output locale for the tester')
                     ->defaultValue($defaultLanguage)
-                ->end()
+        ;
+        $childrenBuilder
                 ->scalarNode('fallback_locale')
                     ->info('Sets fallback output locale for the tester')
                     ->defaultValue('en')
-                ->end()
-            ->end();
+        ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadTranslator($container, $config['locale'], $config['fallback_locale']);
         $this->loadController($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }
@@ -85,61 +72,62 @@ final class TranslatorExtension implements Extension
     /**
      * Loads translator service.
      *
-     * @param ContainerBuilder $container
      * @param string           $locale
      * @param string           $fallbackLocale
      */
     private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
     {
-        $definition = new Definition('Behat\Behat\Definition\Translator\Translator', array($locale));
+        $definition = new Definition('Behat\Behat\Definition\Translator\Translator', [$locale]);
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
 
-        $definition->addMethodCall('setFallbackLocales', array(array($fallbackLocale)));
+        $definition->addMethodCall('setFallbackLocales', [[$fallbackLocale]]);
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            [
                 'xliff',
-                new Definition('Symfony\Component\Translation\Loader\XliffFileLoader')
-            )
+                new Definition('Symfony\Component\Translation\Loader\XliffFileLoader'),
+            ]
         );
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            [
                 'yaml',
-                new Definition('Symfony\Component\Translation\Loader\YamlFileLoader')
-            )
+                new Definition('Symfony\Component\Translation\Loader\YamlFileLoader'),
+            ]
         );
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            [
                 'php',
-                new Definition('Symfony\Component\Translation\Loader\PhpFileLoader')
-            )
+                new Definition('Symfony\Component\Translation\Loader\PhpFileLoader'),
+            ]
         );
         $definition->addMethodCall(
-            'addLoader', array(
+            'addLoader',
+            [
                 'array',
-                new Definition('Symfony\Component\Translation\Loader\ArrayLoader')
-            )
+                new Definition('Symfony\Component\Translation\Loader\ArrayLoader'),
+            ]
         );
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
     }
 
     /**
      * Loads translator controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Translator\Cli\LanguageController', array(
-            new Reference(self::TRANSLATOR_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 800));
+        $definition = new Definition('Behat\Testwork\Translator\Cli\LanguageController', [
+            new Reference(self::TRANSLATOR_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 800]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.translator', $definition);
     }
 
     /**
      * Tries to guess default user cli language.
      *
-     * @return null|string
+     * @return string|null
      */
     private function getDefaultLanguage()
     {

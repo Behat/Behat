@@ -25,10 +25,10 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $scopeName
-     * @param null|string $filterString
-     * @param callable    $callable
-     * @param null|string $description
+     * @param string                               $scopeName
+     * @param string|null                          $filterString
+     * @param callable|array{class-string, string} $callable
+     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
@@ -36,18 +36,9 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
-        if ($this->isAnInstanceMethod()) {
-            throw new BadCallbackException(sprintf(
-                'Suite hook callback: %s::%s() must be a static method',
-                $callable[0],
-                $callable[1]
-            ), $callable);
-        }
+        $this->throwIfInstanceMethod($callable, 'Suite');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof SuiteScope) {
@@ -67,7 +58,6 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Checks if Feature matches specified filter.
      *
-     * @param Suite  $suite
      * @param string $filterString
      *
      * @return bool

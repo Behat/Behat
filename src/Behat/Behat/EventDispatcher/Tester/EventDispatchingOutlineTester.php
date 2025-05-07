@@ -18,7 +18,6 @@ use Behat\Behat\Tester\OutlineTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -40,9 +39,6 @@ final class EventDispatchingOutlineTester implements OutlineTester
 
     /**
      * Initializes tester.
-     *
-     * @param OutlineTester            $baseTester
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(OutlineTester $baseTester, EventDispatcherInterface $eventDispatcher)
     {
@@ -50,9 +46,6 @@ final class EventDispatchingOutlineTester implements OutlineTester
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
@@ -68,22 +61,16 @@ final class EventDispatchingOutlineTester implements OutlineTester
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         return $this->baseTester->test($env, $feature, $outline, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
 
-        $this->eventDispatcher->dispatch( $event,$event::BEFORE_TEARDOWN);
+        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $outline, $skip, $result);
 

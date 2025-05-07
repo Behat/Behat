@@ -24,15 +24,13 @@ interface ServiceContainerEnvironment extends Environment
 {
     /**
      * Sets/unsets service container for the environment.
-     *
-     * @param ContainerInterface|null $container
      */
     public function setServiceContainer(?ContainerInterface $container = null);
 
     /**
      * Returns environment service container if set.
      *
-     * @return null|ContainerInterface
+     * @return ContainerInterface|null
      */
     public function getServiceContainer();
 }

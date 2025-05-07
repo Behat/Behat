@@ -56,47 +56,35 @@ final class OutputExtension implements Extension
      *
      * @param string                $defaultFormatter
      * @param FormatterFactory[]    $formatterFactories
-     * @param null|ServiceProcessor $processor
      */
     public function __construct($defaultFormatter, array $formatterFactories, ?ServiceProcessor $processor = null)
     {
         $this->defaultFormatter = $defaultFormatter;
         $this->factories = $formatterFactories;
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
      * Registers formatter factory.
-     *
-     * @param FormatterFactory $factory
      */
     public function registerFormatterFactory(FormatterFactory $factory)
     {
         $this->factories[] = $factory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'formatters';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
-            ->defaultValue(array($this->defaultFormatter => array('enabled' => true)))
+        $builder = $builder
+            ->defaultValue([$this->defaultFormatter => ['enabled' => true]])
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
@@ -104,21 +92,20 @@ final class OutputExtension implements Extension
                         return is_array($a) && !isset($a['enabled']);
                     })
                     ->then(function ($a) {
-                        return array_merge($a, array('enabled' => true));
+                        return array_merge($a, ['enabled' => true]);
                     })
                 ->end()
+        ;
+        assert($builder instanceof ArrayNodeDefinition);
+        $builder
                 ->useAttributeAsKey('name')
-                ->treatTrueLike(array('enabled' => true))
-                ->treatNullLike(array('enabled' => true))
-                ->treatFalseLike(array('enabled' => false))
+                ->treatTrueLike(['enabled' => true])
+                ->treatNullLike(['enabled' => true])
+                ->treatFalseLike(['enabled' => false])
                 ->prototype('variable')->end()
-            ->end()
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadOutputController($container);
@@ -126,9 +113,6 @@ final class OutputExtension implements Extension
         $this->loadManager($container, $config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processFormatters($container);
@@ -137,39 +121,34 @@ final class OutputExtension implements Extension
 
     /**
      * Loads output controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadOutputController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', array(
-            new Reference(self::MANAGER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1000));
+        $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', [
+            new Reference(self::MANAGER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.output', $definition);
     }
 
     /**
      * Loads output manager.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $formatters
      */
     private function loadManager(ContainerBuilder $container, array $formatters)
     {
-        $definition = new Definition('Behat\Testwork\Output\OutputManager', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
+        $definition = new Definition('Behat\Testwork\Output\OutputManager', [
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+        ]);
 
         foreach ($formatters as $name => $parameters) {
             if ($parameters['enabled']) {
-                $definition->addMethodCall('enableFormatter', array($name));
+                $definition->addMethodCall('enableFormatter', [$name]);
             } else {
-                $definition->addMethodCall('disableFormatter', array($name));
+                $definition->addMethodCall('disableFormatter', [$name]);
             }
 
             unset($parameters['enabled']);
-            $definition->addMethodCall('setFormatterParameters', array($name, $parameters));
+            $definition->addMethodCall('setFormatterParameters', [$name, $parameters]);
         }
 
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -177,8 +156,6 @@ final class OutputExtension implements Extension
 
     /**
      * Loads default formatters using registered factories.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadFormatters(ContainerBuilder $container)
     {
@@ -189,8 +166,6 @@ final class OutputExtension implements Extension
 
     /**
      * Processes formatters using registered factories.
-     *
-     * @param ContainerBuilder $container
      */
     private function processFormatters(ContainerBuilder $container)
     {
@@ -201,8 +176,6 @@ final class OutputExtension implements Extension
 
     /**
      * Processes all available output formatters.
-     *
-     * @param ContainerBuilder $container
      */
     private function processDynamicallyRegisteredFormatters(ContainerBuilder $container)
     {
@@ -213,7 +186,7 @@ final class OutputExtension implements Extension
         $definition->setMethodCalls();
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerFormatter', array($reference));
+            $definition->addMethodCall('registerFormatter', [$reference]);
         }
 
         foreach ($previousCalls as $call) {

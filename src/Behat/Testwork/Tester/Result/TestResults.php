@@ -18,6 +18,8 @@ use IteratorAggregate;
  * Aggregates multiple test results into a collection and provides informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements IteratorAggregate<int, TestResult>
  */
 final class TestResults implements TestResult, Countable, IteratorAggregate
 {
@@ -33,21 +35,18 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      *
      * @param TestResult[] $results
      */
-    public function __construct(array $results = array())
+    public function __construct(array $results = [])
     {
         $this->results = $results;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();
     }
 
     /**
-     * {@inheritdoc}
+     * @return TestResult::*|TestResults::NO_TESTS
      */
     public function getResultCode()
     {
@@ -59,17 +58,11 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
         return $resultCode;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count(): int
     {
         return count($this->results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->results);

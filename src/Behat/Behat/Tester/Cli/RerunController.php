@@ -16,7 +16,6 @@ use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
 use Behat\Testwork\Tester\Result\ResultInterpreter;
-use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -31,7 +30,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class RerunController implements Controller
 {
     /**
-     * @var null|string
+     * @var string|null
      */
     private $cachePath;
     /**
@@ -39,16 +38,14 @@ final class RerunController implements Controller
      */
     private $key;
     /**
-     * @var string[]
+     * @var array<string, string[]>
      */
-    private $lines = array();
+    private $lines = [];
 
     /**
      * Initializes controller.
      *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param null|string              $cachePath
-     * @param string                   $basepath
+     * @param string|null $cachePath
      */
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -61,42 +58,39 @@ final class RerunController implements Controller
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
-        $command->addOption('--rerun', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--rerun',
+            null,
+            InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution, or run everything if there were no failures.'
         );
-        $command->addOption('--rerun-only', null, InputOption::VALUE_NONE,
+        $command->addOption(
+            '--rerun-only',
+            null,
+            InputOption::VALUE_NONE,
             'Re-run scenarios that failed during last execution, or exit if there were no failures.'
         );
     }
 
-    /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, array($this, 'collectFailedScenario'), -50);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, array($this, 'collectFailedScenario'), -50);
-        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, array($this, 'writeCache'), -50);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, [$this, 'collectFailedScenario'], -50);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, [$this, 'collectFailedScenario'], -50);
+        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'writeCache'], -50);
 
         $this->key = $this->generateKey($input);
 
         if (!$input->getOption('rerun') && !$input->getOption('rerun-only')) {
-            return;
+            return null;
         }
 
         if (!$this->getFileName() || !file_exists($this->getFileName())) {
             if ($input->getOption('rerun-only')) {
                 $output->writeln('No failure found, exiting.');
+
                 return 0;
             }
 
@@ -104,12 +98,12 @@ final class RerunController implements Controller
         }
 
         $input->setArgument('paths', $this->getFileName());
+
+        return null;
     }
 
     /**
      * Records scenario if it is failed.
-     *
-     * @param AfterScenarioTested $event
      */
     public function collectFailedScenario(AfterScenarioTested $event)
     {
@@ -151,14 +145,12 @@ final class RerunController implements Controller
     /**
      * Generates cache key.
      *
-     * @param InputInterface $input
-     *
      * @return string
      */
     private function generateKey(InputInterface $input)
     {
         return md5(
-            $input->getParameterOption(array('--profile', '-p')) .
+            $input->getParameterOption(['--profile', '-p']) .
             $input->getOption('suite') .
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .
@@ -171,7 +163,7 @@ final class RerunController implements Controller
     /**
      * Returns cache filename (if exists).
      *
-     * @return null|string
+     * @return string|null
      */
     private function getFileName()
     {

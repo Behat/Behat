@@ -17,17 +17,11 @@ namespace Behat\Testwork\Tester\Setup;
  */
 final class FailedSetup implements Setup
 {
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasOutput()
     {
         return false;

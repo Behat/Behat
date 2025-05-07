@@ -9,9 +9,14 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use PHPUnit\Framework\Assert;
+use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -37,20 +42,27 @@ class FeatureContext implements Context
     /**
      * @var string
      */
+    private $tempDir;
+    /**
+     * @var string
+     */
     private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
     /**
      * @var array
      */
-    private $env = array();
+    private $env = [];
     /**
      * @var string
      */
     private $answerString;
 
+    private bool $workingDirChanged = false;
+
     /**
      * Cleans test folders in the temporary directory.
      *
      * @BeforeSuite
+     *
      * @AfterSuite
      */
     public static function cleanTestFolders()
@@ -71,13 +83,13 @@ class FeatureContext implements Context
             md5(microtime() . rand(0, 10000));
 
         mkdir($dir . '/features/bootstrap/i18n', 0777, true);
-        mkdir($dir . '/junit');
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
-            throw new \RuntimeException('Unable to find the PHP executable.');
+            throw new RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
+        $this->tempDir = $dir;
         $this->phpBin = $php;
     }
 
@@ -91,7 +103,7 @@ class FeatureContext implements Context
      */
     public function aFileNamedWith($filename, PyStringNode $content)
     {
-        $content = strtr((string) $content, array("'''" => '"""'));
+        $content = strtr((string) $content, ["'''" => '"""']);
         $this->createFile($this->workingDir . '/' . $filename, $content);
     }
 
@@ -168,29 +180,60 @@ EOL;
     }
 
     /**
-     * Sets specified ENV variable
+     * Sets specified ENV variable.
      *
      * @When /^the "([^"]*)" environment variable is set to "([^"]*)"$/
      */
     public function iSetEnvironmentVariable($name, $value)
     {
-        $this->env = array($name => (string) $value);
+        $this->env = [$name => (string) $value];
     }
 
     /**
-     * Sets the BEHAT_PARAMS env variable
+     * Sets the BEHAT_PARAMS env variable.
      *
      * @When /^"BEHAT_PARAMS" environment variable is set to:$/
-     *
-     * @param PyStringNode $value
      */
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value)
     {
-        $this->env = array('BEHAT_PARAMS' => (string) $value);
+        $this->env = ['BEHAT_PARAMS' => (string) $value];
     }
 
     /**
-     * Runs behat command with provided parameters
+     * @When I set the working directory to the :dir fixtures folder
+     */
+    public function iSetTheWorkingDirectoryToTheFixturesFolder($dir): void
+    {
+        $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
+        $dir = $basePath . $dir;
+        if (!is_dir($dir)) {
+            throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
+        }
+        $this->workingDir = $dir;
+        $this->workingDirChanged = true;
+    }
+
+    #[Given('I clear the default behat options')]
+    public function iClearTheDefaultBehatOptions(): void
+    {
+        $this->options = '';
+    }
+
+    #[Given('I provide the following options for all behat invocations:')]
+    public function iProvideTheFollowingOptionsForAllBehatInvocations(TableNode $table): void
+    {
+        $this->addBehatOptions($table);
+    }
+
+    #[When('I run behat with the following additional options:')]
+    public function iRunBehatWithTheFollowingAdditionalOptions(TableNode $table): void
+    {
+        $this->addBehatOptions($table);
+        $this->iRunBehat();
+    }
+
+    /**
+     * Runs behat command with provided parameters.
      *
      * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
      *
@@ -198,14 +241,14 @@ EOL;
      */
     public function iRunBehat($argumentsString = '')
     {
-        $argumentsString = strtr($argumentsString, array('\'' => '"'));
+        $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
         $cmd = sprintf(
             '%s %s %s %s',
             $this->phpBin,
             escapeshellarg(BEHAT_BIN_PATH),
             $argumentsString,
-            strtr($this->options, array('\'' => '"', '"' => '\"'))
+            strtr($this->options, ['\'' => '"', '"' => '\"'])
         );
 
         $this->process = Process::fromShellCommandline($cmd);
@@ -230,7 +273,7 @@ EOL;
     }
 
     /**
-     * Runs behat command with provided parameters in interactive mode
+     * Runs behat command with provided parameters in interactive mode.
      *
      * @When /^I answer "([^"]+)" when running "behat(?: ((?:\"|[^"])*))?"$/
      *
@@ -248,7 +291,7 @@ EOL;
     }
 
     /**
-     * Runs behat command in debug mode
+     * Runs behat command in debug mode.
      *
      * @When /^I run behat in debug mode$/
      */
@@ -267,8 +310,30 @@ EOL;
      */
     public function itShouldPassOrFailWith($success, PyStringNode $text)
     {
-        $this->theOutputShouldContain($text);
-        $this->itShouldPassOrFail($success);
+        $isCorrect = $this->exitCodeIsCorrect($success);
+
+        $outputMessage = [];
+        $hasError = false;
+
+        if (!$isCorrect) {
+            $hasError = true;
+            $outputMessage[] = 'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode();
+        } else {
+            $outputMessage[] = 'Command did ' . strtoupper($success) . ' as expected.';
+        }
+
+        if (!str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
+            $hasError = true;
+            $outputMessage[] = $this->getOutputDiff($text);
+        } else {
+            $outputMessage[] = 'Output is as expected.';
+        }
+
+        if ($hasError) {
+            throw new UnexpectedValueException(
+                implode(PHP_EOL . PHP_EOL, $outputMessage)
+            );
+        }
     }
 
     /**
@@ -309,7 +374,7 @@ EOL;
     /**
      * Checks whether specified content and structure of the xml is correct without worrying about layout.
      *
-     * @Then /^"([^"]*)" file xml should be like:$/
+     * @Then /^(?:the\s)?"([^"]*)" file xml should be like:$/
      *
      * @param string       $path file path
      * @param PyStringNode $text file content
@@ -317,6 +382,46 @@ EOL;
     public function fileXmlShouldBeLike($path, PyStringNode $text)
     {
         $path = $this->workingDir . '/' . $path;
+        $this->checkXmlFileContents($path, $text);
+    }
+
+    #[When('I copy the :file file to the temp folder')]
+    public function iCopyTheFileToTheTempFolder($file): void
+    {
+        $origin = $this->workingDir . '/' . $file;
+        $destination = $this->tempDir . '/' . $file;
+        copy($origin, $destination);
+    }
+
+    #[Then('the temp :file file should be like:')]
+    public function theTempFileShouldBeLike($file, PyStringNode $string): void
+    {
+        $path = $this->tempDir . '/' . $file;
+        Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+
+        Assert::assertSame($string->getRaw(), $fileContent);
+    }
+
+    #[Then('the temp :file file should have been removed')]
+    public function theTempFileShouldHaveBeenRemoved($file): void
+    {
+        $path = $this->tempDir . '/' . $file;
+        Assert::assertFileDoesNotExist($path);
+    }
+
+    /**
+     * @Then the temp :path file xml should be like:
+     */
+    public function theTempFileFileXmlShouldBeLike($path, PyStringNode $text): void
+    {
+        $path = $this->tempDir . '/' . $path;
+        $this->checkXmlFileContents($path, $text);
+    }
+
+    private function checkXmlFileContents($path, PyStringNode $text)
+    {
         Assert::assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
@@ -333,7 +438,6 @@ EOL;
         Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
     }
 
-
     /**
      * Checks whether last command output contains provided string.
      *
@@ -343,41 +447,64 @@ EOL;
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        Assert::assertStringContainsString($this->getExpectedOutput($text), $this->getOutput());
+        if (str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
+            return;
+        }
+
+        throw new UnexpectedValueException(
+            $this->getOutputDiff($text)
+        );
     }
 
     private function getExpectedOutput(PyStringNode $expectedText)
     {
-        $text = strtr($expectedText, array(
+        $text = strtr($expectedText, [
             '\'\'\'' => '"""',
             '%%TMP_DIR%%' => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
             '%%WORKING_DIR%%' => realpath($this->workingDir . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR,
             '%%DS%%' => DIRECTORY_SEPARATOR,
-        ));
+        ]);
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/[ "]features\/[^\n "]+/', function ($matches) {
+                '/[ "]features\/[^\n "]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
             $text = preg_replace_callback(
-                '/\<span class\="path"\>features\/[^\<]+/', function ($matches) {
+                '/\<span class\="path"\>features\/[^\<]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
             $text = preg_replace_callback(
-                '/\+[fd] [^ ]+/', function ($matches) {
+                '/\+[fd] [^ ]+/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
             );
 
             // error stacktrace
             $text = preg_replace_callback(
-                '/#\d+ [^:]+:/', function ($matches) {
+                '/#\d+ [^:]+:/',
+                function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                }, $text
+                },
+                $text
+            );
+
+            // texts with absolute paths
+            $text = preg_replace_callback(
+                '/\{BASE_PATH\}[^\n "]+/',
+                function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                },
+                $text
             );
         }
 
@@ -389,25 +516,18 @@ EOL;
      *
      * @Then /^it should (fail|pass)$/
      *
-     * @param 'pass'|'fail' $success  
+     * @param 'pass'|'fail' $success
      */
     public function itShouldPassOrFail($success)
     {
-        $is_correct = match($success) {
-            'fail' => 0 !== $this->getExitCode(),
-            'pass' => 0 === $this->getExitCode(),
-       };
-     
-       if ($is_correct) {
-          return;
-       }
-    
-       throw new UnexpectedValueException(
-            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode() . PHP_EOL
-            . PHP_EOL
-            . '##### Actual output #####' . PHP_EOL
-            . '> ' . str_replace(PHP_EOL, PHP_EOL  .  '> ', $this->getOutput()) . PHP_EOL
-            . '##### End of output #####'
+        $isCorrect = $this->exitCodeIsCorrect($success);
+
+        if ($isCorrect) {
+            return;
+        }
+
+        throw new UnexpectedValueException(
+            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode()
         );
     }
 
@@ -421,8 +541,23 @@ EOL;
      */
     public function xmlShouldBeValid($xmlFile, $schemaPath)
     {
-        $dom = new DomDocument();
-        $dom->load($this->workingDir . '/' . $xmlFile);
+        $path = $this->workingDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    /**
+     * @Then the temp file :xmlFile should be a valid document according to :schemaPath
+     */
+    public function theTempFileShouldBeAValidDocumentAccordingTo($xmlFile, $schemaPath): void
+    {
+        $path = $this->tempDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
+    {
+        $dom = new DOMDocument();
+        $dom->load($xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
     }
@@ -432,7 +567,7 @@ EOL;
         return $this->process->getExitCode();
     }
 
-    private function getOutput()
+    private function getOutput(): string
     {
         $output = $this->process->getErrorOutput() . $this->process->getOutput();
 
@@ -442,20 +577,27 @@ EOL;
         }
 
         // Remove location of the project
-        $output = str_replace(realpath(dirname(dirname(__DIR__))).DIRECTORY_SEPARATOR, '', $output);
+        $output = str_replace(
+            realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR,
+            '{BASE_PATH}',
+            $output
+        );
 
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
 
         // replace error messages that changed in PHP8
-        $output = str_replace('Warning: Undefined array key','Notice: Undefined offset:', $output);
+        $output = str_replace('Warning: Undefined array key', 'Notice: Undefined offset:', $output);
         $output = preg_replace('/Class "([^"]+)" not found/', 'Class \'$1\' not found', $output);
 
-        return trim(preg_replace("/ +$/m", '', $output));
+        return trim(preg_replace('/ +$/m', '', $output));
     }
 
     private function createFile($filename, $content)
     {
+        if ($this->workingDirChanged) {
+            throw new RuntimeException('Trying to write a file in a fixtures folder');
+        }
         $path = dirname($filename);
         $this->createDirectory($path);
 
@@ -471,12 +613,30 @@ EOL;
 
     private function moveToNewPath($path)
     {
-        $newWorkingDir = $this->workingDir .'/' . $path;
+        $newWorkingDir = $this->workingDir . '/' . $path;
         if (!file_exists($newWorkingDir)) {
             mkdir($newWorkingDir, 0777, true);
         }
 
         $this->workingDir = $newWorkingDir;
+    }
+
+    /**
+     * @param 'fail'|'pass' $success
+     */
+    private function exitCodeIsCorrect(string $success): bool
+    {
+        return match ($success) {
+            'fail' => 0 !== $this->getExitCode(),
+            'pass' => 0 === $this->getExitCode(),
+        };
+    }
+
+    private function getOutputDiff(PyStringNode $expectedText): string
+    {
+        $differ = new Differ(new DiffOnlyOutputBuilder());
+
+        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
     private static function clearDirectory($path)
@@ -493,7 +653,22 @@ EOL;
                 unlink($file);
             }
         }
+    }
 
-        rmdir($path);
+    private function addBehatOptions(TableNode $table): void
+    {
+        $rows = $table->getHash();
+        foreach ($rows as $row) {
+            $option = $row['option'];
+            $value = $row['value'];
+            if ($value !== '') {
+                if (str_starts_with($value, '{SYSTEM_TMP_DIR}')) {
+                    $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
+                }
+
+                $option .= '=' . $value;
+            }
+            $this->options .= ' ' . $option;
+        }
     }
 }

@@ -19,9 +19,6 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class SoftInterpretation implements ResultInterpretation
 {
-    /**
-     * {@inheritdoc}
-     */
     public function isFailure(TestResult $result)
     {
         return TestResult::FAILED <= $result->getResultCode();

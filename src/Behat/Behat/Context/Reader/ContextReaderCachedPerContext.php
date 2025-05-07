@@ -26,21 +26,16 @@ final class ContextReaderCachedPerContext implements ContextReader
     /**
      * @var array[]
      */
-    private $cachedCallees = array();
+    private $cachedCallees = [];
 
     /**
      * Initializes reader.
-     *
-     * @param ContextReader $childReader
      */
     public function __construct(ContextReader $childReader)
     {
         $this->childReader = $childReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         if (isset($this->cachedCallees[$contextClass])) {
@@ -48,7 +43,8 @@ final class ContextReaderCachedPerContext implements ContextReader
         }
 
         return $this->cachedCallees[$contextClass] = $this->childReader->readContextCallees(
-            $environment, $contextClass
+            $environment,
+            $contextClass
         );
     }
 }

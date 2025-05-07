@@ -34,23 +34,20 @@ class EnvironmentCall implements Call
      */
     private $arguments;
     /**
-     * @var null|integer
+     * @var int|null
      */
     private $errorReportingLevel;
 
     /**
      * Initializes call.
      *
-     * @param Environment  $environment
-     * @param Callee       $callee
-     * @param array        $arguments
-     * @param null|integer $errorReportingLevel
+     * @param int|null $errorReportingLevel
      */
     public function __construct(
         Environment $environment,
         Callee $callee,
         array $arguments,
-        $errorReportingLevel = null
+        $errorReportingLevel = null,
     ) {
         $this->environment = $environment;
         $this->callee = $callee;
@@ -68,33 +65,21 @@ class EnvironmentCall implements Call
         return $this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getCallee()
     {
         return $this->callee;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getBoundCallable()
     {
         return $this->environment->bindCallee($this->callee);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getArguments()
     {
         return $this->arguments;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getErrorReportingLevel()
     {
         return $this->errorReportingLevel;
