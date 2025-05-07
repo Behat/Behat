@@ -4,63 +4,14 @@ Feature: Path filters
   I need Behat to support path(s) filtering
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^Some slow step N(\d+)$/')]
-          public function someSlowStepN($num) {}
-
-          #[Given('/^Some normal step N(\d+)$/')]
-          public function someNormalStepN($num) {}
-
-          #[Given('/^Some fast step N(\d+)$/')]
-          public function someFastStepN($num) {}
-      }
-     """
-    And a file named "features/a/feature1.feature" with:
-      """
-      Feature: First Feature
-
-        Scenario: First Scenario
-          Given Some slow step N12
-          And Some normal step N13
-
-        Scenario: Second Scenario
-          Given Some fast step N14
-      """
-    And a file named "features/a/feature2.feature" with:
-      """
-      Feature: Second Feature
-
-        Background:
-          Given Some normal step N21
-
-        Scenario: First Scenario
-          Given Some slow step N22
-          And Some fast step N23
-      """
-    And a file named "features/b/feature1.feature" with:
-      """
-      Feature: Third Feature
-
-        Scenario: First Scenario
-          Given Some fast step N14
-
-        Scenario: Second Scenario
-          Given Some fast step N14
-          And Some fast step N14
-      """
+    Given I set the working directory to the "PathFilters" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value   |
+      | --no-colors |         |
+      | --format    | pretty  |
 
   Scenario: First feature file only
-    When I run "behat --no-colors -f pretty features/a/feature1.feature"
+    When I run "behat features/a/feature1.feature"
     Then it should pass with:
       """
       Feature: First Feature
@@ -77,7 +28,7 @@ Feature: Path filters
       """
 
   Scenario: Second feature file only
-    When I run "behat --no-colors -f pretty features/a/feature2.feature"
+    When I run "behat features/a/feature2.feature"
     Then it should pass with:
       """
       Feature: Second Feature
@@ -94,7 +45,7 @@ Feature: Path filters
       """
 
   Scenario: Both feature files
-    When I run "behat --no-colors -f pretty features/a/feature1.feature features/a/feature2.feature"
+    When I run "behat features/a/feature1.feature features/a/feature2.feature"
     Then it should pass with:
       """
       Feature: First Feature
@@ -120,7 +71,7 @@ Feature: Path filters
       """
 
     Scenario: Single nested directory
-      When I run "behat --no-colors -f pretty features/a"
+      When I run "behat features/a"
       Then it should pass with:
       """
       Feature: First Feature
@@ -146,7 +97,7 @@ Feature: Path filters
       """
 
   Scenario: Directory with nested directories
-    When I run "behat --no-colors -f pretty features"
+    When I run "behat features"
     Then it should pass with:
       """
       Feature: First Feature
@@ -181,7 +132,7 @@ Feature: Path filters
       """
 
     Scenario: Single scenario from single feature file
-      When I run "behat --no-colors -f pretty features/a/feature1.feature:7"
+      When I run "behat features/a/feature1.feature:7"
       Then it should pass with:
       """
       Feature: First Feature
@@ -194,7 +145,7 @@ Feature: Path filters
       """
 
   Scenario: Single scenario from each feature file
-    When I run "behat --no-colors -f pretty features/a/feature1.feature:7 features/a/feature2.feature:6"
+    When I run "behat features/a/feature1.feature:7 features/a/feature2.feature:6"
     Then it should pass with:
       """
       Feature: First Feature
