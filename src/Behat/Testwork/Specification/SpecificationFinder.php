@@ -56,11 +56,10 @@ final class SpecificationFinder
      * Finds all specifications for all provided suites matching provided locator and wraps them into a spec iterator.
      *
      * @param Suite[]     $suites
-     * @param string|null $locator
      *
      * @return list<SpecificationIterator<T>>
      */
-    public function findSuitesSpecifications(array $suites, $locator = null)
+    public function findSuitesSpecifications(array $suites, ?string $locator = null)
     {
         $iterators = [];
         foreach ($suites as $suite) {

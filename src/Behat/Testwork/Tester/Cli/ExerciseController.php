@@ -87,8 +87,8 @@ final class ExerciseController implements Controller
         $command
             ->addArgument(
                 'paths',
-                InputArgument::OPTIONAL,
-                'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
+                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+                'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples,
             )
             ->addOption(
                 '--dry-run',
@@ -109,16 +109,17 @@ final class ExerciseController implements Controller
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $specs = $this->findSpecifications($input);
+        $paths = $this->extractUniquePaths($input);
+        $specs = $this->findSpecifications($paths);
         $result = $this->testSpecifications($input, $specs);
 
-        if ($input->getArgument('paths') && !$input->getOption('allow-no-tests') && TestResults::NO_TESTS === $result->getResultCode()) {
+        if ($paths !== null && !$input->getOption('allow-no-tests') && TestResults::NO_TESTS === $result->getResultCode()) {
             throw new WrongPathsException(
                 sprintf(
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
-                    $input->getArgument('paths')
+                    implode(', ', $paths)
                 ),
-                $input->getArgument('paths')
+                implode(', ', $paths)
             );
         }
 
@@ -128,11 +129,24 @@ final class ExerciseController implements Controller
     /**
      * Finds exercise specifications.
      *
+     * @param list<string>|null $paths
+     *
      * @return SpecificationIterator[]
      */
-    private function findSpecifications(InputInterface $input)
+    private function findSpecifications(?array $paths): array
     {
-        return $this->findSuitesSpecifications($this->getAvailableSuites(), $input->getArgument('paths'));
+        $availableSuites = $this->getAvailableSuites();
+        if ($paths === null) {
+            return $this->findSuitesSpecifications($availableSuites, null);
+        }
+
+        $specifications = [];
+
+        foreach ($paths as $path) {
+            $specifications = array_merge($specifications, $this->findSuitesSpecifications($availableSuites, $path));
+        }
+
+        return $specifications;
     }
 
     /**
@@ -170,12 +184,24 @@ final class ExerciseController implements Controller
      * Finds specification iterators for all provided suites using locator.
      *
      * @param Suite[]     $suites
-     * @param string|null $locator
      *
      * @return SpecificationIterator[]
      */
-    private function findSuitesSpecifications($suites, $locator)
+    private function findSuitesSpecifications(array $suites, ?string $locator): array
     {
         return $this->specificationFinder->findSuitesSpecifications($suites, $locator);
+    }
+
+    /**
+     * Extracts unique paths from input argument. Returns null if no paths were supplied.
+     */
+    private function extractUniquePaths(InputInterface $input): ?array
+    {
+        $paths = $input->getArgument('paths') ?: null;
+        if ($paths === null) {
+            return null;
+        }
+
+        return array_values(array_unique($paths));
     }
 }

@@ -97,7 +97,7 @@ final class RerunController implements Controller
             return null;
         }
 
-        $input->setArgument('paths', $this->getFileName());
+        $input->setArgument('paths', [$this->getFileName()]);
 
         return null;
     }
@@ -155,7 +155,7 @@ final class RerunController implements Controller
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .
             $input->getOption('role') .
-            $input->getArgument('paths') .
+            \implode($input->getArgument('paths')) .
             $this->basepath
         );
     }
