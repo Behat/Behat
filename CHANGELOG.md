@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.16.1] - 2025-05-07
+
+### Changed
+
+* Remove dependency on file location in Gherkin package. The (internal) service container parameters gherkin.paths.lib
+  and gherkin.paths.i18n are no longer defined or used. Minimum behat/gherkin version is now ^4.12.0.
+  By @carlos-granados in #1604, backported from 3.20.0 to fix errors for users stuck on 3.16.0 due to
+  dependency conflicts.
+
 ## [3.22.0] - 2025-05-05
 
 ### Changed
@@ -1271,6 +1280,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [3.18.1]: https://github.com/Behat/Behat/compare/v3.18.0...v3.18.1
 [3.18.0]: https://github.com/Behat/Behat/compare/v3.17.0...v3.18.0
 [3.17.0]: https://github.com/Behat/Behat/compare/v3.16.0...v3.17.0
+[3.16.1]: https://github.com/Behat/Behat/compare/v3.16.0...v3.16.1
 [3.16.0]: https://github.com/Behat/Behat/compare/v3.15.0...v3.16.0
 [3.15.0]: https://github.com/Behat/Behat/compare/v3.14.0...v3.15.0
 [3.14.0]: https://github.com/Behat/Behat/compare/v3.13.0...v3.14.0
