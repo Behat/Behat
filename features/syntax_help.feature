@@ -44,34 +44,34 @@ Feature: Syntax helpers
       """
       <?php class FeatureContext implements Behat\Behat\Context\Context {}
       """
-    When I run "behat --no-colors --story-syntax --lang ru"
+    When I run "behat --no-colors --story-syntax --lang el"
     Then the output should contain:
       """
-      # language: ru
-      [Функциональность|Функционал|Свойство|Функция]: Internal operations
+      # language: el
+      [Δυνατότητα|Λειτουργία]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
 
-        [Предыстория|Контекст]:
-          [Допустим|Пусть|Дано|*] there is agent A
-          [К тому же|Также|*|И] there is agent B
+        Υπόβαθρο:
+          [Δεδομένου|*] there is agent A
+          [Και|*] there is agent B
 
-        [Сценарий|Пример]: Erasing agent memory
-          [Допустим|Пусть|Дано|*] there is agent J
-          [К тому же|Также|*|И] there is agent K
-          [Когда|Если|*] I erase agent K's memory
-          [Затем|Тогда|То|*] there should be agent J
-          [Иначе|Но|*|А] there should not be agent K
+        [Παράδειγμα|Σενάριο]: Erasing agent memory
+          [Δεδομένου|*] there is agent J
+          [Και|*] there is agent K
+          [Όταν|*] I erase agent K's memory
+          [Τότε|*] there should be agent J
+          [Αλλά|*] there should not be agent K
 
-        [Структура сценария|Шаблон сценария]: Erasing other agents' memory
-          [Допустим|Пусть|Дано|*] there is agent <agent1>
-          [К тому же|Также|*|И] there is agent <agent2>
-          [Когда|Если|*] I erase agent <agent2>'s memory
-          [Затем|Тогда|То|*] there should be agent <agent1>
-          [Иначе|Но|*|А] there should not be agent <agent2>
+        [Περίγραμμα Σεναρίου|Περιγραφή Σεναρίου]: Erasing other agents' memory
+          [Δεδομένου|*] there is agent <agent1>
+          [Και|*] there is agent <agent2>
+          [Όταν|*] I erase agent <agent2>'s memory
+          [Τότε|*] there should be agent <agent1>
+          [Αλλά|*] there should not be agent <agent2>
 
-          Примеры:
+          [Παραδείγματα|Σενάρια]:
             | agent1 | agent2 |
             | D      | M      |
       """
