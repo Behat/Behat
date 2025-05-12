@@ -43,7 +43,7 @@ final class PrettyPathPrinter
         ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
         $this->widthCalculator = $widthCalculator;
-        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false, editorUrl: null);
     }
 
     /**
@@ -61,7 +61,7 @@ final class PrettyPathPrinter
             return;
         }
 
-        $fileAndLine = sprintf('%s:%s', $this->configurablePathPrinter->processPathsInText($feature->getFile()), $scenario->getLine());
+        $fileAndLine = $this->configurablePathPrinter->processPathsInText(sprintf('%s:%s', $feature->getFile(), $scenario->getLine()));
         $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario, $indentation);
         $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation, 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));

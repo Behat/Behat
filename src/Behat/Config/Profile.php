@@ -30,6 +30,7 @@ final class Profile implements ConfigConverterInterface
     private const PRINT_UNUSED_DEFINITIONS_SETTING = 'print_unused_definitions';
     private const PATH_OPTIONS_SETTING = 'path_options';
     private const PRINT_ABSOLUTE_PATHS_SETTING = 'print_absolute_paths';
+    private const EDITOR_URL_SETTING = 'editor_url';
 
     private const DISABLE_FORMATTER_FUNCTION = 'disableFormatter';
     private const FORMATTER_FUNCTION = 'withFormatter';
@@ -39,6 +40,7 @@ final class Profile implements ConfigConverterInterface
     private const SUITE_FUNCTION = 'withSuite';
     private const PATH_OPTIONS_FUNCTION = 'withPathOptions';
     private const PRINT_ABSOLUTE_PATHS_PARAMETER = 'printAbsolutePaths';
+    private const EDITOR_URL_PARAMETER = 'editorUrl';
     private const TESTER_OPTIONS_FUNCTION = 'withTesterOptions';
 
     public function __construct(
@@ -106,9 +108,13 @@ final class Profile implements ConfigConverterInterface
         return $this;
     }
 
-    public function withPathOptions(bool $printAbsolutePaths): self
+    public function withPathOptions(bool $printAbsolutePaths = false, ?string $editorUrl = null): self
     {
         $this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING] = $printAbsolutePaths;
+
+        if ($editorUrl !== null) {
+            $this->settings[self::PATH_OPTIONS_SETTING][self::EDITOR_URL_SETTING] = $editorUrl;
+        }
 
         return $this;
     }
@@ -244,18 +250,34 @@ final class Profile implements ConfigConverterInterface
 
     private function addPathOptionsToExpr(Expr &$expr): void
     {
-        if (!isset($this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING])) {
-            return;
+        $args = [
+            self::PRINT_ABSOLUTE_PATHS_PARAMETER => false,
+            self::EDITOR_URL_PARAMETER => null,
+        ];
+        $settingsPerParameter = [
+            self::PRINT_ABSOLUTE_PATHS_PARAMETER => self::PRINT_ABSOLUTE_PATHS_SETTING,
+            self::EDITOR_URL_PARAMETER => self::EDITOR_URL_SETTING,
+        ];
+        $settingFound = false;
+        foreach ($settingsPerParameter as $parameter => $setting) {
+            if (isset($this->settings[self::PATH_OPTIONS_SETTING][$setting])) {
+                $args[$parameter] = $this->settings[self::PATH_OPTIONS_SETTING][$setting];
+                unset($this->settings[self::PATH_OPTIONS_SETTING][$setting]);
+                $settingFound = true;
+            }
         }
-        $expr = ConfigConverterTools::addMethodCall(
-            self::class,
-            self::PATH_OPTIONS_FUNCTION,
-            [self::PRINT_ABSOLUTE_PATHS_PARAMETER => $this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING]],
-            $expr
-        );
-        unset($this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING]);
-        if ($this->settings[self::PATH_OPTIONS_SETTING] === []) {
-            unset($this->settings[self::PATH_OPTIONS_SETTING]);
+
+        if ($settingFound) {
+            $expr = ConfigConverterTools::addMethodCall(
+                self::class,
+                self::PATH_OPTIONS_FUNCTION,
+                $args,
+                $expr
+            );
+
+            if ($this->settings[self::PATH_OPTIONS_SETTING] === []) {
+                unset($this->settings[self::PATH_OPTIONS_SETTING]);
+            }
         }
     }
 

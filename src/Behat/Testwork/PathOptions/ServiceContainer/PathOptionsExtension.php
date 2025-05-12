@@ -14,6 +14,7 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -38,17 +39,22 @@ final class PathOptionsExtension implements Extension
 
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
+        $builder = $builder
             ->addDefaultsIfNotSet()
             ->children()
             ->scalarNode('print_absolute_paths')
             ->defaultFalse()
+            ->end();
+        assert($builder instanceof NodeBuilder);
+        $builder
+            ->scalarNode('editor_url')
+            ->defaultNull()
         ;
     }
 
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadConfigurablePathPrinter($container, $config['print_absolute_paths']);
+        $this->loadConfigurablePathPrinter($container, $config['print_absolute_paths'], $config['editor_url'] ?? null);
         $this->loadPathOptionsController($container);
     }
 
@@ -56,11 +62,12 @@ final class PathOptionsExtension implements Extension
     {
     }
 
-    private function loadConfigurablePathPrinter(ContainerBuilder $container, bool $printAbsolutePaths): void
+    private function loadConfigurablePathPrinter(ContainerBuilder $container, bool $printAbsolutePaths, ?string $editorUrl): void
     {
         $definition = new Definition('Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter', [
             '%paths.base%',
             $printAbsolutePaths,
+            $editorUrl,
         ]);
         $container->setDefinition(self::CONFIGURABLE_PATH_PRINTER_ID, $definition);
     }
