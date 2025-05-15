@@ -13,6 +13,9 @@ namespace Behat\Behat\Definition\Context\Attribute;
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Definition\Call;
+use Behat\Behat\Definition\Call\Given;
+use Behat\Behat\Definition\Call\Then;
+use Behat\Behat\Definition\Call\When;
 use Behat\Step as Attribute;
 use ReflectionAttribute;
 use ReflectionMethod;
@@ -28,9 +31,9 @@ final class DefinitionAttributeReader implements AttributeReader
      * @var array<class-string<Attribute\Definition>, class-string<Call\RuntimeDefinition>>
      */
     private static $attributeToCallMap = [
-        Attribute\Given::class => Call\Given::class,
-        Attribute\When::class => Call\When::class,
-        Attribute\Then::class => Call\Then::class,
+        Attribute\Given::class => Given::class,
+        Attribute\When::class => When::class,
+        Attribute\Then::class => Then::class,
     ];
 
     /**

@@ -11,7 +11,6 @@
 namespace Behat\Testwork\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Extends Symfony2 event dispatcher with catch-all listeners.

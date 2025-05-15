@@ -11,6 +11,8 @@
 namespace Behat\Testwork\Exception\Stringer;
 
 use Exception;
+use PHPUnit\Framework\TestFailure;
+use PHPUnit\Util\ThrowableToStringMapper;
 use PHPUnit_Framework_Exception;
 use PHPUnit_Framework_TestFailure;
 use Throwable;
@@ -59,17 +61,14 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
         // * Contribute a PR to Behat to add support for the newer PHPUnit version :)
 
         try {
-            // Class names are intentionally fully qualified here to maximise clarity - particularly because a future
-            // PHPUnit version may reuse a class name in a different namespace.
-
-            if (class_exists(\PHPUnit\Util\ThrowableToStringMapper::class)) {
+            if (class_exists(ThrowableToStringMapper::class)) {
                 // PHPUnit 10.0.0 onwards
-                return trim(\PHPUnit\Util\ThrowableToStringMapper::map($exception));
+                return trim(ThrowableToStringMapper::map($exception));
             }
 
-            if (class_exists(\PHPUnit\Framework\TestFailure::class)) {
+            if (class_exists(TestFailure::class)) {
                 // PHPUnit 6.0.0 - 9.x
-                return trim(\PHPUnit\Framework\TestFailure::exceptionToString($exception));
+                return trim(TestFailure::exceptionToString($exception));
             }
 
             if (class_exists(PHPUnit_Framework_TestFailure::class)) {
