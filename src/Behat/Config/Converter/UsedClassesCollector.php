@@ -3,6 +3,9 @@
 namespace Behat\Config\Converter;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\NodeVisitorAbstract;
 
 class UsedClassesCollector extends NodeVisitorAbstract
@@ -14,13 +17,13 @@ class UsedClassesCollector extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?Node
     {
-        if ($node instanceof Node\Name\FullyQualified) {
+        if ($node instanceof FullyQualified) {
             return $this->importClass($node);
         }
 
-        if ($node instanceof Node\Expr\ClassConstFetch && $node->class instanceof Node\Name) {
+        if ($node instanceof ClassConstFetch && $node->class instanceof Name) {
             // E.g. a `MyClass::class` argument
-            return new Node\Expr\ClassConstFetch(
+            return new ClassConstFetch(
                 $this->importClass($node->class),
                 $node->name,
                 $node->getAttributes(),
@@ -30,14 +33,14 @@ class UsedClassesCollector extends NodeVisitorAbstract
         return null;
     }
 
-    private function importClass(Node\Name $node): Node\Name
+    private function importClass(Name $node): Name
     {
         $className = $node->toString();
         $shortName = $node->getLast();
 
         $this->usedClasses[$shortName] = $className;
 
-        return new Node\Name($shortName);
+        return new Name($shortName);
     }
 
     /**
