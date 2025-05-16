@@ -47,7 +47,7 @@ final class ExceptionPresenter
         // The ConfigurablePathPrinter requires a value, but it is not used if printAbsolutePaths is true.
         // Therefore, if the user provided null we can safely cast to '' (the working directory) and tell the printer
         // to show absolute paths.
-        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath ?? '', printAbsolutePaths: $basePath === null);
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath ?? '', printAbsolutePaths: $basePath === null, editorUrl: null);
     }
 
     /**

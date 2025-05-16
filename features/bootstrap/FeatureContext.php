@@ -500,7 +500,16 @@ EOL;
 
             // texts with absolute paths
             $text = preg_replace_callback(
-                '/\{BASE_PATH\}[^\n "]+/',
+                '/\{BASE_PATH\}[^\n \<"]+/',
+                function ($matches) {
+                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
+                },
+                $text
+            );
+
+            // texts in editor URLs
+            $text = preg_replace_callback(
+                '/open\?file[^\<"]+/',
                 function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 },

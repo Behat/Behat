@@ -1,3 +1,6 @@
 default:
     path_options:
         print_absolute_paths: true
+with_editor_url:
+    path_options:
+        editor_url: phpstorm://open?file={relPath}&line={line}

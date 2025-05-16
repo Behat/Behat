@@ -430,7 +430,9 @@ Feature: Convert config
 
       return (new Config())
           ->withProfile((new Profile('default'))
-              ->withPathOptions(printAbsolutePaths: true));
+              ->withPathOptions(printAbsolutePaths: true))
+          ->withProfile((new Profile('with_editor_url'))
+              ->withPathOptions(editorUrl: 'phpstorm://open?file={relPath}&line={line}'));
       """
     And the temp "path_options.yaml" file should have been removed
 
@@ -502,7 +504,10 @@ Feature: Convert config
               ->withFilter(new NameFilter('john'))
               ->withFilter(new RoleFilter('admin'))
               ->withPrintUnusedDefinitions()
-              ->withPathOptions(printAbsolutePaths: true)
+              ->withPathOptions(
+                  printAbsolutePaths: true,
+                  editorUrl: 'phpstorm://open?file={relPath}&line={line}'
+              )
               ->withTesterOptions((new TesterOptions())
                   ->withStrictResultInterpretation())
               ->withExtension(new Extension('custom_extension.php'))

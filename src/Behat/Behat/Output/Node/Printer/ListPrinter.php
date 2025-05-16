@@ -61,7 +61,7 @@ final class ListPrinter
     ) {
         $this->resultConverter = $resultConverter;
         $this->translator = $translator;
-        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false);
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false, editorUrl: null);
     }
 
     /**
@@ -285,12 +285,12 @@ final class ListPrinter
                 ),
                 $scope instanceof BeforeScenarioScope,
                 $scope instanceof AfterScenarioScope => $this->configurablePathPrinter->processPathsInText(
-                    $scope->getFeature()->getFile()
-                ) . ':' . $scope->getScenario()->getLine(),
+                    $scope->getFeature()->getFile() . ':' . $scope->getScenario()->getLine()
+                ),
                 $scope instanceof BeforeStepScope,
                 $scope instanceof AfterStepScope => $this->configurablePathPrinter->processPathsInText(
-                    $scope->getFeature()->getFile()
-                ) . ':' . $scope->getStep()->getLine(),
+                    $scope->getFeature()->getFile() . ':' . $scope->getStep()->getLine()
+                ),
                 default => null,
             };
         }

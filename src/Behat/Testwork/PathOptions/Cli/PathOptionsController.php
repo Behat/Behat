@@ -36,22 +36,31 @@ class PathOptionsController implements Controller
                 '--print-absolute-paths', null, InputOption::VALUE_NONE,
                 'Print absolute paths in output'
             )
+            ->addOption(
+                '--editor-url', null, InputOption::VALUE_REQUIRED,
+                'URL template for opening files in an editor'
+            )
         ;
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $printAbsolutePaths = $input->getOption('print-absolute-paths');
+        $editorUrl = $input->getOption('editor-url');
 
-        $this->configurePrintPaths($printAbsolutePaths);
+        $this->configurePrintPaths($printAbsolutePaths, $editorUrl);
 
         return null;
     }
 
-    private function configurePrintPaths(bool $printAbsolutePaths): void
+    private function configurePrintPaths(bool $printAbsolutePaths, ?string $editorUrl): void
     {
         if ($printAbsolutePaths) {
             $this->configurablePathPrinter->setPrintAbsolutePaths($printAbsolutePaths);
+        }
+
+        if ($editorUrl !== null) {
+            $this->configurablePathPrinter->setEditorUrl($editorUrl);
         }
     }
 }
