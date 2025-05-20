@@ -99,8 +99,6 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
 
     /**
      * Adds attributes to the current <testcase> node.
-     *
-     * @param array $testcaseAttributes
      */
     public function addCurrentTestCaseAttributes(array $testcaseAttributes)
     {
