@@ -6,6 +6,9 @@ namespace Behat\Config\Converter;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
+use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use PhpParser\Node\Expr\BitwiseNot;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
@@ -153,7 +156,7 @@ class ConfigConverterTools
         // the bit may still be set in the error_reporting integer in a user's YAML file.
         // Since 8.0, PHP cannot actually ever trigger an E_STRICT error, so the setting of the bit
         // is actually irrelevant and we can safely ignore it.
-        $value = $value & ~2048;
+        $value &= ~2048;
 
         if ($value === (E_ALL & ~2048)) {
             // The value is equivalent to E_ALL (with or without the E_STRICT bit set, it doesn't matter).
@@ -169,7 +172,7 @@ class ConfigConverterTools
         $flagsOn = $flagsOff = [];
         $remainingValue = $value;
         foreach (self::listErrorLevelConstants() as $constName => $constValue) {
-            $remainingValue = $remainingValue & ~$constValue;
+            $remainingValue &= ~$constValue;
 
             if ($value & $constValue) {
                 $flagsOn[] = $builderFactory->constFetch($constName);
@@ -186,9 +189,9 @@ class ConfigConverterTools
 
         if (count($flagsOff) < count($flagsOn)) {
             // Most flags are on, it will be more readable and future-proof to start from E_ALL and negate
-            return new Expr\BinaryOp\BitwiseAnd(
+            return new BitwiseAnd(
                 $builderFactory->constFetch('E_ALL'),
-                new Expr\BitwiseNot(self::buildBitwiseFlagExpression(...$flagsOff)),
+                new BitwiseNot(self::buildBitwiseFlagExpression(...$flagsOff)),
             );
         }
 
@@ -209,7 +212,7 @@ class ConfigConverterTools
     {
         $expr = array_shift($expressions);
         while ($expressions !== []) {
-            $expr = new Expr\BinaryOp\BitwiseOr($expr, array_shift($expressions));
+            $expr = new BitwiseOr($expr, array_shift($expressions));
         }
 
         return $expr;
