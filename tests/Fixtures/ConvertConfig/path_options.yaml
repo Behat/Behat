@@ -4,3 +4,8 @@ default:
 with_editor_url:
     path_options:
         editor_url: phpstorm://open?file={relPath}&line={line}
+with_remove_prefix:
+    path_options:
+        remove_prefix:
+            - features/bootstrap/
+            - features/

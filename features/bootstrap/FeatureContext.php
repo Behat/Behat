@@ -468,7 +468,7 @@ EOL;
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
-                '/[ "]features\/[^\n "]+/',
+                '/[ "](features|tests)\/[^\n "]+/',
                 function ($matches) {
                     return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
                 },
@@ -674,7 +674,14 @@ EOL;
                 if (str_starts_with($value, '{SYSTEM_TMP_DIR}')) {
                     $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
                 }
+                if (str_starts_with($value, '{BASE_PATH}')) {
+                    $basePath = realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR;
+                    $value = $basePath . substr($value, strlen('{BASE_PATH}'));
+                }
 
+                if ($option === '--remove-prefix' && DIRECTORY_SEPARATOR !== '/') {
+                    $value = str_replace('/', DIRECTORY_SEPARATOR, $value);
+                }
                 $option .= '=' . $value;
             }
             $this->options .= ' ' . $option;
