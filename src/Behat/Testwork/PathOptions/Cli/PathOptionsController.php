@@ -40,6 +40,10 @@ class PathOptionsController implements Controller
                 '--editor-url', null, InputOption::VALUE_REQUIRED,
                 'URL template for opening files in an editor'
             )
+            ->addOption(
+                '--remove-prefix', null, InputOption::VALUE_REQUIRED,
+                'Comma-separated list of prefixes to remove from paths'
+            )
         ;
     }
 
@@ -47,13 +51,23 @@ class PathOptionsController implements Controller
     {
         $printAbsolutePaths = $input->getOption('print-absolute-paths');
         $editorUrl = $input->getOption('editor-url');
+        $removePrefix = $input->getOption('remove-prefix');
 
-        $this->configurePrintPaths($printAbsolutePaths, $editorUrl);
+        // Parse comma-separated list into an array
+        $removePrefixArray = [];
+        if ($removePrefix !== null) {
+            $removePrefixArray = explode(',', $removePrefix);
+        }
+
+        $this->configurePrintPaths($printAbsolutePaths, $editorUrl, $removePrefixArray);
 
         return null;
     }
 
-    private function configurePrintPaths(bool $printAbsolutePaths, ?string $editorUrl): void
+    /**
+     * @param string[] $removePrefix
+     */
+    private function configurePrintPaths(bool $printAbsolutePaths, ?string $editorUrl, array $removePrefix = []): void
     {
         if ($printAbsolutePaths) {
             $this->configurablePathPrinter->setPrintAbsolutePaths($printAbsolutePaths);
@@ -61,6 +75,10 @@ class PathOptionsController implements Controller
 
         if ($editorUrl !== null) {
             $this->configurablePathPrinter->setEditorUrl($editorUrl);
+        }
+
+        if (!empty($removePrefix)) {
+            $this->configurablePathPrinter->setRemovePrefix($removePrefix);
         }
     }
 }

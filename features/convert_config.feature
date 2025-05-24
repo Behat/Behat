@@ -432,7 +432,12 @@ Feature: Convert config
           ->withProfile((new Profile('default'))
               ->withPathOptions(printAbsolutePaths: true))
           ->withProfile((new Profile('with_editor_url'))
-              ->withPathOptions(editorUrl: 'phpstorm://open?file={relPath}&line={line}'));
+              ->withPathOptions(editorUrl: 'phpstorm://open?file={relPath}&line={line}'))
+          ->withProfile((new Profile('with_remove_prefix'))
+              ->withPathOptions(removePrefix: [
+                  'features/bootstrap/',
+                  'features/',
+              ]));
       """
     And the temp "path_options.yaml" file should have been removed
 
@@ -506,7 +511,11 @@ Feature: Convert config
               ->withPrintUnusedDefinitions()
               ->withPathOptions(
                   printAbsolutePaths: true,
-                  editorUrl: 'phpstorm://open?file={relPath}&line={line}'
+                  editorUrl: 'phpstorm://open?file={relPath}&line={line}',
+                  removePrefix: [
+                      'features/bootstrap/',
+                      'features/',
+                  ]
               )
               ->withTesterOptions((new TesterOptions())
                   ->withStrictResultInterpretation())
