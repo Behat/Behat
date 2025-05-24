@@ -65,3 +65,12 @@ Contributors
 
 - Konstantin Kudryashov [everzet](https://github.com/everzet) [lead developer]
 - Other [awesome developers](https://github.com/Behat/Behat/graphs/contributors)
+
+Technology Sponsors
+-------------------
+Technology sponsors allow us to use their products and services for free as part of a contribution to the open source ecosystem and our work.
+
+<a href="https://jb.gg/OpenSource"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg" width="200" alt="JetBrains"></a>
+
+<a href="https://github.com"><img src="GitHub_Lockup_Dark.svg" width="150"></a>
+
