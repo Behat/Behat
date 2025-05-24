@@ -31,6 +31,7 @@ final class Profile implements ConfigConverterInterface
     private const PATH_OPTIONS_SETTING = 'path_options';
     private const PRINT_ABSOLUTE_PATHS_SETTING = 'print_absolute_paths';
     private const EDITOR_URL_SETTING = 'editor_url';
+    private const REMOVE_PREFIX_SETTING = 'remove_prefix';
 
     private const DISABLE_FORMATTER_FUNCTION = 'disableFormatter';
     private const FORMATTER_FUNCTION = 'withFormatter';
@@ -39,9 +40,11 @@ final class Profile implements ConfigConverterInterface
     private const EXTENSION_FUNCTION = 'withExtension';
     private const SUITE_FUNCTION = 'withSuite';
     private const PATH_OPTIONS_FUNCTION = 'withPathOptions';
+    private const TESTER_OPTIONS_FUNCTION = 'withTesterOptions';
+
     private const PRINT_ABSOLUTE_PATHS_PARAMETER = 'printAbsolutePaths';
     private const EDITOR_URL_PARAMETER = 'editorUrl';
-    private const TESTER_OPTIONS_FUNCTION = 'withTesterOptions';
+    private const REMOVE_PREFIX_PARAMETER = 'removePrefix';
 
     public function __construct(
         private string $name,
@@ -108,12 +111,22 @@ final class Profile implements ConfigConverterInterface
         return $this;
     }
 
-    public function withPathOptions(bool $printAbsolutePaths = false, ?string $editorUrl = null): self
-    {
+    /**
+     * @param string[] $removePrefix
+     */
+    public function withPathOptions(
+        bool $printAbsolutePaths = false,
+        ?string $editorUrl = null,
+        array $removePrefix = [],
+    ): self {
         $this->settings[self::PATH_OPTIONS_SETTING][self::PRINT_ABSOLUTE_PATHS_SETTING] = $printAbsolutePaths;
 
         if ($editorUrl !== null) {
             $this->settings[self::PATH_OPTIONS_SETTING][self::EDITOR_URL_SETTING] = $editorUrl;
+        }
+
+        if (!empty($removePrefix)) {
+            $this->settings[self::PATH_OPTIONS_SETTING][self::REMOVE_PREFIX_SETTING] = $removePrefix;
         }
 
         return $this;
@@ -253,10 +266,12 @@ final class Profile implements ConfigConverterInterface
         $args = [
             self::PRINT_ABSOLUTE_PATHS_PARAMETER => false,
             self::EDITOR_URL_PARAMETER => null,
+            self::REMOVE_PREFIX_PARAMETER => [],
         ];
         $settingsPerParameter = [
             self::PRINT_ABSOLUTE_PATHS_PARAMETER => self::PRINT_ABSOLUTE_PATHS_SETTING,
             self::EDITOR_URL_PARAMETER => self::EDITOR_URL_SETTING,
+            self::REMOVE_PREFIX_PARAMETER => self::REMOVE_PREFIX_SETTING,
         ];
         $settingFound = false;
         foreach ($settingsPerParameter as $parameter => $setting) {

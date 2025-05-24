@@ -49,12 +49,24 @@ final class PathOptionsExtension implements Extension
         $builder
             ->scalarNode('editor_url')
             ->defaultNull()
+            ->end()
+        ;
+        $builder
+            ->arrayNode('remove_prefix')
+            ->scalarPrototype()
+            ->defaultValue([])
+            ->end()
         ;
     }
 
     public function load(ContainerBuilder $container, array $config)
     {
-        $this->loadConfigurablePathPrinter($container, $config['print_absolute_paths'], $config['editor_url'] ?? null);
+        $this->loadConfigurablePathPrinter(
+            $container,
+            $config['print_absolute_paths'],
+            $config['editor_url'] ?? null,
+            $config['remove_prefix']
+        );
         $this->loadPathOptionsController($container);
     }
 
@@ -62,12 +74,20 @@ final class PathOptionsExtension implements Extension
     {
     }
 
-    private function loadConfigurablePathPrinter(ContainerBuilder $container, bool $printAbsolutePaths, ?string $editorUrl): void
-    {
+    /**
+     * @param string[] $removePrefix
+     */
+    private function loadConfigurablePathPrinter(
+        ContainerBuilder $container,
+        bool $printAbsolutePaths,
+        ?string $editorUrl,
+        array $removePrefix = [],
+    ): void {
         $definition = new Definition('Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter', [
             '%paths.base%',
             $printAbsolutePaths,
             $editorUrl,
+            $removePrefix,
         ]);
         $container->setDefinition(self::CONFIGURABLE_PATH_PRINTER_ID, $definition);
     }
