@@ -79,7 +79,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     private function isKeyAStringAndNexOneIsAnInteger($keyIndex, array $keys)
     {
         $keyIsAString = is_string($keys[$keyIndex]);
-        $nextKeyIsAnInteger = isset($keys[$keyIndex + 1]) && is_integer($keys[$keyIndex + 1]);
+        $nextKeyIsAnInteger = isset($keys[$keyIndex + 1]) && is_int($keys[$keyIndex + 1]);
 
         return $keyIsAString && $nextKeyIsAnInteger;
     }
