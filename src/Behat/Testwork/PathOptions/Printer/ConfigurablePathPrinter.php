@@ -60,12 +60,7 @@ final class ConfigurablePathPrinter
     {
         // If no editor URL is set, use the original behavior
         if ($this->editorUrl === null) {
-            if ($this->printAbsolutePaths === true) {
-                $processedText = $text;
-            } else {
-                $processedText = str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $text);
-            }
-
+            $processedText = $this->printAbsolutePaths ? $text : str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $text);
             // Apply removePrefix if configured
             if (!empty($this->removePrefix)) {
                 foreach ($this->removePrefix as $prefix) {

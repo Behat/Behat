@@ -163,11 +163,7 @@ final class Profile implements ConfigConverterInterface
         $this->addExtensionsToExpr($expr);
         $this->addSuitesToExpr($expr);
 
-        if (count($this->settings) === 0) {
-            $arguments = [$this->name];
-        } else {
-            $arguments = [$this->name, $this->settings];
-        }
+        $arguments = count($this->settings) === 0 ? [$this->name] : [$this->name, $this->settings];
         ConfigConverterTools::addArgumentsToConstructor($arguments, $profileObject);
 
         return $expr;

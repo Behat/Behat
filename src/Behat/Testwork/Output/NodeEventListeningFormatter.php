@@ -77,11 +77,7 @@ final class NodeEventListeningFormatter implements Formatter
     public function listenEvent(Event $event, $eventName = null)
     {
         if (null === $eventName) {
-            if (method_exists($event, 'getName')) {
-                $eventName = $event->getName();
-            } else {
-                $eventName = get_class($event);
-            }
+            $eventName = method_exists($event, 'getName') ? $event->getName() : get_class($event);
         }
 
         $this->listener->listenEvent($this, $event, $eventName);

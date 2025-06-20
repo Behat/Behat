@@ -92,11 +92,7 @@ final class Suite implements ConfigConverterInterface
         $this->addPathsToExpr($expr);
         $this->addFiltersToExpr($expr);
 
-        if ($this->settings === []) {
-            $arguments = [$this->name];
-        } else {
-            $arguments = [$this->name, $this->settings];
-        }
+        $arguments = $this->settings === [] ? [$this->name] : [$this->name, $this->settings];
         ConfigConverterTools::addArgumentsToConstructor($arguments, $suiteObject);
 
         return $expr;
