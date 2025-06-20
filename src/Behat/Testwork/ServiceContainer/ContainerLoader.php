@@ -93,7 +93,7 @@ final class ContainerLoader
             }
         }
 
-        foreach ($configs as $i => $config) {
+        foreach (array_keys($configs) as $i) {
             unset($configs[$i]['extensions']);
         }
 
