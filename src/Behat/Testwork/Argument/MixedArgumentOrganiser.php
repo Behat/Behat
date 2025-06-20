@@ -373,7 +373,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         $arguments = [];
 
         $increment = 0;
-        foreach ($parameters as $num => $parameter) {
+        foreach (array_keys($parameters) as $num) {
             if ($this->isArgumentDefined($num)) {
                 continue;
             }
