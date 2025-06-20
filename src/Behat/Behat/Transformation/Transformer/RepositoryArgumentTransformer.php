@@ -160,7 +160,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         return array_reduce($transformations, function ($acc, $t) {
             return [
                 $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
-                !$t instanceof SimpleArgumentTransformation ? array_merge($acc[1], [$t]) : $acc[1],
+                $t instanceof SimpleArgumentTransformation ? $acc[1] : array_merge($acc[1], [$t]),
             ];
         }, [[], []]);
     }
