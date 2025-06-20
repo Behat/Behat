@@ -48,11 +48,7 @@ final class CounterPrinter
     {
         $stats = array_filter($stats, function ($count) { return 0 !== $count; });
 
-        if (0 === count($stats)) {
-            $totalCount = 0;
-        } else {
-            $totalCount = array_sum($stats);
-        }
+        $totalCount = 0 === count($stats) ? 0 : array_sum($stats);
 
         $detailedStats = [];
         foreach ($stats as $resultCode => $count) {
