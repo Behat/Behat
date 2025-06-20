@@ -119,7 +119,7 @@ final class StepStatsListener implements EventListener
         $exception = $this->getStepException($result);
 
         $path = $this->getStepPath($event, $exception);
-        $error = $exception ? $this->exceptionPresenter->presentException($exception) : null;
+        $error = $exception !== null ? $this->exceptionPresenter->presentException($exception) : null;
         $stdOut = $result instanceof ExecutedStepResult ? $result->getCallResult()->getStdOut() : null;
 
         $resultCode = $result->getResultCode();

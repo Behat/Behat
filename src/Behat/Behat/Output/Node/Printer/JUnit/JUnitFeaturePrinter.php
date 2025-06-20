@@ -57,7 +57,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
-            'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
+            'time' => $this->durationListener !== null ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
         ]);
 
         $this->statistics->reset();
