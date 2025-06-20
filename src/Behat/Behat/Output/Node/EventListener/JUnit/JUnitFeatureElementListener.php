@@ -145,11 +145,11 @@ final class JUnitFeatureElementListener implements EventListener
             $event->getFeature()->getFile()
         );
 
-        if ($this->afterSuiteSetup !== null) {
+        if ($this->afterSuiteSetup instanceof AfterSuiteSetup) {
             $this->setupPrinter->printSetup($formatter, $this->afterSuiteSetup->getSetup());
             $this->afterSuiteSetup = null;
         }
-        if ($this->afterFeatureSetup !== null) {
+        if ($this->afterFeatureSetup instanceof AfterFeatureSetup) {
             $this->setupPrinter->printSetup($formatter, $this->afterFeatureSetup->getSetup());
             $this->afterFeatureSetup = null;
         }

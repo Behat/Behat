@@ -295,7 +295,7 @@ final class Profile implements ConfigConverterInterface
     private function addTesterOptionsToExpr(Expr &$expr): void
     {
         $optionsObject = TesterOptions::consumeSettingsFromProfile($this->settings);
-        if ($optionsObject === null) {
+        if (!$optionsObject instanceof TesterOptions) {
             return;
         }
 
