@@ -85,10 +85,10 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * Generates snippets for undefined steps.
      */
-    private function generateSnippets()
+    private function generateSnippets(): void
     {
         if ($this->snippetsGenerated) {
-            return null;
+            return;
         }
 
         $snippetsSet = [];
