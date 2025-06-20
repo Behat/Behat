@@ -66,7 +66,7 @@ final class DebugCommand extends BaseCommand
 
         $debug = $this->extensionManager->debugInformation();
         $output->writeln('--- extensions');
-        $output->writeln(sprintf('    extensions loaded: %s', count($debug['extensions_list']) ? implode(', ', $debug['extensions_list']) : 'none'));
+        $output->writeln(sprintf('    extensions loaded: %s', count($debug['extensions_list']) > 0 ? implode(', ', $debug['extensions_list']) : 'none'));
 
         $output->writeln('');
 
