@@ -45,7 +45,7 @@ final class CallResults implements Countable, IteratorAggregate
      */
     public static function merge(CallResults $first, CallResults $second)
     {
-        return new static(array_merge($first->toArray(), $second->toArray()));
+        return new self(array_merge($first->toArray(), $second->toArray()));
     }
 
     /**
