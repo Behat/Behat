@@ -125,7 +125,7 @@ final class Profile implements ConfigConverterInterface
             $this->settings[self::PATH_OPTIONS_SETTING][self::EDITOR_URL_SETTING] = $editorUrl;
         }
 
-        if (!empty($removePrefix)) {
+        if ($removePrefix !== []) {
             $this->settings[self::PATH_OPTIONS_SETTING][self::REMOVE_PREFIX_SETTING] = $removePrefix;
         }
 
