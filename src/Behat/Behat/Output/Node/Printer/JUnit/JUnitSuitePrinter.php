@@ -30,7 +30,7 @@ final class JUnitSuitePrinter implements SuitePrinter
 
     public function printHeader(Formatter $formatter, Suite $suite)
     {
-        if ($this->statistics !== null) {
+        if ($this->statistics instanceof PhaseStatistics) {
             $this->statistics->reset();
         }
 

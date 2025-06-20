@@ -99,7 +99,7 @@ final class ContextSnippetAppender implements SnippetAppender
      */
     private function logSnippetAddition(AggregateSnippet $snippet, $path)
     {
-        if ($this->logger === null) {
+        if (!$this->logger instanceof FilesystemLogger) {
             return;
         }
 
