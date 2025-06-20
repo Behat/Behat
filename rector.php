@@ -10,7 +10,7 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withRootFiles()
-    ->withCodeQualityLevel(0)
+    ->withPreparedSets(codeQuality: true)
     ->withImportNames(
         removeUnusedImports: true,
     )
