@@ -67,7 +67,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
         array $passedArguments,
         array $organisedArguments,
     ) {
-        foreach ($passedArguments as $key => $val) {
+        foreach (array_keys($passedArguments) as $key) {
             if (array_key_exists($key, $organisedArguments)) {
                 continue;
             }

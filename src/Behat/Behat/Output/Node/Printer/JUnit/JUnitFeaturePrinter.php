@@ -46,11 +46,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
     {
         $stats = $this->statistics->getScenarioStatCounts();
 
-        if (0 === count($stats)) {
-            $totalCount = 0;
-        } else {
-            $totalCount = (int) array_sum($stats);
-        }
+        $totalCount = 0 === count($stats) ? 0 : (int) array_sum($stats);
 
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
@@ -61,7 +57,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
-            'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
+            'time' => $this->durationListener instanceof JUnitDurationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
         ]);
 
         $this->statistics->reset();

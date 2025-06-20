@@ -100,7 +100,7 @@ class StreamOutputPrinter implements OutputPrinter
      */
     final protected function getWritingStream()
     {
-        if (null === $this->output) {
+        if (!$this->output instanceof OutputInterface) {
             $this->output = $this->outputFactory->createOutput();
         }
 

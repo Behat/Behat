@@ -174,7 +174,7 @@ class ConfigConverterTools
         foreach (self::listErrorLevelConstants() as $constName => $constValue) {
             $remainingValue &= ~$constValue;
 
-            if ($value & $constValue) {
+            if (($value & $constValue) !== 0) {
                 $flagsOn[] = $builderFactory->constFetch($constName);
             } else {
                 $flagsOff[] = $builderFactory->constFetch($constName);

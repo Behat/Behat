@@ -55,12 +55,13 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
         $arguments = [];
 
         $keys = array_keys($cleanMatch);
-        for ($keyIndex = 0; $keyIndex < count($keys); ++$keyIndex) {
+        $numKeys = count($keys);
+        for ($keyIndex = 0; $keyIndex < $numKeys; ++$keyIndex) {
             $key = $keys[$keyIndex];
 
             $arguments[$key] = $cleanMatch[$key];
 
-            if ($this->isKeyAStringAndNexOneIsAnInteger($keyIndex, $keys)) {
+            if ($this->isKeyAStringAndNextOneIsAnInteger($keyIndex, $keys)) {
                 ++$keyIndex;
             }
         }
@@ -76,7 +77,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      *
      * @return bool
      */
-    private function isKeyAStringAndNexOneIsAnInteger($keyIndex, array $keys)
+    private function isKeyAStringAndNextOneIsAnInteger($keyIndex, array $keys)
     {
         $keyIsAString = is_string($keys[$keyIndex]);
         $nextKeyIsAnInteger = isset($keys[$keyIndex + 1]) && is_int($keys[$keyIndex + 1]);

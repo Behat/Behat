@@ -77,7 +77,7 @@ final class StepListener implements EventListener
             return;
         }
 
-        if ($this->setupPrinter) {
+        if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printSetup($formatter, $event->getSetup());
         }
     }
@@ -93,7 +93,7 @@ final class StepListener implements EventListener
 
         $this->stepPrinter->printStep($formatter, $this->scenario, $event->getStep(), $event->getTestResult());
 
-        if ($this->setupPrinter) {
+        if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
         }
     }

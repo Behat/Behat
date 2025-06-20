@@ -47,7 +47,7 @@ final class ConfigurablePathPrinter
     {
         // If no editor URL is set, use the original behavior
         if ($this->editorUrl === null) {
-            if ($this->printAbsolutePaths === true) {
+            if ($this->printAbsolutePaths) {
                 return $text;
             }
 

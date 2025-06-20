@@ -89,11 +89,7 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
 
         $expr = $this->applyBaseSettings($formatterObject);
 
-        if ($this->settings === []) {
-            $arguments = [$this->name];
-        } else {
-            $arguments = [$this->name, $this->settings];
-        }
+        $arguments = $this->settings === [] ? [$this->name] : [$this->name, $this->settings];
         ConfigConverterTools::addArgumentsToConstructor($arguments, $formatterObject);
 
         return $expr;

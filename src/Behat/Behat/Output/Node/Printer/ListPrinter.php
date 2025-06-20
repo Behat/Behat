@@ -275,7 +275,7 @@ final class ListPrinter
 
     private function getLocationFromScope(?HookScope $scope): ?string
     {
-        if ($scope !== null) {
+        if ($scope instanceof HookScope) {
             return match (true) {
                 $scope instanceof BeforeSuiteScope,
                 $scope instanceof AfterSuiteScope => $scope->getSuite()->getName(),
