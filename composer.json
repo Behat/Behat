@@ -18,7 +18,7 @@
         "ext-mbstring": "*",
         "behat/gherkin": "^4.12.0",
         "composer-runtime-api": "^2.2",
-        "composer/xdebug-handler": "^3.0",
+        "composer/xdebug-handler": "^1.4 || ^2.0 || ^3.0",
         "nikic/php-parser": "^5.2",
         "psr/container": "^1.0 || ^2.0",
         "symfony/config": "^5.4 || ^6.4 || ^7.0",
