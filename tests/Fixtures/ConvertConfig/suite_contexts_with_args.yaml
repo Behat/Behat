@@ -3,10 +3,10 @@ default:
         my_suite:
             contexts:
                 - MyContext
-                - App\AContextWithPositionalArgs:
+                - AContextWithPositionalArgs:
                     - First Arg
                     - Second Arg
-                - App\AContextWithNamedArgs:
+                - AContextWithNamedArgs:
                       param1: Something
                       param2: Else
-                - App\AnotherContext
+                - AnotherContext
