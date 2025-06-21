@@ -3,4 +3,4 @@ default:
         my_suite:
             contexts:
                 - MyContext
-                - App\AnotherContext
+                - AnotherContext
