@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.23.0] - 2025-07-15
+
+### Added
+
+* Support providing multiple paths for features to run by @marmichalski in [#1611](https://github.com/Behat/Behat/pull/1611)
+* Add editorUrl option to provide clickable links to IDEs in CLI output by @carlos-granados in [#1638](https://github.com/Behat/Behat/pull/1638)
+* Add removePrefix option to trim printed paths in CLI output @carlos-granados in [#1644](https://github.com/Behat/Behat/pull/1644)
+* Add line number of last executed step in JUnit <testcase> by @magnetik in [#1608](https://github.com/Behat/Behat/pull/1608)
+
+### Fixed
+
+* Relaxed constraints on nikic/php-parser and composer/xdebug-handler dependencies to allow wider use of newer Behat
+  releases by @acoulton in [#1650](https://github.com/Behat/Behat/pull/1650) and [#1649](https://github.com/Behat/Behat/pull/1649)
+
+### Internal
+
+* Add Rector and standardise namespace imports by @carlos-granados in [#1640](https://github.com/Behat/Behat/pull/1640)
+* Update expected output in tests to reflect new gherkin translations by @acoulton in [#1635](https://github.com/Behat/Behat/pull/1635)
+* Remove start signs in docs to improve copy/paste by @yosmanyga in [#1647](https://github.com/Behat/Behat/pull/1647)
+
 ## [3.16.1] - 2025-05-07
 
 ### Changed
@@ -1272,6 +1292,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.23.0]: https://github.com/Behat/Behat/compare/v3.22.0...v3.23.0
 [3.22.0]: https://github.com/Behat/Behat/compare/v3.21.1...v3.22.0
 [3.21.1]: https://github.com/Behat/Behat/compare/v3.21.0...v3.21.1
 [3.21.0]: https://github.com/Behat/Behat/compare/v3.20.0...v3.21.0
