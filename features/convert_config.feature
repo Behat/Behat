@@ -177,7 +177,7 @@ Feature: Convert config
               ->withSuite((new Suite('my_suite'))
                   ->withContexts(
                       'MyContext',
-                      'App\AnotherContext'
+                      'AnotherContext'
                   )));
       """
     And the temp "suite_contexts.yaml" file should have been removed
@@ -200,20 +200,20 @@ Feature: Convert config
               ->withSuite((new Suite('my_suite'))
                   ->addContext('MyContext')
                   ->addContext(
-                      'App\AContextWithPositionalArgs',
+                      'AContextWithPositionalArgs',
                       [
                           'First Arg',
                           'Second Arg',
                       ]
                   )
                   ->addContext(
-                      'App\AContextWithNamedArgs',
+                      'AContextWithNamedArgs',
                       [
                           'param1' => 'Something',
                           'param2' => 'Else',
                       ]
                   )
-                  ->addContext('App\AnotherContext')));
+                  ->addContext('AnotherContext')));
       """
     And the temp "suite_contexts.yaml" file should have been removed
 
