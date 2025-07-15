@@ -16,10 +16,14 @@ final class ConfigurablePathPrinter
 {
     private string $basePath;
 
+    /**
+     * @param string[] $removePrefix
+     */
     public function __construct(
         string $basePath,
         private bool $printAbsolutePaths,
         private ?string $editorUrl = null,
+        private array $removePrefix = [],
     ) {
         $realBasePath = realpath($basePath);
 
@@ -28,6 +32,7 @@ final class ConfigurablePathPrinter
         }
 
         $this->basePath = $basePath;
+        $this->removePrefix = $removePrefix;
     }
 
     public function setPrintAbsolutePaths(bool $printAbsolutePaths): void
@@ -41,6 +46,14 @@ final class ConfigurablePathPrinter
     }
 
     /**
+     * @param string[] $removePrefix
+     */
+    public function setRemovePrefix(array $removePrefix): void
+    {
+        $this->removePrefix = $removePrefix;
+    }
+
+    /**
      * Conditionally transforms paths to relative and adds editor links if configured.
      */
     public function processPathsInText(string $text): string
@@ -48,10 +61,19 @@ final class ConfigurablePathPrinter
         // If no editor URL is set, use the original behavior
         if ($this->editorUrl === null) {
             if ($this->printAbsolutePaths === true) {
-                return $text;
+                $processedText = $text;
+            } else {
+                $processedText = str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $text);
             }
 
-            return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $text);
+            // Apply removePrefix if configured
+            if (!empty($this->removePrefix)) {
+                foreach ($this->removePrefix as $prefix) {
+                    $processedText = str_replace($prefix, '', $processedText);
+                }
+            }
+
+            return $processedText;
         }
 
         // Search for paths in the text
@@ -68,6 +90,16 @@ final class ConfigurablePathPrinter
 
             // Format the path according to printAbsolutePaths setting
             $displayPath = $this->printAbsolutePaths ? $absPath : $relPath;
+
+            // Remove prefixes if configured
+            if (!empty($this->removePrefix)) {
+                foreach ($this->removePrefix as $prefix) {
+                    if (str_starts_with($displayPath, $prefix)) {
+                        $displayPath = substr($displayPath, strlen($prefix));
+                        break;
+                    }
+                }
+            }
 
             // If no line number is present, use empty string
             if ($line === null) {
