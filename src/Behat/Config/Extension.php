@@ -39,11 +39,7 @@ final class Extension implements ExtensionConfigInterface
             }
         }
 
-        if ($this->settings === []) {
-            $arguments = [$name];
-        } else {
-            $arguments = [$name, $this->settings];
-        }
+        $arguments = $this->settings === [] ? [$name] : [$name, $this->settings];
         ConfigConverterTools::addArgumentsToConstructor($arguments, $extensionObject);
 
         return $extensionObject;

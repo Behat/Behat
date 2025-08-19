@@ -28,19 +28,15 @@ class JUnitSetupPrinter implements SetupPrinter
 
     public function printSetup(Formatter $formatter, Setup $setup)
     {
-        if (!$setup->isSuccessful()) {
-            if ($setup instanceof HookedSetup) {
-                $this->handleHookCalls($formatter, $setup->getHookCallResults(), 'setup');
-            }
+        if (!$setup->isSuccessful() && $setup instanceof HookedSetup) {
+            $this->handleHookCalls($formatter, $setup->getHookCallResults(), 'setup');
         }
     }
 
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
-        if (!$teardown->isSuccessful()) {
-            if ($teardown instanceof HookedTeardown) {
-                $this->handleHookCalls($formatter, $teardown->getHookCallResults(), 'teardown');
-            }
+        if (!$teardown->isSuccessful() && $teardown instanceof HookedTeardown) {
+            $this->handleHookCalls($formatter, $teardown->getHookCallResults(), 'teardown');
         }
     }
 

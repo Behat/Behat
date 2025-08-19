@@ -77,7 +77,7 @@ class PathOptionsController implements Controller
             $this->configurablePathPrinter->setEditorUrl($editorUrl);
         }
 
-        if (!empty($removePrefix)) {
+        if ($removePrefix !== []) {
             $this->configurablePathPrinter->setRemovePrefix($removePrefix);
         }
     }

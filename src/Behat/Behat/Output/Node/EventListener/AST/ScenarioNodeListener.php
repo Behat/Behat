@@ -53,7 +53,7 @@ final class ScenarioNodeListener implements EventListener
             return;
         }
 
-        if ($this->setupPrinter) {
+        if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printSetup($formatter, $event->getSetup());
         }
 
@@ -69,7 +69,7 @@ final class ScenarioNodeListener implements EventListener
             return;
         }
 
-        if ($this->setupPrinter) {
+        if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
         }
 

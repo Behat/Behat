@@ -33,7 +33,7 @@
         "friendsofphp/php-cs-fixer": "^3.68",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^9.6",
-        "rector/rector": "^2.0",
+        "rector/rector": "2.1.4",
         "sebastian/diff": "^4.0",
         "symfony/polyfill-php84": "^1.31",
         "symfony/process": "^5.4 || ^6.4 || ^7.0"

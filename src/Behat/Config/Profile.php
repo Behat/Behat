@@ -125,7 +125,7 @@ final class Profile implements ConfigConverterInterface
             $this->settings[self::PATH_OPTIONS_SETTING][self::EDITOR_URL_SETTING] = $editorUrl;
         }
 
-        if (!empty($removePrefix)) {
+        if ($removePrefix !== []) {
             $this->settings[self::PATH_OPTIONS_SETTING][self::REMOVE_PREFIX_SETTING] = $removePrefix;
         }
 
@@ -163,11 +163,7 @@ final class Profile implements ConfigConverterInterface
         $this->addExtensionsToExpr($expr);
         $this->addSuitesToExpr($expr);
 
-        if (count($this->settings) === 0) {
-            $arguments = [$this->name];
-        } else {
-            $arguments = [$this->name, $this->settings];
-        }
+        $arguments = count($this->settings) === 0 ? [$this->name] : [$this->name, $this->settings];
         ConfigConverterTools::addArgumentsToConstructor($arguments, $profileObject);
 
         return $expr;
@@ -299,7 +295,7 @@ final class Profile implements ConfigConverterInterface
     private function addTesterOptionsToExpr(Expr &$expr): void
     {
         $optionsObject = TesterOptions::consumeSettingsFromProfile($this->settings);
-        if ($optionsObject === null) {
+        if (!$optionsObject instanceof TesterOptions) {
             return;
         }
 

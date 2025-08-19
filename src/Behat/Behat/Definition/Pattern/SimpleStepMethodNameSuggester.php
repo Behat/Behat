@@ -15,7 +15,7 @@ final class SimpleStepMethodNameSuggester implements StepMethodNameSuggester
         $name = preg_replace('/[^a-zA-Z0-9_\x80-\xff]/u', '', $name);
 
         // Remove leading digits (these are the only characters that are valid in a name except at the beginning)
-        $name = preg_replace('/^[0-9]+/', '', $name);
+        $name = preg_replace('/^\d+/', '', $name);
 
         if ($name === '') {
             // ContextSnippetGenerator::getUniqueMethodName will increment the trailing number if necessary so that

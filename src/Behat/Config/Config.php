@@ -76,11 +76,7 @@ final class Config implements ConfigInterface, ConfigConverterInterface
                     $expr
                 );
             } elseif ($settingsName === self::IMPORTS_SETTING) {
-                if (count($settings) === 1) {
-                    $arguments = [$settings[0]];
-                } else {
-                    $arguments = [$settings];
-                }
+                $arguments = count($settings) === 1 ? [$settings[0]] : [$settings];
                 $expr = ConfigConverterTools::addMethodCall(
                     self::class,
                     self::IMPORT_FUNCTION,

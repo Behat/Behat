@@ -237,9 +237,9 @@ final class Application extends BaseApplication
 
     protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
-        if (true === $input->hasParameterOption(['--colors'])) {
+        if ($input->hasParameterOption(['--colors'])) {
             $output->setDecorated(true);
-        } elseif (true === $input->hasParameterOption(['--no-colors'])) {
+        } elseif ($input->hasParameterOption(['--no-colors'])) {
             $output->setDecorated(false);
         }
 

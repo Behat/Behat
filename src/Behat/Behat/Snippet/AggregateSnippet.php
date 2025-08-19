@@ -101,7 +101,7 @@ final class AggregateSnippet
      */
     public function getUsedClasses(): array
     {
-        if (empty($this->snippets)) {
+        if ($this->snippets === []) {
             return [];
         }
 

@@ -50,7 +50,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      */
     public function getResultCode()
     {
-        $resultCode = static::NO_TESTS;
+        $resultCode = self::NO_TESTS;
         foreach ($this->results as $result) {
             $resultCode = max($resultCode, $result->getResultCode());
         }
