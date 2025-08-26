@@ -101,6 +101,10 @@ final class SnippetsController implements Controller
         }
 
         if (!$input->getOption('no-snippets')) {
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->printSnippetGenerationFailures(...), -999);
+        }
+
+        if (!$input->getOption('no-snippets')) {
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUndefinedSteps'], -995);
         }
 
@@ -137,6 +141,14 @@ final class SnippetsController implements Controller
         count($snippets) && $this->output->writeln('');
 
         $this->writer->printSnippets($this->printer, $snippets);
+    }
+
+    private function printSnippetGenerationFailures(): void
+    {
+        $failures = $this->registry->getGenerationFailures();
+        count($failures) && $this->output->writeln('');
+
+        $this->printer->printSnippetGenerationFailures($failures);
     }
 
     /**
