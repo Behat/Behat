@@ -66,9 +66,7 @@ class FeatureContext implements Context
      */
     public static function cleanTestFolders()
     {
-        if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
-            self::clearDirectory($dir);
-        }
+        (new Filesystem())->remove(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat');
     }
 
     public function __construct(
@@ -86,7 +84,7 @@ class FeatureContext implements Context
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
             md5(microtime() . rand(0, 10000));
 
-        mkdir($dir . '/features/bootstrap/i18n', 0777, true);
+        $this->filesystem->mkdir($dir);
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
@@ -108,7 +106,7 @@ class FeatureContext implements Context
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, ["'''" => '"""']);
-        $this->createFile($this->workingDir . '/' . $filename, $content);
+        $this->createFileInWorkingDir($filename, $content);
     }
 
     /**
@@ -120,7 +118,7 @@ class FeatureContext implements Context
      */
     public function aFileNamed($filename)
     {
-        $this->createFile($this->workingDir . '/' . $filename, '');
+        $this->createFileInWorkingDir($filename, '');
     }
 
     /**
@@ -140,7 +138,7 @@ class FeatureContext implements Context
 {
 }
 EOL;
-        $this->createFile($this->workingDir . '/' . $filename, $content);
+        $this->createFileInWorkingDir($filename, $content);
     }
 
     /**
@@ -156,7 +154,7 @@ Feature:
         Scenario:
           When this scenario executes
 EOL;
-        $this->createFile($this->workingDir . '/' . $filename, $content);
+        $this->createFileInWorkingDir($filename, $content);
     }
 
     /**
@@ -584,27 +582,15 @@ EOL;
         return trim(preg_replace('/ +$/m', '', $output));
     }
 
-    private function createFile($filename, $content)
+    private function createFileInWorkingDir(string $filename, string $content): void
     {
-        $path = dirname($filename);
-        $this->createDirectory($path);
-
-        file_put_contents($filename, $content);
-    }
-
-    private function createDirectory($path)
-    {
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
+        $this->filesystem->dumpFile($this->workingDir . DIRECTORY_SEPARATOR . $filename, $content);
     }
 
     private function moveToNewPath($path)
     {
         $newWorkingDir = $this->workingDir . '/' . $path;
-        if (!file_exists($newWorkingDir)) {
-            mkdir($newWorkingDir, 0777, true);
-        }
+        $this->filesystem->mkdir($newWorkingDir);
 
         $this->workingDir = $newWorkingDir;
     }
@@ -625,22 +611,6 @@ EOL;
         $differ = new Differ(new DiffOnlyOutputBuilder());
 
         return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
-    }
-
-    private static function clearDirectory($path)
-    {
-        $files = scandir($path);
-        array_shift($files);
-        array_shift($files);
-
-        foreach ($files as $file) {
-            $file = $path . DIRECTORY_SEPARATOR . $file;
-            if (is_dir($file)) {
-                self::clearDirectory($file);
-            } else {
-                unlink($file);
-            }
-        }
     }
 
     private function addBehatOptions(TableNode $table): void
