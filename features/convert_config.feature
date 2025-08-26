@@ -16,7 +16,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                       |
       | --config | {SYSTEM_TMP_DIR}/empty.yaml |
-    Then the temp "empty.php" file should be like:
+    Then it should pass
+    And the temp "empty.php" file should be like:
       """
       <?php
 
@@ -31,7 +32,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                          |
       | --config | {SYSTEM_TMP_DIR}/profiles.yaml |
-    Then the temp "profiles.php" file should be like:
+    Then it should pass
+    And the temp "profiles.php" file should be like:
       """
       <?php
 
@@ -49,7 +51,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                   |
       | --config | {SYSTEM_TMP_DIR}/preferred_profile.yaml |
-    Then the temp "preferred_profile.php" file should be like:
+    Then it should pass
+    And the temp "preferred_profile.php" file should be like:
       """
       <?php
 
@@ -70,7 +73,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                         |
       | --config | {SYSTEM_TMP_DIR}/imports.yaml |
-    Then the temp "imports.php" file should be like:
+    Then it should pass
+    And the temp "imports.php" file should be like:
       """
       <?php
 
@@ -101,7 +105,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                  |
       | --config | {SYSTEM_TMP_DIR}/multiple_imports.yaml |
-    Then the temp "multiple_imports.php" file should be like:
+    Then it should pass
+    And the temp "multiple_imports.php" file should be like:
       """
       <?php
 
@@ -144,7 +149,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                        |
       | --config | {SYSTEM_TMP_DIR}/suites.yaml |
-    Then the temp "suites.php" file should be like:
+    Then it should pass
+    And the temp "suites.php" file should be like:
       """
       <?php
 
@@ -164,7 +170,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                |
       | --config | {SYSTEM_TMP_DIR}/suite_contexts.yaml |
-    Then the temp "suite_contexts.php" file should be like:
+    Then it should pass
+    And the temp "suite_contexts.php" file should be like:
       """
       <?php
 
@@ -187,7 +194,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                          |
       | --config | {SYSTEM_TMP_DIR}/suite_contexts_with_args.yaml |
-    Then the temp "suite_contexts_with_args.php" file should be like:
+    Then it should pass
+    And the temp "suite_contexts_with_args.php" file should be like:
       """
       <?php
 
@@ -222,7 +230,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                             |
       | --config | {SYSTEM_TMP_DIR}/suite_paths.yaml |
-    Then the temp "suite_paths.php" file should be like:
+    Then it should pass
+    And the temp "suite_paths.php" file should be like:
       """
       <?php
 
@@ -245,7 +254,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                               |
       | --config | {SYSTEM_TMP_DIR}/suite_filters.yaml |
-    Then the temp "suite_filters.php" file should be like:
+    Then it should pass
+    And the temp "suite_filters.php" file should be like:
       """
       <?php
 
@@ -266,7 +276,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                            |
       | --config | {SYSTEM_TMP_DIR}/extensions.yaml |
-    Then the temp "extensions.php" file should be like:
+    Then it should pass
+    And the temp "extensions.php" file should be like:
       """
       <?php
 
@@ -293,7 +304,8 @@ Feature: Convert config
     When  I run behat with the following additional options:
       | option   | value                                  |
       | --config | {SYSTEM_TMP_DIR}/class_references.yaml |
-    Then the temp "class_references.php" file should be like:
+    Then it should pass
+    And the temp "class_references.php" file should be like:
       """
       <?php
 
@@ -336,7 +348,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                 |
       | --config | {SYSTEM_TMP_DIR}/profile_filters.yaml |
-    Then the temp "profile_filters.php" file should be like:
+    Then it should pass
+    And the temp "profile_filters.php" file should be like:
       """
       <?php
 
@@ -357,7 +370,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/unused_definitions.yaml |
-    Then the temp "unused_definitions.php" file should be like:
+    Then it should pass
+    And the temp "unused_definitions.php" file should be like:
       """
       <?php
 
@@ -375,7 +389,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                            |
       | --config | {SYSTEM_TMP_DIR}/formatters.yaml |
-    Then the temp "formatters.php" file should be like:
+    Then it should pass
+    And the temp "formatters.php" file should be like:
       """
       <?php
 
@@ -421,7 +436,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/path_options.yaml |
-    Then the temp "path_options.php" file should be like:
+    Then it should pass
+    And the temp "path_options.php" file should be like:
       """
       <?php
 
@@ -446,7 +462,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/tester_options.yaml |
-    Then the temp "tester_options.php" file should be like:
+    Then it should pass
+    And the temp "tester_options.php" file should be like:
       """
       <?php
 
@@ -478,7 +495,8 @@ Feature: Convert config
     When I run behat with the following additional options:
       | option   | value                                    |
       | --config | {SYSTEM_TMP_DIR}/full_configuration.yaml |
-    Then the temp "full_configuration.php" file should be like:
+    Then it should pass
+    And the temp "full_configuration.php" file should be like:
       """
       <?php
 
