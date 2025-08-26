@@ -4,7 +4,7 @@ Feature: Unused definitions
   I need to be able to generate a list of unused definitions
 
   Background:
-    Given I set the working directory to the "UnusedDefinitions" fixtures folder
+    Given I initialise the working directory from the "UnusedDefinitions" fixtures folder
     And I provide the following options for all behat invocations:
       | option                     | value    |
       | --no-colors                |          |
@@ -79,4 +79,3 @@ Feature: Unused definitions
       [Given|*] /^I have clicked "+"$/
       `TranslatedDefinitionsContext::iHaveClickedPlus()`
       """
-

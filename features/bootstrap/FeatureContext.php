@@ -17,6 +17,7 @@ use Behat\Step\When;
 use PHPUnit\Framework\Assert;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -56,8 +57,6 @@ class FeatureContext implements Context
      */
     private $answerString;
 
-    private bool $workingDirChanged = false;
-
     /**
      * Cleans test folders in the temporary directory.
      *
@@ -70,6 +69,11 @@ class FeatureContext implements Context
         if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
             self::clearDirectory($dir);
         }
+    }
+
+    public function __construct(
+        private readonly Filesystem $filesystem = new Filesystem(),
+    ) {
     }
 
     /**
@@ -199,9 +203,7 @@ EOL;
         $this->env = ['BEHAT_PARAMS' => (string) $value];
     }
 
-    /**
-     * @When I set the working directory to the :dir fixtures folder
-     */
+    #[When('I initialise the working directory from the :dir fixtures folder')]
     public function iSetTheWorkingDirectoryToTheFixturesFolder($dir): void
     {
         $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
@@ -209,8 +211,7 @@ EOL;
         if (!is_dir($dir)) {
             throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
         }
-        $this->workingDir = $dir;
-        $this->workingDirChanged = true;
+        $this->filesystem->mirror($dir, $this->workingDir);
     }
 
     #[Given('I clear the default behat options')]
@@ -385,29 +386,10 @@ EOL;
         $this->checkXmlFileContents($path, $text);
     }
 
-    #[When('I copy the :file file to the temp folder')]
-    public function iCopyTheFileToTheTempFolder($file): void
+    #[Then('the :file file should have been removed from the working directory')]
+    public function fileShouldHaveBeenRemoved($file): void
     {
-        $origin = $this->workingDir . '/' . $file;
-        $destination = $this->tempDir . '/' . $file;
-        copy($origin, $destination);
-    }
-
-    #[Then('the temp :file file should be like:')]
-    public function theTempFileShouldBeLike($file, PyStringNode $string): void
-    {
-        $path = $this->tempDir . '/' . $file;
-        Assert::assertFileExists($path);
-
-        $fileContent = trim(file_get_contents($path));
-
-        Assert::assertSame($string->getRaw(), $fileContent);
-    }
-
-    #[Then('the temp :file file should have been removed')]
-    public function theTempFileShouldHaveBeenRemoved($file): void
-    {
-        $path = $this->tempDir . '/' . $file;
+        $path = $this->workingDir . '/' . $file;
         Assert::assertFileDoesNotExist($path);
     }
 
@@ -604,9 +586,6 @@ EOL;
 
     private function createFile($filename, $content)
     {
-        if ($this->workingDirChanged) {
-            throw new RuntimeException('Trying to write a file in a fixtures folder');
-        }
         $path = dirname($filename);
         $this->createDirectory($path);
 
@@ -675,7 +654,7 @@ EOL;
                     $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
                 }
                 if (str_starts_with($value, '{BASE_PATH}')) {
-                    $basePath = realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR;
+                    $basePath = $this->workingDir . DIRECTORY_SEPARATOR;
                     $value = $basePath . substr($value, strlen('{BASE_PATH}'));
                 }
 

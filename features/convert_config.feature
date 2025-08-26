@@ -4,7 +4,7 @@ Feature: Convert config
   I need to be able to convert this configuration to the new PHP format
 
   Background:
-    Given I set the working directory to the "ConvertConfig" fixtures folder
+    Given I initialise the working directory from the "ConvertConfig" fixtures folder
     And I clear the default behat options
     And I provide the following options for all behat invocations:
       | option           | value |
@@ -12,12 +12,11 @@ Feature: Convert config
       | --convert-config |       |
 
   Scenario: Convert empty file
-    When I copy the "empty.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                       |
-      | --config | {SYSTEM_TMP_DIR}/empty.yaml |
+      | option   | value      |
+      | --config | empty.yaml |
     Then it should pass
-    And the temp "empty.php" file should be like:
+    And "empty.php" file should contain:
       """
       <?php
 
@@ -25,15 +24,14 @@ Feature: Convert config
 
       return new Config();
       """
-    And the temp "empty.yaml" file should have been removed
+    And the "empty.yaml" file should have been removed from the working directory
 
   Scenario: Convert profiles
-    When I copy the "profiles.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                          |
-      | --config | {SYSTEM_TMP_DIR}/profiles.yaml |
+      | option   | value         |
+      | --config | profiles.yaml |
     Then it should pass
-    And the temp "profiles.php" file should be like:
+    And "profiles.php" file should contain:
       """
       <?php
 
@@ -44,15 +42,14 @@ Feature: Convert config
           ->withProfile(new Profile('default'))
           ->withProfile(new Profile('another'));
       """
-    And the temp "profiles.yaml" file should have been removed
+    And the "profiles.yaml" file should have been removed from the working directory
 
   Scenario: Preferred profile
-    When I copy the "preferred_profile.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                   |
-      | --config | {SYSTEM_TMP_DIR}/preferred_profile.yaml |
+      | option   | value                  |
+      | --config | preferred_profile.yaml |
     Then it should pass
-    And the temp "preferred_profile.php" file should be like:
+    And "preferred_profile.php" file should contain:
       """
       <?php
 
@@ -65,16 +62,14 @@ Feature: Convert config
               ->disableFormatter('pretty'))
           ->withPreferredProfile('another');
       """
-    And the temp "preferred_profile.yaml" file should have been removed
+    And the "preferred_profile.yaml" file should have been removed from the working directory
 
   Scenario: Imports
-    When I copy the "imports.yaml" file to the temp folder
-    And I copy the "imported.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                         |
-      | --config | {SYSTEM_TMP_DIR}/imports.yaml |
+      | option   | value        |
+      | --config | imports.yaml |
     Then it should pass
-    And the temp "imports.php" file should be like:
+    And "imports.php" file should contain:
       """
       <?php
 
@@ -85,7 +80,7 @@ Feature: Convert config
           ->import('imported.php')
           ->withProfile(new Profile('default'));
     """
-    And the temp "imported.php" file should be like:
+    And "imported.php" file should contain:
       """
       <?php
 
@@ -95,18 +90,22 @@ Feature: Convert config
       return (new Config())
           ->withProfile(new Profile('another'));
       """
-    And the temp "imports.yaml" file should have been removed
-    And the temp "imported.yaml" file should have been removed
+    And the "imports.yaml" file should have been removed from the working directory
+    And the "imported.yaml" file should have been removed from the working directory
 
   Scenario: Multiple Imports
-    When I copy the "multiple_imports.yaml" file to the temp folder
-    And I copy the "imported.yaml" file to the temp folder
-    And I copy the "other_imported.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                  |
-      | --config | {SYSTEM_TMP_DIR}/multiple_imports.yaml |
-    Then it should pass
-    And the temp "multiple_imports.php" file should be like:
+      | option   | value                 |
+      | --config | multiple_imports.yaml |
+    Then it should pass with:
+      """
+      Starting conversion
+      Converting configuration file: multiple_imports.yaml
+      Converting configuration file: ./imported.yaml
+      Converting configuration file: ./other_imported.yaml
+      Conversion finished
+      """
+    And "multiple_imports.php" file should contain:
       """
       <?php
 
@@ -119,8 +118,8 @@ Feature: Convert config
               'other_imported.php',
           ])
           ->withProfile(new Profile('default'));
-    """
-    And the temp "imported.php" file should be like:
+      """
+    And "imported.php" file should contain:
       """
       <?php
 
@@ -130,7 +129,7 @@ Feature: Convert config
       return (new Config())
           ->withProfile(new Profile('another'));
       """
-    And the temp "other_imported.php" file should be like:
+    And "other_imported.php" file should contain:
       """
       <?php
 
@@ -140,17 +139,16 @@ Feature: Convert config
       return (new Config())
           ->withProfile(new Profile('other'));
       """
-    And the temp "multiple_imports.yaml" file should have been removed
-    And the temp "imported.yaml" file should have been removed
-    And the temp "other_imported.yaml" file should have been removed
+    And the "multiple_imports.yaml" file should have been removed from the working directory
+    And the "imported.yaml" file should have been removed from the working directory
+    And the "other_imported.yaml" file should have been removed from the working directory
 
   Scenario: Suites
-    When I copy the "suites.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                        |
-      | --config | {SYSTEM_TMP_DIR}/suites.yaml |
+      | option   | value       |
+      | --config | suites.yaml |
     Then it should pass
-    And the temp "suites.php" file should be like:
+    And "suites.php" file should contain:
       """
       <?php
 
@@ -163,15 +161,14 @@ Feature: Convert config
               ->withSuite(new Suite('one_suite'))
               ->withSuite(new Suite('another_suite')));
       """
-    And the temp "suites.yaml" file should have been removed
+    And the "suites.yaml" file should have been removed from the working directory
 
   Scenario: Suite contexts
-    When I copy the "suite_contexts.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                |
-      | --config | {SYSTEM_TMP_DIR}/suite_contexts.yaml |
+      | option   | value               |
+      | --config | suite_contexts.yaml |
     Then it should pass
-    And the temp "suite_contexts.php" file should be like:
+    And "suite_contexts.php" file should contain:
       """
       <?php
 
@@ -187,15 +184,14 @@ Feature: Convert config
                       'AnotherContext'
                   )));
       """
-    And the temp "suite_contexts.yaml" file should have been removed
+    And the "suite_contexts.yaml" file should have been removed from the working directory
 
   Scenario: Suite contexts with arguments
-    When I copy the "suite_contexts_with_args.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                          |
-      | --config | {SYSTEM_TMP_DIR}/suite_contexts_with_args.yaml |
+      | option   | value                         |
+      | --config | suite_contexts_with_args.yaml |
     Then it should pass
-    And the temp "suite_contexts_with_args.php" file should be like:
+    And "suite_contexts_with_args.php" file should contain:
       """
       <?php
 
@@ -223,15 +219,14 @@ Feature: Convert config
                   )
                   ->addContext('AnotherContext')));
       """
-    And the temp "suite_contexts_with_args.yaml" file should have been removed
+    And the "suite_contexts_with_args.yaml" file should have been removed from the working directory
 
   Scenario: Suite paths
-    When I copy the "suite_paths.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                             |
-      | --config | {SYSTEM_TMP_DIR}/suite_paths.yaml |
+      | option   | value            |
+      | --config | suite_paths.yaml |
     Then it should pass
-    And the temp "suite_paths.php" file should be like:
+    And "suite_paths.php" file should contain:
       """
       <?php
 
@@ -247,15 +242,14 @@ Feature: Convert config
                       'other.feature'
                   )));
       """
-    And the temp "suite_paths.yaml" file should have been removed
+    And the "suite_paths.yaml" file should have been removed from the working directory
 
   Scenario: Suite filters
-    When I copy the "suite_filters.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                               |
-      | --config | {SYSTEM_TMP_DIR}/suite_filters.yaml |
+      | option   | value              |
+      | --config | suite_filters.yaml |
     Then it should pass
-    And the temp "suite_filters.php" file should be like:
+    And "suite_filters.php" file should contain:
       """
       <?php
 
@@ -269,15 +263,14 @@ Feature: Convert config
               ->withSuite((new Suite('my_suite'))
                   ->withFilter(new TagFilter('@run'))));
       """
-    And the temp "suite_filters.yaml" file should have been removed
+    And the "suite_filters.yaml" file should have been removed from the working directory
 
   Scenario: Extensions
-    When I copy the "extensions.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                            |
-      | --config | {SYSTEM_TMP_DIR}/extensions.yaml |
+      | option   | value           |
+      | --config | extensions.yaml |
     Then it should pass
-    And the temp "extensions.php" file should be like:
+    And "extensions.php" file should contain:
       """
       <?php
 
@@ -297,15 +290,14 @@ Feature: Convert config
                   ],
               ])));
       """
-    And the temp "extensions.yaml" file should have been removed
+    And the "extensions.yaml" file should have been removed from the working directory
 
   Scenario: Class references for known extensions and contexts
-    Given I copy the "class_references.yaml" file to the temp folder
     When  I run behat with the following additional options:
-      | option   | value                                  |
-      | --config | {SYSTEM_TMP_DIR}/class_references.yaml |
+      | option   | value                 |
+      | --config | class_references.yaml |
     Then it should pass
-    And the temp "class_references.php" file should be like:
+    And "class_references.php" file should contain:
       """
       <?php
 
@@ -341,15 +333,14 @@ Feature: Convert config
                   )
                   ->addContext(MySecondContext::class)));
       """
-    And the temp "class_references.yaml" file should have been removed
+    And the "class_references.yaml" file should have been removed from the working directory
 
   Scenario: Profile filters
-    When I copy the "profile_filters.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                 |
-      | --config | {SYSTEM_TMP_DIR}/profile_filters.yaml |
+      | option   | value                |
+      | --config | profile_filters.yaml |
     Then it should pass
-    And the temp "profile_filters.php" file should be like:
+    And "profile_filters.php" file should contain:
       """
       <?php
 
@@ -363,15 +354,14 @@ Feature: Convert config
               ->withFilter(new NameFilter('john'))
               ->withFilter(new RoleFilter('admin')));
       """
-    And the temp "profile_filters.yaml" file should have been removed
+    And the "profile_filters.yaml" file should have been removed from the working directory
 
   Scenario: Unused definitions
-    When I copy the "unused_definitions.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                    |
-      | --config | {SYSTEM_TMP_DIR}/unused_definitions.yaml |
+      | option   | value                   |
+      | --config | unused_definitions.yaml |
     Then it should pass
-    And the temp "unused_definitions.php" file should be like:
+    And "unused_definitions.php" file should contain:
       """
       <?php
 
@@ -382,15 +372,14 @@ Feature: Convert config
           ->withProfile((new Profile('default'))
               ->withPrintUnusedDefinitions());
       """
-    And the temp "unused_definitions.yaml" file should have been removed
+    And the "unused_definitions.yaml" file should have been removed from the working directory
 
   Scenario: Formatters
-    When I copy the "formatters.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                            |
-      | --config | {SYSTEM_TMP_DIR}/formatters.yaml |
+      | option   | value           |
+      | --config | formatters.yaml |
     Then it should pass
-    And the temp "formatters.php" file should be like:
+    And "formatters.php" file should contain:
       """
       <?php
 
@@ -429,15 +418,14 @@ Feature: Convert config
                       ],
                   ])));
       """
-    And the temp "formatters.yaml" file should have been removed
+    And the "formatters.yaml" file should have been removed from the working directory
 
   Scenario: path options
-    When I copy the "path_options.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                    |
-      | --config | {SYSTEM_TMP_DIR}/path_options.yaml |
+      | option   | value             |
+      | --config | path_options.yaml |
     Then it should pass
-    And the temp "path_options.php" file should be like:
+    And "path_options.php" file should contain:
       """
       <?php
 
@@ -455,15 +443,14 @@ Feature: Convert config
                   'features/',
               ]));
       """
-    And the temp "path_options.yaml" file should have been removed
+    And the "path_options.yaml" file should have been removed from the working directory
 
   Scenario: Tester options
-    Given I copy the "tester_options.yaml" file to the temp folder
     When I run behat with the following additional options:
-      | option   | value                                    |
-      | --config | {SYSTEM_TMP_DIR}/tester_options.yaml |
+      | option   | value               |
+      | --config | tester_options.yaml |
     Then it should pass
-    And the temp "tester_options.php" file should be like:
+    And "tester_options.php" file should contain:
       """
       <?php
 
@@ -486,17 +473,15 @@ Feature: Convert config
                   ->withSkipAllTests()
                   ->withErrorReporting(E_ALL & ~(E_WARNING | E_NOTICE | E_DEPRECATED))));
       """
-    And the temp "tester_options.yaml" file should have been removed
+    And the "tester_options.yaml" file should have been removed from the working directory
 
   Scenario: Full configuration
-    When I copy the "full_configuration.yaml" file to the temp folder
-    And I copy the "imported.yaml" file to the temp folder
     And the "MY_SECRET_PASSWORD" environment variable is set to "sesame"
     When I run behat with the following additional options:
-      | option   | value                                    |
-      | --config | {SYSTEM_TMP_DIR}/full_configuration.yaml |
+      | option   | value                   |
+      | --config | full_configuration.yaml |
     Then it should pass
-    And the temp "full_configuration.php" file should be like:
+    And "full_configuration.php" file should contain:
       """
       <?php
 
@@ -553,7 +538,7 @@ Feature: Convert config
                   ->withErrorReporting(E_ERROR)))
           ->withPreferredProfile('other');
       """
-    And the temp "imported.php" file should be like:
+    And "imported.php" file should contain:
       """
       <?php
 
@@ -563,5 +548,5 @@ Feature: Convert config
       return (new Config())
           ->withProfile(new Profile('another'));
       """
-    And the temp "full_configuration.yaml" file should have been removed
-    And the temp "imported.yaml" file should have been removed
+    And the "full_configuration.yaml" file should have been removed from the working directory
+    And the "imported.yaml" file should have been removed from the working directory

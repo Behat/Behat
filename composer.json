@@ -36,7 +36,8 @@
         "rector/rector": "2.1.4",
         "sebastian/diff": "^4.0",
         "symfony/polyfill-php84": "^1.31",
-        "symfony/process": "^5.4 || ^6.4 || ^7.0"
+        "symfony/process": "^5.4 || ^6.4 || ^7.0",
+        "symfony/filesystem": "^5.4 || ^6.4 || ^7.0"
     },
 
     "suggest": {

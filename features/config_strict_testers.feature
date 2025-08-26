@@ -4,7 +4,7 @@ Feature: Strict result interpretation defined in configuration file
   I need to be able to configure "strict" option in the configuration file
 
   Background:
-    Given I set the working directory to the "ConfigStrictTesters" fixtures folder
+    Given I initialise the working directory from the "ConfigStrictTesters" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value    |
       | --no-colors |          |

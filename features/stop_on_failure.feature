@@ -4,7 +4,7 @@ Feature: Stop on failure via config
   I need to have a stop-on-failure option on the CLI or in config
 
   Background:
-    Given I set the working directory to the "StopOnFailure" fixtures folder
+    Given I initialise the working directory from the "StopOnFailure" fixtures folder
     And I provide the following options for all behat invocations:
       | option            | value              |
       | --no-colors       |                    |

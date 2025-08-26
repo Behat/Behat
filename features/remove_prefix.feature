@@ -4,7 +4,7 @@ Feature: Remove prefix
   I need to be able to ask Behat to remove specific prefixes from paths in the output
 
   Background:
-    Given I set the working directory to the "RemovePrefix" fixtures folder
+    Given I initialise the working directory from the "RemovePrefix" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value |
       | --no-colors |       |
@@ -65,12 +65,12 @@ Feature: Remove prefix
       | --remove-prefix        | {BASE_PATH} |
     Then the output should contain:
       """
-        Scenario:                                    # tests/Fixtures/RemovePrefix/features/test.feature:3
+        Scenario:                                    # features/test.feature:3
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in tests/Fixtures/RemovePrefix/features/bootstrap/FeatureContext.php line 16
+            Warning: Undefined variable $b in features/bootstrap/FeatureContext.php line 16
 
       --- Failed scenarios:
 
-          tests/Fixtures/RemovePrefix/features/test.feature:3
+          features/test.feature:3
       """

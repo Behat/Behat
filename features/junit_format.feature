@@ -4,7 +4,7 @@
   I need to be able to generate a JUnit-compatible report
 
   Background:
-    Given I set the working directory to the "JunitFormat" fixtures folder
+    Given I initialise the working directory from the "JunitFormat" fixtures folder
     And I provide the following options for all behat invocations:
       | option          | value            |
       | --no-colors     |                  |

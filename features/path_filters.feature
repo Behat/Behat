@@ -4,7 +4,7 @@ Feature: Path filters
   I need Behat to support path(s) filtering
 
   Background:
-    Given I set the working directory to the "PathFilters" fixtures folder
+    Given I initialise the working directory from the "PathFilters" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value   |
       | --no-colors |         |
