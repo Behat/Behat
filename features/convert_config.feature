@@ -140,7 +140,7 @@ Feature: Convert config
       return (new Config())
           ->withProfile(new Profile('other'));
       """
-    And the temp "imports.yaml" file should have been removed
+    And the temp "multiple_imports.yaml" file should have been removed
     And the temp "imported.yaml" file should have been removed
     And the temp "other_imported.yaml" file should have been removed
 
@@ -223,7 +223,7 @@ Feature: Convert config
                   )
                   ->addContext('AnotherContext')));
       """
-    And the temp "suite_contexts.yaml" file should have been removed
+    And the temp "suite_contexts_with_args.yaml" file should have been removed
 
   Scenario: Suite paths
     When I copy the "suite_paths.yaml" file to the temp folder
