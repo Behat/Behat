@@ -1,4 +1,4 @@
-  Feature: JUnit Formatter
+Feature: JUnit Formatter
   In order to integrate with other development tools
   As a developer
   I need to be able to generate a JUnit-compatible report
@@ -10,9 +10,9 @@
       | --no-colors     |                  |
       | --snippets-type | regex            |
       | --format        | junit            |
-      | --out           | {SYSTEM_TMP_DIR} |
+      | --out           | {BASE_PATH}/logs |
 
-    Scenario: Run a single feature
+  Scenario: Run a single feature
     When I run behat with the following additional options:
       | option         | value          |
       | --snippets-for | FeatureContext |
@@ -27,7 +27,7 @@
               throw new PendingException();
           }
       """
-    And the temp "single_feature.xml" file xml should be like:
+    And the "logs/single_feature.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="single_feature">
@@ -54,14 +54,14 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "single_feature.xml" should be a valid document according to "junit.xsd"
+    And the file "logs/single_feature.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Run multiple Features
     When I run behat with the following additional options:
       | option  | value             |
       | --suite | multiple_features |
     Then it should pass with no output
-    And the temp "multiple_features.xml" file xml should be like:
+    And the "logs/multiple_features.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="multiple_features">
@@ -73,14 +73,14 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "multiple_features.xml" should be a valid document according to "junit.xsd"
+    And the file "logs/multiple_features.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Confirm multiline scenario titles are printed correctly
     When I run behat with the following additional options:
       | option  | value            |
       | --suite | multiline_titles |
     Then it should pass with no output
-    And the temp "multiline_titles.xml" file xml should be like:
+    And the "logs/multiline_titles.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="multiline_titles">
@@ -90,14 +90,14 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "multiline_titles.xml" should be a valid document according to "junit.xsd"
+    And the file "logs/multiline_titles.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Multiple suites
     When I run behat with the following additional options:
       | option   | value          |
       | --config | two_suites.php |
     Then it should fail with no output
-    And the temp "small_kid.xml" file xml should be like:
+    And the "logs/small_kid.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
@@ -106,8 +106,8 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "small_kid.xml" should be a valid document according to "junit.xsd"
-    And the temp "old_man.xml" file xml should be like:
+    And the file "logs/small_kid.xml" should be a valid document according to "junit.xsd"
+    And the "logs/old_man.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
@@ -118,14 +118,14 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "old_man.xml" should be a valid document according to "junit.xsd"
+    And the file "logs/old_man.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Report skipped testcases
     When I run behat with the following additional options:
       | option  | value              |
       | --suite | skipped_test_cases |
     Then it should fail with no output
-    And the temp "skipped_test_cases.xml" file xml should be like:
+    And the "logs/skipped_test_cases.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="skipped_test_cases">
@@ -139,14 +139,14 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "skipped_test_cases.xml" should be a valid document according to "junit.xsd"
+    And the file "logs/skipped_test_cases.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Stop on Failure
     When I run behat with the following additional options:
       | option  | value           |
       | --suite | stop_on_failure |
     Then it should fail with no output
-    And the temp "stop_on_failure.xml" file xml should be like:
+    And the "logs/stop_on_failure.xml" file xml should be like:
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="stop_on_failure">
@@ -157,7 +157,7 @@
         </testsuite>
       </testsuites>
       """
-    And the temp file "stop_on_failure.xml" should be a valid document according to "junit.xsd"
+    And the file "logs/stop_on_failure.xml" should be a valid document according to "junit.xsd"
 
   Scenario: Aborting due to PHP error
     When I run behat with the following additional options:
@@ -167,7 +167,7 @@
     """
     cannot extend interface Behat\Behat\Context\Context
     """
-    And the temp "abort_on_php_error.xml" file xml should be like:
+    And the "logs/abort_on_php_error.xml" file xml should be like:
     """
     <?xml version="1.0" encoding="UTF-8"?>
     <testsuites name="abort_on_php_error"/>

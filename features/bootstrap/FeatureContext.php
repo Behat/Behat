@@ -40,10 +40,7 @@ class FeatureContext implements Context
      * @var string
      */
     private $workingDir;
-    /**
-     * @var string
-     */
-    private $tempDir;
+
     /**
      * @var string
      */
@@ -91,7 +88,6 @@ class FeatureContext implements Context
             throw new RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
-        $this->tempDir = $dir;
         $this->phpBin = $php;
     }
 
@@ -406,15 +402,6 @@ EOL;
         Assert::assertFileDoesNotExist($path);
     }
 
-    /**
-     * @Then the temp :path file xml should be like:
-     */
-    public function theTempFileFileXmlShouldBeLike($path, PyStringNode $text): void
-    {
-        $path = $this->tempDir . '/' . $path;
-        $this->checkXmlFileContents($path, $text);
-    }
-
     private function checkXmlFileContents($path, PyStringNode $text)
     {
         Assert::assertFileExists($path);
@@ -549,15 +536,6 @@ EOL;
         $this->checkXmlIsValid($path, $schemaPath);
     }
 
-    /**
-     * @Then the temp file :xmlFile should be a valid document according to :schemaPath
-     */
-    public function theTempFileShouldBeAValidDocumentAccordingTo($xmlFile, $schemaPath): void
-    {
-        $path = $this->tempDir . '/' . $xmlFile;
-        $this->checkXmlIsValid($path, $schemaPath);
-    }
-
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
     {
         $dom = new DOMDocument();
@@ -635,9 +613,6 @@ EOL;
             $option = $row['option'];
             $value = $row['value'];
             if ($value !== '') {
-                if (str_starts_with($value, '{SYSTEM_TMP_DIR}')) {
-                    $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
-                }
                 if (str_starts_with($value, '{BASE_PATH}')) {
                     $basePath = realpath($this->workingDir) . DIRECTORY_SEPARATOR;
                     $value = $basePath . substr($value, strlen('{BASE_PATH}'));
