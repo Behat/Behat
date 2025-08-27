@@ -101,8 +101,8 @@ Feature: Convert config
       """
       Starting conversion
       Converting configuration file: multiple_imports.yaml
-      Converting configuration file: ./imported.yaml
-      Converting configuration file: ./other_imported.yaml
+      Converting configuration file: .%%DS%%imported.yaml
+      Converting configuration file: .%%DS%%other_imported.yaml
       Conversion finished
       """
     And "multiple_imports.php" file should contain:

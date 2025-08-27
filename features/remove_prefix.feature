@@ -65,12 +65,12 @@ Feature: Remove prefix
       | --remove-prefix        | {BASE_PATH} |
     Then the output should contain:
       """
-        Scenario:                                    # features/test.feature:3
+        Scenario:                                    # features%%DS%%test.feature:3
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in features/bootstrap/FeatureContext.php line 16
+            Warning: Undefined variable $b in features%%DS%%bootstrap%%DS%%FeatureContext.php line 16
 
       --- Failed scenarios:
 
-          features/test.feature:3
+          features%%DS%%test.feature:3
       """

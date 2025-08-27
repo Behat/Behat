@@ -15,14 +15,14 @@ Feature: Print absolute paths
       | --print-absolute-paths |       |
     Then the output should contain:
       """
-        Scenario:                                    # %%WORKING_DIR%%features/test.feature:3
+        Scenario:                                    # %%WORKING_DIR%%features%%DS%%test.feature:3
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in %%WORKING_DIR%%features/bootstrap/FeatureContext.php line 16
+            Warning: Undefined variable $b in %%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php line 16
 
       --- Failed scenarios:
 
-          %%WORKING_DIR%%features/test.feature:3
+          %%WORKING_DIR%%features%%DS%%test.feature:3
       """
 
   Scenario: Add option in config file
@@ -31,12 +31,12 @@ Feature: Print absolute paths
       | --profile | absolute_paths       |
     Then the output should contain:
       """
-        Scenario:                                    # %%WORKING_DIR%%features/test.feature:3
+        Scenario:                                    # %%WORKING_DIR%%features%%DS%%test.feature:3
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in %%WORKING_DIR%%features/bootstrap/FeatureContext.php line 16
+            Warning: Undefined variable $b in %%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php line 16
 
       --- Failed scenarios:
 
-          %%WORKING_DIR%%features/test.feature:3
+          %%WORKING_DIR%%features%%DS%%test.feature:3
       """
