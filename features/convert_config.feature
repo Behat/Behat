@@ -425,7 +425,7 @@ Feature: Convert config
       | option   | value             |
       | --config | path_options.yaml |
     Then it should pass
-    And "path_options.php" file should contain:
+    And "path_options.php" file should contain exactly:
       """
       <?php
 
@@ -481,7 +481,7 @@ Feature: Convert config
       | option   | value                   |
       | --config | full_configuration.yaml |
     Then it should pass
-    And "full_configuration.php" file should contain:
+    And "full_configuration.php" file should contain exactly:
       """
       <?php
 

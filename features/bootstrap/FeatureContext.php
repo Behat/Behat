@@ -370,6 +370,21 @@ EOL;
         Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
     }
 
+    #[Then(':path file should contain exactly:')]
+    public function fileShouldContainExactly(string $path, PyStringNode $text): void
+    {
+        $path = $this->workingDir.'/'.$path;
+        Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
+        }
+
+        Assert::assertEquals($text, $fileContent);
+    }
+
     /**
      * Checks whether specified content and structure of the xml is correct without worrying about layout.
      *
