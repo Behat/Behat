@@ -639,7 +639,7 @@ EOL;
                     $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
                 }
                 if (str_starts_with($value, '{BASE_PATH}')) {
-                    $basePath = $this->workingDir . DIRECTORY_SEPARATOR;
+                    $basePath = realpath($this->workingDir) . DIRECTORY_SEPARATOR;
                     $value = $basePath . substr($value, strlen('{BASE_PATH}'));
                 }
 
