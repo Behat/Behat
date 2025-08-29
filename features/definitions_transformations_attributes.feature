@@ -4,7 +4,7 @@ Feature: Step Arguments Transformations with Attributes
   I need to use transformation functions using PHP attributes
 
   Background:
-    Given I set the working directory to the "Transformations" fixtures folder
+    Given I initialise the working directory from the "Transformations" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value      |
       | --no-colors |            |
@@ -58,4 +58,3 @@ Feature: Step Arguments Transformations with Attributes
       4 scenarios (4 passed)
       11 steps (11 passed)
       """
-

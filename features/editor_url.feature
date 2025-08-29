@@ -4,7 +4,7 @@ Feature: Editor URL
   I need to be able to ask Behat to add editor links to file paths in the output
 
   Background:
-    Given I set the working directory to the "EditorUrl" fixtures folder
+    Given I initialise the working directory from the "EditorUrl" fixtures folder
     And I provide the following options for all behat invocations:
       | option          | value            |
       | --no-colors     |                  |
@@ -47,14 +47,14 @@ Feature: Editor URL
       | --editor-url | 'phpstorm://open?file={absPath}&line={line}' |
     Then the output should contain:
       """
-        Scenario:                                    # <href=phpstorm://open?file={BASE_PATH}tests/Fixtures/EditorUrl/features/test.feature&line=3>features/test.feature:3</>
+        Scenario:                                    # <href=phpstorm://open?file=%%WORKING_DIR%%features/test.feature&line=3>features/test.feature:3</>
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in <href=phpstorm://open?file={BASE_PATH}tests/Fixtures/EditorUrl/features/bootstrap/FeatureContext.php&line=16>features/bootstrap/FeatureContext.php line 16</>
+            Warning: Undefined variable $b in <href=phpstorm://open?file=%%WORKING_DIR%%features/bootstrap/FeatureContext.php&line=16>features/bootstrap/FeatureContext.php line 16</>
 
       --- Failed scenarios:
 
-          <href=phpstorm://open?file={BASE_PATH}tests/Fixtures/EditorUrl/features/test.feature&line=3>features/test.feature:3</>
+          <href=phpstorm://open?file=%%WORKING_DIR%%features/test.feature&line=3>features/test.feature:3</>
       """
 
   Scenario: Use relative paths in url but absolute paths in visible text
@@ -64,13 +64,12 @@ Feature: Editor URL
       | --editor-url           | 'phpstorm://open?file={relPath}&line={line}' |
     Then the output should contain:
       """
-        Scenario:                                    # <href=phpstorm://open?file=features/test.feature&line=3>{BASE_PATH}tests/Fixtures/EditorUrl/features/test.feature:3</>
+        Scenario:                                    # <href=phpstorm://open?file=features/test.feature&line=3>%%WORKING_DIR%%features/test.feature:3</>
           Given I have a passing step                # FeatureContext::iHaveAPassingStep()
           And I have a step that throws an exception # FeatureContext::iHaveAFailingStep()
-            Warning: Undefined variable $b in <href=phpstorm://open?file=features/bootstrap/FeatureContext.php&line=16>{BASE_PATH}tests/Fixtures/EditorUrl/features/bootstrap/FeatureContext.php line 16</>
+            Warning: Undefined variable $b in <href=phpstorm://open?file=features/bootstrap/FeatureContext.php&line=16>%%WORKING_DIR%%features/bootstrap/FeatureContext.php line 16</>
 
       --- Failed scenarios:
 
-          <href=phpstorm://open?file=features/test.feature&line=3>{BASE_PATH}tests/Fixtures/EditorUrl/features/test.feature:3</>
+          <href=phpstorm://open?file=features/test.feature&line=3>%%WORKING_DIR%%features/test.feature:3</>
       """
-

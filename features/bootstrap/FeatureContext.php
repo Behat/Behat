@@ -17,6 +17,7 @@ use Behat\Step\When;
 use PHPUnit\Framework\Assert;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
@@ -39,10 +40,7 @@ class FeatureContext implements Context
      * @var string
      */
     private $workingDir;
-    /**
-     * @var string
-     */
-    private $tempDir;
+
     /**
      * @var string
      */
@@ -56,7 +54,10 @@ class FeatureContext implements Context
      */
     private $answerString;
 
-    private bool $workingDirChanged = false;
+    public function __construct(
+        private readonly Filesystem $filesystem = new Filesystem(),
+    ) {
+    }
 
     /**
      * Cleans test folders in the temporary directory.
@@ -67,9 +68,7 @@ class FeatureContext implements Context
      */
     public static function cleanTestFolders()
     {
-        if (is_dir($dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat')) {
-            self::clearDirectory($dir);
-        }
+        (new Filesystem())->remove(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat');
     }
 
     /**
@@ -82,14 +81,13 @@ class FeatureContext implements Context
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
             md5(microtime() . rand(0, 10000));
 
-        mkdir($dir . '/features/bootstrap/i18n', 0777, true);
+        $this->filesystem->mkdir($dir);
 
         $phpFinder = new PhpExecutableFinder();
         if (false === $php = $phpFinder->find()) {
             throw new RuntimeException('Unable to find the PHP executable.');
         }
         $this->workingDir = $dir;
-        $this->tempDir = $dir;
         $this->phpBin = $php;
     }
 
@@ -104,7 +102,7 @@ class FeatureContext implements Context
     public function aFileNamedWith($filename, PyStringNode $content)
     {
         $content = strtr((string) $content, ["'''" => '"""']);
-        $this->createFile($this->workingDir . '/' . $filename, $content);
+        $this->createFileInWorkingDir($filename, $content);
     }
 
     /**
@@ -116,7 +114,7 @@ class FeatureContext implements Context
      */
     public function aFileNamed($filename)
     {
-        $this->createFile($this->workingDir . '/' . $filename, '');
+        $this->createFileInWorkingDir($filename, '');
     }
 
     /**
@@ -136,7 +134,7 @@ class FeatureContext implements Context
 {
 }
 EOL;
-        $this->createFile($this->workingDir . '/' . $filename, $content);
+        $this->createFileInWorkingDir($filename, $content);
     }
 
     /**
@@ -152,7 +150,7 @@ Feature:
         Scenario:
           When this scenario executes
 EOL;
-        $this->createFile($this->workingDir . '/' . $filename, $content);
+        $this->createFileInWorkingDir($filename, $content);
     }
 
     /**
@@ -199,9 +197,7 @@ EOL;
         $this->env = ['BEHAT_PARAMS' => (string) $value];
     }
 
-    /**
-     * @When I set the working directory to the :dir fixtures folder
-     */
+    #[When('I initialise the working directory from the :dir fixtures folder')]
     public function iSetTheWorkingDirectoryToTheFixturesFolder($dir): void
     {
         $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
@@ -209,8 +205,7 @@ EOL;
         if (!is_dir($dir)) {
             throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
         }
-        $this->workingDir = $dir;
-        $this->workingDirChanged = true;
+        $this->filesystem->mirror($dir, $this->workingDir);
     }
 
     #[Given('I clear the default behat options')]
@@ -371,6 +366,21 @@ EOL;
         Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
     }
 
+    #[Then(':path file should contain exactly:')]
+    public function fileShouldContainExactly(string $path, PyStringNode $text): void
+    {
+        $path = $this->workingDir.'/'.$path;
+        Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+        // Normalize the line endings in the output
+        if ("\n" !== PHP_EOL) {
+            $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
+        }
+
+        Assert::assertEquals($text, $fileContent);
+    }
+
     /**
      * Checks whether specified content and structure of the xml is correct without worrying about layout.
      *
@@ -385,39 +395,11 @@ EOL;
         $this->checkXmlFileContents($path, $text);
     }
 
-    #[When('I copy the :file file to the temp folder')]
-    public function iCopyTheFileToTheTempFolder($file): void
+    #[Then('the :file file should have been removed from the working directory')]
+    public function fileShouldHaveBeenRemoved($file): void
     {
-        $origin = $this->workingDir . '/' . $file;
-        $destination = $this->tempDir . '/' . $file;
-        copy($origin, $destination);
-    }
-
-    #[Then('the temp :file file should be like:')]
-    public function theTempFileShouldBeLike($file, PyStringNode $string): void
-    {
-        $path = $this->tempDir . '/' . $file;
-        Assert::assertFileExists($path);
-
-        $fileContent = trim(file_get_contents($path));
-
-        Assert::assertSame($string->getRaw(), $fileContent);
-    }
-
-    #[Then('the temp :file file should have been removed')]
-    public function theTempFileShouldHaveBeenRemoved($file): void
-    {
-        $path = $this->tempDir . '/' . $file;
+        $path = $this->workingDir . '/' . $file;
         Assert::assertFileDoesNotExist($path);
-    }
-
-    /**
-     * @Then the temp :path file xml should be like:
-     */
-    public function theTempFileFileXmlShouldBeLike($path, PyStringNode $text): void
-    {
-        $path = $this->tempDir . '/' . $path;
-        $this->checkXmlFileContents($path, $text);
     }
 
     private function checkXmlFileContents($path, PyStringNode $text)
@@ -554,15 +536,6 @@ EOL;
         $this->checkXmlIsValid($path, $schemaPath);
     }
 
-    /**
-     * @Then the temp file :xmlFile should be a valid document according to :schemaPath
-     */
-    public function theTempFileShouldBeAValidDocumentAccordingTo($xmlFile, $schemaPath): void
-    {
-        $path = $this->tempDir . '/' . $xmlFile;
-        $this->checkXmlIsValid($path, $schemaPath);
-    }
-
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
     {
         $dom = new DOMDocument();
@@ -602,30 +575,15 @@ EOL;
         return trim(preg_replace('/ +$/m', '', $output));
     }
 
-    private function createFile($filename, $content)
+    private function createFileInWorkingDir(string $filename, string $content): void
     {
-        if ($this->workingDirChanged) {
-            throw new RuntimeException('Trying to write a file in a fixtures folder');
-        }
-        $path = dirname($filename);
-        $this->createDirectory($path);
-
-        file_put_contents($filename, $content);
-    }
-
-    private function createDirectory($path)
-    {
-        if (!is_dir($path)) {
-            mkdir($path, 0777, true);
-        }
+        $this->filesystem->dumpFile($this->workingDir . DIRECTORY_SEPARATOR . $filename, $content);
     }
 
     private function moveToNewPath($path)
     {
         $newWorkingDir = $this->workingDir . '/' . $path;
-        if (!file_exists($newWorkingDir)) {
-            mkdir($newWorkingDir, 0777, true);
-        }
+        $this->filesystem->mkdir($newWorkingDir);
 
         $this->workingDir = $newWorkingDir;
     }
@@ -648,22 +606,6 @@ EOL;
         return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
     }
 
-    private static function clearDirectory($path)
-    {
-        $files = scandir($path);
-        array_shift($files);
-        array_shift($files);
-
-        foreach ($files as $file) {
-            $file = $path . DIRECTORY_SEPARATOR . $file;
-            if (is_dir($file)) {
-                self::clearDirectory($file);
-            } else {
-                unlink($file);
-            }
-        }
-    }
-
     private function addBehatOptions(TableNode $table): void
     {
         $rows = $table->getHash();
@@ -671,11 +613,8 @@ EOL;
             $option = $row['option'];
             $value = $row['value'];
             if ($value !== '') {
-                if (str_starts_with($value, '{SYSTEM_TMP_DIR}')) {
-                    $value = $this->tempDir . substr($value, strlen('{SYSTEM_TMP_DIR}'));
-                }
                 if (str_starts_with($value, '{BASE_PATH}')) {
-                    $basePath = realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR;
+                    $basePath = realpath($this->workingDir) . DIRECTORY_SEPARATOR;
                     $value = $basePath . substr($value, strlen('{BASE_PATH}'));
                 }
 

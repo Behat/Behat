@@ -4,7 +4,7 @@ Feature: Error Reporting
   I need to have an ability to set a custom error level for steps to be executed in
 
   Background:
-    Given I set the working directory to the "ErrorReporting" fixtures folder
+    Given I initialise the working directory from the "ErrorReporting" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value    |
       | --no-colors |          |

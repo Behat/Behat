@@ -4,7 +4,7 @@ Feature: Step Arguments Transformations Annotations
   I need to use transformation functions using annotations
 
   Background:
-    Given I set the working directory to the "Transformations" fixtures folder
+    Given I initialise the working directory from the "Transformations" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value       |
       | --no-colors |             |
