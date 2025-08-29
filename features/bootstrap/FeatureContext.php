@@ -54,6 +54,11 @@ class FeatureContext implements Context
      */
     private $answerString;
 
+    public function __construct(
+        private readonly Filesystem $filesystem = new Filesystem(),
+    ) {
+    }
+
     /**
      * Cleans test folders in the temporary directory.
      *
@@ -64,11 +69,6 @@ class FeatureContext implements Context
     public static function cleanTestFolders()
     {
         (new Filesystem())->remove(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat');
-    }
-
-    public function __construct(
-        private readonly Filesystem $filesystem = new Filesystem(),
-    ) {
     }
 
     /**
