@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Snippet\Printer;
 
+use Behat\Behat\Context\Snippet\Generator\CannotGenerateStepPatternException;
 use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Gherkin\Node\StepNode;
@@ -46,6 +47,7 @@ class ConsoleSnippetPrinter implements SnippetPrinter
 
         $output->getFormatter()->setStyle('snippet_keyword', new OutputFormatterStyle(null, null, ['bold']));
         $output->getFormatter()->setStyle('snippet_undefined', new OutputFormatterStyle('yellow'));
+        $output->getFormatter()->setStyle('snippet_failure', new OutputFormatterStyle('red'));
     }
 
     /**
@@ -106,6 +108,27 @@ class ConsoleSnippetPrinter implements SnippetPrinter
 
         foreach ($usedClasses as $usedClass) {
             $this->output->writeln(sprintf('    <snippet_undefined>use %s;</snippet_undefined>', $usedClass));
+        }
+    }
+
+    /**
+     * @param array<CannotGenerateStepPatternException> $exceptions
+     */
+    public function printSnippetGenerationFailures(array $exceptions): void
+    {
+        if ([] === $exceptions) {
+            return;
+        }
+
+        $title = $this->translator->trans('snippet_generation_failure_title', [], 'output');
+        $hint = $this->translator->trans('snippet_generation_failure_hint', [], 'output');
+
+        $this->output->writeln('<snippet_failure>--- '.$title.'</snippet_failure>');
+        $this->output->writeln('<snippet_failure>    '.$hint.'</snippet_failure>');
+        $this->output->writeln('');
+
+        foreach ($exceptions as $exception) {
+            $this->output->writeln('<snippet_failure>    - '.$exception->stepText.'</snippet_failure>');
         }
     }
 }

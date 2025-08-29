@@ -6,6 +6,9 @@ return [
         'snippet_proposal_title' => '<snippet_undefined><snippet_keyword>%count%</snippet_keyword> has missing steps. Define them with these snippets:</snippet_undefined>',
         'snippet_proposal_use' => 'Don\'t forget these %count% use statements:',
         'snippet_missing_title' => '<snippet_undefined>Use <snippet_keyword>--snippets-for</snippet_keyword> CLI option to generate snippets for following <snippet_keyword>%count%</snippet_keyword> suite steps:</snippet_undefined>',
+        // @todo: Add translations for other languages
+        'snippet_generation_failure_title' => 'Could not automatically generate snippets matching the following steps:',
+        'snippet_generation_failure_hint' => '(try using --snippets-type=regex, or manually define the step)',
         'skipped_scenarios_title' => 'Skipped scenarios:',
         'failed_scenarios_title' => 'Failed scenarios:',
         'failed_hooks_title' => 'Failed hooks:',

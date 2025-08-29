@@ -109,6 +109,12 @@ TPL;
         $stepText = $step->getText();
         $pattern = $this->patternTransformer->generatePattern($patternType, $stepText);
 
+        if ($this->patternTransformer->matchPattern($pattern->getPattern(), $stepText) === false) {
+            // The generated pattern does not actually match the step text. For example because the step
+            // text contains literal characters that are treated as placeholders or similar.
+            throw new CannotGenerateStepPatternException($stepText);
+        }
+
         $methodName = $this->getUniqueMethodName(
             $contextClass,
             $pattern->getPattern(),
