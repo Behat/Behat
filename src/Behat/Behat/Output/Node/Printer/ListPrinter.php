@@ -316,7 +316,13 @@ final class ListPrinter
 
     private function extractLineNumber(string $path): ?string
     {
-        return explode(':', $path)[1] ?? null;
+        $lastColonPos = strrpos($path, ':');
+
+        if (false === $lastColonPos) {
+            return null;
+        }
+
+        return substr($path, $lastColonPos + 1);
     }
 
     private function getLocationFromScope(?HookScope $scope): ?string
