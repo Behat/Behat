@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Snippet;
 
+use Behat\Behat\Context\Snippet\Generator\CannotGenerateStepPatternException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
@@ -37,6 +38,11 @@ final class SnippetRegistry implements SnippetRepository
      * @var bool
      */
     private $snippetsGenerated = false;
+
+    /**
+     * @var list<CannotGenerateStepPatternException>
+     */
+    private array $exceptions = [];
 
     /**
      * Registers snippet generator.
@@ -83,6 +89,16 @@ final class SnippetRegistry implements SnippetRepository
     }
 
     /**
+     * @return list<CannotGenerateStepPatternException>
+     */
+    public function getGenerationFailures(): array
+    {
+        $this->generateSnippets();
+
+        return $this->exceptions;
+    }
+
+    /**
      * Generates snippets for undefined steps.
      */
     private function generateSnippets(): void
@@ -93,7 +109,13 @@ final class SnippetRegistry implements SnippetRepository
 
         $snippetsSet = [];
         foreach ($this->undefinedSteps as $i => $undefinedStep) {
-            $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
+            try {
+                $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
+            } catch (CannotGenerateStepPatternException $e) {
+                $this->exceptions[] = $e;
+                unset($this->undefinedSteps[$i]);
+                continue;
+            }
 
             if (!$snippet) {
                 continue;

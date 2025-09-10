@@ -101,6 +101,10 @@ final class SnippetsController implements Controller
         }
 
         if (!$input->getOption('no-snippets')) {
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->printSnippetGenerationFailures(...), -999);
+        }
+
+        if (!$input->getOption('no-snippets')) {
             $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUndefinedSteps'], -995);
         }
 
@@ -123,7 +127,9 @@ final class SnippetsController implements Controller
     public function appendAllSnippets()
     {
         $snippets = $this->registry->getSnippets();
-        count($snippets) && $this->output->writeln('');
+        if ($snippets) {
+            $this->output->writeln('');
+        }
 
         $this->writer->appendSnippets($snippets);
     }
@@ -134,9 +140,21 @@ final class SnippetsController implements Controller
     public function printAllSnippets()
     {
         $snippets = $this->registry->getSnippets();
-        count($snippets) && $this->output->writeln('');
+        if ($snippets) {
+            $this->output->writeln('');
+        }
 
         $this->writer->printSnippets($this->printer, $snippets);
+    }
+
+    private function printSnippetGenerationFailures(): void
+    {
+        $failures = $this->registry->getGenerationFailures();
+        if ($failures) {
+            $this->output->writeln('');
+        }
+
+        $this->printer->printSnippetGenerationFailures($failures);
     }
 
     /**
@@ -145,7 +163,9 @@ final class SnippetsController implements Controller
     public function printUndefinedSteps()
     {
         $undefined = $this->registry->getUndefinedSteps();
-        count($undefined) && $this->output->writeln('');
+        if ($undefined) {
+            $this->output->writeln('');
+        }
 
         $this->writer->printUndefinedSteps($this->printer, $undefined);
     }

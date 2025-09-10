@@ -110,9 +110,8 @@ final class RepositorySearchEngine implements SearchEngine
      */
     private function match(Definition $definition, $stepText, array $multiline)
     {
-        $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
-
-        if (!preg_match($regex, $stepText, $match)) {
+        $match = $this->patternTransformer->matchPattern($definition->getPattern(), $stepText);
+        if ($match === false) {
             return null;
         }
 
