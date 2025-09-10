@@ -148,8 +148,8 @@ Feature: Multiple formats
       U
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -236,8 +236,8 @@ Feature: Multiple formats
       U
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -361,8 +361,8 @@ Feature: Multiple formats
 
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -415,8 +415,8 @@ Feature: Multiple formats
 
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -528,8 +528,8 @@ Feature: Multiple formats
 
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)

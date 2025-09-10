@@ -61,7 +61,7 @@ Feature: Show output
 
       --- Failed scenarios:
 
-          features/show_output.feature:6
+          features/show_output.feature:6 (on line 9)
 
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
@@ -84,7 +84,7 @@ Feature: Show output
 
       --- Failed scenarios:
 
-          features/show_output.feature:6
+          features/show_output.feature:6 (on line 9)
 
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
@@ -108,7 +108,7 @@ Feature: Show output
 
       --- Failed scenarios:
 
-          features/show_output.feature:6
+          features/show_output.feature:6 (on line 9)
 
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)

@@ -543,7 +543,7 @@ Feature: Hooks Attributes
 
       --- Failed scenarios:
 
-          features/test.feature:6
+          features/test.feature:6 (on line 7)
           features/test.feature:9
 
       4 scenarios (1 passed, 2 failed, 1 skipped)

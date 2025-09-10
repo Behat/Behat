@@ -123,9 +123,9 @@ Feature: I18n Attributes
 
       --- Проваленные сценарии:
 
-          features/World.feature:20
-          features/World.feature:31
-          features/World.feature:33
+          features/World.feature:20 (в строке 22)
+          features/World.feature:31 (в строке 27)
+          features/World.feature:33 (в строке 27)
 
       6 сценариев (1 пройден, 3 провалено, 1 не определен, 1 в ожидании)
       23 шага (16 пройдено, 3 провалено, 1 не определен, 1 в ожидании, 2 пропущено)
