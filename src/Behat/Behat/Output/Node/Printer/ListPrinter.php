@@ -298,7 +298,7 @@ final class ListPrinter
             }
         }
 
-        if (!$foundStepStat) {
+        if (!$foundStepStat instanceof StepStatV2) {
             return $path;
         }
 
