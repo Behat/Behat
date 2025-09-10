@@ -91,7 +91,7 @@ return [
         'snippet_proposal_use' => 'No olvides estas %count% declaraciones de use:',
         'snippet_missing_title' => '<snippet_undefined>Las plantillas para los siguientes pasos en <snippet_keyword>%count%</snippet_keyword> no fueron generadas (revisa tu configuración):</snippet_undefined>',
         'snippet_generation_failure_title' => 'No se pudieron generar automáticamente fragmentos que coincidan con los siguientes pasos:',
-        'snippet_generation_failure_hint' => '(intente usar --snippets-type=regex o defina el paso manualmente)',
+        'snippet_generation_failure_hint' => '(intenta usar --snippets-type=regex o define el paso manualmente)',
         'failed_scenarios_title' => 'Escenarios fallidos:',
         'failed_hooks_title' => 'Hooks fallidos:',
         'failed_steps_title' => 'Pasos fallidos:',
