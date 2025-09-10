@@ -70,6 +70,7 @@ final class ListPrinter
      * @param string         $intro
      * @param int            $resultCode
      * @param ScenarioStat[] $scenarioStats
+     * @param StepStat[]     $stepStats
      */
     public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null)
     {
@@ -277,7 +278,7 @@ final class ListPrinter
     }
 
     /**
-     * @param array<ScenarioStat> $stepStats
+     * @param StepStat[] $stepStats
      */
     private function appendFailingStepText(?array $stepStats, string $path, ScenarioStat $scenarioStat): string
     {
@@ -297,7 +298,7 @@ final class ListPrinter
             }
         }
 
-        if (!($foundStepStat instanceof StepStatV2)) {
+        if (!$foundStepStat) {
             return $path;
         }
 
