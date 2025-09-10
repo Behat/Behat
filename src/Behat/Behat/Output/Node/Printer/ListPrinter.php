@@ -81,7 +81,7 @@ final class ListPrinter
         $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
-        foreach ($scenarioStats as $key => $stat) {            
+        foreach ($scenarioStats as $key => $stat) {
             $path = $this->configurablePathPrinter->processPathsInText((string) $stat);
             $path = $this->appendFailingStepText($stepStats, $key, $path);
             
