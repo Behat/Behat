@@ -81,10 +81,11 @@ final class ListPrinter
         $intro = $this->translator->trans($intro, [], 'output');
 
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
-        foreach ($scenarioStats as $key => $stat) {
+        foreach ($scenarioStats as $stat) {
             $path = $this->configurablePathPrinter->processPathsInText((string) $stat);
-            $path = $this->appendFailingStepText($stepStats, $key, $path);
-            
+
+            $path = $this->appendFailingStepText($stepStats, $path, $stat);
+
             $printer->writeln(sprintf('    {+%s}%s{-%s}', $style, $path, $style));
         }
 
@@ -276,16 +277,34 @@ final class ListPrinter
     }
 
     /**
-     * @param ScenarioStat[] $scenarioStats
+     * @param array<ScenarioStat> $stepStats
      */
-    private function appendFailingStepText(?array $stepStats, int $key, string $path): string
+    private function appendFailingStepText(?array $stepStats, string $path, ScenarioStat $scenarioStat): string
     {
-        $stepStat = isset($stepStats[$key]) ? $stepStats[$key] : null;
-        $stepLine = $stepStat ? $this->extractLineNumber((string) $stepStat) : null;
+        $foundStepStat = null;
+        if (null === $stepStats) {
+            return $path;
+        }
+
+        foreach ($stepStats as $stepStat) {
+            // See https://github.com/Behat/Behat/pull/1615#pullrequestreview-2737706542
+            // > although Statistics::getFailedSteps() is typed as returning StepStat[] for BC reasons,
+            // > in practice we only ever create / register instances of StepStatV2. And that has a
+            // > getScenarioPath() which I think should always match the getPath() of ScenarioStat.
+            if ($stepStat instanceof StepStatV2 && $stepStat->getScenarioPath() === $scenarioStat->getPath()) {
+                $foundStepStat = $stepStat;
+                break;
+            }
+        }
+
+        if (!($foundStepStat instanceof StepStatV2)) {
+            return $path;
+        }
+
+        $stepLine = $this->extractLineNumber((string) $foundStepStat->getStepPath());
 
         if ($stepLine !== null) {
             $lineNumber = $this->translator->trans('on_line_number', ['%line%' => $stepLine], 'output');
-            
             $lineHelper = ' (' . $lineNumber . ')';
         } else {
             $lineHelper = '';
@@ -293,7 +312,6 @@ final class ListPrinter
 
         return $path . $lineHelper;
     }
-
 
     private function extractLineNumber(string $path): ?string
     {
