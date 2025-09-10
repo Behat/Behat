@@ -83,19 +83,9 @@ final class ListPrinter
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($scenarioStats as $key => $stat) {            
             $path = $this->configurablePathPrinter->processPathsInText((string) $stat);
+            $path = $this->appendFailingStepText($stepStats, $key, $path);
             
-            $stepStat = isset($stepStats[$key]) ? $stepStats[$key] : null;
-            $stepLine = $stepStat ? $this->extractLineNumber((string) $stepStat) : null;
-
-            if ($stepLine !== null) {
-                $lineNumber = $this->translator->trans('on_line_number', ['%line%' => $stepLine], 'output');
-                
-                $lineHelper = ' (' . $lineNumber . ')';
-            } else {
-                $lineHelper = '';
-            }
-
-            $printer->writeln(sprintf('    {+%s}%s%s{-%s}', $style, $path, $lineHelper, $style));
+            $printer->writeln(sprintf('    {+%s}%s{-%s}', $style, $path, $style));
         }
 
         $printer->writeln();
@@ -284,6 +274,26 @@ final class ListPrinter
 
         $printer->writeln();
     }
+
+    /**
+     * @param ScenarioStat[] $scenarioStats
+     */
+    private function appendFailingStepText(?array $stepStats, int $key, string $path): string
+    {
+        $stepStat = isset($stepStats[$key]) ? $stepStats[$key] : null;
+        $stepLine = $stepStat ? $this->extractLineNumber((string) $stepStat) : null;
+
+        if ($stepLine !== null) {
+            $lineNumber = $this->translator->trans('on_line_number', ['%line%' => $stepLine], 'output');
+            
+            $lineHelper = ' (' . $lineNumber . ')';
+        } else {
+            $lineHelper = '';
+        }
+
+        return $path . $lineHelper;
+    }
+
 
     private function extractLineNumber(string $path): ?string
     {
