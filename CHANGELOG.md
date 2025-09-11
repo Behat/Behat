@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.24.0] - 2025-09-11
+
+### Changed
+
+* Throw if a step provides an unexpected PyString or Table argument, to highlight cases where step definitions do not
+  match their usage causing potential false-positive passes. If users have stubbed steps with incomplete arguments (e.g.
+  to throw a PendingException) these will now fail before executing. Steps generated from Behat's snippets or IDEs
+  should not be affected as these should already define appropriate PyStringNode / TableNode arguments.
+  By @jdeniau in [#1614](https://github.com/Behat/Behat/pull/1614)
+
+### Added
+
+* Display line number of failing test in pretty formatter by @jdeniau in [#1615](https://github.com/Behat/Behat/pull/1615)
+
+### Fixed
+
+* Ensure that suggested step definitions actually match the step text by @acoulton in [#1656](https://github.com/Behat/Behat/pull/1656)
+
+### Internal
+
+* Rector code quality by @carlos-granados in [#1648](https://github.com/Behat/Behat/pull/1648)
+* Run fixture-based scenarios in isolated directories by @acoulton in [#1657](https://github.com/Behat/Behat/pull/1657)
+
 ## [3.23.0] - 2025-07-15
 
 ### Added
@@ -1292,6 +1315,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.24.0]: https://github.com/Behat/Behat/compare/v3.23.0...v3.24.0
 [3.23.0]: https://github.com/Behat/Behat/compare/v3.22.0...v3.23.0
 [3.22.0]: https://github.com/Behat/Behat/compare/v3.21.1...v3.22.0
 [3.21.1]: https://github.com/Behat/Behat/compare/v3.21.0...v3.21.1
