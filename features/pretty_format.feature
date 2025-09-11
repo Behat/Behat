@@ -120,9 +120,9 @@ Feature: Pretty Formatter
 
       --- Failed scenarios:
 
-          features/World.feature:19
-          features/World.feature:30
-          features/World.feature:32
+          features/World.feature:19 (on line 21)
+          features/World.feature:30 (on line 26)
+          features/World.feature:32 (on line 26)
 
       6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
       23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)

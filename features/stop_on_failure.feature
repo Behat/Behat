@@ -19,8 +19,8 @@ Feature: Stop on failure via config
       """
       --- Failed scenarios:
 
-          features/failing.feature:13
-          features/failing.feature:18
+          features/failing.feature:13 (on line 15)
+          features/failing.feature:18 (on line 19)
 
       4 scenarios (2 passed, 2 failed)
       14 steps (10 passed, 2 failed, 2 skipped)
@@ -35,8 +35,8 @@ Feature: Stop on failure via config
       """
       --- Failed scenarios:
 
-          features/failing.feature:13
-          features/failing.feature:18
+          features/failing.feature:13 (on line 15)
+          features/failing.feature:18 (on line 19)
 
       4 scenarios (2 passed, 2 failed)
       14 steps (10 passed, 2 failed, 2 skipped)
@@ -52,7 +52,7 @@ Feature: Stop on failure via config
       """
       --- Failed scenarios:
 
-          features/failing.feature:13
+          features/failing.feature:13 (on line 15)
 
       2 scenarios (1 passed, 1 failed)
       7 steps (5 passed, 1 failed, 1 skipped)
@@ -67,7 +67,7 @@ Feature: Stop on failure via config
       """
       --- Failed scenarios:
 
-          features/failing.feature:13
+          features/failing.feature:13 (on line 15)
 
       2 scenarios (1 passed, 1 failed)
       7 steps (5 passed, 1 failed, 1 skipped)
@@ -83,7 +83,7 @@ Feature: Stop on failure via config
       """
       --- Failed scenarios:
 
-          features/failing.feature:13
+          features/failing.feature:13 (on line 15)
 
       2 scenarios (1 passed, 1 failed)
       7 steps (5 passed, 1 failed, 1 skipped)
