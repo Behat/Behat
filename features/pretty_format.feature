@@ -410,12 +410,13 @@ Feature: Pretty Formatter
 
       use Behat\Behat\Context\Context;
       use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Gherkin\Node\TableNode;
       use Behat\Step\Given;
 
       class FeatureContext implements Context
       {
           #[Given('/^.*$/')]
-          public function anything() {
+          public function anything(?TableNode $table = null): void {
               throw new PendingException();
           }
       }
