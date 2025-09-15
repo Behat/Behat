@@ -9,6 +9,7 @@
  */
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
@@ -498,6 +499,8 @@ EOL;
                 $text
             );
         }
+
+        $text = ConsoleFormatter::replaceHref($text);
 
         return $text;
     }
