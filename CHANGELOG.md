@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.24.1] - 2025-09-15
+
+### Fixed
+
+* Fix rendering editorUrl links in console output by @carlos-granados in [#1661](https://github.com/Behat/Behat/pull/1661)
+
 ## [3.24.0] - 2025-09-11
 
 ### Changed
@@ -1315,6 +1321,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.24.1]: https://github.com/Behat/Behat/compare/v3.24.0...v3.24.1
 [3.24.0]: https://github.com/Behat/Behat/compare/v3.23.0...v3.24.0
 [3.23.0]: https://github.com/Behat/Behat/compare/v3.22.0...v3.23.0
 [3.22.0]: https://github.com/Behat/Behat/compare/v3.21.1...v3.22.0
