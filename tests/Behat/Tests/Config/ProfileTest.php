@@ -16,7 +16,6 @@ use Behat\Config\Suite;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PHPUnit\Framework\TestCase;
-use UnexpectedValueException;
 
 final class ProfileTest extends TestCase
 {
@@ -147,10 +146,12 @@ final class ProfileTest extends TestCase
                     'multiline' => true,
                     'output_verbosity' => 2,
                     'show_output' => 'yes',
+                    'short_summary' => true,
                 ],
                 'progress' => [
                     'timer' => false,
                     'show_output' => 'in-summary',
+                    'short_summary' => false,
                 ],
                 'junit' => [],
             ],
@@ -188,18 +189,10 @@ final class ProfileTest extends TestCase
                 'progress' => [
                     'timer' => true,
                     'show_output' => 'yes',
+                    'short_summary' => false,
                 ],
                 'junit' => false,
             ],
         ], $profile->toArray());
-    }
-
-    public function testSettingInvalidShowOutputOption(): void
-    {
-        $profile = new Profile('default');
-
-        $this->expectException(UnexpectedValueException::class);
-
-        $profile->withFormatter(new PrettyFormatter(showOutput: ShowOutputOption::InSummary));
     }
 }

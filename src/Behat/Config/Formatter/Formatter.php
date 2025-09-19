@@ -15,6 +15,9 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
     private const OUTPUT_PATH_SETTING = 'output_path';
     private const OUTPUT_DECORATE_SETTING = 'output_decorate';
     private const OUTPUT_STYLES_SETTING = 'output_styles';
+    private const SHORT_SUMMARY_SETTING = 'short_summary';
+
+    private const SHORT_SUMMARY_PARAMETER_NAME = 'shortSummary';
 
     private const OUTPUT_VERBOSITY_FUNCTION = 'withOutputVerbosity';
     private const OUTPUT_PATH_FUNCTION = 'withOutputPath';
@@ -114,6 +117,9 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
             if ($name === ShowOutputOption::OPTION_NAME) {
                 $value = ShowOutputOption::from($value);
                 $name = ShowOutputOption::PARAMETER_NAME;
+            }
+            if ($name === self::SHORT_SUMMARY_SETTING) {
+                $name = self::SHORT_SUMMARY_PARAMETER_NAME;
             }
             $arguments[$name] = $value;
         }
