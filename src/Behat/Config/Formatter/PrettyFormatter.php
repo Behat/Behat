@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Behat\Config\Formatter;
 
 use PhpParser\Node\Expr;
-use UnexpectedValueException;
 
 final class PrettyFormatter extends Formatter
 {
@@ -15,6 +14,7 @@ final class PrettyFormatter extends Formatter
     private const EXPAND_SETTING = 'expand';
     private const PATHS_SETTING = 'paths';
     private const MULTILINE_SETTING = 'multiline';
+    private const SHORT_SUMMARY_SETTING = 'short_summary';
 
     /**
      * @param bool $timer show time and memory usage at the end of the test run
@@ -24,6 +24,8 @@ final class PrettyFormatter extends Formatter
      * @param bool $multiline print out PyStrings and TableNodes in full
      * @param ShowOutputOption $showOutput show the test stdout output as part of the
      *                                     formatter output (yes, no, on-fail)
+     * @param bool $shortSummary if we should print the short summary which just lists scenarios
+     *                           or the long summary which lists steps
      */
     public function __construct(
         bool $timer = true,
@@ -31,19 +33,16 @@ final class PrettyFormatter extends Formatter
         bool $paths = true,
         bool $multiline = true,
         ShowOutputOption $showOutput = ShowOutputOption::Yes,
+        bool $shortSummary = true,
         ...$baseOptions,
     ) {
-        if ($showOutput === ShowOutputOption::InSummary) {
-            throw new UnexpectedValueException(
-                'The pretty formatter does not support the "in-summary" show output option'
-            );
-        }
         $settings = [
             self::TIMER_SETTING => $timer,
             self::EXPAND_SETTING => $expand,
             self::PATHS_SETTING => $paths,
             self::MULTILINE_SETTING => $multiline,
             ShowOutputOption::OPTION_NAME => $showOutput->value,
+            self::SHORT_SUMMARY_SETTING => $shortSummary,
         ];
         $settings = [...$settings, ...$baseOptions];
         parent::__construct(name: self::NAME, settings: $settings);

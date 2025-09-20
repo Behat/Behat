@@ -8,6 +8,7 @@ default:
         pretty:
             paths:    false
             output_decorate: false
+            short_summary: false
         progress: ~
         junit: false
         custom_formatter:

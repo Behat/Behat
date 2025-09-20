@@ -395,7 +395,7 @@ Feature: Convert config
 
       return (new Config())
           ->withProfile((new Profile('default'))
-              ->withFormatter((new PrettyFormatter(paths: false))
+              ->withFormatter((new PrettyFormatter(paths: false, shortSummary: false))
                   ->withOutputDecorated(false))
               ->withFormatter(new ProgressFormatter())
               ->disableFormatter('junit')
@@ -501,7 +501,7 @@ Feature: Convert config
       return (new Config())
           ->import('imported.php')
           ->withProfile((new Profile('default'))
-              ->withFormatter((new PrettyFormatter(paths: false))
+              ->withFormatter((new PrettyFormatter(paths: false, shortSummary: false))
                   ->withOutputDecorated(false))
               ->withFormatter(new ProgressFormatter())
               ->disableFormatter('junit')
