@@ -124,8 +124,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
-        return function ($col) use ($style) {
-            return sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
-        };
+        return fn ($col) => sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
     }
 }

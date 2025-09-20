@@ -96,9 +96,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
-        usort($transformations, function (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) {
-            return $t2->getPriority() <=> $t1->getPriority();
-        });
+        usort($transformations, fn (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) => $t2->getPriority() <=> $t1->getPriority());
 
         $newValue = $value;
         foreach ($transformations as $transformation) {
@@ -157,11 +155,9 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     private function splitSimpleAndNormalTransformations(array $transformations)
     {
-        return array_reduce($transformations, function ($acc, $t) {
-            return [
-                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
-                $t instanceof SimpleArgumentTransformation ? $acc[1] : array_merge($acc[1], [$t]),
-            ];
-        }, [[], []]);
+        return array_reduce($transformations, fn ($acc, $t) => [
+            $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
+            $t instanceof SimpleArgumentTransformation ? $acc[1] : array_merge($acc[1], [$t]),
+        ], [[], []]);
     }
 }

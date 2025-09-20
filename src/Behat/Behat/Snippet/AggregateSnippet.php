@@ -68,9 +68,7 @@ final class AggregateSnippet
     {
         return array_unique(
             array_map(
-                function (Snippet $snippet) {
-                    return $snippet->getStep();
-                },
+                fn (Snippet $snippet) => $snippet->getStep(),
                 $this->snippets
             ),
             SORT_REGULAR
@@ -86,9 +84,7 @@ final class AggregateSnippet
     {
         return array_unique(
             array_map(
-                function (Snippet $snippet) {
-                    return $snippet->getTarget();
-                },
+                fn (Snippet $snippet) => $snippet->getTarget(),
                 $this->snippets
             )
         );

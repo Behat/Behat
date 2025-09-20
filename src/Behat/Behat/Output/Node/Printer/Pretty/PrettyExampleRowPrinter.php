@@ -165,13 +165,11 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $callResult = $result->getCallResult();
         $indentedText = $this->subIndentText;
 
-        $pad = function ($line) use ($indentedText) {
-            return sprintf(
-                '%s│ {+stdout}%s{-stdout}',
-                $indentedText,
-                $line
-            );
-        };
+        $pad = (fn ($line) => sprintf(
+            '%s│ {+stdout}%s{-stdout}',
+            $indentedText,
+            $line
+        ));
 
         $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
     }

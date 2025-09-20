@@ -90,12 +90,8 @@ final class OutputExtension implements Extension
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function ($a) {
-                        return is_array($a) && !isset($a['enabled']);
-                    })
-                    ->then(function ($a) {
-                        return array_merge($a, ['enabled' => true]);
-                    })
+                    ->ifTrue(fn ($a) => is_array($a) && !isset($a['enabled']))
+                    ->then(fn ($a) => array_merge($a, ['enabled' => true]))
                 ->end()
         ;
         assert($builder instanceof ArrayNodeDefinition);

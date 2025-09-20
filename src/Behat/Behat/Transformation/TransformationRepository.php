@@ -43,9 +43,7 @@ final class TransformationRepository
     {
         return array_filter(
             $this->environmentManager->readEnvironmentCallees($environment),
-            function (Callee $callee) {
-                return $callee instanceof Transformation;
-            }
+            fn (Callee $callee) => $callee instanceof Transformation
         );
     }
 }

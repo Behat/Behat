@@ -79,9 +79,7 @@ final class SuiteExtension implements Extension
             ->normalizeKeys(false)
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function ($suite) {
-                        return is_array($suite) && count($suite);
-                    })
+                    ->ifTrue(fn ($suite) => is_array($suite) && count($suite))
                     ->then(function ($suite) {
                         $suite['settings'] = $suite['settings'] ?? [];
 

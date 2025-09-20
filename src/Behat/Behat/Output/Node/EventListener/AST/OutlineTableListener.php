@@ -204,9 +204,7 @@ final class OutlineTableListener implements EventListener
     private function getStepTestResults(): array
     {
         return array_map(
-            function (AfterStepTested $event) {
-                return $event->getTestResult();
-            },
+            fn (AfterStepTested $event) => $event->getTestResult(),
             $this->stepAfterTestedEvents
         );
     }

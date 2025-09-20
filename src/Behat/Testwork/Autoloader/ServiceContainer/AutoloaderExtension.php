@@ -63,9 +63,7 @@ final class AutoloaderExtension implements Extension
     {
         $builder = $builder
             ->beforeNormalization()
-                ->ifString()->then(function ($path) {
-                    return ['' => $path];
-                })
+                ->ifString()->then(fn ($path) => ['' => $path])
             ->end()
 
             ->defaultValue($this->defaultPaths)

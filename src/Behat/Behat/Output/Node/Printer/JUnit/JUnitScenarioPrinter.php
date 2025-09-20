@@ -62,9 +62,7 @@ final class JUnitScenarioPrinter
 
     public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
-        $name = implode(' ', array_map(function ($l) {
-            return trim($l);
-        }, explode("\n", $scenario->getTitle() ?? '')));
+        $name = implode(' ', array_map(fn ($l) => trim($l), explode("\n", $scenario->getTitle() ?? '')));
 
         if ($scenario instanceof ExampleNode) {
             $name = $this->buildExampleName($scenario);

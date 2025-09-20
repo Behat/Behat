@@ -452,50 +452,38 @@ EOL;
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
                 '/[ "](features|tests)\/[^\n "]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
             $text = preg_replace_callback(
                 '/\<span class\="path"\>features\/[^\<]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
             $text = preg_replace_callback(
                 '/\+[fd] [^ ]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
 
             // error stacktrace
             $text = preg_replace_callback(
                 '/#\d+ [^:]+:/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
 
             // texts with absolute paths
             $text = preg_replace_callback(
                 '/\{BASE_PATH\}[^\n \<"]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
 
             // texts in editor URLs
             $text = preg_replace_callback(
                 '/open\?file[^\<"]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
         }
