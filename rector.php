@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Class_\StringableForToStringRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -11,7 +12,10 @@ return RectorConfig::configure()
     ])
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
-    ->withPhpLevel(78)
+    ->withPhpLevel(79)
+    ->withSkip([
+        StringableForToStringRector::class,
+    ])
     ->withImportNames(
         removeUnusedImports: true,
     )
