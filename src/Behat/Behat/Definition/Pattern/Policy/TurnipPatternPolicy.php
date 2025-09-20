@@ -62,7 +62,7 @@ final class TurnipPatternPolicy implements PatternPolicy
             $pattern = preg_replace_callback(
                 $replacePattern,
                 function () use (&$count) { return ':arg' . ++$count; },
-                $pattern
+                (string) $pattern
             );
         }
         $pattern = $this->escapeAlternationSyntax($pattern);
@@ -123,7 +123,7 @@ final class TurnipPatternPolicy implements PatternPolicy
 
     private function replaceTokenWithRegexCaptureGroup($tokenMatch)
     {
-        if (strlen($tokenMatch[1]) > 32) {
+        if (strlen((string) $tokenMatch[1]) > 32) {
             throw new InvalidPatternException(
                 "Token name should not exceed 32 characters, but `{$tokenMatch[1]}` was used."
             );

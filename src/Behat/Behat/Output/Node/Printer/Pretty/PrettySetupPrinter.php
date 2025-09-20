@@ -149,7 +149,7 @@ final class PrettySetupPrinter implements SetupPrinter
             $line
         ));
 
-        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
         $printer->writeln(sprintf('%s│', $indentText));
     }
 

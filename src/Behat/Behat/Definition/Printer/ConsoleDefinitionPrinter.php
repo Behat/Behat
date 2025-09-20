@@ -65,7 +65,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 
         $method = 'get' . ucfirst($definition->getType()) . 'Keywords';
 
-        $keywords = explode('|', $this->keywords->$method());
+        $keywords = explode('|', (string) $this->keywords->$method());
 
         if ($onlyOne) {
             return current($keywords);

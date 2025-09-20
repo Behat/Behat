@@ -93,7 +93,7 @@ final class ArgumentAutowirer
             new ReflectionClass($typeString);
 
             return $typeString;
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return null;
         }
     }

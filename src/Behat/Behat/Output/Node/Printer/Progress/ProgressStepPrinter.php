@@ -100,7 +100,7 @@ final class ProgressStepPrinter implements StepPrinter
             $line
         ));
 
-        $printer->write(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->write(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
         $this->hasPrintedOutput = true;
     }
 }

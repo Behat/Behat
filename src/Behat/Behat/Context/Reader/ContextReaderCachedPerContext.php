@@ -34,11 +34,7 @@ final class ContextReaderCachedPerContext implements ContextReader
 
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        if (isset($this->cachedCallees[$contextClass])) {
-            return $this->cachedCallees[$contextClass];
-        }
-
-        return $this->cachedCallees[$contextClass] = $this->childReader->readContextCallees(
+        return $this->cachedCallees[$contextClass] ?? $this->cachedCallees[$contextClass] = $this->childReader->readContextCallees(
             $environment,
             $contextClass
         );

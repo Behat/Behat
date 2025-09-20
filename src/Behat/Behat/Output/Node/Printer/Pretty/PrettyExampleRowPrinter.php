@@ -156,7 +156,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
             $line
         ));
 
-        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
     }
 
     /**

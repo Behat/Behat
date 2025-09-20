@@ -115,7 +115,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
         }
 
         foreach ($this->delayedUntilBackgroundEnd as $eventInfo) {
-            list($event, $eventName) = $eventInfo;
+            [$event, $eventName] = $eventInfo;
 
             $this->descendant->listenEvent($formatter, $event, $eventName);
         }

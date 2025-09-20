@@ -90,7 +90,7 @@ final class ExceptionPresenter
                 $exception = $this->removeBehatCallsFromTrace($exception);
             }
 
-            return $this->configurablePathPrinter->processPathsInText(trim($exception));
+            return $this->configurablePathPrinter->processPathsInText(trim((string) $exception));
         }
 
         return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . $exception::class . ')');

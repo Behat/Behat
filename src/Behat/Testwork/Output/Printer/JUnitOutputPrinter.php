@@ -56,7 +56,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
         if (!extension_loaded('dom')) {
             throw new MissingExtensionException('The PHP DOM extension is required to generate JUnit reports.');
         }
-        $this->setFileName(strtolower(trim(preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
+        $this->setFileName(strtolower(trim((string) preg_replace('/[^[:alnum:]_]+/', '_', $name), '_')));
 
         $this->domDocument = new DOMDocument(self::XML_VERSION, self::XML_ENCODING);
         $this->domDocument->formatOutput = true;

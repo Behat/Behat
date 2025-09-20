@@ -53,7 +53,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     {
         $this->markAllArgumentsUndefined();
 
-        list($named, $typehinted, $numbered) = $this->splitArguments($parameters, $arguments);
+        [$named, $typehinted, $numbered] = $this->splitArguments($parameters, $arguments);
 
         $wasMultilineProvided = $this->hasMultilineArgument($numbered);
 
@@ -288,7 +288,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
             try {
                 $classes[] = new ReflectionClass($typeString);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException) {
                 continue;
             }
         }

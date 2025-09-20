@@ -60,22 +60,15 @@ final class TranslatableContextReader implements ContextReader
      */
     private function addTranslationResource($path, $assetsId)
     {
-        switch ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
-            case 'yml':
-                $this->addTranslatorResource('yaml', $path, basename($path, '.' . $ext), $assetsId);
-                break;
-            case 'xliff':
-                $this->addTranslatorResource('xliff', $path, basename($path, '.' . $ext), $assetsId);
-                break;
-            case 'php':
-                $this->addTranslatorResource('php', $path, basename($path, '.' . $ext), $assetsId);
-                break;
-            default:
-                throw new UnknownTranslationResourceException(sprintf(
-                    'Can not read translations from `%s`. File type is not supported.',
-                    $path
-                ), $path);
-        }
+        match ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
+            'yml' => $this->addTranslatorResource('yaml', $path, basename($path, '.' . $ext), $assetsId),
+            'xliff' => $this->addTranslatorResource('xliff', $path, basename($path, '.' . $ext), $assetsId),
+            'php' => $this->addTranslatorResource('php', $path, basename($path, '.' . $ext), $assetsId),
+            default => throw new UnknownTranslationResourceException(sprintf(
+                'Can not read translations from `%s`. File type is not supported.',
+                $path
+            ), $path),
+        };
     }
 
     /**

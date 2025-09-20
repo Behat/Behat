@@ -40,7 +40,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     public function setupSuite(Suite $suite)
     {
         foreach ($suite->getSetting('paths') as $locator) {
-            if (!str_starts_with($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
+            if (!str_starts_with((string) $locator, '@') && !is_dir($path = $this->locatePath($locator))) {
                 $this->createFeatureDirectory($path);
             }
         }
@@ -55,7 +55,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     {
         mkdir($path, 0777, true);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->directoryCreated($path, 'place your *.feature files here');
         }
     }

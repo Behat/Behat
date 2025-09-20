@@ -50,7 +50,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
             );
         }
 
-        return $this->instances[$id] = $this->instances[$id] ?? $this->createInstance($id);
+        return $this->instances[$id] ??= $this->createInstance($id);
     }
 
     /**

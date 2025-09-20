@@ -36,7 +36,7 @@ final class SearchResult
      */
     public function hasMatch()
     {
-        return null !== $this->definition;
+        return $this->definition instanceof Definition;
     }
 
     /**

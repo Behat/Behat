@@ -50,7 +50,6 @@ class FatalThrowableError extends ErrorException
     private function setTrace($trace)
     {
         $traceReflector = new ReflectionProperty('Exception', 'trace');
-        $traceReflector->setAccessible(true);
         $traceReflector->setValue($this, $trace);
     }
 }

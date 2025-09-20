@@ -38,17 +38,12 @@ final class ResultToStringConverter
      */
     public function convertResultCodeToString($resultCode)
     {
-        switch ($resultCode) {
-            case TestResult::SKIPPED:
-                return 'skipped';
-            case TestResult::PENDING:
-                return 'pending';
-            case TestResult::FAILED:
-                return 'failed';
-            case TestResult::UNDEFINED:
-                return 'undefined';
-        }
-
-        return 'passed';
+        return match ($resultCode) {
+            TestResult::SKIPPED => 'skipped',
+            TestResult::PENDING => 'pending',
+            TestResult::FAILED => 'failed',
+            TestResult::UNDEFINED => 'undefined',
+            default => 'passed',
+        };
     }
 }

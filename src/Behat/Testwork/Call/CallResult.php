@@ -60,7 +60,7 @@ final class CallResult
      */
     public function hasException()
     {
-        return null !== $this->exception;
+        return $this->exception instanceof Exception;
     }
 
     /**

@@ -123,7 +123,7 @@ final class OutputManager
      */
     public function disableAllFormatters()
     {
-        array_map([$this, 'disableFormatter'], array_keys($this->formatters));
+        array_map($this->disableFormatter(...), array_keys($this->formatters));
     }
 
     /**

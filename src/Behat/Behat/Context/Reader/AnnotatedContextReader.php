@@ -91,7 +91,7 @@ final class AnnotatedContextReader implements ContextReader
             if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
                 $callees = array_merge($callees, $this->readMethodCallees($class, $prototype));
             }
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
         }
 
         if ($docBlock = $method->getDocComment()) {

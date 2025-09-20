@@ -61,8 +61,8 @@ final class UnusedDefinitionsController implements Controller
             $this->printUnusedDefinitions = true;
         }
         if ($this->printUnusedDefinitions) {
-            $this->eventDispatcher->addListener(SuiteTested::AFTER, [$this, 'registerDefinitionUsages'], -999);
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUnusedDefinitions'], -999);
+            $this->eventDispatcher->addListener(SuiteTested::AFTER, $this->registerDefinitionUsages(...), -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->printUnusedDefinitions(...), -999);
         }
 
         return null;

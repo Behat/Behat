@@ -39,7 +39,7 @@ final class SuiteBootstrapper
      */
     public function bootstrapSuites(array $suites)
     {
-        array_map([$this, 'bootstrapSuite'], $suites);
+        array_map($this->bootstrapSuite(...), $suites);
     }
 
     /**

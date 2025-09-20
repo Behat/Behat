@@ -42,7 +42,7 @@ final class SigintController implements Controller
         if (function_exists('pcntl_signal')) {
             pcntl_async_signals(true);
 
-            pcntl_signal(SIGINT, [$this, 'abortExercise']);
+            pcntl_signal(SIGINT, $this->abortExercise(...));
         }
 
         return null;
@@ -51,7 +51,7 @@ final class SigintController implements Controller
     /**
      * Dispatches AFTER exercise event and exits program.
      */
-    public function abortExercise()
+    public function abortExercise(): never
     {
         $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
 

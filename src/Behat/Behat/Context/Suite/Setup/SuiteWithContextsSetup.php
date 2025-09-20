@@ -114,7 +114,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     {
         mkdir($path, 0777, true);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->directoryCreated($path, 'place your context classes here');
         }
     }
@@ -129,7 +129,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     {
         file_put_contents($path, $content);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->fileCreated($path, 'place your definitions, transformations and hooks here');
         }
     }
@@ -145,7 +145,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      */
     private function findClassFile($class)
     {
-        list($classpath, $classname) = $this->findClasspathAndClass($class);
+        [$classpath, $classname] = $this->findClasspathAndClass($class);
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
 
         foreach ($this->autoloader->getPrefixes() as $prefix => $dirs) {

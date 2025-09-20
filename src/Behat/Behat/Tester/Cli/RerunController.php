@@ -77,9 +77,9 @@ final class RerunController implements Controller
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(ScenarioTested::AFTER, [$this, 'collectFailedScenario'], -50);
-        $this->eventDispatcher->addListener(ExampleTested::AFTER, [$this, 'collectFailedScenario'], -50);
-        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'writeCache'], -50);
+        $this->eventDispatcher->addListener(ScenarioTested::AFTER, $this->collectFailedScenario(...), -50);
+        $this->eventDispatcher->addListener(ExampleTested::AFTER, $this->collectFailedScenario(...), -50);
+        $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->writeCache(...), -50);
 
         $this->key = $this->generateKey($input);
 
@@ -155,7 +155,7 @@ final class RerunController implements Controller
             implode(' ', $input->getOption('name')) .
             implode(' ', $input->getOption('tags')) .
             $input->getOption('role') .
-            \implode($input->getArgument('paths')) .
+            \implode('', $input->getArgument('paths')) .
             $this->basepath
         );
     }

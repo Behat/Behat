@@ -65,7 +65,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
         // And here we check we don't have a 3rd column
         try {
             $argumentArgumentValue->getColumn(2);
-        } catch (NodeException $e) {
+        } catch (NodeException) {
             // Once we know the table could be a row table, we check against the pattern.
             return $this->pattern === 'rowtable:' . implode(',', $argumentArgumentValue->getColumn(0));
         }

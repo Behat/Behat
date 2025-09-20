@@ -36,11 +36,7 @@ final class ContextReaderCachedPerSuite implements ContextReader
     {
         $key = $this->generateCacheKey($environment, $contextClass);
 
-        if (isset($this->cachedCallees[$key])) {
-            return $this->cachedCallees[$key];
-        }
-
-        return $this->cachedCallees[$key] = $this->childReader->readContextCallees(
+        return $this->cachedCallees[$key] ?? $this->cachedCallees[$key] = $this->childReader->readContextCallees(
             $environment,
             $contextClass
         );
