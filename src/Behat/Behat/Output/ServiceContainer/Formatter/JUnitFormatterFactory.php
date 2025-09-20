@@ -10,8 +10,25 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitFeatureElementListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener;
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\JUnit\JUnitFeaturePrinter;
+use Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter;
+use Behat\Behat\Output\Node\Printer\JUnit\JUnitSetupPrinter;
+use Behat\Behat\Output\Node\Printer\JUnit\JUnitStepPrinter;
+use Behat\Behat\Output\Node\Printer\JUnit\JUnitSuitePrinter;
+use Behat\Behat\Output\Statistics\PhaseStatistics;
 use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
+use Behat\Testwork\Output\Node\EventListener\ChainEventListener;
+use Behat\Testwork\Output\NodeEventListeningFormatter;
+use Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory;
+use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -48,7 +65,7 @@ final class JUnitFormatterFactory implements FormatterFactory
      */
     private function loadPrinterHelpers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter');
+        $definition = new Definition(ResultToStringConverter::class);
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
     }
 
@@ -57,31 +74,31 @@ final class JUnitFormatterFactory implements FormatterFactory
      */
     private function loadCorePrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitSuitePrinter', [
+        $definition = new Definition(JUnitSuitePrinter::class, [
             new Reference('output.junit.statistics'),
         ]);
         $container->setDefinition('output.node.printer.junit.suite', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitFeaturePrinter', [
+        $definition = new Definition(JUnitFeaturePrinter::class, [
             new Reference('output.junit.statistics'),
             new Reference('output.node.listener.junit.duration'),
         ]);
         $container->setDefinition('output.node.printer.junit.feature', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitScenarioPrinter', [
+        $definition = new Definition(JUnitScenarioPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference('output.node.listener.junit.outline'),
             new Reference('output.node.listener.junit.duration'),
         ]);
         $container->setDefinition('output.node.printer.junit.scenario', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\JUnit\JUnitStepPrinter', [
+        $definition = new Definition(JUnitStepPrinter::class, [
             new Reference(ExceptionExtension::PRESENTER_ID),
         ]);
         $container->setDefinition('output.node.printer.junit.step', $definition);
 
         $definition = new Definition(
-            'Behat\Behat\Output\Node\Printer\JUnit\JUnitSetupPrinter',
+            JUnitSetupPrinter::class,
             [
                 new Reference(ExceptionExtension::PRESENTER_ID),
             ]
@@ -95,7 +112,7 @@ final class JUnitFormatterFactory implements FormatterFactory
     private function loadRootNodeListener(ContainerBuilder $container)
     {
         $definition = new Definition(
-            'Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener',
+            JUnitOutlineStoreListener::class,
             [
                 new Reference('output.node.printer.junit.suite'),
             ]
@@ -103,15 +120,15 @@ final class JUnitFormatterFactory implements FormatterFactory
         $container->setDefinition('output.node.listener.junit.outline', $definition);
 
         $definition = new Definition(
-            'Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener'
+            JUnitDurationListener::class
         );
 
         $container->setDefinition('output.node.listener.junit.duration', $definition);
 
-        $definition = new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', [
+        $definition = new Definition(ChainEventListener::class, [
             [
                 new Reference('output.node.listener.junit.duration'),
-                new Definition('Behat\Behat\Output\Node\EventListener\JUnit\JUnitFeatureElementListener', [
+                new Definition(JUnitFeatureElementListener::class, [
                     new Reference('output.node.printer.junit.feature'),
                     new Reference('output.node.printer.junit.scenario'),
                     new Reference('output.node.printer.junit.step'),
@@ -128,25 +145,25 @@ final class JUnitFormatterFactory implements FormatterFactory
      */
     private function loadFormatter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Statistics\PhaseStatistics');
+        $definition = new Definition(PhaseStatistics::class);
         $container->setDefinition('output.junit.statistics', $definition);
 
-        $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', [
+        $definition = new Definition(NodeEventListeningFormatter::class, [
             JUnitFormatter::NAME,
             'Outputs the failures in JUnit compatible files.',
             JUnitFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
-            new Definition('Behat\Testwork\Output\Node\EventListener\ChainEventListener', [
+            new Definition(ChainEventListener::class, [
                 [
                     new Reference(self::ROOT_LISTENER_ID),
-                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', [
+                    new Definition(ScenarioStatsListener::class, [
                         new Reference('output.junit.statistics'),
                     ]),
-                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', [
+                    new Definition(StepStatsListener::class, [
                         new Reference('output.junit.statistics'),
                         new Reference(ExceptionExtension::PRESENTER_ID),
                     ]),
-                    new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', [
+                    new Definition(HookStatsListener::class, [
                         new Reference('output.junit.statistics'),
                         new Reference(ExceptionExtension::PRESENTER_ID),
                     ]),
@@ -164,8 +181,8 @@ final class JUnitFormatterFactory implements FormatterFactory
      */
     private function createOutputPrinterDefinition()
     {
-        return new Definition('Behat\Testwork\Output\Printer\JUnitOutputPrinter', [
-            new Definition('Behat\Testwork\Output\Printer\Factory\FilesystemOutputFactory'),
+        return new Definition(JUnitOutputPrinter::class, [
+            new Definition(FilesystemOutputFactory::class),
         ]);
     }
 }

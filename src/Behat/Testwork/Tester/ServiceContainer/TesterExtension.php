@@ -18,6 +18,13 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Behat\Testwork\Specification\ServiceContainer\SpecificationExtension;
 use Behat\Testwork\Suite\ServiceContainer\SuiteExtension;
+use Behat\Testwork\Tester\Cli\ExerciseController;
+use Behat\Testwork\Tester\Cli\StrictController;
+use Behat\Testwork\Tester\Handler\StopOnFailureHandler;
+use Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation;
+use Behat\Testwork\Tester\Result\ResultInterpreter;
+use Behat\Testwork\Tester\Runtime\RuntimeExercise;
+use Behat\Testwork\Tester\Runtime\RuntimeSuiteTester;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -117,7 +124,7 @@ abstract class TesterExtension implements Extension
      */
     protected function loadExerciseController(ContainerBuilder $container, $skip = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\ExerciseController', [
+        $definition = new Definition(ExerciseController::class, [
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(SpecificationExtension::FINDER_ID),
             new Reference(self::EXERCISE_ID),
@@ -133,7 +140,7 @@ abstract class TesterExtension implements Extension
      */
     private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Handler\StopOnFailureHandler', [
+        $definition = new Definition(StopOnFailureHandler::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference(TesterExtension::RESULT_INTERPRETER_ID),
         ]);
@@ -151,7 +158,7 @@ abstract class TesterExtension implements Extension
      */
     protected function loadStrictController(ContainerBuilder $container, $strict = false)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Cli\StrictController', [
+        $definition = new Definition(StrictController::class, [
             new Reference(self::RESULT_INTERPRETER_ID),
             $strict,
         ]);
@@ -164,10 +171,10 @@ abstract class TesterExtension implements Extension
      */
     protected function loadResultInterpreter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Result\ResultInterpreter');
+        $definition = new Definition(ResultInterpreter::class);
         $container->setDefinition(self::RESULT_INTERPRETER_ID, $definition);
 
-        $definition = new Definition('Behat\Testwork\Tester\Result\Interpretation\SoftInterpretation');
+        $definition = new Definition(SoftInterpretation::class);
         $definition->addTag(self::RESULT_INTERPRETATION_TAG);
         $container->setDefinition(self::RESULT_INTERPRETATION_TAG . '.soft', $definition);
     }
@@ -177,7 +184,7 @@ abstract class TesterExtension implements Extension
      */
     protected function loadExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeExercise', [
+        $definition = new Definition(RuntimeExercise::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
             new Reference(self::SUITE_TESTER_ID),
         ]);
@@ -189,7 +196,7 @@ abstract class TesterExtension implements Extension
      */
     protected function loadSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Tester\Runtime\RuntimeSuiteTester', [
+        $definition = new Definition(RuntimeSuiteTester::class, [
             new Reference(self::SPECIFICATION_TESTER_ID),
         ]);
         $container->setDefinition(self::SUITE_TESTER_ID, $definition);

@@ -11,6 +11,10 @@
 namespace Behat\Testwork\Exception\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Exception\Cli\VerbosityController;
+use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer;
+use Behat\Testwork\Exception\Stringer\TestworkExceptionStringer;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -97,7 +101,7 @@ final class ExceptionExtension implements Extension
      */
     protected function loadPresenter(ContainerBuilder $container, $verbosity)
     {
-        $definition = new Definition('Behat\Testwork\Exception\ExceptionPresenter', [
+        $definition = new Definition(ExceptionPresenter::class, [
             '%paths.base%',
             $verbosity,
             new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
@@ -110,11 +114,11 @@ final class ExceptionExtension implements Extension
      */
     protected function loadDefaultStringers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer');
+        $definition = new Definition(PHPUnitExceptionStringer::class);
         $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
         $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
 
-        $definition = new Definition('Behat\Testwork\Exception\Stringer\TestworkExceptionStringer');
+        $definition = new Definition(TestworkExceptionStringer::class);
         $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
         $container->setDefinition(self::STRINGER_TAG . '.testwork', $definition);
     }
@@ -139,7 +143,7 @@ final class ExceptionExtension implements Extension
      */
     protected function loadVerbosityController($container)
     {
-        $definition = new Definition('Behat\Testwork\Exception\Cli\VerbosityController', [
+        $definition = new Definition(VerbosityController::class, [
             new Reference(self::PRESENTER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);

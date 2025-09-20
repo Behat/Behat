@@ -12,6 +12,8 @@ namespace Behat\Testwork\Output\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Output\Cli\OutputController;
+use Behat\Testwork\Output\OutputManager;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -124,7 +126,7 @@ final class OutputExtension implements Extension
      */
     private function loadOutputController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', [
+        $definition = new Definition(OutputController::class, [
             new Reference(self::MANAGER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
@@ -136,7 +138,7 @@ final class OutputExtension implements Extension
      */
     private function loadManager(ContainerBuilder $container, array $formatters)
     {
-        $definition = new Definition('Behat\Testwork\Output\OutputManager', [
+        $definition = new Definition(OutputManager::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
 

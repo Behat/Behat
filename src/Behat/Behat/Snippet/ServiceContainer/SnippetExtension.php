@@ -10,6 +10,10 @@
 
 namespace Behat\Behat\Snippet\ServiceContainer;
 
+use Behat\Behat\Snippet\Cli\SnippetsController;
+use Behat\Behat\Snippet\Printer\ConsoleSnippetPrinter;
+use Behat\Behat\Snippet\SnippetRegistry;
+use Behat\Behat\Snippet\SnippetWriter;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -81,13 +85,13 @@ class SnippetExtension implements Extension
 
     protected function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Snippet\Printer\ConsoleSnippetPrinter', [
+        $definition = new Definition(ConsoleSnippetPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition('snippet.printer', $definition);
 
-        $definition = new Definition('Behat\Behat\Snippet\Cli\SnippetsController', [
+        $definition = new Definition(SnippetsController::class, [
             new Reference(self::REGISTRY_ID),
             new Reference(self::WRITER_ID),
             new Reference('snippet.printer'),
@@ -99,13 +103,13 @@ class SnippetExtension implements Extension
 
     protected function loadRegistry(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Snippet\SnippetRegistry');
+        $definition = new Definition(SnippetRegistry::class);
         $container->setDefinition(self::REGISTRY_ID, $definition);
     }
 
     protected function loadWriter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Snippet\SnippetWriter');
+        $definition = new Definition(SnippetWriter::class);
         $container->setDefinition(self::WRITER_ID, $definition);
     }
 

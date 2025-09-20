@@ -11,6 +11,10 @@
 namespace Behat\Testwork\EventDispatcher\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\EventDispatcher\Cli\SigintController;
+use Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise;
+use Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -81,7 +85,7 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadSigintController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', [
+        $definition = new Definition(SigintController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
@@ -93,7 +97,7 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadEventDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\TestworkEventDispatcher');
+        $definition = new Definition(TestworkEventDispatcher::class);
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }
 
@@ -102,7 +106,7 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadEventDispatchingExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', [
+        $definition = new Definition(EventDispatchingExercise::class, [
             new Reference(TesterExtension::EXERCISE_ID),
             new Reference(self::DISPATCHER_ID),
         ]);
@@ -115,7 +119,7 @@ class EventDispatcherExtension implements Extension
      */
     protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', [
+        $definition = new Definition(EventDispatchingSuiteTester::class, [
             new Reference(TesterExtension::SUITE_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
         ]);

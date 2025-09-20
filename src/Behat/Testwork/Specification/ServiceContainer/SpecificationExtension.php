@@ -13,6 +13,7 @@ namespace Behat\Testwork\Specification\ServiceContainer;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
+use Behat\Testwork\Specification\SpecificationFinder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -75,7 +76,7 @@ final class SpecificationExtension implements Extension
      */
     private function loadFinder(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Specification\SpecificationFinder');
+        $definition = new Definition(SpecificationFinder::class);
         $container->setDefinition(self::FINDER_ID, $definition);
     }
 

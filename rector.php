@@ -11,6 +11,7 @@ return RectorConfig::configure()
     ])
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
+    ->withPhpLevel(10)
     ->withImportNames(
         removeUnusedImports: true,
     )

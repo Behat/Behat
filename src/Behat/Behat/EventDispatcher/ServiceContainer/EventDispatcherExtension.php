@@ -10,8 +10,14 @@
 
 namespace Behat\Behat\EventDispatcher\ServiceContainer;
 
+use Behat\Behat\EventDispatcher\Cli\StopOnFailureController;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Behat\Behat\EventDispatcher\Tester\EventDispatchingBackgroundTester;
+use Behat\Behat\EventDispatcher\Tester\EventDispatchingFeatureTester;
+use Behat\Behat\EventDispatcher\Tester\EventDispatchingOutlineTester;
+use Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester;
+use Behat\Behat\EventDispatcher\Tester\EventDispatchingStepTester;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension as BaseExtension;
@@ -46,7 +52,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadStopOnFailureController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Cli\StopOnFailureController', [
+        $definition = new Definition(StopOnFailureController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
         $definition->addMethodCall('setStopOnFailureHandler', [new Reference(TestworkTesterExtension::STOP_ON_FAILURE_ID)]);
@@ -59,7 +65,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadEventDispatchingBackgroundTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingBackgroundTester', [
+        $definition = new Definition(EventDispatchingBackgroundTester::class, [
             new Reference(TesterExtension::BACKGROUND_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
         ]);
@@ -72,7 +78,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadEventDispatchingFeatureTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingFeatureTester', [
+        $definition = new Definition(EventDispatchingFeatureTester::class, [
             new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
         ]);
@@ -85,7 +91,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadEventDispatchingOutlineTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingOutlineTester', [
+        $definition = new Definition(EventDispatchingOutlineTester::class, [
             new Reference(TesterExtension::OUTLINE_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
         ]);
@@ -98,7 +104,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadEventDispatchingScenarioTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester', [
+        $definition = new Definition(EventDispatchingScenarioTester::class, [
             new Reference(TesterExtension::SCENARIO_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
             ScenarioTested::BEFORE,
@@ -115,7 +121,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadEventDispatchingExampleTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingScenarioTester', [
+        $definition = new Definition(EventDispatchingScenarioTester::class, [
             new Reference(TesterExtension::EXAMPLE_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
             ExampleTested::BEFORE,
@@ -132,7 +138,7 @@ class EventDispatcherExtension extends BaseExtension
      */
     protected function loadEventDispatchingStepTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\EventDispatcher\Tester\EventDispatchingStepTester', [
+        $definition = new Definition(EventDispatchingStepTester::class, [
             new Reference(TesterExtension::STEP_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
         ]);

@@ -13,6 +13,9 @@ namespace Behat\Testwork\Hook\ServiceContainer;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
+use Behat\Testwork\Hook\HookDispatcher;
+use Behat\Testwork\Hook\HookRepository;
+use Behat\Testwork\Hook\Tester\HookableSuiteTester;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -62,7 +65,7 @@ class HookExtension implements Extension
      */
     protected function loadDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', [
+        $definition = new Definition(HookDispatcher::class, [
             new Reference(self::REPOSITORY_ID),
             new Reference(CallExtension::CALL_CENTER_ID),
         ]);
@@ -74,7 +77,7 @@ class HookExtension implements Extension
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookRepository', [
+        $definition = new Definition(HookRepository::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
@@ -85,7 +88,7 @@ class HookExtension implements Extension
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', [
+        $definition = new Definition(HookableSuiteTester::class, [
             new Reference(TesterExtension::SUITE_TESTER_ID),
             new Reference(self::DISPATCHER_ID),
         ]);

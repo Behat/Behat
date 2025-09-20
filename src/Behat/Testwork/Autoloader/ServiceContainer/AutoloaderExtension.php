@@ -10,9 +10,11 @@
 
 namespace Behat\Testwork\Autoloader\ServiceContainer;
 
+use Behat\Testwork\Autoloader\Cli\AutoloaderController;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Composer\Autoload\ClassLoader;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -94,7 +96,7 @@ final class AutoloaderExtension implements Extension
      */
     private function loadAutoloader(ContainerBuilder $container)
     {
-        $definition = new Definition('Composer\Autoload\ClassLoader');
+        $definition = new Definition(ClassLoader::class);
         $container->setDefinition(self::CLASS_LOADER_ID, $definition);
     }
 
@@ -103,7 +105,7 @@ final class AutoloaderExtension implements Extension
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Autoloader\Cli\AutoloaderController', [
+        $definition = new Definition(AutoloaderController::class, [
             new Reference(self::CLASS_LOADER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);

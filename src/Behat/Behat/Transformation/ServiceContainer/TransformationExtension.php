@@ -12,6 +12,11 @@ namespace Behat\Behat\Transformation\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
+use Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer;
+use Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader;
+use Behat\Behat\Transformation\Context\Attribute\TransformationAttributeReader;
+use Behat\Behat\Transformation\TransformationRepository;
+use Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -87,7 +92,7 @@ class TransformationExtension implements Extension
      */
     protected function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer');
+        $definition = new Definition(DefinitionArgumentsTransformer::class);
         $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 200]);
         $container->setDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID, $definition);
     }
@@ -97,7 +102,7 @@ class TransformationExtension implements Extension
      */
     protected function loadDefaultTransformers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer', [
+        $definition = new Definition(RepositoryArgumentTransformer::class, [
             new Reference(self::REPOSITORY_ID),
             new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
@@ -112,7 +117,7 @@ class TransformationExtension implements Extension
      */
     protected function loadAnnotationReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader');
+        $definition = new Definition(TransformationAnnotationReader::class);
         $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.transformation', $definition);
     }
@@ -122,7 +127,7 @@ class TransformationExtension implements Extension
      */
     private function loadAttributeReader(ContainerBuilder $container): void
     {
-        $definition = new Definition('\Behat\Behat\Transformation\Context\Attribute\TransformationAttributeReader', [
+        $definition = new Definition(TransformationAttributeReader::class, [
             new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID),
         ]);
         $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, ['priority' => 50]);
@@ -134,7 +139,7 @@ class TransformationExtension implements Extension
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\TransformationRepository', [
+        $definition = new Definition(TransformationRepository::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);

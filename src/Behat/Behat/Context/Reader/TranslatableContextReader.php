@@ -43,7 +43,7 @@ final class TranslatableContextReader implements ContextReader
     {
         $reflClass = new ReflectionClass($contextClass);
 
-        if (!$reflClass->implementsInterface('Behat\Behat\Context\TranslatableContext')) {
+        if (!$reflClass->implementsInterface(TranslatableContext::class)) {
             return [];
         }
 

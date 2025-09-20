@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\Environment\ServiceContainer;
 
+use Behat\Testwork\Environment\EnvironmentManager;
+use Behat\Testwork\Environment\Handler\StaticEnvironmentHandler;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -80,7 +82,7 @@ final class EnvironmentExtension implements Extension
      */
     protected function loadManager(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Environment\EnvironmentManager');
+        $definition = new Definition(EnvironmentManager::class);
         $container->setDefinition(self::MANAGER_ID, $definition);
     }
 
@@ -89,7 +91,7 @@ final class EnvironmentExtension implements Extension
      */
     protected function loadStaticEnvironmentHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Environment\Handler\StaticEnvironmentHandler');
+        $definition = new Definition(StaticEnvironmentHandler::class);
         $definition->addTag(self::HANDLER_TAG, ['priority' => 0]);
         $container->setDefinition(self::HANDLER_TAG . '.static', $definition);
     }
