@@ -22,7 +22,7 @@ Feature: Error Reporting
 
     001 Scenario: Access undefined index # features/php_errors_in_scenario.feature:9
           When I access array index 0    # features/php_errors_in_scenario.feature:10
-            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 23
+            Warning: Undefined array key 0 in features/bootstrap/FeatureContext.php line 23
 
     002 Scenario: Trigger PHP deprecation # features/php_errors_in_scenario.feature:18
           When I trim NULL                # features/php_errors_in_scenario.feature:19
@@ -56,7 +56,7 @@ Feature: Error Reporting
 
     001 Scenario: Access undefined index # features/php_errors_in_scenario.feature:9
           When I access array index 0    # features/php_errors_in_scenario.feature:10
-            Notice: Undefined offset: 0 in features/bootstrap/FeatureContext.php line 23
+            Warning: Undefined array key 0 in features/bootstrap/FeatureContext.php line 23
 
     3 scenarios (2 passed, 1 failed)
     9 steps (7 passed, 1 failed, 1 skipped)

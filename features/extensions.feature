@@ -218,7 +218,7 @@ Feature: Extensions
 
       001 Scenario:                  # features/extensions.feature:2
             Given non-existent class # features/extensions.feature:3
-              Fatal error: Class 'Non\Existent\Cls' not found (Behat\Testwork\Call\Exception\FatalThrowableError)
+              Fatal error: Class "Non\Existent\Cls" not found (Behat\Testwork\Call\Exception\FatalThrowableError)
 
       002 Scenario:                   # features/extensions.feature:4
             Given non-existent method # features/extensions.feature:5
