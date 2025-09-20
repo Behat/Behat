@@ -96,7 +96,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         if (!$environment instanceof UninitializedContextEnvironment) {
             throw new EnvironmentIsolationException(sprintf(
                 'ContextEnvironmentHandler does not support isolation of `%s` environment.',
-                get_class($environment)
+                $environment::class
             ), $environment);
         }
 

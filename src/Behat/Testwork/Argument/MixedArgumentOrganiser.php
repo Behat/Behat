@@ -367,7 +367,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
     {
-        return $reflectionClass->getName() === get_class($candidate);
+        return $reflectionClass->getName() === $candidate::class;
     }
 
     /**

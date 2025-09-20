@@ -100,7 +100,7 @@ TPL;
         if (!$environment instanceof ContextEnvironment) {
             throw new EnvironmentSnippetGenerationException(sprintf(
                 'ContextSnippetGenerator does not support `%s` environment.',
-                get_class($environment)
+                $environment::class
             ), $environment);
         }
 

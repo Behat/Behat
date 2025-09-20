@@ -186,9 +186,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             throw new WrongContainerClassException(
                 sprintf(
                     'Service container is expected to implement `Psr\Container\ContainerInterface`, but `%s` does not.',
-                    get_class($container)
+                    $container::class
                 ),
-                get_class($container)
+                $container::class
             );
         }
 

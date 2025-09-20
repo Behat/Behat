@@ -211,7 +211,7 @@ final class ExtensionManager
         if (!$extension instanceof Extension) {
             throw new ExtensionInitializationException(sprintf(
                 '`%s` extension class should implement Testwork Extension interface.',
-                get_class($extension)
+                $extension::class
             ), $locator);
         }
     }

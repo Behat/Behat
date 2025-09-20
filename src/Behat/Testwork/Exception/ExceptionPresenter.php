@@ -93,7 +93,7 @@ final class ExceptionPresenter
             return $this->configurablePathPrinter->processPathsInText(trim($exception));
         }
 
-        return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . get_class($exception) . ')');
+        return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . $exception::class . ')');
     }
 
     private function removeBehatCallsFromTrace(Exception $exception)
@@ -114,7 +114,7 @@ final class ExceptionPresenter
 
         return sprintf(
             '%s: %s in %s:%d%sStack trace:%s%s',
-            get_class($exception),
+            $exception::class,
             $exception->getMessage(),
             $exception->getFile(),
             $exception->getLine(),

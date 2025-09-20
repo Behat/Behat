@@ -40,7 +40,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
         if (!$function instanceof ReflectionMethod) {
             throw new UnsupportedFunctionException(sprintf(
                 'ConstructorArgumentOrganiser can only work with ReflectionMethod, but `%s` given.',
-                get_class($function)
+                $function::class
             ));
         }
 

@@ -46,7 +46,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
         if (!$call instanceof DefinitionCall) {
             throw new UnsupportedCallException(sprintf(
                 'DefinitionArgumentTransformer can not filter `%s` call.',
-                get_class($call)
+                $call::class
             ), $call);
         }
 
