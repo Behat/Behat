@@ -114,7 +114,7 @@ final class Application extends BaseApplication
 
         // xdebug's default nesting level of 100 is not enough
         if (extension_loaded('xdebug')
-            && false === strpos(ini_get('disable_functions'), 'ini_set')
+            && !str_contains(ini_get('disable_functions'), 'ini_set')
         ) {
             $oldValue = ini_get('xdebug.max_nesting_level');
             if ($oldValue === false || $oldValue < 256) {

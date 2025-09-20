@@ -53,7 +53,7 @@ final class StepTextPainter
         $paramStyle = $style . '_param';
 
         // If it's just a string - skip
-        if ('/' !== substr($regex, 0, 1)) {
+        if (!str_starts_with($regex, '/')) {
             return $text;
         }
 
@@ -66,7 +66,7 @@ final class StepTextPainter
         $shift = 0;
         $lastReplacementPosition = 0;
         foreach ($matches as $key => $match) {
-            if (!is_numeric($key) || -1 === $match[1] || false !== strpos($match[0], '<')) {
+            if (!is_numeric($key) || -1 === $match[1] || str_contains($match[0], '<')) {
                 continue;
             }
 

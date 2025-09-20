@@ -49,7 +49,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     public function setupSuite(Suite $suite)
     {
         foreach ($suite->getSetting('paths') as $locator) {
-            if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
+            if (!str_starts_with($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
                 $this->createFeatureDirectory($path);
             }
         }

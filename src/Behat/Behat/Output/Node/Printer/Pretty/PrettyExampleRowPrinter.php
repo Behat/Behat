@@ -102,7 +102,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
                 $steps = $outline->getSteps();
                 $outlineStepText = $steps[$index]->getText();
 
-                if (false !== strpos($outlineStepText, '<' . $header[$column] . '>')) {
+                if (str_contains($outlineStepText, '<' . $header[$column] . '>')) {
                     $results[] = $event->getTestResult();
                 }
             }

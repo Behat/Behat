@@ -100,7 +100,7 @@ final class ExceptionPresenter
     {
         $traceOutput = '';
         foreach ($exception->getTrace() as $i => $trace) {
-            if (isset($trace['file']) && false !== strpos(str_replace('\\', '/', $trace['file']), 'Behat/Testwork/Call/Handler/RuntimeCallHandler')) {
+            if (isset($trace['file']) && str_contains(str_replace('\\', '/', $trace['file']), 'Behat/Testwork/Call/Handler/RuntimeCallHandler')) {
                 break;
             }
 

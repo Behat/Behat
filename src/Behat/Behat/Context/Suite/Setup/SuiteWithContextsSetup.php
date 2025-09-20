@@ -157,7 +157,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
 
         foreach ($this->autoloader->getPrefixes() as $prefix => $dirs) {
-            if (0 === strpos($class, $prefix)) {
+            if (str_starts_with($class, $prefix)) {
                 return current($dirs) . DIRECTORY_SEPARATOR . $classpath;
             }
         }

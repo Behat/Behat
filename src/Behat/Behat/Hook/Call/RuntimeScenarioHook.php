@@ -47,7 +47,7 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
      */
     protected function isMatch(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
     {
-        if (false !== strpos($filterString, '@')) {
+        if (str_contains($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $scenario, $filterString);
         }
 

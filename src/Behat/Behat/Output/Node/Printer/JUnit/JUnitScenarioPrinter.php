@@ -81,7 +81,7 @@ final class JUnitScenarioPrinter
         if ($file) {
             $cwd = realpath(getcwd());
             $testCaseAttributes['file'] =
-                substr($file, 0, strlen($cwd)) === $cwd ?
+                str_starts_with($file, $cwd) ?
                     ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
         }
 

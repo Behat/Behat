@@ -172,7 +172,7 @@ final class AnnotatedContextReader implements ContextReader
      */
     private function isNotAnnotation($docLine)
     {
-        return '@' !== substr($docLine, 0, 1);
+        return !str_starts_with($docLine, '@');
     }
 
     /**
@@ -210,7 +210,7 @@ final class AnnotatedContextReader implements ContextReader
     {
         $lowDocLine = strtolower($docLine);
         foreach (self::$ignoreAnnotations as $ignoredAnnotation) {
-            if ($ignoredAnnotation == substr($lowDocLine, 0, strlen($ignoredAnnotation))) {
+            if (str_starts_with($lowDocLine, $ignoredAnnotation)) {
                 return true;
             }
         }
