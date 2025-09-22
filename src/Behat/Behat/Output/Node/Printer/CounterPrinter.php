@@ -22,21 +22,12 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 final class CounterPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initializes printer.
      */
-    public function __construct(ResultToStringConverter $resultConverter, TranslatorInterface $translator)
-    {
-        $this->resultConverter = $resultConverter;
-        $this->translator = $translator;
+    public function __construct(
+        private ResultToStringConverter $resultConverter,
+        private TranslatorInterface $translator,
+    ) {
     }
 
     /**

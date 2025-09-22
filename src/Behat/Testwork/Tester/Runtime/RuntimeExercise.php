@@ -33,23 +33,14 @@ use Behat\Testwork\Tester\SuiteTester;
 final class RuntimeExercise implements Exercise
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $envManager;
-    /**
-     * @var SuiteTester<TSpec>
-     */
-    private $suiteTester;
-
-    /**
      * Initializes tester.
      *
      * @param SuiteTester<TSpec> $suiteTester
      */
-    public function __construct(EnvironmentManager $envManager, SuiteTester $suiteTester)
-    {
-        $this->envManager = $envManager;
-        $this->suiteTester = $suiteTester;
+    public function __construct(
+        private EnvironmentManager $envManager,
+        private SuiteTester $suiteTester,
+    ) {
     }
 
     public function setUp(array $iterators, $skip)

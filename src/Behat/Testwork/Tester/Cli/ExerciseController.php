@@ -36,43 +36,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ExerciseController implements Controller
 {
     /**
-     * @var SuiteRepository
-     */
-    private $suiteRepository;
-    /**
-     * @var SpecificationFinder
-     */
-    private $specificationFinder;
-    /**
-     * @var Exercise
-     */
-    private $exercise;
-    /**
-     * @var ResultInterpreter
-     */
-    private $resultInterpreter;
-    /**
-     * @var bool
-     */
-    private $skip;
-
-    /**
      * Initializes controller.
      *
      * @param bool             $skip
      */
     public function __construct(
-        SuiteRepository $suiteRepository,
-        SpecificationFinder $specificationFinder,
-        Exercise $exercise,
-        ResultInterpreter $resultInterpreter,
-        $skip = false,
+        private SuiteRepository $suiteRepository,
+        private SpecificationFinder $specificationFinder,
+        private Exercise $exercise,
+        private ResultInterpreter $resultInterpreter,
+        private $skip = false,
     ) {
-        $this->suiteRepository = $suiteRepository;
-        $this->specificationFinder = $specificationFinder;
-        $this->exercise = $exercise;
-        $this->resultInterpreter = $resultInterpreter;
-        $this->skip = $skip;
     }
 
     public function configure(Command $command)

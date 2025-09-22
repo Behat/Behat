@@ -26,14 +26,6 @@ use Composer\Autoload\ClassLoader;
 final class SuiteWithContextsSetup implements SuiteSetup
 {
     /**
-     * @var ClassLoader
-     */
-    private $autoloader;
-    /**
-     * @var FilesystemLogger|null
-     */
-    private $logger;
-    /**
      * @var ClassGenerator[]
      */
     private $classGenerators = [];
@@ -41,10 +33,10 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Initializes setup.
      */
-    public function __construct(ClassLoader $autoloader, ?FilesystemLogger $logger = null)
-    {
-        $this->autoloader = $autoloader;
-        $this->logger = $logger;
+    public function __construct(
+        private ClassLoader $autoloader,
+        private ?FilesystemLogger $logger = null,
+    ) {
     }
 
     /**

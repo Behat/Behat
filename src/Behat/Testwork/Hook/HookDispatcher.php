@@ -24,21 +24,12 @@ use Behat\Testwork\Hook\Scope\HookScope;
 final class HookDispatcher
 {
     /**
-     * @var HookRepository
-     */
-    private $repository;
-    /**
-     * @var CallCenter
-     */
-    private $callCenter;
-
-    /**
      * Initializes hook dispatcher.
      */
-    public function __construct(HookRepository $repository, CallCenter $callCenter)
-    {
-        $this->repository = $repository;
-        $this->callCenter = $callCenter;
+    public function __construct(
+        private HookRepository $repository,
+        private CallCenter $callCenter,
+    ) {
     }
 
     /**

@@ -22,21 +22,12 @@ use Behat\Testwork\Suite\Suite;
 final class BeforeFeatureScope implements FeatureScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-
-    /**
      * Initializes scope.
      */
-    public function __construct(Environment $env, FeatureNode $feature)
-    {
-        $this->environment = $env;
-        $this->feature = $feature;
+    public function __construct(
+        private Environment $environment,
+        private FeatureNode $feature,
+    ) {
     }
 
     /**

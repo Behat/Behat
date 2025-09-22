@@ -18,12 +18,9 @@ use Behat\Testwork\Tester\Setup\Teardown;
  */
 class JUnitSetupPrinter implements SetupPrinter
 {
-    /** @var ExceptionPresenter */
-    private $exceptionPresenter;
-
-    public function __construct(ExceptionPresenter $exceptionPresenter)
-    {
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
     public function printSetup(Formatter $formatter, Setup $setup)

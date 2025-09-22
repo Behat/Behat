@@ -22,25 +22,15 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 class FireOnlyIfFormatterParameterListener implements EventListener
 {
     /**
-     * @var string
-     */
-    private $name;
-    private $value;
-    /**
-     * @var EventListener
-     */
-    private $descendant;
-
-    /**
      * Initializes listener.
      *
      * @param string        $name
      */
-    public function __construct($name, $value, EventListener $descendant)
-    {
-        $this->name = $name;
-        $this->value = $value;
-        $this->descendant = $descendant;
+    public function __construct(
+        private $name,
+        private $value,
+        private EventListener $descendant,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

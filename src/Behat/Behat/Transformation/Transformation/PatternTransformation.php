@@ -26,21 +26,16 @@ use Exception;
 final class PatternTransformation extends RuntimeCallee implements Transformation
 {
     /**
-     * @var string
-     */
-    private $pattern;
-
-    /**
      * Initializes transformation.
      *
      * @param string      $pattern
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($pattern, $callable, $description = null)
-    {
-        $this->pattern = $pattern;
-
+    public function __construct(
+        private $pattern,
+        $callable, $description = null,
+    ) {
         parent::__construct($callable, $description);
     }
 

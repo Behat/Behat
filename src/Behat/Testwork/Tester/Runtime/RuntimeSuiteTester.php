@@ -33,18 +33,13 @@ use Behat\Testwork\Tester\SuiteTester;
 final class RuntimeSuiteTester implements SuiteTester
 {
     /**
-     * @var SpecificationTester<TSpec>
-     */
-    private $specTester;
-
-    /**
      * Initializes tester.
      *
      * @param SpecificationTester<TSpec> $specTester
      */
-    public function __construct(SpecificationTester $specTester)
-    {
-        $this->specTester = $specTester;
+    public function __construct(
+        private SpecificationTester $specTester,
+    ) {
     }
 
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)

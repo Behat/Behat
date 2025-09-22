@@ -32,35 +32,14 @@ use Behat\Testwork\Environment\Environment;
 final class RepositorySearchEngine implements SearchEngine
 {
     /**
-     * @var DefinitionRepository
-     */
-    private $repository;
-    /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var DefinitionTranslator
-     */
-    private $translator;
-    /**
-     * @var ArgumentOrganiser
-     */
-    private $argumentOrganiser;
-
-    /**
      * Initializes search engine.
      */
     public function __construct(
-        DefinitionRepository $repository,
-        PatternTransformer $patternTransformer,
-        DefinitionTranslator $translator,
-        ArgumentOrganiser $argumentOrganiser,
+        private DefinitionRepository $repository,
+        private PatternTransformer $patternTransformer,
+        private DefinitionTranslator $translator,
+        private ArgumentOrganiser $argumentOrganiser,
     ) {
-        $this->repository = $repository;
-        $this->patternTransformer = $patternTransformer;
-        $this->translator = $translator;
-        $this->argumentOrganiser = $argumentOrganiser;
     }
 
     /**

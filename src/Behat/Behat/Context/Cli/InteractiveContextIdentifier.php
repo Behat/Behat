@@ -26,26 +26,13 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 final class InteractiveContextIdentifier implements TargetContextIdentifier
 {
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-    /**
-     * @var InputInterface
-     */
-    private $input;
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
      * Initialises identifier.
      */
-    public function __construct(TranslatorInterface $translator, InputInterface $input, OutputInterface $output)
-    {
-        $this->translator = $translator;
-        $this->input = $input;
-        $this->output = $output;
+    public function __construct(
+        private TranslatorInterface $translator,
+        private InputInterface $input,
+        private OutputInterface $output,
+    ) {
     }
 
     public function guessTargetContextClass(ContextEnvironment $environment)

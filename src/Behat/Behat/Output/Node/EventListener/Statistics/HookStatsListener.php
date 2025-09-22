@@ -32,21 +32,12 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class HookStatsListener implements EventListener
 {
     /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-
-    /**
      * Initializes listener.
      */
-    public function __construct(Statistics $statistics, ExceptionPresenter $exceptionPresenter)
-    {
-        $this->statistics = $statistics;
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private Statistics $statistics,
+        private ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

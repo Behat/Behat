@@ -23,16 +23,11 @@ use ReflectionMethod;
 final class ConstructorArgumentOrganiser implements ArgumentOrganiser
 {
     /**
-     * @var ArgumentOrganiser
-     */
-    private $baseOrganiser;
-
-    /**
      * Initializes organiser.
      */
-    public function __construct(ArgumentOrganiser $organiser)
-    {
-        $this->baseOrganiser = $organiser;
+    public function __construct(
+        private ArgumentOrganiser $baseOrganiser,
+    ) {
     }
 
     public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)

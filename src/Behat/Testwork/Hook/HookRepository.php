@@ -23,16 +23,11 @@ use Behat\Testwork\Hook\Scope\HookScope;
 final class HookRepository
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-
-    /**
      * Initializes repository.
      */
-    public function __construct(EnvironmentManager $environmentManager)
-    {
-        $this->environmentManager = $environmentManager;
+    public function __construct(
+        private EnvironmentManager $environmentManager,
+    ) {
     }
 
     /**

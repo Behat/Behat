@@ -29,31 +29,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingScenarioTester implements ScenarioTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $baseTester;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var string
-     */
-    private $beforeEventName;
-    /**
-     * @var string
-     */
-    private $afterSetupEventName;
-    /**
-     * @var string
-     */
-    private $beforeTeardownEventName;
-    /**
-     * @var string
-     */
-    private $afterEventName;
-
-    /**
      * Initializes tester.
      *
      * @param string                   $beforeEventName
@@ -62,19 +37,13 @@ final class EventDispatchingScenarioTester implements ScenarioTester
      * @param string                   $afterEventName
      */
     public function __construct(
-        ScenarioTester $baseTester,
-        EventDispatcherInterface $eventDispatcher,
-        $beforeEventName,
-        $afterSetupEventName,
-        $beforeTeardownEventName,
-        $afterEventName,
+        private ScenarioTester $baseTester,
+        private EventDispatcherInterface $eventDispatcher,
+        private $beforeEventName,
+        private $afterSetupEventName,
+        private $beforeTeardownEventName,
+        private $afterEventName,
     ) {
-        $this->baseTester = $baseTester;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->beforeEventName = $beforeEventName;
-        $this->afterSetupEventName = $afterSetupEventName;
-        $this->beforeTeardownEventName = $beforeTeardownEventName;
-        $this->afterEventName = $afterEventName;
     }
 
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)

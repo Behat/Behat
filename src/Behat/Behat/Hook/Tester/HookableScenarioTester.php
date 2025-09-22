@@ -29,21 +29,12 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class HookableScenarioTester implements ScenarioTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $baseTester;
-    /**
-     * @var HookDispatcher
-     */
-    private $hookDispatcher;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(ScenarioTester $baseTester, HookDispatcher $hookDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->hookDispatcher = $hookDispatcher;
+    public function __construct(
+        private ScenarioTester $baseTester,
+        private HookDispatcher $hookDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)

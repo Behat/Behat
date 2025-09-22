@@ -21,18 +21,13 @@ use Behat\Gherkin\Node\StepNode;
 final class AggregateSnippet
 {
     /**
-     * @var Snippet[]
-     */
-    private array $snippets;
-
-    /**
      * Initializes snippet.
      *
      * @param Snippet[] $snippets
      */
-    public function __construct(array $snippets)
-    {
-        $this->snippets = $snippets;
+    public function __construct(
+        private array $snippets,
+    ) {
     }
 
     /**

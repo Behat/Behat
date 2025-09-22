@@ -32,22 +32,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class SnippetsController implements Controller
 {
     /**
-     * @var SnippetRegistry
-     */
-    private $registry;
-    /**
-     * @var SnippetWriter
-     */
-    private $writer;
-    /**
-     * @var ConsoleSnippetPrinter
-     */
-    private $printer;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
      * @var OutputInterface
      */
     private $output;
@@ -56,15 +40,11 @@ final class SnippetsController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        SnippetRegistry $registry,
-        SnippetWriter $writer,
-        ConsoleSnippetPrinter $printer,
-        EventDispatcherInterface $eventDispatcher,
+        private SnippetRegistry $registry,
+        private SnippetWriter $writer,
+        private ConsoleSnippetPrinter $printer,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
-        $this->registry = $registry;
-        $this->writer = $writer;
-        $this->printer = $printer;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**

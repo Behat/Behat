@@ -49,8 +49,6 @@ final class ContextSnippetGenerator implements SnippetGenerator
     }
 TPL;
 
-    private PatternTransformer $patternTransformer;
-
     private TargetContextIdentifier $contextIdentifier;
 
     private PatternIdentifier $patternIdentifier;
@@ -58,10 +56,9 @@ TPL;
     /**
      * Initializes snippet generator.
      */
-    public function __construct(PatternTransformer $patternTransformer)
-    {
-        $this->patternTransformer = $patternTransformer;
-
+    public function __construct(
+        private PatternTransformer $patternTransformer,
+    ) {
         $this->setContextIdentifier(new FixedContextIdentifier());
         $this->setPatternIdentifier(new FixedPatternIdentifier());
     }

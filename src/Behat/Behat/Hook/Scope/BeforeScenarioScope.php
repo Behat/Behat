@@ -23,26 +23,13 @@ use Behat\Testwork\Suite\Suite;
 final class BeforeScenarioScope implements ScenarioScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var ScenarioInterface
-     */
-    private $scenario;
-
-    /**
      * Initializes scope.
      */
-    public function __construct(Environment $env, FeatureNode $feature, ScenarioInterface $scenario)
-    {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->scenario = $scenario;
+    public function __construct(
+        private Environment $environment,
+        private FeatureNode $feature,
+        private ScenarioInterface $scenario,
+    ) {
     }
 
     /**

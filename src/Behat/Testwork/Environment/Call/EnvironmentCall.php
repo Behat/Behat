@@ -22,37 +22,16 @@ use Behat\Testwork\Environment\Environment;
 class EnvironmentCall implements Call
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var Callee
-     */
-    private $callee;
-    /**
-     * @var array
-     */
-    private $arguments;
-    /**
-     * @var int|null
-     */
-    private $errorReportingLevel;
-
-    /**
      * Initializes call.
      *
      * @param int|null $errorReportingLevel
      */
     public function __construct(
-        Environment $environment,
-        Callee $callee,
-        array $arguments,
-        $errorReportingLevel = null,
+        private Environment $environment,
+        private Callee $callee,
+        private array $arguments,
+        private $errorReportingLevel = null,
     ) {
-        $this->environment = $environment;
-        $this->callee = $callee;
-        $this->arguments = $arguments;
-        $this->errorReportingLevel = $errorReportingLevel;
     }
 
     /**

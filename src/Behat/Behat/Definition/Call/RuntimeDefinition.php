@@ -20,15 +20,6 @@ use Behat\Testwork\Call\RuntimeCallee;
  */
 abstract class RuntimeDefinition extends RuntimeCallee implements Definition
 {
-    /**
-     * @var string
-     */
-    private $type;
-    /**
-     * @var string
-     */
-    private $pattern;
-
     private bool $used = false;
 
     /**
@@ -39,11 +30,12 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Definition
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($type, $pattern, $callable, $description = null)
-    {
-        $this->type = $type;
-        $this->pattern = $pattern;
-
+    public function __construct(
+        private $type,
+        private $pattern,
+        $callable,
+        $description = null,
+    ) {
         parent::__construct($callable, $description);
     }
 

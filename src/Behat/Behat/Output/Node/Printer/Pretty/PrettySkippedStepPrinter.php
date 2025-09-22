@@ -33,18 +33,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettySkippedStepPrinter implements StepPrinter
 {
     /**
-     * @var StepTextPainter
-     */
-    private $textPainter;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var PrettyPathPrinter
-     */
-    private $pathPrinter;
-    /**
      * @var string
      */
     private $indentText;
@@ -60,15 +48,12 @@ final class PrettySkippedStepPrinter implements StepPrinter
      * @param int $subIndentation
      */
     public function __construct(
-        StepTextPainter $textPainter,
-        ResultToStringConverter $resultConverter,
-        PrettyPathPrinter $pathPrinter,
+        private StepTextPainter $textPainter,
+        private ResultToStringConverter $resultConverter,
+        private PrettyPathPrinter $pathPrinter,
         $indentation = 4,
         $subIndentation = 2,
     ) {
-        $this->textPainter = $textPainter;
-        $this->resultConverter = $resultConverter;
-        $this->pathPrinter = $pathPrinter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }

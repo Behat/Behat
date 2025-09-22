@@ -20,20 +20,15 @@ use RuntimeException;
 class ExtensionException extends RuntimeException implements ServiceContainerException
 {
     /**
-     * @var string
-     */
-    private $extensionName;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $extensionName
      */
-    public function __construct($message, $extensionName)
-    {
-        $this->extensionName = $extensionName;
-
+    public function __construct(
+        $message,
+        private $extensionName,
+    ) {
         parent::__construct($message);
     }
 

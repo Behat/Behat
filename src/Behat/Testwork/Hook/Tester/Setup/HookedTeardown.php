@@ -21,21 +21,12 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class HookedTeardown implements Teardown
 {
     /**
-     * @var Teardown
-     */
-    private $teardown;
-    /**
-     * @var CallResults
-     */
-    private $hookCallResults;
-
-    /**
      * Initializes setup.
      */
-    public function __construct(Teardown $teardown, CallResults $hookCallResults)
-    {
-        $this->teardown = $teardown;
-        $this->hookCallResults = $hookCallResults;
+    public function __construct(
+        private Teardown $teardown,
+        private CallResults $hookCallResults,
+    ) {
     }
 
     public function isSuccessful()

@@ -31,25 +31,9 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class PrettySetupPrinter implements SetupPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var string
      */
     private $indentText;
-    /**
-     * @var bool
-     */
-    private $newlineBefore;
-    /**
-     * @var bool
-     */
-    private $newlineAfter;
 
     /**
      * Initializes printer.
@@ -59,17 +43,13 @@ final class PrettySetupPrinter implements SetupPrinter
      * @param bool $newlineAfter
      */
     public function __construct(
-        ResultToStringConverter $resultConverter,
-        ExceptionPresenter $exceptionPresenter,
+        private ResultToStringConverter $resultConverter,
+        private ExceptionPresenter $exceptionPresenter,
         $indentation = 0,
-        $newlineBefore = false,
-        $newlineAfter = false,
+        private $newlineBefore = false,
+        private $newlineAfter = false,
     ) {
-        $this->resultConverter = $resultConverter;
-        $this->exceptionPresenter = $exceptionPresenter;
         $this->indentText = str_repeat(' ', intval($indentation));
-        $this->newlineBefore = $newlineBefore;
-        $this->newlineAfter = $newlineAfter;
     }
 
     public function printSetup(Formatter $formatter, Setup $setup)

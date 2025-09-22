@@ -44,16 +44,11 @@ final class AnnotatedContextReader implements ContextReader
     private $readers = [];
 
     /**
-     * @var DocBlockHelper
-     */
-    private $docBlockHelper;
-
-    /**
      * Initializes reader.
      */
-    public function __construct(DocBlockHelper $docBlockHelper)
-    {
-        $this->docBlockHelper = $docBlockHelper;
+    public function __construct(
+        private DocBlockHelper $docBlockHelper,
+    ) {
     }
 
     /**

@@ -19,13 +19,11 @@ use Attribute;
 final class Given implements Definition
 {
     /**
-     * @var string|null
+     * @param string|null $pattern
      */
-    public $pattern;
-
-    public function __construct($pattern = null)
-    {
-        $this->pattern = $pattern;
+    public function __construct(
+        public $pattern = null,
+    ) {
     }
 
     public function getPattern(): ?string

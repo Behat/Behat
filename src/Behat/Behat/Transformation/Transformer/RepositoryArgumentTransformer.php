@@ -29,35 +29,14 @@ use Behat\Testwork\Call\CallCenter;
 final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexGenerator
 {
     /**
-     * @var TransformationRepository
-     */
-    private $repository;
-    /**
-     * @var CallCenter
-     */
-    private $callCenter;
-    /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initializes transformer.
      */
     public function __construct(
-        TransformationRepository $repository,
-        CallCenter $callCenter,
-        PatternTransformer $patternTransformer,
-        TranslatorInterface $translator,
+        private TransformationRepository $repository,
+        private CallCenter $callCenter,
+        private PatternTransformer $patternTransformer,
+        private TranslatorInterface $translator,
     ) {
-        $this->repository = $repository;
-        $this->callCenter = $callCenter;
-        $this->patternTransformer = $patternTransformer;
-        $this->translator = $translator;
     }
 
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)

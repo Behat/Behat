@@ -29,25 +29,15 @@ use function count;
 class ConsoleSnippetPrinter implements SnippetPrinter
 {
     /**
-     * @var OutputInterface
-     */
-    private $output;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initializes printer.
      */
-    public function __construct(OutputInterface $output, TranslatorInterface $translator)
-    {
-        $this->output = $output;
-        $this->translator = $translator;
-
-        $output->getFormatter()->setStyle('snippet_keyword', new OutputFormatterStyle(null, null, ['bold']));
-        $output->getFormatter()->setStyle('snippet_undefined', new OutputFormatterStyle('yellow'));
-        $output->getFormatter()->setStyle('snippet_failure', new OutputFormatterStyle('red'));
+    public function __construct(
+        private OutputInterface $output,
+        private TranslatorInterface $translator,
+    ) {
+        $this->output->getFormatter()->setStyle('snippet_keyword', new OutputFormatterStyle(null, null, ['bold']));
+        $this->output->getFormatter()->setStyle('snippet_undefined', new OutputFormatterStyle('yellow'));
+        $this->output->getFormatter()->setStyle('snippet_failure', new OutputFormatterStyle('red'));
     }
 
     /**

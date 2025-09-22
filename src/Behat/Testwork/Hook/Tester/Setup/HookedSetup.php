@@ -21,21 +21,12 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class HookedSetup implements Setup
 {
     /**
-     * @var Setup
-     */
-    private $setup;
-    /**
-     * @var CallResults
-     */
-    private $hookCallResults;
-
-    /**
      * Initializes setup.
      */
-    public function __construct(Setup $setup, CallResults $hookCallResults)
-    {
-        $this->setup = $setup;
-        $this->hookCallResults = $hookCallResults;
+    public function __construct(
+        private Setup $setup,
+        private CallResults $hookCallResults,
+    ) {
     }
 
     public function isSuccessful()

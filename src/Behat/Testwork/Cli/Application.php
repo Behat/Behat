@@ -33,26 +33,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class Application extends BaseApplication
 {
     /**
-     * @var ConfigurationLoader
-     */
-    private $configurationLoader;
-    /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initializes application.
      *
      * @param string              $name
      * @param string              $version
      */
-    public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
-    {
+    public function __construct(
+        $name,
+        $version,
+        private ConfigurationLoader $configurationLoader,
+        private ExtensionManager $extensionManager,
+    ) {
         putenv('COLUMNS=9999');
-
-        $this->configurationLoader = $configLoader;
-        $this->extensionManager = $extensionManager;
 
         parent::__construct($name, $version);
     }

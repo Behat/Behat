@@ -29,35 +29,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class AvailableDefinitionsController implements Controller
 {
     /**
-     * @var SuiteRepository
-     */
-    private $suiteRepository;
-    /**
-     * @var DefinitionWriter
-     */
-    private $writer;
-    /**
-     * @var ConsoleDefinitionListPrinter
-     */
-    private $listPrinter;
-    /**
-     * @var ConsoleDefinitionInformationPrinter
-     */
-    private $infoPrinter;
-
-    /**
      * Initializes controller.
      */
     public function __construct(
-        SuiteRepository $suiteRepository,
-        DefinitionWriter $writer,
-        ConsoleDefinitionListPrinter $listPrinter,
-        ConsoleDefinitionInformationPrinter $infoPrinter,
+        private SuiteRepository $suiteRepository,
+        private DefinitionWriter $writer,
+        private ConsoleDefinitionListPrinter $listPrinter,
+        private ConsoleDefinitionInformationPrinter $infoPrinter,
     ) {
-        $this->suiteRepository = $suiteRepository;
-        $this->writer = $writer;
-        $this->listPrinter = $listPrinter;
-        $this->infoPrinter = $infoPrinter;
     }
 
     public function configure(Command $command)

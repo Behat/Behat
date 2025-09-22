@@ -20,10 +20,6 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 final class ContextReaderCachedPerContext implements ContextReader
 {
     /**
-     * @var ContextReader
-     */
-    private $childReader;
-    /**
      * @var array[]
      */
     private $cachedCallees = [];
@@ -31,9 +27,9 @@ final class ContextReaderCachedPerContext implements ContextReader
     /**
      * Initializes reader.
      */
-    public function __construct(ContextReader $childReader)
-    {
-        $this->childReader = $childReader;
+    public function __construct(
+        private ContextReader $childReader,
+    ) {
     }
 
     public function readContextCallees(ContextEnvironment $environment, $contextClass)

@@ -29,21 +29,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingOutlineTester implements OutlineTester
 {
     /**
-     * @var OutlineTester
-     */
-    private $baseTester;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(OutlineTester $baseTester, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private OutlineTester $baseTester,
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)

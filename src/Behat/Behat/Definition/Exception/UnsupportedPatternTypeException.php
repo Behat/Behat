@@ -20,20 +20,15 @@ use InvalidArgumentException;
 final class UnsupportedPatternTypeException extends InvalidArgumentException implements DefinitionException
 {
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $type
      */
-    public function __construct($message, $type)
-    {
-        $this->type = $type;
-
+    public function __construct(
+        $message,
+        private $type,
+    ) {
         parent::__construct($message);
     }
 

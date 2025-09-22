@@ -32,23 +32,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingSuiteTester implements SuiteTester
 {
     /**
-     * @var SuiteTester<TSpec>
-     */
-    private $baseTester;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes tester.
      *
      * @param SuiteTester<TSpec>       $baseTester
      */
-    public function __construct(SuiteTester $baseTester, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private SuiteTester $baseTester,
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)

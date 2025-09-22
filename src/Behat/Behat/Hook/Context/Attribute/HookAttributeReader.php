@@ -41,16 +41,11 @@ final class HookAttributeReader implements AttributeReader
     ];
 
     /**
-     * @var DocBlockHelper
-     */
-    private $docBlockHelper;
-
-    /**
      * Initializes reader.
      */
-    public function __construct(DocBlockHelper $docBlockHelper)
-    {
-        $this->docBlockHelper = $docBlockHelper;
+    public function __construct(
+        private DocBlockHelper $docBlockHelper,
+    ) {
     }
 
     public function readCallees(string $contextClass, ReflectionMethod $method)

@@ -22,16 +22,11 @@ use Behat\Testwork\Suite\Suite;
 abstract class LifecycleEvent extends Event
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
      * Initializes scenario event.
      */
-    public function __construct(Environment $env)
-    {
-        $this->environment = $env;
+    public function __construct(
+        private Environment $environment,
+    ) {
     }
 
     /**

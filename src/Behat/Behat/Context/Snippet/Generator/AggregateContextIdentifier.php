@@ -24,18 +24,13 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 final class AggregateContextIdentifier implements TargetContextIdentifier
 {
     /**
-     * @var TargetContextIdentifier[]
-     */
-    private $identifiers;
-
-    /**
      * Initialises identifier.
      *
      * @param TargetContextIdentifier[] $identifiers
      */
-    public function __construct(array $identifiers)
-    {
-        $this->identifiers = $identifiers;
+    public function __construct(
+        private array $identifiers,
+    ) {
     }
 
     public function guessTargetContextClass(ContextEnvironment $environment)

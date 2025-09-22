@@ -29,16 +29,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class FilterController implements Controller
 {
     /**
-     * @var Gherkin
-     */
-    private $gherkin;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(Gherkin $gherkin)
-    {
-        $this->gherkin = $gherkin;
+    public function __construct(
+        private Gherkin $gherkin,
+    ) {
     }
 
     /**

@@ -24,10 +24,6 @@ use ReflectionClass;
 final class ContextFactory
 {
     /**
-     * @var ArgumentOrganiser
-     */
-    private $argumentOrganiser;
-    /**
      * @var ArgumentResolver[]
      */
     private $argumentResolvers = [];
@@ -43,9 +39,9 @@ final class ContextFactory
     /**
      * Initialises factory.
      */
-    public function __construct(ArgumentOrganiser $argumentOrganiser)
-    {
-        $this->argumentOrganiser = $argumentOrganiser;
+    public function __construct(
+        private ArgumentOrganiser $argumentOrganiser,
+    ) {
         $this->validator = new Validator();
     }
 

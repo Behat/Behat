@@ -21,20 +21,15 @@ use Psr\Container\NotFoundExceptionInterface;
 final class ServiceNotFoundException extends InvalidArgumentException implements HelperContainerException, NotFoundExceptionInterface
 {
     /**
-     * @var string
-     */
-    private $serviceId;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $serviceId
      */
-    public function __construct($message, $serviceId)
-    {
-        $this->serviceId = $serviceId;
-
+    public function __construct(
+        $message,
+        private $serviceId,
+    ) {
         parent::__construct($message);
     }
 

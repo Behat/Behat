@@ -24,10 +24,6 @@ use Exception;
 final class RuntimeCallHandler implements CallHandler
 {
     /**
-     * @var int
-     */
-    private $errorReportingLevel;
-    /**
      * @var bool
      */
     private $obStarted = false;
@@ -41,9 +37,9 @@ final class RuntimeCallHandler implements CallHandler
      *
      * @param int $errorReportingLevel
      */
-    public function __construct($errorReportingLevel = E_ALL)
-    {
-        $this->errorReportingLevel = $errorReportingLevel;
+    public function __construct(
+        private $errorReportingLevel = E_ALL,
+    ) {
         $this->validator = new Validator();
     }
 

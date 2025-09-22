@@ -22,16 +22,11 @@ use Behat\Testwork\Environment\EnvironmentManager;
 final class DefinitionRepository
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-
-    /**
      * Initializes repository.
      */
-    public function __construct(EnvironmentManager $environmentManager)
-    {
-        $this->environmentManager = $environmentManager;
+    public function __construct(
+        private EnvironmentManager $environmentManager,
+    ) {
     }
 
     /**

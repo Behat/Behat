@@ -39,15 +39,6 @@ final class OutputExtension implements Extension
      * Available extension points
      */
     public const FORMATTER_TAG = 'output.formatter';
-
-    /**
-     * @var string
-     */
-    private $defaultFormatter;
-    /**
-     * @var FormatterFactory[]
-     */
-    private $factories;
     /**
      * @var ServiceProcessor
      */
@@ -57,12 +48,13 @@ final class OutputExtension implements Extension
      * Initializes extension.
      *
      * @param string                $defaultFormatter
-     * @param FormatterFactory[]    $formatterFactories
+     * @param FormatterFactory[] $factories
      */
-    public function __construct($defaultFormatter, array $formatterFactories, ?ServiceProcessor $processor = null)
-    {
-        $this->defaultFormatter = $defaultFormatter;
-        $this->factories = $formatterFactories;
+    public function __construct(
+        private $defaultFormatter,
+        private array $factories,
+        ?ServiceProcessor $processor = null,
+    ) {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 

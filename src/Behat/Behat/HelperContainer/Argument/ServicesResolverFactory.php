@@ -33,16 +33,11 @@ use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 final class ServicesResolverFactory implements SuiteScopedResolverFactory, ArgumentResolverFactory
 {
     /**
-     * @var TaggedContainerInterface
-     */
-    private $container;
-
-    /**
      * Initialises factory.
      */
-    public function __construct(TaggedContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private TaggedContainerInterface $container,
+    ) {
     }
 
     /**

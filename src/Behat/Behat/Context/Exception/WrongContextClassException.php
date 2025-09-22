@@ -20,17 +20,12 @@ use InvalidArgumentException;
 final class WrongContextClassException extends InvalidArgumentException implements ContextException
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * Initializes exception.
      */
-    public function __construct(string $message, string $class)
-    {
-        $this->class = $class;
-
+    public function __construct(
+        string $message,
+        private string $class,
+    ) {
         parent::__construct($message);
     }
 

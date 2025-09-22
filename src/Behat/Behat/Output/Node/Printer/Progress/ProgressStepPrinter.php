@@ -29,10 +29,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class ProgressStepPrinter implements StepPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
      * @var int
      */
     private $stepsPrinted = 0;
@@ -42,9 +38,9 @@ final class ProgressStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      */
-    public function __construct(ResultToStringConverter $resultConverter)
-    {
-        $this->resultConverter = $resultConverter;
+    public function __construct(
+        private ResultToStringConverter $resultConverter,
+    ) {
     }
 
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)

@@ -27,10 +27,6 @@ class RuntimeCallee implements Callee
      */
     private $callable;
     /**
-     * @var string|null
-     */
-    private $description;
-    /**
      * @var ReflectionFunctionAbstract
      */
     private $reflection;
@@ -42,8 +38,10 @@ class RuntimeCallee implements Callee
     /**
      * Initializes callee.
      */
-    public function __construct(callable|array $callable, ?string $description = null)
-    {
+    public function __construct(
+        callable|array $callable,
+        private ?string $description = null,
+    ) {
         if (is_array($callable)) {
             $this->reflection = new ReflectionMethod($callable[0], $callable[1]);
             $this->path = $callable[0] . '::' . $callable[1] . '()';
@@ -53,7 +51,6 @@ class RuntimeCallee implements Callee
         }
 
         $this->callable = $callable;
-        $this->description = $description;
     }
 
     /**

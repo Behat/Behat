@@ -19,15 +19,10 @@ use InvalidArgumentException;
  */
 final class UnknownPatternException extends InvalidArgumentException implements DefinitionException
 {
-    /**
-     * @var string
-     */
-    private $pattern;
-
-    public function __construct(string $message, string $pattern)
-    {
-        $this->pattern = $pattern;
-
+    public function __construct(
+        string $message,
+        private string $pattern,
+    ) {
         parent::__construct($message);
     }
 

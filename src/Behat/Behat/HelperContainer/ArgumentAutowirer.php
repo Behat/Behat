@@ -26,16 +26,11 @@ use ReflectionParameter;
 final class ArgumentAutowirer
 {
     /**
-     * @var PsrContainerInterface
-     */
-    private $container;
-
-    /**
      * Initialises wirer.
      */
-    public function __construct(PsrContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private PsrContainerInterface $container,
+    ) {
     }
 
     /**

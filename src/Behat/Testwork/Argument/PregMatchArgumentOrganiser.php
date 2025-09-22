@@ -20,16 +20,11 @@ use ReflectionFunctionAbstract;
 final class PregMatchArgumentOrganiser implements ArgumentOrganiser
 {
     /**
-     * @var ArgumentOrganiser
-     */
-    private $baseOrganiser;
-
-    /**
      * Initialises organiser.
      */
-    public function __construct(ArgumentOrganiser $organiser)
-    {
-        $this->baseOrganiser = $organiser;
+    public function __construct(
+        private ArgumentOrganiser $baseOrganiser,
+    ) {
     }
 
     public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)

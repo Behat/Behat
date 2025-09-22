@@ -24,16 +24,11 @@ use Symfony\Component\Translation\Translator;
 final class TranslatableContextReader implements ContextReader
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Initializes loader.
      */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private Translator $translator,
+    ) {
     }
 
     /**

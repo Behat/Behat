@@ -22,21 +22,12 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class StepTextPainter
 {
     /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-
-    /**
      * Initializes painter.
      */
-    public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
-    {
-        $this->patternTransformer = $patternTransformer;
-        $this->resultConverter = $resultConverter;
+    public function __construct(
+        private PatternTransformer $patternTransformer,
+        private ResultToStringConverter $resultConverter,
+    ) {
     }
 
     /**

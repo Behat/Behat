@@ -20,10 +20,6 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 final class ExtensionManager
 {
     /**
-     * @var string
-     */
-    private $extensionsPath;
-    /**
      * @var Extension[]
      */
     private $extensions = [];
@@ -41,13 +37,13 @@ final class ExtensionManager
      * @param Extension[] $extensions     List of default extensions
      * @param string|null $extensionsPath Base path where to search custom extension files
      */
-    public function __construct(array $extensions, $extensionsPath = null)
-    {
+    public function __construct(
+        array $extensions,
+        private $extensionsPath = null,
+    ) {
         foreach ($extensions as $extension) {
             $this->extensions[$extension->getConfigKey()] = $extension;
         }
-
-        $this->extensionsPath = $extensionsPath;
     }
 
     /**

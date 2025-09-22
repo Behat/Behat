@@ -26,37 +26,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 {
     /**
-     * @var OutputInterface
-     */
-    private $output;
-    /**
-     * @var DefinitionTranslator
-     */
-    private $translator;
-    /**
-     * @var KeywordsInterface
-     */
-    private $keywords;
-
-    /**
      * @param PatternTransformer $patternTransformer deprecated, will be removed in the next major version
      */
     public function __construct(
-        OutputInterface $output,
+        private OutputInterface $output,
         PatternTransformer $patternTransformer,
-        DefinitionTranslator $translator,
-        KeywordsInterface $keywords,
+        private DefinitionTranslator $translator,
+        private KeywordsInterface $keywords,
     ) {
-        $this->output = $output;
-        $this->translator = $translator;
-        $this->keywords = $keywords;
-
-        $output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
-        $output->getFormatter()->setStyle(
+        $this->output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
+        $this->output->getFormatter()->setStyle(
             'def_regex_capture',
             new OutputFormatterStyle('yellow', null, ['bold'])
         );
-        $output->getFormatter()->setStyle(
+        $this->output->getFormatter()->setStyle(
             'def_dimmed',
             new OutputFormatterStyle('black', null, ['bold'])
         );

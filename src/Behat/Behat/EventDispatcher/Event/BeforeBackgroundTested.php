@@ -24,23 +24,14 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 final class BeforeBackgroundTested extends BackgroundTested implements BeforeTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var BackgroundNode
-     */
-    private $background;
-
-    /**
      * Initializes event.
      */
-    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background)
-    {
+    public function __construct(
+        Environment $env,
+        private FeatureNode $feature,
+        private BackgroundNode $background,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->background = $background;
     }
 
     /**

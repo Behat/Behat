@@ -26,23 +26,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class StrictController implements Controller
 {
     /**
-     * @var ResultInterpreter
-     */
-    private $resultInterpreter;
-    /**
-     * @var bool
-     */
-    private $strict;
-
-    /**
      * Initializes controller.
      *
      * @param bool           $strict
      */
-    public function __construct(ResultInterpreter $resultInterpreter, $strict = false)
-    {
-        $this->resultInterpreter = $resultInterpreter;
-        $this->strict = $strict;
+    public function __construct(
+        private ResultInterpreter $resultInterpreter,
+        private $strict = false,
+    ) {
     }
 
     public function configure(Command $command)

@@ -21,23 +21,14 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
 {
     /**
-     * @var SpecificationIterator<mixed>[]
-     */
-    private $specificationIterators;
-    /**
-     * @var Setup
-     */
-    private $setup;
-
-    /**
      * Initializes event.
      *
      * @param SpecificationIterator<mixed>[] $specificationIterators
      */
-    public function __construct(array $specificationIterators, Setup $setup)
-    {
-        $this->specificationIterators = $specificationIterators;
-        $this->setup = $setup;
+    public function __construct(
+        private array $specificationIterators,
+        private Setup $setup,
+    ) {
     }
 
     public function getSpecificationIterators()

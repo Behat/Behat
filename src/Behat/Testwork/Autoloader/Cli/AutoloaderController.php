@@ -24,16 +24,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class AutoloaderController implements Controller
 {
     /**
-     * @var ClassLoader
-     */
-    private $loader;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(ClassLoader $loader)
-    {
-        $this->loader = $loader;
+    public function __construct(
+        private ClassLoader $loader,
+    ) {
     }
 
     public function configure(Command $command)

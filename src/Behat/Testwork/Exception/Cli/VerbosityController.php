@@ -24,16 +24,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class VerbosityController implements Controller
 {
     /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(ExceptionPresenter $exceptionPresenter)
-    {
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
     /**

@@ -26,16 +26,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class SigintController implements Controller
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function configure(Command $command)

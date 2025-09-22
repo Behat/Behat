@@ -29,16 +29,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class JUnitScenarioPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-
-    /**
-     * @var JUnitOutlineStoreListener
-     */
-    private $outlineStoreListener;
-
-    /**
      * @var OutlineNode
      */
     private $lastOutline;
@@ -48,16 +38,11 @@ final class JUnitScenarioPrinter
      */
     private $outlineStepCount;
 
-    /**
-     * @var JUnitDurationListener|null
-     */
-    private $durationListener;
-
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, ?JUnitDurationListener $durationListener = null)
-    {
-        $this->resultConverter = $resultConverter;
-        $this->outlineStoreListener = $outlineListener;
-        $this->durationListener = $durationListener;
+    public function __construct(
+        private ResultToStringConverter $resultConverter,
+        private JUnitOutlineStoreListener $outlineStoreListener,
+        private ?JUnitDurationListener $durationListener = null,
+    ) {
     }
 
     public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)

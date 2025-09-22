@@ -21,19 +21,14 @@ use RuntimeException;
 final class EnvironmentReadException extends RuntimeException implements EnvironmentException
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-
-    /**
      * Initializes exception.
      *
      * @param string      $message
      */
-    public function __construct($message, Environment $environment)
-    {
-        $this->environment = $environment;
-
+    public function __construct(
+        $message,
+        private Environment $environment,
+    ) {
         parent::__construct($message);
     }
 

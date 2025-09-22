@@ -23,26 +23,13 @@ use Behat\Testwork\Suite\Suite;
 final class BeforeStepScope implements StepScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-
-    /**
      * Initializes scope.
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step)
-    {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->step = $step;
+    public function __construct(
+        private Environment $environment,
+        private FeatureNode $feature,
+        private StepNode $step,
+    ) {
     }
 
     /**

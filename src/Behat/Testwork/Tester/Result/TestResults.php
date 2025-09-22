@@ -26,18 +26,13 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     public const NO_TESTS = -100;
 
     /**
-     * @var TestResult[]
-     */
-    private $results;
-
-    /**
      * Initializes test results collection.
      *
      * @param TestResult[] $results
      */
-    public function __construct(array $results = [])
-    {
-        $this->results = $results;
+    public function __construct(
+        private array $results = [],
+    ) {
     }
 
     public function isPassed()

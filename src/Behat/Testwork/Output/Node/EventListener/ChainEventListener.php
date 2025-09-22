@@ -26,18 +26,13 @@ use IteratorAggregate;
 class ChainEventListener implements EventListener, Countable, IteratorAggregate
 {
     /**
-     * @var EventListener[]
-     */
-    private $listeners;
-
-    /**
      * Initializes collection.
      *
      * @param EventListener[] $listeners
      */
-    public function __construct(array $listeners)
-    {
-        $this->listeners = $listeners;
+    public function __construct(
+        private array $listeners,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

@@ -21,10 +21,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class OutputManager
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
      * @var Formatter[]
      */
     private $formatters = [];
@@ -32,9 +28,9 @@ final class OutputManager
     /**
      * Initializes manager.
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     /**

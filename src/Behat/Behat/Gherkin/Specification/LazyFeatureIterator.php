@@ -31,14 +31,6 @@ use Behat\Testwork\Suite\Suite;
 final class LazyFeatureIterator implements SpecificationIterator
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-    /**
-     * @var Gherkin
-     */
-    private $gherkin;
-    /**
      * @var string[]
      */
     private $paths = [];
@@ -65,12 +57,14 @@ final class LazyFeatureIterator implements SpecificationIterator
      * @param string[]          $paths
      * @param FeatureFilterInterface[] $filters
      */
-    public function __construct(Suite $suite, Gherkin $gherkin, array $paths, array $filters = [])
-    {
-        $this->suite = $suite;
-        $this->gherkin = $gherkin;
+    public function __construct(
+        private Suite $suite,
+        private Gherkin $gherkin,
+        array $paths,
+        array $filters = [],
+    ) {
         $this->paths = array_values($paths);
-        $this->filters = array_merge($this->getSuiteFilters($suite), $filters);
+        $this->filters = array_merge($this->getSuiteFilters($this->suite), $filters);
     }
 
     public function getSuite()

@@ -24,16 +24,11 @@ use Symfony\Component\Translation\Translator;
 final class GherkinTranslationsController implements Controller
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private Translator $translator,
+    ) {
     }
 
     public function configure(SymfonyCommand $command)

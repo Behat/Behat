@@ -38,29 +38,18 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class ListPrinter
 {
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
     private ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
      */
     public function __construct(
-        ResultToStringConverter $resultConverter,
+        private ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
-        TranslatorInterface $translator,
+        private TranslatorInterface $translator,
         string $basePath,
         ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
-        $this->resultConverter = $resultConverter;
-        $this->translator = $translator;
         $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false, editorUrl: null);
     }
 

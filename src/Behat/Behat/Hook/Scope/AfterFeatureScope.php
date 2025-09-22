@@ -24,26 +24,13 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class AfterFeatureScope implements FeatureScope, AfterTestScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var TestResult
-     */
-    private $result;
-
-    /**
      * Initializes scope.
      */
-    public function __construct(Environment $env, FeatureNode $feature, TestResult $result)
-    {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->result = $result;
+    public function __construct(
+        private Environment $environment,
+        private FeatureNode $feature,
+        private TestResult $result,
+    ) {
     }
 
     /**

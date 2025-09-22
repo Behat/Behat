@@ -24,30 +24,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class DebugCommand extends BaseCommand
 {
     /**
-     * @var Application
-     */
-    private $application;
-    /**
-     * @var ConfigurationLoader
-     */
-    private $configurationLoader;
-    /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initialises command.
      */
     public function __construct(
-        Application $application,
-        ConfigurationLoader $configurationLoader,
-        ExtensionManager $extensionManager,
+        private Application $application,
+        private ConfigurationLoader $configurationLoader,
+        private ExtensionManager $extensionManager,
     ) {
-        $this->application = $application;
-        $this->configurationLoader = $configurationLoader;
-        $this->extensionManager = $extensionManager;
-
         parent::__construct('debug');
     }
 

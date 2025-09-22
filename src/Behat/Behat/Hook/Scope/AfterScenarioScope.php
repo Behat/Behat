@@ -25,31 +25,14 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class AfterScenarioScope implements ScenarioScope, AfterTestScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var ScenarioInterface
-     */
-    private $scenario;
-    /**
-     * @var TestResult
-     */
-    private $result;
-
-    /**
      * Initializes scope.
      */
-    public function __construct(Environment $env, FeatureNode $feature, ScenarioInterface $scenario, TestResult $result)
-    {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->scenario = $scenario;
-        $this->result = $result;
+    public function __construct(
+        private Environment $environment,
+        private FeatureNode $feature,
+        private ScenarioInterface $scenario,
+        private TestResult $result,
+    ) {
     }
 
     /**

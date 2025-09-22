@@ -20,23 +20,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ConsoleFilesystemLogger implements FilesystemLogger
 {
     /**
-     * @var string
-     */
-    private $basePath;
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
      * Initializes logger.
      *
      * @param string          $basePath
      */
-    public function __construct($basePath, OutputInterface $output)
-    {
-        $this->basePath = $basePath;
-        $this->output = $output;
+    public function __construct(
+        private $basePath,
+        private OutputInterface $output,
+    ) {
     }
 
     public function directoryCreated($path, $reason)

@@ -24,32 +24,15 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var Scenario
-     */
-    private $scenario;
-    /**
-     * @var TestResult
-     */
-    private $result;
-
-    /**
      * Initializes event.
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        Scenario $scenario,
-        TestResult $result,
+        private FeatureNode $feature,
+        private Scenario $scenario,
+        private TestResult $result,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->scenario = $scenario;
-        $this->result = $result;
     }
 
     /**

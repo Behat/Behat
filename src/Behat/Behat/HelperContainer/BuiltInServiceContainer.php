@@ -26,18 +26,14 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * @var array
      */
-    private $schema;
-    /**
-     * @var array
-     */
     private $instances;
 
     /**
      * Initialises container using provided service configuration.
      */
-    public function __construct(array $schema)
-    {
-        $this->schema = $schema;
+    public function __construct(
+        private array $schema,
+    ) {
     }
 
     public function has($id): bool

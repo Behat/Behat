@@ -30,10 +30,6 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 class FirstBackgroundFiresFirstListener implements EventListener
 {
     /**
-     * @var EventListener
-     */
-    private $descendant;
-    /**
      * @var bool
      */
     private $firstBackgroundEnded = false;
@@ -45,9 +41,9 @@ class FirstBackgroundFiresFirstListener implements EventListener
     /**
      * Initializes listener.
      */
-    public function __construct(EventListener $descendant)
-    {
-        $this->descendant = $descendant;
+    public function __construct(
+        private EventListener $descendant,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

@@ -35,10 +35,6 @@ use Behat\Testwork\Suite\Suite;
 final class ContextEnvironmentHandler implements EnvironmentHandler
 {
     /**
-     * @var ContextFactory
-     */
-    private $contextFactory;
-    /**
      * @var ArgumentResolverFactory
      */
     private $resolverFactory;
@@ -52,10 +48,10 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      *
      * @param ArgumentResolverFactory|SuiteScopedResolverFactory $resolverFactory
      */
-    public function __construct(ContextFactory $factory, $resolverFactory = null)
-    {
-        $this->contextFactory = $factory;
-
+    public function __construct(
+        private ContextFactory $contextFactory,
+        $resolverFactory = null,
+    ) {
         if ($resolverFactory && !$resolverFactory instanceof ArgumentResolverFactory) {
             $resolverFactory = new SuiteScopedResolverFactoryAdapter($resolverFactory);
         }

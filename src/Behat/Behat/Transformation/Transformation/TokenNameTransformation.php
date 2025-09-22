@@ -26,11 +26,6 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
 {
     public const PATTERN_REGEX = '/^\:\w+$/';
 
-    /**
-     * @var string
-     */
-    private $pattern;
-
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -43,10 +38,11 @@ final class TokenNameTransformation extends RuntimeCallee implements SimpleArgum
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($pattern, $callable, $description = null)
-    {
-        $this->pattern = $pattern;
-
+    public function __construct(
+        private $pattern,
+        $callable,
+        $description = null,
+    ) {
         parent::__construct($callable, $description);
     }
 

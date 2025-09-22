@@ -31,18 +31,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettyOutlinePrinter implements OutlinePrinter
 {
     /**
-     * @var ScenarioPrinter
-     */
-    private $scenarioPrinter;
-    /**
-     * @var StepPrinter
-     */
-    private $stepPrinter;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
      * @var string
      */
     private $indentText;
@@ -56,15 +44,12 @@ final class PrettyOutlinePrinter implements OutlinePrinter
      * @param int $subIndentation
      */
     public function __construct(
-        ScenarioPrinter $scenarioPrinter,
-        StepPrinter $stepPrinter,
-        ResultToStringConverter $resultConverter,
+        private ScenarioPrinter $scenarioPrinter,
+        private StepPrinter $stepPrinter,
+        private ResultToStringConverter $resultConverter,
         $indentation = 4,
         $subIndentation = 2,
     ) {
-        $this->scenarioPrinter = $scenarioPrinter;
-        $this->stepPrinter = $stepPrinter;
-        $this->resultConverter = $resultConverter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }

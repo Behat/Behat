@@ -32,23 +32,14 @@ use RegexIterator;
 final class FilesystemFeatureLocator implements SpecificationLocator
 {
     /**
-     * @var Gherkin
-     */
-    private $gherkin;
-    /**
-     * @var string
-     */
-    private $basePath;
-
-    /**
      * Initializes loader.
      *
      * @param string  $basePath
      */
-    public function __construct(Gherkin $gherkin, $basePath)
-    {
-        $this->gherkin = $gherkin;
-        $this->basePath = $basePath;
+    public function __construct(
+        private Gherkin $gherkin,
+        private $basePath,
+    ) {
     }
 
     public function getLocatorExamples()

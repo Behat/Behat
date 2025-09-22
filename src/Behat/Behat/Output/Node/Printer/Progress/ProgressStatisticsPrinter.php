@@ -26,21 +26,12 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class ProgressStatisticsPrinter implements StatisticsPrinter
 {
     /**
-     * @var CounterPrinter
-     */
-    private $counterPrinter;
-    /**
-     * @var ListPrinter
-     */
-    private $listPrinter;
-
-    /**
      * Initializes printer.
      */
-    public function __construct(CounterPrinter $counterPrinter, ListPrinter $listPrinter)
-    {
-        $this->counterPrinter = $counterPrinter;
-        $this->listPrinter = $listPrinter;
+    public function __construct(
+        private CounterPrinter $counterPrinter,
+        private ListPrinter $listPrinter,
+    ) {
     }
 
     public function printStatistics(Formatter $formatter, Statistics $statistics)

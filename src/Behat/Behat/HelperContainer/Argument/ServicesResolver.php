@@ -25,16 +25,11 @@ use ReflectionClass;
 final class ServicesResolver implements ArgumentResolver
 {
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
      * Initialises resolver.
      */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private ContainerInterface $container,
+    ) {
     }
 
     /**

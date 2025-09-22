@@ -34,24 +34,13 @@ use Behat\Testwork\Tester\SpecificationTester;
 final class RuntimeFeatureTester implements SpecificationTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $scenarioTester;
-    /**
-     * @var OutlineTester
-     */
-    private $outlineTester;
-
-    /**
      * @param EnvironmentManager $envManager deprecated , will be removed in the next major version
      */
     public function __construct(
-        ScenarioTester $scenarioTester,
-        OutlineTester $outlineTester,
+        private ScenarioTester $scenarioTester,
+        private OutlineTester $outlineTester,
         EnvironmentManager $envManager,
     ) {
-        $this->scenarioTester = $scenarioTester;
-        $this->outlineTester = $outlineTester;
     }
 
     public function setUp(Environment $env, $spec, $skip)

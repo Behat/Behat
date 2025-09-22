@@ -29,21 +29,12 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class IsolatingScenarioTester implements ScenarioTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $decoratedTester;
-    /**
-     * @var EnvironmentManager
-     */
-    private $envManager;
-
-    /**
      * Initialises tester.
      */
-    public function __construct(ScenarioTester $decoratedTester, EnvironmentManager $envManager)
-    {
-        $this->decoratedTester = $decoratedTester;
-        $this->envManager = $envManager;
+    public function __construct(
+        private ScenarioTester $decoratedTester,
+        private EnvironmentManager $envManager,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)

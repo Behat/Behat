@@ -22,28 +22,15 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class AfterSuiteScope implements SuiteScope, AfterTestScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var SpecificationIterator<mixed>
-     */
-    private $iterator;
-    /**
-     * @var TestResult
-     */
-    private $result;
-
-    /**
      * Initializes scope.
      *
      * @param SpecificationIterator<mixed> $iterator
      */
-    public function __construct(Environment $environment, SpecificationIterator $iterator, TestResult $result)
-    {
-        $this->environment = $environment;
-        $this->iterator = $iterator;
-        $this->result = $result;
+    public function __construct(
+        private Environment $environment,
+        private SpecificationIterator $iterator,
+        private TestResult $result,
+    ) {
     }
 
     public function getName()

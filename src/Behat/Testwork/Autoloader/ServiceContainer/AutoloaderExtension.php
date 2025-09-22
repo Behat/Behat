@@ -33,16 +33,11 @@ final class AutoloaderExtension implements Extension
     public const CLASS_LOADER_ID = 'class_loader';
 
     /**
-     * @var array
-     */
-    private $defaultPaths = [];
-
-    /**
      * Initializes extension.
      */
-    public function __construct(array $defaultPaths = [])
-    {
-        $this->defaultPaths = $defaultPaths;
+    public function __construct(
+        private array $defaultPaths = [],
+    ) {
     }
 
     /**

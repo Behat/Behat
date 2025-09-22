@@ -20,10 +20,6 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 final class CachedContextIdentifier implements TargetContextIdentifier
 {
     /**
-     * @var TargetContextIdentifier
-     */
-    private $decoratedIdentifier;
-    /**
      * @var array
      */
     private $contextClasses = [];
@@ -31,9 +27,9 @@ final class CachedContextIdentifier implements TargetContextIdentifier
     /**
      * Initialise the identifier.
      */
-    public function __construct(TargetContextIdentifier $identifier)
-    {
-        $this->decoratedIdentifier = $identifier;
+    public function __construct(
+        private TargetContextIdentifier $decoratedIdentifier,
+    ) {
     }
 
     public function guessTargetContextClass(ContextEnvironment $environment)

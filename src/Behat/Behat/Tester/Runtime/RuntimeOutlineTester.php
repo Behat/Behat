@@ -30,16 +30,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeOutlineTester implements OutlineTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $scenarioTester;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(ScenarioTester $scenarioTester)
-    {
-        $this->scenarioTester = $scenarioTester;
+    public function __construct(
+        private ScenarioTester $scenarioTester,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)

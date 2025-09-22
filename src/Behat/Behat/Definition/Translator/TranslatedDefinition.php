@@ -20,29 +20,16 @@ use Behat\Behat\Definition\Definition;
 final class TranslatedDefinition implements Definition
 {
     /**
-     * @var Definition
-     */
-    private $definition;
-    /**
-     * @var string
-     */
-    private $translatedPattern;
-    /**
-     * @var string
-     */
-    private $language;
-
-    /**
      * Initialises translated definition.
      *
      * @param string     $translatedPattern
      * @param string     $language
      */
-    public function __construct(Definition $definition, $translatedPattern, $language)
-    {
-        $this->definition = $definition;
-        $this->translatedPattern = $translatedPattern;
-        $this->language = $language;
+    public function __construct(
+        private Definition $definition,
+        private $translatedPattern,
+        private $language,
+    ) {
     }
 
     public function getType()

@@ -22,23 +22,14 @@ use Behat\Testwork\Suite\Suite;
 final class SuiteWithPathsSetup implements SuiteSetup
 {
     /**
-     * @var string
-     */
-    private $basePath;
-    /**
-     * @var FilesystemLogger|null
-     */
-    private $logger;
-
-    /**
      * Initializes setup.
      *
      * @param string                $basePath
      */
-    public function __construct($basePath, ?FilesystemLogger $logger = null)
-    {
-        $this->basePath = $basePath;
-        $this->logger = $logger;
+    public function __construct(
+        private $basePath,
+        private ?FilesystemLogger $logger = null,
+    ) {
     }
 
     public function supportsSuite(Suite $suite)
