@@ -24,8 +24,8 @@ final class HookedTeardown implements Teardown
      * Initializes setup.
      */
     public function __construct(
-        private Teardown $teardown,
-        private CallResults $hookCallResults,
+        private readonly Teardown $teardown,
+        private readonly CallResults $hookCallResults,
     ) {
     }
 

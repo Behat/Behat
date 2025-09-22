@@ -34,7 +34,7 @@ final class SpecificationArrayIterator extends ArrayIterator implements Specific
      * @param array<int, T> $specifications
      */
     public function __construct(
-        private Suite $suite,
+        private readonly Suite $suite,
         $specifications = [],
     ) {
         parent::__construct($specifications);

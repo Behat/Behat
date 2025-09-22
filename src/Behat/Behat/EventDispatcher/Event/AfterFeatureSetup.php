@@ -27,8 +27,8 @@ final class AfterFeatureSetup extends FeatureTested implements AfterSetup
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private Setup $setup,
+        private readonly FeatureNode $feature,
+        private readonly Setup $setup,
     ) {
         parent::__construct($env);
     }

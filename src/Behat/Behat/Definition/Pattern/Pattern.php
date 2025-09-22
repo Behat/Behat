@@ -18,9 +18,9 @@ namespace Behat\Behat\Definition\Pattern;
 final class Pattern
 {
     public function __construct(
-        private string $suggestedMethodName,
-        private string $pattern,
-        private int $placeholderCount = 0,
+        private readonly string $suggestedMethodName,
+        private readonly string $pattern,
+        private readonly int $placeholderCount = 0,
     ) {
     }
 

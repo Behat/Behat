@@ -26,7 +26,7 @@ final class HookRepository
      * Initializes repository.
      */
     public function __construct(
-        private EnvironmentManager $environmentManager,
+        private readonly EnvironmentManager $environmentManager,
     ) {
     }
 

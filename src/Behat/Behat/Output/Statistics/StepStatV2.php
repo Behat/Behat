@@ -23,13 +23,13 @@ final class StepStatV2 extends StepStat
      * @param StepResult::* $resultCode
      */
     public function __construct(
-        private string $scenarioTitle,
-        private string $scenarioPath,
-        private string $stepText,
-        private string $stepPath,
-        private int $resultCode,
-        private ?string $error = null,
-        private ?string $stdOut = null,
+        private readonly string $scenarioTitle,
+        private readonly string $scenarioPath,
+        private readonly string $stepText,
+        private readonly string $stepPath,
+        private readonly int $resultCode,
+        private readonly ?string $error = null,
+        private readonly ?string $stdOut = null,
     ) {
         parent::__construct($stepText, $stepPath, $resultCode, $error, $stdOut);
     }

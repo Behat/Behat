@@ -22,7 +22,7 @@ class StreamOutputPrinter implements OutputPrinter
     private ?OutputInterface $output = null;
 
     public function __construct(
-        private OutputFactory $outputFactory,
+        private readonly OutputFactory $outputFactory,
     ) {
     }
 

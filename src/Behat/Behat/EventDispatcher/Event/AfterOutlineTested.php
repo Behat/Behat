@@ -29,10 +29,10 @@ final class AfterOutlineTested extends OutlineTested implements AfterTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private OutlineNode $outline,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly FeatureNode $feature,
+        private readonly OutlineNode $outline,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
     }

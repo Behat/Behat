@@ -29,7 +29,7 @@ final class ConvertConfigCommand extends BaseCommand
     private OutputInterface $output;
 
     public function __construct(
-        private ConfigurationLoader $configurationLoader,
+        private readonly ConfigurationLoader $configurationLoader,
     ) {
         parent::__construct('convert-config');
     }

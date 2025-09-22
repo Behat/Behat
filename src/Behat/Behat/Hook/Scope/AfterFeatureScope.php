@@ -27,9 +27,9 @@ final class AfterFeatureScope implements FeatureScope, AfterTestScope
      * Initializes scope.
      */
     public function __construct(
-        private Environment $environment,
-        private FeatureNode $feature,
-        private TestResult $result,
+        private readonly Environment $environment,
+        private readonly FeatureNode $feature,
+        private readonly TestResult $result,
     ) {
     }
 

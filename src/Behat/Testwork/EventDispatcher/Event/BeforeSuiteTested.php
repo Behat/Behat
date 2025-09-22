@@ -27,7 +27,7 @@ final class BeforeSuiteTested extends SuiteTested implements BeforeTested
      */
     public function __construct(
         Environment $env,
-        private SpecificationIterator $iterator,
+        private readonly SpecificationIterator $iterator,
     ) {
         parent::__construct($env);
     }

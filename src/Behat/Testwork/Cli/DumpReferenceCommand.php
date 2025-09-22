@@ -28,7 +28,7 @@ final class DumpReferenceCommand extends BaseCommand
      * Initializes dumper.
      */
     public function __construct(
-        private ExtensionManager $extensionManager,
+        private readonly ExtensionManager $extensionManager,
     ) {
         parent::__construct('dump-reference');
     }

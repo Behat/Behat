@@ -25,9 +25,9 @@ final class CallResult
      * @param string|null $stdOut
      */
     public function __construct(
-        private Call $call,
+        private readonly Call $call,
         private $return,
-        private ?Exception $exception = null,
+        private readonly ?Exception $exception = null,
         private $stdOut = null,
     ) {
     }

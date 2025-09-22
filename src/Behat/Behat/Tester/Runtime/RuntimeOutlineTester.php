@@ -33,7 +33,7 @@ final class RuntimeOutlineTester implements OutlineTester
      * Initializes tester.
      */
     public function __construct(
-        private ScenarioTester $scenarioTester,
+        private readonly ScenarioTester $scenarioTester,
     ) {
     }
 

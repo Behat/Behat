@@ -28,7 +28,7 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
     }
 
     public function __construct(
-        private string $pattern,
+        private readonly string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

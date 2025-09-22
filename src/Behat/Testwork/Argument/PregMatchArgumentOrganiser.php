@@ -23,7 +23,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      * Initialises organiser.
      */
     public function __construct(
-        private ArgumentOrganiser $baseOrganiser,
+        private readonly ArgumentOrganiser $baseOrganiser,
     ) {
     }
 

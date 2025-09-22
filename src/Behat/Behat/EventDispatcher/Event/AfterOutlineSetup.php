@@ -28,9 +28,9 @@ final class AfterOutlineSetup extends OutlineTested implements AfterSetup
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private OutlineNode $outline,
-        private Setup $setup,
+        private readonly FeatureNode $feature,
+        private readonly OutlineNode $outline,
+        private readonly Setup $setup,
     ) {
         parent::__construct($env);
     }

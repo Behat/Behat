@@ -27,8 +27,8 @@ final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private Scenario $scenario,
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
     ) {
         parent::__construct($env);
     }

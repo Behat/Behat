@@ -38,8 +38,8 @@ final class RuntimeExercise implements Exercise
      * @param SuiteTester<TSpec> $suiteTester
      */
     public function __construct(
-        private EnvironmentManager $envManager,
-        private SuiteTester $suiteTester,
+        private readonly EnvironmentManager $envManager,
+        private readonly SuiteTester $suiteTester,
     ) {
     }
 

@@ -40,7 +40,7 @@ final class ContextFactory
      * Initialises factory.
      */
     public function __construct(
-        private ArgumentOrganiser $argumentOrganiser,
+        private readonly ArgumentOrganiser $argumentOrganiser,
     ) {
         $this->validator = new Validator();
     }

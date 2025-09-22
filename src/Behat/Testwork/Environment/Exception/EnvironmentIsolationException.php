@@ -27,7 +27,7 @@ final class EnvironmentIsolationException extends RuntimeException implements En
      */
     public function __construct(
         $message,
-        private Environment $environment,
+        private readonly Environment $environment,
         private $subject = null,
     ) {
         parent::__construct($message);

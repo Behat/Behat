@@ -57,7 +57,7 @@ TPL;
      * Initializes snippet generator.
      */
     public function __construct(
-        private PatternTransformer $patternTransformer,
+        private readonly PatternTransformer $patternTransformer,
     ) {
         $this->setContextIdentifier(new FixedContextIdentifier());
         $this->setPatternIdentifier(new FixedPatternIdentifier());

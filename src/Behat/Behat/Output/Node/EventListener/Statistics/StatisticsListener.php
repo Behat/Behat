@@ -28,8 +28,8 @@ final class StatisticsListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private Statistics $statistics,
-        private StatisticsPrinter $printer,
+        private readonly Statistics $statistics,
+        private readonly StatisticsPrinter $printer,
     ) {
     }
 

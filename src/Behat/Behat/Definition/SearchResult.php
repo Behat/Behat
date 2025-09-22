@@ -23,9 +23,9 @@ final class SearchResult
      * @param string|null $matchedText
      */
     public function __construct(
-        private ?Definition $definition = null,
+        private readonly ?Definition $definition = null,
         private $matchedText = null,
-        private ?array $arguments = null,
+        private readonly ?array $arguments = null,
     ) {
     }
 

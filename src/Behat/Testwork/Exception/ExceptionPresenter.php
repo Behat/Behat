@@ -30,7 +30,7 @@ final class ExceptionPresenter
      */
     private $stringers = [];
 
-    private ConfigurablePathPrinter $configurablePathPrinter;
+    private readonly ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * Initializes presenter.

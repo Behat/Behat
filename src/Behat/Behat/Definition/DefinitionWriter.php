@@ -25,8 +25,8 @@ final class DefinitionWriter
      * Initializes writer.
      */
     public function __construct(
-        private EnvironmentManager $environmentManager,
-        private DefinitionRepository $repository,
+        private readonly EnvironmentManager $environmentManager,
+        private readonly DefinitionRepository $repository,
     ) {
     }
 

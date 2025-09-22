@@ -28,7 +28,7 @@ final class CachedContextIdentifier implements TargetContextIdentifier
      * Initialise the identifier.
      */
     public function __construct(
-        private TargetContextIdentifier $decoratedIdentifier,
+        private readonly TargetContextIdentifier $decoratedIdentifier,
     ) {
     }
 

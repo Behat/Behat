@@ -34,8 +34,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
      * Initializes setup.
      */
     public function __construct(
-        private ClassLoader $autoloader,
-        private ?FilesystemLogger $logger = null,
+        private readonly ClassLoader $autoloader,
+        private readonly ?FilesystemLogger $logger = null,
     ) {
     }
 

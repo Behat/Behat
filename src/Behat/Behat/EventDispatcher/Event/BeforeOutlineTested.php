@@ -27,8 +27,8 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private OutlineNode $outline,
+        private readonly FeatureNode $feature,
+        private readonly OutlineNode $outline,
     ) {
         parent::__construct($env);
     }

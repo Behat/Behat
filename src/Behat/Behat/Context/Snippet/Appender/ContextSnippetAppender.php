@@ -26,7 +26,7 @@ final class ContextSnippetAppender implements SnippetAppender
     public const PENDING_EXCEPTION_CLASS = PendingException::class;
 
     public function __construct(
-        private ?FilesystemLogger $logger = null,
+        private readonly ?FilesystemLogger $logger = null,
     ) {
     }
 

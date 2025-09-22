@@ -29,7 +29,7 @@ final class SuiteController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private SuiteRegistry $registry,
+        private readonly SuiteRegistry $registry,
         private array $suiteConfigurations,
     ) {
     }

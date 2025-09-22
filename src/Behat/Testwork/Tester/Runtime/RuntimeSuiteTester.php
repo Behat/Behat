@@ -38,7 +38,7 @@ final class RuntimeSuiteTester implements SuiteTester
      * @param SpecificationTester<TSpec> $specTester
      */
     public function __construct(
-        private SpecificationTester $specTester,
+        private readonly SpecificationTester $specTester,
     ) {
     }
 

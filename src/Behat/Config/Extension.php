@@ -11,8 +11,8 @@ use PhpParser\Node\Expr;
 final class Extension implements ExtensionConfigInterface
 {
     public function __construct(
-        private string $name,
-        private array $settings = [],
+        private readonly string $name,
+        private readonly array $settings = [],
     ) {
     }
 

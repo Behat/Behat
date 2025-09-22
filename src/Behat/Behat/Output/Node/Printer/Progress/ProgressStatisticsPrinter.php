@@ -29,8 +29,8 @@ final class ProgressStatisticsPrinter implements StatisticsPrinter
      * Initializes printer.
      */
     public function __construct(
-        private CounterPrinter $counterPrinter,
-        private ListPrinter $listPrinter,
+        private readonly CounterPrinter $counterPrinter,
+        private readonly ListPrinter $listPrinter,
     ) {
     }
 

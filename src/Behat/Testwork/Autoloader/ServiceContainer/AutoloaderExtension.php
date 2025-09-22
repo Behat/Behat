@@ -36,7 +36,7 @@ final class AutoloaderExtension implements Extension
      * Initializes extension.
      */
     public function __construct(
-        private array $defaultPaths = [],
+        private readonly array $defaultPaths = [],
     ) {
     }
 

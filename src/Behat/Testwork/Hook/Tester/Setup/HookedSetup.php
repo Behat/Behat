@@ -24,8 +24,8 @@ final class HookedSetup implements Setup
      * Initializes setup.
      */
     public function __construct(
-        private Setup $setup,
-        private CallResults $hookCallResults,
+        private readonly Setup $setup,
+        private readonly CallResults $hookCallResults,
     ) {
     }
 

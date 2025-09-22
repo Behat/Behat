@@ -31,10 +31,10 @@ final class AfterStepTested extends StepTested implements AfterTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private StepNode $step,
-        private StepResult $result,
-        private Teardown $teardown,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+        private readonly StepResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
     }

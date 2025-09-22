@@ -37,8 +37,8 @@ final class EventDispatchingSuiteTester implements SuiteTester
      * @param SuiteTester<TSpec>       $baseTester
      */
     public function __construct(
-        private SuiteTester $baseTester,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly SuiteTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

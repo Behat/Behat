@@ -32,8 +32,8 @@ final class EventDispatchingStepTester implements StepTester
      * Initializes tester.
      */
     public function __construct(
-        private StepTester $baseTester,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly StepTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

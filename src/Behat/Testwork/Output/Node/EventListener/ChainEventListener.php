@@ -31,7 +31,7 @@ class ChainEventListener implements EventListener, Countable, IteratorAggregate
      * @param EventListener[] $listeners
      */
     public function __construct(
-        private array $listeners,
+        private readonly array $listeners,
     ) {
     }
 

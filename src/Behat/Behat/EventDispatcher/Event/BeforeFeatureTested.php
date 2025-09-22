@@ -26,7 +26,7 @@ final class BeforeFeatureTested extends FeatureTested implements BeforeTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
+        private readonly FeatureNode $feature,
     ) {
         parent::__construct($env);
     }

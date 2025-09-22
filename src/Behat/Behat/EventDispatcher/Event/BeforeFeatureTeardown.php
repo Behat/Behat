@@ -27,8 +27,8 @@ final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardow
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private TestResult $result,
+        private readonly FeatureNode $feature,
+        private readonly TestResult $result,
     ) {
         parent::__construct($env);
     }

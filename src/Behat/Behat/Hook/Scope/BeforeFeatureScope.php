@@ -25,8 +25,8 @@ final class BeforeFeatureScope implements FeatureScope
      * Initializes scope.
      */
     public function __construct(
-        private Environment $environment,
-        private FeatureNode $feature,
+        private readonly Environment $environment,
+        private readonly FeatureNode $feature,
     ) {
     }
 

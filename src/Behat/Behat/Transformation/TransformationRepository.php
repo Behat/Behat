@@ -25,7 +25,7 @@ final class TransformationRepository
      * Initializes repository.
      */
     public function __construct(
-        private EnvironmentManager $environmentManager,
+        private readonly EnvironmentManager $environmentManager,
     ) {
     }
 

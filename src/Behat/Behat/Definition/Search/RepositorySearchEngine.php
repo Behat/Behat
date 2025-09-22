@@ -35,10 +35,10 @@ final class RepositorySearchEngine implements SearchEngine
      * Initializes search engine.
      */
     public function __construct(
-        private DefinitionRepository $repository,
-        private PatternTransformer $patternTransformer,
-        private DefinitionTranslator $translator,
-        private ArgumentOrganiser $argumentOrganiser,
+        private readonly DefinitionRepository $repository,
+        private readonly PatternTransformer $patternTransformer,
+        private readonly DefinitionTranslator $translator,
+        private readonly ArgumentOrganiser $argumentOrganiser,
     ) {
     }
 

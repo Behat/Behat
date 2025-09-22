@@ -58,8 +58,8 @@ final class LazyFeatureIterator implements SpecificationIterator
      * @param FeatureFilterInterface[] $filters
      */
     public function __construct(
-        private Suite $suite,
-        private Gherkin $gherkin,
+        private readonly Suite $suite,
+        private readonly Gherkin $gherkin,
         array $paths,
         array $filters = [],
     ) {

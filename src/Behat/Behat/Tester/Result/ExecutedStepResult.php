@@ -26,8 +26,8 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      * Initialize test result.
      */
     public function __construct(
-        private SearchResult $searchResult,
-        private CallResult $callResult,
+        private readonly SearchResult $searchResult,
+        private readonly CallResult $callResult,
     ) {
     }
 

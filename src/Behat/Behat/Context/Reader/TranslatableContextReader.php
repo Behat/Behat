@@ -27,7 +27,7 @@ final class TranslatableContextReader implements ContextReader
      * Initializes loader.
      */
     public function __construct(
-        private Translator $translator,
+        private readonly Translator $translator,
     ) {
     }
 

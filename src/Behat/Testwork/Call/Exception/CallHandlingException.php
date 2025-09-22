@@ -27,7 +27,7 @@ final class CallHandlingException extends RuntimeException implements CallExcept
      */
     public function __construct(
         $message,
-        private Call $call,
+        private readonly Call $call,
     ) {
         parent::__construct($message);
     }

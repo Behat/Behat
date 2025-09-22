@@ -25,8 +25,8 @@ final class StepTextPainter
      * Initializes painter.
      */
     public function __construct(
-        private PatternTransformer $patternTransformer,
-        private ResultToStringConverter $resultConverter,
+        private readonly PatternTransformer $patternTransformer,
+        private readonly ResultToStringConverter $resultConverter,
     ) {
     }
 

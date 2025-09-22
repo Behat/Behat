@@ -28,9 +28,9 @@ final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardow
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private OutlineNode $outline,
-        private TestResult $result,
+        private readonly FeatureNode $feature,
+        private readonly OutlineNode $outline,
+        private readonly TestResult $result,
     ) {
         parent::__construct($env);
     }

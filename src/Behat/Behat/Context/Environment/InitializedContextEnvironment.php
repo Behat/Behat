@@ -40,7 +40,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      * Initializes environment.
      */
     public function __construct(
-        private Suite $suite,
+        private readonly Suite $suite,
     ) {
     }
 

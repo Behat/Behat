@@ -21,7 +21,7 @@ final class UnknownPatternException extends InvalidArgumentException implements 
 {
     public function __construct(
         string $message,
-        private string $pattern,
+        private readonly string $pattern,
     ) {
         parent::__construct($message);
     }

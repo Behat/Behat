@@ -24,7 +24,7 @@ use Behat\Testwork\Suite\Suite;
 final class JUnitSuitePrinter implements SuitePrinter
 {
     public function __construct(
-        private ?PhaseStatistics $statistics = null,
+        private readonly ?PhaseStatistics $statistics = null,
     ) {
     }
 

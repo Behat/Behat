@@ -22,7 +22,7 @@ final class AggregatePatternIdentifier implements PatternIdentifier
      * @param PatternIdentifier[] $identifiers
      */
     public function __construct(
-        private array $identifiers,
+        private readonly array $identifiers,
     ) {
     }
 

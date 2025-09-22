@@ -23,7 +23,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
      * Initializes step result.
      */
     public function __construct(
-        private SearchResult $searchResult,
+        private readonly SearchResult $searchResult,
     ) {
     }
 

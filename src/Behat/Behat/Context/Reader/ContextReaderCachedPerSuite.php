@@ -28,7 +28,7 @@ final class ContextReaderCachedPerSuite implements ContextReader
      * Initializes reader.
      */
     public function __construct(
-        private ContextReader $childReader,
+        private readonly ContextReader $childReader,
     ) {
     }
 

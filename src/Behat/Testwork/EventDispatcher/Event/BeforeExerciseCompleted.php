@@ -25,7 +25,7 @@ final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeT
      * @param SpecificationIterator<mixed>[] $specificationIterators
      */
     public function __construct(
-        private array $specificationIterators,
+        private readonly array $specificationIterators,
     ) {
     }
 

@@ -33,8 +33,8 @@ final class NodeEventListeningFormatter implements Formatter
         private $name,
         private $description,
         private array $parameters,
-        private OutputPrinter $printer,
-        private EventListener $listener,
+        private readonly OutputPrinter $printer,
+        private readonly EventListener $listener,
     ) {
     }
 

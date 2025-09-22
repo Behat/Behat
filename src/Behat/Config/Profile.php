@@ -47,7 +47,7 @@ final class Profile implements ConfigConverterInterface
     private const REMOVE_PREFIX_PARAMETER = 'removePrefix';
 
     public function __construct(
-        private string $name,
+        private readonly string $name,
         private array $settings = [],
     ) {
     }

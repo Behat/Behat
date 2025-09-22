@@ -36,11 +36,11 @@ final class OutlineListener implements EventListener
     private ?ExampleNode $example = null;
 
     public function __construct(
-        private OutlinePrinter $outlinePrinter,
-        private ExamplePrinter $examplePrinter,
-        private StepPrinter $stepPrinter,
-        private SetupPrinter $exampleSetupPrinter,
-        private SetupPrinter $stepSetupPrinter,
+        private readonly OutlinePrinter $outlinePrinter,
+        private readonly ExamplePrinter $examplePrinter,
+        private readonly StepPrinter $stepPrinter,
+        private readonly SetupPrinter $exampleSetupPrinter,
+        private readonly SetupPrinter $stepSetupPrinter,
     ) {
     }
 

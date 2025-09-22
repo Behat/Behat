@@ -29,10 +29,10 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private Scenario $scenario,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
     }

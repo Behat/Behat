@@ -27,7 +27,7 @@ final class SuiteScopedResolverFactoryAdapter implements ArgumentResolverFactory
      * Initialises adapter.
      */
     public function __construct(
-        private SuiteScopedResolverFactory $factory,
+        private readonly SuiteScopedResolverFactory $factory,
     ) {
     }
 

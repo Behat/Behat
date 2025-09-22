@@ -38,15 +38,15 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class ListPrinter
 {
-    private ConfigurablePathPrinter $configurablePathPrinter;
+    private readonly ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
      */
     public function __construct(
-        private ResultToStringConverter $resultConverter,
+        private readonly ResultToStringConverter $resultConverter,
         ExceptionPresenter $exceptionPresenter,
-        private TranslatorInterface $translator,
+        private readonly TranslatorInterface $translator,
         string $basePath,
         ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {

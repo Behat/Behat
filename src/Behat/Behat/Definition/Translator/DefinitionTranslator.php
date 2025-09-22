@@ -24,7 +24,7 @@ final class DefinitionTranslator
      * Initialises definition translator.
      */
     public function __construct(
-        private TranslatorInterface $translator,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 

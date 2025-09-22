@@ -26,7 +26,7 @@ final class TranslatedDefinition implements Definition
      * @param string     $language
      */
     public function __construct(
-        private Definition $definition,
+        private readonly Definition $definition,
         private $translatedPattern,
         private $language,
     ) {

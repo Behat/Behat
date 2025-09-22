@@ -34,8 +34,8 @@ final class RuntimeScenarioTester implements ScenarioTester
      * Initializes tester.
      */
     public function __construct(
-        private StepContainerTester $containerTester,
-        private BackgroundTester $backgroundTester,
+        private readonly StepContainerTester $containerTester,
+        private readonly BackgroundTester $backgroundTester,
     ) {
     }
 

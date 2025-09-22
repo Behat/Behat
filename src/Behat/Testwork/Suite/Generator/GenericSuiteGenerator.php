@@ -23,7 +23,7 @@ final class GenericSuiteGenerator implements SuiteGenerator
      * Initializes suite generator.
      */
     public function __construct(
-        private array $defaultSettings = [],
+        private readonly array $defaultSettings = [],
     ) {
     }
 

@@ -25,7 +25,7 @@ abstract class LifecycleEvent extends Event
      * Initializes scenario event.
      */
     public function __construct(
-        private Environment $environment,
+        private readonly Environment $environment,
     ) {
     }
 

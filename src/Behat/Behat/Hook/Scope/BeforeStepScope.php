@@ -26,9 +26,9 @@ final class BeforeStepScope implements StepScope
      * Initializes scope.
      */
     public function __construct(
-        private Environment $environment,
-        private FeatureNode $feature,
-        private StepNode $step,
+        private readonly Environment $environment,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
     ) {
     }
 

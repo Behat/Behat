@@ -12,7 +12,7 @@ return RectorConfig::configure()
     ])
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
-    ->withPhpLevel(83)
+    ->withPhpLevel(100)
     ->withSkip([
         StringableForToStringRector::class,
     ])

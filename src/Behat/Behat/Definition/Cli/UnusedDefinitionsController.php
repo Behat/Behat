@@ -36,9 +36,9 @@ final class UnusedDefinitionsController implements Controller
     private array $definitionUsage = [];
 
     public function __construct(
-        private DefinitionRepository $definitionRepository,
-        private EventDispatcherInterface $eventDispatcher,
-        private UnusedDefinitionPrinter $printer,
+        private readonly DefinitionRepository $definitionRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly UnusedDefinitionPrinter $printer,
         private bool $printUnusedDefinitions,
     ) {
     }

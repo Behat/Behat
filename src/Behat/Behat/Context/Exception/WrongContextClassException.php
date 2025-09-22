@@ -24,7 +24,7 @@ final class WrongContextClassException extends InvalidArgumentException implemen
      */
     public function __construct(
         string $message,
-        private string $class,
+        private readonly string $class,
     ) {
         parent::__construct($message);
     }

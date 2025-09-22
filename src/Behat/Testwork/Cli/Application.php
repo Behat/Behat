@@ -41,8 +41,8 @@ final class Application extends BaseApplication
     public function __construct(
         $name,
         $version,
-        private ConfigurationLoader $configurationLoader,
-        private ExtensionManager $extensionManager,
+        private readonly ConfigurationLoader $configurationLoader,
+        private readonly ExtensionManager $extensionManager,
     ) {
         putenv('COLUMNS=9999');
 

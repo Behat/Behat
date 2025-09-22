@@ -28,9 +28,9 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private Scenario $scenario,
-        private Setup $setup,
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+        private readonly Setup $setup,
     ) {
         parent::__construct($env);
     }

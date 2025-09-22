@@ -35,8 +35,8 @@ final class EventDispatchingFeatureTester implements SpecificationTester
      * @param SpecificationTester<FeatureNode> $baseTester
      */
     public function __construct(
-        private SpecificationTester $baseTester,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly SpecificationTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

@@ -29,7 +29,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 class JUnitStepPrinter implements StepPrinter
 {
     public function __construct(
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly ExceptionPresenter $exceptionPresenter,
     ) {
     }
 

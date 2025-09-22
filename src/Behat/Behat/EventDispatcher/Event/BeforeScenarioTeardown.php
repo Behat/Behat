@@ -28,9 +28,9 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private Scenario $scenario,
-        private TestResult $result,
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+        private readonly TestResult $result,
     ) {
         parent::__construct($env);
     }

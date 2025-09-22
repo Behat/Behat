@@ -44,7 +44,7 @@ final class HookAttributeReader implements AttributeReader
      * Initializes reader.
      */
     public function __construct(
-        private DocBlockHelper $docBlockHelper,
+        private readonly DocBlockHelper $docBlockHelper,
     ) {
     }
 

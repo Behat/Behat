@@ -36,7 +36,7 @@ final class ContainerLoader
      * Initialize extension.
      */
     public function __construct(
-        private ExtensionManager $extensionManager,
+        private readonly ExtensionManager $extensionManager,
         ?ConfigurationTree $configuration = null,
         ?Processor $processor = null,
     ) {

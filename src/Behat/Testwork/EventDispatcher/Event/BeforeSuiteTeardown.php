@@ -28,8 +28,8 @@ final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
      */
     public function __construct(
         Environment $env,
-        private SpecificationIterator $iterator,
-        private TestResult $result,
+        private readonly SpecificationIterator $iterator,
+        private readonly TestResult $result,
     ) {
         parent::__construct($env);
     }

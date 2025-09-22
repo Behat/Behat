@@ -40,8 +40,8 @@ final class RuntimeStepTester implements StepTester
      * Initialize tester.
      */
     public function __construct(
-        private DefinitionFinder $definitionFinder,
-        private CallCenter $callCenter,
+        private readonly DefinitionFinder $definitionFinder,
+        private readonly CallCenter $callCenter,
     ) {
     }
 

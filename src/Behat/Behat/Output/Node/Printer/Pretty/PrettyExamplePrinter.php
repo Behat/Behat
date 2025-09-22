@@ -35,7 +35,7 @@ final class PrettyExamplePrinter implements ExamplePrinter
      * @param int $indentation
      */
     public function __construct(
-        private PrettyPathPrinter $pathPrinter,
+        private readonly PrettyPathPrinter $pathPrinter,
         $indentation = 6,
     ) {
         $this->indentText = str_repeat(' ', intval($indentation));

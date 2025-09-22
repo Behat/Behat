@@ -26,7 +26,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
      * Initializes organiser.
      */
     public function __construct(
-        private ArgumentOrganiser $baseOrganiser,
+        private readonly ArgumentOrganiser $baseOrganiser,
     ) {
     }
 

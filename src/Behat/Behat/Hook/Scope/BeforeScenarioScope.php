@@ -26,9 +26,9 @@ final class BeforeScenarioScope implements ScenarioScope
      * Initializes scope.
      */
     public function __construct(
-        private Environment $environment,
-        private FeatureNode $feature,
-        private ScenarioInterface $scenario,
+        private readonly Environment $environment,
+        private readonly FeatureNode $feature,
+        private readonly ScenarioInterface $scenario,
     ) {
     }
 

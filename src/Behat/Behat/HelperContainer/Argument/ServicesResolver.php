@@ -28,7 +28,7 @@ final class ServicesResolver implements ArgumentResolver
      * Initialises resolver.
      */
     public function __construct(
-        private ContainerInterface $container,
+        private readonly ContainerInterface $container,
     ) {
     }
 

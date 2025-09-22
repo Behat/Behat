@@ -39,9 +39,9 @@ final class JUnitScenarioPrinter
     private $outlineStepCount;
 
     public function __construct(
-        private ResultToStringConverter $resultConverter,
-        private JUnitOutlineStoreListener $outlineStoreListener,
-        private ?JUnitDurationListener $durationListener = null,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly JUnitOutlineStoreListener $outlineStoreListener,
+        private readonly ?JUnitDurationListener $durationListener = null,
     ) {
     }
 

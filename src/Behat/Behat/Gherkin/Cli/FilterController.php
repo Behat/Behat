@@ -32,7 +32,7 @@ final class FilterController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private Gherkin $gherkin,
+        private readonly Gherkin $gherkin,
     ) {
     }
 

@@ -26,7 +26,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
      */
     public function __construct(
         private $basePath,
-        private OutputInterface $output,
+        private readonly OutputInterface $output,
     ) {
     }
 

@@ -28,9 +28,9 @@ final class AfterFeatureTested extends FeatureTested implements AfterTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly FeatureNode $feature,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
     }

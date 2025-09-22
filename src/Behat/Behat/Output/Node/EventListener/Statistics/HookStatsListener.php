@@ -35,8 +35,8 @@ final class HookStatsListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private Statistics $statistics,
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly Statistics $statistics,
+        private readonly ExceptionPresenter $exceptionPresenter,
     ) {
     }
 

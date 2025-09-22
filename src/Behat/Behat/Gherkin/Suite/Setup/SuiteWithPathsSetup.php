@@ -28,7 +28,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
      */
     public function __construct(
         private $basePath,
-        private ?FilesystemLogger $logger = null,
+        private readonly ?FilesystemLogger $logger = null,
     ) {
     }
 

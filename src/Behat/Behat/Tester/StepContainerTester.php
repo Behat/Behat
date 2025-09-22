@@ -28,7 +28,7 @@ final class StepContainerTester
      * Initializes tester.
      */
     public function __construct(
-        private StepTester $stepTester,
+        private readonly StepTester $stepTester,
     ) {
     }
 

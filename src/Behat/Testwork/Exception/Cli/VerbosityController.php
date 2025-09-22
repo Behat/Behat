@@ -27,7 +27,7 @@ final class VerbosityController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly ExceptionPresenter $exceptionPresenter,
     ) {
     }
 

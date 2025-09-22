@@ -36,7 +36,7 @@ final class SyntaxController implements Controller
      */
     public function __construct(
         KeywordsDumper $dumper,
-        private TranslatorInterface $translator,
+        private readonly TranslatorInterface $translator,
     ) {
         $dumper->setKeywordsDumperFunction([$this, 'dumpKeywords']);
         $this->keywordsDumper = $dumper;

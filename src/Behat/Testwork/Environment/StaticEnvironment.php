@@ -24,7 +24,7 @@ class StaticEnvironment implements Environment
      * Initializes environment.
      */
     public function __construct(
-        private Suite $suite,
+        private readonly Suite $suite,
     ) {
     }
 

@@ -32,8 +32,8 @@ final class DefinitionCall extends EnvironmentCall
      */
     public function __construct(
         Environment $environment,
-        private FeatureNode $feature,
-        private StepNode $step,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
         Definition $definition,
         array $arguments,
         $errorReportingLevel = null,

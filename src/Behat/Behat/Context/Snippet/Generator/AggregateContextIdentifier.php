@@ -29,7 +29,7 @@ final class AggregateContextIdentifier implements TargetContextIdentifier
      * @param TargetContextIdentifier[] $identifiers
      */
     public function __construct(
-        private array $identifiers,
+        private readonly array $identifiers,
     ) {
     }
 

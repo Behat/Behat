@@ -26,7 +26,7 @@ final class AggregateSnippet
      * @param Snippet[] $snippets
      */
     public function __construct(
-        private array $snippets,
+        private readonly array $snippets,
     ) {
     }
 

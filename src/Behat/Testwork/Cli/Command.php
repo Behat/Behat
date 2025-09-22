@@ -29,7 +29,7 @@ final class Command extends BaseCommand
      */
     public function __construct(
         $commandName,
-        private array $controllers,
+        private readonly array $controllers,
     ) {
         parent::__construct($commandName);
     }

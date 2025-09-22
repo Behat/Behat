@@ -26,8 +26,8 @@ final class BeforeSuiteScope implements SuiteScope
      * @param SpecificationIterator<mixed> $iterator
      */
     public function __construct(
-        private Environment $environment,
-        private SpecificationIterator $iterator,
+        private readonly Environment $environment,
+        private readonly SpecificationIterator $iterator,
     ) {
     }
 

@@ -36,7 +36,7 @@ final class JUnitOutlineStoreListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private SuitePrinter $suitePrinter,
+        private readonly SuitePrinter $suitePrinter,
     ) {
     }
 

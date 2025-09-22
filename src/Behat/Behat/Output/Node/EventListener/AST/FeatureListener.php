@@ -30,8 +30,8 @@ final class FeatureListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private FeaturePrinter $featurePrinter,
-        private SetupPrinter $setupPrinter,
+        private readonly FeaturePrinter $featurePrinter,
+        private readonly SetupPrinter $setupPrinter,
     ) {
     }
 

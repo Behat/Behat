@@ -31,7 +31,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      * @param TestResult[] $results
      */
     public function __construct(
-        private array $results = [],
+        private readonly array $results = [],
     ) {
     }
 

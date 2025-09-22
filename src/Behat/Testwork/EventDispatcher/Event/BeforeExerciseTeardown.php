@@ -26,8 +26,8 @@ final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTe
      * @param SpecificationIterator<mixed>[] $specificationIterators
      */
     public function __construct(
-        private array $specificationIterators,
-        private TestResult $result,
+        private readonly array $specificationIterators,
+        private readonly TestResult $result,
     ) {
     }
 

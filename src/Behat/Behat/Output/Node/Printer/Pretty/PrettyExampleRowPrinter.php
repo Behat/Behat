@@ -48,9 +48,9 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * @param int $subIndentation
      */
     public function __construct(
-        private ResultToStringConverter $resultConverter,
-        private ExceptionPresenter $exceptionPresenter,
-        private TranslatorInterface $translator,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly ExceptionPresenter $exceptionPresenter,
+        private readonly TranslatorInterface $translator,
         $indentation = 6,
         $subIndentation = 2,
     ) {

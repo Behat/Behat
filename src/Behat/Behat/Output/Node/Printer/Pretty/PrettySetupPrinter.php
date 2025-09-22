@@ -43,8 +43,8 @@ final class PrettySetupPrinter implements SetupPrinter
      * @param bool $newlineAfter
      */
     public function __construct(
-        private ResultToStringConverter $resultConverter,
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly ExceptionPresenter $exceptionPresenter,
         $indentation = 0,
         private $newlineBefore = false,
         private $newlineAfter = false,

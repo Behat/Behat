@@ -37,8 +37,8 @@ final class HookableSuiteTester implements SuiteTester
      * @param SuiteTester<TSpec> $baseTester
      */
     public function __construct(
-        private SuiteTester $baseTester,
-        private HookDispatcher $hookDispatcher,
+        private readonly SuiteTester $baseTester,
+        private readonly HookDispatcher $hookDispatcher,
     ) {
     }
 

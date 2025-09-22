@@ -40,10 +40,10 @@ final class SnippetsController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private SnippetRegistry $registry,
-        private SnippetWriter $writer,
-        private ConsoleSnippetPrinter $printer,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly SnippetRegistry $registry,
+        private readonly SnippetWriter $writer,
+        private readonly ConsoleSnippetPrinter $printer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

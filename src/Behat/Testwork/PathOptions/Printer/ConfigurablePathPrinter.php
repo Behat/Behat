@@ -14,7 +14,7 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 
 final class ConfigurablePathPrinter
 {
-    private string $basePath;
+    private readonly string $basePath;
 
     /**
      * @param string[] $removePrefix

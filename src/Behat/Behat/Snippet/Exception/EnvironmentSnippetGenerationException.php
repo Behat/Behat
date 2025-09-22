@@ -27,7 +27,7 @@ final class EnvironmentSnippetGenerationException extends RuntimeException imple
      */
     public function __construct(
         $message,
-        private Environment $environment,
+        private readonly Environment $environment,
     ) {
         parent::__construct($message);
     }

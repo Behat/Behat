@@ -29,7 +29,7 @@ final class ArgumentAutowirer
      * Initialises wirer.
      */
     public function __construct(
-        private PsrContainerInterface $container,
+        private readonly PsrContainerInterface $container,
     ) {
     }
 

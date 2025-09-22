@@ -48,9 +48,9 @@ final class RerunController implements Controller
      * @param string|null $cachePath
      */
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
-        private ResultInterpreter $resultInterpreter,
-        private string $basepath,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly ResultInterpreter $resultInterpreter,
+        private readonly string $basepath,
         $cachePath,
     ) {
         $this->cachePath = null !== $cachePath ? rtrim($cachePath, DIRECTORY_SEPARATOR) : null;

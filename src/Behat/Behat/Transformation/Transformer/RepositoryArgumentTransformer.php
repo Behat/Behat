@@ -32,10 +32,10 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      * Initializes transformer.
      */
     public function __construct(
-        private TransformationRepository $repository,
-        private CallCenter $callCenter,
-        private PatternTransformer $patternTransformer,
-        private TranslatorInterface $translator,
+        private readonly TransformationRepository $repository,
+        private readonly CallCenter $callCenter,
+        private readonly PatternTransformer $patternTransformer,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 

@@ -28,7 +28,7 @@ final class NoSpecificationsIterator extends EmptyIterator implements Specificat
      * Initializes iterator.
      */
     public function __construct(
-        private Suite $suite,
+        private readonly Suite $suite,
     ) {
     }
 

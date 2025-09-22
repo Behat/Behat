@@ -28,8 +28,8 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
      */
     public function __construct(
         Environment $env,
-        private SpecificationIterator $iterator,
-        private Setup $setup,
+        private readonly SpecificationIterator $iterator,
+        private readonly Setup $setup,
     ) {
         parent::__construct($env);
     }

@@ -34,7 +34,7 @@ final class TickingStepTester implements StepTester
      * Initializes tester.
      */
     public function __construct(
-        private StepTester $baseTester,
+        private readonly StepTester $baseTester,
     ) {
     }
 

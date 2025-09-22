@@ -29,7 +29,7 @@ final class SigintController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

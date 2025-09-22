@@ -27,8 +27,8 @@ final class HookDispatcher
      * Initializes hook dispatcher.
      */
     public function __construct(
-        private HookRepository $repository,
-        private CallCenter $callCenter,
+        private readonly HookRepository $repository,
+        private readonly CallCenter $callCenter,
     ) {
     }
 

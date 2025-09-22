@@ -42,8 +42,8 @@ final class StepStatsListener implements EventListener
     private ?string $scenarioPath = null;
 
     public function __construct(
-        private Statistics $statistics,
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly Statistics $statistics,
+        private readonly ExceptionPresenter $exceptionPresenter,
     ) {
     }
 

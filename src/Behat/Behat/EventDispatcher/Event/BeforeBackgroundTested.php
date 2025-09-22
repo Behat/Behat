@@ -28,8 +28,8 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private BackgroundNode $background,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
     ) {
         parent::__construct($env);
     }

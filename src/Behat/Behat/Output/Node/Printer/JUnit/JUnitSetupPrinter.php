@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
 class JUnitSetupPrinter implements SetupPrinter
 {
     public function __construct(
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly ExceptionPresenter $exceptionPresenter,
     ) {
     }
 

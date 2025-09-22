@@ -48,9 +48,9 @@ final class PrettySkippedStepPrinter implements StepPrinter
      * @param int $subIndentation
      */
     public function __construct(
-        private StepTextPainter $textPainter,
-        private ResultToStringConverter $resultConverter,
-        private PrettyPathPrinter $pathPrinter,
+        private readonly StepTextPainter $textPainter,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly PrettyPathPrinter $pathPrinter,
         $indentation = 4,
         $subIndentation = 2,
     ) {

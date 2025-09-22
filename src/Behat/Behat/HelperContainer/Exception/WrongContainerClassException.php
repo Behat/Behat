@@ -21,7 +21,7 @@ final class WrongContainerClassException extends InvalidArgumentException implem
 {
     public function __construct(
         string $message,
-        private string $class,
+        private readonly string $class,
     ) {
         parent::__construct($message);
     }

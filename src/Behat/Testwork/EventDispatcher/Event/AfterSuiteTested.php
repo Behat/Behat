@@ -29,9 +29,9 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
      */
     public function __construct(
         Environment $env,
-        private SpecificationIterator $iterator,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly SpecificationIterator $iterator,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
     }

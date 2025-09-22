@@ -29,7 +29,7 @@ final class CallResults implements Countable, IteratorAggregate
      * @param CallResult[] $results
      */
     public function __construct(
-        private array $results = [],
+        private readonly array $results = [],
     ) {
     }
 

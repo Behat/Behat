@@ -24,9 +24,9 @@ final class TestWithSetupResult implements TestResult
      * Initializes test result.
      */
     public function __construct(
-        private Setup $setup,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly Setup $setup,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
     }
 

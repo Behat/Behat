@@ -29,9 +29,9 @@ final class InteractiveContextIdentifier implements TargetContextIdentifier
      * Initialises identifier.
      */
     public function __construct(
-        private TranslatorInterface $translator,
-        private InputInterface $input,
-        private OutputInterface $output,
+        private readonly TranslatorInterface $translator,
+        private readonly InputInterface $input,
+        private readonly OutputInterface $output,
     ) {
     }
 

@@ -27,7 +27,7 @@ final class EnvironmentReadException extends RuntimeException implements Environ
      */
     public function __construct(
         $message,
-        private Environment $environment,
+        private readonly Environment $environment,
     ) {
         parent::__construct($message);
     }

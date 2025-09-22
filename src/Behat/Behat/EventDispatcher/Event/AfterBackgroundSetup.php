@@ -29,9 +29,9 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private BackgroundNode $background,
-        private Setup $setup,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
+        private readonly Setup $setup,
     ) {
         parent::__construct($env);
     }

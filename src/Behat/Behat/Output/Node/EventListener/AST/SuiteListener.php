@@ -28,7 +28,7 @@ final class SuiteListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private SetupPrinter $setupPrinter,
+        private readonly SetupPrinter $setupPrinter,
     ) {
     }
 

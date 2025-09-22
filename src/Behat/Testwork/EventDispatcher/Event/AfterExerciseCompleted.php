@@ -27,9 +27,9 @@ final class AfterExerciseCompleted extends ExerciseCompleted implements AfterTes
      * @param SpecificationIterator<mixed>[] $specificationIterators
      */
     public function __construct(
-        private array $specificationIterators,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly array $specificationIterators,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
     }
 

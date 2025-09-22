@@ -37,8 +37,8 @@ final class EventDispatchingScenarioTester implements ScenarioTester
      * @param string                   $afterEventName
      */
     public function __construct(
-        private ScenarioTester $baseTester,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly ScenarioTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
         private $beforeEventName,
         private $afterSetupEventName,
         private $beforeTeardownEventName,

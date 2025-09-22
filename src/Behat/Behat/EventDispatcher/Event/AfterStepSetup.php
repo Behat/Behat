@@ -28,9 +28,9 @@ final class AfterStepSetup extends StepTested implements AfterSetup
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private StepNode $step,
-        private Setup $setup,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+        private readonly Setup $setup,
     ) {
         parent::__construct($env);
     }

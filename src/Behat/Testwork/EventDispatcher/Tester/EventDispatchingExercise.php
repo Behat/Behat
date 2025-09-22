@@ -35,8 +35,8 @@ final class EventDispatchingExercise implements Exercise
      * @param Exercise<TSpec>          $baseExercise
      */
     public function __construct(
-        private Exercise $baseExercise,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly Exercise $baseExercise,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

@@ -40,7 +40,7 @@ class RuntimeCallee implements Callee
      */
     public function __construct(
         callable|array $callable,
-        private ?string $description = null,
+        private readonly ?string $description = null,
     ) {
         if (is_array($callable)) {
             $this->reflection = new ReflectionMethod($callable[0], $callable[1]);

@@ -42,7 +42,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private EventListener $descendant,
+        private readonly EventListener $descendant,
     ) {
     }
 

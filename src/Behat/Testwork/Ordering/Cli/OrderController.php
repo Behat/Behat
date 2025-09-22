@@ -37,7 +37,7 @@ final class OrderController implements Controller
      */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
-        private OrderedExercise $exercise,
+        private readonly OrderedExercise $exercise,
     ) {
     }
 

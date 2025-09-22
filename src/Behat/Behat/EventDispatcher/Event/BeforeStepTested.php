@@ -27,8 +27,8 @@ final class BeforeStepTested extends StepTested implements BeforeTested
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private StepNode $step,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
     ) {
         parent::__construct($env);
     }

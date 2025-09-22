@@ -30,10 +30,10 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      */
     public function __construct(
         Environment $env,
-        private FeatureNode $feature,
-        private BackgroundNode $background,
-        private TestResult $result,
-        private Teardown $teardown,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
     }

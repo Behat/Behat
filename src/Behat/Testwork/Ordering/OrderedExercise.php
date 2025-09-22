@@ -46,7 +46,7 @@ final class OrderedExercise implements Exercise
      * @param Exercise<TSpec> $decoratedExercise
      */
     public function __construct(
-        private Exercise $decoratedExercise,
+        private readonly Exercise $decoratedExercise,
     ) {
         $this->orderer = new NoopOrderer();
     }

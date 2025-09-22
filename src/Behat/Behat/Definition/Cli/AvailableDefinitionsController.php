@@ -32,10 +32,10 @@ final class AvailableDefinitionsController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private SuiteRepository $suiteRepository,
-        private DefinitionWriter $writer,
-        private ConsoleDefinitionListPrinter $listPrinter,
-        private ConsoleDefinitionInformationPrinter $infoPrinter,
+        private readonly SuiteRepository $suiteRepository,
+        private readonly DefinitionWriter $writer,
+        private readonly ConsoleDefinitionListPrinter $listPrinter,
+        private readonly ConsoleDefinitionInformationPrinter $infoPrinter,
     ) {
     }
 

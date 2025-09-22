@@ -39,7 +39,7 @@ final class ProgressStepPrinter implements StepPrinter
      * Initializes printer.
      */
     public function __construct(
-        private ResultToStringConverter $resultConverter,
+        private readonly ResultToStringConverter $resultConverter,
     ) {
     }
 

@@ -50,10 +50,10 @@ final class PrettyStepPrinter implements StepPrinter
      * @param int $subIndentation
      */
     public function __construct(
-        private StepTextPainter $textPainter,
-        private ResultToStringConverter $resultConverter,
-        private PrettyPathPrinter $pathPrinter,
-        private ExceptionPresenter $exceptionPresenter,
+        private readonly StepTextPainter $textPainter,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly PrettyPathPrinter $pathPrinter,
+        private readonly ExceptionPresenter $exceptionPresenter,
         $indentation = 4,
         $subIndentation = 2,
     ) {

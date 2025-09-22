@@ -49,7 +49,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      * @param ArgumentResolverFactory|SuiteScopedResolverFactory $resolverFactory
      */
     public function __construct(
-        private ContextFactory $contextFactory,
+        private readonly ContextFactory $contextFactory,
         $resolverFactory = null,
     ) {
         if ($resolverFactory && !$resolverFactory instanceof ArgumentResolverFactory) {

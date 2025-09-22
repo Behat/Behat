@@ -25,8 +25,8 @@ final class CounterPrinter
      * Initializes printer.
      */
     public function __construct(
-        private ResultToStringConverter $resultConverter,
-        private TranslatorInterface $translator,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 

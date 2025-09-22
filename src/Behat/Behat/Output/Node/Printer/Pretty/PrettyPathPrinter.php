@@ -27,13 +27,13 @@ use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
  */
 final class PrettyPathPrinter
 {
-    private ConfigurablePathPrinter $configurablePathPrinter;
+    private readonly ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * Initializes printer.
      */
     public function __construct(
-        private WidthCalculator $widthCalculator,
+        private readonly WidthCalculator $widthCalculator,
         string $basePath,
         ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {

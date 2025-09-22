@@ -32,8 +32,8 @@ class ConsoleSnippetPrinter implements SnippetPrinter
      * Initializes printer.
      */
     public function __construct(
-        private OutputInterface $output,
-        private TranslatorInterface $translator,
+        private readonly OutputInterface $output,
+        private readonly TranslatorInterface $translator,
     ) {
         $this->output->getFormatter()->setStyle('snippet_keyword', new OutputFormatterStyle(null, null, ['bold']));
         $this->output->getFormatter()->setStyle('snippet_undefined', new OutputFormatterStyle('yellow'));

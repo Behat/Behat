@@ -28,7 +28,7 @@ final class LanguageController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private Translator $translator,
+        private readonly Translator $translator,
     ) {
     }
 

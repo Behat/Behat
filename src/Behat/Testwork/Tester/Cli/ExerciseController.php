@@ -41,10 +41,10 @@ final class ExerciseController implements Controller
      * @param bool             $skip
      */
     public function __construct(
-        private SuiteRepository $suiteRepository,
-        private SpecificationFinder $specificationFinder,
-        private Exercise $exercise,
-        private ResultInterpreter $resultInterpreter,
+        private readonly SuiteRepository $suiteRepository,
+        private readonly SpecificationFinder $specificationFinder,
+        private readonly Exercise $exercise,
+        private readonly ResultInterpreter $resultInterpreter,
         private $skip = false,
     ) {
     }

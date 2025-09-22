@@ -27,9 +27,9 @@ final class DebugCommand extends BaseCommand
      * Initialises command.
      */
     public function __construct(
-        private Application $application,
-        private ConfigurationLoader $configurationLoader,
-        private ExtensionManager $extensionManager,
+        private readonly Application $application,
+        private readonly ConfigurationLoader $configurationLoader,
+        private readonly ExtensionManager $extensionManager,
     ) {
         parent::__construct('debug');
     }

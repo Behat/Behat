@@ -27,7 +27,7 @@ final class AutoloaderController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private ClassLoader $loader,
+        private readonly ClassLoader $loader,
     ) {
     }
 

@@ -36,7 +36,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      * Initialises factory.
      */
     public function __construct(
-        private TaggedContainerInterface $container,
+        private readonly TaggedContainerInterface $container,
     ) {
     }
 

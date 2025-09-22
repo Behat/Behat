@@ -29,7 +29,7 @@ class FireOnlyIfFormatterParameterListener implements EventListener
     public function __construct(
         private $name,
         private $value,
-        private EventListener $descendant,
+        private readonly EventListener $descendant,
     ) {
     }
 

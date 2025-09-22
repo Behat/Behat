@@ -29,7 +29,7 @@ final class OutputManager
      * Initializes manager.
      */
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

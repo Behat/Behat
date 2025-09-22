@@ -27,7 +27,7 @@ final class TransformationCall extends EnvironmentCall
      */
     public function __construct(
         Environment $environment,
-        private Definition $definition,
+        private readonly Definition $definition,
         Transformation $transformation,
         array $arguments,
     ) {

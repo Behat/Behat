@@ -44,9 +44,9 @@ final class PrettyOutlinePrinter implements OutlinePrinter
      * @param int $subIndentation
      */
     public function __construct(
-        private ScenarioPrinter $scenarioPrinter,
-        private StepPrinter $stepPrinter,
-        private ResultToStringConverter $resultConverter,
+        private readonly ScenarioPrinter $scenarioPrinter,
+        private readonly StepPrinter $stepPrinter,
+        private readonly ResultToStringConverter $resultConverter,
         $indentation = 4,
         $subIndentation = 2,
     ) {

@@ -29,7 +29,7 @@ class OutputController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        private OutputManager $manager,
+        private readonly OutputManager $manager,
     ) {
     }
 

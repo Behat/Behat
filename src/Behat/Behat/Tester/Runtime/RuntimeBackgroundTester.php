@@ -32,7 +32,7 @@ final class RuntimeBackgroundTester implements BackgroundTester
      * Initializes tester.
      */
     public function __construct(
-        private StepContainerTester $containerTester,
+        private readonly StepContainerTester $containerTester,
     ) {
     }
 

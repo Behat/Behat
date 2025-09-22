@@ -35,7 +35,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
      * @param list<SpecificationIterator<T>> $iterators
      */
     public function __construct(
-        private Suite $suite,
+        private readonly Suite $suite,
         private array $iterators,
     ) {
     }

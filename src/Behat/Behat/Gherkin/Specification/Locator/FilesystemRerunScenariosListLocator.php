@@ -30,7 +30,7 @@ final class FilesystemRerunScenariosListLocator implements SpecificationLocator
      * Initializes locator.
      */
     public function __construct(
-        private Gherkin $gherkin,
+        private readonly Gherkin $gherkin,
     ) {
     }
 

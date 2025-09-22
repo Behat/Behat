@@ -27,7 +27,7 @@ final class UnsupportedCallException extends InvalidArgumentException implements
      */
     public function __construct(
         $message,
-        private Call $call,
+        private readonly Call $call,
     ) {
         parent::__construct($message);
     }

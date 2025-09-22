@@ -29,10 +29,10 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      * @param PatternTransformer $patternTransformer deprecated, will be removed in the next major version
      */
     public function __construct(
-        private OutputInterface $output,
+        private readonly OutputInterface $output,
         PatternTransformer $patternTransformer,
-        private DefinitionTranslator $translator,
-        private KeywordsInterface $keywords,
+        private readonly DefinitionTranslator $translator,
+        private readonly KeywordsInterface $keywords,
     ) {
         $this->output->getFormatter()->setStyle('def_regex', new OutputFormatterStyle('yellow'));
         $this->output->getFormatter()->setStyle(
