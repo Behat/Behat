@@ -29,35 +29,14 @@ use Behat\Testwork\Call\CallCenter;
 final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexGenerator
 {
     /**
-     * @var TransformationRepository
-     */
-    private $repository;
-    /**
-     * @var CallCenter
-     */
-    private $callCenter;
-    /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initializes transformer.
      */
     public function __construct(
-        TransformationRepository $repository,
-        CallCenter $callCenter,
-        PatternTransformer $patternTransformer,
-        TranslatorInterface $translator,
+        private readonly TransformationRepository $repository,
+        private readonly CallCenter $callCenter,
+        private readonly PatternTransformer $patternTransformer,
+        private readonly TranslatorInterface $translator,
     ) {
-        $this->repository = $repository;
-        $this->callCenter = $callCenter;
-        $this->patternTransformer = $patternTransformer;
-        $this->translator = $translator;
     }
 
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
@@ -68,7 +47,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $environment = $definitionCall->getEnvironment();
-        list($simpleTransformations, $normalTransformations) = $this->splitSimpleAndNormalTransformations(
+        [$simpleTransformations, $normalTransformations] = $this->splitSimpleAndNormalTransformations(
             $this->repository->getEnvironmentTransformations($environment)
         );
 
@@ -96,9 +75,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, $index, $value)
     {
-        usort($transformations, function (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) {
-            return $t2->getPriority() <=> $t1->getPriority();
-        });
+        usort($transformations, fn (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2) => $t2->getPriority() <=> $t1->getPriority());
 
         $newValue = $value;
         foreach ($transformations as $transformation) {
@@ -157,11 +134,9 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     private function splitSimpleAndNormalTransformations(array $transformations)
     {
-        return array_reduce($transformations, function ($acc, $t) {
-            return [
-                $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
-                $t instanceof SimpleArgumentTransformation ? $acc[1] : array_merge($acc[1], [$t]),
-            ];
-        }, [[], []]);
+        return array_reduce($transformations, fn ($acc, $t) => [
+            $t instanceof SimpleArgumentTransformation ? array_merge($acc[0], [$t]) : $acc[0],
+            $t instanceof SimpleArgumentTransformation ? $acc[1] : array_merge($acc[1], [$t]),
+        ], [[], []]);
     }
 }

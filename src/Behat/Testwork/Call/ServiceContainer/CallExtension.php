@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\Call\ServiceContainer;
 
+use Behat\Testwork\Call\CallCenter;
+use Behat\Testwork\Call\Handler\RuntimeCallHandler;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -89,7 +91,7 @@ final class CallExtension implements Extension
      */
     protected function loadCallCenter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Call\CallCenter');
+        $definition = new Definition(CallCenter::class);
         $container->setDefinition(self::CALL_CENTER_ID, $definition);
     }
 
@@ -100,7 +102,7 @@ final class CallExtension implements Extension
      */
     protected function loadCallHandlers(ContainerBuilder $container, $errorReporting)
     {
-        $definition = new Definition('Behat\Testwork\Call\Handler\RuntimeCallHandler', [$errorReporting]);
+        $definition = new Definition(RuntimeCallHandler::class, [$errorReporting]);
         $definition->addTag(self::CALL_HANDLER_TAG, ['priority' => 50]);
         $container->setDefinition(self::CALL_HANDLER_TAG . '.runtime', $definition);
     }

@@ -26,21 +26,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class SuiteController implements Controller
 {
     /**
-     * @var SuiteRegistry
-     */
-    private $registry;
-    /**
-     * @var array
-     */
-    private $suiteConfigurations = [];
-
-    /**
      * Initializes controller.
      */
-    public function __construct(SuiteRegistry $registry, array $suiteConfigurations)
-    {
-        $this->registry = $registry;
-        $this->suiteConfigurations = $suiteConfigurations;
+    public function __construct(
+        private readonly SuiteRegistry $registry,
+        private array $suiteConfigurations,
+    ) {
     }
 
     public function configure(Command $command)

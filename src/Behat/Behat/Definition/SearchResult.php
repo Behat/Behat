@@ -18,28 +18,15 @@ namespace Behat\Behat\Definition;
 final class SearchResult
 {
     /**
-     * @var Definition|null
-     */
-    private $definition;
-    /**
-     * @var string|null
-     */
-    private $matchedText;
-    /**
-     * @var array|null
-     */
-    private $arguments;
-
-    /**
      * Registers search match.
      *
      * @param string|null $matchedText
      */
-    public function __construct(?Definition $definition = null, $matchedText = null, ?array $arguments = null)
-    {
-        $this->definition = $definition;
-        $this->matchedText = $matchedText;
-        $this->arguments = $arguments;
+    public function __construct(
+        private readonly ?Definition $definition = null,
+        private $matchedText = null,
+        private readonly ?array $arguments = null,
+    ) {
     }
 
     /**
@@ -49,7 +36,7 @@ final class SearchResult
      */
     public function hasMatch()
     {
-        return null !== $this->definition;
+        return $this->definition instanceof Definition;
     }
 
     /**

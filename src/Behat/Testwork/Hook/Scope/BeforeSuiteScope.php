@@ -21,23 +21,14 @@ use Behat\Testwork\Specification\SpecificationIterator;
 final class BeforeSuiteScope implements SuiteScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var SpecificationIterator<mixed>
-     */
-    private $iterator;
-
-    /**
      * Initializes scope.
      *
      * @param SpecificationIterator<mixed> $iterator
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator)
-    {
-        $this->environment = $env;
-        $this->iterator = $iterator;
+    public function __construct(
+        private readonly Environment $environment,
+        private readonly SpecificationIterator $iterator,
+    ) {
     }
 
     public function getName()

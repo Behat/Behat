@@ -31,21 +31,12 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeScenarioTester implements ScenarioTester
 {
     /**
-     * @var StepContainerTester
-     */
-    private $containerTester;
-    /**
-     * @var BackgroundTester
-     */
-    private $backgroundTester;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(StepContainerTester $containerTester, BackgroundTester $backgroundTester)
-    {
-        $this->containerTester = $containerTester;
-        $this->backgroundTester = $backgroundTester;
+    public function __construct(
+        private readonly StepContainerTester $containerTester,
+        private readonly BackgroundTester $backgroundTester,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)

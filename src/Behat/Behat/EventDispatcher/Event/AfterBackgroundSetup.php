@@ -25,28 +25,15 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var BackgroundNode
-     */
-    private $background;
-    /**
-     * @var Setup
-     */
-    private $setup;
-
-    /**
      * Initializes event.
      */
-    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background, Setup $setup)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
+        private readonly Setup $setup,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->background = $background;
-        $this->setup = $setup;
     }
 
     /**

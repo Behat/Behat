@@ -30,23 +30,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingFeatureTester implements SpecificationTester
 {
     /**
-     * @var SpecificationTester<FeatureNode>
-     */
-    private $baseTester;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes tester.
      *
      * @param SpecificationTester<FeatureNode> $baseTester
      */
-    public function __construct(SpecificationTester $baseTester, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly SpecificationTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, $spec, $skip)

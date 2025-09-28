@@ -27,11 +27,6 @@ use Psr\Container\ContainerInterface;
  */
 final class InitializedContextEnvironment implements ContextEnvironment, ServiceContainerEnvironment
 {
-    /**
-     * @var Suite
-     */
-    private $suite;
-
     private ?ContainerInterface $serviceContainer = null;
 
     /**
@@ -44,9 +39,9 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     /**
      * Initializes environment.
      */
-    public function __construct(Suite $suite)
-    {
-        $this->suite = $suite;
+    public function __construct(
+        private readonly Suite $suite,
+    ) {
     }
 
     /**
@@ -54,7 +49,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      */
     public function registerContext(Context $context)
     {
-        $this->contexts[get_class($context)] = $context;
+        $this->contexts[$context::class] = $context;
     }
 
     public function setServiceContainer(?ContainerInterface $container = null)

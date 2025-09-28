@@ -29,16 +29,11 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeBackgroundTester implements BackgroundTester
 {
     /**
-     * @var StepContainerTester
-     */
-    private $containerTester;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(StepContainerTester $containerTester)
-    {
-        $this->containerTester = $containerTester;
+    public function __construct(
+        private readonly StepContainerTester $containerTester,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, $skip)

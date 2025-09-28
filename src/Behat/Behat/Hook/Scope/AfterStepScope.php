@@ -26,31 +26,14 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class AfterStepScope implements StepScope, AfterTestScope
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-    /**
-     * @var StepResult
-     */
-    private $result;
-
-    /**
      * Initializes scope.
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step, StepResult $result)
-    {
-        $this->environment = $env;
-        $this->feature = $feature;
-        $this->step = $step;
-        $this->result = $result;
+    public function __construct(
+        private readonly Environment $environment,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+        private readonly StepResult $result,
+    ) {
     }
 
     /**

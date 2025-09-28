@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Translator\ServiceContainer;
 
+use Behat\Behat\Translator\Cli\GherkinTranslationsController;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -53,7 +54,7 @@ final class GherkinTranslationsExtension implements Extension
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Translator\Cli\GherkinTranslationsController', [
+        $definition = new Definition(GherkinTranslationsController::class, [
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);

@@ -24,28 +24,15 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class AfterFeatureTested extends FeatureTested implements AfterTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var TestResult
-     */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
-
-    /**
      * Initializes event.
      */
-    public function __construct(Environment $env, FeatureNode $feature, TestResult $result, Teardown $teardown)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**

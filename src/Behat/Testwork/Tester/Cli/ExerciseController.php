@@ -36,51 +36,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ExerciseController implements Controller
 {
     /**
-     * @var SuiteRepository
-     */
-    private $suiteRepository;
-    /**
-     * @var SpecificationFinder
-     */
-    private $specificationFinder;
-    /**
-     * @var Exercise
-     */
-    private $exercise;
-    /**
-     * @var ResultInterpreter
-     */
-    private $resultInterpreter;
-    /**
-     * @var bool
-     */
-    private $skip;
-
-    /**
      * Initializes controller.
      *
      * @param bool             $skip
      */
     public function __construct(
-        SuiteRepository $suiteRepository,
-        SpecificationFinder $specificationFinder,
-        Exercise $exercise,
-        ResultInterpreter $resultInterpreter,
-        $skip = false,
+        private readonly SuiteRepository $suiteRepository,
+        private readonly SpecificationFinder $specificationFinder,
+        private readonly Exercise $exercise,
+        private readonly ResultInterpreter $resultInterpreter,
+        private $skip = false,
     ) {
-        $this->suiteRepository = $suiteRepository;
-        $this->specificationFinder = $specificationFinder;
-        $this->exercise = $exercise;
-        $this->resultInterpreter = $resultInterpreter;
-        $this->skip = $skip;
     }
 
     public function configure(Command $command)
     {
         $locatorsExamples = implode(PHP_EOL, array_map(
-            function ($locator) {
-                return '- ' . $locator;
-            },
+            fn ($locator) => '- ' . $locator,
             $this->specificationFinder->getExampleLocators()
         ));
 

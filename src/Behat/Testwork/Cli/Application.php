@@ -33,26 +33,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class Application extends BaseApplication
 {
     /**
-     * @var ConfigurationLoader
-     */
-    private $configurationLoader;
-    /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initializes application.
      *
      * @param string              $name
      * @param string              $version
      */
-    public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
-    {
+    public function __construct(
+        $name,
+        $version,
+        private readonly ConfigurationLoader $configurationLoader,
+        private readonly ExtensionManager $extensionManager,
+    ) {
         putenv('COLUMNS=9999');
-
-        $this->configurationLoader = $configLoader;
-        $this->extensionManager = $extensionManager;
 
         parent::__construct($name, $version);
     }
@@ -114,7 +106,7 @@ final class Application extends BaseApplication
 
         // xdebug's default nesting level of 100 is not enough
         if (extension_loaded('xdebug')
-            && false === strpos(ini_get('disable_functions'), 'ini_set')
+            && !str_contains(ini_get('disable_functions'), 'ini_set')
         ) {
             $oldValue = ini_get('xdebug.max_nesting_level');
             if ($oldValue === false || $oldValue < 256) {

@@ -29,10 +29,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class ProgressStepPrinter implements StepPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
      * @var int
      */
     private $stepsPrinted = 0;
@@ -42,9 +38,9 @@ final class ProgressStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      */
-    public function __construct(ResultToStringConverter $resultConverter)
-    {
-        $this->resultConverter = $resultConverter;
+    public function __construct(
+        private readonly ResultToStringConverter $resultConverter,
+    ) {
     }
 
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
@@ -99,14 +95,12 @@ final class ProgressStepPrinter implements StepPrinter
 
         $printer->writeln("\n" . $result->getStepDefinition()->getPath() . ':');
         $callResult = $result->getCallResult();
-        $pad = function ($line) {
-            return sprintf(
-                '  | {+stdout}%s{-stdout}',
-                $line
-            );
-        };
+        $pad = (fn ($line) => sprintf(
+            '  | {+stdout}%s{-stdout}',
+            $line
+        ));
 
-        $printer->write(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->write(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
         $this->hasPrintedOutput = true;
     }
 }

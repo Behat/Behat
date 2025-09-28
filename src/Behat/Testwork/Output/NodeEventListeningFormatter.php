@@ -24,39 +24,18 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 final class NodeEventListeningFormatter implements Formatter
 {
     /**
-     * @var OutputPrinter
-     */
-    private $printer;
-    /**
-     * @var array
-     */
-    private $parameters;
-    /**
-     * @var EventListener
-     */
-    private $listener;
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
      * Initializes formatter.
      *
      * @param string        $name
      * @param string        $description
      */
-    public function __construct($name, $description, array $parameters, OutputPrinter $printer, EventListener $listener)
-    {
-        $this->name = $name;
-        $this->description = $description;
-        $this->parameters = $parameters;
-        $this->printer = $printer;
-        $this->listener = $listener;
+    public function __construct(
+        private $name,
+        private $description,
+        private array $parameters,
+        private readonly OutputPrinter $printer,
+        private readonly EventListener $listener,
+    ) {
     }
 
     /**
@@ -77,7 +56,7 @@ final class NodeEventListeningFormatter implements Formatter
     public function listenEvent(Event $event, $eventName = null)
     {
         if (null === $eventName) {
-            $eventName = method_exists($event, 'getName') ? $event->getName() : get_class($event);
+            $eventName = method_exists($event, 'getName') ? $event->getName() : $event::class;
         }
 
         $this->listener->listenEvent($this, $event, $eventName);

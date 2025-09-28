@@ -22,20 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class Command extends BaseCommand
 {
     /**
-     * @var Controller[]
-     */
-    private $controllers = [];
-
-    /**
      * Initializes command.
      *
      * @param string       $commandName
      * @param Controller[] $controllers
      */
-    public function __construct($commandName, array $controllers)
-    {
-        $this->controllers = $controllers;
-
+    public function __construct(
+        $commandName,
+        private readonly array $controllers,
+    ) {
         parent::__construct($commandName);
     }
 

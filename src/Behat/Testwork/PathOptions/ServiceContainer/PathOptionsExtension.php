@@ -11,6 +11,8 @@
 namespace Behat\Testwork\PathOptions\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\PathOptions\Cli\PathOptionsController;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -83,7 +85,7 @@ final class PathOptionsExtension implements Extension
         ?string $editorUrl,
         array $removePrefix = [],
     ): void {
-        $definition = new Definition('Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter', [
+        $definition = new Definition(ConfigurablePathPrinter::class, [
             '%paths.base%',
             $printAbsolutePaths,
             $editorUrl,
@@ -94,7 +96,7 @@ final class PathOptionsExtension implements Extension
 
     private function loadPathOptionsController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\PathOptions\Cli\PathOptionsController', [
+        $definition = new Definition(PathOptionsController::class, [
             new Reference(self::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);

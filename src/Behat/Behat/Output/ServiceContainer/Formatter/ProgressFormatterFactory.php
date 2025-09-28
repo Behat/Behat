@@ -10,8 +10,23 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
+use Behat\Behat\Output\Node\EventListener\AST\StepListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener;
+use Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener;
+use Behat\Behat\Output\Node\Printer\CounterPrinter;
+use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
+use Behat\Behat\Output\Node\Printer\ListPrinter;
+use Behat\Behat\Output\Node\Printer\Progress\ProgressStatisticsPrinter;
+use Behat\Behat\Output\Node\Printer\Progress\ProgressStepPrinter;
+use Behat\Behat\Output\Printer\ConsoleOutputFactory;
+use Behat\Behat\Output\Statistics\TotalStatistics;
 use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
+use Behat\Testwork\Output\Node\EventListener\ChainEventListener;
+use Behat\Testwork\Output\NodeEventListeningFormatter;
+use Behat\Testwork\Output\Printer\StreamOutputPrinter;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
 use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
@@ -70,7 +85,7 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function loadRootNodeListener(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\EventListener\AST\StepListener', [
+        $definition = new Definition(StepListener::class, [
             new Reference('output.node.printer.progress.step'),
         ]);
         $container->setDefinition(self::ROOT_LISTENER_ID, $definition);
@@ -81,13 +96,13 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function loadCorePrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\CounterPrinter', [
+        $definition = new Definition(CounterPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition('output.node.printer.counter', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\ListPrinter', [
+        $definition = new Definition(ListPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
@@ -96,12 +111,12 @@ class ProgressFormatterFactory implements FormatterFactory
         ]);
         $container->setDefinition('output.node.printer.list', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Progress\ProgressStepPrinter', [
+        $definition = new Definition(ProgressStepPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
         ]);
         $container->setDefinition('output.node.printer.progress.step', $definition);
 
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Progress\ProgressStatisticsPrinter', [
+        $definition = new Definition(ProgressStatisticsPrinter::class, [
             new Reference('output.node.printer.counter'),
             new Reference('output.node.printer.list'),
         ]);
@@ -113,7 +128,7 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function loadPrinterHelpers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter');
+        $definition = new Definition(ResultToStringConverter::class);
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
     }
 
@@ -122,31 +137,31 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function loadFormatter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Output\Statistics\TotalStatistics');
+        $definition = new Definition(TotalStatistics::class);
         $container->setDefinition('output.progress.statistics', $definition);
 
-        $definition = new Definition('Behat\Testwork\Output\NodeEventListeningFormatter', [
+        $definition = new Definition(NodeEventListeningFormatter::class, [
             ProgressFormatter::NAME,
             'Prints one character per step.',
             ProgressFormatter::defaults(),
             $this->createOutputPrinterDefinition(),
             new Definition(
-                'Behat\Testwork\Output\Node\EventListener\ChainEventListener',
+                ChainEventListener::class,
                 [
                     [
                         new Reference(self::ROOT_LISTENER_ID),
-                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener', [
+                        new Definition(StatisticsListener::class, [
                             new Reference('output.progress.statistics'),
                             new Reference('output.node.printer.progress.statistics'),
                         ]),
-                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener', [
+                        new Definition(ScenarioStatsListener::class, [
                             new Reference('output.progress.statistics'),
                         ]),
-                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener', [
+                        new Definition(StepStatsListener::class, [
                             new Reference('output.progress.statistics'),
                             new Reference(ExceptionExtension::PRESENTER_ID),
                         ]),
-                        new Definition('Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener', [
+                        new Definition(HookStatsListener::class, [
                             new Reference('output.progress.statistics'),
                             new Reference(ExceptionExtension::PRESENTER_ID),
                         ]),
@@ -165,8 +180,8 @@ class ProgressFormatterFactory implements FormatterFactory
      */
     protected function createOutputPrinterDefinition()
     {
-        return new Definition('Behat\Testwork\Output\Printer\StreamOutputPrinter', [
-            new Definition('Behat\Behat\Output\Printer\ConsoleOutputFactory'),
+        return new Definition(StreamOutputPrinter::class, [
+            new Definition(ConsoleOutputFactory::class),
         ]);
     }
 

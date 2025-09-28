@@ -11,6 +11,7 @@
 namespace Behat\Testwork\Filesystem\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Filesystem\ConsoleFilesystemLogger;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -57,7 +58,7 @@ final class FilesystemExtension implements Extension
      */
     protected function loadFilesystemLogger(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Filesystem\ConsoleFilesystemLogger', [
+        $definition = new Definition(ConsoleFilesystemLogger::class, [
             '%paths.base%',
             new Reference(CliExtension::OUTPUT_ID),
         ]);

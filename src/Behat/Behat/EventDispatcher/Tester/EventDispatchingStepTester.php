@@ -29,21 +29,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingStepTester implements StepTester
 {
     /**
-     * @var StepTester
-     */
-    private $baseTester;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(StepTester $baseTester, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly StepTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)

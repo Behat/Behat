@@ -49,8 +49,6 @@ final class ContextSnippetGenerator implements SnippetGenerator
     }
 TPL;
 
-    private PatternTransformer $patternTransformer;
-
     private TargetContextIdentifier $contextIdentifier;
 
     private PatternIdentifier $patternIdentifier;
@@ -58,10 +56,9 @@ TPL;
     /**
      * Initializes snippet generator.
      */
-    public function __construct(PatternTransformer $patternTransformer)
-    {
-        $this->patternTransformer = $patternTransformer;
-
+    public function __construct(
+        private readonly PatternTransformer $patternTransformer,
+    ) {
         $this->setContextIdentifier(new FixedContextIdentifier());
         $this->setPatternIdentifier(new FixedPatternIdentifier());
     }
@@ -100,7 +97,7 @@ TPL;
         if (!$environment instanceof ContextEnvironment) {
             throw new EnvironmentSnippetGenerationException(sprintf(
                 'ContextSnippetGenerator does not support `%s` environment.',
-                get_class($environment)
+                $environment::class
             ), $environment);
         }
 

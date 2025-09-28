@@ -23,34 +23,17 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class AfterSuiteTested extends SuiteTested implements AfterTested
 {
     /**
-     * @var SpecificationIterator<mixed>
-     */
-    private $iterator;
-    /**
-     * @var TestResult
-     */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
-
-    /**
      * Initializes event.
      *
      * @param SpecificationIterator<mixed> $iterator
      */
     public function __construct(
         Environment $env,
-        SpecificationIterator $iterator,
-        TestResult $result,
-        Teardown $teardown,
+        private readonly SpecificationIterator $iterator,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
-
-        $this->iterator = $iterator;
-        $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     public function getSpecificationIterator()

@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Cli\ServiceContainer;
 
+use Behat\Testwork\Cli\Command;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -83,7 +84,7 @@ final class CliExtension implements Extension
      */
     protected function loadCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Cli\Command', ['%cli.command.name%', []]);
+        $definition = new Definition(Command::class, ['%cli.command.name%', []]);
         $definition->setPublic(true);
         $container->setDefinition(self::COMMAND_ID, $definition);
     }

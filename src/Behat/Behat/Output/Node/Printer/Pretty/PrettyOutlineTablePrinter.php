@@ -31,18 +31,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettyOutlineTablePrinter implements OutlineTablePrinter
 {
     /**
-     * @var ScenarioPrinter
-     */
-    private $scenarioPrinter;
-    /**
-     * @var StepPrinter
-     */
-    private $stepPrinter;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
      * @var string
      */
     private $indentText;
@@ -58,15 +46,12 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
      * @param int $subIndentation
      */
     public function __construct(
-        ScenarioPrinter $scenarioPrinter,
-        StepPrinter $stepPrinter,
-        ResultToStringConverter $resultConverter,
+        private readonly ScenarioPrinter $scenarioPrinter,
+        private readonly StepPrinter $stepPrinter,
+        private readonly ResultToStringConverter $resultConverter,
         $indentation = 4,
         $subIndentation = 2,
     ) {
-        $this->scenarioPrinter = $scenarioPrinter;
-        $this->stepPrinter = $stepPrinter;
-        $this->resultConverter = $resultConverter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -124,8 +109,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
-        return function ($col) use ($style) {
-            return sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
-        };
+        return fn ($col) => sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
     }
 }

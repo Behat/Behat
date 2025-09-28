@@ -30,23 +30,14 @@ use Behat\Testwork\Tester\SpecificationTester;
 final class HookableFeatureTester implements SpecificationTester
 {
     /**
-     * @var SpecificationTester<FeatureNode>
-     */
-    private $baseTester;
-    /**
-     * @var HookDispatcher
-     */
-    private $hookDispatcher;
-
-    /**
      * Initializes tester.
      *
      * @param SpecificationTester<FeatureNode> $baseTester
      */
-    public function __construct(SpecificationTester $baseTester, HookDispatcher $hookDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->hookDispatcher = $hookDispatcher;
+    public function __construct(
+        private readonly SpecificationTester $baseTester,
+        private readonly HookDispatcher $hookDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, $spec, $skip)

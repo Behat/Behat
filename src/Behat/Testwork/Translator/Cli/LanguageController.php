@@ -25,16 +25,11 @@ use Symfony\Component\Translation\Translator;
 final class LanguageController implements Controller
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly Translator $translator,
+    ) {
     }
 
     public function configure(Command $command)

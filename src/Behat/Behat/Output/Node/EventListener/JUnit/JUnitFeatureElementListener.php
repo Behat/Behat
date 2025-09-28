@@ -54,10 +54,10 @@ final class JUnitFeatureElementListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private FeaturePrinter $featurePrinter,
-        private JUnitScenarioPrinter $scenarioPrinter,
-        private StepPrinter $stepPrinter,
-        private SetupPrinter $setupPrinter,
+        private readonly FeaturePrinter $featurePrinter,
+        private readonly JUnitScenarioPrinter $scenarioPrinter,
+        private readonly StepPrinter $stepPrinter,
+        private readonly SetupPrinter $setupPrinter,
     ) {
     }
 

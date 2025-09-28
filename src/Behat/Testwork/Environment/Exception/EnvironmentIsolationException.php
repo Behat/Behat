@@ -21,21 +21,15 @@ use RuntimeException;
 final class EnvironmentIsolationException extends RuntimeException implements EnvironmentException
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    private $subject;
-
-    /**
      * Initializes exception.
      *
      * @param string      $message
      */
-    public function __construct($message, Environment $environment, $testSubject = null)
-    {
-        $this->environment = $environment;
-        $this->subject = $testSubject;
-
+    public function __construct(
+        $message,
+        private readonly Environment $environment,
+        private $subject = null,
+    ) {
         parent::__construct($message);
     }
 

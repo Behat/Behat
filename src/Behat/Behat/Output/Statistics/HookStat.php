@@ -20,22 +20,6 @@ use Behat\Testwork\Hook\Scope\HookScope;
 final class HookStat
 {
     /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var string
-     */
-    private $path;
-    /**
-     * @var string|null
-     */
-    private $error;
-    /**
-     * @var string|null
-     */
-    private $stdOut;
-    /**
      * @var HookScope|null
      */
     private $scope;
@@ -48,12 +32,12 @@ final class HookStat
      * @param string|null $error
      * @param string|null $stdOut
      */
-    public function __construct($name, $path, $error = null, $stdOut = null)
-    {
-        $this->name = $name;
-        $this->path = $path;
-        $this->error = $error;
-        $this->stdOut = $stdOut;
+    public function __construct(
+        private $name,
+        private $path,
+        private $error = null,
+        private $stdOut = null,
+    ) {
     }
 
     public function setScope(HookScope $scope)

@@ -21,19 +21,14 @@ use RuntimeException;
 final class CallHandlingException extends RuntimeException implements CallException
 {
     /**
-     * @var Call
-     */
-    private $call;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      */
-    public function __construct($message, Call $callable)
-    {
-        $this->call = $callable;
-
+    public function __construct(
+        $message,
+        private readonly Call $call,
+    ) {
         parent::__construct($message);
     }
 

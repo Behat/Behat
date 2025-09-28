@@ -50,7 +50,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
 
         $reflClass = new ReflectionClass($contextClass);
 
-        if (!$reflClass->implementsInterface('Behat\Behat\Context\Context')) {
+        if (!$reflClass->implementsInterface(Context::class)) {
             throw new WrongContextClassException(sprintf(
                 'Every context class must implement Behat Context interface, but `%s` does not.',
                 $contextClass

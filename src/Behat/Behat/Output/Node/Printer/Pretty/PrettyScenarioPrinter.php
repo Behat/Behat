@@ -26,10 +26,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettyScenarioPrinter implements ScenarioPrinter
 {
     /**
-     * @var PrettyPathPrinter
-     */
-    private $pathPrinter;
-    /**
      * @var string
      */
     private $indentText;
@@ -44,9 +40,11 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      * @param int $indentation
      * @param int $subIndentation
      */
-    public function __construct(PrettyPathPrinter $pathPrinter, $indentation = 2, $subIndentation = 2)
-    {
-        $this->pathPrinter = $pathPrinter;
+    public function __construct(
+        private readonly PrettyPathPrinter $pathPrinter,
+        $indentation = 2,
+        $subIndentation = 2,
+    ) {
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }

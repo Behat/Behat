@@ -23,23 +23,14 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var Scenario
-     */
-    private $scenario;
-
-    /**
      * Initializes event.
      */
-    public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->scenario = $scenario;
     }
 
     /**

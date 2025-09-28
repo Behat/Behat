@@ -32,23 +32,14 @@ use Behat\Testwork\Tester\SuiteTester;
 final class HookableSuiteTester implements SuiteTester
 {
     /**
-     * @var SuiteTester<TSpec>
-     */
-    private $baseTester;
-    /**
-     * @var HookDispatcher
-     */
-    private $hookDispatcher;
-
-    /**
      * Initializes tester.
      *
      * @param SuiteTester<TSpec> $baseTester
      */
-    public function __construct(SuiteTester $baseTester, HookDispatcher $hookDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->hookDispatcher = $hookDispatcher;
+    public function __construct(
+        private readonly SuiteTester $baseTester,
+        private readonly HookDispatcher $hookDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, SpecificationIterator $iterator, $skip)

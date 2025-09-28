@@ -22,21 +22,12 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 final class CounterPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initializes printer.
      */
-    public function __construct(ResultToStringConverter $resultConverter, TranslatorInterface $translator)
-    {
-        $this->resultConverter = $resultConverter;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
@@ -46,7 +37,7 @@ final class CounterPrinter
      */
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {
-        $stats = array_filter($stats, function ($count) { return 0 !== $count; });
+        $stats = array_filter($stats, fn ($count) => 0 !== $count);
 
         $totalCount = 0 === count($stats) ? 0 : array_sum($stats);
 

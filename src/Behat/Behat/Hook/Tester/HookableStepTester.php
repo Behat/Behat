@@ -29,21 +29,12 @@ use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 final class HookableStepTester implements StepTester
 {
     /**
-     * @var StepTester
-     */
-    private $baseTester;
-    /**
-     * @var HookDispatcher
-     */
-    private $hookDispatcher;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(StepTester $baseTester, HookDispatcher $hookDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->hookDispatcher = $hookDispatcher;
+    public function __construct(
+        private readonly StepTester $baseTester,
+        private readonly HookDispatcher $hookDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)

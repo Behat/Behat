@@ -30,23 +30,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingExercise implements Exercise
 {
     /**
-     * @var Exercise<TSpec>
-     */
-    private $baseExercise;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes exercise.
      *
      * @param Exercise<TSpec>          $baseExercise
      */
-    public function __construct(Exercise $baseExercise, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseExercise = $baseExercise;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly Exercise $baseExercise,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function setUp(array $iterators, $skip)

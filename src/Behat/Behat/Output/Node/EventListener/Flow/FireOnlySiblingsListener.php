@@ -25,18 +25,6 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 class FireOnlySiblingsListener implements EventListener
 {
     /**
-     * @var string
-     */
-    private $beforeEventName;
-    /**
-     * @var string
-     */
-    private $afterEventName;
-    /**
-     * @var EventListener
-     */
-    private $descendant;
-    /**
      * @var bool
      */
     private $inContext = false;
@@ -47,11 +35,11 @@ class FireOnlySiblingsListener implements EventListener
      * @param string        $beforeEventName
      * @param string        $afterEventName
      */
-    public function __construct($beforeEventName, $afterEventName, EventListener $descendant)
-    {
-        $this->beforeEventName = $beforeEventName;
-        $this->afterEventName = $afterEventName;
-        $this->descendant = $descendant;
+    public function __construct(
+        private $beforeEventName,
+        private $afterEventName,
+        private readonly EventListener $descendant,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

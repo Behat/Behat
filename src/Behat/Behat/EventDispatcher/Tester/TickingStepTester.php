@@ -31,16 +31,11 @@ use Behat\Testwork\Environment\Environment;
 final class TickingStepTester implements StepTester
 {
     /**
-     * @var StepTester
-     */
-    private $baseTester;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(StepTester $baseTester)
-    {
-        $this->baseTester = $baseTester;
+    public function __construct(
+        private readonly StepTester $baseTester,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)

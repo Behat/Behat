@@ -24,10 +24,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 final class ContainerLoader
 {
     /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-    /**
      * @var ConfigurationTree
      */
     private $configuration;
@@ -40,11 +36,10 @@ final class ContainerLoader
      * Initialize extension.
      */
     public function __construct(
-        ExtensionManager $extensionManager,
+        private readonly ExtensionManager $extensionManager,
         ?ConfigurationTree $configuration = null,
         ?Processor $processor = null,
     ) {
-        $this->extensionManager = $extensionManager;
         $this->configuration = $configuration ?: new ConfigurationTree();
         $this->processor = $processor ?: new Processor();
     }

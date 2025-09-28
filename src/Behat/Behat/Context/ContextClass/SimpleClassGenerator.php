@@ -64,7 +64,7 @@ PHP;
         }
 
         return strtr(
-            static::$template,
+            self::$template,
             [
                 '{namespace}' => $namespace,
                 '{className}' => $contextClass,

@@ -19,13 +19,11 @@ use Attribute;
 final class AfterFeature implements Hook
 {
     /**
-     * @var string|null
+     * @param string|null $filterString
      */
-    public $filterString;
-
-    public function __construct($filterString = null)
-    {
-        $this->filterString = $filterString;
+    public function __construct(
+        public $filterString = null,
+    ) {
     }
 
     public function getFilterString(): ?string

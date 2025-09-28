@@ -24,18 +24,13 @@ use IteratorAggregate;
 final class CallResults implements Countable, IteratorAggregate
 {
     /**
-     * @var CallResult[]
-     */
-    private $results;
-
-    /**
      * Initializes call results collection.
      *
      * @param CallResult[] $results
      */
-    public function __construct(array $results = [])
-    {
-        $this->results = $results;
+    public function __construct(
+        private readonly array $results = [],
+    ) {
     }
 
     /**

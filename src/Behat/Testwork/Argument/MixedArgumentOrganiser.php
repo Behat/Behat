@@ -53,7 +53,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     {
         $this->markAllArgumentsUndefined();
 
-        list($named, $typehinted, $numbered) = $this->splitArguments($parameters, $arguments);
+        [$named, $typehinted, $numbered] = $this->splitArguments($parameters, $arguments);
 
         $wasMultilineProvided = $this->hasMultilineArgument($numbered);
 
@@ -99,9 +99,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     private function splitArguments(array $parameters, array $arguments)
     {
         $parameterNames = array_map(
-            function (ReflectionParameter $parameter) {
-                return $parameter->getName();
-            },
+            fn (ReflectionParameter $parameter) => $parameter->getName(),
             $parameters
         );
 
@@ -247,10 +245,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     {
         return array_filter(
             $parameters,
-            function ($parameter, $num) {
-                return !$this->isArgumentDefined($num)
-                && $this->getReflectionClassesFromParameter($parameter);
-            },
+            fn ($parameter, $num) => !$this->isArgumentDefined($num)
+            && $this->getReflectionClassesFromParameter($parameter),
             ARRAY_FILTER_USE_BOTH
         );
     }
@@ -292,7 +288,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
             try {
                 $classes[] = new ReflectionClass($typeString);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException) {
                 continue;
             }
         }
@@ -371,7 +367,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
     {
-        return $reflectionClass->getName() === get_class($candidate);
+        return $reflectionClass->getName() === $candidate::class;
     }
 
     /**

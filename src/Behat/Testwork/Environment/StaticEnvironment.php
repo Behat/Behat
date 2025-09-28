@@ -21,16 +21,11 @@ use Behat\Testwork\Suite\Suite;
 class StaticEnvironment implements Environment
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-
-    /**
      * Initializes environment.
      */
-    public function __construct(Suite $suite)
-    {
-        $this->suite = $suite;
+    public function __construct(
+        private readonly Suite $suite,
+    ) {
     }
 
     final public function getSuite()

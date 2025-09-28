@@ -20,20 +20,15 @@ use InvalidArgumentException;
 final class UnknownTranslationResourceException extends InvalidArgumentException implements ContextException
 {
     /**
-     * @var string
-     */
-    private $resource;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
-     * @param string $class
+     * @param string $resource
      */
-    public function __construct($message, $class)
-    {
-        $this->resource = $class;
-
+    public function __construct(
+        $message,
+        private $resource,
+    ) {
         parent::__construct($message);
     }
 

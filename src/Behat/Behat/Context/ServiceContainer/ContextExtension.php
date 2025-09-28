@@ -10,6 +10,21 @@
 
 namespace Behat\Behat\Context\ServiceContainer;
 
+use Behat\Behat\Context\Annotation\DocBlockHelper;
+use Behat\Behat\Context\Argument\CompositeArgumentResolverFactory;
+use Behat\Behat\Context\Cli\ContextSnippetsController;
+use Behat\Behat\Context\ContextClass\SimpleClassGenerator;
+use Behat\Behat\Context\ContextFactory;
+use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
+use Behat\Behat\Context\Environment\Reader\ContextEnvironmentReader;
+use Behat\Behat\Context\Reader\AnnotatedContextReader;
+use Behat\Behat\Context\Reader\AttributeContextReader;
+use Behat\Behat\Context\Reader\ContextReaderCachedPerContext;
+use Behat\Behat\Context\Reader\ContextReaderCachedPerSuite;
+use Behat\Behat\Context\Reader\TranslatableContextReader;
+use Behat\Behat\Context\Snippet\Appender\ContextSnippetAppender;
+use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
+use Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\Snippet\ServiceContainer\SnippetExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
@@ -119,7 +134,7 @@ final class ContextExtension implements Extension
      */
     private function loadFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\ContextFactory', [
+        $definition = new Definition(ContextFactory::class, [
             new Reference(ArgumentExtension::CONSTRUCTOR_ARGUMENT_ORGANISER_ID),
         ]);
         $container->setDefinition(self::FACTORY_ID, $definition);
@@ -130,7 +145,7 @@ final class ContextExtension implements Extension
      */
     private function loadArgumentResolverFactory(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Argument\CompositeArgumentResolverFactory');
+        $definition = new Definition(CompositeArgumentResolverFactory::class);
         $container->setDefinition(self::AGGREGATE_RESOLVER_FACTORY_ID, $definition);
     }
 
@@ -139,7 +154,7 @@ final class ContextExtension implements Extension
      */
     private function loadEnvironmentHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler', [
+        $definition = new Definition(ContextEnvironmentHandler::class, [
             new Reference(self::FACTORY_ID),
             new Reference(self::AGGREGATE_RESOLVER_FACTORY_ID),
         ]);
@@ -152,7 +167,7 @@ final class ContextExtension implements Extension
      */
     private function loadEnvironmentReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Environment\Reader\ContextEnvironmentReader');
+        $definition = new Definition(ContextEnvironmentReader::class);
         $definition->addTag(EnvironmentExtension::READER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ENVIRONMENT_READER_ID, $definition);
     }
@@ -162,7 +177,7 @@ final class ContextExtension implements Extension
      */
     private function loadSuiteSetup(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Suite\Setup\SuiteWithContextsSetup', [
+        $definition = new Definition(SuiteWithContextsSetup::class, [
             new Reference(AutoloaderExtension::CLASS_LOADER_ID),
             new Reference(FilesystemExtension::LOGGER_ID),
         ]);
@@ -175,7 +190,7 @@ final class ContextExtension implements Extension
      */
     private function loadSnippetAppender(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Snippet\Appender\ContextSnippetAppender', [
+        $definition = new Definition(ContextSnippetAppender::class, [
             new Reference(FilesystemExtension::LOGGER_ID),
         ]);
         $definition->addTag(SnippetExtension::APPENDER_TAG, ['priority' => 50]);
@@ -187,7 +202,7 @@ final class ContextExtension implements Extension
      */
     private function loadSnippetGenerators(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator', [
+        $definition = new Definition(ContextSnippetGenerator::class, [
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
         ]);
         $definition->addTag(SnippetExtension::GENERATOR_TAG, ['priority' => 50]);
@@ -196,7 +211,7 @@ final class ContextExtension implements Extension
 
     protected function loadSnippetsController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Cli\ContextSnippetsController', [
+        $definition = new Definition(ContextSnippetsController::class, [
             new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
@@ -209,7 +224,7 @@ final class ContextExtension implements Extension
      */
     private function loadDefaultClassGenerators(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\ContextClass\SimpleClassGenerator');
+        $definition = new Definition(SimpleClassGenerator::class);
         $definition->addTag(self::CLASS_GENERATOR_TAG, ['priority' => 50]);
         $container->setDefinition(self::CLASS_GENERATOR_TAG . '.simple', $definition);
     }
@@ -231,12 +246,12 @@ final class ContextExtension implements Extension
      */
     private function loadAnnotatedContextReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Reader\AnnotatedContextReader', [
+        $definition = new Definition(AnnotatedContextReader::class, [
             new Reference(self::DOC_BLOCK_HELPER_ID),
         ]);
         $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID, $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', [
+        $definition = new Definition(ContextReaderCachedPerContext::class, [
             new Reference(self::ANNOTATED_CONTEXT_READER_ID),
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
@@ -248,10 +263,10 @@ final class ContextExtension implements Extension
      */
     private function loadAttributedContextReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Reader\AttributeContextReader');
+        $definition = new Definition(AttributeContextReader::class);
         $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID, $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerContext', [
+        $definition = new Definition(ContextReaderCachedPerContext::class, [
             new Reference(self::ATTRIBUTED_CONTEXT_READER_ID),
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
@@ -265,12 +280,12 @@ final class ContextExtension implements Extension
      */
     private function loadTranslatableContextReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Reader\TranslatableContextReader', [
+        $definition = new Definition(TranslatableContextReader::class, [
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition(self::READER_TAG . '.translatable', $definition);
 
-        $definition = new Definition('Behat\Behat\Context\Reader\ContextReaderCachedPerSuite', [
+        $definition = new Definition(ContextReaderCachedPerSuite::class, [
             new Reference(self::READER_TAG . '.translatable'),
         ]);
         $definition->addTag(self::READER_TAG, ['priority' => 50]);
@@ -282,7 +297,7 @@ final class ContextExtension implements Extension
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Annotation\DocBlockHelper');
+        $definition = new Definition(DocBlockHelper::class);
 
         $container->setDefinition(self::DOC_BLOCK_HELPER_ID, $definition);
     }

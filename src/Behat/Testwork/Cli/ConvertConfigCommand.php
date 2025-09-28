@@ -29,7 +29,7 @@ final class ConvertConfigCommand extends BaseCommand
     private OutputInterface $output;
 
     public function __construct(
-        private ConfigurationLoader $configurationLoader,
+        private readonly ConfigurationLoader $configurationLoader,
     ) {
         parent::__construct('convert-config');
     }
@@ -38,7 +38,7 @@ final class ConvertConfigCommand extends BaseCommand
     {
         $this->output = $output;
         $configPath = $this->configurationLoader->getConfigurationFilePath();
-        if (str_ends_with($configPath, '.php')) {
+        if (str_ends_with((string) $configPath, '.php')) {
             throw new ConfigurationLoadingException(sprintf('Configuration file `%s` is already in PHP format', $configPath));
         }
 
@@ -96,7 +96,7 @@ final class ConvertConfigCommand extends BaseCommand
         // First, handle cases where `.dist` is part of the extension
         $outputFileName = preg_replace('/(\.ya?ml)\.dist$|\.dist\.(ya?ml)$/', '.dist.php', $outputFileName);
         // Then, handle regular `.yaml` or `.yml` files
-        $outputFileName = preg_replace('/\.(ya?ml)$/', '.php', $outputFileName);
+        $outputFileName = preg_replace('/\.(ya?ml)$/', '.php', (string) $outputFileName);
 
         $printer = new CustomPrettyPrinter();
 

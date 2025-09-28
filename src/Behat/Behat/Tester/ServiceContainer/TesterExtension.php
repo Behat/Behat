@@ -11,6 +11,15 @@
 namespace Behat\Behat\Tester\ServiceContainer;
 
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
+use Behat\Behat\Tester\Cli\RerunController;
+use Behat\Behat\Tester\Exception\Stringer\PendingExceptionStringer;
+use Behat\Behat\Tester\Runtime\IsolatingScenarioTester;
+use Behat\Behat\Tester\Runtime\RuntimeBackgroundTester;
+use Behat\Behat\Tester\Runtime\RuntimeFeatureTester;
+use Behat\Behat\Tester\Runtime\RuntimeOutlineTester;
+use Behat\Behat\Tester\Runtime\RuntimeScenarioTester;
+use Behat\Behat\Tester\Runtime\RuntimeStepTester;
+use Behat\Behat\Tester\StepContainerTester;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
@@ -103,7 +112,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadSpecificationTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeFeatureTester', [
+        $definition = new Definition(RuntimeFeatureTester::class, [
             new Reference(self::SCENARIO_TESTER_ID),
             new Reference(self::OUTLINE_TESTER_ID),
             new Reference(EnvironmentExtension::MANAGER_ID),
@@ -121,12 +130,12 @@ class TesterExtension extends BaseExtension
      */
     protected function loadScenarioTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', [
+        $definition = new Definition(StepContainerTester::class, [
             new Reference(self::STEP_TESTER_ID),
         ]);
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', [
+        $definition = new Definition(RuntimeScenarioTester::class, [
             new Reference('tester.step_container'),
             new Reference(self::BACKGROUND_TESTER_ID),
         ]);
@@ -134,7 +143,7 @@ class TesterExtension extends BaseExtension
 
         // Proper isolation for scenarios
         $definition = new Definition(
-            'Behat\Behat\Tester\Runtime\IsolatingScenarioTester',
+            IsolatingScenarioTester::class,
             [
                 new Reference(self::SCENARIO_TESTER_ID),
                 new Reference(EnvironmentExtension::MANAGER_ID),
@@ -149,7 +158,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadOutlineTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeOutlineTester', [
+        $definition = new Definition(RuntimeOutlineTester::class, [
             new Reference(self::EXAMPLE_TESTER_ID),
         ]);
         $container->setDefinition(self::OUTLINE_TESTER_ID, $definition);
@@ -162,12 +171,12 @@ class TesterExtension extends BaseExtension
      */
     protected function loadExampleTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', [
+        $definition = new Definition(StepContainerTester::class, [
             new Reference(self::STEP_TESTER_ID),
         ]);
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeScenarioTester', [
+        $definition = new Definition(RuntimeScenarioTester::class, [
             new Reference('tester.step_container'),
             new Reference(self::BACKGROUND_TESTER_ID),
         ]);
@@ -175,7 +184,7 @@ class TesterExtension extends BaseExtension
 
         // Proper isolation for examples
         $definition = new Definition(
-            'Behat\Behat\Tester\Runtime\IsolatingScenarioTester',
+            IsolatingScenarioTester::class,
             [
                 new Reference(self::EXAMPLE_TESTER_ID),
                 new Reference(EnvironmentExtension::MANAGER_ID),
@@ -190,12 +199,12 @@ class TesterExtension extends BaseExtension
      */
     protected function loadBackgroundTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\StepContainerTester', [
+        $definition = new Definition(StepContainerTester::class, [
             new Reference(self::STEP_TESTER_ID),
         ]);
         $container->setDefinition('tester.step_container', $definition);
 
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeBackgroundTester', [
+        $definition = new Definition(RuntimeBackgroundTester::class, [
             new Reference('tester.step_container'),
         ]);
         $container->setDefinition(self::BACKGROUND_TESTER_ID, $definition);
@@ -206,7 +215,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadStepTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Runtime\RuntimeStepTester', [
+        $definition = new Definition(RuntimeStepTester::class, [
             new Reference(DefinitionExtension::FINDER_ID),
             new Reference(CallExtension::CALL_CENTER_ID),
         ]);
@@ -220,7 +229,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadRerunController(ContainerBuilder $container, $cachePath)
     {
-        $definition = new Definition('Behat\Behat\Tester\Cli\RerunController', [
+        $definition = new Definition(RerunController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference(TesterExtension::RESULT_INTERPRETER_ID),
             $container->getParameter('paths.base'),
@@ -235,7 +244,7 @@ class TesterExtension extends BaseExtension
      */
     protected function loadPendingExceptionStringer(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Tester\Exception\Stringer\PendingExceptionStringer');
+        $definition = new Definition(PendingExceptionStringer::class);
         $definition->addTag(ExceptionExtension::STRINGER_TAG);
         $container->setDefinition(ExceptionExtension::STRINGER_TAG . '.pending', $definition);
     }

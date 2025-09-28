@@ -24,16 +24,11 @@ use Symfony\Component\Translation\Translator;
 final class GherkinTranslationsController implements Controller
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly Translator $translator,
+    ) {
     }
 
     public function configure(SymfonyCommand $command)
@@ -42,7 +37,7 @@ final class GherkinTranslationsController implements Controller
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $i18nPath = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . DIRECTORY_SEPARATOR . 'i18n.php';
+        $i18nPath = dirname(__DIR__, 5) . DIRECTORY_SEPARATOR . 'i18n.php';
 
         foreach (require ($i18nPath) as $lang => $messages) {
             $this->translator->addResource('array', $messages, $lang, 'output');

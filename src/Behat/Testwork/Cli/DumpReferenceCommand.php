@@ -25,17 +25,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class DumpReferenceCommand extends BaseCommand
 {
     /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initializes dumper.
      */
-    public function __construct(ExtensionManager $extensionManager)
-    {
-        $this->extensionManager = $extensionManager;
-
+    public function __construct(
+        private readonly ExtensionManager $extensionManager,
+    ) {
         parent::__construct('dump-reference');
     }
 

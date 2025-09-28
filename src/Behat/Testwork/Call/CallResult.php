@@ -20,30 +20,16 @@ use Exception;
 final class CallResult
 {
     /**
-     * @var Call
-     */
-    private $call;
-    private $return;
-    /**
-     * @var Exception|null
-     */
-    private $exception;
-    /**
-     * @var string|null
-     */
-    private $stdOut;
-
-    /**
      * Initializes call result.
      *
      * @param string|null $stdOut
      */
-    public function __construct(Call $call, $return, ?Exception $exception = null, $stdOut = null)
-    {
-        $this->call = $call;
-        $this->return = $return;
-        $this->exception = $exception;
-        $this->stdOut = $stdOut;
+    public function __construct(
+        private readonly Call $call,
+        private $return,
+        private readonly ?Exception $exception = null,
+        private $stdOut = null,
+    ) {
     }
 
     /**
@@ -74,7 +60,7 @@ final class CallResult
      */
     public function hasException()
     {
-        return null !== $this->exception;
+        return $this->exception instanceof Exception;
     }
 
     /**

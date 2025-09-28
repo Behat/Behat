@@ -21,20 +21,15 @@ use InvalidArgumentException;
 final class UnsupportedCallException extends InvalidArgumentException implements TransformationException
 {
     /**
-     * @var Call
-     */
-    private $call;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      */
-    public function __construct($message, Call $call)
-    {
+    public function __construct(
+        $message,
+        private readonly Call $call,
+    ) {
         parent::__construct($message);
-
-        $this->call = $call;
     }
 
     /**

@@ -11,6 +11,14 @@
 namespace Behat\Behat\Hook\Context\Annotation;
 
 use Behat\Behat\Context\Annotation\AnnotationReader;
+use Behat\Behat\Hook\Call\AfterFeature;
+use Behat\Behat\Hook\Call\AfterScenario;
+use Behat\Behat\Hook\Call\AfterStep;
+use Behat\Behat\Hook\Call\BeforeFeature;
+use Behat\Behat\Hook\Call\BeforeScenario;
+use Behat\Behat\Hook\Call\BeforeStep;
+use Behat\Testwork\Hook\Call\AfterSuite;
+use Behat\Testwork\Hook\Call\BeforeSuite;
 use Behat\Testwork\Hook\Call\RuntimeHook;
 use ReflectionMethod;
 
@@ -29,14 +37,14 @@ final class HookAnnotationReader implements AnnotationReader
      * @var string[]
      */
     private static $classes = [
-        'beforesuite' => 'Behat\Testwork\Hook\Call\BeforeSuite',
-        'aftersuite' => 'Behat\Testwork\Hook\Call\AfterSuite',
-        'beforefeature' => 'Behat\Behat\Hook\Call\BeforeFeature',
-        'afterfeature' => 'Behat\Behat\Hook\Call\AfterFeature',
-        'beforescenario' => 'Behat\Behat\Hook\Call\BeforeScenario',
-        'afterscenario' => 'Behat\Behat\Hook\Call\AfterScenario',
-        'beforestep' => 'Behat\Behat\Hook\Call\BeforeStep',
-        'afterstep' => 'Behat\Behat\Hook\Call\AfterStep',
+        'beforesuite' => BeforeSuite::class,
+        'aftersuite' => AfterSuite::class,
+        'beforefeature' => BeforeFeature::class,
+        'afterfeature' => AfterFeature::class,
+        'beforescenario' => BeforeScenario::class,
+        'afterscenario' => AfterScenario::class,
+        'beforestep' => BeforeStep::class,
+        'afterstep' => AfterStep::class,
     ];
 
     /**

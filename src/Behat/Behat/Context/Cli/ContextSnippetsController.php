@@ -32,21 +32,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ContextSnippetsController implements Controller
 {
     /**
-     * @var ContextSnippetGenerator
-     */
-    private $generator;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initialises controller.
      */
-    public function __construct(ContextSnippetGenerator $generator, TranslatorInterface $translator)
-    {
-        $this->generator = $generator;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ContextSnippetGenerator $generator,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     public function configure(SymfonyCommand $command)

@@ -12,6 +12,8 @@ namespace Behat\Testwork\Output\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Output\Cli\OutputController;
+use Behat\Testwork\Output\OutputManager;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -37,15 +39,6 @@ final class OutputExtension implements Extension
      * Available extension points
      */
     public const FORMATTER_TAG = 'output.formatter';
-
-    /**
-     * @var string
-     */
-    private $defaultFormatter;
-    /**
-     * @var FormatterFactory[]
-     */
-    private $factories;
     /**
      * @var ServiceProcessor
      */
@@ -55,12 +48,13 @@ final class OutputExtension implements Extension
      * Initializes extension.
      *
      * @param string                $defaultFormatter
-     * @param FormatterFactory[]    $formatterFactories
+     * @param FormatterFactory[] $factories
      */
-    public function __construct($defaultFormatter, array $formatterFactories, ?ServiceProcessor $processor = null)
-    {
-        $this->defaultFormatter = $defaultFormatter;
-        $this->factories = $formatterFactories;
+    public function __construct(
+        private $defaultFormatter,
+        private array $factories,
+        ?ServiceProcessor $processor = null,
+    ) {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
@@ -88,12 +82,8 @@ final class OutputExtension implements Extension
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function ($a) {
-                        return is_array($a) && !isset($a['enabled']);
-                    })
-                    ->then(function ($a) {
-                        return array_merge($a, ['enabled' => true]);
-                    })
+                    ->ifTrue(fn ($a) => is_array($a) && !isset($a['enabled']))
+                    ->then(fn ($a) => array_merge($a, ['enabled' => true]))
                 ->end()
         ;
         assert($builder instanceof ArrayNodeDefinition);
@@ -124,7 +114,7 @@ final class OutputExtension implements Extension
      */
     private function loadOutputController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Output\Cli\OutputController', [
+        $definition = new Definition(OutputController::class, [
             new Reference(self::MANAGER_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1000]);
@@ -136,7 +126,7 @@ final class OutputExtension implements Extension
      */
     private function loadManager(ContainerBuilder $container, array $formatters)
     {
-        $definition = new Definition('Behat\Testwork\Output\OutputManager', [
+        $definition = new Definition(OutputManager::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
 

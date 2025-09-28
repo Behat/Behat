@@ -21,20 +21,15 @@ use Behat\Testwork\Specification\SpecificationIterator;
 final class BeforeSuiteTested extends SuiteTested implements BeforeTested
 {
     /**
-     * @var SpecificationIterator<mixed>
-     */
-    private $iterator;
-
-    /**
      * Initializes event.
      *
      * @param SpecificationIterator<mixed> $iterator
      */
-    public function __construct(Environment $env, SpecificationIterator $iterator)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly SpecificationIterator $iterator,
+    ) {
         parent::__construct($env);
-
-        $this->iterator = $iterator;
     }
 
     public function getSpecificationIterator()

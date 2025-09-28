@@ -10,8 +10,23 @@
 
 namespace Behat\Behat\Definition\ServiceContainer;
 
+use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\Behat\Definition\Cli\AvailableDefinitionsController;
+use Behat\Behat\Definition\Cli\UnusedDefinitionsController;
+use Behat\Behat\Definition\Context\Annotation\DefinitionAnnotationReader;
+use Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader;
+use Behat\Behat\Definition\DefinitionFinder;
+use Behat\Behat\Definition\DefinitionRepository;
+use Behat\Behat\Definition\DefinitionWriter;
+use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy;
+use Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy;
 use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
+use Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter;
+use Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter;
+use Behat\Behat\Definition\Search\RepositorySearchEngine;
+use Behat\Behat\Definition\Translator\DefinitionTranslator;
 use Behat\Behat\Gherkin\ServiceContainer\GherkinExtension;
 use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
@@ -111,7 +126,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadFinder(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\DefinitionFinder');
+        $definition = new Definition(DefinitionFinder::class);
         $container->setDefinition(self::FINDER_ID, $definition);
     }
 
@@ -120,7 +135,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\DefinitionRepository', [
+        $definition = new Definition(DefinitionRepository::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
@@ -131,7 +146,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadWriter(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\DefinitionWriter', [
+        $definition = new Definition(DefinitionWriter::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
             new Reference(self::REPOSITORY_ID),
         ]);
@@ -143,7 +158,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadPatternTransformer(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Pattern\PatternTransformer');
+        $definition = new Definition(PatternTransformer::class);
         $container->setDefinition(self::PATTERN_TRANSFORMER_ID, $definition);
     }
 
@@ -152,7 +167,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefinitionTranslator(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Translator\DefinitionTranslator', [
+        $definition = new Definition(DefinitionTranslator::class, [
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);
         $container->setDefinition(self::DEFINITION_TRANSLATOR_ID, $definition);
@@ -163,7 +178,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefaultSearchEngines(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Search\RepositorySearchEngine', [
+        $definition = new Definition(RepositorySearchEngine::class, [
             new Reference(self::REPOSITORY_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
@@ -184,13 +199,13 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefaultPatternPolicies(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\TurnipPatternPolicy', [
+        $definition = new Definition(TurnipPatternPolicy::class, [
             new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
         ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 50]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.turnip', $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Pattern\Policy\RegexPatternPolicy', [
+        $definition = new Definition(RegexPatternPolicy::class, [
             new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
         ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 60]);
@@ -202,7 +217,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadAnnotationReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Context\Annotation\DefinitionAnnotationReader');
+        $definition = new Definition(DefinitionAnnotationReader::class);
         $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.definition', $definition);
     }
@@ -212,7 +227,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadAttributeReader(ContainerBuilder $container)
     {
-        $definition = new Definition('\Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader', [
+        $definition = new Definition(DefinitionAttributeReader::class, [
             new Reference(self::DOC_BLOCK_HELPER_ID),
         ]);
         $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, ['priority' => 50]);
@@ -224,7 +239,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadDefinitionPrinters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter', [
+        $definition = new Definition(ConsoleDefinitionInformationPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
@@ -232,7 +247,7 @@ final class DefinitionExtension implements Extension
         ]);
         $container->setDefinition($this->getInformationPrinterId(), $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter', [
+        $definition = new Definition(ConsoleDefinitionListPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
             new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
@@ -243,7 +258,7 @@ final class DefinitionExtension implements Extension
 
     private function loadControllers(ContainerBuilder $container, bool $printUnusedDefinitions): void
     {
-        $definition = new Definition('Behat\Behat\Definition\Cli\AvailableDefinitionsController', [
+        $definition = new Definition(AvailableDefinitionsController::class, [
             new Reference(SuiteExtension::REGISTRY_ID),
             new Reference(self::WRITER_ID),
             new Reference($this->getListPrinterId()),
@@ -252,7 +267,7 @@ final class DefinitionExtension implements Extension
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 500]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.available_definitions', $definition);
 
-        $definition = new Definition('Behat\Behat\Definition\Cli\UnusedDefinitionsController', [
+        $definition = new Definition(UnusedDefinitionsController::class, [
             new Reference(self::REPOSITORY_ID),
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference($this->getInformationPrinterId()),
@@ -267,7 +282,7 @@ final class DefinitionExtension implements Extension
      */
     private function loadDocblockHelper(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Context\Annotation\DocBlockHelper');
+        $definition = new Definition(DocBlockHelper::class);
 
         $container->setDefinition(self::DOC_BLOCK_HELPER_ID, $definition);
     }

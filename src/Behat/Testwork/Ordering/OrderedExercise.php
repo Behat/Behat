@@ -43,17 +43,12 @@ final class OrderedExercise implements Exercise
     private $ordered;
 
     /**
-     * @var Exercise<TSpec>
-     */
-    private $decoratedExercise;
-
-    /**
      * @param Exercise<TSpec> $decoratedExercise
      */
-    public function __construct(Exercise $decoratedExercise)
-    {
+    public function __construct(
+        private readonly Exercise $decoratedExercise,
+    ) {
         $this->orderer = new NoopOrderer();
-        $this->decoratedExercise = $decoratedExercise;
     }
 
     public function setUp(array $iterators, $skip)

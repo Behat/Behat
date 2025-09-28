@@ -12,6 +12,7 @@ namespace Behat\Behat\Context\Snippet\Appender;
 
 use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Behat\Snippet\Appender\SnippetAppender;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Testwork\Filesystem\FilesystemLogger;
 use ReflectionClass;
 
@@ -22,13 +23,10 @@ use ReflectionClass;
  */
 final class ContextSnippetAppender implements SnippetAppender
 {
-    /**
-     * @const PendingException class
-     */
-    public const PENDING_EXCEPTION_CLASS = 'Behat\Behat\Tester\Exception\PendingException';
+    public const PENDING_EXCEPTION_CLASS = PendingException::class;
 
     public function __construct(
-        private ?FilesystemLogger $logger = null,
+        private readonly ?FilesystemLogger $logger = null,
     ) {
     }
 

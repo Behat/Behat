@@ -18,21 +18,17 @@ namespace Behat\Testwork\Suite\Exception;
 final class ParameterNotFoundException extends SuiteException
 {
     /**
-     * @var string
-     */
-    private $parameter;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $name
      * @param string $parameter
      */
-    public function __construct($message, $name, $parameter)
-    {
-        $this->parameter = $parameter;
-
+    public function __construct(
+        $message,
+        $name,
+        private $parameter,
+    ) {
         parent::__construct($message, $name);
     }
 

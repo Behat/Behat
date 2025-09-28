@@ -23,21 +23,12 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 final class ExecutedStepResult implements StepResult, DefinedStepResult, ExceptionResult
 {
     /**
-     * @var SearchResult
-     */
-    private $searchResult;
-    /**
-     * @var CallResult|null
-     */
-    private $callResult;
-
-    /**
      * Initialize test result.
      */
-    public function __construct(SearchResult $searchResult, CallResult $callResult)
-    {
-        $this->searchResult = $searchResult;
-        $this->callResult = $callResult;
+    public function __construct(
+        private readonly SearchResult $searchResult,
+        private readonly CallResult $callResult,
+    ) {
     }
 
     /**

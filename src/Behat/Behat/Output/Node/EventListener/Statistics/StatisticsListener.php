@@ -25,21 +25,12 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class StatisticsListener implements EventListener
 {
     /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
-     * @var StatisticsPrinter
-     */
-    private $printer;
-
-    /**
      * Initializes listener.
      */
-    public function __construct(Statistics $statistics, StatisticsPrinter $statisticsPrinter)
-    {
-        $this->statistics = $statistics;
-        $this->printer = $statisticsPrinter;
+    public function __construct(
+        private readonly Statistics $statistics,
+        private readonly StatisticsPrinter $printer,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

@@ -26,31 +26,19 @@ use Behat\Testwork\Environment\Environment;
 final class DefinitionCall extends EnvironmentCall
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-
-    /**
      * Initializes definition call.
      *
      * @param int|null $errorReportingLevel
      */
     public function __construct(
         Environment $environment,
-        FeatureNode $feature,
-        StepNode $step,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
         Definition $definition,
         array $arguments,
         $errorReportingLevel = null,
     ) {
         parent::__construct($environment, $definition, $arguments, $errorReportingLevel);
-
-        $this->feature = $feature;
-        $this->step = $step;
     }
 
     /**

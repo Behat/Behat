@@ -80,7 +80,7 @@ class FeatureContext implements Context
     public function prepareTestFolders()
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
-            md5(microtime() . rand(0, 10000));
+            md5(microtime() . random_int(0, 10000));
 
         $this->filesystem->mkdir($dir);
 
@@ -318,7 +318,7 @@ EOL;
             $outputMessage[] = 'Command did ' . strtoupper($success) . ' as expected.';
         }
 
-        if (!str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
+        if (!str_contains($this->getOutput(), (string) $this->getExpectedOutput($text))) {
             $hasError = true;
             $outputMessage[] = $this->getOutputDiff($text);
         } else {
@@ -430,7 +430,7 @@ EOL;
      */
     public function theOutputShouldContain(PyStringNode $text)
     {
-        if (str_contains($this->getOutput(), $this->getExpectedOutput($text))) {
+        if (str_contains($this->getOutput(), (string) $this->getExpectedOutput($text))) {
             return;
         }
 
@@ -452,51 +452,39 @@ EOL;
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
                 '/[ "](features|tests)\/[^\n "]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
             $text = preg_replace_callback(
                 '/\<span class\="path"\>features\/[^\<]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
-                $text
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                (string) $text
             );
             $text = preg_replace_callback(
                 '/\+[fd] [^ ]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
-                $text
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                (string) $text
             );
 
             // error stacktrace
             $text = preg_replace_callback(
                 '/#\d+ [^:]+:/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
-                $text
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                (string) $text
             );
 
             // texts with absolute paths
             $text = preg_replace_callback(
                 '/\{BASE_PATH\}[^\n \<"]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
-                $text
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                (string) $text
             );
 
             // texts in editor URLs
             $text = preg_replace_callback(
                 '/open\?file[^\<"]+/',
-                function ($matches) {
-                    return str_replace('/', DIRECTORY_SEPARATOR, $matches[0]);
-                },
-                $text
+                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                (string) $text
             );
         }
 
@@ -563,7 +551,7 @@ EOL;
 
         // Remove location of the project
         $output = str_replace(
-            realpath(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR,
+            realpath(dirname(__DIR__, 2)) . DIRECTORY_SEPARATOR,
             '{BASE_PATH}',
             $output
         );
@@ -571,7 +559,7 @@ EOL;
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
 
-        return trim(preg_replace('/ +$/m', '', $output));
+        return trim((string) preg_replace('/ +$/m', '', $output));
     }
 
     private function createFileInWorkingDir(string $filename, string $content): void

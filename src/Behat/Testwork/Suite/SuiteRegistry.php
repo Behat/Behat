@@ -82,7 +82,7 @@ final class SuiteRegistry implements SuiteRepository
 
         $this->suites = [];
         foreach ($this->suiteConfigurations as $name => $configuration) {
-            list($type, $settings) = $configuration;
+            [$type, $settings] = $configuration;
 
             $this->suites[] = $this->generateSuite($name, $type, $settings);
         }

@@ -25,32 +25,15 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeTeardown
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var BackgroundNode
-     */
-    private $background;
-    /**
-     * @var TestResult
-     */
-    private $result;
-
-    /**
      * Initializes event.
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        BackgroundNode $background,
-        TestResult $result,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
+        private readonly TestResult $result,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->background = $background;
-        $this->result = $result;
     }
 
     /**

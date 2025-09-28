@@ -27,21 +27,12 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class FeatureListener implements EventListener
 {
     /**
-     * @var FeaturePrinter
-     */
-    private $featurePrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $setupPrinter;
-
-    /**
      * Initializes listener.
      */
-    public function __construct(FeaturePrinter $featurePrinter, SetupPrinter $setupPrinter)
-    {
-        $this->featurePrinter = $featurePrinter;
-        $this->setupPrinter = $setupPrinter;
+    public function __construct(
+        private readonly FeaturePrinter $featurePrinter,
+        private readonly SetupPrinter $setupPrinter,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

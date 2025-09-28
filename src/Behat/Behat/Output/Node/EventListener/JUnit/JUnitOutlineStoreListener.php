@@ -28,11 +28,6 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class JUnitOutlineStoreListener implements EventListener
 {
     /**
-     * @var SuitePrinter
-     */
-    private $suitePrinter;
-
-    /**
      * @var array
      */
     private $lineScenarioMap = [];
@@ -40,9 +35,9 @@ final class JUnitOutlineStoreListener implements EventListener
     /**
      * Initializes listener.
      */
-    public function __construct(SuitePrinter $suitePrinter)
-    {
-        $this->suitePrinter = $suitePrinter;
+    public function __construct(
+        private readonly SuitePrinter $suitePrinter,
+    ) {
     }
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName)

@@ -26,16 +26,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class OutputController implements Controller
 {
     /**
-     * @var OutputManager
-     */
-    private $manager;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(OutputManager $manager)
-    {
-        $this->manager = $manager;
+    public function __construct(
+        private readonly OutputManager $manager,
+    ) {
     }
 
     public function configure(Command $command)

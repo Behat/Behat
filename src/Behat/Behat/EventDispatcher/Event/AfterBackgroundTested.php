@@ -26,38 +26,16 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class AfterBackgroundTested extends BackgroundTested implements AfterTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var BackgroundNode
-     */
-    private $background;
-    /**
-     * @var TestResult
-     */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
-
-    /**
      * Initializes event.
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        BackgroundNode $background,
-        TestResult $result,
-        Teardown $teardown,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->background = $background;
-        $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**

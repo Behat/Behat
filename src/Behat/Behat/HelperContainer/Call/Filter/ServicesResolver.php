@@ -67,7 +67,7 @@ final class ServicesResolver implements CallFilter
         if (!$call instanceof EnvironmentCall) {
             throw new UnsupportedCallException(sprintf(
                 'ServicesResolver can not filter `%s` call.',
-                get_class($call)
+                $call::class
             ), $call);
         }
 
@@ -76,7 +76,7 @@ final class ServicesResolver implements CallFilter
         if (!$environment instanceof ServiceContainerEnvironment) {
             throw new UnsupportedCallException(sprintf(
                 'ServicesResolver can not filter `%s` call.',
-                get_class($call)
+                $call::class
             ), $call);
         }
 
@@ -119,7 +119,7 @@ final class ServicesResolver implements CallFilter
         throw new UnsupportedCallException(
             sprintf(
                 'ServicesResolver can not filter `%s` call.',
-                get_class($call)
+                $call::class
             ),
             $call
         );
@@ -161,7 +161,7 @@ final class ServicesResolver implements CallFilter
             throw new UnsupportedCallException(
                 sprintf(
                     'Something is wrong in callee associated with `%s` call.',
-                    get_class($call)
+                    $call::class
                 ),
                 $call
             );

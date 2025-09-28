@@ -25,16 +25,11 @@ use Behat\Testwork\Tester\Result\TestWithSetupResult;
 final class StepContainerTester
 {
     /**
-     * @var StepTester
-     */
-    private $stepTester;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(StepTester $stepTester)
-    {
-        $this->stepTester = $stepTester;
+    public function __construct(
+        private readonly StepTester $stepTester,
+    ) {
     }
 
     /**

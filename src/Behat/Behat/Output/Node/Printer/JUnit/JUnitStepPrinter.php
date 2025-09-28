@@ -28,14 +28,9 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 class JUnitStepPrinter implements StepPrinter
 {
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-
-    public function __construct(ExceptionPresenter $exceptionPresenter)
-    {
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private readonly ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
     /**

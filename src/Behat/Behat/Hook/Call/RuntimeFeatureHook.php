@@ -62,7 +62,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      */
     private function isMatch(FeatureNode $feature, $filterString)
     {
-        if (false !== strpos($filterString, '@')) {
+        if (str_contains($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $filterString);
         }
 

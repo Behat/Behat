@@ -26,21 +26,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class InitializationController implements Controller
 {
     /**
-     * @var SuiteRepository
-     */
-    private $repository;
-    /**
-     * @var SuiteBootstrapper
-     */
-    private $bootstrapper;
-
-    /**
      * Initializes controller.
      */
-    public function __construct(SuiteRepository $repository, SuiteBootstrapper $bootstrapper)
-    {
-        $this->repository = $repository;
-        $this->bootstrapper = $bootstrapper;
+    public function __construct(
+        private readonly SuiteRepository $repository,
+        private readonly SuiteBootstrapper $bootstrapper,
+    ) {
     }
 
     public function configure(Command $command)

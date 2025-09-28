@@ -32,22 +32,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class SnippetsController implements Controller
 {
     /**
-     * @var SnippetRegistry
-     */
-    private $registry;
-    /**
-     * @var SnippetWriter
-     */
-    private $writer;
-    /**
-     * @var ConsoleSnippetPrinter
-     */
-    private $printer;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
      * @var OutputInterface
      */
     private $output;
@@ -56,15 +40,11 @@ final class SnippetsController implements Controller
      * Initializes controller.
      */
     public function __construct(
-        SnippetRegistry $registry,
-        SnippetWriter $writer,
-        ConsoleSnippetPrinter $printer,
-        EventDispatcherInterface $eventDispatcher,
+        private readonly SnippetRegistry $registry,
+        private readonly SnippetWriter $writer,
+        private readonly ConsoleSnippetPrinter $printer,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
-        $this->registry = $registry;
-        $this->writer = $writer;
-        $this->printer = $printer;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -89,15 +69,15 @@ final class SnippetsController implements Controller
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->eventDispatcher->addListener(StepTested::AFTER, [$this, 'registerUndefinedStep'], -999);
+        $this->eventDispatcher->addListener(StepTested::AFTER, $this->registerUndefinedStep(...), -999);
         $this->output = $output;
 
         if ($input->getOption('append-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'appendAllSnippets'], -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->appendAllSnippets(...), -999);
         }
 
         if (!$input->getOption('no-snippets') && !$input->getOption('append-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printAllSnippets'], -999);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->printAllSnippets(...), -999);
         }
 
         if (!$input->getOption('no-snippets')) {
@@ -105,7 +85,7 @@ final class SnippetsController implements Controller
         }
 
         if (!$input->getOption('no-snippets')) {
-            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, [$this, 'printUndefinedSteps'], -995);
+            $this->eventDispatcher->addListener(ExerciseCompleted::AFTER, $this->printUndefinedSteps(...), -995);
         }
 
         return null;
@@ -150,7 +130,7 @@ final class SnippetsController implements Controller
     private function printSnippetGenerationFailures(): void
     {
         $failures = $this->registry->getGenerationFailures();
-        if ($failures) {
+        if ($failures !== []) {
             $this->output->writeln('');
         }
 

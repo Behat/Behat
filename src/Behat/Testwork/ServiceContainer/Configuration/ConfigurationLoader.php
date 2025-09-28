@@ -25,14 +25,6 @@ use function str_ends_with;
 final class ConfigurationLoader
 {
     /**
-     * @var string|null
-     */
-    private $configurationPath;
-    /**
-     * @var string|null
-     */
-    private $environmentVariable;
-    /**
      * @var bool
      */
     private $profileFound;
@@ -48,13 +40,13 @@ final class ConfigurationLoader
     /**
      * Constructs reader.
      *
-     * @param string $environmentVariableName Environment variable name
-     * @param string $configurationPath       Configuration file path
+     * @param string|null $environmentVariable Environment variable name
+     * @param string|null $configurationPath       Configuration file path
      */
-    public function __construct($environmentVariableName = null, $configurationPath = null)
-    {
-        $this->environmentVariable = $environmentVariableName;
-        $this->configurationPath = $configurationPath;
+    public function __construct(
+        private $environmentVariable = null,
+        private $configurationPath = null,
+    ) {
     }
 
     /**

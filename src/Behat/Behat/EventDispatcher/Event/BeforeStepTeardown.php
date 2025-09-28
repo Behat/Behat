@@ -27,32 +27,15 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class BeforeStepTeardown extends StepTested implements BeforeTeardown
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-    /**
-     * @var StepResult
-     */
-    private $result;
-
-    /**
      * Initializes event.
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        StepNode $step,
-        StepResult $result,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+        private readonly StepResult $result,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->step = $step;
-        $this->result = $result;
     }
 
     /**

@@ -10,13 +10,19 @@
 
 namespace Behat\Testwork\Translator\ServiceContainer;
 
+use Behat\Behat\Definition\Translator\Translator;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Behat\Testwork\Translator\Cli\LanguageController;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Translation\Loader\ArrayLoader;
+use Symfony\Component\Translation\Loader\PhpFileLoader;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\Loader\YamlFileLoader;
 
 /**
  * Provides translator service.
@@ -77,7 +83,7 @@ final class TranslatorExtension implements Extension
      */
     private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
     {
-        $definition = new Definition('Behat\Behat\Definition\Translator\Translator', [$locale]);
+        $definition = new Definition(Translator::class, [$locale]);
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
 
         $definition->addMethodCall('setFallbackLocales', [[$fallbackLocale]]);
@@ -85,28 +91,28 @@ final class TranslatorExtension implements Extension
             'addLoader',
             [
                 'xliff',
-                new Definition('Symfony\Component\Translation\Loader\XliffFileLoader'),
+                new Definition(XliffFileLoader::class),
             ]
         );
         $definition->addMethodCall(
             'addLoader',
             [
                 'yaml',
-                new Definition('Symfony\Component\Translation\Loader\YamlFileLoader'),
+                new Definition(YamlFileLoader::class),
             ]
         );
         $definition->addMethodCall(
             'addLoader',
             [
                 'php',
-                new Definition('Symfony\Component\Translation\Loader\PhpFileLoader'),
+                new Definition(PhpFileLoader::class),
             ]
         );
         $definition->addMethodCall(
             'addLoader',
             [
                 'array',
-                new Definition('Symfony\Component\Translation\Loader\ArrayLoader'),
+                new Definition(ArrayLoader::class),
             ]
         );
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
@@ -117,7 +123,7 @@ final class TranslatorExtension implements Extension
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Translator\Cli\LanguageController', [
+        $definition = new Definition(LanguageController::class, [
             new Reference(self::TRANSLATOR_ID),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 800]);

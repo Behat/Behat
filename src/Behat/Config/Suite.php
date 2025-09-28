@@ -25,7 +25,7 @@ final class Suite implements ConfigConverterInterface
     private const FILTER_FUNCTION = 'withFilter';
 
     public function __construct(
-        private string $name,
+        private readonly string $name,
         private array $settings = [],
     ) {
     }

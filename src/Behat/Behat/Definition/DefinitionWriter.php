@@ -22,21 +22,12 @@ use Behat\Testwork\Suite\Suite;
 final class DefinitionWriter
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-    /**
-     * @var DefinitionRepository
-     */
-    private $repository;
-
-    /**
      * Initializes writer.
      */
-    public function __construct(EnvironmentManager $environmentManager, DefinitionRepository $repository)
-    {
-        $this->environmentManager = $environmentManager;
-        $this->repository = $repository;
+    public function __construct(
+        private readonly EnvironmentManager $environmentManager,
+        private readonly DefinitionRepository $repository,
+    ) {
     }
 
     /**

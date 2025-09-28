@@ -20,11 +20,6 @@ use Behat\Testwork\Hook\FilterableHook;
 abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHook
 {
     /**
-     * @var string|null
-     */
-    private $filterString;
-
-    /**
      * Initializes hook.
      *
      * @param string      $scopeName
@@ -32,10 +27,12 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHo
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($scopeName, $filterString, $callable, $description = null)
-    {
-        $this->filterString = $filterString;
-
+    public function __construct(
+        $scopeName,
+        private $filterString,
+        $callable,
+        $description = null,
+    ) {
         parent::__construct($scopeName, $callable, $description);
     }
 

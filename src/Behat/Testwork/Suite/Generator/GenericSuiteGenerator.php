@@ -20,16 +20,11 @@ use Behat\Testwork\Suite\GenericSuite;
 final class GenericSuiteGenerator implements SuiteGenerator
 {
     /**
-     * @var array
-     */
-    private $defaultSettings = [];
-
-    /**
      * Initializes suite generator.
      */
-    public function __construct(array $defaultSettings = [])
-    {
-        $this->defaultSettings = $defaultSettings;
+    public function __construct(
+        private readonly array $defaultSettings = [],
+    ) {
     }
 
     public function supportsTypeAndSettings($type, array $settings)

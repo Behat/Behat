@@ -20,16 +20,11 @@ use Behat\Behat\Definition\SearchResult;
 final class SkippedStepResult implements StepResult, DefinedStepResult
 {
     /**
-     * @var SearchResult
-     */
-    private $searchResult;
-
-    /**
      * Initializes step result.
      */
-    public function __construct(SearchResult $searchResult)
-    {
-        $this->searchResult = $searchResult;
+    public function __construct(
+        private readonly SearchResult $searchResult,
+    ) {
     }
 
     /**

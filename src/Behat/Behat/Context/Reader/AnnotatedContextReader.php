@@ -44,16 +44,11 @@ final class AnnotatedContextReader implements ContextReader
     private $readers = [];
 
     /**
-     * @var DocBlockHelper
-     */
-    private $docBlockHelper;
-
-    /**
      * Initializes reader.
      */
-    public function __construct(DocBlockHelper $docBlockHelper)
-    {
-        $this->docBlockHelper = $docBlockHelper;
+    public function __construct(
+        private readonly DocBlockHelper $docBlockHelper,
+    ) {
     }
 
     /**
@@ -96,7 +91,7 @@ final class AnnotatedContextReader implements ContextReader
             if ($prototype->getDeclaringClass()->getName() !== $method->getDeclaringClass()->getName()) {
                 $callees = array_merge($callees, $this->readMethodCallees($class, $prototype));
             }
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
         }
 
         if ($docBlock = $method->getDocComment()) {
@@ -172,7 +167,7 @@ final class AnnotatedContextReader implements ContextReader
      */
     private function isNotAnnotation($docLine)
     {
-        return '@' !== substr($docLine, 0, 1);
+        return !str_starts_with($docLine, '@');
     }
 
     /**
@@ -210,7 +205,7 @@ final class AnnotatedContextReader implements ContextReader
     {
         $lowDocLine = strtolower($docLine);
         foreach (self::$ignoreAnnotations as $ignoredAnnotation) {
-            if ($ignoredAnnotation == substr($lowDocLine, 0, strlen($ignoredAnnotation))) {
+            if (str_starts_with($lowDocLine, $ignoredAnnotation)) {
                 return true;
             }
         }

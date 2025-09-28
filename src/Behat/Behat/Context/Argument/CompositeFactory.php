@@ -40,9 +40,7 @@ final class CompositeFactory implements SuiteScopedResolverFactory
     {
         return array_reduce(
             $this->factories,
-            function (array $resolvers, SuiteScopedResolverFactory $factory) use ($suite) {
-                return array_merge($resolvers, $factory->generateArgumentResolvers($suite));
-            },
+            fn (array $resolvers, SuiteScopedResolverFactory $factory) => array_merge($resolvers, $factory->generateArgumentResolvers($suite)),
             []
         );
     }

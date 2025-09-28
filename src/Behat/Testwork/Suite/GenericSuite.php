@@ -20,23 +20,14 @@ use Behat\Testwork\Suite\Exception\ParameterNotFoundException;
 final class GenericSuite implements Suite
 {
     /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var array
-     */
-    private $settings = [];
-
-    /**
      * Initializes suite.
      *
      * @param string $name
      */
-    public function __construct($name, array $settings)
-    {
-        $this->name = $name;
-        $this->settings = $settings;
+    public function __construct(
+        private $name,
+        private array $settings,
+    ) {
     }
 
     /**

@@ -22,16 +22,11 @@ use Behat\Testwork\Environment\EnvironmentManager;
 final class TransformationRepository
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-
-    /**
      * Initializes repository.
      */
-    public function __construct(EnvironmentManager $environmentManager)
-    {
-        $this->environmentManager = $environmentManager;
+    public function __construct(
+        private readonly EnvironmentManager $environmentManager,
+    ) {
     }
 
     /**
@@ -43,9 +38,7 @@ final class TransformationRepository
     {
         return array_filter(
             $this->environmentManager->readEnvironmentCallees($environment),
-            function (Callee $callee) {
-                return $callee instanceof Transformation;
-            }
+            fn (Callee $callee) => $callee instanceof Transformation
         );
     }
 }

@@ -33,16 +33,11 @@ use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 final class ServicesResolverFactory implements SuiteScopedResolverFactory, ArgumentResolverFactory
 {
     /**
-     * @var TaggedContainerInterface
-     */
-    private $container;
-
-    /**
      * Initialises factory.
      */
-    public function __construct(TaggedContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly TaggedContainerInterface $container,
+    ) {
     }
 
     /**
@@ -186,9 +181,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
             throw new WrongContainerClassException(
                 sprintf(
                     'Service container is expected to implement `Psr\Container\ContainerInterface`, but `%s` does not.',
-                    get_class($container)
+                    $container::class
                 ),
-                get_class($container)
+                $container::class
             );
         }
 

@@ -25,11 +25,11 @@ class StepStat
      * @param StepResult::* $resultCode
      */
     public function __construct(
-        private string $text,
-        private string $path,
-        private int $resultCode,
-        private ?string $error = null,
-        private ?string $stdOut = null,
+        private readonly string $text,
+        private readonly string $path,
+        private readonly int $resultCode,
+        private readonly ?string $error = null,
+        private readonly ?string $stdOut = null,
     ) {
     }
 

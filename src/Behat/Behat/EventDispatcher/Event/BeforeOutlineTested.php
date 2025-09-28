@@ -23,23 +23,14 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 final class BeforeOutlineTested extends OutlineTested implements BeforeTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var OutlineNode
-     */
-    private $outline;
-
-    /**
      * Initializes event.
      */
-    public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly OutlineNode $outline,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->outline = $outline;
     }
 
     /**

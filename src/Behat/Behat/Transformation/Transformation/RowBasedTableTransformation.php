@@ -28,11 +28,6 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
 {
     public const PATTERN_REGEX = '/^rowtable\:[[:print:]]+$/u';
 
-    /**
-     * @var string
-     */
-    private $pattern;
-
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -45,10 +40,11 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($pattern, $callable, $description = null)
-    {
-        $this->pattern = $pattern;
-
+    public function __construct(
+        private $pattern,
+        $callable,
+        $description = null,
+    ) {
         parent::__construct($callable, $description);
     }
 
@@ -62,14 +58,14 @@ final class RowBasedTableTransformation extends RuntimeCallee implements SimpleA
         // This bit checks we have two columns
         try {
             $argumentArgumentValue->getColumn(1);
-        } catch (NodeException $e) {
+        } catch (NodeException) {
             return false;
         }
 
         // And here we check we don't have a 3rd column
         try {
             $argumentArgumentValue->getColumn(2);
-        } catch (NodeException $e) {
+        } catch (NodeException) {
             // Once we know the table could be a row table, we check against the pattern.
             return $this->pattern === 'rowtable:' . implode(',', $argumentArgumentValue->getColumn(0));
         }

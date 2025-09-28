@@ -14,6 +14,11 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
+use Behat\Testwork\Suite\Cli\InitializationController;
+use Behat\Testwork\Suite\Cli\SuiteController;
+use Behat\Testwork\Suite\Generator\GenericSuiteGenerator;
+use Behat\Testwork\Suite\SuiteBootstrapper;
+use Behat\Testwork\Suite\SuiteRegistry;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -74,11 +79,9 @@ final class SuiteExtension implements Extension
             ->normalizeKeys(false)
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function ($suite) {
-                        return is_array($suite) && count($suite);
-                    })
+                    ->ifTrue(fn ($suite) => is_array($suite) && count($suite))
                     ->then(function ($suite) {
-                        $suite['settings'] = $suite['settings'] ?? [];
+                        $suite['settings'] ??= [];
 
                         foreach ($suite as $key => $val) {
                             $suiteKeys = ['enabled', 'type', 'settings'];
@@ -161,7 +164,7 @@ final class SuiteExtension implements Extension
      */
     private function loadRegistryController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\Cli\SuiteController', [
+        $definition = new Definition(SuiteController::class, [
             new Reference(self::REGISTRY_ID),
             '%suite.configurations%',
         ]);
@@ -174,7 +177,7 @@ final class SuiteExtension implements Extension
      */
     private function loadBootstrapController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\Cli\InitializationController', [
+        $definition = new Definition(InitializationController::class, [
             new Reference(self::REGISTRY_ID),
             new Reference(self::BOOTSTRAPPER_ID),
         ]);
@@ -187,7 +190,7 @@ final class SuiteExtension implements Extension
      */
     private function loadRegistry(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\SuiteRegistry');
+        $definition = new Definition(SuiteRegistry::class);
         $container->setDefinition(self::REGISTRY_ID, $definition);
     }
 
@@ -196,7 +199,7 @@ final class SuiteExtension implements Extension
      */
     private function loadBootstrapper(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\SuiteBootstrapper');
+        $definition = new Definition(SuiteBootstrapper::class);
         $container->setDefinition(self::BOOTSTRAPPER_ID, $definition);
     }
 
@@ -207,7 +210,7 @@ final class SuiteExtension implements Extension
     {
         $container->setParameter('suite.generic.default_settings', []);
 
-        $definition = new Definition('Behat\Testwork\Suite\Generator\GenericSuiteGenerator', [
+        $definition = new Definition(GenericSuiteGenerator::class, [
             '%suite.generic.default_settings%',
         ]);
         $definition->addTag(SuiteExtension::GENERATOR_TAG, ['priority' => 50]);

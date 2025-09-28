@@ -35,22 +35,6 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 final class PrettyStepPrinter implements StepPrinter
 {
     /**
-     * @var StepTextPainter
-     */
-    private $textPainter;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var PrettyPathPrinter
-     */
-    private $pathPrinter;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var string
      */
     private $indentText;
@@ -66,17 +50,13 @@ final class PrettyStepPrinter implements StepPrinter
      * @param int $subIndentation
      */
     public function __construct(
-        StepTextPainter $textPainter,
-        ResultToStringConverter $resultConverter,
-        PrettyPathPrinter $pathPrinter,
-        ExceptionPresenter $exceptionPresenter,
+        private readonly StepTextPainter $textPainter,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly PrettyPathPrinter $pathPrinter,
+        private readonly ExceptionPresenter $exceptionPresenter,
         $indentation = 4,
         $subIndentation = 2,
     ) {
-        $this->textPainter = $textPainter;
-        $this->resultConverter = $resultConverter;
-        $this->pathPrinter = $pathPrinter;
-        $this->exceptionPresenter = $exceptionPresenter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -140,15 +120,13 @@ final class PrettyStepPrinter implements StepPrinter
         $callResult = $result->getCallResult();
         $indentedText = $this->subIndentText;
 
-        $pad = function ($line) use ($indentedText) {
-            return sprintf(
-                '%s│ {+stdout}%s{-stdout}',
-                $indentedText,
-                $line
-            );
-        };
+        $pad = (fn ($line) => sprintf(
+            '%s│ {+stdout}%s{-stdout}',
+            $indentedText,
+            $line
+        ));
 
-        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
     }
 
     /**

@@ -37,21 +37,12 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeStepTester implements StepTester
 {
     /**
-     * @var DefinitionFinder
-     */
-    private $definitionFinder;
-    /**
-     * @var CallCenter
-     */
-    private $callCenter;
-
-    /**
      * Initialize tester.
      */
-    public function __construct(DefinitionFinder $definitionFinder, CallCenter $callCenter)
-    {
-        $this->definitionFinder = $definitionFinder;
-        $this->callCenter = $callCenter;
+    public function __construct(
+        private readonly DefinitionFinder $definitionFinder,
+        private readonly CallCenter $callCenter,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)

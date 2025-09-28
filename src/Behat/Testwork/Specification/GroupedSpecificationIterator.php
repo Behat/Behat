@@ -25,14 +25,6 @@ use ReturnTypeWillChange;
 final class GroupedSpecificationIterator implements SpecificationIterator
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-    /**
-     * @var SpecificationIterator[]
-     */
-    private $iterators;
-    /**
      * @var int
      */
     private $position = 0;
@@ -40,12 +32,12 @@ final class GroupedSpecificationIterator implements SpecificationIterator
     /**
      * Initializes iterator.
      *
-     * @param list<SpecificationIterator<T>> $specificationIterators
+     * @param list<SpecificationIterator<T>> $iterators
      */
-    public function __construct(Suite $suite, array $specificationIterators)
-    {
-        $this->suite = $suite;
-        $this->iterators = $specificationIterators;
+    public function __construct(
+        private readonly Suite $suite,
+        private array $iterators,
+    ) {
     }
 
     /**
@@ -65,9 +57,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         }
 
         return array_map(
-            function ($iterator) {
-                return new GroupedSpecificationIterator($iterator[0]->getSuite(), $iterator);
-            },
+            fn ($iterator) => new GroupedSpecificationIterator($iterator[0]->getSuite(), $iterator),
             $groupedSpecifications
         );
     }

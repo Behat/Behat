@@ -22,17 +22,16 @@ final class TableColumnTransformation extends RuntimeCallee implements SimpleArg
 {
     public const PATTERN_REGEX = '/^column\:[[:print:]]+$/u';
 
-    private string $pattern;
-
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
 
-    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
-    {
-        $this->pattern = $pattern;
-
+    public function __construct(
+        private readonly string $pattern,
+        callable|array $callable,
+        ?string $description = null,
+    ) {
         parent::__construct($callable, $description);
     }
 

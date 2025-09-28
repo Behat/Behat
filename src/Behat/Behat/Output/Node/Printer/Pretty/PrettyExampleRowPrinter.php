@@ -33,14 +33,6 @@ use Behat\Testwork\Tester\Result\TestResults;
 final class PrettyExampleRowPrinter implements ExampleRowPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var string
      */
     private $indentText;
@@ -48,10 +40,6 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * @var string
      */
     private $subIndentText;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
 
     /**
      * Initializes printer.
@@ -60,15 +48,12 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * @param int $subIndentation
      */
     public function __construct(
-        ResultToStringConverter $resultConverter,
-        ExceptionPresenter $exceptionPresenter,
-        TranslatorInterface $translator,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly ExceptionPresenter $exceptionPresenter,
+        private readonly TranslatorInterface $translator,
         $indentation = 6,
         $subIndentation = 2,
     ) {
-        $this->resultConverter = $resultConverter;
-        $this->exceptionPresenter = $exceptionPresenter;
-        $this->translator = $translator;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
@@ -102,7 +87,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
                 $steps = $outline->getSteps();
                 $outlineStepText = $steps[$index]->getText();
 
-                if (false !== strpos($outlineStepText, '<' . $header[$column] . '>')) {
+                if (str_contains($outlineStepText, '<' . $header[$column] . '>')) {
                     $results[] = $event->getTestResult();
                 }
             }
@@ -165,15 +150,13 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $callResult = $result->getCallResult();
         $indentedText = $this->subIndentText;
 
-        $pad = function ($line) use ($indentedText) {
-            return sprintf(
-                '%s│ {+stdout}%s{-stdout}',
-                $indentedText,
-                $line
-            );
-        };
+        $pad = (fn ($line) => sprintf(
+            '%s│ {+stdout}%s{-stdout}',
+            $indentedText,
+            $line
+        ));
 
-        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
     }
 
     /**

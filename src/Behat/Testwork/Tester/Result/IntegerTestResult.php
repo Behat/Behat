@@ -18,18 +18,13 @@ namespace Behat\Testwork\Tester\Result;
 final class IntegerTestResult implements TestResult
 {
     /**
-     * @var TestResult::*
-     */
-    private $resultCode;
-
-    /**
      * Initializes test result.
      *
      * @param TestResult::* $resultCode
      */
-    public function __construct($resultCode)
-    {
-        $this->resultCode = $resultCode;
+    public function __construct(
+        private $resultCode,
+    ) {
     }
 
     public function isPassed()

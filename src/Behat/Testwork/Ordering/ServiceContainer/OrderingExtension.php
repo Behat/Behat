@@ -12,6 +12,10 @@ namespace Behat\Testwork\Ordering\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Ordering\Cli\OrderController;
+use Behat\Testwork\Ordering\OrderedExercise;
+use Behat\Testwork\Ordering\Orderer\RandomOrderer;
+use Behat\Testwork\Ordering\Orderer\ReverseOrderer;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -102,7 +106,7 @@ final class OrderingExtension implements Extension
      */
     private function loadOrderController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Cli\OrderController', [
+        $definition = new Definition(OrderController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering'),
         ]);
@@ -115,7 +119,7 @@ final class OrderingExtension implements Extension
      */
     private function loadOrderedExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\OrderedExercise', [
+        $definition = new Definition(OrderedExercise::class, [
             new Reference(TesterExtension::EXERCISE_ID),
         ]);
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG, ['priority' => -9999]);
@@ -127,11 +131,11 @@ final class OrderingExtension implements Extension
      */
     private function loadDefaultOrderers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Orderer\ReverseOrderer');
+        $definition = new Definition(ReverseOrderer::class);
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.reverse', $definition);
 
-        $definition = new Definition('Behat\Testwork\Ordering\Orderer\RandomOrderer');
+        $definition = new Definition(RandomOrderer::class);
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.random', $definition);
     }

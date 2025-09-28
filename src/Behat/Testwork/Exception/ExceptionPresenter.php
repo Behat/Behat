@@ -30,7 +30,7 @@ final class ExceptionPresenter
      */
     private $stringers = [];
 
-    private ConfigurablePathPrinter $configurablePathPrinter;
+    private readonly ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * Initializes presenter.
@@ -90,17 +90,17 @@ final class ExceptionPresenter
                 $exception = $this->removeBehatCallsFromTrace($exception);
             }
 
-            return $this->configurablePathPrinter->processPathsInText(trim($exception));
+            return $this->configurablePathPrinter->processPathsInText(trim((string) $exception));
         }
 
-        return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . get_class($exception) . ')');
+        return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . $exception::class . ')');
     }
 
     private function removeBehatCallsFromTrace(Exception $exception)
     {
         $traceOutput = '';
         foreach ($exception->getTrace() as $i => $trace) {
-            if (isset($trace['file']) && false !== strpos(str_replace('\\', '/', $trace['file']), 'Behat/Testwork/Call/Handler/RuntimeCallHandler')) {
+            if (isset($trace['file']) && str_contains(str_replace('\\', '/', $trace['file']), 'Behat/Testwork/Call/Handler/RuntimeCallHandler')) {
                 break;
             }
 
@@ -114,7 +114,7 @@ final class ExceptionPresenter
 
         return sprintf(
             '%s: %s in %s:%d%sStack trace:%s%s',
-            get_class($exception),
+            $exception::class,
             $exception->getMessage(),
             $exception->getFile(),
             $exception->getLine(),

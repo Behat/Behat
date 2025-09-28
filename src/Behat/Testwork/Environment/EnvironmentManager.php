@@ -87,7 +87,7 @@ final class EnvironmentManager
 
         throw new EnvironmentIsolationException(sprintf(
             'None of the registered environment handlers seem to support `%s` environment.',
-            get_class($environment)
+            $environment::class
         ), $environment, $testSubject);
     }
 

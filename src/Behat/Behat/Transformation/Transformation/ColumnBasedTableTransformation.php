@@ -27,11 +27,6 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
 {
     public const PATTERN_REGEX = '/^table\:(?:\*|[[:print:]]+)$/u';
 
-    /**
-     * @var string
-     */
-    private $pattern;
-
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
@@ -44,10 +39,11 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($pattern, $callable, $description = null)
-    {
-        $this->pattern = $pattern;
-
+    public function __construct(
+        private $pattern,
+        $callable,
+        $description = null,
+    ) {
         parent::__construct($callable, $description);
     }
 

@@ -29,16 +29,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class JUnitScenarioPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-
-    /**
-     * @var JUnitOutlineStoreListener
-     */
-    private $outlineStoreListener;
-
-    /**
      * @var OutlineNode
      */
     private $lastOutline;
@@ -48,23 +38,16 @@ final class JUnitScenarioPrinter
      */
     private $outlineStepCount;
 
-    /**
-     * @var JUnitDurationListener|null
-     */
-    private $durationListener;
-
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, ?JUnitDurationListener $durationListener = null)
-    {
-        $this->resultConverter = $resultConverter;
-        $this->outlineStoreListener = $outlineListener;
-        $this->durationListener = $durationListener;
+    public function __construct(
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly JUnitOutlineStoreListener $outlineStoreListener,
+        private readonly ?JUnitDurationListener $durationListener = null,
+    ) {
     }
 
     public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
-        $name = implode(' ', array_map(function ($l) {
-            return trim($l);
-        }, explode("\n", $scenario->getTitle() ?? '')));
+        $name = implode(' ', array_map(fn ($l) => trim($l), explode("\n", $scenario->getTitle() ?? '')));
 
         if ($scenario instanceof ExampleNode) {
             $name = $this->buildExampleName($scenario);
@@ -77,13 +60,13 @@ final class JUnitScenarioPrinter
             'name' => $name,
             'classname' => $feature->getTitle(),
             'status' => $this->resultConverter->convertResultToString($result),
-            'time' => $this->durationListener ? $this->durationListener->getDuration($scenario) : '',
+            'time' => $this->durationListener instanceof JUnitDurationListener ? $this->durationListener->getDuration($scenario) : '',
         ];
 
         if ($file) {
             $cwd = realpath(getcwd());
             $testCaseAttributes['file'] =
-                substr($file, 0, strlen($cwd)) === $cwd ?
+                str_starts_with($file, $cwd) ?
                     ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
         }
 

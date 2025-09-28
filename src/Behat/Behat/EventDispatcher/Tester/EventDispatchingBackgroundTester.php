@@ -29,21 +29,12 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class EventDispatchingBackgroundTester implements BackgroundTester
 {
     /**
-     * @var BackgroundTester
-     */
-    private $baseTester;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes tester.
      */
-    public function __construct(BackgroundTester $baseTester, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly BackgroundTester $baseTester,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function setUp(Environment $env, FeatureNode $feature, $skip)

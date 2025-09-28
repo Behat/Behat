@@ -21,18 +21,13 @@ use Behat\Gherkin\Node\StepNode;
 final class AggregateSnippet
 {
     /**
-     * @var Snippet[]
-     */
-    private array $snippets;
-
-    /**
      * Initializes snippet.
      *
      * @param Snippet[] $snippets
      */
-    public function __construct(array $snippets)
-    {
-        $this->snippets = $snippets;
+    public function __construct(
+        private readonly array $snippets,
+    ) {
     }
 
     /**
@@ -68,9 +63,7 @@ final class AggregateSnippet
     {
         return array_unique(
             array_map(
-                function (Snippet $snippet) {
-                    return $snippet->getStep();
-                },
+                fn (Snippet $snippet) => $snippet->getStep(),
                 $this->snippets
             ),
             SORT_REGULAR
@@ -86,9 +79,7 @@ final class AggregateSnippet
     {
         return array_unique(
             array_map(
-                function (Snippet $snippet) {
-                    return $snippet->getTarget();
-                },
+                fn (Snippet $snippet) => $snippet->getTarget(),
                 $this->snippets
             )
         );

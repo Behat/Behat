@@ -22,23 +22,14 @@ use Behat\Testwork\Suite\Suite;
 final class SuiteWithPathsSetup implements SuiteSetup
 {
     /**
-     * @var string
-     */
-    private $basePath;
-    /**
-     * @var FilesystemLogger|null
-     */
-    private $logger;
-
-    /**
      * Initializes setup.
      *
      * @param string                $basePath
      */
-    public function __construct($basePath, ?FilesystemLogger $logger = null)
-    {
-        $this->basePath = $basePath;
-        $this->logger = $logger;
+    public function __construct(
+        private $basePath,
+        private readonly ?FilesystemLogger $logger = null,
+    ) {
     }
 
     public function supportsSuite(Suite $suite)
@@ -49,7 +40,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     public function setupSuite(Suite $suite)
     {
         foreach ($suite->getSetting('paths') as $locator) {
-            if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
+            if (!str_starts_with((string) $locator, '@') && !is_dir($path = $this->locatePath($locator))) {
                 $this->createFeatureDirectory($path);
             }
         }
@@ -64,7 +55,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     {
         mkdir($path, 0777, true);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->directoryCreated($path, 'place your *.feature files here');
         }
     }

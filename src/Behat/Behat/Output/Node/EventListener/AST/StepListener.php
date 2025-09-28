@@ -32,8 +32,8 @@ final class StepListener implements EventListener
     private ?ScenarioLikeInterface $scenario = null;
 
     public function __construct(
-        private StepPrinter $stepPrinter,
-        private ?SetupPrinter $setupPrinter = null,
+        private readonly StepPrinter $stepPrinter,
+        private readonly ?SetupPrinter $setupPrinter = null,
     ) {
     }
 

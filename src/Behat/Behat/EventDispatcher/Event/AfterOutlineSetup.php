@@ -24,28 +24,15 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterOutlineSetup extends OutlineTested implements AfterSetup
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var OutlineNode
-     */
-    private $outline;
-    /**
-     * @var Setup
-     */
-    private $setup;
-
-    /**
      * Initializes event.
      */
-    public function __construct(Environment $env, FeatureNode $feature, OutlineNode $outline, Setup $setup)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly OutlineNode $outline,
+        private readonly Setup $setup,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->outline = $outline;
-        $this->setup = $setup;
     }
 
     /**

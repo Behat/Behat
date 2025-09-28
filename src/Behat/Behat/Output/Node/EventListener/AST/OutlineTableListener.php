@@ -54,10 +54,10 @@ final class OutlineTableListener implements EventListener
     private array $stepAfterTestedEvents = [];
 
     public function __construct(
-        private OutlineTablePrinter $tablePrinter,
-        private ExampleRowPrinter $exampleRowPrinter,
-        private SetupPrinter $exampleSetupPrinter,
-        private SetupPrinter $stepSetupPrinter,
+        private readonly OutlineTablePrinter $tablePrinter,
+        private readonly ExampleRowPrinter $exampleRowPrinter,
+        private readonly SetupPrinter $exampleSetupPrinter,
+        private readonly SetupPrinter $stepSetupPrinter,
     ) {
     }
 
@@ -204,9 +204,7 @@ final class OutlineTableListener implements EventListener
     private function getStepTestResults(): array
     {
         return array_map(
-            function (AfterStepTested $event) {
-                return $event->getTestResult();
-            },
+            fn (AfterStepTested $event) => $event->getTestResult(),
             $this->stepAfterTestedEvents
         );
     }

@@ -20,21 +20,16 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 final class WrongPathsException extends RuntimeException implements TesterException
 {
     /**
-     * @var string
-     */
-    private $path;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $path
      */
-    public function __construct($message, $path)
-    {
+    public function __construct(
+        $message,
+        private $path,
+    ) {
         parent::__construct($message);
-
-        $this->path = $path;
     }
 
     /**

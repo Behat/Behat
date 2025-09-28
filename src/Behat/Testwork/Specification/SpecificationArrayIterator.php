@@ -29,19 +29,14 @@ use Behat\Testwork\Suite\Suite;
 final class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-
-    /**
      * Initializes iterator.
      *
      * @param array<int, T> $specifications
      */
-    public function __construct(Suite $suite, $specifications = [])
-    {
-        $this->suite = $suite;
-
+    public function __construct(
+        private readonly Suite $suite,
+        $specifications = [],
+    ) {
         parent::__construct($specifications);
     }
 

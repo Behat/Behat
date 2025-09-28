@@ -28,8 +28,8 @@ final class JUnitFeaturePrinter implements FeaturePrinter
     private ?FeatureNode $currentFeature = null;
 
     public function __construct(
-        private PhaseStatistics $statistics,
-        private ?JUnitDurationListener $durationListener = null,
+        private readonly PhaseStatistics $statistics,
+        private readonly ?JUnitDurationListener $durationListener = null,
     ) {
     }
 

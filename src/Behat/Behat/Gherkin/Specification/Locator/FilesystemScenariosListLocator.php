@@ -27,16 +27,11 @@ use Behat\Testwork\Suite\Suite;
 final class FilesystemScenariosListLocator implements SpecificationLocator
 {
     /**
-     * @var Gherkin
-     */
-    private $gherkin;
-
-    /**
      * Initializes locator.
      */
-    public function __construct(Gherkin $gherkin)
-    {
-        $this->gherkin = $gherkin;
+    public function __construct(
+        private readonly Gherkin $gherkin,
+    ) {
     }
 
     public function getLocatorExamples()

@@ -31,25 +31,9 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class PrettySetupPrinter implements SetupPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
      * @var string
      */
     private $indentText;
-    /**
-     * @var bool
-     */
-    private $newlineBefore;
-    /**
-     * @var bool
-     */
-    private $newlineAfter;
 
     /**
      * Initializes printer.
@@ -59,17 +43,13 @@ final class PrettySetupPrinter implements SetupPrinter
      * @param bool $newlineAfter
      */
     public function __construct(
-        ResultToStringConverter $resultConverter,
-        ExceptionPresenter $exceptionPresenter,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly ExceptionPresenter $exceptionPresenter,
         $indentation = 0,
-        $newlineBefore = false,
-        $newlineAfter = false,
+        private $newlineBefore = false,
+        private $newlineAfter = false,
     ) {
-        $this->resultConverter = $resultConverter;
-        $this->exceptionPresenter = $exceptionPresenter;
         $this->indentText = str_repeat(' ', intval($indentation));
-        $this->newlineBefore = $newlineBefore;
-        $this->newlineAfter = $newlineAfter;
     }
 
     public function printSetup(Formatter $formatter, Setup $setup)
@@ -163,15 +143,13 @@ final class PrettySetupPrinter implements SetupPrinter
             return;
         }
 
-        $pad = function ($line) use ($indentText) {
-            return sprintf(
-                '%s│  {+stdout}%s{-stdout}',
-                $indentText,
-                $line
-            );
-        };
+        $pad = (fn ($line) => sprintf(
+            '%s│  {+stdout}%s{-stdout}',
+            $indentText,
+            $line
+        ));
 
-        $printer->writeln(implode("\n", array_map($pad, explode("\n", $callResult->getStdOut()))));
+        $printer->writeln(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
         $printer->writeln(sprintf('%s│', $indentText));
     }
 
@@ -186,13 +164,11 @@ final class PrettySetupPrinter implements SetupPrinter
             return;
         }
 
-        $pad = function ($l) use ($indentText) {
-            return sprintf(
-                '%s╳  {+exception}%s{-exception}',
-                $indentText,
-                $l
-            );
-        };
+        $pad = (fn ($l) => sprintf(
+            '%s╳  {+exception}%s{-exception}',
+            $indentText,
+            $l
+        ));
 
         $exception = $this->exceptionPresenter->presentException($callResult->getException());
         $printer->writeln(implode("\n", array_map($pad, explode("\n", $exception))));

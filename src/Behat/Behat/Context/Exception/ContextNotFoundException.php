@@ -20,20 +20,15 @@ use InvalidArgumentException;
 final class ContextNotFoundException extends InvalidArgumentException implements ContextException
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $class
      */
-    public function __construct($message, $class)
-    {
-        $this->class = $class;
-
+    public function __construct(
+        $message,
+        private $class,
+    ) {
         parent::__construct($message);
     }
 

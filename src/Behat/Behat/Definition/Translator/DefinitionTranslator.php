@@ -21,16 +21,11 @@ use Behat\Testwork\Suite\Suite;
 final class DefinitionTranslator
 {
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initialises definition translator.
      */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
