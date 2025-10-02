@@ -20,6 +20,7 @@ use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Argument\ArgumentOrganiser;
+use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
 use Behat\Testwork\Environment\Environment;
 
 /**
@@ -54,14 +55,15 @@ final class RepositorySearchEngine implements SearchEngine
         $language = $feature->getLanguage();
         $stepText = $step->getText();
         $multi = $step->getArguments();
+        $stepLocation = $feature->getFile().':'.$step->getLine();
 
         $definitions = [];
         $result = null;
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
             $definition = $this->translator->translateDefinition($suite, $definition, $language);
-
-            if (!$newResult = $this->match($definition, $stepText, $multi)) {
+            $newResult = $this->match($definition, $stepLocation, $stepText, $multi);
+            if (!$newResult instanceof SearchResult) {
                 continue;
             }
 
@@ -82,12 +84,9 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Attempts to match provided definition against a step text.
      *
-     * @param string              $stepText
      * @param ArgumentInterface[] $multiline
-     *
-     * @return SearchResult|null
      */
-    private function match(Definition $definition, $stepText, array $multiline)
+    private function match(Definition $definition, string $stepLocation, string $stepText, array $multiline): ?SearchResult
     {
         $match = $this->patternTransformer->matchPattern($definition->getPattern(), $stepText);
         if ($match === false) {
@@ -96,7 +95,19 @@ final class RepositorySearchEngine implements SearchEngine
 
         $function = $definition->getReflection();
         $match = array_merge($match, array_values($multiline));
-        $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
+
+        try {
+            $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
+        } catch (UnexpectedMultilineArgumentException $e) {
+            // Add the location of the feature and step that caused the problem.
+            // We can't do this where the exception is originally thrown because the ArgumentOrganiser interface
+            // is used for other types of function / argument processing e.g. Context constructors, so it has no
+            // knowledge of the concept of a Step.
+            throw new UnexpectedMultilineArgumentException(
+                $e->getMessage() . PHP_EOL . 'This is probably an error in your step implementation or in ' . $stepLocation,
+                previous: $e
+            );
+        }
 
         return new SearchResult($definition, $stepText, $arguments);
     }
