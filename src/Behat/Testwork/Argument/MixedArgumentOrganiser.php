@@ -12,10 +12,11 @@ namespace Behat\Testwork\Argument;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use InvalidArgumentException;
+use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunctionAbstract;
+use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionUnionType;
@@ -38,19 +39,20 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      */
     public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
-        return $this->prepareArguments($function->getParameters(), $arguments);
+        return $this->prepareArguments($function, $arguments);
     }
 
     /**
      * Prepares arguments based on provided parameters.
      *
-     * @param ReflectionParameter[] $parameters
      * @param mixed[]               $arguments
      *
      * @return mixed[]
      */
-    private function prepareArguments(array $parameters, array $arguments)
+    private function prepareArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
+        $parameters = $function->getParameters();
+
         $this->markAllArgumentsUndefined();
 
         [$named, $typehinted, $numbered] = $this->splitArguments($parameters, $arguments);
@@ -66,8 +68,13 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         // If a parameter was a TableNode or a PystringNode, but has been removed from the final arguments,
         // then it's an error in the feature file.
         if ($wasMultilineProvided && !$this->hasMultilineArgument($arguments)) {
-            throw new InvalidArgumentException(
-                'You have passed a TableNode or PystringNode as an argument, but it was not used in the function. This is probably an error in your feature file.'
+            throw new UnexpectedMultilineArgumentException(
+                sprintf(
+                    'You have passed a TableNode or PystringNode, but it was not used by %s.',
+                    $function instanceof ReflectionMethod
+                        ? $function->class.'::'.$function->getName()
+                        : $function->getName(),
+                ),
             );
         }
 
