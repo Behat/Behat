@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.25.0] - 2025-10-03
+
+### Added
+* Add short_summary formatter option by @carlos-granados in [#1664](https://github.com/Behat/Behat/pull/1664)
+
+### Fixed
+* Provide more context when failing with unexpected multiline args by @acoulton in [#1668](https://github.com/Behat/Behat/pull/1668)
+  
+### Internal
+* Remove PHP 8 error conversion by @carlos-granados in [#1665](https://github.com/Behat/Behat/pull/1665)
+* Apply Rector rules to use PHP 8.1+ language features by @carlos-granados in [#1666](https://github.com/Behat/Behat/pull/1666)
+
 ## [3.24.1] - 2025-09-15
 
 ### Fixed
@@ -1321,6 +1333,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.25.0]: https://github.com/Behat/Behat/compare/v3.24.1...v3.25.0
 [3.24.1]: https://github.com/Behat/Behat/compare/v3.24.0...v3.24.1
 [3.24.0]: https://github.com/Behat/Behat/compare/v3.23.0...v3.24.0
 [3.23.0]: https://github.com/Behat/Behat/compare/v3.22.0...v3.23.0
