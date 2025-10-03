@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   
 ### Internal
 * Remove PHP 8 error conversion by @carlos-granados in [#1665](https://github.com/Behat/Behat/pull/1665)
-* Apply Rector rules to use PHP 8.1+ language features by @carlos-granados in [#1666](https://github.com/Behat/Behat/pull/1666)
+* Apply Rector rules to use PHP 8.1 language features by @carlos-granados in [#1666](https://github.com/Behat/Behat/pull/1666)
 
 ## [3.24.1] - 2025-09-15
 
