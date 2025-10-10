@@ -25,7 +25,7 @@
 ## Testing Guidelines
 - Every user-visible change needs a covering scenario under `features/` or an updated specification;
 - Keep steps declarative and reuse contexts from `features/bootstrap`.
-- If needed, add or adjust PHPUnit tests in `tests/Behat/Tests`, naming classes with the `Test` suffix and methods with `test...
+- If needed, add or adjust PHPUnit tests in `tests/Behat/Tests`, naming classes with the `Test` suffix and methods with `test...`
 - Prefer Behat integration tests to unit tests
 - Run targeted suites (`composer behat`, `composer phpunit`) during development and finish with `composer all-tests`.
 - Maintain green static analysis by addressing `composer phpstan` findings before raising a PR.
