@@ -12,6 +12,7 @@ use Behat\Config\Filter\RoleFilter;
 use Behat\Config\Filter\TagFilter;
 use Behat\Config\Formatter\Formatter;
 use Behat\Config\Formatter\FormatterConfigInterface;
+use Behat\Config\Formatter\JSONFormatter;
 use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
@@ -196,6 +197,7 @@ final class Profile implements ConfigConverterInterface
                     PrettyFormatter::NAME => $formatterSettings === true ? new PrettyFormatter() : new PrettyFormatter(...$formatterSettings),
                     ProgressFormatter::NAME => $formatterSettings === true ? new ProgressFormatter() : new ProgressFormatter(...$formatterSettings),
                     JUnitFormatter::NAME => $formatterSettings === true ? new JUnitFormatter() : new JUnitFormatter(...$formatterSettings),
+                    JSONFormatter::NAME => $formatterSettings === true ? new JSONFormatter() : new JSONFormatter(...$formatterSettings),
                     default => $formatterSettings === true ? new Formatter($name) : new Formatter($name, $formatterSettings),
                 };
                 $expr = ConfigConverterTools::addMethodCall(

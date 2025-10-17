@@ -8,10 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Behat\Behat\Output\Node\EventListener\JUnit;
+namespace Behat\Behat\Output\Node\Printer;
 
-use Behat\Behat\Output\Node\EventListener\Statistics\DurationListener;
+use Behat\Testwork\Output\Formatter;
 
-final class JUnitDurationListener extends DurationListener
+interface ExercisePrinter
 {
+    public function printHeader(Formatter $formatter): void;
+
+    public function printFooter(Formatter $formatter): void;
 }

@@ -16,6 +16,8 @@ with_options:
     formatters:
         junit:
             output_path: build/logs/junit
+        json:
+            output_path: build/logs/result.json
         progress:
             timer: true
             show_output: on-fail
