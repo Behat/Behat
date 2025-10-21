@@ -68,7 +68,7 @@ final class CallExtension implements Extension
             ->children()
                 ->scalarNode('error_reporting')
                     ->info('Call executor will catch exceptions matching this level')
-                    ->defaultValue(E_ALL)
+                    ->defaultValue(error_reporting())
         ;
     }
 
