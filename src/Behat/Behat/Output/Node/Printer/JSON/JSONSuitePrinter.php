@@ -20,7 +20,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 
 final class JSONSuitePrinter implements SuitePrinter
 {
-    private ?Suite $currentSuite = null;
+    private Suite $currentSuite;
 
     public function __construct(
         private readonly PhaseStatistics $statistics,

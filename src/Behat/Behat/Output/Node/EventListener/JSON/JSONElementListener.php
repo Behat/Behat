@@ -16,10 +16,8 @@ use Behat\Behat\EventDispatcher\Event\AfterScenarioSetup;
 use Behat\Behat\EventDispatcher\Event\AfterScenarioTested;
 use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
-use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\Output\Node\Printer\ExercisePrinter;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
-use Behat\Behat\Output\Node\Printer\JSON\JSONScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
@@ -35,7 +33,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 
 final class JSONElementListener implements EventListener
 {
-    private ?ScenarioLikeInterface $currentScenario = null;
+    private ScenarioLikeInterface $currentScenario;
 
     public function __construct(
         private readonly ExercisePrinter $exercisePrinter,
@@ -52,7 +50,6 @@ final class JSONElementListener implements EventListener
         $this->onExerciseStart($formatter, $event);
         $this->onSuiteStart($formatter, $event);
         $this->onFeatureStart($formatter, $event);
-        $this->onOutlineStart($event);
         $this->onScenarioStart($formatter, $event);
         $this->onStepStart($formatter, $event);
         $this->onStepEnd($formatter, $event);
@@ -105,17 +102,6 @@ final class JSONElementListener implements EventListener
         if ($event instanceof AfterFeatureTested) {
             $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
             $this->featurePrinter->printFooter($formatter, $event->getTestResult());
-        }
-    }
-
-    private function onOutlineStart(Event $event): void
-    {
-        if ($event instanceof BeforeOutlineTested) {
-            $outline = $event->getOutline();
-            assert($this->scenarioPrinter instanceof JSONScenarioPrinter);
-            foreach ($outline->getExamples() as $example) {
-                $this->scenarioPrinter->saveOutline($example->getLine(), $outline);
-            }
         }
     }
 

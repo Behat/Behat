@@ -13,9 +13,8 @@ namespace Behat\Behat\Output\Node\Printer\JSON;
 use Behat\Behat\Output\Node\EventListener\JSON\JSONDurationListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
-use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\NamedScenarioInterface;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JSONOutputPrinter;
@@ -23,18 +22,9 @@ use Behat\Testwork\Tester\Result\TestResult;
 
 final class JSONScenarioPrinter implements ScenarioPrinter
 {
-    /**
-     * @var array<int, OutlineNode>
-     */
-    private array $outlineMap = [];
+    private ScenarioLikeInterface $currentScenario;
 
-    private ?OutlineNode $lastOutline = null;
-
-    private int $outlineStepCount;
-
-    private ?ScenarioLikeInterface $currentScenario = null;
-
-    private ?FeatureNode $currentFeature = null;
+    private FeatureNode $currentFeature;
 
     public function __construct(
         private readonly ResultToStringConverter $resultConverter,
@@ -57,11 +47,8 @@ final class JSONScenarioPrinter implements ScenarioPrinter
     public function printFooter(Formatter $formatter, TestResult $result): void
     {
         $scenario = $this->currentScenario;
-        $name = implode(' ', array_map(fn ($l) => trim($l), explode("\n", $scenario->getTitle() ?? '')));
-
-        if ($scenario instanceof ExampleNode) {
-            $name = $this->buildExampleName($scenario);
-        }
+        assert($scenario instanceof NamedScenarioInterface);
+        $name = implode(' ', array_map(fn ($l) => trim($l), explode("\n", $scenario->getName() ?? '')));
 
         $scenarioAttributes = [
             'name' => $name,
@@ -81,25 +68,5 @@ final class JSONScenarioPrinter implements ScenarioPrinter
         assert($outputPrinter instanceof JSONOutputPrinter);
 
         $outputPrinter->addCurrentScenarioAttributes($scenarioAttributes, true);
-    }
-
-    public function saveOutline(int $line, OutlineNode $outline): void
-    {
-        $this->outlineMap[$line] = $outline;
-    }
-
-    private function buildExampleName(ExampleNode $scenario): string
-    {
-        $currentOutline = $this->outlineMap[$scenario->getLine()];
-        if ($currentOutline === $this->lastOutline) {
-            ++$this->outlineStepCount;
-        } else {
-            $this->lastOutline = $currentOutline;
-            $this->outlineStepCount = 1;
-        }
-
-        $name = $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
-
-        return $name;
     }
 }

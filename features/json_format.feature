@@ -502,3 +502,13 @@ Feature: JSON Formatter
       cannot extend interface Behat\Behat\Context\Context
       """
     And the "abort_on_php_error.json" file should not exist
+
+  Scenario: Aborting due to invalid output path
+    When I run behat with the following additional options:
+      | option  | value          |
+      | --suite | single_feature |
+      | --out   | ./features     |
+    Then it should fail with:
+      """
+      A file name expected for the `output_path` option, but a directory was given.
+      """

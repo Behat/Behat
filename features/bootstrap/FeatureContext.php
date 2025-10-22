@@ -442,17 +442,18 @@ EOL;
 
         $fileContent = trim(file_get_contents($path));
 
-        $data = json_decode($fileContent, true);
+        $data = json_decode($fileContent, true, JSON_THROW_ON_ERROR);
 
         Assert::assertIsArray($data);
 
         $fileContent = preg_replace('/"time": [\d.]+/', '"time": -IGNORE-VALUE-', $fileContent);
 
-        $directorySeparator = DIRECTORY_SEPARATOR;
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $directorySeparator .= DIRECTORY_SEPARATOR;
-        }
-        $text = str_replace('-DIRECTORY-SEPARATOR-', $directorySeparator, $text);
+        $text = str_replace(
+            '-DIRECTORY-SEPARATOR-',
+            // use the correct representation of directory separators in json for each OS
+            trim(json_encode(DIRECTORY_SEPARATOR, JSON_UNESCAPED_SLASHES), '"'),
+            $text
+        );
 
         Assert::assertEquals($text, $fileContent);
     }

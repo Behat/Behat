@@ -20,7 +20,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 
 final class JSONFeaturePrinter implements FeaturePrinter
 {
-    private ?FeatureNode $currentFeature = null;
+    private FeatureNode $currentFeature;
 
     public function __construct(
         private readonly PhaseStatistics $statistics,
