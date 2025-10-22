@@ -11,7 +11,7 @@
         "failed": { "type": "integer", "minimum": 0 },
         "pending": { "type": "integer", "minimum": 0 },
         "undefined": { "type": "integer", "minimum": 0 },
-        "time": { "$ref": "#/$defs/TimeString" },
+        "time": { "$ref": "#/$defs/DurationSeconds" },
         "suites": {
             "type": "array",
             "items": { "$ref": "#/$defs/Suite" }
@@ -19,7 +19,7 @@
     },
 
     "$defs": {
-        "TimeString": {
+        "DurationSeconds": {
             "type": "number",
             "description": "Seconds rounded to 3 decimals (e.g., 0.041)."
         },
@@ -49,7 +49,7 @@
                 "failed": { "type": "integer", "minimum": 0 },
                 "pending": { "type": "integer", "minimum": 0 },
                 "undefined": { "type": "integer", "minimum": 0 },
-                "time": { "$ref": "#/$defs/TimeString" },
+                "time": { "$ref": "#/$defs/DurationSeconds" },
                 "features": {
                     "type": "array",
                     "items": { "$ref": "#/$defs/Feature" }
@@ -74,7 +74,7 @@
                 "failed": { "type": "integer", "minimum": 0 },
                 "pending": { "type": "integer", "minimum": 0 },
                 "undefined": { "type": "integer", "minimum": 0 },
-                "time": { "$ref": "#/$defs/TimeString" },
+                "time": { "$ref": "#/$defs/DurationSeconds" },
                 "scenarios": {
                     "type": "array",
                     "items": { "$ref": "#/$defs/Scenario" }
@@ -94,7 +94,7 @@
             "required": ["name", "time", "status", "file", "line"],
             "properties": {
                 "name": { "type": "string" },
-                "time": { "$ref": "#/$defs/TimeString" },
+                "time": { "$ref": "#/$defs/DurationSeconds" },
                 "status": {
                     "type": "string",
                     "enum": ["passed", "failed", "pending", "undefined", "skipped"]
