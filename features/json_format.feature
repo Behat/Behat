@@ -35,7 +35,7 @@ Feature: JSON Formatter
           "failed": 3,
           "pending": 1,
           "undefined": 1,
-          "time": "-IGNORE-VALUE-",
+          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "single_feature",
@@ -44,7 +44,7 @@ Feature: JSON Formatter
                   "failed": 3,
                   "pending": 1,
                   "undefined": 1,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Adding numbers",
@@ -53,18 +53,18 @@ Feature: JSON Formatter
                           "failed": 3,
                           "pending": 1,
                           "undefined": 1,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Passed",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 11
                               },
                               {
                                   "name": "Undefined",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "undefined",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 16,
@@ -77,7 +77,7 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Pending",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "pending",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 21,
@@ -90,7 +90,7 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Failed",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 25,
@@ -103,7 +103,7 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Passed & Failed #1",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 29,
@@ -116,14 +116,14 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Passed & Failed #2",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 29
                               },
                               {
                                   "name": "Passed & Failed #3",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 29,
@@ -136,14 +136,14 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Another Outline #1",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 39
                               },
                               {
                                   "name": "Another Outline #2",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 39
@@ -171,7 +171,7 @@ Feature: JSON Formatter
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": "-IGNORE-VALUE-",
+          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "multiple_features",
@@ -180,7 +180,7 @@ Feature: JSON Formatter
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Adding Feature 1",
@@ -189,11 +189,11 @@ Feature: JSON Formatter
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Adding 4 to 10",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiple_features_1.feature",
                                   "line": 9
@@ -207,11 +207,11 @@ Feature: JSON Formatter
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Adding 8 to 10",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiple_features_2.feature",
                                   "line": 9
@@ -239,7 +239,7 @@ Feature: JSON Formatter
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": "-IGNORE-VALUE-",
+          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "multiline_titles",
@@ -248,7 +248,7 @@ Feature: JSON Formatter
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Use multiline titles",
@@ -257,18 +257,18 @@ Feature: JSON Formatter
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Adding some interesting value",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",
                                   "line": 13
                               },
                               {
                                   "name": "Adding another value",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",
                                   "line": 20
@@ -296,7 +296,7 @@ Feature: JSON Formatter
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": "-IGNORE-VALUE-",
+          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "small_kid",
@@ -305,7 +305,7 @@ Feature: JSON Formatter
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Adding easy numbers",
@@ -314,11 +314,11 @@ Feature: JSON Formatter
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Easy sum",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiple_suites_1.feature",
                                   "line": 11
@@ -334,7 +334,7 @@ Feature: JSON Formatter
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Adding difficult numbers",
@@ -343,11 +343,11 @@ Feature: JSON Formatter
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Difficult sum",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiple_suites_2.feature",
                                   "line": 11,
@@ -381,7 +381,7 @@ Feature: JSON Formatter
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": "-IGNORE-VALUE-",
+          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "skipped_test_cases",
@@ -390,7 +390,7 @@ Feature: JSON Formatter
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Skipped test cases",
@@ -399,11 +399,11 @@ Feature: JSON Formatter
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Skipped",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-skipped_test_cases.feature",
                                   "failures": [
@@ -416,7 +416,7 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Another skipped",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-skipped_test_cases.feature",
                                   "failures": [
@@ -450,7 +450,7 @@ Feature: JSON Formatter
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": "-IGNORE-VALUE-",
+          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "stop_on_failure",
@@ -459,7 +459,7 @@ Feature: JSON Formatter
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": "-IGNORE-VALUE-",
+                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "Stop on failure",
@@ -468,11 +468,11 @@ Feature: JSON Formatter
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": "-IGNORE-VALUE-",
+                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "Failed",
-                                  "time": "-IGNORE-VALUE-",
+                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-stop_on_failure.feature",
                                   "line": 11,

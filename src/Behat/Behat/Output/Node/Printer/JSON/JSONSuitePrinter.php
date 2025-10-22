@@ -54,7 +54,7 @@ final class JSONSuitePrinter implements SuitePrinter
             'failed' => $stats[TestResult::FAILED],
             'pending' => $stats[TestResult::PENDING],
             'undefined' => $stats[TestResult::UNDEFINED],
-            'time' => $this->durationListener->getSuiteDuration($this->currentSuite),
+            'time' => (float) $this->durationListener->getSuiteDuration($this->currentSuite),
         ]);
     }
 }

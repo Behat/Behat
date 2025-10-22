@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://example.com/schemas/test-report.schema.json",
+    "$id": "https://behat.org/schemas/test-report.schema.json",
     "title": "Test Report",
     "type": "object",
     "additionalProperties": false,
@@ -20,15 +20,14 @@
 
     "$defs": {
         "TimeString": {
-            "type": "string",
-            "description": "Seconds as a string with optional decimals (e.g., '0.041').",
-            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+            "type": "number",
+            "description": "Seconds rounded to 3 decimals (e.g., 0.041)."
         },
 
         "FailureEntry": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["message"],
+            "required": ["message", "type"],
             "properties": {
                 "message": { "type": "string" },
                 "type": {
@@ -117,9 +116,3 @@
         }
     }
 }
-
-
-
-
-
-

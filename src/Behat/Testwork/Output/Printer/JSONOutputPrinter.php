@@ -17,37 +17,37 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class JSONOutputPrinter extends StreamOutputPrinter
 {
     /**
-     * @var array<string, string|int|array>|null
+     * @var array<string, string|int|float|array>|null
      */
     private ?array $exercise = null;
 
     /**
-     * @var array<string, string|int|array>[]
+     * @var array<string, string|int|float|array>[]
      */
     private array $suites = [];
 
     /**
-     * @var array<string, string|int|array>[]
+     * @var array<string, string|int|float|array>[]
      */
     private array $features = [];
 
     /**
-     * @var array<string, string|int|array>[]
+     * @var array<string, string|int|float|array>[]
      */
     private array $scenarios = [];
 
     /**
-     * @var array<string, string|int|array>
+     * @var array<string, string|int|float|array>
      */
     private array $currentSuite = [];
 
     /**
-     * @var array<string, string|int|array>
+     * @var array<string, string|int|float|array>
      */
     private array $currentFeature = [];
 
     /**
-     * @var array<string, string|int|array>
+     * @var array<string, string|int|float|array>
      */
     private array $currentScenario = [];
 
@@ -70,7 +70,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $exerciseAttributes
+     * @param array<string, string|int|float> $exerciseAttributes
      */
     public function extendExerciseAttributes(array $exerciseAttributes): void
     {
@@ -78,7 +78,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $suiteAttributes
+     * @param array<string, string|int|float> $suiteAttributes
      */
     public function addSuite(array $suiteAttributes = []): void
     {
@@ -91,7 +91,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $suiteAttributes
+     * @param array<string, string|int|float> $suiteAttributes
      */
     public function extendSuiteAttributes(array $suiteAttributes): void
     {
@@ -99,7 +99,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $featureAttributes
+     * @param array<string, string|int|float> $featureAttributes
      */
     public function addFeature(array $featureAttributes = []): void
     {
@@ -112,7 +112,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $featureAttributes
+     * @param array<string, string|int|float> $featureAttributes
      */
     public function extendFeatureAttributes(array $featureAttributes): void
     {
@@ -120,7 +120,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $scenarioAttributes
+     * @param array<string, string|int|float> $scenarioAttributes
      */
     public function addScenario(array $scenarioAttributes = []): void
     {
@@ -130,7 +130,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $scenarioAttributes
+     * @param array<string, string|int|float> $scenarioAttributes
      */
     public function addCurrentScenarioAttributes(array $scenarioAttributes, bool $atStart = false): void
     {
@@ -138,7 +138,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $nodeAttributes
+     * @param array<string, string|int|float> $nodeAttributes
      */
     public function addSuiteChild(string $nodeName, array $nodeAttributes = []): void
     {
@@ -151,7 +151,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $nodeAttributes
+     * @param array<string, string|int|float> $nodeAttributes
      */
     public function addFeatureChild(string $nodeName, array $nodeAttributes = []): void
     {
@@ -164,7 +164,7 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int> $nodeAttributes
+     * @param array<string, string|int|float> $nodeAttributes
      */
     public function addScenarioChild(string $nodeName, array $nodeAttributes = []): void
     {
@@ -196,8 +196,8 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     }
 
     /**
-     * @param array<string, string|int|array> $node
-     * @param array<string, string|int> $attributes
+     * @param array<string, string|int|float|array> $node
+     * @param array<string, string|int|float> $attributes
      */
     private function addAttributesToNode(array &$node, array $attributes, bool $atStart = false): void
     {

@@ -49,7 +49,7 @@ final class JSONExercisePrinter implements ExercisePrinter
             'failed' => $stats[TestResult::FAILED],
             'pending' => $stats[TestResult::PENDING],
             'undefined' => $stats[TestResult::UNDEFINED],
-            'time' => $this->durationListener->getExerciseDuration(),
+            'time' => (float) $this->durationListener->getExerciseDuration(),
         ]);
 
         $formatter->getOutputPrinter()->flush();

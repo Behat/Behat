@@ -442,17 +442,17 @@ EOL;
 
         $fileContent = trim(file_get_contents($path));
 
-        $fileContent = preg_replace('/"time": "\d\.\d{3}"/U', '"time": "-IGNORE-VALUE-"', $fileContent);
+        $data = json_decode($fileContent, true);
+
+        Assert::assertIsArray($data);
+
+        $fileContent = preg_replace('/"time": [\d.]+/', '"time": -IGNORE-VALUE-', $fileContent);
 
         $directorySeparator = DIRECTORY_SEPARATOR;
         if (DIRECTORY_SEPARATOR === '\\') {
             $directorySeparator .= DIRECTORY_SEPARATOR;
         }
         $text = str_replace('-DIRECTORY-SEPARATOR-', $directorySeparator, $text);
-
-        $data = json_decode((string) $fileContent, true);
-
-        Assert::assertIsArray($data);
 
         Assert::assertEquals($text, $fileContent);
     }
@@ -567,7 +567,7 @@ EOL;
     public function theFileShouldBeAValidDocumentAccordingToTheJsonSchema($jsonFile, $schemaFile): void
     {
         $json = json_decode(file_get_contents($this->workingDir . '/' . $jsonFile));
-        $schema = file_get_contents(__DIR__ . '/schema/' . $schemaFile);
+        $schema = file_get_contents(__DIR__ . '/../../resources/' . $schemaFile);
 
         $validator = new Validator();
 
