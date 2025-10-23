@@ -19,6 +19,7 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -42,6 +43,7 @@ final class JUnitScenarioPrinter
         private readonly ResultToStringConverter $resultConverter,
         private readonly JUnitOutlineStoreListener $outlineStoreListener,
         private readonly ?JUnitDurationListener $durationListener = null,
+        private readonly ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
     }
 
@@ -63,11 +65,11 @@ final class JUnitScenarioPrinter
             'time' => $this->durationListener instanceof JUnitDurationListener ? $this->durationListener->getDuration($scenario) : '',
         ];
 
-        if ($file) {
-            $cwd = realpath(getcwd());
-            $testCaseAttributes['file'] =
-                str_starts_with($file, $cwd) ?
-                    ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
+        if ($file && $this->configurablePathPrinter instanceof ConfigurablePathPrinter) {
+            $testCaseAttributes['file'] = $this->configurablePathPrinter->processPathsInText(
+                $file,
+                applyEditorUrl: false,
+            );
         }
 
         $outputPrinter->addTestcase($testCaseAttributes);
