@@ -386,6 +386,7 @@ Feature: Convert config
       use Behat\Config\Config;
       use Behat\Config\Extension;
       use Behat\Config\Formatter\Formatter;
+      use Behat\Config\Formatter\JSONFormatter;
       use Behat\Config\Formatter\JUnitFormatter;
       use Behat\Config\Formatter\PrettyFormatter;
       use Behat\Config\Formatter\ProgressFormatter;
@@ -407,6 +408,8 @@ Feature: Convert config
           ->withProfile((new Profile('with_options'))
               ->withFormatter((new JUnitFormatter())
                   ->withOutputPath('build/logs/junit'))
+              ->withFormatter((new JSONFormatter())
+                  ->withOutputPath('build/logs/result.json'))
               ->withFormatter((new ProgressFormatter(showOutput: ShowOutputOption::OnFail))
                   ->withOutputVerbosity(OutputFactory::VERBOSITY_VERY_VERBOSE))
               ->withFormatter((new PrettyFormatter(expand: true, showOutput: ShowOutputOption::No))

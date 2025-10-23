@@ -4,7 +4,7 @@ Feature: JUnit Formatter
   I need to be able to generate a JUnit-compatible report
 
   Background:
-    Given I initialise the working directory from the "JunitFormat" fixtures folder
+    Given I initialise the working directory from the "TestReportFormat" fixtures folder
     And I provide the following options for all behat invocations:
       | option          | value            |
       | --no-colors     |                  |

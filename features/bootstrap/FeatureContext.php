@@ -15,6 +15,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Opis\JsonSchema\Validator;
 use PHPUnit\Framework\Assert;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
@@ -396,6 +397,20 @@ EOL;
         $this->checkXmlFileContents($path, $text);
     }
 
+    /**
+     * Checks whether specified content and structure of the json is correct without worrying about layout.
+     *
+     * @Then /^(?:the\s)?"([^"]*)" file json should be like:$/
+     *
+     * @param string       $path file path
+     * @param PyStringNode $text file content
+     */
+    public function fileJSONShouldBeLike($path, PyStringNode $text)
+    {
+        $path = $this->workingDir . '/' . $path;
+        $this->checkJSONFileContents($path, $text);
+    }
+
     #[Then('the :file file should have been removed from the working directory')]
     public function fileShouldHaveBeenRemoved($file): void
     {
@@ -419,6 +434,28 @@ EOL;
         $dom->formatOutput = true;
 
         Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
+    }
+
+    private function checkJSONFileContents($path, PyStringNode $text)
+    {
+        Assert::assertFileExists($path);
+
+        $fileContent = trim(file_get_contents($path));
+
+        $data = json_decode($fileContent, true, JSON_THROW_ON_ERROR);
+
+        Assert::assertIsArray($data);
+
+        $fileContent = preg_replace('/"time": [\d.]+/', '"time": -IGNORE-VALUE-', $fileContent);
+
+        $text = str_replace(
+            '-DIRECTORY-SEPARATOR-',
+            // use the correct representation of directory separators in json for each OS
+            trim(json_encode(DIRECTORY_SEPARATOR, JSON_UNESCAPED_SLASHES), '"'),
+            $text
+        );
+
+        Assert::assertEquals($text, $fileContent);
     }
 
     /**
@@ -525,6 +562,30 @@ EOL;
     {
         $path = $this->workingDir . '/' . $xmlFile;
         $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    #[Then('the file :jsonFile should be a valid document according to the json schema :schemaFile')]
+    public function theFileShouldBeAValidDocumentAccordingToTheJsonSchema($jsonFile, $schemaFile): void
+    {
+        $json = json_decode(file_get_contents($this->workingDir . '/' . $jsonFile));
+        $schema = file_get_contents(__DIR__ . '/../../resources/' . $schemaFile);
+
+        $validator = new Validator();
+
+        $result = $validator->validate($json, $schema);
+
+        if (!$result->isValid()) {
+            throw new UnexpectedValueException('JSON is not valid according to schema');
+        }
+    }
+
+    #[Then('the :file file should not exist')]
+    public function theFileShouldNotExist($file): void
+    {
+        $path = $this->workingDir . '/' . $file;
+        if (is_file($path)) {
+            throw new Exception("File $file exists");
+        }
     }
 
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
