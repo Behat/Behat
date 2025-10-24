@@ -56,6 +56,8 @@ class FeatureContext implements Context
      */
     private $answerString;
 
+    private ?int $errorLevel = null;
+
     public function __construct(
         private readonly Filesystem $filesystem = new Filesystem(),
     ) {
@@ -240,9 +242,15 @@ EOL;
     {
         $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
+        $php = $this->phpBin;
+
+        if ($this->errorLevel !== null) {
+            $php .= ' -d error_reporting=' . $this->errorLevel;
+        }
+
         $cmd = sprintf(
             '%s %s %s %s',
-            $this->phpBin,
+            $php,
             escapeshellarg(BEHAT_BIN_PATH),
             $argumentsString,
             strtr($this->options, ['\'' => '"', '"' => '\"'])
@@ -594,6 +602,16 @@ EOL;
         if (is_file($path)) {
             throw new Exception("File $file exists");
         }
+    }
+
+    #[Given('I set the php error_reporting option for the behat command to :level')]
+    public function iSetThePhpErrorReportingOptionForTheBehatCommandTo($level): void
+    {
+        $this->errorLevel = match ($level) {
+            'none' => 0,
+            'ignore deprecations' => E_ALL & ~E_DEPRECATED,
+            'all' => E_ALL,
+        };
     }
 
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
