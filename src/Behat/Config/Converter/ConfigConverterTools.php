@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Behat\Config\Converter;
 
+use InvalidArgumentException;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
@@ -44,16 +45,17 @@ class ConfigConverterTools
 
             // The Config object must provide a value for every argument (defaults are stripped here). If we are
             // missing arguments, that implies the ->toPhpExpr implementation is out of sync with the method definition.
-            assert(
-                array_key_exists($argKey, $arguments),
-                sprintf(
-                    'Missing argument #%d (%s) for %s::%s',
-                    $index,
-                    $parameter->getName(),
-                    $method->getDeclaringClass()->getName(),
-                    $method->getName(),
-                ),
-            );
+            if (!array_key_exists($argKey, $arguments)) {
+                throw new InvalidArgumentException(
+                    sprintf(
+                        'Missing argument #%d (%s) for %s::%s',
+                        $index,
+                        $parameter->getName(),
+                        $method->getDeclaringClass()->getName(),
+                        $method->getName(),
+                    ),
+                );
+            }
 
             $argValue = $arguments[$argKey];
             if ($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === $argValue) {
@@ -70,15 +72,16 @@ class ConfigConverterTools
 
         // We should have applied all arguments that were provided. If not, that implies the ->toPhpExpr implementation
         // is out of sync with the method definition.
-        assert(
-            $arguments === [],
-            sprintf(
-                'Too many arguments provided for %s::%s (%s)',
-                $method->getDeclaringClass()->getName(),
-                $method->getName(),
-                implode(', ', array_keys($arguments)),
-            ),
-        );
+        if ($arguments !== []) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Too many arguments provided for %s::%s (%s)',
+                    $method->getDeclaringClass()->getName(),
+                    $method->getName(),
+                    implode(', ', array_keys($arguments)),
+                ),
+            );
+        }
 
         return $result;
     }
