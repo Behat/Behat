@@ -31,6 +31,7 @@ use Behat\Testwork\Output\Printer\Factory\FileOutputFactory;
 use Behat\Testwork\Output\Printer\JSONOutputPrinter;
 use Behat\Testwork\Output\ServiceContainer\Formatter\FormatterFactory;
 use Behat\Testwork\Output\ServiceContainer\OutputExtension;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -81,6 +82,7 @@ final class JSONFormatterFactory implements FormatterFactory
         $definition = new Definition(JSONScenarioPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference('output.node.listener.json.duration'),
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition('output.node.printer.json.scenario', $definition);
 

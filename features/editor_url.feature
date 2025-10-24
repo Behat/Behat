@@ -73,3 +73,76 @@ Feature: Editor URL
 
           <href=phpstorm://open?file=features/test.feature&line=3>%%WORKING_DIR%%features/test.feature:3</>
       """
+
+  Scenario: Editor URL does not affect JSON formatter paths
+    When I run behat with the following additional options:
+      | option    | value                                        |
+      | --profile | editor_url                                   |
+      | --format  | json                                         |
+      | --out     | report.json                                  |
+    Then the "report.json" file json should be like:
+      """
+      {
+          "tests": 1,
+          "skipped": 0,
+          "failed": 1,
+          "pending": 0,
+          "undefined": 0,
+          "time": -IGNORE-VALUE-,
+          "suites": [
+              {
+                  "name": "default",
+                  "tests": 1,
+                  "skipped": 0,
+                  "failed": 1,
+                  "pending": 0,
+                  "undefined": 0,
+                  "time": -IGNORE-VALUE-,
+                  "features": [
+                      {
+                          "name": "",
+                          "tests": 1,
+                          "skipped": 0,
+                          "failed": 1,
+                          "pending": 0,
+                          "undefined": 0,
+                          "time": -IGNORE-VALUE-,
+                          "scenarios": [
+                              {
+                                  "name": "",
+                                  "time": -IGNORE-VALUE-,
+                                  "status": "failed",
+                                  "file": "features-DIRECTORY-SEPARATOR-test.feature",
+                                  "line": 5,
+                                  "failures": [
+                                      {
+                                          "message": "And I have a step that throws an exception: Warning: Undefined variable $b in features-DIRECTORY-SEPARATOR-bootstrap-DIRECTORY-SEPARATOR-FeatureContext.php line 16",
+                                          "type": "failed"
+                                      }
+                                  ]
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      }
+    """
+
+  Scenario: Editor URL does not affect JUnit formatter paths
+    When I run behat with the following additional options:
+      | option    | value                                      |
+      | --profile | editor_url                                 |
+      | --format  | junit                                      |
+      | --out     | report                                     |
+    Then the "report/default.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="default">
+        <testsuite name="" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
+          <testcase name="" classname="" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-test.feature" line="5">
+            <failure message="And I have a step that throws an exception: Warning: Undefined variable $b in features-DIRECTORY-SEPARATOR-bootstrap-DIRECTORY-SEPARATOR-FeatureContext.php line 16"></failure>
+          </testcase>
+        </testsuite>
+      </testsuites>
+      """

@@ -60,7 +60,10 @@ final class JSONSetupPrinter implements SetupPrinter
                 if ($scope instanceof StepScope) {
                     $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
                 }
-                $message .= ': ' . $this->exceptionPresenter->presentException($hookCallResult->getException());
+                $message .= ': ' . $this->exceptionPresenter->presentException(
+                    $hookCallResult->getException(),
+                    applyEditorUrl: false
+                );
 
                 $attributes = [
                     'message' => $message,

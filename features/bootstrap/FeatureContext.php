@@ -428,6 +428,8 @@ EOL;
 
         // The placeholder is necessary because of different separators on Unix and Windows environments
         $text = str_replace('-DIRECTORY-SEPARATOR-', DIRECTORY_SEPARATOR, $text);
+        // used for absolute paths
+        $text = str_replace('%%WORKING_DIR%%', realpath($this->workingDir . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR, $text);
 
         $dom = new DOMDocument();
         $dom->loadXML($text);
@@ -452,6 +454,12 @@ EOL;
             '-DIRECTORY-SEPARATOR-',
             // use the correct representation of directory separators in json for each OS
             trim(json_encode(DIRECTORY_SEPARATOR, JSON_UNESCAPED_SLASHES), '"'),
+            $text
+        );
+        // used for absolute paths
+        $text = str_replace(
+            '%%WORKING_DIR%%',
+            trim(json_encode(realpath($this->workingDir . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR, JSON_UNESCAPED_SLASHES), '"'),
             $text
         );
 

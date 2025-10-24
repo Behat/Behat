@@ -44,7 +44,10 @@ class JUnitStepPrinter implements StepPrinter
         $message = $step->getKeyword() . ' ' . $step->getText();
 
         if ($result instanceof ExceptionResult && $result->hasException()) {
-            $message .= ': ' . $this->exceptionPresenter->presentException($result->getException());
+            $message .= ': ' . $this->exceptionPresenter->presentException(
+                $result->getException(),
+                applyEditorUrl: false
+            );
         }
 
         $attributes = ['message' => $message];

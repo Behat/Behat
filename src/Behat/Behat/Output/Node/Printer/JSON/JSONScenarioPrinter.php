@@ -18,6 +18,7 @@ use Behat\Gherkin\Node\NamedScenarioInterface;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JSONOutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 final class JSONScenarioPrinter implements ScenarioPrinter
@@ -29,6 +30,7 @@ final class JSONScenarioPrinter implements ScenarioPrinter
     public function __construct(
         private readonly ResultToStringConverter $resultConverter,
         private readonly JSONDurationListener $durationListener,
+        private readonly ConfigurablePathPrinter $configurablePathPrinter,
     ) {
     }
 
@@ -58,10 +60,10 @@ final class JSONScenarioPrinter implements ScenarioPrinter
 
         $file = $this->currentFeature->getFile();
         if ($file) {
-            $cwd = realpath(getcwd());
-            $scenarioAttributes['file'] =
-                str_starts_with($file, $cwd) ?
-                    ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
+            $scenarioAttributes['file'] = $this->configurablePathPrinter->processPathsInText(
+                $file,
+                applyEditorUrl: false,
+            );
         }
 
         $outputPrinter = $formatter->getOutputPrinter();

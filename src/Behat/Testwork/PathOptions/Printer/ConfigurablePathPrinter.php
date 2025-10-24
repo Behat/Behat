@@ -56,10 +56,10 @@ final class ConfigurablePathPrinter
     /**
      * Conditionally transforms paths to relative and adds editor links if configured.
      */
-    public function processPathsInText(string $text): string
+    public function processPathsInText(string $text, bool $applyEditorUrl = true): string
     {
-        // If no editor URL is set, use the original behavior
-        if ($this->editorUrl === null) {
+        // If no editor URL is set or the caller opts out, use the original behavior
+        if ($this->editorUrl === null || $applyEditorUrl === false) {
             $processedText = $this->printAbsolutePaths ? $text : str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $text);
             // Apply removePrefix if configured
             if ($this->removePrefix !== []) {

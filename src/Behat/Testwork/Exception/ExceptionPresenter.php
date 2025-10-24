@@ -71,8 +71,11 @@ final class ExceptionPresenter
     /**
      * Presents exception as a string.
      */
-    public function presentException(Throwable $exception, ?int $verbosity = null): string
-    {
+    public function presentException(
+        Throwable $exception,
+        ?int $verbosity = null,
+        $applyEditorUrl = true,
+    ): string {
         $verbosity = $verbosity ?: $this->defaultVerbosity;
 
         if (!$exception instanceof Exception) {
@@ -81,7 +84,10 @@ final class ExceptionPresenter
 
         foreach ($this->stringers as $stringer) {
             if ($stringer->supportsException($exception)) {
-                return $this->configurablePathPrinter->processPathsInText($stringer->stringException($exception, $verbosity));
+                return $this->configurablePathPrinter->processPathsInText(
+                    $stringer->stringException($exception, $verbosity),
+                    applyEditorUrl: $applyEditorUrl
+                );
             }
         }
 

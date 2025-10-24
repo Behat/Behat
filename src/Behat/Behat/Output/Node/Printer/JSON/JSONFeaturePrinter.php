@@ -47,7 +47,7 @@ final class JSONFeaturePrinter implements FeaturePrinter
         assert($outputPrinter instanceof JSONOutputPrinter);
 
         $outputPrinter->extendFeatureAttributes([
-            'name' => $this->currentFeature->getTitle(),
+            'name' => $this->currentFeature->getTitle() ?? '',
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failed' => $stats[TestResult::FAILED],
