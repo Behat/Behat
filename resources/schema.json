@@ -66,9 +66,10 @@
             "type": "object",
             "title": "Feature",
             "additionalProperties": false,
-            "required": ["name", "tests", "skipped", "failed", "pending", "undefined", "time", "scenarios"],
+            "required": ["name", "file", "tests", "skipped", "failed", "pending", "undefined", "time", "scenarios"],
             "properties": {
                 "name": { "type": "string" },
+                "file": { "type": "string" },
                 "tests": { "type": "integer", "minimum": 0 },
                 "skipped": { "type": "integer", "minimum": 0 },
                 "failed": { "type": "integer", "minimum": 0 },

@@ -31,7 +31,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="single_feature">
-        <testsuite name="Adding numbers" tests="9" skipped="0" failures="3" errors="2" time="-IGNORE-VALUE-">
+        <testsuite name="Adding numbers" file="features-DIRECTORY-SEPARATOR-single_feature.feature" tests="9" skipped="0" failures="3" errors="2" time="-IGNORE-VALUE-">
           <testcase name="Passed" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="11"></testcase>
           <testcase name="Undefined" classname="Adding numbers" status="undefined" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="16">
             <error message="And Something new" type="undefined"/>
@@ -65,10 +65,10 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="multiple_features">
-        <testsuite name="Adding Feature 1" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Adding Feature 1" file="features-DIRECTORY-SEPARATOR-multiple_features_1.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Adding 4 to 10" classname="Adding Feature 1" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiple_features_1.feature" line="9"></testcase>
         </testsuite>
-        <testsuite name="Adding Feature 2" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Adding Feature 2" file="features-DIRECTORY-SEPARATOR-multiple_features_2.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Adding 8 to 10" classname="Adding Feature 2" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiple_features_2.feature" line="9"></testcase>
         </testsuite>
       </testsuites>
@@ -84,7 +84,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="multiline_titles">
-        <testsuite name="Use multiline titles" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Use multiline titles" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Adding some interesting value" classname="Use multiline titles" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" line="13"/>
           <testcase name="Adding another value" classname="Use multiline titles" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" line="20"/>
         </testsuite>
@@ -101,7 +101,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="small_kid">
-        <testsuite name="Adding easy numbers" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Adding easy numbers" file="features-DIRECTORY-SEPARATOR-multiple_suites_1.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Easy sum" classname="Adding easy numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiple_suites_1.feature" line="11"/>
         </testsuite>
       </testsuites>
@@ -111,7 +111,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="old_man">
-        <testsuite name="Adding difficult numbers" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Adding difficult numbers" file="features-DIRECTORY-SEPARATOR-multiple_suites_2.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Difficult sum" classname="Adding difficult numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiple_suites_2.feature" line="11">
             <failure message="Then I must have 477: Failed asserting that 378 matches expected '477'."/>
           </testcase>
@@ -129,7 +129,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="skipped_test_cases">
-        <testsuite name="Skipped test cases" tests="2" skipped="2" failures="0" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Skipped test cases" file="features-DIRECTORY-SEPARATOR-skipped_test_cases.feature" tests="2" skipped="2" failures="0" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Skipped" classname="Skipped test cases" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-skipped_test_cases.feature" line="11">
             <failure message="BeforeScenario: This scenario has a failed setup (Exception)" type="setup"></failure>
           </testcase>
@@ -150,7 +150,7 @@ Feature: JUnit Formatter
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="stop_on_failure">
-        <testsuite name="Stop on failure" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="Stop on failure" file="features-DIRECTORY-SEPARATOR-stop_on_failure.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Failed" classname="Stop on failure" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-stop_on_failure.feature" line="11">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
           </testcase>

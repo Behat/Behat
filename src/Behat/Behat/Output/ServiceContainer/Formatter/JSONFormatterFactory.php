@@ -76,6 +76,7 @@ final class JSONFormatterFactory implements FormatterFactory
         $definition = new Definition(JSONFeaturePrinter::class, [
             new Reference('output.json.statistics.feature'),
             new Reference('output.node.listener.json.duration'),
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition('output.node.printer.json.feature', $definition);
 
