@@ -103,6 +103,7 @@ Feature: Remove prefix
                   "features": [
                       {
                           "name": "",
+                          "file": "test.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 1,
@@ -142,7 +143,7 @@ Feature: Remove prefix
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="" file="test.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="" classname="" status="failed" time="-IGNORE-VALUE-" file="test.feature" line="5">
             <failure message="And I have a step that throws an exception: Warning: Undefined variable $b in FeatureContext.php line 16"></failure>
           </testcase>

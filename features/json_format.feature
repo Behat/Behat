@@ -48,6 +48,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Adding numbers",
+                          "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                           "tests": 9,
                           "skipped": 0,
                           "failed": 3,
@@ -184,6 +185,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Adding Feature 1",
+                          "file": "features-DIRECTORY-SEPARATOR-multiple_features_1.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -202,6 +204,7 @@ Feature: JSON Formatter
                       },
                       {
                           "name": "Adding Feature 2",
+                          "file": "features-DIRECTORY-SEPARATOR-multiple_features_2.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -252,6 +255,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Use multiline titles",
+                          "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",
                           "tests": 2,
                           "skipped": 0,
                           "failed": 0,
@@ -309,6 +313,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Adding easy numbers",
+                          "file": "features-DIRECTORY-SEPARATOR-multiple_suites_1.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -338,6 +343,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Adding difficult numbers",
+                          "file": "features-DIRECTORY-SEPARATOR-multiple_suites_2.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 1,
@@ -394,6 +400,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Skipped test cases",
+                          "file": "features-DIRECTORY-SEPARATOR-skipped_test_cases.feature",
                           "tests": 2,
                           "skipped": 2,
                           "failed": 0,
@@ -463,6 +470,7 @@ Feature: JSON Formatter
                   "features": [
                       {
                           "name": "Stop on failure",
+                          "file": "features-DIRECTORY-SEPARATOR-stop_on_failure.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 1,

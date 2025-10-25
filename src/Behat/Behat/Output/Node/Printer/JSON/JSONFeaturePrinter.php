@@ -16,6 +16,7 @@ use Behat\Behat\Output\Statistics\PhaseStatistics;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JSONOutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 final class JSONFeaturePrinter implements FeaturePrinter
@@ -25,6 +26,7 @@ final class JSONFeaturePrinter implements FeaturePrinter
     public function __construct(
         private readonly PhaseStatistics $statistics,
         private readonly JSONDurationListener $durationListener,
+        private readonly ConfigurablePathPrinter $configurablePathPrinter,
     ) {
     }
 
@@ -46,14 +48,27 @@ final class JSONFeaturePrinter implements FeaturePrinter
         $outputPrinter = $formatter->getOutputPrinter();
         assert($outputPrinter instanceof JSONOutputPrinter);
 
-        $outputPrinter->extendFeatureAttributes([
+        $featureAttributes = [
             'name' => $this->currentFeature->getTitle() ?? '',
+        ];
+
+        $file = $this->currentFeature->getFile();
+        if ($file) {
+            $featureAttributes['file'] = $this->configurablePathPrinter->processPathsInText(
+                $file,
+                applyEditorUrl: false,
+            );
+        }
+
+        $featureAttributes += [
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failed' => $stats[TestResult::FAILED],
             'pending' => $stats[TestResult::PENDING],
             'undefined' => $stats[TestResult::UNDEFINED],
             'time' => (float) $this->durationListener->getFeatureDuration($this->currentFeature),
-        ]);
+        ];
+
+        $outputPrinter->extendFeatureAttributes($featureAttributes);
     }
 }

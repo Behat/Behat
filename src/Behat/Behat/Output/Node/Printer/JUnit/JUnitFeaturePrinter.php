@@ -16,6 +16,7 @@ use Behat\Behat\Output\Statistics\PhaseStatistics;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -30,6 +31,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
     public function __construct(
         private readonly PhaseStatistics $statistics,
         private readonly ?JUnitDurationListener $durationListener = null,
+        private readonly ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {
     }
 
@@ -51,14 +53,27 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $outputPrinter->extendTestsuiteAttributes([
+        $featureAttributes = [
             'name' => $this->currentFeature->getTitle(),
+        ];
+
+        $file = $this->currentFeature->getFile();
+        if ($file && $this->configurablePathPrinter instanceof ConfigurablePathPrinter) {
+            $featureAttributes['file'] = $this->configurablePathPrinter->processPathsInText(
+                $file,
+                applyEditorUrl: false,
+            );
+        }
+
+        $featureAttributes += [
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
             'time' => $this->durationListener instanceof JUnitDurationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
-        ]);
+        ];
+
+        $outputPrinter->extendTestsuiteAttributes($featureAttributes);
 
         $this->statistics->reset();
         $this->currentFeature = null;

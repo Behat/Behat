@@ -101,6 +101,7 @@ Feature: Editor URL
                   "features": [
                       {
                           "name": "",
+                          "file": "features-DIRECTORY-SEPARATOR-test.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 1,
@@ -139,7 +140,7 @@ Feature: Editor URL
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
+        <testsuite name="" file="features-DIRECTORY-SEPARATOR-test.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="" classname="" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-test.feature" line="5">
             <failure message="And I have a step that throws an exception: Warning: Undefined variable $b in features-DIRECTORY-SEPARATOR-bootstrap-DIRECTORY-SEPARATOR-FeatureContext.php line 16"></failure>
           </testcase>
