@@ -43,14 +43,19 @@ final class JSONExercisePrinter implements ExercisePrinter
         $outputPrinter = $formatter->getOutputPrinter();
         assert($outputPrinter instanceof JSONOutputPrinter);
 
-        $outputPrinter->extendExerciseAttributes([
+        $exerciseAttributes = [
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failed' => $stats[TestResult::FAILED],
             'pending' => $stats[TestResult::PENDING],
             'undefined' => $stats[TestResult::UNDEFINED],
-            'time' => (float) $this->durationListener->getExerciseDuration(),
-        ]);
+        ];
+
+        if ($formatter->getParameter('timer')) {
+            $exerciseAttributes['time'] = (float) $this->durationListener->getExerciseDuration();
+        }
+
+        $outputPrinter->extendExerciseAttributes($exerciseAttributes);
 
         $formatter->getOutputPrinter()->flush();
     }

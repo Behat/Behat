@@ -76,6 +76,7 @@ Feature: Remove prefix
       """
 
   Scenario: Remove prefixes in JSON formatter
+    Given I clear the default behat options
     When I run behat with the following additional options:
       | option    | value           |
       | --profile | remove_prefix   |
@@ -133,6 +134,7 @@ Feature: Remove prefix
       """
 
   Scenario: Remove prefixes in JUnit formatter
+    Given I clear the default behat options
     When I run behat with the following additional options:
       | option    | value           |
       | --profile | remove_prefix   |

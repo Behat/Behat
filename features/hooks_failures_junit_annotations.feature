@@ -22,6 +22,7 @@ Feature: Display hook failures location in junit printer using annotations
         Scenario: First scenario
           When I have a simple step
       """
+    And I clear the default behat options
 
   Scenario: Handling of a error in beforeSuite hook
     Given a file named "features/bootstrap/FeatureContext.php" with:

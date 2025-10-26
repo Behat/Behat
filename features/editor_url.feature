@@ -75,6 +75,7 @@ Feature: Editor URL
       """
 
   Scenario: Editor URL does not affect JSON formatter paths
+    Given I clear the default behat options
     When I run behat with the following additional options:
       | option    | value                                        |
       | --profile | editor_url                                   |
@@ -131,6 +132,7 @@ Feature: Editor URL
     """
 
   Scenario: Editor URL does not affect JUnit formatter paths
+    Given I clear the default behat options
     When I run behat with the following additional options:
       | option    | value                                      |
       | --profile | editor_url                                 |

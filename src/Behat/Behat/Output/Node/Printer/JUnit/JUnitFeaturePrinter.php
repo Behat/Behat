@@ -70,8 +70,11 @@ final class JUnitFeaturePrinter implements FeaturePrinter
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
             'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
-            'time' => $this->durationListener instanceof JUnitDurationListener ? $this->durationListener->getFeatureDuration($this->currentFeature) : '',
         ];
+
+        if ($formatter->getParameter('timer') && $this->durationListener instanceof JUnitDurationListener) {
+            $featureAttributes['time'] = $this->durationListener->getFeatureDuration($this->currentFeature);
+        }
 
         $outputPrinter->extendTestsuiteAttributes($featureAttributes);
 

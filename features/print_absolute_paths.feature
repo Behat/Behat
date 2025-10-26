@@ -42,6 +42,7 @@ Feature: Print absolute paths
       """
 
   Scenario: Print absolute paths in JSON formatter
+    Given I clear the default behat options
     When I run behat with the following additional options:
       | option    | value          |
       | --profile | absolute_paths |
@@ -98,6 +99,7 @@ Feature: Print absolute paths
       """
 
   Scenario: Print absolute paths in JUnit formatter
+    Given I clear the default behat options
     When I run behat with the following additional options:
       | option    | value          |
       | --profile | absolute_paths |

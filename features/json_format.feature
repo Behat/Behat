@@ -5,6 +5,7 @@ Feature: JSON Formatter
 
   Background:
     Given I initialise the working directory from the "TestReportFormat" fixtures folder
+    And I clear the default behat options
     And I provide the following options for all behat invocations:
       | option          | value |
       | --no-colors     |       |
@@ -520,3 +521,68 @@ Feature: JSON Formatter
       """
       A file name expected for the `output_path` option, but a directory was given.
       """
+
+  Scenario: JSON formatter omits timers when disabled
+    When I run behat with the following additional options:
+      | option            | value               |
+      | --suite           | multiple_features   |
+      | --out             | timer_disabled.json |
+      | --format-settings | '{"timer": false}'  |
+    Then it should pass with no output
+    And the "timer_disabled.json" file json should be like:
+      """
+      {
+          "tests": 2,
+          "skipped": 0,
+          "failed": 0,
+          "pending": 0,
+          "undefined": 0,
+          "suites": [
+              {
+                  "name": "multiple_features",
+                  "tests": 2,
+                  "skipped": 0,
+                  "failed": 0,
+                  "pending": 0,
+                  "undefined": 0,
+                  "features": [
+                      {
+                          "name": "Adding Feature 1",
+                          "file": "features-DIRECTORY-SEPARATOR-multiple_features_1.feature",
+                          "tests": 1,
+                          "skipped": 0,
+                          "failed": 0,
+                          "pending": 0,
+                          "undefined": 0,
+                          "scenarios": [
+                              {
+                                  "name": "Adding 4 to 10",
+                                  "status": "passed",
+                                  "file": "features-DIRECTORY-SEPARATOR-multiple_features_1.feature",
+                                  "line": 9
+                              }
+                          ]
+                      },
+                      {
+                          "name": "Adding Feature 2",
+                          "file": "features-DIRECTORY-SEPARATOR-multiple_features_2.feature",
+                          "tests": 1,
+                          "skipped": 0,
+                          "failed": 0,
+                          "pending": 0,
+                          "undefined": 0,
+                          "scenarios": [
+                              {
+                                  "name": "Adding 8 to 10",
+                                  "status": "passed",
+                                  "file": "features-DIRECTORY-SEPARATOR-multiple_features_2.feature",
+                                  "line": 9
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      }
+      """
+    And the file "timer_disabled.json" should be a valid document according to the json schema "schema.json"

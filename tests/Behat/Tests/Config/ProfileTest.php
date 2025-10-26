@@ -153,7 +153,9 @@ final class ProfileTest extends TestCase
                     'show_output' => 'in-summary',
                     'short_summary' => false,
                 ],
-                'junit' => [],
+                'junit' => [
+                    'timer' => true,
+                ],
             ],
         ], $profile->toArray());
     }
