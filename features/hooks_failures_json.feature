@@ -69,6 +69,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 2,
                           "failed": 0,
@@ -94,6 +95,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 1,
                           "failed": 0,
@@ -169,6 +171,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 0,
                           "failed": 0,
@@ -194,6 +197,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -274,6 +278,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 2,
                           "failed": 0,
@@ -305,6 +310,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -379,6 +385,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 0,
                           "failed": 0,
@@ -410,6 +417,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -484,6 +492,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 1,
                           "failed": 0,
@@ -515,6 +524,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -589,6 +599,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 0,
                           "failed": 0,
@@ -620,6 +631,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -694,6 +706,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 0,
                           "failed": 1,
@@ -725,6 +738,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,
@@ -799,6 +813,7 @@ Feature: Display hook failures location in json printer
                   "features": [
                       {
                           "name": "First feature",
+                          "file": "features-DIRECTORY-SEPARATOR-one.feature",
                           "tests": 2,
                           "skipped": 0,
                           "failed": 1,
@@ -830,6 +845,7 @@ Feature: Display hook failures location in json printer
                       },
                       {
                           "name": "Second feature",
+                          "file": "features-DIRECTORY-SEPARATOR-two.feature",
                           "tests": 1,
                           "skipped": 0,
                           "failed": 0,

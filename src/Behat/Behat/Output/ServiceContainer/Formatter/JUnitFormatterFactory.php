@@ -83,6 +83,7 @@ final class JUnitFormatterFactory implements FormatterFactory
         $definition = new Definition(JUnitFeaturePrinter::class, [
             new Reference('output.junit.statistics'),
             new Reference('output.node.listener.junit.duration'),
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition('output.node.printer.junit.feature', $definition);
 
