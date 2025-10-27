@@ -42,15 +42,15 @@ Feature: JUnit Formatter
           <testcase name="Failed" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="25">
             <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #1" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29">
+          <testcase name="Passed &amp; Failed with value=5 #1" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29">
             <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
           </testcase>
-          <testcase name="Passed &amp; Failed #2" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29"/>
-          <testcase name="Passed &amp; Failed #3" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29">
+          <testcase name="Passed &amp; Failed with value=10 #2" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29"/>
+          <testcase name="Passed &amp; Failed with value=23 #3" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29">
             <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
           </testcase>
-          <testcase name="Another Outline #1" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="39"/>
-          <testcase name="Another Outline #2" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="39"/>
+          <testcase name="Another Outline (5 = 15) #1" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="39"/>
+          <testcase name="Another Outline (10 = 20) #2" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="39"/>
         </testsuite>
       </testsuites>
       """

@@ -24,7 +24,7 @@ Feature: Adding numbers
     When I add 4
     Then I must have 13
 
-  Scenario Outline: Passed & Failed
+  Scenario Outline: Passed & Failed with value=<value>
     When I add <value>
     Then I must have <result>
 
@@ -34,7 +34,7 @@ Feature: Adding numbers
       |  10   | 20     |
       |  23   | 32     |
 
-  Scenario Outline: Another Outline
+  Scenario Outline: Another Outline (<value> = <result>)
     When I add <value>
     Then I must have <result>
 
