@@ -47,14 +47,19 @@ final class JSONSuitePrinter implements SuitePrinter
         $outputPrinter = $formatter->getOutputPrinter();
         assert($outputPrinter instanceof JSONOutputPrinter);
 
-        $outputPrinter->extendSuiteAttributes([
+        $suiteAttributes = [
             'name' => $this->currentSuite->getName(),
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failed' => $stats[TestResult::FAILED],
             'pending' => $stats[TestResult::PENDING],
             'undefined' => $stats[TestResult::UNDEFINED],
-            'time' => (float) $this->durationListener->getSuiteDuration($this->currentSuite),
-        ]);
+        ];
+
+        if ($formatter->getParameter('timer')) {
+            $suiteAttributes['time'] = (float) $this->durationListener->getSuiteDuration($this->currentSuite);
+        }
+
+        $outputPrinter->extendSuiteAttributes($suiteAttributes);
     }
 }

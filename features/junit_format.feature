@@ -5,6 +5,7 @@ Feature: JUnit Formatter
 
   Background:
     Given I initialise the working directory from the "TestReportFormat" fixtures folder
+    And I clear the default behat options
     And I provide the following options for all behat invocations:
       | option          | value            |
       | --no-colors     |                  |
@@ -179,3 +180,23 @@ Feature: JUnit Formatter
       """
       Directory expected for the `output_path` option, but a filename was given.
       """
+
+  Scenario: JUnit formatter omits timers when disabled
+    When I run behat with the following additional options:
+      | option            | value              |
+      | --suite           | multiple_features  |
+      | --format-settings | '{"timer": false}' |
+    Then it should pass with no output
+    And the "logs/multiple_features.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="multiple_features">
+        <testsuite name="Adding Feature 1" file="features-DIRECTORY-SEPARATOR-multiple_features_1.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="Adding 4 to 10" classname="Adding Feature 1" status="passed" file="features-DIRECTORY-SEPARATOR-multiple_features_1.feature" line="9"></testcase>
+        </testsuite>
+        <testsuite name="Adding Feature 2" file="features-DIRECTORY-SEPARATOR-multiple_features_2.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="Adding 8 to 10" classname="Adding Feature 2" status="passed" file="features-DIRECTORY-SEPARATOR-multiple_features_2.feature" line="9"></testcase>
+        </testsuite>
+      </testsuites>
+      """
+    And the file "logs/multiple_features.xml" should be a valid document according to "junit.xsd"

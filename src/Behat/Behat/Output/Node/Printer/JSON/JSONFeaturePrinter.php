@@ -66,8 +66,11 @@ final class JSONFeaturePrinter implements FeaturePrinter
             'failed' => $stats[TestResult::FAILED],
             'pending' => $stats[TestResult::PENDING],
             'undefined' => $stats[TestResult::UNDEFINED],
-            'time' => (float) $this->durationListener->getFeatureDuration($this->currentFeature),
         ];
+
+        if ($formatter->getParameter('timer')) {
+            $featureAttributes['time'] = (float) $this->durationListener->getFeatureDuration($this->currentFeature);
+        }
 
         $outputPrinter->extendFeatureAttributes($featureAttributes);
     }

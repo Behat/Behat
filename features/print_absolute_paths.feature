@@ -55,7 +55,6 @@ Feature: Print absolute paths
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -64,7 +63,6 @@ Feature: Print absolute paths
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "",
@@ -74,11 +72,9 @@ Feature: Print absolute paths
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "%%WORKING_DIR%%features-DIRECTORY-SEPARATOR-test.feature",
                                   "line": 5,
@@ -107,8 +103,8 @@ Feature: Print absolute paths
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="" file="%%WORKING_DIR%%features-DIRECTORY-SEPARATOR-test.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="" classname="" status="failed" time="-IGNORE-VALUE-" file="%%WORKING_DIR%%features-DIRECTORY-SEPARATOR-test.feature" line="5">
+        <testsuite name="" file="%%WORKING_DIR%%features-DIRECTORY-SEPARATOR-test.feature" tests="1" skipped="0" failures="1" errors="0">
+          <testcase name="" classname="" status="failed" file="%%WORKING_DIR%%features-DIRECTORY-SEPARATOR-test.feature" line="5">
             <failure message="And I have a step that throws an exception: Warning: Undefined variable $b in %%WORKING_DIR%%features-DIRECTORY-SEPARATOR-bootstrap-DIRECTORY-SEPARATOR-FeatureContext.php line 16"></failure>
           </testcase>
         </testsuite>
