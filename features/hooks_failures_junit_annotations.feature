@@ -22,7 +22,6 @@ Feature: Display hook failures location in junit printer using annotations
         Scenario: First scenario
           When I have a simple step
       """
-    And I clear the default behat options
 
   Scenario: Handling of a error in beforeSuite hook
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -55,14 +54,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="2" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="2" failures="0" errors="0">
+          <testcase name="First scenario" classname="First feature" status="skipped" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
             <failure message="BeforeSuite: Error in beforeSuite hook (Exception)" type="setup"></failure>
           </testcase>
-          <testcase name="Second scenario" classname="First feature" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="skipped" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="1" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="1" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="skipped" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -99,12 +98,12 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5"></testcase>
-          <testcase name="Second scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="5"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4">
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4">
             <failure message="AfterSuite: Error in afterSuite hook (Exception)" type="teardown"></failure>
           </testcase>
         </testsuite>
@@ -148,14 +147,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="2" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="2" failures="0" errors="0">
+          <testcase name="First scenario" classname="First feature" status="skipped" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
             <failure message="BeforeFeature: Error in beforeFeature hook (Exception)" type="setup"></failure>
           </testcase>
-          <testcase name="Second scenario" classname="First feature" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="skipped" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -197,14 +196,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5"></testcase>
-          <testcase name="Second scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="5"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="8">
             <failure message="AfterFeature: Error in afterFeature hook (Exception)" type="teardown"></failure>
           </testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -246,14 +245,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="1" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="skipped" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="1" failures="0" errors="0">
+          <testcase name="First scenario" classname="First feature" status="skipped" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
             <failure message="BeforeScenario: Error in beforeScenario hook (Exception)" type="setup"></failure>
           </testcase>
-          <testcase name="Second scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -295,14 +294,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
             <failure message="AfterScenario: Error in afterScenario hook (Exception)" type="teardown"></failure>
           </testcase>
-          <testcase name="Second scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -344,14 +343,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="1" errors="0">
+          <testcase name="First scenario" classname="First feature" status="failed" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
             <failure message="BeforeStep: When I have a simple step: Error in beforeStep hook (Exception)" type="setup"></failure>
           </testcase>
-          <testcase name="Second scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """
@@ -393,14 +392,14 @@ Feature: Display hook failures location in junit printer using annotations
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="First feature" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
+        <testsuite name="First feature" file="features-DIRECTORY-SEPARATOR-one.feature" tests="2" skipped="0" failures="1" errors="0">
+          <testcase name="First scenario" classname="First feature" status="failed" file="features-DIRECTORY-SEPARATOR-one.feature" line="5">
             <failure message="AfterStep: When I have a simple step: Error in afterStep hook (Exception)" type="teardown"></failure>
           </testcase>
-          <testcase name="Second scenario" classname="First feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
+          <testcase name="Second scenario" classname="First feature" status="passed" file="features-DIRECTORY-SEPARATOR-one.feature" line="8"></testcase>
         </testsuite>
-        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="First scenario" classname="Second feature" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
+        <testsuite name="Second feature" file="features-DIRECTORY-SEPARATOR-two.feature" tests="1" skipped="0" failures="0" errors="0">
+          <testcase name="First scenario" classname="Second feature" status="passed" file="features-DIRECTORY-SEPARATOR-two.feature" line="4"></testcase>
         </testsuite>
       </testsuites>
       """

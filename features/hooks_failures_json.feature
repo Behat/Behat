@@ -22,7 +22,6 @@ Feature: Display hook failures location in json printer
         Scenario: First scenario
           When I have a simple step
       """
-    And I clear the default behat options
 
   Scenario: Handling of a error in beforeSuite hook
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -57,7 +56,6 @@ Feature: Display hook failures location in json printer
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -66,7 +64,6 @@ Feature: Display hook failures location in json printer
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -76,18 +73,15 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 5
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -102,11 +96,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -159,7 +151,6 @@ Feature: Display hook failures location in json printer
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -168,7 +159,6 @@ Feature: Display hook failures location in json printer
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -178,18 +168,15 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 5
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -204,11 +191,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -266,7 +251,6 @@ Feature: Display hook failures location in json printer
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -275,7 +259,6 @@ Feature: Display hook failures location in json printer
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -285,18 +268,15 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 5
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -317,11 +297,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -373,7 +351,6 @@ Feature: Display hook failures location in json printer
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -382,7 +359,6 @@ Feature: Display hook failures location in json printer
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -392,18 +368,15 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 5
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -424,11 +397,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -480,7 +451,6 @@ Feature: Display hook failures location in json printer
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -489,7 +459,6 @@ Feature: Display hook failures location in json printer
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -499,11 +468,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "skipped",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "failures": [
@@ -516,7 +483,6 @@ Feature: Display hook failures location in json printer
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -531,11 +497,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -587,7 +551,6 @@ Feature: Display hook failures location in json printer
           "failed": 0,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -596,7 +559,6 @@ Feature: Display hook failures location in json printer
                   "failed": 0,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -606,11 +568,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 5,
@@ -623,7 +583,6 @@ Feature: Display hook failures location in json printer
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -638,11 +597,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -694,7 +651,6 @@ Feature: Display hook failures location in json printer
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -703,7 +659,6 @@ Feature: Display hook failures location in json printer
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -713,11 +668,9 @@ Feature: Display hook failures location in json printer
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "failures": [
@@ -730,7 +683,6 @@ Feature: Display hook failures location in json printer
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -745,11 +697,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
@@ -801,7 +751,6 @@ Feature: Display hook failures location in json printer
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -810,7 +759,6 @@ Feature: Display hook failures location in json printer
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "First feature",
@@ -820,11 +768,9 @@ Feature: Display hook failures location in json printer
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 5,
@@ -837,7 +783,6 @@ Feature: Display hook failures location in json printer
                               },
                               {
                                   "name": "Second scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-one.feature",
                                   "line": 8
@@ -852,11 +797,9 @@ Feature: Display hook failures location in json printer
                           "failed": 0,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "First scenario",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-two.feature",
                                   "line": 4
