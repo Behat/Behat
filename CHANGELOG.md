@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 * Implement JSON formatter by @carlos-granados in [#1674](https://github.com/Behat/Behat/pull/1674), [#1680](https://github.com/Behat/Behat/pull/1680),
-  [#1681](https://github.com/Behat/Behat/pull/1681, [#1677](https://github.com/Behat/Behat/pull/1677)
+  [#1681](https://github.com/Behat/Behat/pull/1681), [#1677](https://github.com/Behat/Behat/pull/1677)
   and [#1684](https://github.com/Behat/Behat/pull/1684).
 * Add feature `file` attribute on `<testsuite>` nodes in the JUnit formatters by @carlos-granados in [#1680](https://github.com/Behat/Behat/pull/1680)
 * Add `timer` option to disable reporting execution times in the JUnit formatter by @carlos-granados in [#1681](https://github.com/Behat/Behat/pull/1681)
