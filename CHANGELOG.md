@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.26.0] - 2025-10-28
+
+### Changed
+* Support configuring how file paths are rendered by the JUnit formatter (relative or absolute, removing a prefix, etc).
+  Previously, the JUnit formatter would print an absolute path unless the file was beneath the current working
+  directory.
+  The new default is to print paths relative to the Behat base directory - in most cases this will also be the current
+  working directory and therefore the result will be the same. However, in some cases the reported file paths will change
+  so you may wish to review the configuration e.g. if your tooling aggregates build results over time.
+  By @carlos-granados in [#1677](https://github.com/Behat/Behat/pull/1677)
+
+### Added
+* Implement JSON formatter by @carlos-granados in [#1674](https://github.com/Behat/Behat/pull/1674), [#1680](https://github.com/Behat/Behat/pull/1680),
+  [#1681](https://github.com/Behat/Behat/pull/1681) and [#1677](https://github.com/Behat/Behat/pull/1677).
+* Add feature `file` attribute on `<testsuite>` nodes in the JUnit formatters by @carlos-granados in [#1680](https://github.com/Behat/Behat/pull/1680)
+* Add `timer` option to disable reporting execution times in the JUnit formatter by @carlos-granados in [#1681](https://github.com/Behat/Behat/pull/1681)
+
+### Fixed
+* `error_reporting` in the Behat configuration should take precedence over system defaults by @carlos-granados in [#1675](https://github.com/Behat/Behat/pull/1675)
+* Ensure runtime assertions are checked during `--convert-config` by @carlos-granados in [#1679](https://github.com/Behat/Behat/pull/1679)
+* Include consistent index & placeholders for Example names in JUnit by @acoulton in [#1682]https://github.com/Behat/Behat/pull/1682)
+  based on work previously done by @uuf6429.
+
+### Internal
+* Add AGENTS instructions by @carlos-granados in [#1672](https://github.com/Behat/Behat/pull/1672)
+* Fix php version constraint in composer.json by @carlos-granados in [#1678](https://github.com/Behat/Behat/pull/1678)
+
+
 ## [3.25.0] - 2025-10-03
 
 ### Added
@@ -11,7 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 * Provide more context when failing with unexpected multiline args by @acoulton in [#1668](https://github.com/Behat/Behat/pull/1668)
-  
+
 ### Internal
 * Remove PHP 8 error conversion by @carlos-granados in [#1665](https://github.com/Behat/Behat/pull/1665)
 * Apply Rector rules to use PHP 8.1 language features by @carlos-granados in [#1666](https://github.com/Behat/Behat/pull/1666)
@@ -1333,6 +1361,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.26.0]: https://github.com/Behat/Behat/compare/v3.25.0...v3.26.0
 [3.25.0]: https://github.com/Behat/Behat/compare/v3.24.1...v3.25.0
 [3.24.1]: https://github.com/Behat/Behat/compare/v3.24.0...v3.24.1
 [3.24.0]: https://github.com/Behat/Behat/compare/v3.23.0...v3.24.0
