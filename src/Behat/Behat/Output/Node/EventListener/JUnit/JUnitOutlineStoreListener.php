@@ -29,8 +29,6 @@ final class JUnitOutlineStoreListener implements EventListener
 {
     /**
      * @var array
-     *
-     * @deprecated This will be removed in the next major as the JUnit formatter no longer uses this information
      */
     private $lineScenarioMap = [];
 
@@ -52,8 +50,6 @@ final class JUnitOutlineStoreListener implements EventListener
 
     /**
      * Captures outline into the ivar on outline BEFORE event.
-     *
-     * @deprecated this method will be removed in the next major as the JUnit formatter no longer uses this information
      */
     private function captureOutlineOnBeforeOutlineEvent(Event $event)
     {
