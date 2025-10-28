@@ -104,7 +104,7 @@ Feature: JSON Formatter
                                   ]
                               },
                               {
-                                  "name": "Passed & Failed #1",
+                                  "name": "Passed & Failed with value=5 #1",
                                   "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
@@ -117,14 +117,14 @@ Feature: JSON Formatter
                                   ]
                               },
                               {
-                                  "name": "Passed & Failed #2",
+                                  "name": "Passed & Failed with value=10 #2",
                                   "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 29
                               },
                               {
-                                  "name": "Passed & Failed #3",
+                                  "name": "Passed & Failed with value=23 #3",
                                   "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
@@ -137,14 +137,14 @@ Feature: JSON Formatter
                                   ]
                               },
                               {
-                                  "name": "Another Outline #1",
+                                  "name": "Another Outline (5 = 15) #1",
                                   "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
                                   "line": 39
                               },
                               {
-                                  "name": "Another Outline #2",
+                                  "name": "Another Outline (10 = 20) #2",
                                   "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-single_feature.feature",
