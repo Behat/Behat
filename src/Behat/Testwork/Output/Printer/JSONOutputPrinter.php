@@ -67,6 +67,8 @@ final class JSONOutputPrinter extends StreamOutputPrinter
         $this->exercise = [
             'suites' => &$this->suites,
         ];
+
+        $this->flush();
     }
 
     /**
