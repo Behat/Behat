@@ -510,7 +510,12 @@ Feature: JSON Formatter
       """
       cannot extend interface Behat\Behat\Context\Context
       """
-    And the "abort_on_php_error.json" file should not exist
+    And the "abort_on_php_error.json" file json should be like:
+      """
+      {
+          "suites": []
+      }
+      """
 
   Scenario: Aborting due to invalid output path
     When I run behat with the following additional options:
