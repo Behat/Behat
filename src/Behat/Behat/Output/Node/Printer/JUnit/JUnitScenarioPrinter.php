@@ -62,8 +62,11 @@ final class JUnitScenarioPrinter
             'name' => $name,
             'classname' => $feature->getTitle(),
             'status' => $this->resultConverter->convertResultToString($result),
-            'time' => $this->durationListener instanceof JUnitDurationListener ? $this->durationListener->getDuration($scenario) : '',
         ];
+
+        if ($formatter->getParameter('timer') && $this->durationListener instanceof JUnitDurationListener) {
+            $testCaseAttributes['time'] = $this->durationListener->getDuration($scenario);
+        }
 
         if ($file && $this->configurablePathPrinter instanceof ConfigurablePathPrinter) {
             $testCaseAttributes['file'] = $this->configurablePathPrinter->processPathsInText(

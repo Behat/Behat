@@ -4,7 +4,7 @@
     "title": "Test Report",
     "type": "object",
     "additionalProperties": false,
-    "required": ["tests", "skipped", "failed", "pending", "undefined", "time", "suites"],
+    "required": ["tests", "skipped", "failed", "pending", "undefined", "suites"],
     "properties": {
         "tests": { "type": "integer", "minimum": 0 },
         "skipped": { "type": "integer", "minimum": 0 },
@@ -41,7 +41,7 @@
             "type": "object",
             "title": "Suite",
             "additionalProperties": false,
-            "required": ["name", "tests", "skipped", "failed", "pending", "undefined", "time", "features"],
+            "required": ["name", "tests", "skipped", "failed", "pending", "undefined", "features"],
             "properties": {
                 "name": { "type": "string" },
                 "tests": { "type": "integer", "minimum": 0 },
@@ -66,7 +66,7 @@
             "type": "object",
             "title": "Feature",
             "additionalProperties": false,
-            "required": ["name", "file", "tests", "skipped", "failed", "pending", "undefined", "time", "scenarios"],
+            "required": ["name", "file", "tests", "skipped", "failed", "pending", "undefined", "scenarios"],
             "properties": {
                 "name": { "type": "string" },
                 "file": { "type": "string" },
@@ -92,7 +92,7 @@
             "type": "object",
             "title": "Scenario",
             "additionalProperties": false,
-            "required": ["name", "time", "status", "file", "line"],
+            "required": ["name", "status", "file", "line"],
             "properties": {
                 "name": { "type": "string" },
                 "time": { "$ref": "#/$defs/DurationSeconds" },

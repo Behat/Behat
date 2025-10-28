@@ -90,7 +90,6 @@ Feature: Remove prefix
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -99,7 +98,6 @@ Feature: Remove prefix
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "",
@@ -109,11 +107,9 @@ Feature: Remove prefix
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "test.feature",
                                   "line": 5,
@@ -143,8 +139,8 @@ Feature: Remove prefix
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="" file="test.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="" classname="" status="failed" time="-IGNORE-VALUE-" file="test.feature" line="5">
+        <testsuite name="" file="test.feature" tests="1" skipped="0" failures="1" errors="0">
+          <testcase name="" classname="" status="failed" file="test.feature" line="5">
             <failure message="And I have a step that throws an exception: Warning: Undefined variable $b in FeatureContext.php line 16"></failure>
           </testcase>
         </testsuite>

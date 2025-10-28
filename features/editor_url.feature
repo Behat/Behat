@@ -88,7 +88,6 @@ Feature: Editor URL
           "failed": 1,
           "pending": 0,
           "undefined": 0,
-          "time": -IGNORE-VALUE-,
           "suites": [
               {
                   "name": "default",
@@ -97,7 +96,6 @@ Feature: Editor URL
                   "failed": 1,
                   "pending": 0,
                   "undefined": 0,
-                  "time": -IGNORE-VALUE-,
                   "features": [
                       {
                           "name": "",
@@ -107,11 +105,9 @@ Feature: Editor URL
                           "failed": 1,
                           "pending": 0,
                           "undefined": 0,
-                          "time": -IGNORE-VALUE-,
                           "scenarios": [
                               {
                                   "name": "",
-                                  "time": -IGNORE-VALUE-,
                                   "status": "failed",
                                   "file": "features-DIRECTORY-SEPARATOR-test.feature",
                                   "line": 5,
@@ -140,8 +136,8 @@ Feature: Editor URL
       """
       <?xml version="1.0" encoding="UTF-8"?>
       <testsuites name="default">
-        <testsuite name="" file="features-DIRECTORY-SEPARATOR-test.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
-          <testcase name="" classname="" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-test.feature" line="5">
+        <testsuite name="" file="features-DIRECTORY-SEPARATOR-test.feature" tests="1" skipped="0" failures="1" errors="0">
+          <testcase name="" classname="" status="failed" file="features-DIRECTORY-SEPARATOR-test.feature" line="5">
             <failure message="And I have a step that throws an exception: Warning: Undefined variable $b in features-DIRECTORY-SEPARATOR-bootstrap-DIRECTORY-SEPARATOR-FeatureContext.php line 16"></failure>
           </testcase>
         </testsuite>

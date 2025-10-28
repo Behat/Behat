@@ -54,9 +54,13 @@ final class JSONScenarioPrinter implements ScenarioPrinter
 
         $scenarioAttributes = [
             'name' => $name,
-            'time' => (float) $this->durationListener->getDuration($scenario),
-            'status' => $this->resultConverter->convertResultToString($result),
         ];
+
+        if ($formatter->getParameter('timer')) {
+            $scenarioAttributes['time'] = (float) $this->durationListener->getDuration($scenario);
+        }
+
+        $scenarioAttributes['status'] = $this->resultConverter->convertResultToString($result);
 
         $file = $this->currentFeature->getFile();
         if ($file) {
