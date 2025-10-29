@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   based on work previously done by @uuf6429.
 
 ### Internal
-* Add AGENTS instructions by @carlos-granados in [#1672](https://github.com/Behat/Behat/pull/1672)
+* Add AGENTS.md file with instructions for AI agents by @carlos-granados in [#1672](https://github.com/Behat/Behat/pull/1672)
 * Fix php version constraint in composer.json by @carlos-granados in [#1678](https://github.com/Behat/Behat/pull/1678)
 
 
