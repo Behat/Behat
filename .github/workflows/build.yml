@@ -51,12 +51,18 @@ jobs:
           - php: 8.2
             os: ubuntu-latest
             composer-mode: update
-            symfony-version: '5.4'
+            symfony-version: '5.4.*'
 
           - php: 8.2
             os: ubuntu-latest
             composer-mode: update
-            symfony-version: '6.4'
+            symfony-version: '6.4.*'
+
+          - php: 8.4
+            os: ubuntu-latest
+            composer-mode: update
+            composer-minimum-stability: RC
+            symfony-version: '8.0.*'
 
     steps:
       - uses: actions/checkout@v4
@@ -69,6 +75,10 @@ jobs:
           ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
           coverage: none
 
+      - name: Configure Composer minimum stability
+        if: matrix.composer-minimum-stability != ''
+        run: composer config minimum-stability ${{ matrix.composer-minimum-stability }}
+
       - name: Install symfony/flex
         if: matrix.symfony-version != ''
         run: |
@@ -78,7 +88,7 @@ jobs:
       - name: Install latest dependencies
         if: matrix.composer-mode == 'update'
         env:
-          SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
+          SYMFONY_REQUIRE: ${{ matrix.symfony-version }}
         run: composer update ${{ matrix.php == '8.5' && '--ignore-platform-req=php+' || '' }}
 
       - name: Install lowest dependencies
