@@ -126,7 +126,8 @@ final class Application extends BaseApplication
             $this->configurationLoader->setConfigurationFilePath($path);
         }
 
-        $this->add($this->createCommand($input, $output));
+        $command = $this->createCommand($input, $output);
+        method_exists($this, 'addCommand') ? $this->addCommand($command) : $this->add($command);
 
         return parent::doRun($input, $output);
     }

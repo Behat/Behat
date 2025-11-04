@@ -78,7 +78,7 @@ final class CallExtension implements Extension
         $this->loadCallHandlers($container, $config['error_reporting']);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processCallFilters($container);
         $this->processCallHandlers($container);
