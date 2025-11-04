@@ -115,7 +115,7 @@ final class DefinitionExtension implements Extension
         $this->loadDocblockHelper($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processSearchEngines($container);
         $this->processPatternPolicies($container);

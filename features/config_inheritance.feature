@@ -134,7 +134,7 @@ Feature: Config inheritance
               $definition->addTag('context.initializer', array('priority' => 100));
           }
 
-          public function process(ContainerBuilder $container) {}
+          public function process(ContainerBuilder $container): void {}
       }
 
       return new CustomExtension;

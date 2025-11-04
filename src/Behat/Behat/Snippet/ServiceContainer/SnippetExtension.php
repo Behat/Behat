@@ -77,7 +77,7 @@ class SnippetExtension implements Extension
         $this->loadWriter($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processGenerators($container);
         $this->processAppenders($container);

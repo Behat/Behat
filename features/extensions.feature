@@ -94,7 +94,7 @@ Feature: Extensions
               $definition->addTag('context.initializer', array('priority' => 100));
           }
 
-          public function process(ContainerBuilder $container) {}
+          public function process(ContainerBuilder $container): void {}
       }
 
       return new CustomExtension;
@@ -185,7 +185,7 @@ Feature: Extensions
           public function getConfigKey() { return 'custom_handlers'; }
           public function configure(ArrayNodeDefinition $builder) { }
           public function initialize(Behat\Testwork\ServiceContainer\ExtensionManager $extensionManager) {}
-          public function process(ContainerBuilder $container) {}
+          public function process(ContainerBuilder $container): void {}
 
           public function load(ContainerBuilder $container, array $config)
           {

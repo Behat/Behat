@@ -45,7 +45,7 @@ final class GherkinTranslationsExtension implements Extension
         $this->loadController($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
     }
 
