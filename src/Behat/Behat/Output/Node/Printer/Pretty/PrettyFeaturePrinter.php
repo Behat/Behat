@@ -112,6 +112,11 @@ final class PrettyFeaturePrinter implements FeaturePrinter
      */
     private function prependTagWithTagSign($tag)
     {
+        if (str_starts_with($tag, '@')) {
+            return $tag;
+        }
+
+        // The legacy mode of the behat/gherkin parser is trimming the `@` from tags so we need to re-add it for pretty-printing
         return '@' . $tag;
     }
 }
