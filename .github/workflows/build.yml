@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [8.1, 8.2, 8.3, 8.4]
+        php: [8.1, 8.2, 8.3, 8.4, 8.5]
         os: [ubuntu-latest]
         composer-mode: [update]
         symfony-version: ['']
@@ -77,7 +77,7 @@ jobs:
         if: matrix.composer-mode == 'update'
         env:
           SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
-        run: composer update ${{ matrix.php == '8.4' && '--ignore-platform-req=php+' || '' }}
+        run: composer update ${{ matrix.php == '8.5' && '--ignore-platform-req=php+' || '' }}
 
       - name: Install lowest dependencies
         if: matrix.composer-mode == 'lowest'
@@ -95,7 +95,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [8.1, 8.4]
+        php: [8.1, 8.5]
     steps:
       - uses: actions/checkout@v4
 
@@ -188,7 +188,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1', '8.2', '8.3', '8.4']
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
     steps:
       - uses: actions/checkout@v4
 
