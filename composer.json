@@ -21,24 +21,24 @@
         "composer/xdebug-handler": "^1.4 || ^2.0 || ^3.0",
         "nikic/php-parser": "^4.19.2 || ^5.2",
         "psr/container": "^1.0 || ^2.0",
-        "symfony/config": "^5.4 || ^6.4 || ^7.0",
-        "symfony/console": "^5.4 || ^6.4 || ^7.0",
-        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0",
-        "symfony/event-dispatcher": "^5.4 || ^6.4 || ^7.0",
-        "symfony/translation": "^5.4 || ^6.4 || ^7.0",
-        "symfony/yaml": "^5.4 || ^6.4 || ^7.0"
+        "symfony/config": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "symfony/console": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "symfony/event-dispatcher": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "symfony/translation": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "symfony/yaml": "^5.4 || ^6.4 || ^7.0 || ^8.0"
     },
 
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.68",
         "opis/json-schema": "^2.5",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^9.6",
         "rector/rector": "2.1.7",
         "sebastian/diff": "^4.0",
         "symfony/polyfill-php84": "^1.31",
-        "symfony/process": "^5.4 || ^6.4 || ^7.0",
-        "symfony/filesystem": "^5.4 || ^6.4 || ^7.0"
+        "symfony/process": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "symfony/filesystem": "^5.4 || ^6.4 || ^7.0 || ^8.0",
+        "php-cs-fixer/shim": "^3.89"
     },
 
     "suggest": {

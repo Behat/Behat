@@ -17,3 +17,7 @@ parameters:
                 - src/Behat/Behat/Tester/Runtime/RuntimeFeatureTester.php
                 - src/Behat/Behat/Transformation/Transformation/ReturnTypeTransformation.php
                 - src/Behat/Testwork/Ordering/Cli/OrderController.php
+        -
+            identifier: function.impossibleType
+            paths:
+                - src/Behat/Testwork/Cli/Application.php

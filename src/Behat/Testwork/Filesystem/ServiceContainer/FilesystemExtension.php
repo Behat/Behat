@@ -49,7 +49,7 @@ final class FilesystemExtension implements Extension
         $this->loadFilesystemLogger($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
     }
 

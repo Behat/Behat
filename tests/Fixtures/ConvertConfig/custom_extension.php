@@ -39,7 +39,7 @@ class CustomExtension implements Extension
         $formatterDefinition->addTag(OutputExtension::FORMATTER_TAG);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
     }
 }
@@ -51,7 +51,7 @@ class CustomFormatter implements Formatter
     ) {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [];
     }
