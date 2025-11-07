@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Output\Statistics;
 
+use Behat\Behat\Tester\Result\StepResult;
+
 /**
  * Behat step stat.
  *
@@ -20,42 +22,15 @@ namespace Behat\Behat\Output\Statistics;
 class StepStat
 {
     /**
-     * @var string
+     * @param StepResult::* $resultCode
      */
-    private $text;
-    /**
-     * @var string
-     */
-    private $path;
-    /**
-     * @var integer
-     */
-    private $resultCode;
-    /**
-     * @var null|string
-     */
-    private $error;
-    /**
-     * @var null|string
-     */
-    private $stdOut;
-
-    /**
-     * Initializes step stat.
-     *
-     * @param string      $text
-     * @param string      $path
-     * @param integer     $resultCode
-     * @param null|string $error
-     * @param null|string $stdOut
-     */
-    public function __construct($text, $path, $resultCode, $error = null, $stdOut = null)
-    {
-        $this->text = $text;
-        $this->path = $path;
-        $this->resultCode = $resultCode;
-        $this->error = $error;
-        $this->stdOut = $stdOut;
+    public function __construct(
+        private readonly string $text,
+        private readonly string $path,
+        private readonly int $resultCode,
+        private readonly ?string $error = null,
+        private readonly ?string $stdOut = null,
+    ) {
     }
 
     /**
@@ -81,7 +56,7 @@ class StepStat
     /**
      * Returns step result code.
      *
-     * @return integer
+     * @return StepResult::*
      */
     public function getResultCode()
     {
@@ -91,7 +66,7 @@ class StepStat
     /**
      * Returns step error (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getError()
     {
@@ -101,7 +76,7 @@ class StepStat
     /**
      * Returns step output (if has one).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

@@ -13,10 +13,10 @@ namespace Behat\Behat\HelperContainer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunctionAbstract;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionException;
 
 /**
  * Automatically wires arguments of a given function from inside the container by using type-hints.
@@ -26,25 +26,15 @@ use ReflectionException;
 final class ArgumentAutowirer
 {
     /**
-     * @var PsrContainerInterface
-     */
-    private $container;
-
-    /**
      * Initialises wirer.
-     *
-     * @param PsrContainerInterface $container
      */
-    public function __construct(PsrContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly PsrContainerInterface $container,
+    ) {
     }
 
     /**
      * Autowires given arguments using provided container.
-     *
-     * @param ReflectionFunctionAbstract $reflection
-     * @param array $arguments
      *
      * @return array
      *
@@ -67,9 +57,7 @@ final class ArgumentAutowirer
      *
      * Argument is wireable if it was not previously set and it has a class type-hint.
      *
-     * @param array               $arguments
-     * @param integer             $index
-     * @param ReflectionParameter $parameter
+     * @param int $index
      *
      * @return bool
      */
@@ -86,7 +74,7 @@ final class ArgumentAutowirer
         return (bool) $this->getClassFromParameter($parameter);
     }
 
-    private function getClassFromParameter(ReflectionParameter $parameter) : ?string
+    private function getClassFromParameter(ReflectionParameter $parameter): ?string
     {
         if (!($type = $parameter->getType()) || !($type instanceof ReflectionNamedType)) {
             return null;
@@ -97,8 +85,7 @@ final class ArgumentAutowirer
 
             if ($typeString == 'self') {
                 return $parameter->getDeclaringClass()->getName();
-            }
-            elseif ($typeString == 'parent') {
+            } elseif ($typeString == 'parent') {
                 return $parameter->getDeclaringClass()->getParentClass()->getName();
             }
 
@@ -106,8 +93,7 @@ final class ArgumentAutowirer
             new ReflectionClass($typeString);
 
             return $typeString;
-
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return null;
         }
     }

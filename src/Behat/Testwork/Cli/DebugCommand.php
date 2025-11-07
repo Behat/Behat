@@ -24,41 +24,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class DebugCommand extends BaseCommand
 {
     /**
-     * @var Application
-     */
-    private $application;
-    /**
-     * @var ConfigurationLoader
-     */
-    private $configurationLoader;
-    /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initialises command.
-     *
-     * @param Application         $application
-     * @param ConfigurationLoader $configurationLoader
-     * @param ExtensionManager    $extensionManager
      */
     public function __construct(
-        Application $application,
-        ConfigurationLoader $configurationLoader,
-        ExtensionManager $extensionManager
+        private readonly Application $application,
+        private readonly ConfigurationLoader $configurationLoader,
+        private readonly ExtensionManager $extensionManager,
     ) {
-        $this->application = $application;
-        $this->configurationLoader = $configurationLoader;
-        $this->extensionManager = $extensionManager;
-
         parent::__construct('debug');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(sprintf('%s version %s', $this->application->getName(), $this->application->getVersion()));
 
@@ -73,7 +49,7 @@ final class DebugCommand extends BaseCommand
 
         $debug = $this->extensionManager->debugInformation();
         $output->writeln('--- extensions');
-        $output->writeln(sprintf('    extensions loaded: %s', count($debug['extensions_list']) ? implode(', ', $debug['extensions_list']) : 'none'));
+        $output->writeln(sprintf('    extensions loaded: %s', count($debug['extensions_list']) > 0 ? implode(', ', $debug['extensions_list']) : 'none'));
 
         $output->writeln('');
 

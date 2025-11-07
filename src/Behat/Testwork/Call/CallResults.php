@@ -18,35 +18,29 @@ use IteratorAggregate;
  * Aggregates multiple call results into a collection and provides an informational API on top of that.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @implements IteratorAggregate<int, CallResult>
  */
 final class CallResults implements Countable, IteratorAggregate
 {
-    /**
-     * @var CallResult[]
-     */
-    private $results;
-
     /**
      * Initializes call results collection.
      *
      * @param CallResult[] $results
      */
-    public function __construct(array $results = array())
-    {
-        $this->results = $results;
+    public function __construct(
+        private readonly array $results = [],
+    ) {
     }
 
     /**
      * Merges results from provided collection into the current one.
      *
-     * @param CallResults $first
-     * @param CallResults $second
-     *
      * @return CallResults
      */
     public static function merge(CallResults $first, CallResults $second)
     {
-        return new static(array_merge($first->toArray(), $second->toArray()));
+        return new self(array_merge($first->toArray(), $second->toArray()));
     }
 
     /**
@@ -83,8 +77,6 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns amount of results.
-     *
-     * @return integer
      */
     public function count(): int
     {
@@ -93,8 +85,6 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Returns collection iterator.
-     *
-     * @return ArrayIterator
      */
     public function getIterator(): ArrayIterator
     {

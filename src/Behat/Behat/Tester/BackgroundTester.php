@@ -26,8 +26,6 @@ interface BackgroundTester
     /**
      * Sets up background for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
      * @param bool     $skip
      *
      * @return Setup
@@ -37,8 +35,6 @@ interface BackgroundTester
     /**
      * Tests background.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
      * @param bool     $skip
      *
      * @return TestResult
@@ -48,10 +44,7 @@ interface BackgroundTester
     /**
      * Tears down background after a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
      * @param bool     $skip
-     * @param TestResult  $result
      *
      * @return Teardown
      */

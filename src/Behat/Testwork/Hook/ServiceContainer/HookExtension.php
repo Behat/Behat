@@ -13,6 +13,9 @@ namespace Behat\Testwork\Hook\ServiceContainer;
 use Behat\Behat\Tester\ServiceContainer\TesterExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
+use Behat\Testwork\Hook\HookDispatcher;
+use Behat\Testwork\Hook\HookRepository;
+use Behat\Testwork\Hook\Tester\HookableSuiteTester;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -33,31 +36,19 @@ class HookExtension implements Extension
     public const DISPATCHER_ID = 'hook.dispatcher';
     public const REPOSITORY_ID = 'hook.repository';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'hooks';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadDispatcher($container);
@@ -65,52 +56,43 @@ class HookExtension implements Extension
         $this->loadHookableTesters($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }
 
     /**
      * Loads hook dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookDispatcher', array(
+        $definition = new Definition(HookDispatcher::class, [
             new Reference(self::REPOSITORY_ID),
-            new Reference(CallExtension::CALL_CENTER_ID)
-        ));
+            new Reference(CallExtension::CALL_CENTER_ID),
+        ]);
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }
 
     /**
      * Loads hook repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\HookRepository', array(
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+        $definition = new Definition(HookRepository::class, [
+            new Reference(EnvironmentExtension::MANAGER_ID),
+        ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
 
     /**
      * Loads hookable testers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadHookableTesters(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Hook\Tester\HookableSuiteTester', array(
+        $definition = new Definition(HookableSuiteTester::class, [
             new Reference(TesterExtension::SUITE_TESTER_ID),
-            new Reference(self::DISPATCHER_ID)
-        ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => 9999));
+            new Reference(self::DISPATCHER_ID),
+        ]);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => 9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.hookable', $definition);
     }
 }

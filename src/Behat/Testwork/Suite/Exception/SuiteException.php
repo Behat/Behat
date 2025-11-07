@@ -22,21 +22,16 @@ use InvalidArgumentException;
 class SuiteException extends InvalidArgumentException implements TestworkException
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
      * Initializes exception.
      *
      * @param string         $message
      * @param string         $name
-     * @param Exception|null $previous
      */
-    public function __construct($message, $name, Exception $previous = null)
-    {
-        $this->name = $name;
-
+    public function __construct(
+        $message,
+        private $name,
+        ?Exception $previous = null,
+    ) {
         parent::__construct($message, 0, $previous);
     }
 

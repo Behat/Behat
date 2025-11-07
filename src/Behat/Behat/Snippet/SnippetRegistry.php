@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Snippet;
 
+use Behat\Behat\Context\Snippet\Generator\CannotGenerateStepPatternException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
@@ -24,24 +25,27 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * @var SnippetGenerator[]
      */
-    private $generators = array();
+    private $generators = [];
     /**
      * @var UndefinedStep[]
      */
-    private $undefinedSteps = array();
+    private $undefinedSteps = [];
     /**
      * @var AggregateSnippet[]
      */
-    private $snippets = array();
+    private $snippets = [];
     /**
      * @var bool
      */
     private $snippetsGenerated = false;
 
     /**
+     * @var list<CannotGenerateStepPatternException>
+     */
+    private array $exceptions = [];
+
+    /**
      * Registers snippet generator.
-     *
-     * @param SnippetGenerator $generator
      */
     public function registerSnippetGenerator(SnippetGenerator $generator)
     {
@@ -52,10 +56,7 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * Generates and registers snippet.
      *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
-     * @return null|Snippet
+     * @return void
      */
     public function registerUndefinedStep(Environment $environment, StepNode $step)
     {
@@ -88,24 +89,40 @@ final class SnippetRegistry implements SnippetRepository
     }
 
     /**
+     * @return list<CannotGenerateStepPatternException>
+     */
+    public function getGenerationFailures(): array
+    {
+        $this->generateSnippets();
+
+        return $this->exceptions;
+    }
+
+    /**
      * Generates snippets for undefined steps.
      */
-    private function generateSnippets()
+    private function generateSnippets(): void
     {
         if ($this->snippetsGenerated) {
-            return null;
+            return;
         }
 
-        $snippetsSet = array();
+        $snippetsSet = [];
         foreach ($this->undefinedSteps as $i => $undefinedStep) {
-            $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
+            try {
+                $snippet = $this->generateSnippet($undefinedStep->getEnvironment(), $undefinedStep->getStep());
+            } catch (CannotGenerateStepPatternException $e) {
+                $this->exceptions[] = $e;
+                unset($this->undefinedSteps[$i]);
+                continue;
+            }
 
             if (!$snippet) {
                 continue;
             }
 
             if (!isset($snippetsSet[$snippet->getHash()])) {
-                $snippetsSet[$snippet->getHash()] = array();
+                $snippetsSet[$snippet->getHash()] = [];
             }
 
             $snippetsSet[$snippet->getHash()][] = $snippet;
@@ -114,9 +131,7 @@ final class SnippetRegistry implements SnippetRepository
 
         $this->snippets = array_values(
             array_map(
-                function (array $snippets) {
-                    return new AggregateSnippet($snippets);
-                },
+                fn (array $snippets) => new AggregateSnippet($snippets),
                 $snippetsSet
             )
         );
@@ -125,10 +140,7 @@ final class SnippetRegistry implements SnippetRepository
     }
 
     /**
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
-     * @return null|Snippet
+     * @return Snippet|null
      */
     private function generateSnippet(Environment $environment, StepNode $step)
     {

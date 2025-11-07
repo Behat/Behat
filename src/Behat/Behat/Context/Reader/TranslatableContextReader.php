@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\Reader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Exception\UnknownTranslationResourceException;
 use Behat\Behat\Context\TranslatableContext;
+use ReflectionClass;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -23,39 +24,30 @@ use Symfony\Component\Translation\Translator;
 final class TranslatableContextReader implements ContextReader
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Initializes loader.
-     *
-     * @param Translator $translator
      */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly Translator $translator,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see TranslatableContext
      */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        $reflClass = new \ReflectionClass($contextClass);
+        $reflClass = new ReflectionClass($contextClass);
 
-        if (!$reflClass->implementsInterface('Behat\Behat\Context\TranslatableContext')) {
-            return array();
+        if (!$reflClass->implementsInterface(TranslatableContext::class)) {
+            return [];
         }
 
         $assetsId = $environment->getSuite()->getName();
-        foreach (call_user_func(array($contextClass, 'getTranslationResources')) as $path) {
+        foreach (call_user_func([$contextClass, 'getTranslationResources']) as $path) {
             $this->addTranslationResource($path, $assetsId);
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -68,22 +60,15 @@ final class TranslatableContextReader implements ContextReader
      */
     private function addTranslationResource($path, $assetsId)
     {
-        switch ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
-            case 'yml':
-                $this->addTranslatorResource('yaml', $path, basename($path, '.' . $ext), $assetsId);
-                break;
-            case 'xliff':
-                $this->addTranslatorResource('xliff', $path, basename($path, '.' . $ext), $assetsId);
-                break;
-            case 'php':
-                $this->addTranslatorResource('php', $path, basename($path, '.' . $ext), $assetsId);
-                break;
-            default:
-                throw new UnknownTranslationResourceException(sprintf(
-                    'Can not read translations from `%s`. File type is not supported.',
-                    $path
-                ), $path);
-        }
+        match ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
+            'yml' => $this->addTranslatorResource('yaml', $path, basename($path, '.' . $ext), $assetsId),
+            'xliff' => $this->addTranslatorResource('xliff', $path, basename($path, '.' . $ext), $assetsId),
+            'php' => $this->addTranslatorResource('php', $path, basename($path, '.' . $ext), $assetsId),
+            default => throw new UnknownTranslationResourceException(sprintf(
+                'Can not read translations from `%s`. File type is not supported.',
+                $path
+            ), $path),
+        };
     }
 
     /**

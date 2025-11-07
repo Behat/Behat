@@ -22,20 +22,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class Command extends BaseCommand
 {
     /**
-     * @var Controller[]
-     */
-    private $controllers = array();
-
-    /**
      * Initializes command.
      *
      * @param string       $commandName
      * @param Controller[] $controllers
      */
-    public function __construct($commandName, array $controllers)
-    {
-        $this->controllers = $controllers;
-
+    public function __construct(
+        $commandName,
+        private readonly array $controllers,
+    ) {
         parent::__construct($commandName);
     }
 
@@ -55,9 +50,9 @@ final class Command extends BaseCommand
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return integer Return code of one of the processors or 0 if none of them returned integer
+     * @return int Return code of one of the processors or 0 if none of them returned integer
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         foreach ($this->controllers as $controller) {
             if (is_int($return = $controller->execute($input, $output))) {

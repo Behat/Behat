@@ -25,39 +25,31 @@ use Symfony\Component\Translation\Translator;
 final class LanguageController implements Controller
 {
     /**
-     * @var Translator
-     */
-    private $translator;
-
-    /**
      * Initializes controller.
-     *
-     * @param Translator $translator
      */
-    public function __construct(Translator $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly Translator $translator,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
-        $command->addOption('--lang', null, InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--lang',
+            null,
+            InputOption::VALUE_REQUIRED,
             'Print output in particular language.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('lang')) {
-            return;
+            return null;
         }
 
         $this->translator->setLocale($input->getOption('lang'));
+
+        return null;
     }
 }

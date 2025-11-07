@@ -20,6 +20,7 @@ use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Argument\ArgumentOrganiser;
+use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
 use Behat\Testwork\Environment\Environment;
 
 /**
@@ -32,69 +33,45 @@ use Behat\Testwork\Environment\Environment;
 final class RepositorySearchEngine implements SearchEngine
 {
     /**
-     * @var DefinitionRepository
-     */
-    private $repository;
-    /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var DefinitionTranslator
-     */
-    private $translator;
-    /**
-     * @var ArgumentOrganiser
-     */
-    private $argumentOrganiser;
-
-    /**
      * Initializes search engine.
-     *
-     * @param DefinitionRepository $repository
-     * @param PatternTransformer   $patternTransformer
-     * @param DefinitionTranslator $translator
-     * @param ArgumentOrganiser    $argumentOrganiser
      */
     public function __construct(
-        DefinitionRepository $repository,
-        PatternTransformer $patternTransformer,
-        DefinitionTranslator $translator,
-        ArgumentOrganiser $argumentOrganiser
+        private readonly DefinitionRepository $repository,
+        private readonly PatternTransformer $patternTransformer,
+        private readonly DefinitionTranslator $translator,
+        private readonly ArgumentOrganiser $argumentOrganiser,
     ) {
-        $this->repository = $repository;
-        $this->patternTransformer = $patternTransformer;
-        $this->translator = $translator;
-        $this->argumentOrganiser = $argumentOrganiser;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws AmbiguousMatchException
      */
     public function searchDefinition(
         Environment $environment,
         FeatureNode $feature,
-        StepNode $step
+        StepNode $step,
     ) {
         $suite = $environment->getSuite();
         $language = $feature->getLanguage();
         $stepText = $step->getText();
         $multi = $step->getArguments();
+        $stepLocation = $feature->getFile().':'.$step->getLine();
 
-        $definitions = array();
+        $definitions = [];
         $result = null;
 
         foreach ($this->repository->getEnvironmentDefinitions($environment) as $definition) {
             $definition = $this->translator->translateDefinition($suite, $definition, $language);
-
-            if (!$newResult = $this->match($definition, $stepText, $multi)) {
+            $newResult = $this->match($definition, $stepLocation, $stepText, $multi);
+            if (!$newResult instanceof SearchResult) {
                 continue;
             }
 
             $result = $newResult;
-            $definitions[] = $newResult->getMatchedDefinition();
+            $matchedDefinition = $newResult->getMatchedDefinition();
+            if ($matchedDefinition instanceof Definition) {
+                $definitions[] = $matchedDefinition;
+            }
         }
 
         if (count($definitions) > 1) {
@@ -107,23 +84,30 @@ final class RepositorySearchEngine implements SearchEngine
     /**
      * Attempts to match provided definition against a step text.
      *
-     * @param Definition          $definition
-     * @param string              $stepText
      * @param ArgumentInterface[] $multiline
-     *
-     * @return null|SearchResult
      */
-    private function match(Definition $definition, $stepText, array $multiline)
+    private function match(Definition $definition, string $stepLocation, string $stepText, array $multiline): ?SearchResult
     {
-        $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
-
-        if (!preg_match($regex, $stepText, $match)) {
+        $match = $this->patternTransformer->matchPattern($definition->getPattern(), $stepText);
+        if ($match === false) {
             return null;
         }
 
         $function = $definition->getReflection();
         $match = array_merge($match, array_values($multiline));
-        $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
+
+        try {
+            $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
+        } catch (UnexpectedMultilineArgumentException $e) {
+            // Add the location of the feature and step that caused the problem.
+            // We can't do this where the exception is originally thrown because the ArgumentOrganiser interface
+            // is used for other types of function / argument processing e.g. Context constructors, so it has no
+            // knowledge of the concept of a Step.
+            throw new UnexpectedMultilineArgumentException(
+                $e->getMessage() . PHP_EOL . 'This is probably an error in your step implementation or in ' . $stepLocation,
+                previous: $e
+            );
+        }
 
         return new SearchResult($definition, $stepText, $arguments);
     }

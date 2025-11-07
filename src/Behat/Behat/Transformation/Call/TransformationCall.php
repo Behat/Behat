@@ -23,27 +23,15 @@ use Behat\Testwork\Environment\Environment;
 final class TransformationCall extends EnvironmentCall
 {
     /**
-     * @var Definition
-     */
-    private $definition;
-
-    /**
      * Initializes call.
-     *
-     * @param Environment    $environment
-     * @param Definition     $definition
-     * @param Transformation $transformation
-     * @param array          $arguments
      */
     public function __construct(
         Environment $environment,
-        Definition $definition,
+        private readonly Definition $definition,
         Transformation $transformation,
-        array $arguments
+        array $arguments,
     ) {
         parent::__construct($environment, $transformation, $arguments);
-
-        $this->definition = $definition;
     }
 
     /**

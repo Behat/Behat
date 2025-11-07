@@ -20,23 +20,13 @@ use ReflectionFunctionAbstract;
 final class PregMatchArgumentOrganiser implements ArgumentOrganiser
 {
     /**
-     * @var ArgumentOrganiser
-     */
-    private $baseOrganiser;
-
-    /**
      * Initialises organiser.
-     *
-     * @param ArgumentOrganiser $organiser
      */
-    public function __construct(ArgumentOrganiser $organiser)
-    {
-        $this->baseOrganiser = $organiser;
+    public function __construct(
+        private readonly ArgumentOrganiser $baseOrganiser,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
     {
         $cleanedArguments = $this->cleanupMatchDuplicates($arguments);
@@ -52,23 +42,22 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      * duplication and also drops the first full match element from the
      * array.
      *
-     * @param array $match
-     *
      * @return mixed[]
      */
     private function cleanupMatchDuplicates(array $match)
     {
         $cleanMatch = array_slice($match, 1);
-        $arguments = array();
+        $arguments = [];
 
         $keys = array_keys($cleanMatch);
-        for ($keyIndex = 0; $keyIndex < count($keys); $keyIndex++) {
+        $numKeys = count($keys);
+        for ($keyIndex = 0; $keyIndex < $numKeys; ++$keyIndex) {
             $key = $keys[$keyIndex];
 
             $arguments[$key] = $cleanMatch[$key];
 
-            if ($this->isKeyAStringAndNexOneIsAnInteger($keyIndex, $keys)) {
-                $keyIndex += 1;
+            if ($this->isKeyAStringAndNextOneIsAnInteger($keyIndex, $keys)) {
+                ++$keyIndex;
             }
         }
 
@@ -78,15 +67,15 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if key at provided index is a string and next key in the array is an integer.
      *
-     * @param integer $keyIndex
+     * @param int     $keyIndex
      * @param mixed[] $keys
      *
      * @return bool
      */
-    private function isKeyAStringAndNexOneIsAnInteger($keyIndex, array $keys)
+    private function isKeyAStringAndNextOneIsAnInteger($keyIndex, array $keys)
     {
         $keyIsAString = is_string($keys[$keyIndex]);
-        $nextKeyIsAnInteger = isset($keys[$keyIndex + 1]) && is_integer($keys[$keyIndex + 1]);
+        $nextKeyIsAnInteger = isset($keys[$keyIndex + 1]) && is_int($keys[$keyIndex + 1]);
 
         return $keyIsAString && $nextKeyIsAnInteger;
     }

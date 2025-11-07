@@ -24,36 +24,22 @@ use Behat\Testwork\Hook\Scope\HookScope;
 final class HookDispatcher
 {
     /**
-     * @var HookRepository
-     */
-    private $repository;
-    /**
-     * @var CallCenter
-     */
-    private $callCenter;
-
-    /**
      * Initializes hook dispatcher.
-     *
-     * @param HookRepository $repository
-     * @param CallCenter     $callCenter
      */
-    public function __construct(HookRepository $repository, CallCenter $callCenter)
-    {
-        $this->repository = $repository;
-        $this->callCenter = $callCenter;
+    public function __construct(
+        private readonly HookRepository $repository,
+        private readonly CallCenter $callCenter,
+    ) {
     }
 
     /**
      * Dispatches hooks for a specified event.
      *
-     * @param HookScope $scope
-     *
      * @return CallResults
      */
     public function dispatchScopeHooks(HookScope $scope)
     {
-        $results = array();
+        $results = [];
         foreach ($this->repository->getScopeHooks($scope) as $hook) {
             $results[] = $this->dispatchHook($scope, $hook);
         }
@@ -63,9 +49,6 @@ final class HookDispatcher
 
     /**
      * Dispatches single event hook.
-     *
-     * @param HookScope $scope
-     * @param Hook      $hook
      *
      * @return CallResult
      */

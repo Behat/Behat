@@ -14,6 +14,11 @@ use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
+use Behat\Testwork\Suite\Cli\InitializationController;
+use Behat\Testwork\Suite\Cli\SuiteController;
+use Behat\Testwork\Suite\Generator\GenericSuiteGenerator;
+use Behat\Testwork\Suite\SuiteBootstrapper;
+use Behat\Testwork\Suite\SuiteRegistry;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -45,54 +50,41 @@ final class SuiteExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'suites';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
-            ->defaultValue(array('default' => array(
-                'enabled'    => true,
-                'type'       => null,
-                'settings'   => array()
-            )))
-            ->treatNullLike(array())
-            ->treatFalseLike(array())
+        $builder = $builder
+            ->defaultValue(['default' => [
+                'enabled' => true,
+                'type' => null,
+                'settings' => [],
+            ]])
+            ->treatNullLike([])
+            ->treatFalseLike([])
             ->useAttributeAsKey('name')
             ->normalizeKeys(false)
             ->prototype('array')
                 ->beforeNormalization()
-                    ->ifTrue(function ($suite) {
-                        return is_array($suite) && count($suite);
-                    })
+                    ->ifTrue(fn ($suite) => is_array($suite) && count($suite))
                     ->then(function ($suite) {
-                        $suite['settings'] = $suite['settings'] ?? array();
+                        $suite['settings'] ??= [];
 
                         foreach ($suite as $key => $val) {
-                            $suiteKeys = array('enabled', 'type', 'settings');
+                            $suiteKeys = ['enabled', 'type', 'settings'];
                             if (!in_array($key, $suiteKeys)) {
                                 $suite['settings'][$key] = $val;
                                 unset($suite[$key]);
@@ -102,34 +94,35 @@ final class SuiteExtension implements Extension
                         return $suite;
                     })
                 ->end()
+        ;
+        assert($builder instanceof ArrayNodeDefinition);
+        $childrenBuilder = $builder
                 ->normalizeKeys(false)
                 ->addDefaultsIfNotSet()
-                ->treatTrueLike(array('enabled' => true))
-                ->treatNullLike(array('enabled' => true))
-                ->treatFalseLike(array('enabled' => false))
+                ->treatTrueLike(['enabled' => true])
+                ->treatNullLike(['enabled' => true])
+                ->treatFalseLike(['enabled' => false])
                 ->children()
+        ;
+        $childrenBuilder
                     ->booleanNode('enabled')
                         ->info('Enables/disables suite')
                         ->defaultTrue()
-                    ->end()
+        ;
+        $childrenBuilder
                     ->scalarNode('type')
                         ->info('Specifies suite type')
                         ->defaultValue(null)
-                    ->end()
+        ;
+        $childrenBuilder
                     ->arrayNode('settings')
                         ->info('Specifies suite extra settings')
-                        ->defaultValue(array())
+                        ->defaultValue([])
                         ->useAttributeAsKey('name')
                         ->prototype('variable')->end()
-                    ->end()
-                ->end()
-            ->end()
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->setSuiteConfigurations($container, $config);
@@ -140,9 +133,6 @@ final class SuiteExtension implements Extension
         $this->loadGenericSuiteGenerator($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processGenerators($container);
@@ -151,22 +141,19 @@ final class SuiteExtension implements Extension
 
     /**
      * Generates and sets suites parameter to container.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $suites
      */
     private function setSuiteConfigurations(ContainerBuilder $container, array $suites)
     {
-        $configuredSuites = array();
+        $configuredSuites = [];
         foreach ($suites as $name => $config) {
             if (!$config['enabled']) {
                 continue;
             }
 
-            $configuredSuites[$name] = array(
-                'type'     => $config['type'],
+            $configuredSuites[$name] = [
+                'type' => $config['type'],
                 'settings' => $config['settings'],
-            );
+            ];
         }
 
         $container->setParameter('suite.configurations', $configuredSuites);
@@ -174,76 +161,64 @@ final class SuiteExtension implements Extension
 
     /**
      * Loads suite registry controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRegistryController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\Cli\SuiteController', array(
+        $definition = new Definition(SuiteController::class, [
             new Reference(self::REGISTRY_ID),
-            '%suite.configurations%'
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 1100));
+            '%suite.configurations%',
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 1100]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.suite', $definition);
     }
 
     /**
      * Loads suite bootstrap controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadBootstrapController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\Cli\InitializationController', array(
+        $definition = new Definition(InitializationController::class, [
             new Reference(self::REGISTRY_ID),
-            new Reference(self::BOOTSTRAPPER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 900));
+            new Reference(self::BOOTSTRAPPER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 900]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.initialization', $definition);
     }
 
     /**
      * Loads suite registry.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadRegistry(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\SuiteRegistry');
+        $definition = new Definition(SuiteRegistry::class);
         $container->setDefinition(self::REGISTRY_ID, $definition);
     }
 
     /**
      * Loads suite bootstrapper.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadBootstrapper(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Suite\SuiteBootstrapper');
+        $definition = new Definition(SuiteBootstrapper::class);
         $container->setDefinition(self::BOOTSTRAPPER_ID, $definition);
     }
 
     /**
      * Loads generic suite generator.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadGenericSuiteGenerator(ContainerBuilder $container)
     {
-        $container->setParameter('suite.generic.default_settings', array());
+        $container->setParameter('suite.generic.default_settings', []);
 
-        $definition = new Definition('Behat\Testwork\Suite\Generator\GenericSuiteGenerator', array(
-            '%suite.generic.default_settings%'
-        ));
-        $definition->addTag(SuiteExtension::GENERATOR_TAG, array('priority' => 50));
+        $definition = new Definition(GenericSuiteGenerator::class, [
+            '%suite.generic.default_settings%',
+        ]);
+        $definition->addTag(SuiteExtension::GENERATOR_TAG, ['priority' => 50]);
         $container->setDefinition(SuiteExtension::GENERATOR_TAG . '.generic', $definition);
     }
 
     /**
      * Processes suite generators.
-     *
-     * @param ContainerBuilder $container
      */
     private function processGenerators(ContainerBuilder $container)
     {
@@ -251,14 +226,12 @@ final class SuiteExtension implements Extension
         $definition = $container->getDefinition(self::REGISTRY_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSuiteGenerator', array($reference));
+            $definition->addMethodCall('registerSuiteGenerator', [$reference]);
         }
     }
 
     /**
      * Processes suite setups.
-     *
-     * @param ContainerBuilder $container
      */
     private function processSetups(ContainerBuilder $container)
     {
@@ -266,7 +239,7 @@ final class SuiteExtension implements Extension
         $definition = $container->getDefinition(self::BOOTSTRAPPER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerSuiteSetup', array($reference));
+            $definition->addMethodCall('registerSuiteSetup', [$reference]);
         }
     }
 }

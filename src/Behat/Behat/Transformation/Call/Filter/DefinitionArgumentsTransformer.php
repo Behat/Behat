@@ -26,39 +26,31 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * @var ArgumentTransformer[]
      */
-    private $argumentTransformers = array();
+    private $argumentTransformers = [];
 
     /**
      * Registers new argument transformer.
-     *
-     * @param ArgumentTransformer $transformer
      */
     public function registerArgumentTransformer(ArgumentTransformer $transformer)
     {
         $this->argumentTransformers[] = $transformer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsCall(Call $call)
     {
         return $call instanceof DefinitionCall;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterCall(Call $call)
     {
         if (!$call instanceof DefinitionCall) {
             throw new UnsupportedCallException(sprintf(
                 'DefinitionArgumentTransformer can not filter `%s` call.',
-                get_class($call)
+                $call::class
             ), $call);
         }
 
-        $newArguments = array();
+        $newArguments = [];
         $transformed = false;
         foreach ($call->getArguments() as $index => $value) {
             $newValue = $this->transformArgument($call, $index, $value);
@@ -87,11 +79,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * Transforms call argument using registered transformers.
      *
-     * @param DefinitionCall $definitionCall
-     * @param integer|string $index
-     * @param mixed          $value
-     *
-     * @return mixed
+     * @param int|string $index
      */
     private function transformArgument(DefinitionCall $definitionCall, $index, $value)
     {

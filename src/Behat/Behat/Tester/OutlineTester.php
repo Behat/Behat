@@ -27,9 +27,6 @@ interface OutlineTester
     /**
      * Sets up background for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
      * @param bool     $skip
      *
      * @return Setup
@@ -39,9 +36,6 @@ interface OutlineTester
     /**
      * Tests outline.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
      * @param bool     $skip
      *
      * @return TestResult
@@ -51,11 +45,7 @@ interface OutlineTester
     /**
      * Sets up background for a test.
      *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param OutlineNode $outline
      * @param bool     $skip
-     * @param TestResult  $result
      *
      * @return Teardown
      */

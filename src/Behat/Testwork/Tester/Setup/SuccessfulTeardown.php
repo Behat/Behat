@@ -17,17 +17,11 @@ namespace Behat\Testwork\Tester\Setup;
  */
 final class SuccessfulTeardown implements Teardown
 {
-    /**
-     * {@inheritdoc}
-     */
     public function isSuccessful()
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasOutput()
     {
         return false;

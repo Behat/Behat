@@ -25,28 +25,19 @@ use ReflectionClass;
 final class ServicesResolver implements ArgumentResolver
 {
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
      * Initialises resolver.
-     *
-     * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        private readonly ContainerInterface $container,
+    ) {
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws ContainerExceptionInterface
      */
     public function resolveArguments(ReflectionClass $classReflection, array $arguments)
     {
-        return array_map(array($this, 'resolveArgument'), $arguments);
+        return array_map([$this, 'resolveArgument'], $arguments);
     }
 
     /**
@@ -54,10 +45,6 @@ final class ServicesResolver implements ArgumentResolver
      *
      * Convention is strings starting with `@` are considered services and
      * are expected to be present in the container.
-     *
-     * @param mixed $value
-     *
-     * @return mixed
      *
      * @throws ContainerExceptionInterface
      */

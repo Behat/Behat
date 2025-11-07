@@ -31,18 +31,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettyOutlineTablePrinter implements OutlineTablePrinter
 {
     /**
-     * @var ScenarioPrinter
-     */
-    private $scenarioPrinter;
-    /**
-     * @var StepPrinter
-     */
-    private $stepPrinter;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
      * @var string
      */
     private $indentText;
@@ -54,29 +42,20 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     /**
      * Initializes printer.
      *
-     * @param ScenarioPrinter         $scenarioPrinter
-     * @param StepPrinter             $stepPrinter
-     * @param ResultToStringConverter $resultConverter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
-        ScenarioPrinter $scenarioPrinter,
-        StepPrinter $stepPrinter,
-        ResultToStringConverter $resultConverter,
+        private readonly ScenarioPrinter $scenarioPrinter,
+        private readonly StepPrinter $stepPrinter,
+        private readonly ResultToStringConverter $resultConverter,
         $indentation = 4,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
-        $this->scenarioPrinter = $scenarioPrinter;
-        $this->stepPrinter = $stepPrinter;
-        $this->resultConverter = $resultConverter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline, array $results)
     {
         $this->scenarioPrinter->printHeader($formatter, $feature, $outline);
@@ -85,9 +64,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
         $this->printExamplesTableHeader($formatter->getOutputPrinter(), $outline->getExampleTable());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();
@@ -96,8 +72,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     /**
      * Prints example steps with definition paths (if has some), but without exceptions or state (skipped).
      *
-     * @param Formatter    $formatter
-     * @param OutlineNode  $outline
      * @param StepNode[]   $steps
      * @param StepResult[] $results
      */
@@ -114,9 +88,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
 
     /**
      * Prints examples table header.
-     *
-     * @param OutputPrinter    $printer
-     * @param ExampleTableNode $table
      */
     private function printExamplesTableHeader(OutputPrinter $printer, ExampleTableNode $table)
     {
@@ -138,8 +109,6 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
-        return function ($col) use ($style) {
-            return sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
-        };
+        return fn ($col) => sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
     }
 }

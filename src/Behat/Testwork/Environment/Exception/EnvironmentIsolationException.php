@@ -21,26 +21,15 @@ use RuntimeException;
 final class EnvironmentIsolationException extends RuntimeException implements EnvironmentException
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var mixed
-     */
-    private $subject;
-
-    /**
      * Initializes exception.
      *
      * @param string      $message
-     * @param Environment $environment
-     * @param mixed       $testSubject
      */
-    public function __construct($message, Environment $environment, $testSubject = null)
-    {
-        $this->environment = $environment;
-        $this->subject = $testSubject;
-
+    public function __construct(
+        $message,
+        private readonly Environment $environment,
+        private $subject = null,
+    ) {
         parent::__construct($message);
     }
 
@@ -56,8 +45,6 @@ final class EnvironmentIsolationException extends RuntimeException implements En
 
     /**
      * Returns test subject that caused exception.
-     *
-     * @return mixed
      */
     public function getSubject()
     {

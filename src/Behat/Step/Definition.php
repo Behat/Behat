@@ -12,10 +12,11 @@ namespace Behat\Step;
 
 /**
  * Marker interface for all Attributes regarding
- * Call definitions
+ * Call definitions.
  *
  * @internal Only meant as marker, not as an extension point
  */
 interface Definition
 {
+    public function getPattern(): ?string;
 }

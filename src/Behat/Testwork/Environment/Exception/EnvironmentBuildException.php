@@ -21,20 +21,14 @@ use RuntimeException;
 final class EnvironmentBuildException extends RuntimeException implements EnvironmentException
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
-     * @param Suite  $suite
      */
-    public function __construct($message, Suite $suite)
-    {
-        $this->suite = $suite;
-
+    public function __construct(
+        $message,
+        private readonly Suite $suite,
+    ) {
         parent::__construct($message);
     }
 

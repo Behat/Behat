@@ -9,47 +9,40 @@ Feature: Profiles
       <?php
 
       use Behat\Behat\Context\Context;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
           private $result;
           private $numbers;
 
-          /**
-           * @Given /I have basic calculator/
-           */
+          #[Given('/I have basic calculator/')]
           public function iHaveBasicCalculator() {
               $this->result  = 0;
               $this->numbers = array();
           }
 
-          /**
-           * @Given /I have entered (\d+)/
-           */
+          #[Given('/I have entered (\d+)/')]
           public function iHaveEntered($number) {
               $this->numbers[] = intval($number);
           }
 
-          /**
-           * @When /I add/
-           */
+          #[When('/I add/')]
           public function iAdd() {
               $this->result  = array_sum($this->numbers);
               $this->numbers = array();
           }
 
-          /**
-           * @When /I sub/
-           */
+          #[When('/I sub/')]
           public function iSub() {
               $this->result  = array_shift($this->numbers);
               $this->result -= array_sum($this->numbers);
               $this->numbers = array();
           }
 
-          /**
-           * @Then /The result should be (\d+)/
-           */
+          #[Then('/The result should be (\d+)/')]
           public function theResultShouldBe($result) {
               PHPUnit\Framework\Assert::assertEquals($result, $this->result);
           }
@@ -80,21 +73,32 @@ Feature: Profiles
           progress: false
           pretty: ~
       """
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        formatters:
-          pretty:   false
-          progress: ~
+      <?php
 
-      pretty_without_paths:
-        formatters:
-          progress: false
-          pretty:
-            paths: false
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
 
-      imports:
-        - pretty.yml
+      $config = new Config(['imports' => ['pretty.yml']]);
+      $config
+        ->withProfile(new Profile('default', [
+          'formatters' => [
+            'pretty' => false,
+            'progress' => null,
+          ],
+        ]))
+        ->withProfile(new Profile('pretty_without_paths', [
+          'formatters' => [
+            'progress' => false,
+            'pretty' => [
+              'paths' => false,
+            ],
+          ],
+        ]))
+      ;
+
+      return $config;
       """
 
   Scenario:

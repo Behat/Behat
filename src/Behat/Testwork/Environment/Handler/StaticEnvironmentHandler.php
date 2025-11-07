@@ -21,33 +21,21 @@ use Behat\Testwork\Suite\Suite;
  */
 final class StaticEnvironmentHandler implements EnvironmentHandler
 {
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildEnvironment(Suite $suite)
     {
         return new StaticEnvironment($suite);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
     {
         return $environment instanceof StaticEnvironment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isolateEnvironment(Environment $environment, $testSubject = null)
     {
         return $environment;

@@ -25,22 +25,21 @@ final class ServiceProcessor
     /**
      * Finds and sorts (by priority) service references by provided tag.
      *
-     * @param ContainerBuilder $container
      * @param string           $tag
      *
      * @return Reference[]
      */
     public function findAndSortTaggedServices(ContainerBuilder $container, $tag)
     {
-        $serviceTags = array();
+        $serviceTags = [];
         foreach ($container->findTaggedServiceIds($tag) as $id => $tags) {
             $firstTags = current($tags);
 
-            $serviceTags[] = array_merge(array('priority' => 0), $firstTags, array('id' => $id));
+            $serviceTags[] = array_merge(['priority' => 0], $firstTags, ['id' => $id]);
         }
 
-        usort($serviceTags, function ($tag1, $tag2) { return $tag2['priority'] - $tag1['priority']; });
-        $serviceReferences = array_map(function ($tag) { return new Reference($tag['id']); }, $serviceTags);
+        usort($serviceTags, fn ($tag1, $tag2) => $tag2['priority'] - $tag1['priority']);
+        $serviceReferences = array_map(fn ($tag) => new Reference($tag['id']), $serviceTags);
 
         return $serviceReferences;
     }
@@ -51,7 +50,6 @@ final class ServiceProcessor
      * The wrappers are applied by descending priority.
      * The first argument of the wrapper service receives the inner service.
      *
-     * @param ContainerBuilder $container
      * @param string           $target     The id of the service being decorated
      * @param string           $wrapperTag The tag used by wrappers
      */

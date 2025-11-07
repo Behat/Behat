@@ -17,23 +17,15 @@ namespace Behat\Behat\Context\Snippet\Generator;
 final class AggregatePatternIdentifier implements PatternIdentifier
 {
     /**
-     * @var PatternIdentifier[]
-     */
-    private $identifiers;
-
-    /**
      * Initialises identifier.
      *
      * @param PatternIdentifier[] $identifiers
      */
-    public function __construct(array $identifiers)
-    {
-        $this->identifiers = $identifiers;
+    public function __construct(
+        private readonly array $identifiers,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function guessPatternType($contextClass)
     {
         foreach ($this->identifiers as $identifier) {

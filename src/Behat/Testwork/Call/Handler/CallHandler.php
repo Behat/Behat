@@ -26,16 +26,12 @@ interface CallHandler
     /**
      * Checks if handler supports call.
      *
-     * @param Call $call
-     *
      * @return bool
      */
     public function supportsCall(Call $call);
 
     /**
      * Handles call and returns call result.
-     *
-     * @param Call $call
      *
      * @return CallResult
      */

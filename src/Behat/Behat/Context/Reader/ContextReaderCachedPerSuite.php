@@ -20,44 +20,31 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 final class ContextReaderCachedPerSuite implements ContextReader
 {
     /**
-     * @var ContextReader
-     */
-    private $childReader;
-    /**
      * @var array[]
      */
-    private $cachedCallees = array();
+    private $cachedCallees = [];
 
     /**
      * Initializes reader.
-     *
-     * @param ContextReader $childReader
      */
-    public function __construct(ContextReader $childReader)
-    {
-        $this->childReader = $childReader;
+    public function __construct(
+        private readonly ContextReader $childReader,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
         $key = $this->generateCacheKey($environment, $contextClass);
 
-        if (isset($this->cachedCallees[$key])) {
-            return $this->cachedCallees[$key];
-        }
-
-        return $this->cachedCallees[$key] = $this->childReader->readContextCallees(
-            $environment, $contextClass
+        return $this->cachedCallees[$key] ?? $this->cachedCallees[$key] = $this->childReader->readContextCallees(
+            $environment,
+            $contextClass
         );
     }
 
     /**
      * Generates cache key.
      *
-     * @param ContextEnvironment $environment
      * @param string             $contextClass
      *
      * @return string

@@ -10,19 +10,24 @@
 
 namespace Behat\Step;
 
+use Attribute;
+
 /**
- * Represents an Attribute for Then steps
+ * Represents an Attribute for Then steps.
  */
-#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Then implements Definition
 {
     /**
-     * @var string
+     * @param string|null $pattern
      */
-    public $pattern;
+    public function __construct(
+        public $pattern = null,
+    ) {
+    }
 
-    public function __construct($pattern = null)
+    public function getPattern(): ?string
     {
-        $this->pattern = $pattern;
+        return $this->pattern;
     }
 }

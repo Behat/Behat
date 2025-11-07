@@ -13,15 +13,18 @@ namespace Behat\Testwork\Ordering\Orderer;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
- * Algorithm for prioritising Specification execution
+ * Algorithm for prioritising Specification execution.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
  */
 interface Orderer
 {
     /**
-     * @param SpecificationIterator[] $scenarioIterators
-     * @return SpecificationIterator[]
+     * @template T
+     *
+     * @param SpecificationIterator<T>[] $scenarioIterators
+     *
+     * @return SpecificationIterator<T>[]
      */
     public function order(array $scenarioIterators);
 

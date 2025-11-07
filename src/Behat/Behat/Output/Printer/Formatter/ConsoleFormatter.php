@@ -21,6 +21,8 @@ final class ConsoleFormatter extends BaseOutputFormatter
 {
     public const CUSTOM_PATTERN = '/{\+([a-z-_]+)}(.*?){\-\\1}/si';
 
+    public const HREF_PATTERN = '/<href=([^>]+)>(.*?)<\/>/';
+
     /**
      * Formats a message according to the given styles.
      *
@@ -30,7 +32,10 @@ final class ConsoleFormatter extends BaseOutputFormatter
      */
     public function format($message): string
     {
-        return preg_replace_callback(self::CUSTOM_PATTERN, array($this, 'replaceStyle'), $message);
+        $formattedMessage = preg_replace_callback(self::CUSTOM_PATTERN, [$this, 'replaceStyle'], $message) ??
+            'Error formatting output: ' . preg_last_error_msg();
+
+        return self::replaceHref($formattedMessage);
     }
 
     /**
@@ -53,5 +58,22 @@ final class ConsoleFormatter extends BaseOutputFormatter
         }
 
         return $style->apply($match[2]);
+    }
+
+    /**
+     * @internal
+     */
+    public static function replaceHref(string $message): string
+    {
+        return preg_replace_callback(
+            self::HREF_PATTERN,
+            function ($matches) {
+                $url = $matches[1];
+                $text = $matches[2];
+
+                return "\033]8;;{$url}\033\\{$text}\033]8;;\033\\";
+            },
+            $message
+        );
     }
 }

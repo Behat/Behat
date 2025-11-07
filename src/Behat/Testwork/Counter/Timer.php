@@ -20,11 +20,11 @@ use Behat\Testwork\Counter\Exception\TimerException;
 final class Timer
 {
     /**
-     * @var null|float
+     * @var float|null
      */
     private $starTime;
     /**
-     * @var null|float
+     * @var float|null
      */
     private $stopTime;
 
@@ -51,7 +51,7 @@ final class Timer
     }
 
     /**
-     * @return null|float
+     * @return float
      *
      * @throws TimerException If timer has not been started
      */
@@ -72,7 +72,7 @@ final class Timer
     /**
      * Returns number of minutes passed.
      *
-     * @return integer
+     * @return int
      */
     public function getMinutes()
     {

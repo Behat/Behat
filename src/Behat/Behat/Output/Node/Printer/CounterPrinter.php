@@ -22,54 +22,36 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 final class CounterPrinter
 {
     /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initializes printer.
-     *
-     * @param ResultToStringConverter $resultConverter
-     * @param TranslatorInterface     $translator
      */
-    public function __construct(ResultToStringConverter $resultConverter, TranslatorInterface $translator)
-    {
-        $this->resultConverter = $resultConverter;
-        $this->translator = $translator;
+    public function __construct(
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
      * Prints scenario and step counters.
      *
-     * @param OutputPrinter $printer
      * @param string        $intro
-     * @param array         $stats
      */
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {
-        $stats = array_filter($stats, function ($count) { return 0 !== $count; });
+        $stats = array_filter($stats, fn ($count) => 0 !== $count);
 
-        if (0 === count($stats)) {
-            $totalCount = 0;
-        } else {
-            $totalCount = array_sum($stats);
-        }
+        $totalCount = 0 === count($stats) ? 0 : array_sum($stats);
 
-        $detailedStats = array();
+        $detailedStats = [];
         foreach ($stats as $resultCode => $count) {
             $style = $this->resultConverter->convertResultCodeToString($resultCode);
 
             $transId = $style . '_count';
-            $message = $this->translator->trans($transId, array('%count%' => $count), 'output');
+            $message = $this->translator->trans($transId, ['%count%' => $count], 'output');
 
             $detailedStats[] = sprintf('{+%s}%s{-%s}', $style, $message, $style);
         }
 
-        $message = $this->translator->trans($intro, array('%count%' => $totalCount), 'output');
+        $message = $this->translator->trans($intro, ['%count%' => $totalCount], 'output');
         $printer->write($message);
 
         if (count($detailedStats)) {

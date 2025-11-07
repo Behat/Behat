@@ -17,6 +17,8 @@ use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
+use Behat\Testwork\Hook\Call\HookCall;
+use Behat\Testwork\Hook\Call\RuntimeHook;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
@@ -30,29 +32,14 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class HookStatsListener implements EventListener
 {
     /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-
-    /**
      * Initializes listener.
-     *
-     * @param Statistics         $statistics
-     * @param ExceptionPresenter $exceptionPresenter
      */
-    public function __construct(Statistics $statistics, ExceptionPresenter $exceptionPresenter)
-    {
-        $this->statistics = $statistics;
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private readonly Statistics $statistics,
+        private readonly ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureHookStatsOnEvent($event);
@@ -60,8 +47,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures hook stats on hooked event.
-     *
-     * @param Event $event
      */
     private function captureHookStatsOnEvent(Event $event)
     {
@@ -76,8 +61,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures before hook stats.
-     *
-     * @param HookedSetup $setup
      */
     private function captureBeforeHookStats(HookedSetup $setup)
     {
@@ -90,8 +73,6 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures before hook stats.
-     *
-     * @param HookedTeardown $teardown
      */
     private function captureAfterHookStats(HookedTeardown $teardown)
     {
@@ -104,20 +85,24 @@ final class HookStatsListener implements EventListener
 
     /**
      * Captures hook call result.
-     *
-     * @param CallResult $hookCallResult
      */
     private function captureHookStat(CallResult $hookCallResult)
     {
-        $callee = $hookCallResult->getCall()->getCallee();
-        $hook = (string) $callee;
+        $call = $hookCallResult->getCall();
+        assert($call instanceof HookCall);
+        $callee = $call->getCallee();
+        $scope = $call->getScope();
         $path = $callee->getPath();
         $stdOut = $hookCallResult->getStdOut();
         $error = $hookCallResult->getException()
             ? $this->exceptionPresenter->presentException($hookCallResult->getException())
             : null;
 
-        $stat = new HookStat($hook, $path, $error, $stdOut);
+        assert($callee instanceof RuntimeHook);
+        $stat = new HookStat((string) $callee, $path, $error, $stdOut);
+        if (!$stat->isSuccessful()) {
+            $stat->setScope($scope);
+        }
         $this->statistics->registerHookStat($stat);
     }
 }

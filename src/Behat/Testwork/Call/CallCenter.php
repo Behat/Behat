@@ -29,24 +29,22 @@ final class CallCenter
     /**
      * @var CallFilter[]
      */
-    private $callFilters = array();
+    private $callFilters = [];
     /**
      * @var CallHandler[]
      */
-    private $callHandlers = array();
+    private $callHandlers = [];
     /**
      * @var ResultFilter[]
      */
-    private $resultFilters = array();
+    private $resultFilters = [];
     /**
      * @var ExceptionHandler[]
      */
-    private $exceptionHandlers = array();
+    private $exceptionHandlers = [];
 
     /**
      * Registers call filter.
-     *
-     * @param CallFilter $filter
      */
     public function registerCallFilter(CallFilter $filter)
     {
@@ -55,8 +53,6 @@ final class CallCenter
 
     /**
      * Registers call handler.
-     *
-     * @param CallHandler $handler
      */
     public function registerCallHandler(CallHandler $handler)
     {
@@ -65,8 +61,6 @@ final class CallCenter
 
     /**
      * Registers call result filter.
-     *
-     * @param ResultFilter $filter
      */
     public function registerResultFilter(ResultFilter $filter)
     {
@@ -75,8 +69,6 @@ final class CallCenter
 
     /**
      * Registers result exception handler.
-     *
-     * @param ExceptionHandler $handler
      */
     public function registerExceptionHandler(ExceptionHandler $handler)
     {
@@ -85,8 +77,6 @@ final class CallCenter
 
     /**
      * Handles call and its result using registered filters and handlers.
-     *
-     * @param Call $call
      *
      * @return CallResult
      */
@@ -101,8 +91,6 @@ final class CallCenter
 
     /**
      * Filters call using registered filters and returns a filtered one.
-     *
-     * @param Call $call
      *
      * @return Call
      */
@@ -121,8 +109,6 @@ final class CallCenter
 
     /**
      * Handles call using registered call handlers.
-     *
-     * @param Call $call
      *
      * @return CallResult
      *
@@ -147,8 +133,6 @@ final class CallCenter
     /**
      * Filters call result using registered filters and returns a filtered one.
      *
-     * @param CallResult $result
-     *
      * @return CallResult
      */
     private function filterResult(CallResult $result)
@@ -169,7 +153,7 @@ final class CallCenter
      *
      * @param Throwable $exception
      *
-     * @return Throwable
+     * @return Exception
      */
     private function handleException($exception)
     {
@@ -181,7 +165,7 @@ final class CallCenter
             $exception = $handler->handleException($exception);
         }
 
-        if ($exception instanceof Throwable) {
+        if (!$exception instanceof Exception) {
             return new FatalThrowableError($exception);
         }
 

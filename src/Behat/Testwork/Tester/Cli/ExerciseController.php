@@ -36,84 +36,62 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ExerciseController implements Controller
 {
     /**
-     * @var SuiteRepository
-     */
-    private $suiteRepository;
-    /**
-     * @var SpecificationFinder
-     */
-    private $specificationFinder;
-    /**
-     * @var Exercise
-     */
-    private $exercise;
-    /**
-     * @var ResultInterpreter
-     */
-    private $resultInterpreter;
-    /**
-     * @var bool
-     */
-    private $skip;
-
-    /**
      * Initializes controller.
      *
-     * @param SuiteRepository     $suiteRepository
-     * @param SpecificationFinder $specificationFinder
-     * @param Exercise            $exercise
-     * @param ResultInterpreter   $resultInterpreter
      * @param bool             $skip
      */
     public function __construct(
-        SuiteRepository $suiteRepository,
-        SpecificationFinder $specificationFinder,
-        Exercise $exercise,
-        ResultInterpreter $resultInterpreter,
-        $skip = false
+        private readonly SuiteRepository $suiteRepository,
+        private readonly SpecificationFinder $specificationFinder,
+        private readonly Exercise $exercise,
+        private readonly ResultInterpreter $resultInterpreter,
+        private $skip = false,
     ) {
-        $this->suiteRepository = $suiteRepository;
-        $this->specificationFinder = $specificationFinder;
-        $this->exercise = $exercise;
-        $this->resultInterpreter = $resultInterpreter;
-        $this->skip = $skip;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $locatorsExamples = implode(PHP_EOL, array_map(
-            function ($locator) {
-                return '- ' . $locator;
-            }, $this->specificationFinder->getExampleLocators()
+            fn ($locator) => '- ' . $locator,
+            $this->specificationFinder->getExampleLocators()
         ));
 
         $command
-            ->addArgument('paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-                'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples
+            ->addArgument(
+                'paths',
+                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+                'Optional path(s) to execute. Could be:' . PHP_EOL . $locatorsExamples,
             )
-            ->addOption('--dry-run', null, InputOption::VALUE_NONE,
+            ->addOption(
+                '--dry-run',
+                null,
+                InputOption::VALUE_NONE,
                 'Invokes formatters without executing the tests and hooks.'
+            )
+            ->addOption(
+                '--allow-no-tests',
+                null,
+                InputOption::VALUE_NONE,
+                'Will not fail if no specifications are found.'
             );
     }
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $specs = $this->findSpecifications($input);
+        $paths = $this->extractUniquePaths($input);
+        $specs = $this->findSpecifications($paths);
         $result = $this->testSpecifications($input, $specs);
 
-        if ($input->getArgument('paths') && TestResults::NO_TESTS === $result->getResultCode()) {
+        if ($paths !== null && !$input->getOption('allow-no-tests') && TestResults::NO_TESTS === $result->getResultCode()) {
             throw new WrongPathsException(
                 sprintf(
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
-                    implode(', ', $input->getArgument('paths'))
+                    implode(', ', $paths)
                 ),
-                $input->getArgument('paths')
+                implode(', ', $paths)
             );
         }
 
@@ -123,19 +101,29 @@ final class ExerciseController implements Controller
     /**
      * Finds exercise specifications.
      *
-     * @param InputInterface $input
+     * @param list<string>|null $paths
      *
      * @return SpecificationIterator[]
      */
-    private function findSpecifications(InputInterface $input)
+    private function findSpecifications(?array $paths): array
     {
-        return $this->findSuitesSpecifications($this->getAvailableSuites(), $input->getArgument('paths'));
+        $availableSuites = $this->getAvailableSuites();
+        if ($paths === null) {
+            return $this->findSuitesSpecifications($availableSuites, null);
+        }
+
+        $specifications = [];
+
+        foreach ($paths as $path) {
+            $specifications = array_merge($specifications, $this->findSuitesSpecifications($availableSuites, $path));
+        }
+
+        return $specifications;
     }
 
     /**
      * Tests exercise specifications.
      *
-     * @param InputInterface          $input
      * @param SpecificationIterator[] $specifications
      *
      * @return TestResult
@@ -167,25 +155,25 @@ final class ExerciseController implements Controller
     /**
      * Finds specification iterators for all provided suites using locator.
      *
-     * @param Suite[]  $suites
-     * @param string[] $locators
+     * @param Suite[]     $suites
      *
      * @return SpecificationIterator[]
      */
-    private function findSuitesSpecifications($suites, array $locators)
+    private function findSuitesSpecifications(array $suites, ?string $locator): array
     {
-        if (empty($locators)) {
-            return $this->specificationFinder->findSuitesSpecifications($suites);
+        return $this->specificationFinder->findSuitesSpecifications($suites, $locator);
+    }
+
+    /**
+     * Extracts unique paths from input argument. Returns null if no paths were supplied.
+     */
+    private function extractUniquePaths(InputInterface $input): ?array
+    {
+        $paths = $input->getArgument('paths') ?: null;
+        if ($paths === null) {
+            return null;
         }
 
-        $specifications = array();
-        foreach ($locators as $locator) {
-            $specifications = array_merge(
-                $specifications,
-                $this->specificationFinder->findSuitesSpecifications($suites, $locator)
-            );
-        }
-
-        return $specifications;
+        return array_values(array_unique($paths));
     }
 }

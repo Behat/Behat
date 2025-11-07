@@ -25,7 +25,6 @@ interface ArgumentResolver
     /**
      * Resolves context constructor arguments.
      *
-     * @param ReflectionClass $classReflection
      * @param mixed[]         $arguments
      *
      * @return mixed[]

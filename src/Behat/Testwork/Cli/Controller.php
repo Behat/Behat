@@ -25,18 +25,13 @@ interface Controller
 {
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param SymfonyCommand $command
      */
     public function configure(SymfonyCommand $command);
 
     /**
      * Executes controller.
      *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
+     * @return int|null
      */
     public function execute(InputInterface $input, OutputInterface $output);
 }

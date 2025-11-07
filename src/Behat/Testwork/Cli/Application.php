@@ -14,6 +14,7 @@ use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Composer\XdebugHandler\XdebugHandler;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -32,28 +33,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class Application extends BaseApplication
 {
     /**
-     * @var ConfigurationLoader
-     */
-    private $configurationLoader;
-    /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initializes application.
      *
      * @param string              $name
      * @param string              $version
-     * @param ConfigurationLoader $configLoader
-     * @param ExtensionManager    $extensionManager
      */
-    public function __construct($name, $version, ConfigurationLoader $configLoader, ExtensionManager $extensionManager)
-    {
+    public function __construct(
+        $name,
+        $version,
+        private readonly ConfigurationLoader $configurationLoader,
+        private readonly ExtensionManager $extensionManager,
+    ) {
         putenv('COLUMNS=9999');
-
-        $this->configurationLoader = $configLoader;
-        $this->extensionManager = $extensionManager;
 
         parent::__construct($name, $version);
     }
@@ -65,26 +56,32 @@ final class Application extends BaseApplication
      */
     public function getDefaultInputDefinition(): InputDefinition
     {
-        return new InputDefinition(array(
+        return new InputDefinition([
             new InputOption('--profile', '-p', InputOption::VALUE_REQUIRED, 'Specify config profile to use.'),
             new InputOption('--config', '-c', InputOption::VALUE_REQUIRED, 'Specify config file to use.'),
             new InputOption(
-                '--verbose', '-v', InputOption::VALUE_OPTIONAL,
+                '--verbose',
+                '-v',
+                InputOption::VALUE_OPTIONAL,
                 'Increase verbosity of exceptions.' . PHP_EOL .
                 'Use -vv or --verbose=2 to display backtraces in addition to exceptions.'
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
+            new InputOption('--convert-config', null, InputOption::VALUE_NONE, 'Convert the configuration to the PHP format.'),
             new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
             new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debugging information about current environment.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
             new InputOption(
-                '--colors', null, InputOption::VALUE_NONE,
+                '--colors',
+                null,
+                InputOption::VALUE_NONE,
                 'Force ANSI color in the output. By default color support is' . PHP_EOL .
                 'guessed based on your platform and the output if not specified.'
             ),
             new InputOption('--no-colors', null, InputOption::VALUE_NONE, 'Force no ANSI color in the output.'),
-        ));
+            new InputOption('--xdebug', null, InputOption::VALUE_NONE, 'Allow Xdebug to run.'),
+        ]);
     }
 
     /**
@@ -93,13 +90,23 @@ final class Application extends BaseApplication
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        $isXdebugAllowed = $input->hasParameterOption('--xdebug')
+            || (extension_loaded('xdebug') && xdebug_is_debugger_active());
+
+        if (!$isXdebugAllowed) {
+            $xdebugHandler = new XdebugHandler('behat');
+            $xdebugHandler->setPersistent();
+            $xdebugHandler->check();
+            unset($xdebugHandler);
+        }
+
         // xdebug's default nesting level of 100 is not enough
         if (extension_loaded('xdebug')
-            && false === strpos(ini_get('disable_functions'), 'ini_set')
+            && !str_contains(ini_get('disable_functions'), 'ini_set')
         ) {
             $oldValue = ini_get('xdebug.max_nesting_level');
             if ($oldValue === false || $oldValue < 256) {
@@ -107,13 +114,13 @@ final class Application extends BaseApplication
             }
         }
 
-        if ($input->hasParameterOption(array('--config-reference'))) {
-            $input = new ArrayInput(array('--config-reference' => true));
+        if ($input->hasParameterOption(['--config-reference'])) {
+            $input = new ArrayInput(['--config-reference' => true]);
         }
 
-        if ($path = $input->getParameterOption(array('--config', '-c'))) {
+        if ($path = $input->getParameterOption(['--config', '-c'])) {
             if (!is_file($path)) {
-                throw new ConfigurationLoadingException("The requested config file does not exist");
+                throw new ConfigurationLoadingException('The requested config file does not exist');
             }
 
             $this->configurationLoader->setConfigurationFilePath($path);
@@ -130,6 +137,7 @@ final class Application extends BaseApplication
 
         $commands[] = new DumpReferenceCommand($this->extensionManager);
         $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
+        $commands[] = new ConvertConfigCommand($this->configurationLoader);
 
         return $commands;
     }
@@ -137,22 +145,17 @@ final class Application extends BaseApplication
     /**
      * Configures container based on provided config file and profile.
      *
-     * @param InputInterface $input
-     *
      * @return array
      */
     private function loadConfiguration(InputInterface $input)
     {
-        $profile = $input->getParameterOption(array('--profile', '-p')) ? : 'default';
+        $profile = $input->getParameterOption(['--profile', '-p']) ?: 'default';
 
         return $this->configurationLoader->loadConfiguration($profile);
     }
 
     /**
      * Creates main command for application.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return SymfonyCommand
      */
@@ -163,9 +166,6 @@ final class Application extends BaseApplication
 
     /**
      * Creates container instance, loads extensions and freezes it.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      *
      * @return ContainerInterface
      */
@@ -212,22 +212,26 @@ final class Application extends BaseApplication
      */
     protected function getCommandName(InputInterface $input): string
     {
-        if ($input->hasParameterOption(array('--config-reference'))) {
+        if ($input->hasParameterOption(['--config-reference'])) {
             return 'dump-reference';
         }
 
-        if ($input->hasParameterOption(array('--debug'))) {
+        if ($input->hasParameterOption(['--debug'])) {
             return 'debug';
+        }
+
+        if ($input->hasParameterOption(['--convert-config'])) {
+            return 'convert-config';
         }
 
         return $this->getName();
     }
 
-    protected function configureIO(InputInterface $input, OutputInterface $output)
+    protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
-        if (true === $input->hasParameterOption(array('--colors'))) {
+        if ($input->hasParameterOption(['--colors'])) {
             $output->setDecorated(true);
-        } elseif (true === $input->hasParameterOption(array('--no-colors'))) {
+        } elseif ($input->hasParameterOption(['--no-colors'])) {
             $output->setDecorated(false);
         }
 

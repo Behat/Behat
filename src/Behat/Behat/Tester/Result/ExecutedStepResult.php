@@ -23,24 +23,12 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 final class ExecutedStepResult implements StepResult, DefinedStepResult, ExceptionResult
 {
     /**
-     * @var SearchResult
-     */
-    private $searchResult;
-    /**
-     * @var null|CallResult
-     */
-    private $callResult;
-
-    /**
      * Initialize test result.
-     *
-     * @param SearchResult $searchResult
-     * @param CallResult   $callResult
      */
-    public function __construct(SearchResult $searchResult, CallResult $callResult)
-    {
-        $this->searchResult = $searchResult;
-        $this->callResult = $callResult;
+    public function __construct(
+        private readonly SearchResult $searchResult,
+        private readonly CallResult $callResult,
+    ) {
     }
 
     /**
@@ -63,32 +51,23 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return $this->callResult;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStepDefinition()
     {
         return $this->searchResult->getMatchedDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasException()
     {
         return null !== $this->getException();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getException()
     {
         return $this->callResult->getException();
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::PENDING|self::FAILED|self::PASSED
      */
     public function getResultCode()
     {
@@ -103,9 +82,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return self::PASSED;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return self::PASSED == $this->getResultCode();

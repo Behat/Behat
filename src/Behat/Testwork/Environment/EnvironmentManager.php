@@ -27,16 +27,14 @@ final class EnvironmentManager
     /**
      * @var EnvironmentHandler[]
      */
-    private $handlers = array();
+    private $handlers = [];
     /**
      * @var EnvironmentReader[]
      */
-    private $readers = array();
+    private $readers = [];
 
     /**
      * Registers environment handler.
-     *
-     * @param EnvironmentHandler $handler
      */
     public function registerEnvironmentHandler(EnvironmentHandler $handler)
     {
@@ -45,8 +43,6 @@ final class EnvironmentManager
 
     /**
      * Registers environment reader.
-     *
-     * @param EnvironmentReader $reader
      */
     public function registerEnvironmentReader(EnvironmentReader $reader)
     {
@@ -55,8 +51,6 @@ final class EnvironmentManager
 
     /**
      * Builds new environment for provided test suite.
-     *
-     * @param Suite $suite
      *
      * @return Environment
      *
@@ -79,9 +73,6 @@ final class EnvironmentManager
     /**
      * Creates new isolated test environment using built one.
      *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
      * @return Environment
      *
      * @throws EnvironmentIsolationException If appropriate environment handler is not found
@@ -96,20 +87,18 @@ final class EnvironmentManager
 
         throw new EnvironmentIsolationException(sprintf(
             'None of the registered environment handlers seem to support `%s` environment.',
-            get_class($environment)
+            $environment::class
         ), $environment, $testSubject);
     }
 
     /**
      * Reads all callees from environment using registered environment readers.
      *
-     * @param Environment $environment
-     *
      * @return Callee[]
      */
     public function readEnvironmentCallees(Environment $environment)
     {
-        $callees = array();
+        $callees = [];
         foreach ($this->readers as $reader) {
             if ($reader->supportsEnvironment($environment)) {
                 $callees = array_merge($callees, $reader->readEnvironmentCallees($environment));

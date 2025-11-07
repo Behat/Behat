@@ -21,8 +21,6 @@ interface ContextInitializer
 {
     /**
      * Initializes provided context.
-     *
-     * @param Context $context
      */
     public function initializeContext(Context $context);
 }

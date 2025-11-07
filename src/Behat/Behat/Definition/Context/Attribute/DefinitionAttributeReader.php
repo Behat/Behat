@@ -12,10 +12,12 @@ namespace Behat\Behat\Definition\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
-use Behat\Step\Definition;
-use Behat\Step\Given;
-use Behat\Step\Then;
-use Behat\Step\When;
+use Behat\Behat\Definition\Call;
+use Behat\Behat\Definition\Call\Given;
+use Behat\Behat\Definition\Call\Then;
+use Behat\Behat\Definition\Call\When;
+use Behat\Step as Attribute;
+use ReflectionAttribute;
 use ReflectionMethod;
 
 /**
@@ -26,53 +28,36 @@ use ReflectionMethod;
 final class DefinitionAttributeReader implements AttributeReader
 {
     /**
-     * @var string[]
+     * @var array<class-string<Attribute\Definition>, class-string<Call\RuntimeDefinition>>
      */
-    private static $classes = array(
-        Given::class => 'Behat\Behat\Definition\Call\Given',
-        When::class  => 'Behat\Behat\Definition\Call\When',
-        Then::class  => 'Behat\Behat\Definition\Call\Then',
-    );
-
-    /**
-     * @var DocBlockHelper
-     */
-    private $docBlockHelper;
+    private static $attributeToCallMap = [
+        Attribute\Given::class => Given::class,
+        Attribute\When::class => When::class,
+        Attribute\Then::class => Then::class,
+    ];
 
     /**
      * Initializes reader.
-     *
-     * @param DocBlockHelper $docBlockHelper
      */
-    public function __construct(DocBlockHelper $docBlockHelper)
-    {
-        $this->docBlockHelper = $docBlockHelper;
+    public function __construct(
+        private readonly DocBlockHelper $docBlockHelper,
+    ) {
     }
 
-    /**
-     * @{inheritdoc}
-     */
     public function readCallees(string $contextClass, ReflectionMethod $method)
     {
-        if (\PHP_MAJOR_VERSION < 8) {
-            return [];
-        }
-
-        /**
-         * @psalm-suppress UndefinedClass (ReflectionAttribute is PHP 8.0 only)
-         */
-        $attributes = $method->getAttributes(Definition::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $attributes = $method->getAttributes(Attribute\Definition::class, ReflectionAttribute::IS_INSTANCEOF);
 
         $callees = [];
         foreach ($attributes as $attribute) {
-            $class = self::$classes[$attribute->getName()];
-            $callable = array($contextClass, $method->getName());
+            $class = self::$attributeToCallMap[$attribute->getName()];
+            $callable = [$contextClass, $method->getName()];
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);
             }
 
-            $callees[] = new $class($attribute->newInstance()->pattern, $callable, $description);
+            $callees[] = new $class($attribute->newInstance()->getPattern(), $callable, $description);
         }
 
         return $callees;

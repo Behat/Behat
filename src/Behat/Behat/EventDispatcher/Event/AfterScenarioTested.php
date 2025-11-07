@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
-use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -26,44 +25,16 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class AfterScenarioTested extends ScenarioTested implements AfterTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var Scenario
-     */
-    private $scenario;
-    /**
-     * @var TestResult
-     */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
-
-    /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
-     * @param Teardown    $teardown
+     * Initializes event.
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        Scenario $scenario,
-        TestResult $result,
-        Teardown $teardown
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+        private readonly TestResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->scenario = $scenario;
-        $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**
@@ -77,9 +48,7 @@ final class AfterScenarioTested extends ScenarioTested implements AfterTested
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

@@ -23,27 +23,14 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 final class BeforeStepTested extends StepTested implements BeforeTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-
-    /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->step = $step;
     }
 
     /**

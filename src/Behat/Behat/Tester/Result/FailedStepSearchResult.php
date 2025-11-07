@@ -12,6 +12,7 @@ namespace Behat\Behat\Tester\Result;
 
 use Behat\Behat\Definition\Exception\SearchException;
 use Behat\Testwork\Tester\Result\ExceptionResult;
+use Throwable;
 
 /**
  * Represents a step test result with a failed definition search.
@@ -21,46 +22,33 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
 final class FailedStepSearchResult implements StepResult, ExceptionResult
 {
     /**
-     * @var SearchException
-     */
-    private $searchException;
-
-    /**
      * Initializes result.
-     *
-     * @param SearchException $searchException
      */
-    public function __construct(SearchException $searchException)
-    {
-        $this->searchException = $searchException;
+    public function __construct(
+        private readonly SearchException $searchException,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasException()
     {
         return true;
     }
 
     /**
-     * {@inheritdoc}
+     * @return Throwable
      */
     public function getException()
     {
         return $this->searchException;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return false;
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::FAILED
      */
     public function getResultCode()
     {

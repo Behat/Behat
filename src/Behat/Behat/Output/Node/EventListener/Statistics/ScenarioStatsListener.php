@@ -26,28 +26,13 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class ScenarioStatsListener implements EventListener
 {
-    /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
-     * @var string
-     */
-    private $currentFeaturePath;
+    private ?string $currentFeaturePath = null;
 
-    /**
-     * Initializes listener.
-     *
-     * @param Statistics $statistics
-     */
-    public function __construct(Statistics $statistics)
-    {
-        $this->statistics = $statistics;
+    public function __construct(
+        private readonly Statistics $statistics,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
@@ -57,8 +42,6 @@ final class ScenarioStatsListener implements EventListener
 
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
     {
@@ -85,8 +68,6 @@ final class ScenarioStatsListener implements EventListener
 
     /**
      * Captures scenario or example stats on their AFTER event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOrExampleStatsOnAfterEvent(Event $event)
     {

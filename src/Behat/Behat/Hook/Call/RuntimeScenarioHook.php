@@ -25,9 +25,6 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof ScenarioScope) {
@@ -44,15 +41,13 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if nodes match filter.
      *
-     * @param FeatureNode       $feature
-     * @param ScenarioInterface $scenario
      * @param string            $filterString
      *
      * @return bool
      */
     protected function isMatch(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
     {
-        if (false !== strpos($filterString, '@')) {
+        if (str_contains($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $scenario, $filterString);
         }
 
@@ -66,8 +61,6 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if node match tag filter.
      *
-     * @param FeatureNode       $feature
-     * @param ScenarioInterface $scenario
      * @param string            $filterString
      *
      * @return bool
@@ -82,7 +75,6 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
     /**
      * Checks if scenario matches name filter.
      *
-     * @param ScenarioInterface $scenario
      * @param string            $filterString
      *
      * @return bool

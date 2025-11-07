@@ -21,26 +21,17 @@ use Behat\Testwork\Suite\Suite;
 final class DefinitionTranslator
 {
     /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
      * Initialises definition translator.
-     *
-     * @param TranslatorInterface $translator
      */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     /**
      * Attempts to translate definition using translator and produce translated one on success.
      *
-     * @param Suite       $suite
-     * @param Definition  $definition
-     * @param null|string $language
+     * @param string|null $language
      *
      * @return Definition|TranslatedDefinition
      */
@@ -49,12 +40,17 @@ final class DefinitionTranslator
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();
 
-        $translatedPattern = $this->translator->trans($pattern, array(), $assetsId, $language);
+        $translatedPattern = $this->translator->trans($pattern, [], $assetsId, $language);
         if ($pattern != $translatedPattern) {
             return new TranslatedDefinition($definition, $translatedPattern, $language);
         }
 
         return $definition;
+    }
+
+    public function translateInfoText(string $infoText, array $parameters): string
+    {
+        return $this->translator->trans($infoText, $parameters, 'output');
     }
 
     public function getLocale()

@@ -33,7 +33,10 @@ final class RedundantStepException extends RuntimeException implements SearchExc
     {
         $message = sprintf(
             "Step \"%s\" is already defined in %s\n\n%s\n%s",
-            $step2->getPattern(), $step1->getPath(), $step1->getPath(), $step2->getPath()
+            $step2->getPattern(),
+            $step1->getPath(),
+            $step1->getPath(),
+            $step2->getPath()
         );
 
         parent::__construct($message);

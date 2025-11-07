@@ -11,7 +11,6 @@
 namespace Behat\Testwork\EventDispatcher;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Extends Symfony2 event dispatcher with catch-all listeners.
@@ -25,8 +24,6 @@ final class TestworkEventDispatcher extends EventDispatcher
     public const DISPATCHER_VERSION = 2;
 
     /**
-     * {@inheritdoc}
-     *
      * @param string|null $eventName
      */
     public function getListeners($eventName = null): array
@@ -42,21 +39,8 @@ final class TestworkEventDispatcher extends EventDispatcher
         );
     }
 
-    public function dispatch($event, $eventName = null): object
+    public function dispatch(object $event, ?string $eventName = null): object
     {
-        if (is_object($event)) {
-            return $this->bcAwareDispatch($event, $eventName);
-        }
-
-        return $this->bcAwareDispatch($eventName, $event);
-    }
-
-    private function bcAwareDispatch(object $event, $eventName)
-    {
-        if (null === $event) {
-            $event = new Event();
-        }
-
         if (method_exists($event, 'setName')) {
             $event->setName($eventName);
         }

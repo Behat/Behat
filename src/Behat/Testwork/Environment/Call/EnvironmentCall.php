@@ -22,40 +22,16 @@ use Behat\Testwork\Environment\Environment;
 class EnvironmentCall implements Call
 {
     /**
-     * @var Environment
-     */
-    private $environment;
-    /**
-     * @var Callee
-     */
-    private $callee;
-    /**
-     * @var array
-     */
-    private $arguments;
-    /**
-     * @var null|integer
-     */
-    private $errorReportingLevel;
-
-    /**
      * Initializes call.
      *
-     * @param Environment  $environment
-     * @param Callee       $callee
-     * @param array        $arguments
-     * @param null|integer $errorReportingLevel
+     * @param int|null $errorReportingLevel
      */
     public function __construct(
-        Environment $environment,
-        Callee $callee,
-        array $arguments,
-        $errorReportingLevel = null
+        private readonly Environment $environment,
+        private readonly Callee $callee,
+        private readonly array $arguments,
+        private $errorReportingLevel = null,
     ) {
-        $this->environment = $environment;
-        $this->callee = $callee;
-        $this->arguments = $arguments;
-        $this->errorReportingLevel = $errorReportingLevel;
     }
 
     /**
@@ -68,33 +44,21 @@ class EnvironmentCall implements Call
         return $this->environment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getCallee()
     {
         return $this->callee;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getBoundCallable()
     {
         return $this->environment->bindCallee($this->callee);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getArguments()
     {
         return $this->arguments;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getErrorReportingLevel()
     {
         return $this->errorReportingLevel;

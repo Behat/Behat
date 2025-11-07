@@ -4,13 +4,25 @@ Feature: Extensions
   I need to be able to write simple extensions
 
   Background:
-    Given a file named "behat.yml" with:
+    Given a file named "behat.php" with:
       """
-      default:
-        extensions:
-          custom_extension.php:
-            param1: val1
-            param2: val2
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Extension;
+      use Behat\Config\Profile;
+
+      $profile = (new Profile('default'))
+        ->withExtension(new Extension('custom_extension.php', [
+          'param1' => 'val1',
+          'param2' => 'val2',
+        ])
+      );
+
+      $config = new Config();
+      $config->withProfile($profile);
+
+      return $config;
       """
     And a file named "features/bootstrap/FeatureContext.php" with:
       """
@@ -206,7 +218,7 @@ Feature: Extensions
 
       001 Scenario:                  # features/extensions.feature:2
             Given non-existent class # features/extensions.feature:3
-              Fatal error: Class 'Non\Existent\Cls' not found (Behat\Testwork\Call\Exception\FatalThrowableError)
+              Fatal error: Class "Non\Existent\Cls" not found (Behat\Testwork\Call\Exception\FatalThrowableError)
 
       002 Scenario:                   # features/extensions.feature:4
             Given non-existent method # features/extensions.feature:5

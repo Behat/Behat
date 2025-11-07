@@ -19,9 +19,6 @@ use Behat\Testwork\Specification\NoSpecificationsIterator;
  */
 final class AfterSuiteAborted extends SuiteTested
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getSpecificationIterator()
     {
         return new NoSpecificationsIterator($this->getSuite());

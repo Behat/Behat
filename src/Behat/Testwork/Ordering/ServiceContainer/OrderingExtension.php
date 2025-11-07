@@ -12,6 +12,10 @@ namespace Behat\Testwork\Ordering\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\Ordering\Cli\OrderController;
+use Behat\Testwork\Ordering\OrderedExercise;
+use Behat\Testwork\Ordering\Orderer\RandomOrderer;
+use Behat\Testwork\Ordering\Orderer\ReverseOrderer;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -37,18 +41,14 @@ final class OrderingExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
     /**
      * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
      *
      * @api
      */
@@ -58,7 +58,7 @@ final class OrderingExtension implements Extension
         $references = $this->processor->findAndSortTaggedServices($container, self::ORDERER_TAG);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerOrderer', array($reference));
+            $definition->addMethodCall('registerOrderer', [$reference]);
         }
     }
 
@@ -79,8 +79,6 @@ final class OrderingExtension implements Extension
      * before any extension `configure()` method is called. This allows extensions
      * to hook into the configuration of other extensions providing such an
      * extension point.
-     *
-     * @param ExtensionManager $extensionManager
      */
     public function initialize(ExtensionManager $extensionManager)
     {
@@ -88,8 +86,6 @@ final class OrderingExtension implements Extension
 
     /**
      * Setups configuration for the extension.
-     *
-     * @param ArrayNodeDefinition $builder
      */
     public function configure(ArrayNodeDefinition $builder)
     {
@@ -97,9 +93,6 @@ final class OrderingExtension implements Extension
 
     /**
      * Loads extension services into temporary container.
-     *
-     * @param ContainerBuilder $container
-     * @param array $config
      */
     public function load(ContainerBuilder $container, array $config)
     {
@@ -110,47 +103,40 @@ final class OrderingExtension implements Extension
 
     /**
      * Loads order controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadOrderController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Cli\OrderController', array(
+        $definition = new Definition(OrderController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
-            new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering')
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 250));
+            new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering'),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 250]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.order', $definition);
     }
 
     /**
-     * Loads exercise wrapper that enables ordering
-     *
-     * @param ContainerBuilder $container
+     * Loads exercise wrapper that enables ordering.
      */
     private function loadOrderedExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\OrderedExercise', array(
-            new Reference(TesterExtension::EXERCISE_ID)
-        ));
-        $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG, array('priority' => -9999));
+        $definition = new Definition(OrderedExercise::class, [
+            new Reference(TesterExtension::EXERCISE_ID),
+        ]);
+        $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering', $definition);
     }
 
     /**
-     * Defines default orderers
-     *
-     * @param ContainerBuilder $container
+     * Defines default orderers.
      */
     private function loadDefaultOrderers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\Ordering\Orderer\ReverseOrderer');
-        $definition->addTag(self::ORDERER_TAG, array('priority' => -9999));
+        $definition = new Definition(ReverseOrderer::class);
+        $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.reverse', $definition);
 
-
-        $definition = new Definition('Behat\Testwork\Ordering\Orderer\RandomOrderer');
-        $definition->addTag(self::ORDERER_TAG, array('priority' => -9999));
+        $definition = new Definition(RandomOrderer::class);
+        $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering.random', $definition);
     }
 }

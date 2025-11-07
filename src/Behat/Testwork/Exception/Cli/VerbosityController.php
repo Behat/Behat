@@ -24,41 +24,26 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class VerbosityController implements Controller
 {
     /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-
-    /**
      * Initializes controller.
-     *
-     * @param ExceptionPresenter $exceptionPresenter
      */
-    public function __construct(ExceptionPresenter $exceptionPresenter)
-    {
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private readonly ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
     /**
      * Configures command to be executable by the controller.
-     *
-     * @param Command $command
      */
     public function configure(Command $command)
     {
     }
 
-    /**
-     * Executes controller.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return null|integer
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
             $this->exceptionPresenter->setDefaultVerbosity($output->getVerbosity());
         }
+
+        return null;
     }
 }

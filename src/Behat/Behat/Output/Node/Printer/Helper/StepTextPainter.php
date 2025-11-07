@@ -22,32 +22,18 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class StepTextPainter
 {
     /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-
-    /**
      * Initializes painter.
-     *
-     * @param PatternTransformer      $patternTransformer
-     * @param ResultToStringConverter $resultConverter
      */
-    public function __construct(PatternTransformer $patternTransformer, ResultToStringConverter $resultConverter)
-    {
-        $this->patternTransformer = $patternTransformer;
-        $this->resultConverter = $resultConverter;
+    public function __construct(
+        private readonly PatternTransformer $patternTransformer,
+        private readonly ResultToStringConverter $resultConverter,
+    ) {
     }
 
     /**
      * Colorizes step text arguments according to definition.
      *
      * @param string     $text
-     * @param Definition $definition
-     * @param TestResult $result
      *
      * @return string
      */
@@ -58,12 +44,12 @@ final class StepTextPainter
         $paramStyle = $style . '_param';
 
         // If it's just a string - skip
-        if ('/' !== substr($regex, 0, 1)) {
+        if (!str_starts_with($regex, '/')) {
             return $text;
         }
 
         // Find arguments with offsets
-        $matches = array();
+        $matches = [];
         preg_match($regex, $text, $matches, PREG_OFFSET_CAPTURE);
         array_shift($matches);
 
@@ -71,7 +57,7 @@ final class StepTextPainter
         $shift = 0;
         $lastReplacementPosition = 0;
         foreach ($matches as $key => $match) {
-            if (!is_numeric($key) || -1 === $match[1] || false !== strpos($match[0], '<')) {
+            if (!is_numeric($key) || -1 === $match[1] || str_contains($match[0], '<')) {
                 continue;
             }
 

@@ -12,6 +12,11 @@ namespace Behat\Behat\Transformation\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
+use Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer;
+use Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader;
+use Behat\Behat\Transformation\Context\Attribute\TransformationAttributeReader;
+use Behat\Behat\Transformation\TransformationRepository;
+use Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -49,50 +54,34 @@ class TransformationExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'transformations';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadDefinitionArgumentsTransformer($container);
         $this->loadDefaultTransformers($container);
         $this->loadAnnotationReader($container);
+        $this->loadAttributeReader($container);
         $this->loadRepository($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processArgumentsTransformers($container);
@@ -100,62 +89,64 @@ class TransformationExtension implements Extension
 
     /**
      * Loads definition arguments transformer.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer');
-        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 200));
+        $definition = new Definition(DefinitionArgumentsTransformer::class);
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 200]);
         $container->setDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID, $definition);
     }
 
     /**
      * Loads default transformers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadDefaultTransformers(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer', array(
+        $definition = new Definition(RepositoryArgumentTransformer::class, [
             new Reference(self::REPOSITORY_ID),
             new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
-        ));
-        $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, array('priority' => 50));
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
+        ]);
+        $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ARGUMENT_TRANSFORMER_TAG . '.repository', $definition);
     }
 
     /**
      * Loads transformation context annotation reader.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadAnnotationReader(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader');
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, array('priority' => 50));
+        $definition = new Definition(TransformationAnnotationReader::class);
+        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
         $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.transformation', $definition);
     }
 
     /**
+     * Loads transformation attribute reader.
+     */
+    private function loadAttributeReader(ContainerBuilder $container): void
+    {
+        $definition = new Definition(TransformationAttributeReader::class, [
+            new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID),
+        ]);
+        $definition->addTag(ContextExtension::ATTRIBUTE_READER_TAG, ['priority' => 50]);
+        $container->setDefinition(ContextExtension::ATTRIBUTE_READER_TAG . '.transformation', $definition);
+    }
+
+    /**
      * Loads transformations repository.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadRepository(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Transformation\TransformationRepository', array(
-            new Reference(EnvironmentExtension::MANAGER_ID)
-        ));
+        $definition = new Definition(TransformationRepository::class, [
+            new Reference(EnvironmentExtension::MANAGER_ID),
+        ]);
         $container->setDefinition(self::REPOSITORY_ID, $definition);
     }
 
     /**
      * Processes all available argument transformers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processArgumentsTransformers(ContainerBuilder $container)
     {
@@ -163,7 +154,7 @@ class TransformationExtension implements Extension
         $definition = $container->getDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('registerArgumentTransformer', array($reference));
+            $definition->addMethodCall('registerArgumentTransformer', [$reference]);
         }
     }
 
@@ -171,9 +162,9 @@ class TransformationExtension implements Extension
      * Returns definition argument transformer service id.
      *
      * @return string
-     * 
+     *
      * @deprecated Use DEFINITION_ARGUMENT_TRANSFORMER_ID constant instead
-     * 
+     *
      * @todo Remove method in next major version
      */
     protected function getDefinitionArgumentTransformerId()

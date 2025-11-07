@@ -26,46 +26,14 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class ScenarioNodeListener implements EventListener
 {
-    /**
-     * @var string
-     */
-    private $beforeEventName;
-    /**
-     * @var string
-     */
-    private $afterEventName;
-    /**
-     * @var ScenarioPrinter
-     */
-    private $scenarioPrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $setupPrinter;
-
-    /**
-     * Initializes listener.
-     *
-     * @param string            $beforeEventName
-     * @param string            $afterEventName
-     * @param ScenarioPrinter   $scenarioPrinter
-     * @param null|SetupPrinter $setupPrinter
-     */
     public function __construct(
-        $beforeEventName,
-        $afterEventName,
-        ScenarioPrinter $scenarioPrinter,
-        SetupPrinter $setupPrinter = null
+        private readonly string $beforeEventName,
+        private readonly string $afterEventName,
+        private readonly ScenarioPrinter $scenarioPrinter,
+        private readonly ?SetupPrinter $setupPrinter = null,
     ) {
-        $this->beforeEventName = $beforeEventName;
-        $this->afterEventName = $afterEventName;
-        $this->scenarioPrinter = $scenarioPrinter;
-        $this->setupPrinter = $setupPrinter;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if (!$event instanceof ScenarioLikeTested) {
@@ -78,18 +46,14 @@ final class ScenarioNodeListener implements EventListener
 
     /**
      * Prints scenario/background header on BEFORE event.
-     *
-     * @param Formatter                     $formatter
-     * @param ScenarioLikeTested|AfterSetup $event
-     * @param string                        $eventName
      */
-    private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
+    private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, string $eventName)
     {
         if ($this->beforeEventName !== $eventName || !$event instanceof AfterSetup) {
             return;
         }
 
-        if ($this->setupPrinter) {
+        if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printSetup($formatter, $event->getSetup());
         }
 
@@ -98,18 +62,14 @@ final class ScenarioNodeListener implements EventListener
 
     /**
      * Prints scenario/background footer on AFTER event.
-     *
-     * @param Formatter                      $formatter
-     * @param ScenarioLikeTested|AfterTested $event
-     * @param string                         $eventName
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, $eventName)
+    private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, string $eventName)
     {
         if ($this->afterEventName !== $eventName || !$event instanceof AfterTested) {
             return;
         }
 
-        if ($this->setupPrinter) {
+        if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printTeardown($formatter, $event->getTeardown());
         }
 

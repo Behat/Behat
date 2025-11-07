@@ -11,7 +11,7 @@
 namespace Behat\Behat\Context\Annotation;
 
 /**
- * Helper class for DocBlock parsing
+ * Helper class for DocBlock parsing.
  */
 class DocBlockHelper
 {
@@ -25,18 +25,18 @@ class DocBlockHelper
         $description = preg_replace('/^[\s\t]*/m', '', $docBlock);
 
         // Remove block comment syntax
-        $description = preg_replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', $description);
+        $description = preg_replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', (string) $description);
 
         // Remove annotations
-        $description = preg_replace('/^@.*$/m', '', $description);
+        $description = preg_replace('/^@.*$/m', '', (string) $description);
 
         // Ignore docs after a "--" separator
-        if (preg_match('/^--.*$/m', $description)) {
-            $descriptionParts = preg_split('/^--.*$/m', $description);
+        if (preg_match('/^--.*$/m', (string) $description)) {
+            $descriptionParts = preg_split('/^--.*$/m', (string) $description);
             $description = array_shift($descriptionParts);
         }
 
         // Trim leading and trailing newlines
-        return trim($description, "\r\n");
+        return trim((string) $description, "\r\n");
     }
 }

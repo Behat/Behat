@@ -20,18 +20,15 @@ use InvalidArgumentException;
 class FormatterNotFoundException extends InvalidArgumentException implements OutputException
 {
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $name
      */
-    public function __construct($message, $name)
-    {
+    public function __construct(
+        $message,
+        private $name,
+    ) {
         parent::__construct($message);
     }
 

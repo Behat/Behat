@@ -24,33 +24,15 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterStepSetup extends StepTested implements AfterSetup
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-    /**
-     * @var Setup
-     */
-    private $setup;
-
-    /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param Setup       $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, StepNode $step, Setup $setup)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+        private readonly Setup $setup,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->step = $step;
-        $this->setup = $setup;
     }
 
     /**

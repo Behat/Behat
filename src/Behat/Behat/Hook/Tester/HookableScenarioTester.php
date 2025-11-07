@@ -29,29 +29,14 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class HookableScenarioTester implements ScenarioTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $baseTester;
-    /**
-     * @var HookDispatcher
-     */
-    private $hookDispatcher;
-
-    /**
      * Initializes tester.
-     *
-     * @param ScenarioTester $baseTester
-     * @param HookDispatcher $hookDispatcher
      */
-    public function __construct(ScenarioTester $baseTester, HookDispatcher $hookDispatcher)
-    {
-        $this->baseTester = $baseTester;
-        $this->hookDispatcher = $hookDispatcher;
+    public function __construct(
+        private readonly ScenarioTester $baseTester,
+        private readonly HookDispatcher $hookDispatcher,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
@@ -66,17 +51,11 @@ final class HookableScenarioTester implements ScenarioTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);

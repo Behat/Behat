@@ -17,7 +17,6 @@ use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\ExceptionResult;
-use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
@@ -28,44 +27,16 @@ use Behat\Testwork\Tester\Setup\Teardown;
 final class AfterStepTested extends StepTested implements AfterTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var StepNode
-     */
-    private $step;
-    /**
-     * @var StepResult
-     */
-    private $result;
-    /**
-     * @var Teardown
-     */
-    private $teardown;
-
-    /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param StepNode    $step
-     * @param StepResult  $result
-     * @param Teardown    $teardown
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        StepNode $step,
-        StepResult $result,
-        Teardown $teardown
+        private readonly FeatureNode $feature,
+        private readonly StepNode $step,
+        private readonly StepResult $result,
+        private readonly Teardown $teardown,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->step = $step;
-        $this->result = $result;
-        $this->teardown = $teardown;
     }
 
     /**
@@ -91,7 +62,7 @@ final class AfterStepTested extends StepTested implements AfterTested
     /**
      * Returns current test result.
      *
-     * @return TestResult
+     * @return StepResult
      */
     public function getTestResult()
     {

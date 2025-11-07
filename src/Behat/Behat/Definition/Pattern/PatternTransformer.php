@@ -24,22 +24,20 @@ final class PatternTransformer
     /**
      * @var PatternPolicy[]
      */
-    private $policies = array();
+    private $policies = [];
 
     /**
      * @var string[]
      */
-    private $patternToRegexpCache = array();
+    private $patternToRegexpCache = [];
 
     /**
      * Registers pattern policy.
-     *
-     * @param PatternPolicy $policy
      */
     public function registerPatternPolicy(PatternPolicy $policy)
     {
         $this->policies[] = $policy;
-        $this->patternToRegexpCache = array();
+        $this->patternToRegexpCache = [];
     }
 
     /**
@@ -79,6 +77,24 @@ final class PatternTransformer
         }
 
         return $this->patternToRegexpCache[$pattern];
+    }
+
+    /**
+     * Tests if a pattern matches a given step text.
+     *
+     * If the pattern does not match, returns false. Otherwise, returns an array of the portions of the
+     * step text that match any placeholders within the pattern.
+     *
+     * @return false|array<int|string,string>
+     */
+    public function matchPattern(string $pattern, string $stepText): false|array
+    {
+        $regex = $this->transformPatternToRegex($pattern);
+        if (!preg_match($regex, $stepText, $matches)) {
+            return false;
+        }
+
+        return $matches;
     }
 
     /**

@@ -20,14 +20,15 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Prepares and tests provided suite specifications against provided environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
  */
 interface SuiteTester
 {
     /**
      * Sets up suite for a test.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
+     * @param SpecificationIterator<TSpec> $iterator
      * @param bool               $skip
      *
      * @return Setup
@@ -37,8 +38,7 @@ interface SuiteTester
     /**
      * Tests provided suite specifications.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
+     * @param SpecificationIterator<TSpec> $iterator
      * @param bool               $skip
      *
      * @return TestResult
@@ -48,10 +48,8 @@ interface SuiteTester
     /**
      * Tears down suite after a test.
      *
-     * @param Environment           $env
-     * @param SpecificationIterator $iterator
+     * @param SpecificationIterator<TSpec> $iterator
      * @param bool               $skip
-     * @param TestResult            $result
      *
      * @return Teardown
      */

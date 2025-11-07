@@ -22,41 +22,25 @@ use Behat\Testwork\Suite\Suite;
 final class SuiteWithPathsSetup implements SuiteSetup
 {
     /**
-     * @var string
-     */
-    private $basePath;
-    /**
-     * @var null|FilesystemLogger
-     */
-    private $logger;
-
-    /**
      * Initializes setup.
      *
      * @param string                $basePath
-     * @param null|FilesystemLogger $logger
      */
-    public function __construct($basePath, FilesystemLogger $logger = null)
-    {
-        $this->basePath = $basePath;
-        $this->logger = $logger;
+    public function __construct(
+        private $basePath,
+        private readonly ?FilesystemLogger $logger = null,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return $suite->hasSetting('paths') && is_array($suite->getSetting('paths'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setupSuite(Suite $suite)
     {
         foreach ($suite->getSetting('paths') as $locator) {
-            if (0 !== strpos($locator, '@') && !is_dir($path = $this->locatePath($locator))) {
+            if (!str_starts_with((string) $locator, '@') && !is_dir($path = $this->locatePath($locator))) {
                 $this->createFeatureDirectory($path);
             }
         }
@@ -71,7 +55,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     {
         mkdir($path, 0777, true);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->directoryCreated($path, 'place your *.feature files here');
         }
     }
@@ -101,16 +85,12 @@ final class SuiteWithPathsSetup implements SuiteSetup
      */
     private function isAbsolutePath($file)
     {
-        if ($file[0] == '/' || $file[0] == '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
+        return $file[0] == '/' || $file[0] == '\\'
+            || (
+                strlen($file) > 3 && ctype_alpha($file[0])
                 && $file[1] == ':'
                 && ($file[2] == '\\' || $file[2] == '/')
             )
-            || null !== parse_url($file, PHP_URL_SCHEME)
-        ) {
-            return true;
-        }
-
-        return false;
+            || null !== parse_url($file, PHP_URL_SCHEME);
     }
 }

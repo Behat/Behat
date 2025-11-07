@@ -19,18 +19,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class StreamOutputPrinter implements OutputPrinter
 {
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-    /**
-     * @var OutputFactory
-     */
-    private $outputFactory;
+    private ?OutputInterface $output = null;
 
-    public function __construct(OutputFactory $outputFactory)
-    {
-        $this->outputFactory = $outputFactory;
+    public function __construct(
+        private readonly OutputFactory $outputFactory,
+    ) {
     }
 
     /**
@@ -41,93 +34,60 @@ class StreamOutputPrinter implements OutputPrinter
         return $this->outputFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputPath($path)
     {
         $this->outputFactory->setOutputPath($path);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputPath()
     {
         return $this->outputFactory->getOutputPath();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputStyles(array $styles)
     {
         $this->outputFactory->setOutputStyles($styles);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputStyles()
     {
         return $this->outputFactory->getOutputStyles();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputDecorated($decorated)
     {
         $this->outputFactory->setOutputDecorated($decorated);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isOutputDecorated()
     {
         return $this->outputFactory->isOutputDecorated();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setOutputVerbosity($level)
     {
         $this->outputFactory->setOutputVerbosity($level);
         $this->flush();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputVerbosity()
     {
         return $this->outputFactory->getOutputVerbosity();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function write($messages)
     {
         $this->getWritingStream()->write($messages, false);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function writeln($messages = '')
     {
         $this->getWritingStream()->write($messages, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function flush()
     {
         $this->output = null;
@@ -140,7 +100,7 @@ class StreamOutputPrinter implements OutputPrinter
      */
     final protected function getWritingStream()
     {
-        if (null === $this->output) {
+        if (!$this->output instanceof OutputInterface) {
             $this->output = $this->outputFactory->createOutput();
         }
 

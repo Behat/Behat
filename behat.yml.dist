@@ -1,4 +1,1 @@
 default:
-  gherkin:
-    filters:
-      tags: ~@php8

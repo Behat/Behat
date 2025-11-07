@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
-use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -25,37 +24,15 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var Scenario
-     */
-    private $scenario;
-    /**
-     * @var TestResult
-     */
-    private $result;
-
-    /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param TestResult  $result
+     * Initializes event.
      */
     public function __construct(
         Environment $env,
-        FeatureNode $feature,
-        Scenario $scenario,
-        TestResult $result
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+        private readonly TestResult $result,
     ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->scenario = $scenario;
-        $this->result = $result;
     }
 
     /**
@@ -69,9 +46,7 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

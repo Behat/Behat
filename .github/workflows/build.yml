@@ -1,149 +1,229 @@
 name: Build
 
 on:
-    push:
-        branches: [master, 4.x]
-    pull_request: ~
-    release:
-        types: [created]
-    workflow_dispatch: ~
+  push:
+    branches: [master, 4.x]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  release:
+    types: [created]
+  workflow_dispatch: ~
 
 jobs:
-    tests:
-        runs-on: ${{ matrix.os }}
-        defaults:
-            run:
-                shell: bash
-        name: Build and test
-        strategy:
-            fail-fast: false
-            matrix:
-                php: [8.2]
-                os: [ubuntu-latest]
-                composer-mode: [update]
-                symfony-version: ['']
-                include:
-                    # publish the phar
-                    -   php: 8.2
-                        os: ubuntu-latest
-                        composer-mode: update
-                        publish-phar: true
-                        symfony-version: ''
+  tests:
+    name: Tests
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.1, 8.2, 8.3, 8.4, 8.5]
+        os: [ubuntu-latest]
+        composer-mode: [update]
+        symfony-version: ['']
+        include:
+          # Build on the lowest supported PHP with the lowest supported dependencies
+          - php: 8.1
+            os: ubuntu-latest
+            composer-mode: lowest
+            symfony-version: ''
 
-                    # Build with lowest dependencies
-                    -   php: 8.2
-                        os: ubuntu-latest
-                        composer-mode: lowest
-                        symfony-version: ''
+          # MacOS on latest PHP only
+          - php: 8.4
+            os: macos-latest
+            composer-mode: update
+            symfony-version: ''
 
-                    # MacOS on latest PHP only
-                    -   php: 8.2
-                        os: macos-latest
-                        composer-mode: update
-                        symfony-version: ''
+          # Windows on latest PHP only
+          - php: 8.4
+            os: windows-latest
+            composer-mode: update
+            symfony-version: ''
 
-                    # Windows on latest PHP only
-                    -   php: 8.2
-                        os: windows-latest
-                        composer-mode: update
-                        symfony-version: ''
+          # Symfony LTS jobs:
+          - php: 8.2
+            os: ubuntu-latest
+            composer-mode: update
+            symfony-version: '5.4'
 
-                    # Symfony jobs:
-                    -   php: 8.2
-                        os: ubuntu-latest
-                        composer-mode: update
-                        symfony-version: '5.4'
-                    -   php: 8.2
-                        os: ubuntu-latest
-                        composer-mode: update
-                        symfony-version: '6.0'
+          - php: 8.2
+            os: ubuntu-latest
+            composer-mode: update
+            symfony-version: '6.4'
 
-        steps:
-            -   uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v4
 
-            -   name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: "${{ matrix.php }}"
-                    ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
-                    coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          ini-file: "development"
+          ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+          coverage: none
 
-            -   name: Install symfony/flex
-                if: matrix.symfony-version != ''
-                run: |
-                    composer config --global --no-plugins allow-plugins.symfony/flex true &&
-                    composer global require symfony/flex
+      - name: Install symfony/flex
+        if: matrix.symfony-version != ''
+        run: |
+          composer config --global --no-plugins allow-plugins.symfony/flex true &&
+          composer global require symfony/flex
 
-            -   name: Install latest dependencies
-                if: matrix.composer-mode == 'update'
-                env:
-                    SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
-                run: composer update
+      - name: Install latest dependencies
+        if: matrix.composer-mode == 'update'
+        env:
+          SYMFONY_REQUIRE: ${{ matrix.symfony-version }}.*
+        run: composer update ${{ matrix.php == '8.5' && '--ignore-platform-req=php+' || '' }}
 
-            -   name: Install lowest dependencies
-                if: matrix.composer-mode == 'lowest'
-                run: composer update --prefer-lowest
+      - name: Install lowest dependencies
+        if: matrix.composer-mode == 'lowest'
+        run: composer update --prefer-lowest
 
-            -   name: Run tests (phpunit)
-                run: ./vendor/bin/phpunit
+      - name: Run tests (phpunit)
+        run: ./vendor/bin/phpunit
 
-            -   name: Run tests (Behat)
-                run: ./bin/behat -fprogress --strict
+      - name: Run tests (Behat)
+        run: ./bin/behat -fprogress --strict
 
-            -   name: Run tests (Behat for PHP 8.0)
-                if: matrix.php >= 8.0
-                run: ./bin/behat -fprogress --strict --tags=@php8
+  static-analysis:
+    name: Static analysis
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [8.1, 8.5]
+    steps:
+      - uses: actions/checkout@v4
 
-            -   name: Build the PHAR
-                if: matrix.publish-phar == true
-                run: |
-                    curl -LSs https://box-project.github.io/box2/installer.php | php &&
-                    export PATH=.:$PATH &&
-                    rm -Rf ./vendor &&
-                    composer install --no-dev -o &&
-                    box.phar build
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          ini-values: "zend.exception_ignore_args=Off"
+          coverage: none
 
-            -   uses: actions/upload-artifact@v3
-                name: Publish the PHAR
-                if: matrix.publish-phar == true
-                with:
-                    name: behat.phar
-                    path: behat.phar
+      - name: Install dependencies
+        run: composer update
 
-    static-analysis:
-        runs-on: ubuntu-latest
-        name: Static analysis
-        steps:
-            - uses: actions/checkout@v3
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
-              with:
-                  php-version: 8.2
-                  ini-values: "zend.exception_ignore_args=Off"
-                  coverage: none
+  coding-standard:
+    name: Coding standards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Install dependencies
-              run: composer update
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          ini-values: "zend.exception_ignore_args=Off"
+          coverage: none
 
-            - name: Run Psalm
-              run: ./vendor/bin/psalm --output-format=github
+      - name: Install dependencies
+        run: composer update
 
-    publish-phar:
-        runs-on: ubuntu-latest
-        name: Publish the PHAR for release
-        needs: tests
-        if: github.event_name == 'release'
-        steps:
-            -   uses: actions/download-artifact@v3
-                with:
-                    name: behat.phar
-                    path: .
-            -   name: Upload behat.phar
-                uses: basefas/upload-release-asset-action@v1
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                with:
-                    release_id: ${{ github.event.release.id }}
-                    asset_path: behat.phar
-                    asset_name: behat.phar
+      - name: Run PHP CS Fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --verbose --diff
+
+  rector:
+    name: Rector
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          ini-values: "zend.exception_ignore_args=Off"
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update
+
+      - name: Run Rector
+        run: ./vendor/bin/rector --dry-run
+
+  build-phar:
+    name: Build PHAR file
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+          coverage: none
+          tools: box
+
+      # We have to force the composer platform because box only runs on ^8.2, but we need to make sure the dependencies
+      # inside the phar support 8.1.0 (our lowest supported PHP version).
+      # When we drop 8.1, we may be able to drop this (if we can still get box to run on 8.2).
+      - name: Force dependencies for lowest supported PHP version
+        run: |
+          composer config platform.php 8.1.0
+          composer update --no-dev -o
+
+      - name: Build the PHAR
+        run: box compile
+
+      - name: cache artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: behat.phar
+          path: behat.phar
+
+  test-phar:
+    name: test PHAR file
+    needs: build-phar
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          ini-values: "phar.readonly=0,zend.exception_ignore_args=Off"
+          coverage: none
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: behat.phar
+
+      - name: Check content
+        run: ls -R .
+
+      - name: Test the PHAR
+        run: php ./behat.phar --version
+
+  publish-phar:
+    name: Publish the PHAR for release
+    runs-on: ubuntu-latest
+    needs: [test-phar, tests]
+    if: github.event_name == 'release'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: behat.phar
+          path: .
+
+      - name: Upload behat.phar
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: behat.phar
+          asset_name: behat.phar
+          tag: ${{ github.ref }}

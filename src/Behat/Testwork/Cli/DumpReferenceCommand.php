@@ -13,7 +13,6 @@ namespace Behat\Testwork\Cli;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationTree;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Dumper\YamlReferenceDumper;
-use Symfony\Component\Config\Definition\ReferenceDumper;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,26 +25,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class DumpReferenceCommand extends BaseCommand
 {
     /**
-     * @var ExtensionManager
-     */
-    private $extensionManager;
-
-    /**
      * Initializes dumper.
-     *
-     * @param ExtensionManager $extensionManager
      */
-    public function __construct(ExtensionManager $extensionManager)
-    {
-        $this->extensionManager = $extensionManager;
-
+    public function __construct(
+        private readonly ExtensionManager $extensionManager,
+    ) {
         parent::__construct('dump-reference');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $dumper = new YamlReferenceDumper();
         $configTree = new ConfigurationTree();

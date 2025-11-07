@@ -1,12 +1,11 @@
 <?php
+
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Hook\Scope\StepScope;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
-use Behat\Testwork\Call\CallResult;
 use Behat\Testwork\Call\CallResults;
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Hook\Call\HookCall;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
@@ -19,68 +18,50 @@ use Behat\Testwork\Tester\Setup\Teardown;
  */
 class JUnitSetupPrinter implements SetupPrinter
 {
-
-    /** @var ExceptionPresenter */
-    private $exceptionPresenter;
-
-    public function __construct(ExceptionPresenter $exceptionPresenter)
-    {
-        $this->exceptionPresenter = $exceptionPresenter;
+    public function __construct(
+        private readonly ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printSetup(Formatter $formatter, Setup $setup)
     {
-        if (!$setup->isSuccessful()) {
-            if ($setup instanceof HookedSetup) {
-                $this->handleHookCalls($formatter, $setup->getHookCallResults(), 'setup');
-            }
+        if (!$setup->isSuccessful() && $setup instanceof HookedSetup) {
+            $this->handleHookCalls($formatter, $setup->getHookCallResults(), 'setup');
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printTeardown(Formatter $formatter, Teardown $teardown)
     {
-        if (!$teardown->isSuccessful()) {
-            if ($teardown instanceof HookedTeardown) {
-                $this->handleHookCalls($formatter, $teardown->getHookCallResults(), 'teardown');
-            }
+        if (!$teardown->isSuccessful() && $teardown instanceof HookedTeardown) {
+            $this->handleHookCalls($formatter, $teardown->getHookCallResults(), 'teardown');
         }
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param CallResults $results
-     * @param string $messageType
-     */
-    private function handleHookCalls(Formatter $formatter, CallResults $results, $messageType)
+    private function handleHookCalls(Formatter $formatter, CallResults $results, string $messageType): void
     {
-        /** @var CallResult $hookCallResult */
         foreach ($results as $hookCallResult) {
             if ($hookCallResult->hasException()) {
-                /** @var HookCall $call */
                 $call = $hookCallResult->getCall();
                 $scope = $call->getScope();
-                /** @var JUnitOutputPrinter $outputPrinter */
                 $outputPrinter = $formatter->getOutputPrinter();
+                assert($outputPrinter instanceof JUnitOutputPrinter);
 
-                $message = '';
+                $callee = $call->getCallee();
+                $message = $callee->getName();
                 if ($scope instanceof StepScope) {
-                    $message .= $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText() . ': ';
+                    $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
                 }
-                $message .= $this->exceptionPresenter->presentException($hookCallResult->getException());
-
-                $attributes = array(
-                    'message' => $message,
-                    'type'    => $messageType,
+                $message .= ': ' . $this->exceptionPresenter->presentException(
+                    $hookCallResult->getException(),
+                    applyEditorUrl: false
                 );
 
-                $outputPrinter->addTestcaseChild('failure', $attributes);
+                $attributes = [
+                    'message' => $message,
+                    'type' => $messageType,
+                ];
 
+                $outputPrinter->addTestcaseChild('failure', $attributes);
             }
         }
     }

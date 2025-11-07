@@ -12,6 +12,9 @@ Feature: Multiple formats
           Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
@@ -22,44 +25,32 @@ Feature: Multiple formats
               $this->parameters = $parameters;
           }
 
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               $this->apples = intval($count);
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               $this->apples -= intval($count);
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               $this->apples += intval($count);
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
           }
 
-          /**
-           * @Then /^context parameter "([^"]*)" should be equal to "([^"]*)"$/
-           */
+          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
           public function contextParameterShouldBeEqualTo($key, $val) {
               PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
           }
 
-          /**
-           * @Given /^context parameter "([^"]*)" should be array with (\d+) elements$/
-           */
+          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
           public function contextParameterShouldBeArrayWithElements($key, $count) {
               PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
               PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
@@ -157,8 +148,8 @@ Feature: Multiple formats
       U
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -179,26 +170,20 @@ Feature: Multiple formats
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
-          public function doSomethingUndefined()
+          #[Then('/^do something undefined$/')]
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
+          #[Given('/^pystring:$/')]
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
+          #[Given('/^table:$/')]
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -251,8 +236,8 @@ Feature: Multiple formats
       U
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -273,26 +258,20 @@ Feature: Multiple formats
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
-          public function doSomethingUndefined()
+          #[Then('/^do something undefined$/')]
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
+          #[Given('/^pystring:$/')]
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
+          #[Given('/^table:$/')]
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -319,26 +298,20 @@ Feature: Multiple formats
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
-          public function doSomethingUndefined()
+          #[Then('/^do something undefined$/')]
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
+          #[Given('/^pystring:$/')]
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
+          #[Given('/^table:$/')]
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -388,8 +361,8 @@ Feature: Multiple formats
 
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
@@ -442,34 +415,28 @@ Feature: Multiple formats
 
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)
 
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
-          public function doSomethingUndefined()
+          #[Then('/^do something undefined$/')]
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
+          #[Given('/^pystring:$/')]
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
+          #[Given('/^table:$/')]
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -498,26 +465,20 @@ Feature: Multiple formats
       """
       --- FeatureContext has missing steps. Define them with these snippets:
 
-          /**
-           * @Then /^do something undefined$/
-           */
-          public function doSomethingUndefined()
+          #[Then('/^do something undefined$/')]
+          public function doSomethingUndefined(): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^pystring:$/
-           */
-          public function pystring(PyStringNode $string)
+          #[Given('/^pystring:$/')]
+          public function pystring(PyStringNode $string): void
           {
               throw new PendingException();
           }
 
-          /**
-           * @Given /^table:$/
-           */
-          public function table(TableNode $table)
+          #[Given('/^table:$/')]
+          public function table(TableNode $table): void
           {
               throw new PendingException();
           }
@@ -567,8 +528,8 @@ Feature: Multiple formats
 
       --- Failed scenarios:
 
-          features/apples.feature:9
-          features/apples.feature:30
+          features/apples.feature:9 (on line 11)
+          features/apples.feature:30 (on line 25)
 
       7 scenarios (3 passed, 2 failed, 2 undefined)
       25 steps (20 passed, 2 failed, 3 undefined)

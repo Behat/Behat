@@ -12,7 +12,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\Tester\Setup\Setup;
@@ -25,33 +25,15 @@ use Behat\Testwork\Tester\Setup\Setup;
 final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-    /**
-     * @var BackgroundNode
-     */
-    private $background;
-    /**
-     * @var Setup
-     */
-    private $setup;
-
-    /**
      * Initializes event.
-     *
-     * @param Environment    $env
-     * @param FeatureNode    $feature
-     * @param BackgroundNode $background
-     * @param Setup          $setup
      */
-    public function __construct(Environment $env, FeatureNode $feature, BackgroundNode $background, Setup $setup)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly BackgroundNode $background,
+        private readonly Setup $setup,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->background = $background;
-        $this->setup = $setup;
     }
 
     /**
@@ -67,7 +49,9 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
     /**
      * Returns scenario node.
      *
-     * @return ScenarioInterface
+     * @deprecated Use getBackground() instead
+     *
+     * @return ScenarioLikeInterface
      */
     public function getScenario()
     {

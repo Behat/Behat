@@ -44,34 +44,34 @@ Feature: Syntax helpers
       """
       <?php class FeatureContext implements Behat\Behat\Context\Context {}
       """
-    When I run "behat --no-colors --story-syntax --lang ru"
+    When I run "behat --no-colors --story-syntax --lang el"
     Then the output should contain:
       """
-      # language: ru
-      [Функциональность|Функционал|Свойство|Функция]: Internal operations
+      # language: el
+      [Δυνατότητα|Λειτουργία]: Internal operations
         In order to stay secret
         As a secret organization
         We need to be able to erase past agents' memory
 
-        [Предыстория|Контекст]:
-          [Допустим|Пусть|Дано|*] there is agent A
-          [К тому же|Также|*|И] there is agent B
+        Υπόβαθρο:
+          [Δεδομένου|*] there is agent A
+          [Και|*] there is agent B
 
-        [Сценарий|Пример]: Erasing agent memory
-          [Допустим|Пусть|Дано|*] there is agent J
-          [К тому же|Также|*|И] there is agent K
-          [Когда|Если|*] I erase agent K's memory
-          [Затем|Тогда|То|*] there should be agent J
-          [Иначе|Но|*|А] there should not be agent K
+        [Παράδειγμα|Σενάριο]: Erasing agent memory
+          [Δεδομένου|*] there is agent J
+          [Και|*] there is agent K
+          [Όταν|*] I erase agent K's memory
+          [Τότε|*] there should be agent J
+          [Αλλά|*] there should not be agent K
 
-        [Структура сценария|Шаблон сценария]: Erasing other agents' memory
-          [Допустим|Пусть|Дано|*] there is agent <agent1>
-          [К тому же|Также|*|И] there is agent <agent2>
-          [Когда|Если|*] I erase agent <agent2>'s memory
-          [Затем|Тогда|То|*] there should be agent <agent1>
-          [Иначе|Но|*|А] there should not be agent <agent2>
+        [Περίγραμμα Σεναρίου|Περιγραφή Σεναρίου]: Erasing other agents' memory
+          [Δεδομένου|*] there is agent <agent1>
+          [Και|*] there is agent <agent2>
+          [Όταν|*] I erase agent <agent2>'s memory
+          [Τότε|*] there should be agent <agent1>
+          [Αλλά|*] there should not be agent <agent2>
 
-          Примеры:
+          [Παραδείγματα|Σενάρια]:
             | agent1 | agent2 |
             | D      | M      |
       """
@@ -83,33 +83,28 @@ Feature: Syntax helpers
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^(?:I|We) have (\d+) apples?$/
-           */
+          #[Given('/^(?:I|We) have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^(?:I|We) ate (\d+) apples?$/
-           */
+          #[When('/^(?:I|We) ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^(?:I|We) found (\d+) apples?$/
-           */
+          #[When('/^(?:I|We) found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^(?:I|We) should have (\d+) apples$/
-           */
+          #[Then('/^(?:I|We) should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -132,33 +127,28 @@ Feature: Syntax helpers
       use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException,
           Behat\Behat\Context\TranslatableContext;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements TranslatableContext
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -202,12 +192,13 @@ Feature: Syntax helpers
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
@@ -220,23 +211,18 @@ Feature: Syntax helpers
            * - two
            * --
            * Internal note not showing in help
-           *
-           * @When /^I ate (\d+) apples?$/
            */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -269,41 +255,37 @@ Feature: Syntax helpers
 
       use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
           /**
            * Eating apples
-           * 
+           *
            * More details on eating apples, and a list:
            * - one
            * - two
            * --
            * Internal note not showing in help
-           *
-           * @When /^I ate (\d+) apples?$/
            */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }
@@ -314,11 +296,10 @@ Feature: Syntax helpers
       """
       default | [Given|*] /^I have (\d+) apples?$/
               | at `FeatureContext::iHaveApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[11:13]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[12:14]`
 
       default | [When|*] /^I ate (\d+) apples?$/
               | Eating apples
-              |
               | More details on eating apples, and a list:
               | - one
               | - two
@@ -327,11 +308,11 @@ Feature: Syntax helpers
 
       default | [When|*] /^I found (\d+) apples?$/
               | at `FeatureContext::iFoundApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[33:35]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[31:33]`
 
       default | [Then|*] /^I should have (\d+) apples$/
               | at `FeatureContext::iShouldHaveApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[40:42]`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[36:38]`
       """
 
   Scenario: Search definition
@@ -342,33 +323,28 @@ Feature: Syntax helpers
       use Behat\Behat\Context\Context,
           Behat\Behat\Exception\PendingException,
           Behat\Behat\Context\TranslatableContext;
+      use Behat\Step\Given;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements TranslatableContext
       {
-          /**
-           * @Given /^I have (\d+) apples?$/
-           */
+          #[Given('/^I have (\d+) apples?$/')]
           public function iHaveApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I ate (\d+) apples?$/
-           */
+          #[When('/^I ate (\d+) apples?$/')]
           public function iAteApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @When /^I found (\d+) apples?$/
-           */
+          #[When('/^I found (\d+) apples?$/')]
           public function iFoundApples($count) {
               throw new PendingException();
           }
 
-          /**
-           * @Then /^I should have (\d+) apples$/
-           */
+          #[Then('/^I should have (\d+) apples$/')]
           public function iShouldHaveApples($count) {
               throw new PendingException();
           }

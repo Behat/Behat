@@ -24,23 +24,13 @@ use Behat\Testwork\Environment\Environment;
 final class SuiteScopedResolverFactoryAdapter implements ArgumentResolverFactory
 {
     /**
-     * @var SuiteScopedResolverFactory
-     */
-    private $factory;
-
-    /**
      * Initialises adapter.
-     *
-     * @param SuiteScopedResolverFactory $factory
      */
-    public function __construct(SuiteScopedResolverFactory $factory)
-    {
-        $this->factory = $factory;
+    public function __construct(
+        private readonly SuiteScopedResolverFactory $factory,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createArgumentResolvers(Environment $environment)
     {
         return $this->factory->generateArgumentResolvers($environment->getSuite());

@@ -10,15 +10,15 @@
 
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
+use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
-use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\OutlineNode;
+use Behat\Gherkin\Node\NamedScenarioInterface;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -28,86 +28,42 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class JUnitScenarioPrinter
 {
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-
-    /**
-     * @var JUnitOutlineStoreListener
-     */
-    private $outlineStoreListener;
-
-    /**
-     * @var OutlineNode
-     */
-    private $lastOutline;
-
-    /**
-     * @var int
-     */
-    private $outlineStepCount;
-
-    /**
-     * @var JUnitDurationListener|null
-     */
-    private $durationListener;
-
-    public function __construct(ResultToStringConverter $resultConverter, JUnitOutlineStoreListener $outlineListener, JUnitDurationListener $durationListener = null)
-    {
-        $this->resultConverter = $resultConverter;
-        $this->outlineStoreListener = $outlineListener;
-        $this->durationListener = $durationListener;
+    public function __construct(
+        private readonly ResultToStringConverter $resultConverter,
+        /*
+         * @deprecated the outlineStoreListener is no longer used but kept for BC. It will be removed in the next major
+         */
+        JUnitOutlineStoreListener $outlineStoreListener,
+        private readonly ?JUnitDurationListener $durationListener = null,
+        private readonly ?ConfigurablePathPrinter $configurablePathPrinter = null,
+    ) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, string $file = null)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
     {
-        $name = implode(' ', array_map(function ($l) {
-            return trim($l);
-        }, explode("\n", $scenario->getTitle())));
-
-        if ($scenario instanceof ExampleNode) {
-            $name = $this->buildExampleName($scenario);
-        }
+        assert($scenario instanceof NamedScenarioInterface);
+        $name = implode(' ', array_map(fn ($l) => trim($l), explode("\n", $scenario->getName() ?? '')));
 
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $testCaseAttributes = array(
-            'name'      => $name,
+        $testCaseAttributes = [
+            'name' => $name,
             'classname' => $feature->getTitle(),
-            'status'    => $this->resultConverter->convertResultToString($result),
-            'time'      => $this->durationListener ? $this->durationListener->getDuration($scenario) : ''
-        );
+            'status' => $this->resultConverter->convertResultToString($result),
+        ];
 
-        if ($file) {
-            $cwd = realpath(getcwd());
-            $testCaseAttributes['file'] =
-                substr($file, 0, strlen($cwd)) === $cwd ?
-                    ltrim(substr($file, strlen($cwd)), DIRECTORY_SEPARATOR) : $file;
+        if ($formatter->getParameter('timer') && $this->durationListener instanceof JUnitDurationListener) {
+            $testCaseAttributes['time'] = $this->durationListener->getDuration($scenario);
+        }
+
+        if ($file && $this->configurablePathPrinter instanceof ConfigurablePathPrinter) {
+            $testCaseAttributes['file'] = $this->configurablePathPrinter->processPathsInText(
+                $file,
+                applyEditorUrl: false,
+            );
         }
 
         $outputPrinter->addTestcase($testCaseAttributes);
-    }
-
-    /**
-     * @param ExampleNode $scenario
-     * @return string
-     */
-    private function buildExampleName(ExampleNode $scenario)
-    {
-        $currentOutline = $this->outlineStoreListener->getCurrentOutline($scenario);
-        if ($currentOutline === $this->lastOutline) {
-            $this->outlineStepCount++;
-        } else {
-            $this->lastOutline = $currentOutline;
-            $this->outlineStepCount = 1;
-        }
-
-        $name = $currentOutline->getTitle() . ' #' . $this->outlineStepCount;
-        return $name;
     }
 }

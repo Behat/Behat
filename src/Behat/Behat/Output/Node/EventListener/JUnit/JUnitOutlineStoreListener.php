@@ -21,36 +21,25 @@ use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 
 /**
- * Listens for Outline events store the current one
+ * Listens for Outline events store the current one.
  *
  * @author James Watson <james@sitepulse.org>
  */
 final class JUnitOutlineStoreListener implements EventListener
 {
-
-    /**
-     * @var SuitePrinter
-     */
-    private $suitePrinter;
-
     /**
      * @var array
      */
-    private $lineScenarioMap = array();
+    private $lineScenarioMap = [];
 
     /**
      * Initializes listener.
-     *
-     * @param SuitePrinter $suitePrinter
      */
-    public function __construct(SuitePrinter $suitePrinter)
-    {
-        $this->suitePrinter = $suitePrinter;
+    public function __construct(
+        private readonly SuitePrinter $suitePrinter,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureOutlineOnBeforeOutlineEvent($event);
@@ -61,8 +50,6 @@ final class JUnitOutlineStoreListener implements EventListener
 
     /**
      * Captures outline into the ivar on outline BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureOutlineOnBeforeOutlineEvent(Event $event)
     {
@@ -76,10 +63,6 @@ final class JUnitOutlineStoreListener implements EventListener
         }
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param Event     $event
-     */
     private function printHeaderOnBeforeSuiteTestedEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof BeforeSuiteTested) {
@@ -88,10 +71,6 @@ final class JUnitOutlineStoreListener implements EventListener
         $this->suitePrinter->printHeader($formatter, $event->getSuite());
     }
 
-    /**
-     * @param Formatter $formatter
-     * @param Event     $event
-     */
     private function printFooterOnAfterSuiteTestedEvent(Formatter $formatter, Event $event)
     {
         if (!$event instanceof AfterSuiteTested) {
@@ -101,8 +80,9 @@ final class JUnitOutlineStoreListener implements EventListener
     }
 
     /**
-     * @param ExampleNode $scenario
      * @return OutlineNode
+     *
+     * @deprecated this method will be removed in the next major as the JUnit formatter no longer uses this information
      */
     public function getCurrentOutline(ExampleNode $scenario)
     {

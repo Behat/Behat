@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Context\Snippet\Generator;
 
+use Behat\Behat\Context\CustomSnippetAcceptingContext;
+
 /**
  * Identifier that uses context interfaces to guess the pattern type.
  *
@@ -19,12 +21,9 @@ namespace Behat\Behat\Context\Snippet\Generator;
  */
 final class ContextInterfaceBasedPatternIdentifier implements PatternIdentifier
 {
-    /**
-     * {@inheritdoc}
-     */
     public function guessPatternType($contextClass)
     {
-        if (!in_array('Behat\Behat\Context\CustomSnippetAcceptingContext', class_implements($contextClass))) {
+        if (!in_array(CustomSnippetAcceptingContext::class, class_implements($contextClass))) {
             return null;
         }
 

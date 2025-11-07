@@ -10,11 +10,13 @@
 
 namespace Behat\Testwork\Exception;
 
+use Throwable;
+
 /**
  * All testwork exceptions implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-interface TestworkException
+interface TestworkException extends Throwable
 {
 }

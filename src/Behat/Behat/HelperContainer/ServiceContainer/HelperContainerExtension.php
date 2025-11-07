@@ -11,6 +11,8 @@
 namespace Behat\Behat\HelperContainer\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
+use Behat\Behat\HelperContainer\Argument\ServicesResolverFactory;
+use Behat\Behat\HelperContainer\Call\Filter\ServicesResolver;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -42,55 +44,38 @@ final class HelperContainerExtension implements Extension
 
     /**
      * Initializes compiler pass.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'helper_container';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
-        $definition = new Definition('Behat\Behat\HelperContainer\Argument\ServicesResolverFactory', array(
-            new Reference('service_container')
-        ));
-        $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, array('priority' => 0));
+        $definition = new Definition(ServicesResolverFactory::class, [
+            new Reference('service_container'),
+        ]);
+        $definition->addTag(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG, ['priority' => 0]);
         $container->setDefinition(ContextExtension::SUITE_SCOPED_RESOLVER_FACTORY_TAG . '.helper_container', $definition);
 
-        $definition = new Definition('Behat\Behat\HelperContainer\Call\Filter\ServicesResolver');
-        $definition->addTag(CallExtension::CALL_FILTER_TAG, array('priority' => 0));
+        $definition = new Definition(ServicesResolver::class);
+        $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 0]);
         $container->setDefinition(CallExtension::CALL_FILTER_TAG . '.helper_container', $definition);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::HELPER_CONTAINER_TAG);
@@ -98,7 +83,8 @@ final class HelperContainerExtension implements Extension
         foreach ($references as $reference) {
             if ($container->getDefinition((string) $reference)->isShared()) {
                 throw new WrongServicesConfigurationException(sprintf(
-                    'Container services must not be configured as shared, but `@%s` is.', $reference
+                    'Container services must not be configured as shared, but `@%s` is.',
+                    $reference
                 ));
             }
         }

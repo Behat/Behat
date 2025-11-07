@@ -30,34 +30,21 @@ use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
 final class RuntimeOutlineTester implements OutlineTester
 {
     /**
-     * @var ScenarioTester
-     */
-    private $scenarioTester;
-
-    /**
      * Initializes tester.
-     *
-     * @param ScenarioTester $scenarioTester
      */
-    public function __construct(ScenarioTester $scenarioTester)
-    {
-        $this->scenarioTester = $scenarioTester;
+    public function __construct(
+        private readonly ScenarioTester $scenarioTester,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
     {
         return new SuccessfulSetup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip = false)
     {
-        $results = array();
+        $results = [];
         foreach ($outline->getExamples() as $example) {
             $setup = $this->scenarioTester->setUp($env, $feature, $example, $skip);
             $localSkip = !$setup->isSuccessful() || $skip;
@@ -71,9 +58,6 @@ final class RuntimeOutlineTester implements OutlineTester
         return new TestResults($results);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
     {
         return new SuccessfulTeardown();

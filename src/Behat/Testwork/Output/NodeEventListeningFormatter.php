@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Output;
 
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -23,42 +24,18 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 final class NodeEventListeningFormatter implements Formatter
 {
     /**
-     * @var OutputPrinter
-     */
-    private $printer;
-    /**
-     * @var array
-     */
-    private $parameters;
-    /**
-     * @var EventListener
-     */
-    private $listener;
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var string
-     */
-    private $description;
-
-    /**
      * Initializes formatter.
      *
      * @param string        $name
      * @param string        $description
-     * @param array         $parameters
-     * @param OutputPrinter $printer
-     * @param EventListener $listener
      */
-    public function __construct($name, $description, array $parameters, OutputPrinter $printer, EventListener $listener)
-    {
-        $this->name = $name;
-        $this->description = $description;
-        $this->parameters = $parameters;
-        $this->printer = $printer;
-        $this->listener = $listener;
+    public function __construct(
+        private $name,
+        private $description,
+        private array $parameters,
+        private readonly OutputPrinter $printer,
+        private readonly EventListener $listener,
+    ) {
     }
 
     /**
@@ -68,65 +45,50 @@ final class NodeEventListeningFormatter implements Formatter
      */
     public static function getSubscribedEvents()
     {
-        return array(TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent');
+        return [TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent'];
     }
 
     /**
      * Proxies event to the listener.
      *
-     * @param Event       $event
-     * @param null|string $eventName
+     * @param string|null $eventName
      */
     public function listenEvent(Event $event, $eventName = null)
     {
         if (null === $eventName) {
-            if (method_exists($event, 'getName')) {
-                $eventName = $event->getName();
-            } else {
-                $eventName = get_class($event);
-            }
+            $eventName = method_exists($event, 'getName') ? $event->getName() : $event::class;
         }
 
         $this->listener->listenEvent($this, $event, $eventName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getOutputPrinter()
     {
         return $this->printer;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setParameter($name, $value)
     {
         $this->parameters[$name] = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParameter($name)
     {
-        return $this->parameters[$name] ?? null;
+        $value = $this->parameters[$name] ?? null;
+        if ($value !== null && $name === ShowOutputOption::OPTION_NAME) {
+            return ShowOutputOption::from($value);
+        }
+
+        return $value;
     }
 }

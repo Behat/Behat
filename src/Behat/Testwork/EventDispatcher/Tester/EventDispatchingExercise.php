@@ -14,7 +14,6 @@ use Behat\Testwork\EventDispatcher\Event\AfterExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\AfterExerciseSetup;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseTeardown;
-use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -23,33 +22,24 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Exercise dispatching BEFORE/AFTER events during its execution.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template TSpec
+ *
+ * @implements Exercise<TSpec>
  */
 final class EventDispatchingExercise implements Exercise
 {
     /**
-     * @var Exercise
-     */
-    private $baseExercise;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
      * Initializes exercise.
      *
-     * @param Exercise                 $baseExercise
-     * @param EventDispatcherInterface $eventDispatcher
+     * @param Exercise<TSpec>          $baseExercise
      */
-    public function __construct(Exercise $baseExercise, EventDispatcherInterface $eventDispatcher)
-    {
-        $this->baseExercise = $baseExercise;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly Exercise $baseExercise,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setUp(array $iterators, $skip)
     {
         $event = new BeforeExerciseCompleted($iterators);
@@ -65,17 +55,11 @@ final class EventDispatchingExercise implements Exercise
         return $setup;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function test(array $iterators, $skip = false)
     {
         return $this->baseExercise->test($iterators, $skip);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function tearDown(array $iterators, $skip, TestResult $result)
     {
         $event = new BeforeExerciseTeardown($iterators, $result);

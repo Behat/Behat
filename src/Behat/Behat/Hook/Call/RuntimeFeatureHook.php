@@ -28,10 +28,10 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string      $scopeName
-     * @param null|string $filterString
-     * @param callable    $callable
-     * @param null|string $description
+     * @param string                               $scopeName
+     * @param string|null                          $filterString
+     * @param callable|array{class-string, string} $callable
+     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
@@ -39,18 +39,9 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
-        if ($this->isAnInstanceMethod()) {
-            throw new BadCallbackException(sprintf(
-                'Feature hook callback: %s::%s() must be a static method',
-                $callable[0],
-                $callable[1]
-            ), $callable);
-        }
+        $this->throwIfInstanceMethod($callable, 'Feature');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filterMatches(HookScope $scope)
     {
         if (!$scope instanceof FeatureScope) {
@@ -65,14 +56,13 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     }
 
     /**
-     * @param FeatureNode $feature
      * @param string      $filterString
      *
      * @return bool
      */
     private function isMatch(FeatureNode $feature, $filterString)
     {
-        if (false !== strpos($filterString, '@')) {
+        if (str_contains($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $filterString);
         }
 
@@ -86,7 +76,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches tag filter.
      *
-     * @param FeatureNode $feature
      * @param string      $filterString
      *
      * @return bool
@@ -101,7 +90,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches name filter.
      *
-     * @param FeatureNode $feature
      * @param string      $filterString
      *
      * @return bool

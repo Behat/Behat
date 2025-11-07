@@ -20,43 +20,23 @@ use Behat\Behat\Definition\Definition;
 final class TranslatedDefinition implements Definition
 {
     /**
-     * @var Definition
-     */
-    private $definition;
-    /**
-     * @var string
-     */
-    private $translatedPattern;
-    /**
-     * @var string
-     */
-    private $language;
-
-    /**
      * Initialises translated definition.
      *
-     * @param Definition $definition
      * @param string     $translatedPattern
      * @param string     $language
      */
-    public function __construct(Definition $definition, $translatedPattern, $language)
-    {
-        $this->definition = $definition;
-        $this->translatedPattern = $translatedPattern;
-        $this->language = $language;
+    public function __construct(
+        private readonly Definition $definition,
+        private $translatedPattern,
+        private $language,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getType()
     {
         return $this->definition->getType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->translatedPattern;
@@ -82,57 +62,41 @@ final class TranslatedDefinition implements Definition
         return $this->language;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDescription()
     {
         return $this->definition->getDescription();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPath()
     {
         return $this->definition->getPath();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isAMethod()
     {
         return $this->definition->isAMethod();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isAnInstanceMethod()
     {
         return $this->definition->isAnInstanceMethod();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCallable()
     {
         return $this->definition->getCallable();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getReflection()
     {
         return $this->definition->getReflection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    public function getOriginalDefinition(): Definition
+    {
+        return $this->definition;
+    }
+
     public function __toString()
     {
         return $this->definition->__toString();

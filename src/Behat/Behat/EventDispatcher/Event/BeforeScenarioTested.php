@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
-use Behat\Gherkin\Node\ScenarioNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 
@@ -24,27 +23,14 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
 {
     /**
-     * @var FeatureNode
+     * Initializes event.
      */
-    private $feature;
-    /**
-     * @var Scenario
-     */
-    private $scenario;
-
-    /**
-     * Initializes event
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     */
-    public function __construct(Environment $env, FeatureNode $feature, Scenario $scenario)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+        private readonly Scenario $scenario,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
-        $this->scenario = $scenario;
     }
 
     /**
@@ -58,9 +44,7 @@ final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
     }
 
     /**
-     * Returns scenario node.
-     *
-     * @return ScenarioNode
+     * @return Scenario
      */
     public function getScenario()
     {

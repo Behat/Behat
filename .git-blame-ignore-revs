@@ -1,0 +1,67 @@
+# Git 2.23+ allows ignoring commits from git-blame, useful to not display large automated commits.
+#
+# This file is a list of such commits, that you most probably are not interested in.
+# To make this work for your local setup, you need to run the following command:
+#
+# $ git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# A few rules for changing this file:
+# - Commits are in chronological order - oldest on top. Therefore new commits should be added in the end.
+# - The purpose is specifically for large commits - avoid adding commits with a very small impact, even if related
+#   to automated code style formatting.
+# - Each commit should be preceded with a comment detailing the purpose of the commit.
+
+# PHP-CS-Fixer - Apply PSR2 rules related to spacing
+2b85b5c1a94c21946ac179ec93dfc08d050f3991
+# PHP-CS-Fixer - Fixes method argument spacing, including making sure that multiline argument lists are fully multiline
+ab71677a60a77a8e14c194babbeabfa2003219f3
+# PHP-CS-Fixer - Fix line endings and empty line at EOF
+a947e21cd9b95e1f8077f7b690f9fa79254f25e7
+# PHP-CS-Fixer - Fix braces position
+ba740b59cff1f5aa8f5e4eed8577b986b8b6b1d3
+# PHP-CS-Fixer - Fix indentation
+ba52edd29e43302f4a4254626fd27af8f92dbf32
+# PHP-CS-Fixer - Fix visibility declarations
+40e62bde42a457ebee38e08f92784fdb68719fc5
+# PHP-CS-Fixer - PSR12 spacing
+90fa446e782f14afe3c7a47b58934eff537f6e94
+# PHP-CS-Fixer - PSR12 blank lines
+4ee4d6e9d81598fe48f2e0a6b2755648aa241cb9
+# PHP-CS-Fixer - PSR12 other miscellaneous changes
+efb86c8d82cdf25017a1adfdbddf7c286e49c0c8
+# PHP-CS-Fixer - PER-CS2.0 array syntax
+093a391a650fbd1139eff9c244753ea7b318bb1a
+# PHP-CS-Fixer - PER-CS2.0 spacing
+7484ac5dbf2fca0efbf4b2c2789929aa0c942fc8
+# PHP-CS-Fixer - Trailing comma in multiline
+d7b5b1fa805435b1a9c9746bfc4c72aa766c6864
+# PHP-CS-Fixer Symfony - Binary operator spacing
+6552f0c99b9ffc8b7dffe4664755baf132c6565c
+# PHP-CS-Fixer Symfony - Other spacing rules
+d382a9bdbe102f721a63d086c233a0b69e08076a
+# PHP-CS Fixer Symfony - Miscellaneous fixes related to comments
+f7bf9b823a038bf80372b46881a8d7a47d27d6db
+# PHP CS Fixer Symfony - Remove useless phpdoc tags
+dda1ef91c0d6660c6bcd81037b35dce920b85d2f
+# PHP CS Fixer Symfony - Remove useless inheritdoc tags
+412d8c109ff79cc3577704254bb67b7a267a2fe2
+# PHP-CS Fixer Symfony - Use int instead of integer in PHP Docs
+4f3c0fd12ba3955f56d2344e4ab06591aa7f4ade
+# PHP-CS Fixer Symfony - Add dot at the end of docblock summary
+a59fb0fcaa883d5b8b6ad7ecc5120877a3463f16
+# PHP-CS Fixer Symfony - Null should always be the last type in docblocs
+cf4be80181bf10a9e7351d71a545052dd5efc5ad
+# PHP-CS Fixer Symfony - Add blank line before return statement
+9d55bf12a90eea9670ab182b8eba5a005cc3cb4c
+# PHP-CS Fixer Symfony - Import classes in global namespace
+1cbbee7d8798f09f247db2760bd24da4aa2f8017
+# PHP-CS Fixer Symfony - Remove extra blank lines
+3ec17fcade24664fc5fbdc41904afeaf83d1e53a
+# PHP-CS Fixer Symfony - Order imports and remove unused ones
+7154571060b6ae202d339ea725c29004377a113b
+# PHP-CS Fixer Symfony - Miscellaneous changes
+6741669d11b36c584f186ce34fa19455d001ee1b
+# PHP-CS Fixer Symfony - Convert double quotes to single quotes
+515c8eb3c2367fe7291b08008d924e9f6810e8ca
+# Rector - Code Quality Level 0
+4753a8168d1c6be39d7eac8291950ece0864aec1

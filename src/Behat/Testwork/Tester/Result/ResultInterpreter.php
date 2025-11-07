@@ -19,15 +19,16 @@ use Behat\Testwork\Tester\Result\Interpretation\ResultInterpretation;
  */
 final class ResultInterpreter
 {
+    public const PASS = 0;
+    public const FAIL = 1;
+
     /**
      * @var ResultInterpretation[]
      */
-    private $interpretations = array();
+    private $interpretations = [];
 
     /**
      * Registers result interpretation.
-     *
-     * @param ResultInterpretation $interpretation
      */
     public function registerResultInterpretation(ResultInterpretation $interpretation)
     {
@@ -37,18 +38,16 @@ final class ResultInterpreter
     /**
      * Interprets result as a UNIX return code (0 for success, 1 for failure).
      *
-     * @param TestResult $result
-     *
-     * @return integer
+     * @return int
      */
     public function interpretResult(TestResult $result)
     {
         foreach ($this->interpretations as $interpretation) {
             if ($interpretation->isFailure($result)) {
-                return 1;
+                return self::FAIL;
             }
         }
 
-        return 0;
+        return self::PASS;
     }
 }

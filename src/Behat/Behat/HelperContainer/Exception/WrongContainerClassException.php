@@ -19,21 +19,10 @@ use InvalidArgumentException;
  */
 final class WrongContainerClassException extends InvalidArgumentException implements HelperContainerException
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * Initializes exception.
-     *
-     * @param integer $message
-     * @param string  $class
-     */
-    public function __construct($message, $class)
-    {
-        $this->class = $class;
-
+    public function __construct(
+        string $message,
+        private readonly string $class,
+    ) {
         parent::__construct($message);
     }
 

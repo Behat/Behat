@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Translator\ServiceContainer;
 
+use Behat\Behat\Translator\Cli\GherkinTranslationsController;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -26,54 +27,37 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class GherkinTranslationsExtension implements Extension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'gherkin_translations';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadController($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
     }
 
     /**
      * Loads translator controller.
-     *
-     * @param ContainerBuilder $container
      */
     private function loadController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Behat\Translator\Cli\GherkinTranslationsController', array(
-            new Reference(TranslatorExtension::TRANSLATOR_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        $definition = new Definition(GherkinTranslationsController::class, [
+            new Reference(TranslatorExtension::TRANSLATOR_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.gherkin_translations', $definition);
     }
 }

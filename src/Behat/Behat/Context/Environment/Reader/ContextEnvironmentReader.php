@@ -27,39 +27,31 @@ final class ContextEnvironmentReader implements EnvironmentReader
     /**
      * @var ContextReader[]
      */
-    private $contextReaders = array();
+    private $contextReaders = [];
 
     /**
      * Registers context loader.
-     *
-     * @param ContextReader $contextReader
      */
     public function registerContextReader(ContextReader $contextReader)
     {
         $this->contextReaders[] = $contextReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsEnvironment(Environment $environment)
     {
         return $environment instanceof ContextEnvironment;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function readEnvironmentCallees(Environment $environment)
     {
         if (!$environment instanceof ContextEnvironment) {
             throw new EnvironmentReadException(sprintf(
                 'ContextEnvironmentReader does not support `%s` environment.',
-                get_class($environment)
+                $environment::class
             ), $environment);
         }
 
-        $callees = array();
+        $callees = [];
         foreach ($environment->getContextClasses() as $contextClass) {
             $callees = array_merge(
                 $callees,
@@ -73,14 +65,13 @@ final class ContextEnvironmentReader implements EnvironmentReader
     /**
      * Reads callees from a specific suite's context.
      *
-     * @param ContextEnvironment $environment
      * @param string             $contextClass
      *
      * @return Callee[]
      */
     private function readContextCallees(ContextEnvironment $environment, $contextClass)
     {
-        $callees = array();
+        $callees = [];
         foreach ($this->contextReaders as $loader) {
             $callees = array_merge(
                 $callees,

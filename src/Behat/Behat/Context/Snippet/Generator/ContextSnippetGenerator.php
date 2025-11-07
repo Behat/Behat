@@ -12,12 +12,20 @@ namespace Behat\Behat\Context\Snippet\Generator;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\Snippet\ContextSnippet;
+use Behat\Behat\Definition\Call as DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use Behat\Behat\Snippet\Exception\EnvironmentSnippetGenerationException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
+use Behat\Behat\Snippet\Snippet;
+use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
 use Behat\Testwork\Environment\Environment;
 use ReflectionClass;
 
@@ -29,71 +37,49 @@ use ReflectionClass;
 final class ContextSnippetGenerator implements SnippetGenerator
 {
     /**
-     * @var string[string]
+     * @var array<string, array<string, string>>
      */
-    private static $proposedMethods = array();
-    /**
-     * @var string
-     */
-    private static $templateTemplate = <<<TPL
-    /**
-     * @%%s %s
-     */
-    public function %s(%s)
+    private static array $proposedMethods = [];
+
+    private static string $snippetTemplate = <<<TPL
+    #[%%s('%s')]
+    public function %s(%s): void
     {
         throw new PendingException();
     }
 TPL;
-    /**
-     * @var PatternTransformer
-     */
-    private $patternTransformer;
-    /**
-     * @var TargetContextIdentifier
-     */
-    private $contextIdentifier;
-    /**
-     * @var PatternIdentifier
-     */
-    private $patternIdentifier;
+
+    private TargetContextIdentifier $contextIdentifier;
+
+    private PatternIdentifier $patternIdentifier;
 
     /**
      * Initializes snippet generator.
-     *
-     * @param PatternTransformer $patternTransformer
      */
-    public function __construct(PatternTransformer $patternTransformer)
-    {
-        $this->patternTransformer = $patternTransformer;
-
-        $this->setContextIdentifier(new FixedContextIdentifier(null));
-        $this->setPatternIdentifier(new FixedPatternIdentifier(null));
+    public function __construct(
+        private readonly PatternTransformer $patternTransformer,
+    ) {
+        $this->setContextIdentifier(new FixedContextIdentifier());
+        $this->setPatternIdentifier(new FixedPatternIdentifier());
     }
 
     /**
      * Sets target context identifier.
-     *
-     * @param TargetContextIdentifier $identifier
      */
-    public function setContextIdentifier(TargetContextIdentifier $identifier)
+    public function setContextIdentifier(TargetContextIdentifier $identifier): void
     {
         $this->contextIdentifier = new CachedContextIdentifier($identifier);
     }
 
     /**
      * Sets target pattern type identifier.
-     *
-     * @param PatternIdentifier $identifier
      */
-    public function setPatternIdentifier(PatternIdentifier $identifier)
+    public function setPatternIdentifier(PatternIdentifier $identifier): void
     {
         $this->patternIdentifier = $identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsEnvironmentAndStep(Environment $environment, StepNode $step)
+    public function supportsEnvironmentAndStep(Environment $environment, StepNode $step): bool
     {
         if (!$environment instanceof ContextEnvironment) {
             return false;
@@ -106,15 +92,12 @@ TPL;
         return null !== $this->contextIdentifier->guessTargetContextClass($environment);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function generateSnippet(Environment $environment, StepNode $step)
+    public function generateSnippet(Environment $environment, StepNode $step): Snippet
     {
         if (!$environment instanceof ContextEnvironment) {
             throw new EnvironmentSnippetGenerationException(sprintf(
                 'ContextSnippetGenerator does not support `%s` environment.',
-                get_class($environment)
+                $environment::class
             ), $environment);
         }
 
@@ -123,7 +106,17 @@ TPL;
         $stepText = $step->getText();
         $pattern = $this->patternTransformer->generatePattern($patternType, $stepText);
 
-        $methodName = $this->getMethodName($contextClass, $pattern->getCanonicalText(), $pattern->getPattern());
+        if ($this->patternTransformer->matchPattern($pattern->getPattern(), $stepText) === false) {
+            // The generated pattern does not actually match the step text. For example because the step
+            // text contains literal characters that are treated as placeholders or similar.
+            throw new CannotGenerateStepPatternException($stepText);
+        }
+
+        $methodName = $this->getUniqueMethodName(
+            $contextClass,
+            $pattern->getPattern(),
+            $pattern->getSuggestedMethodName() ?: SimpleStepMethodNameSuggester::DEFAULT_NAME,
+        );
         $methodArguments = $this->getMethodArguments($step, $pattern->getPlaceholderCount());
         $snippetTemplate = $this->getSnippetTemplate($pattern->getPattern(), $methodName, $methodArguments);
 
@@ -133,34 +126,14 @@ TPL;
     }
 
     /**
-     * Generates method name using step text and regex.
-     *
-     * @param string $contextClass
-     * @param string $canonicalText
-     * @param string $pattern
-     *
-     * @return string
-     */
-    private function getMethodName($contextClass, $canonicalText, $pattern)
-    {
-        $methodName = $this->deduceMethodName($canonicalText);
-        $methodName = $this->getUniqueMethodName($contextClass, $pattern, $methodName);
-
-        return $methodName;
-    }
-
-    /**
      * Returns an array of method argument names from step and token count.
-     *
-     * @param StepNode $step
-     * @param integer  $tokenCount
      *
      * @return string[]
      */
-    private function getMethodArguments(StepNode $step, $tokenCount)
+    private function getMethodArguments(StepNode $step, int $tokenCount): array
     {
-        $args = array();
-        for ($i = 0; $i < $tokenCount; $i++) {
+        $args = [];
+        for ($i = 0; $i < $tokenCount; ++$i) {
             $args[] = '$arg' . ($i + 1);
         }
 
@@ -172,22 +145,28 @@ TPL;
     }
 
     /**
-     * Returns an array of classes used by the snippet template
-     *
-     * @param StepNode $step
+     * Returns an array of classes used by the snippet template.
      *
      * @return string[]
      */
-    private function getUsedClasses(StepNode $step)
+    private function getUsedClasses(StepNode $step): array
     {
-        $usedClasses = array('Behat\Behat\Tester\Exception\PendingException');
+        $usedClasses = [PendingException::class];
+
+        $keywordType = $step->getKeywordType();
+        assert(
+            $keywordType === DefinitionCall\Given::KEYWORD
+            || $keywordType === DefinitionCall\When::KEYWORD
+            || $keywordType === DefinitionCall\Then::KEYWORD
+        );
+        $usedClasses[] = match ($keywordType) {
+            DefinitionCall\Given::KEYWORD => Given::class,
+            DefinitionCall\When::KEYWORD => When::class,
+            DefinitionCall\Then::KEYWORD => Then::class,
+        };
 
         foreach ($step->getArguments() as $argument) {
-            if ($argument instanceof TableNode) {
-                $usedClasses[] = 'Behat\Gherkin\Node\TableNode';
-            } elseif ($argument instanceof PyStringNode) {
-                $usedClasses[] = 'Behat\Gherkin\Node\PyStringNode';
-            }
+            $usedClasses[] = $argument::class;
         }
 
         return $usedClasses;
@@ -196,69 +175,42 @@ TPL;
     /**
      * Generates snippet template using regex, method name and arguments.
      *
-     * @param string   $pattern
-     * @param string   $methodName
      * @param string[] $methodArguments
-     *
-     * @return string
      */
-    private function getSnippetTemplate($pattern, $methodName, array $methodArguments)
+    private function getSnippetTemplate(string $pattern, string $methodName, array $methodArguments): string
     {
         return sprintf(
-            self::$templateTemplate,
-            str_replace('%', '%%', $pattern),
+            self::$snippetTemplate,
+            $this->preparePattern($pattern),
             $methodName,
             implode(', ', $methodArguments)
         );
     }
 
-    /**
-     * Generates definition method name based on the step text.
-     *
-     * @param string $canonicalText
-     *
-     * @return string
-     */
-    private function deduceMethodName($canonicalText)
+    private function preparePattern(string $pattern): string
     {
-        // check that method name is not empty
-        if (0 !== strlen($canonicalText)) {
-            $canonicalText[0] = strtolower($canonicalText[0]);
+        $pattern = str_replace('%', '%%', $pattern);
+        $pattern = str_replace('\\\\', '\\\\\\\\', $pattern);
 
-            return $canonicalText;
-        }
-
-        return 'stepDefinition1';
+        return str_replace("'", "\'", $pattern);
     }
 
     /**
      * Ensures uniqueness of the method name in the context.
-     *
-     * @param string $contextClass
-     * @param string $stepPattern
-     * @param string $name
-     *
-     * @return string
      */
-    private function getUniqueMethodName($contextClass, $stepPattern, $name)
+    private function getUniqueMethodName(string $contextClass, string $stepPattern, string $name): string
     {
         $reflection = new ReflectionClass($contextClass);
-
         $number = $this->getMethodNumberFromTheMethodName($name);
-        list($name, $number) = $this->getMethodNameNotExistentInContext($reflection, $name, $number);
-        $name = $this->getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number);
+        [$name, $number] = $this->getMethodNameNotExistentInContext($reflection, $name, $number);
 
-        return $name;
+        return $this->getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number);
     }
 
     /**
      * Tries to deduct method number from the provided method name.
-     *
-     * @param string $methodName
-     *
-     * @return integer
      */
-    private function getMethodNumberFromTheMethodName($methodName)
+    private function getMethodNumberFromTheMethodName(string $methodName): int
     {
         $methodNumber = 2;
         if (preg_match('/(\d+)$/', $methodName, $matches)) {
@@ -271,33 +223,22 @@ TPL;
     /**
      * Tries to guess method name that is not yet defined in the context class.
      *
-     * @param ReflectionClass $reflection
-     * @param string          $methodName
-     * @param integer         $methodNumber
-     *
-     * @return array
+     * @return array{string, int}
      */
-    private function getMethodNameNotExistentInContext(ReflectionClass $reflection, $methodName, $methodNumber)
+    private function getMethodNameNotExistentInContext(ReflectionClass $reflection, string $methodName, int $methodNumber): array
     {
         while ($reflection->hasMethod($methodName)) {
             $methodName = preg_replace('/\d+$/', '', $methodName);
             $methodName .= $methodNumber++;
         }
 
-        return array($methodName, $methodNumber);
+        return [$methodName, $methodNumber];
     }
 
     /**
      * Tries to guess method name that is not yet proposed to the context class.
-     *
-     * @param string  $contextClass
-     * @param string  $stepPattern
-     * @param string  $name
-     * @param integer $number
-     *
-     * @return string
      */
-    private function getMethodNameNotProposedEarlier($contextClass, $stepPattern, $name, $number)
+    private function getMethodNameNotProposedEarlier(string $contextClass, string $stepPattern, string $name, int $number): string
     {
         foreach ($this->getAlreadyProposedMethods($contextClass) as $proposedPattern => $proposedMethod) {
             if ($proposedPattern === $stepPattern) {
@@ -318,43 +259,27 @@ TPL;
     /**
      * Returns already proposed method names.
      *
-     * @param string $contextClass
-     *
-     * @return string[]
+     * @return array<string, string>
      */
-    private function getAlreadyProposedMethods($contextClass)
+    private function getAlreadyProposedMethods(string $contextClass): array
     {
-        return self::$proposedMethods[$contextClass] ?? array();
+        return self::$proposedMethods[$contextClass] ?? [];
     }
 
     /**
      * Marks method as proposed one.
-     *
-     * @param string $contextClass
-     * @param string $stepPattern
-     * @param string $methodName
      */
-    private function markMethodAsAlreadyProposed($contextClass, $stepPattern, $methodName)
+    private function markMethodAsAlreadyProposed(string $contextClass, string $stepPattern, string $methodName): void
     {
         self::$proposedMethods[$contextClass][$stepPattern] = $methodName;
     }
 
-    /**
-     * Returns method argument.
-     *
-     * @param string $argument
-     *
-     * @return string
-     */
-    private function getMethodArgument($argument)
+    private function getMethodArgument(ArgumentInterface $argument): string
     {
-        $arg = '__unknown__';
-        if ($argument instanceof PyStringNode) {
-            $arg = 'PyStringNode $string';
-        } elseif ($argument instanceof TableNode) {
-            $arg = 'TableNode $table';
-        }
-
-        return $arg;
+        return match (true) {
+            $argument instanceof PyStringNode => 'PyStringNode $string',
+            $argument instanceof TableNode => 'TableNode $table',
+            default => '__unknown__',
+        };
     }
 }

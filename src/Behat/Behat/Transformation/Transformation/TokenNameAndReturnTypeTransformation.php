@@ -33,10 +33,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
      */
     private $returnTransformation;
 
-    /**
-     * {@inheritdoc}
-     */
-    static public function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {
         return TokenNameTransformation::supportsPatternAndMethod($pattern, $method)
             && ReturnTypeTransformation::supportsPatternAndMethod('', $method);
@@ -47,7 +44,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
      *
      * @param string      $pattern
      * @param callable    $callable
-     * @param null|string $description
+     * @param string|null $description
      */
     public function __construct($pattern, $callable, $description = null)
     {
@@ -57,25 +54,19 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
         parent::__construct($callable, $description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
     {
         return $this->tokenTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue)
             && $this->returnTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),
             $definitionCall->getCallee(),
             $this,
-            array($argumentValue)
+            [$argumentValue]
         );
 
         $result = $callCenter->makeCall($call);
@@ -87,25 +78,16 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
         return $result->getReturn();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPriority()
     {
         return 100;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPattern()
     {
         return $this->tokenTransformation->getPattern();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString()
     {
         return 'NamedReturnTypeTransform ' . $this->getPattern();

@@ -1,212 +1,124 @@
-Feature: Stop on failure
+Feature: Stop on failure via config
   In order to stop further execution of steps when first step fails
   As a feature developer
-  I need to have a --stop-on-failure option
+  I need to have a stop-on-failure option on the CLI or in config
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
+    Given I initialise the working directory from the "StopOnFailure" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option            | value              |
+      | --no-colors       |                    |
+      | --format-settings | '{"paths": false}' |
 
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given /^I have (?:a|another) step that passes?$/
-           * @Then /^I should have a scenario that passed$/
-           */
-          public function passing() {
-          }
-
-          /**
-           * @Given /^I have (?:a|another) step that fails?$/
-           * @Then /^I should have a scenario that failed$/
-           */
-          public function failing() {
-              throw new Exception("step failed as supposed");
-          }
-
-      }
-      """
-    And a file named "features/failing.feature" with:
-      """
-      Feature: Failing Feature
-        In order to test the stop-on-failure feature
-        As a behat developer
-        I need to have a feature that fails
-
-        Background:
-          Given I have a step that passes
-
-        Scenario: 1st Passing
-          When I have a step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 2nd Passing
-          When I have a step that passes
-           And I have another step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 1st Failing
-          When I have a step that passes
-           And I have another step that fails
-          Then I should have a scenario that failed
-
-        Scenario: 2st Failing
-          When I have a step that fails
-          Then I should have a scenario that failed
-      """
-    And a file named "features/missing-step.feature" with:
-      """
-      Feature: Missing Step Feature
-        In order to test the stop-on-failure and strict features
-        As a behat developer
-        I need to have a feature with a missing step
-
-        Background:
-          Given I have a step that passes
-
-        Scenario: 1st Passing
-          When I have a step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 2nd Passing
-          When I have a step that passes
-           And I have another step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 1st Failing
-          When I have a step that passes
-           And I have another step that is missing
-          Then I should have a scenario that failed
-
-        Scenario: 2st Failing
-          When I have a step that is missing
-          Then I should have a scenario that failed
-      """
-    And a file named "features/passing.feature" with:
-      """
-      Feature: Passing Feature
-        In order to test the stop-on-failure feature
-        As a behat developer
-        I need to have a broken feature
-
-        Background:
-          Given I have a step that passes
-
-        Scenario: 1st Passing
-          When I have a step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 2nd Passing
-          When I have a step that passes
-           And I have another step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 3rd Passing
-          When I have a step that passes
-           And I have another step that passes
-           And I have another step that passes
-          Then I should have a scenario that passed
-      """
-
-  Scenario: Just run feature
-    When I run "behat --no-colors --format-settings='{\"paths\": false}' --stop-on-failure features/failing.feature"
+  Scenario: Run all scenarios with with default config and command options
+    When  I run behat with the following additional options:
+      | option                   | value   |
+      | --profile                | default |
+      | features/failing.feature |         |
     Then it should fail with:
       """
-      Feature: Failing Feature
-        In order to test the stop-on-failure feature
-        As a behat developer
-        I need to have a feature that fails
-      
-        Background:
-          Given I have a step that passes
-      
-        Scenario: 1st Passing
-          When I have a step that passes
-          Then I should have a scenario that passed
-      
-        Scenario: 2nd Passing
-          When I have a step that passes
-          And I have another step that passes
-          Then I should have a scenario that passed
-      
-        Scenario: 1st Failing
-          When I have a step that passes
-          And I have another step that fails
-            step failed as supposed (Exception)
-          Then I should have a scenario that failed
-
       --- Failed scenarios:
 
-          features/failing.feature:18
+          features/failing.feature:13 (on line 15)
+          features/failing.feature:18 (on line 19)
 
-      3 scenarios (2 passed, 1 failed)
-      11 steps (9 passed, 1 failed, 1 skipped)
+      4 scenarios (2 passed, 2 failed)
+      14 steps (10 passed, 2 failed, 2 skipped)
       """
 
-  Scenario: Just run feature
-    When I run "behat --no-colors --format-settings='{\"paths\": false}' --strict --stop-on-failure features/missing-step.feature"
+  Scenario: Run all scenarios with stop_on_failure set to false in config
+    When  I run behat with the following additional options:
+      | option                   | value              |
+      | --profile                | no-stop-on-failure |
+      | features/failing.feature |                    |
     Then it should fail with:
       """
-      Feature: Missing Step Feature
-        In order to test the stop-on-failure and strict features
-        As a behat developer
-        I need to have a feature with a missing step
+      --- Failed scenarios:
 
-        Background:
-          Given I have a step that passes
+          features/failing.feature:13 (on line 15)
+          features/failing.feature:18 (on line 19)
 
-        Scenario: 1st Passing
-          When I have a step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 2nd Passing
-          When I have a step that passes
-          And I have another step that passes
-          Then I should have a scenario that passed
-
-        Scenario: 1st Failing
-          When I have a step that passes
-          And I have another step that is missing
-          Then I should have a scenario that failed
-
-      3 scenarios (2 passed, 1 undefined)
-      11 steps (9 passed, 1 undefined, 1 skipped)
-
-      --- Use --snippets-for CLI option to generate snippets for following default suite steps:
-
-          And I have another step that is missing
+      4 scenarios (2 passed, 2 failed)
+      14 steps (10 passed, 2 failed, 2 skipped)
       """
 
-  Scenario: Just run feature
-    When I run "behat --no-colors --format-settings='{\"paths\": false}' --stop-on-failure features/passing.feature"
+
+  Scenario: Stop on first failure with stop_on_failure set to true in config
+    When  I run behat with the following additional options:
+      | option                   | value           |
+      | --profile                | stop-on-failure |
+      | features/failing.feature |                 |
+    Then it should fail with:
+      """
+      --- Failed scenarios:
+
+          features/failing.feature:13 (on line 15)
+
+      2 scenarios (1 passed, 1 failed)
+      7 steps (5 passed, 1 failed, 1 skipped)
+      """
+
+  Scenario: Stop on first failure with --stop-on-failure on CLI
+    When  I run behat with the following additional options:
+      | option                   | value |
+      | --stop-on-failure        |       |
+      | features/failing.feature |       |
+    Then it should fail with:
+      """
+      --- Failed scenarios:
+
+          features/failing.feature:13 (on line 15)
+
+      2 scenarios (1 passed, 1 failed)
+      7 steps (5 passed, 1 failed, 1 skipped)
+      """
+
+  Scenario: --stop-on-failure CLI flag takes precedence over configuring stop_on_failure false
+    When  I run behat with the following additional options:
+      | option                   | value              |
+      | --profile                | no-stop-on-failure |
+      | --stop-on-failure        |                    |
+      | features/failing.feature |                    |
+    Then it should fail with:
+      """
+      --- Failed scenarios:
+
+          features/failing.feature:13 (on line 15)
+
+      2 scenarios (1 passed, 1 failed)
+      7 steps (5 passed, 1 failed, 1 skipped)
+      """
+
+  Scenario: Do not stop on undefined steps by default
+    When  I run behat with the following additional options:
+      | option                        | value           |
+      | --profile                     | stop-on-failure |
+      | features/missing-step.feature |                 |
     Then it should pass with:
       """
-      Feature: Passing Feature
-        In order to test the stop-on-failure feature
-        As a behat developer
-        I need to have a broken feature
-      
-        Background:
-          Given I have a step that passes
-      
-        Scenario: 1st Passing
-          When I have a step that passes
-          Then I should have a scenario that passed
-      
-        Scenario: 2nd Passing
-          When I have a step that passes
-          And I have another step that passes
-          Then I should have a scenario that passed
-      
-        Scenario: 3rd Passing
-          When I have a step that passes
-          And I have another step that passes
-          And I have another step that passes
-          Then I should have a scenario that passed
-      
+      2 scenarios (1 passed, 1 undefined)
+      6 steps (4 passed, 1 undefined, 1 skipped)
+      """
+
+  Scenario: Stop on first undefined step in strict mode
+    When  I run behat with the following additional options:
+      | option                        | value           |
+      | --profile                     | stop-on-failure |
+      | --strict                      |                 |
+      | features/missing-step.feature |                 |
+    Then it should fail with:
+      """
+      1 scenario (1 undefined)
+      3 steps (1 passed, 1 undefined, 1 skipped)
+      """
+
+  Scenario: Run all scenarios if none fail, even with stop_on_failure set
+    When  I run behat with the following additional options:
+      | option                   | value           |
+      | --profile                | stop-on-failure |
+      | features/passing.feature |                 |
+    Then it should pass with:
+      """
       3 scenarios (3 passed)
       12 steps (12 passed)
       """

@@ -19,26 +19,32 @@ use ErrorException;
  */
 final class CallErrorException extends ErrorException
 {
-    private $levels = array(
-        E_WARNING           => 'Warning',
-        E_NOTICE            => 'Notice',
-        E_USER_ERROR        => 'User Error',
-        E_USER_WARNING      => 'User Warning',
-        E_USER_NOTICE       => 'User Notice',
-        E_STRICT            => 'Runtime Notice',
+    private $levels = [
+        E_WARNING => 'Warning',
+        E_NOTICE => 'Notice',
+        E_DEPRECATED => 'Deprecated',
+        E_USER_ERROR => 'User Error',
+        E_USER_WARNING => 'User Warning',
+        E_USER_NOTICE => 'User Notice',
+        E_USER_DEPRECATED => 'User Deprecated',
         E_RECOVERABLE_ERROR => 'Catchable Fatal Error',
-    );
+    ];
 
     /**
      * Initializes error handler exception.
      *
-     * @param integer $level   error level
-     * @param string  $message error message
-     * @param string  $file    error file
-     * @param integer $line    error line
+     * @param int    $level   error level
+     * @param string $message error message
+     * @param string $file    error file
+     * @param int    $line    error line
      */
     public function __construct($level, $message, $file, $line)
     {
+        // E_STRICT is deprecated since PHP 8.4.
+        if (defined('E_STRICT') && $level === @E_STRICT) {
+            $this->levels[@E_STRICT] = 'Runtime Notice';
+        }
+
         parent::__construct(
             sprintf(
                 '%s: %s in %s line %d',

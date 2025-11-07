@@ -26,48 +26,41 @@ use Symfony\Component\Console\Output\OutputInterface;
 class OutputController implements Controller
 {
     /**
-     * @var OutputManager
-     */
-    private $manager;
-
-    /**
      * Initializes controller.
-     *
-     * @param OutputManager $manager
      */
-    public function __construct(OutputManager $manager)
-    {
-        $this->manager = $manager;
+    public function __construct(
+        private readonly OutputManager $manager,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
         $command
             ->addOption(
-                '--format', '-f', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--format',
+                '-f',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'How to format tests output. <comment>pretty</comment> is default.' . PHP_EOL .
                 'Available formats are:' . PHP_EOL . $this->getFormatterDescriptions() .
                 'You can use multiple formats at the same time.'
             )
             ->addOption(
-                '--out', '-o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--out',
+                '-o',
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Write format output to a file/directory instead of' . PHP_EOL .
                 'STDOUT <comment>(output_path)</comment>. You can also provide different' . PHP_EOL .
-                'outputs to multiple formats.'
+                'outputs to multiple formats. This option is mandatory for the junit formatter.'
             )
             ->addOption(
-                '--format-settings', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                '--format-settings',
+                null,
+                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Set formatters parameters using json object.' . PHP_EOL .
                 'Keys are parameter names, values are values.'
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $formats = $input->getOption('format');
@@ -75,14 +68,12 @@ class OutputController implements Controller
 
         $this->configureFormatters($formats, $input, $output);
         $this->configureOutputs($formats, $outputs, $output->isDecorated());
+
+        return null;
     }
 
     /**
      * Configures formatters based on container, input and output configurations.
-     *
-     * @param array           $formats
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function configureFormatters(array $formats, InputInterface $input, OutputInterface $output)
     {
@@ -92,8 +83,6 @@ class OutputController implements Controller
 
     /**
      * Enables formatters.
-     *
-     * @param array $formats
      */
     protected function enableFormatters(array $formats)
     {
@@ -107,9 +96,6 @@ class OutputController implements Controller
 
     /**
      * Sets formatters parameters based on input & output.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function setFormattersParameters(InputInterface $input, OutputInterface $output)
     {
@@ -151,8 +137,6 @@ class OutputController implements Controller
     /**
      * Initializes multiple formatters with different outputs.
      *
-     * @param array   $formats
-     * @param array   $outputs
      * @param bool $decorated
      */
     private function configureOutputs(array $formats, array $outputs, $decorated = false)
@@ -200,17 +184,13 @@ class OutputController implements Controller
      */
     private function isAbsolutePath($file)
     {
-        if ($file[0] == '/' || $file[0] == '\\'
-            || (strlen($file) > 3 && ctype_alpha($file[0])
+        return $file[0] == '/' || $file[0] == '\\'
+            || (
+                strlen($file) > 3 && ctype_alpha($file[0])
                 && $file[1] == ':'
                 && ($file[2] == '\\' || $file[2] == '/')
             )
-            || null !== parse_url($file, PHP_URL_SCHEME)
-        ) {
-            return true;
-        }
-
-        return false;
+            || null !== parse_url($file, PHP_URL_SCHEME);
     }
 
     /**
@@ -228,7 +208,8 @@ class OutputController implements Controller
                     $comment .= $formatter->getDescription();
 
                     return $comment;
-                }, $this->manager->getFormatters()
+                },
+                $this->manager->getFormatters()
             )
         ) . PHP_EOL;
     }

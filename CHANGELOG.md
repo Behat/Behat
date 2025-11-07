@@ -4,6 +4,352 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.26.0] - 2025-10-28
+
+### Changed
+* Support configuring how file paths are rendered by the JUnit formatter (relative or absolute, removing a prefix, etc).
+  Previously, the JUnit formatter would print an absolute path unless the file was beneath the current working
+  directory.
+  The new default is to print paths relative to the Behat base directory - in most cases this will also be the current
+  working directory and therefore the result will be the same. However, in some cases the reported file paths will change
+  so you may wish to review the configuration e.g. if your tooling aggregates build results over time.
+  By @carlos-granados in [#1677](https://github.com/Behat/Behat/pull/1677)
+
+### Added
+* Implement JSON formatter by @carlos-granados in [#1674](https://github.com/Behat/Behat/pull/1674), [#1680](https://github.com/Behat/Behat/pull/1680),
+  [#1681](https://github.com/Behat/Behat/pull/1681), [#1677](https://github.com/Behat/Behat/pull/1677)
+  and [#1684](https://github.com/Behat/Behat/pull/1684).
+* Add feature `file` attribute on `<testsuite>` nodes in the JUnit formatters by @carlos-granados in [#1680](https://github.com/Behat/Behat/pull/1680)
+* Add `timer` option to disable reporting execution times in the JUnit formatter by @carlos-granados in [#1681](https://github.com/Behat/Behat/pull/1681)
+
+### Fixed
+* `error_reporting` in the Behat configuration should take precedence over system defaults by @carlos-granados in [#1675](https://github.com/Behat/Behat/pull/1675)
+* Ensure runtime assertions are checked during `--convert-config` by @carlos-granados in [#1679](https://github.com/Behat/Behat/pull/1679)
+* Include consistent index & placeholders for Example names in JUnit by @acoulton in [#1682]https://github.com/Behat/Behat/pull/1682)
+  based on work previously done by @uuf6429.
+
+### Internal
+* Add AGENTS.md file with instructions for AI agents by @carlos-granados in [#1672](https://github.com/Behat/Behat/pull/1672)
+* Fix php version constraint in composer.json by @carlos-granados in [#1678](https://github.com/Behat/Behat/pull/1678)
+
+
+## [3.25.0] - 2025-10-03
+
+### Added
+* Add short_summary formatter option by @carlos-granados in [#1664](https://github.com/Behat/Behat/pull/1664)
+
+### Fixed
+* Provide more context when failing with unexpected multiline args by @acoulton in [#1668](https://github.com/Behat/Behat/pull/1668)
+
+### Internal
+* Remove PHP 8 error conversion by @carlos-granados in [#1665](https://github.com/Behat/Behat/pull/1665)
+* Apply Rector rules to use PHP 8.1 language features by @carlos-granados in [#1666](https://github.com/Behat/Behat/pull/1666)
+
+## [3.24.1] - 2025-09-15
+
+### Fixed
+
+* Fix rendering editorUrl links in console output by @carlos-granados in [#1661](https://github.com/Behat/Behat/pull/1661)
+
+## [3.24.0] - 2025-09-11
+
+### Changed
+
+* Throw if a step provides an unexpected PyString or Table argument, to highlight cases where step definitions do not
+  match their usage causing potential false-positive passes. If users have stubbed steps with incomplete arguments (e.g.
+  to throw a PendingException) these will now fail before executing. Steps generated from Behat's snippets or IDEs
+  should not be affected as these should already define appropriate PyStringNode / TableNode arguments.
+  By @jdeniau in [#1614](https://github.com/Behat/Behat/pull/1614)
+
+### Added
+
+* Display line number of failing test in pretty formatter by @jdeniau in [#1615](https://github.com/Behat/Behat/pull/1615)
+
+### Fixed
+
+* Ensure that suggested step definitions actually match the step text by @acoulton in [#1656](https://github.com/Behat/Behat/pull/1656)
+
+### Internal
+
+* Rector code quality by @carlos-granados in [#1648](https://github.com/Behat/Behat/pull/1648)
+* Run fixture-based scenarios in isolated directories by @acoulton in [#1657](https://github.com/Behat/Behat/pull/1657)
+
+## [3.23.0] - 2025-07-15
+
+### Added
+
+* Support providing multiple paths for features to run by @marmichalski in [#1611](https://github.com/Behat/Behat/pull/1611)
+* Add editorUrl option to provide clickable links to IDEs in CLI output by @carlos-granados in [#1638](https://github.com/Behat/Behat/pull/1638)
+* Add removePrefix option to trim printed paths in CLI output @carlos-granados in [#1644](https://github.com/Behat/Behat/pull/1644)
+* Add line number of last executed step in JUnit <testcase> by @magnetik in [#1608](https://github.com/Behat/Behat/pull/1608)
+
+### Fixed
+
+* Relaxed constraints on nikic/php-parser and composer/xdebug-handler dependencies to allow wider use of newer Behat
+  releases by @acoulton in [#1650](https://github.com/Behat/Behat/pull/1650) and [#1649](https://github.com/Behat/Behat/pull/1649)
+
+### Internal
+
+* Add Rector and standardise namespace imports by @carlos-granados in [#1640](https://github.com/Behat/Behat/pull/1640)
+* Update expected output in tests to reflect new gherkin translations by @acoulton in [#1635](https://github.com/Behat/Behat/pull/1635)
+* Remove start signs in docs to improve copy/paste by @yosmanyga in [#1647](https://github.com/Behat/Behat/pull/1647)
+
+## [3.16.1] - 2025-05-07
+
+### Changed
+
+* Remove dependency on file location in Gherkin package. The (internal) service container parameters gherkin.paths.lib
+  and gherkin.paths.i18n are no longer defined or used. Minimum behat/gherkin version is now ^4.12.0.
+  By @carlos-granados in #1604, backported from 3.20.0 to fix errors for users stuck on 3.16.0 due to
+  dependency conflicts.
+
+## [3.22.0] - 2025-05-05
+
+### Changed
+
+* Suggested method names for new step definitions will no longer be transliterated to ASCII.
+  Users working in languages whose characters are mostly outside the allowed UTF-8 range
+  will see generic `stepDefinitionX` names. We have provided an extension point for custom
+  suggestion implementations, and would consider providing an official extension. If this
+  affects you, please open a discussion on the Behat repository.
+  By @acoulton in [#1633](https://github.com/Behat/Behat/pull/1633)
+* The behat/transliterator package is no longer required and will shortly be archived.
+
+### Internal
+
+* Update all code style to Symfony coding style (with small variations) by @carlos-granados in [#1628](https://github.com/Behat/Behat/pull/1628)
+
+## [3.21.1] - 2025-04-22
+
+### Fixed
+
+* ExceptionPresenter was causing a TypeError when constructed with a null $basePath by @acoulton in [#1631](https://github.com/Behat/Behat/pull/1631)
+
+## [3.21.0] - 2025-04-18
+
+### Fixed
+
+* JUnit formatter options were being lost when converting config to PHP by @acoulton in [#1622](https://github.com/Behat/Behat/pull/1622)
+* Contexts with constructor arguments were not properly converted to PHP configuration by @acoulton in [#1619](https://github.com/Behat/Behat/pull/1619)
+
+### Added
+
+* New CLI and configuration option to print all paths as absolute paths by @carlos-granados in [#1620](https://github.com/Behat/Behat/pull/1620)
+* Expose PHP configuration interface for tester and error_reporting options by @acoulton in [#1626](https://github.com/Behat/Behat/pull/1626)
+* Improve config conversion to PHP to generate class references instead of string names; reference extensions by their
+  fully qualified class names; convert output_verbosity values to constants; and convert tester and error_reporting
+  configuration to PHP by @acoulton in [#1619](https://github.com/Behat/Behat/pull/1619), [#1623](https://github.com/Behat/Behat/pull/1623)
+  and [#1626](https://github.com/Behat/Behat/pull/1626)
+
+### Internal
+
+* Refactor features for configurable tester / error_reporting options by @acoulton in [#1625](https://github.com/Behat/Behat/pull/1625)
+
+## [3.20.0] - 2025-04-02
+
+### Changed
+
+* Remove dependency on file location in Gherkin package. The (internal) service container parameters `gherkin.paths.lib`
+  and `gherkin.paths.i18n` are no longer defined or used. Minimum behat/gherkin version is now ^4.12.0.
+  By @carlos-granados in [#1604](https://github.com/Behat/Behat/pull/1604).
+
+### Added
+
+* `--allow-no-tests` CLI option to pass even if no specifications found by @Kingdutch in [#1420](https://github.com/Behat/Behat/pull/1420)
+* `--convert-config` CLI option to convert the yaml config to php by @carlos-granados in [#1605](https://github.com/Behat/Behat/pull/1605)
+
+### Internal
+
+* Apply PSR-12 and PER-CS2.0 code styles by @carlos-granados in [#1599](https://github.com/Behat/Behat/pull/1599)
+  and [#1606](https://github.com/Behat/Behat/pull/1606)
+
+## [3.19.0] - 2025-02-13
+
+### Changed
+
+* Remove internal wrappers for PSR Container interfaces - may affect projects using container-interop/container-interop
+  < 1.2.0 (released in 2017, package now deprecated and unsupported by behat since 2021).
+  By @acoulton in [#1584](https://github.com/Behat/Behat/pull/1584)
+* Remove legacy Symfony event dispatchers - these were internal wrappers to support symfony <5 and >=5, both now
+  redundant. By @carlos-granados in [#1585](https://github.com/Behat/Behat/pull/1585)
+
+### Added
+
+* Add option to print unused definitions by @carlos-granados in [#1594](https://github.com/Behat/Behat/pull/1594) and
+  [#1597](https://github.com/Behat/Behat/pull/1597)
+* Support transforming named column(s) in any table by @carlos-granados in [#1593](https://github.com/Behat/Behat/pull/1593)
+
+### Fixed
+
+* Allow unicode characters in table transformations by @carlos-granados in [#1595](https://github.com/Behat/Behat/pull/1595)
+
+### Internal
+
+* Use real files instead of generated files in local tests by @carlos-granados in [#1544](https://github.com/Behat/Behat/pull/1544)
+* Adopt PHP CS Fixer and apply PSR2 styles by @carlos-granados in [#1592](https://github.com/Behat/Behat/pull/1592)
+* Migrate from Psalm to PHPStan and improve internal type safety by @carlos-granados in [#1583](https://github.com/Behat/Behat/pull/1583),
+  [#1589](https://github.com/Behat/Behat/pull/1589) and [#1590](https://github.com/Behat/Behat/pull/1590) and by
+  @stof in [#1591](https://github.com/Behat/Behat/pull/1591)
+
+## [3.18.1] - 2025-01-10
+
+### Fixed
+
+* Fix handling of `show_output` option when used with a custom formatter that does not define it by @carlos-granados in
+  [#1587](https://github.com/Behat/Behat/pull/1587)
+
+## [3.18.0] - 2025-01-09
+
+### Changed
+
+* Add new methods to the `Behat\Hook\Hook` and `Behat\Step\Definition` interfaces used internally by step definition
+  attributes by @carlos-granados in [#1573](https://github.com/Behat/Behat/pull/1573)
+
+### Added
+
+* Add `show_output` formatter option to control if/when to display stdout generated during tests
+  by @carlos-granados in [#1576](https://github.com/Behat/Behat/pull/1576)
+
+### Fixed
+
+* Do not disable xdebug if there is an active debugging connection by @carlos-granados in [#1581](https://github.com/Behat/Behat/pull/1581)
+* Inherit step definition attributes on methods extended from parent Context by @fmatsos in [#1567](https://github.com/Behat/Behat/pull/1567)
+
+### Internal
+
+* Add PHPStan and improve / fix docblock annotations and type-safety within methods to achieve level 3 by
+  @carlos-granados in [#1571](https://github.com/Behat/Behat/pull/1571), [#1573](https://github.com/Behat/Behat/pull/1573)
+  [#1578](https://github.com/Behat/Behat/pull/1578) and by @stof in [#1575](https://github.com/Behat/Behat/pull/1575)
+* Use annotations rather than attributes for step definitions in Behat's own feature suites by @fmatsos in [#1564](https://github.com/Behat/Behat/pull/1564)
+* Remove composer dev dependency on legacy herrera-io/box by @acoulton in [#1580](https://github.com/Behat/Behat/pull/1580)
+* Do not run ci builds if only markdown files have changed by @codisart in [#1582](https://github.com/Behat/Behat/pull/1582)
+
+## [3.17.0] - 2024-12-18
+
+### Changed
+
+* Use attributes rather than annotations when generating suggested Context snippets
+  by @fmatsos in [#1549](https://github.com/Behat/Behat/pull/1549) and [#1569](https://github.com/Behat/Behat/pull/1569)
+* Disable Xdebug unless `--xdebug` is specified on the CLI, to improve performance by @carlos-granados in [#1560](https://github.com/Behat/Behat/pull/1560)
+
+### Added
+
+* :partying_face: Support configuring Behat with a PHP file and helper objects / methods - see [the docs](https://docs.behat.org/en/latest/user_guide/configuration/suites.html)
+  by @loic425 in [#1537](https://github.com/Behat/Behat/pull/1537), [#1538](https://github.com/Behat/Behat/pull/1538),
+  [#1550](https://github.com/Behat/Behat/pull/1550), [#1547](https://github.com/Behat/Behat/pull/1547),
+  [#1540](https://github.com/Behat/Behat/pull/1540), [#1546](https://github.com/Behat/Behat/pull/1546),
+  [#1556](https://github.com/Behat/Behat/pull/1556), [#1557](https://github.com/Behat/Behat/pull/1557) and
+  [#1558](https://github.com/Behat/Behat/pull/1558).
+* Display location of hook failure in progress printer by @carlos-granados in [#1526](https://github.com/Behat/Behat/pull/1526)
+* Print failed hooks summary at the end of the pretty format by @carlos-granados in [#1530](https://github.com/Behat/Behat/pull/1530)
+* Print `<failure>` nodes for all hook failures in the junit output by @carlos-granados in [#1536](https://github.com/Behat/Behat/pull/1536)
+* Add the `#[Transform]` attribute, equivalent to the `@Transform` annotation by @carlos-granados in [#1545](https://github.com/Behat/Behat/pull/1545)
+* Allow using the `--narrative` filter on the command line by @carlos-granados in [#1559](https://github.com/Behat/Behat/pull/1559)
+
+### Fixed
+
+* Show more meaningful message if no `output_path` is specified for the junit formatter by @carlos-granados in [#1533](https://github.com/Behat/Behat/pull/1533)
+* Fix error from the JUnit printer if scenario has no title by @mvhirsch in [#1525](https://github.com/Behat/Behat/pull/1525)
+* Fix naming of suggested methods when generating regex snippets for steps defined with single quotes by @carlos-granados in [#1524](https://github.com/Behat/Behat/pull/1524)
+
+### Internal
+
+* Improve / fix docblock annotations and type-safety within methods to achieve Psalm level 6
+  by @carlos-granados in [#1554](https://github.com/Behat/Behat/pull/1554), [#1562](https://github.com/Behat/Behat/pull/1562),
+  [#1566](https://github.com/Behat/Behat/pull/1566), [#1568](https://github.com/Behat/Behat/pull/1568)
+  [#1570](https://github.com/Behat/Behat/pull/1570).
+* Improve failure output of Behat's own tests with unexpected status code or output by @jdeniau in [#1532](https://github.com/Behat/Behat/pull/1532)
+* Remove redundant tests for hook failures in junit formatter by @carlos-granados in [#1543](https://github.com/Behat/Behat/pull/1543)
+* Update .editorconfig indent size to 2 for feature files by @carlos-granados in [#1528](https://github.com/Behat/Behat/pull/1528)
+* Update static analysis to use Psalm v5 by @carlos-granados in [#1548](https://github.com/Behat/Behat/pull/1548)
+* Remove tagging of tests that require PHP8, as these now always run by @carlos-granados in [#1551](https://github.com/Behat/Behat/pull/1551)
+* Add composer scripts for testing tools by @carlos-granados in [#1555](https://github.com/Behat/Behat/pull/1555)
+
+## [3.16.0] - 2024-11-08
+
+### Changed
+
+* Drop support for PHP < 8.1, Symfony < 5.4 and Symfony 6.0 - 6.3. In future Behat will drop support for PHP and symfony
+  versions as they reach EOL. by @AlexSkrypnyk in [#1504](https://github.com/Behat/Behat/pull/1504)
+* ApplicationFactory::VERSION is deprecated and will not be updated, Behat now internally uses composer's runtime API
+  to report the running version. by @acoulton in [#1520](https://github.com/Behat/Behat/pull/1520)
+* API changes to 2 final Behat classes that are not considered part of the public API (but were not explicitly marked
+  as such). This may affect users who are creating instances direct rather than through the DI container as expected.
+  See Behat\Behat\EventDispatcher\Cli\StopOnFailureController in #1501 and Behat\Behat\Tester\Cli\RerunController in #1518.
+
+### Added
+
+* Render JUnit test durations with millisecond precision e.g. `1.234` rather than only as integer seconds
+  by @uuf6429 in [#1460](https://github.com/Behat/Behat/pull/1460)
+* Support specifying `stop_on_failure` within behat.yml by @jdeniau in [#1512](https://github.com/Behat/Behat/pull/1512),
+  [#1501](https://github.com/Behat/Behat/pull/1501) and [#1516](https://github.com/Behat/Behat/pull/1516)
+* Allow BeforeSuite/AfterSuite hooks to be marked with attributes by @rpkamp in [#1511](https://github.com/Behat/Behat/pull/1511)
+
+### Fixed
+
+* `--rerun` all tests that should be considered failed (including undefined, when strict) by @carlos-granados in [#1518](https://github.com/Behat/Behat/pull/1518)
+* Improve handling exceptions from unsupported PHPUnit versions by @acoulton and @uuf6429 in [#1521](https://github.com/Behat/Behat/pull/1521)
+* Fix high memory consumption when using Junit formatter by @simon-auch in [#1423](https://github.com/Behat/Behat/pull/1423)
+* Fix error when attempting to format long output messages by @jonpugh in [#1439](https://github.com/Behat/Behat/pull/1439)
+
+### Internal
+
+* Remove the unnecessary alias of the ScenarioInterface as it just causes confusion by @carlos-granados in [#1500](https://github.com/Behat/Behat/pull/1500)
+* Improve output when behat's own tests pass or fail unexpectedly by @jdeniau in [#1515](https://github.com/Behat/Behat/pull/1515)
+* Update guidance on submitting PRs by @acoulton in [#1505](https://github.com/Behat/Behat/pull/1505)
+* Fix indentation in Github Actions config by @AlexSkrypnyk in [#1502](https://github.com/Behat/Behat/pull/1502)
+* Fix Github Actions phar upload for the release by @carlos-granados in [#1509](https://github.com/Behat/Behat/pull/1509)
+
+## [3.15.0] - 2024-10-29
+
+***Note:** This release also bumps the minor version of behat/gherkin to 4.10.0, which was released on 2024-10-19 with
+  a behaviour-changing bugfix related to the parsing of `\` characters in scenarios.
+  See [the Behat/Gherkin CHANGELOG](https://github.com/Behat/Gherkin/blob/master/CHANGES.md#4100--2024-10-19).*
+
+### Added
+
+* PHP 8.4 support by @heiglandreas in [#1473](https://github.com/Behat/Behat/pull/1473), @jrfnl in [#1478](https://github.com/Behat/Behat/pull/1478),
+  @jrfnl in [#1477](https://github.com/Behat/Behat/pull/1477)
+* Support config files named `behat.dist.y[a]ml` by @uuf6429 in [#1464](https://github.com/Behat/Behat/pull/1464)
+* Add a `--rerun-only` flag to immediately exit 0 without running anything if there were no failures on the previous run
+  by @Treast in [#1466](https://github.com/Behat/Behat/pull/1466)
+* Allow profiles to override extensions in the config file by @Zayon in [#1341](https://github.com/Behat/Behat/pull/1341)
+* Support configuring a preferred profile to use instead of `default` if nothing was specified at runtime
+  by @andrewnicols in [#1334](https://github.com/Behat/Behat/pull/1334)
+* Add void return type when generating new snippets by @carlos-granados in [#1463](https://github.com/Behat/Behat/pull/1463)
+
+### Fixed
+
+* Fix enforcing that 32 character (or longer) turnip pattern names are not allowed
+  by @ivastly in [#1457](https://github.com/Behat/Behat/pull/1457) and @acoulton in [#1483](https://github.com/Behat/Behat/pull/1483)
+* Fix generating the PHAR for releases by upgrading the build tooling by @heiglandreas in [#1462](https://github.com/Behat/Behat/pull/1462)
+
+### Internal
+
+* Improve code readability; use ::class references by @uuf6429 in [#1485](https://github.com/Behat/Behat/pull/1485)
+* Fix autoloading unit tests and improve some code style & assertion failure messages by @uuf6429 in [#1427](https://github.com/Behat/Behat/pull/1427),
+  [#1486](https://github.com/Behat/Behat/pull/1486) and [#1487](https://github.com/Behat/Behat/pull/1487) and by
+  @jrfnl in [#1479](https://github.com/Behat/Behat/pull/1479)
+* Add .editorconfig file by @chapeupreto in [#1418](https://github.com/Behat/Behat/pull/1418)
+* Updates to github actions workflows @jrfnl in [#1475](https://github.com/Behat/Behat/pull/1475),[#1474](https://github.com/Behat/Behat/pull/1474),
+* Update contributing docs and README links by @carlos-granados in [#1489](https://github.com/Behat/Behat/pull/1489) and
+  [#1492](https://github.com/Behat/Behat/pull/1492)
+
+## [3.14.0] - 2024-01-10
+
+### Added
+
+* 🎉 Symfony 7 is now supported 🎉 by @dmaicher in [#1442](https://github.com/Behat/Behat/pull/1442)
+* PHP 8.3 is now supported (no code changes were required) by @jrfnl in [#1440](https://github.com/Behat/Behat/pull/1440)
+
+### Fixed
+
+* Renamed method parameters to match signatures from interfaces by @ciaranmcnulty in [#1434](https://github.com/Behat/Behat/pull/1434)
+
+### Internal
+
+* CI improvements by @stof in [#1430](https://github.com/Behat/Behat/pull/1430)
+
 ## [3.13.0] - 2023-04-18
 
 ### Added
@@ -1016,6 +1362,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.26.0]: https://github.com/Behat/Behat/compare/v3.25.0...v3.26.0
+[3.25.0]: https://github.com/Behat/Behat/compare/v3.24.1...v3.25.0
+[3.24.1]: https://github.com/Behat/Behat/compare/v3.24.0...v3.24.1
+[3.24.0]: https://github.com/Behat/Behat/compare/v3.23.0...v3.24.0
+[3.23.0]: https://github.com/Behat/Behat/compare/v3.22.0...v3.23.0
+[3.22.0]: https://github.com/Behat/Behat/compare/v3.21.1...v3.22.0
+[3.21.1]: https://github.com/Behat/Behat/compare/v3.21.0...v3.21.1
+[3.21.0]: https://github.com/Behat/Behat/compare/v3.20.0...v3.21.0
+[3.20.0]: https://github.com/Behat/Behat/compare/v3.19.0...v3.20.0
+[3.19.0]: https://github.com/Behat/Behat/compare/v3.18.1...v3.19.0
+[3.18.1]: https://github.com/Behat/Behat/compare/v3.18.0...v3.18.1
+[3.18.0]: https://github.com/Behat/Behat/compare/v3.17.0...v3.18.0
+[3.17.0]: https://github.com/Behat/Behat/compare/v3.16.0...v3.17.0
+[3.16.1]: https://github.com/Behat/Behat/compare/v3.16.0...v3.16.1
+[3.16.0]: https://github.com/Behat/Behat/compare/v3.15.0...v3.16.0
+[3.15.0]: https://github.com/Behat/Behat/compare/v3.14.0...v3.15.0
+[3.14.0]: https://github.com/Behat/Behat/compare/v3.13.0...v3.14.0
 [3.13.0]: https://github.com/Behat/Behat/compare/v3.12.0...v3.13.0
 [3.12.0]: https://github.com/Behat/Behat/compare/v3.11.0...v3.12.0
 [3.11.0]: https://github.com/Behat/Behat/compare/v3.10.0...v3.11.0

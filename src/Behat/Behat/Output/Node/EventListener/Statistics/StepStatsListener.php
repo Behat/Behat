@@ -15,9 +15,10 @@ use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeScenarioTested;
 use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
-use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Output\Statistics\Statistics;
+use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Event\Event;
@@ -25,7 +26,7 @@ use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 use Behat\Testwork\Tester\Result\ExceptionResult;
-use Exception;
+use Throwable;
 
 /**
  * Listens and records step events to statistics.
@@ -34,42 +35,18 @@ use Exception;
  */
 final class StepStatsListener implements EventListener
 {
-    /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
-     * @var string
-     */
-    private $currentFeaturePath;
-    /**
-     * @var ExceptionPresenter
-     */
-    private $exceptionPresenter;
-    /**
-     * @var string
-     */
-    private $scenarioTitle;
-    /**
-     * @var string
-     */
-    private $scenarioPath;
+    private ?string $currentFeaturePath = null;
 
-    /**
-     * Initializes listener.
-     *
-     * @param Statistics         $statistics
-     * @param ExceptionPresenter $exceptionPresenter
-     */
-    public function __construct(Statistics $statistics, ExceptionPresenter $exceptionPresenter)
-    {
-        $this->statistics = $statistics;
-        $this->exceptionPresenter = $exceptionPresenter;
+    private ?string $scenarioTitle = null;
+
+    private ?string $scenarioPath = null;
+
+    public function __construct(
+        private readonly Statistics $statistics,
+        private readonly ExceptionPresenter $exceptionPresenter,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
@@ -81,8 +58,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
     {
@@ -109,8 +84,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures current scenario title and path on scenario BEFORE event.
-     *
-     * @param Event $event
      */
     private function captureScenarioOnBeforeFeatureEvent(Event $event)
     {
@@ -133,8 +106,6 @@ final class StepStatsListener implements EventListener
 
     /**
      * Captures step stats on step AFTER event.
-     *
-     * @param Event $event
      */
     private function captureStepStatsOnAfterEvent(Event $event)
     {
@@ -148,7 +119,7 @@ final class StepStatsListener implements EventListener
         $exception = $this->getStepException($result);
 
         $path = $this->getStepPath($event, $exception);
-        $error = $exception ? $this->exceptionPresenter->presentException($exception) : null;
+        $error = $exception instanceof Throwable ? $this->exceptionPresenter->presentException($exception) : null;
         $stdOut = $result instanceof ExecutedStepResult ? $result->getCallResult()->getStdOut() : null;
 
         $resultCode = $result->getResultCode();
@@ -159,12 +130,8 @@ final class StepStatsListener implements EventListener
 
     /**
      * Gets exception from the step test results.
-     *
-     * @param StepResult $result
-     *
-     * @return null|Exception
      */
-    private function getStepException(StepResult $result)
+    private function getStepException(StepResult $result): ?Throwable
     {
         if ($result instanceof ExceptionResult) {
             return $result->getException();
@@ -175,18 +142,15 @@ final class StepStatsListener implements EventListener
 
     /**
      * Gets step path from the AFTER test event and exception.
-     *
-     * @param AfterStepTested $event
-     * @param null|Exception  $exception
-     *
-     * @return string
      */
-    private function getStepPath(AfterStepTested $event, Exception $exception = null)
+    private function getStepPath(AfterStepTested $event, ?Throwable $exception = null): string
     {
         $path = sprintf('%s:%d', $this->currentFeaturePath, $event->getStep()->getLine());
 
         if ($exception && $exception instanceof PendingException) {
-            $path = $event->getTestResult()->getStepDefinition()->getPath();
+            $testResult = $event->getTestResult();
+            assert($testResult instanceof DefinedStepResult);
+            $path = $testResult->getStepDefinition()->getPath();
         }
 
         return $path;

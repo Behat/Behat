@@ -26,39 +26,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class SuiteController implements Controller
 {
     /**
-     * @var SuiteRegistry
-     */
-    private $registry;
-    /**
-     * @var array
-     */
-    private $suiteConfigurations = array();
-
-    /**
      * Initializes controller.
-     *
-     * @param SuiteRegistry $registry
-     * @param array         $suiteConfigurations
      */
-    public function __construct(SuiteRegistry $registry, array $suiteConfigurations)
-    {
-        $this->registry = $registry;
-        $this->suiteConfigurations = $suiteConfigurations;
+    public function __construct(
+        private readonly SuiteRegistry $registry,
+        private array $suiteConfigurations,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(Command $command)
     {
-        $command->addOption('--suite', '-s', InputOption::VALUE_REQUIRED,
+        $command->addOption(
+            '--suite',
+            '-s',
+            InputOption::VALUE_REQUIRED,
             'Only execute a specific suite.'
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $exerciseSuiteName = $input->getOption('suite');
@@ -76,8 +61,12 @@ final class SuiteController implements Controller
             }
 
             $this->registry->registerSuiteConfiguration(
-                $name, $config['type'], $config['settings']
+                $name,
+                $config['type'],
+                $config['settings']
             );
         }
+
+        return null;
     }
 }

@@ -11,6 +11,10 @@
 namespace Behat\Testwork\EventDispatcher\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\EventDispatcher\Cli\SigintController;
+use Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise;
+use Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester;
+use Behat\Testwork\EventDispatcher\TestworkEventDispatcher;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
@@ -44,39 +48,25 @@ class EventDispatcherExtension implements Extension
 
     /**
      * Initializes extension.
-     *
-     * @param null|ServiceProcessor $processor
      */
-    public function __construct(ServiceProcessor $processor = null)
+    public function __construct(?ServiceProcessor $processor = null)
     {
-        $this->processor = $processor ? : new ServiceProcessor();
+        $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigKey()
     {
         return 'events';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function initialize(ExtensionManager $extensionManager)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configure(ArrayNodeDefinition $builder)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadSigintController($container);
@@ -85,73 +75,60 @@ class EventDispatcherExtension implements Extension
         $this->loadEventDispatchingSuiteTester($container);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->processSubscribers($container);
     }
 
     /**
-     * Loads sigint controller
-     *
-     * @param ContainerBuilder $container
+     * Loads sigint controller.
      */
     protected function loadSigintController(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Cli\SigintController', array(
-            new Reference(EventDispatcherExtension::DISPATCHER_ID)
-        ));
-        $definition->addTag(CliExtension::CONTROLLER_TAG, array('priority' => 9999));
+        $definition = new Definition(SigintController::class, [
+            new Reference(EventDispatcherExtension::DISPATCHER_ID),
+        ]);
+        $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.sigint', $definition);
     }
 
     /**
      * Loads event dispatcher.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatcher(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\TestworkEventDispatcher');
+        $definition = new Definition(TestworkEventDispatcher::class);
         $container->setDefinition(self::DISPATCHER_ID, $definition);
     }
 
     /**
      * Loads event-dispatching exercise.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingExercise(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingExercise', array(
+        $definition = new Definition(EventDispatchingExercise::class, [
             new Reference(TesterExtension::EXERCISE_ID),
-            new Reference(self::DISPATCHER_ID)
-        ));
+            new Reference(self::DISPATCHER_ID),
+        ]);
         $definition->addTag(TesterExtension::EXERCISE_WRAPPER_TAG);
         $container->setDefinition(TesterExtension::EXERCISE_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
     /**
      * Loads event-dispatching suite tester.
-     *
-     * @param ContainerBuilder $container
      */
     protected function loadEventDispatchingSuiteTester(ContainerBuilder $container)
     {
-        $definition = new Definition('Behat\Testwork\EventDispatcher\Tester\EventDispatchingSuiteTester', array(
+        $definition = new Definition(EventDispatchingSuiteTester::class, [
             new Reference(TesterExtension::SUITE_TESTER_ID),
-            new Reference(self::DISPATCHER_ID)
-        ));
-        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, array('priority' => -9999));
+            new Reference(self::DISPATCHER_ID),
+        ]);
+        $definition->addTag(TesterExtension::SUITE_TESTER_WRAPPER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::SUITE_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
     }
 
     /**
      * Registers all available event subscribers.
-     *
-     * @param ContainerBuilder $container
      */
     protected function processSubscribers(ContainerBuilder $container)
     {
@@ -159,7 +136,7 @@ class EventDispatcherExtension implements Extension
         $definition = $container->getDefinition(self::DISPATCHER_ID);
 
         foreach ($references as $reference) {
-            $definition->addMethodCall('addSubscriber', array($reference));
+            $definition->addMethodCall('addSubscriber', [$reference]);
         }
     }
 }

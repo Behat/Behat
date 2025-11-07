@@ -20,29 +20,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ConsoleFilesystemLogger implements FilesystemLogger
 {
     /**
-     * @var string
-     */
-    private $basePath;
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
      * Initializes logger.
      *
      * @param string          $basePath
-     * @param OutputInterface $output
      */
-    public function __construct($basePath, OutputInterface $output)
-    {
-        $this->basePath = $basePath;
-        $this->output = $output;
+    public function __construct(
+        private $basePath,
+        private readonly OutputInterface $output,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function directoryCreated($path, $reason)
     {
         $this->output->writeln(
@@ -54,9 +41,6 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fileCreated($path, $reason)
     {
         $this->output->writeln(
@@ -68,9 +52,6 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fileUpdated($path, $reason)
     {
         $this->output->writeln(

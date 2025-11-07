@@ -15,6 +15,7 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Exception\ContextNotFoundException;
 use Behat\Behat\Context\Exception\WrongContextClassException;
 use Behat\Testwork\Environment\StaticEnvironment;
+use ReflectionClass;
 
 /**
  * Context environment based on a list of context classes.
@@ -28,18 +29,17 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
     /**
      * @var array<class-string<Context>, array>
      */
-    private $contextClasses = array();
+    private $contextClasses = [];
 
     /**
      * Registers context class.
      *
      * @param class-string<Context> $contextClass
-     * @param null|array            $arguments
      *
      * @throws ContextNotFoundException   If class does not exist
      * @throws WrongContextClassException if class does not implement Context interface
      */
-    public function registerContextClass($contextClass, array $arguments = null)
+    public function registerContextClass($contextClass, ?array $arguments = null)
     {
         if (!class_exists($contextClass)) {
             throw new ContextNotFoundException(sprintf(
@@ -48,37 +48,28 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
             ), $contextClass);
         }
 
-        $reflClass = new \ReflectionClass($contextClass);
+        $reflClass = new ReflectionClass($contextClass);
 
-        if (!$reflClass->implementsInterface('Behat\Behat\Context\Context')) {
+        if (!$reflClass->implementsInterface(Context::class)) {
             throw new WrongContextClassException(sprintf(
                 'Every context class must implement Behat Context interface, but `%s` does not.',
                 $contextClass
             ), $contextClass);
         }
 
-        $this->contextClasses[$contextClass] = $arguments ? : array();
+        $this->contextClasses[$contextClass] = $arguments ?: [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasContexts()
     {
         return count($this->contextClasses) > 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getContextClasses()
     {
         return array_keys($this->contextClasses);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function hasContextClass($class)
     {
         return isset($this->contextClasses[$class]);

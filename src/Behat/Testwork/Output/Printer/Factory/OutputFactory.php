@@ -18,25 +18,23 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class OutputFactory
 {
-    public const VERBOSITY_NORMAL       = 1;
-    public const VERBOSITY_VERBOSE      = 2;
+    public const VERBOSITY_NORMAL = 1;
+    public const VERBOSITY_VERBOSE = 2;
     public const VERBOSITY_VERY_VERBOSE = 3;
-    public const VERBOSITY_DEBUG        = 4;
+    public const VERBOSITY_DEBUG = 4;
 
     /**
-     * @var null|string
+     * @var string|null
      */
     private $outputPath;
     /**
      * @var array
      */
-    private $outputStyles = array();
+    private $outputStyles = [];
+
+    private ?bool $outputDecorated = null;
     /**
-     * @var null|bool
-     */
-    private $outputDecorated = null;
-    /**
-     * @var integer
+     * @var int
      */
     private $verbosityLevel = 0;
 
@@ -53,7 +51,7 @@ abstract class OutputFactory
     /**
      * Returns output path.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getOutputPath()
     {
@@ -62,8 +60,6 @@ abstract class OutputFactory
 
     /**
      * Sets output styles.
-     *
-     * @param array $styles
      */
     public function setOutputStyles(array $styles)
     {
@@ -93,7 +89,7 @@ abstract class OutputFactory
     /**
      * Returns output decoration status.
      *
-     * @return null|bool
+     * @return bool|null
      */
     public function isOutputDecorated()
     {
@@ -103,7 +99,7 @@ abstract class OutputFactory
     /**
      * Sets output verbosity level.
      *
-     * @param integer $level
+     * @param int $level
      */
     public function setOutputVerbosity($level)
     {
@@ -113,7 +109,7 @@ abstract class OutputFactory
     /**
      * Returns output verbosity level.
      *
-     * @return integer
+     * @return int
      */
     public function getOutputVerbosity()
     {

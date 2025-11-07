@@ -23,13 +23,9 @@ use ReflectionMethod;
 class RuntimeCallee implements Callee
 {
     /**
-     * @var callable
+     * @var callable|array{class-string, string}
      */
     private $callable;
-    /**
-     * @var null|string
-     */
-    private $description;
     /**
      * @var ReflectionFunctionAbstract
      */
@@ -41,22 +37,11 @@ class RuntimeCallee implements Callee
 
     /**
      * Initializes callee.
-     *
-     * @param callable    $callable
-     * @param null|string $description
-     *
-     * @throws BadCallbackException If invalid callback provided
      */
-    public function __construct($callable, $description = null)
-    {
-        if (!is_array($callable) && !is_callable($callable)) {
-            throw new BadCallbackException(sprintf(
-                '%s expects a valid callable, but `%s` given',
-                get_class($this),
-                gettype($callable)
-            ), $callable);
-        }
-
+    public function __construct(
+        callable|array $callable,
+        private readonly ?string $description = null,
+    ) {
         if (is_array($callable)) {
             $this->reflection = new ReflectionMethod($callable[0], $callable[1]);
             $this->path = $callable[0] . '::' . $callable[1] . '()';
@@ -66,7 +51,6 @@ class RuntimeCallee implements Callee
         }
 
         $this->callable = $callable;
-        $this->description = $description;
     }
 
     /**
@@ -92,7 +76,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable.
      *
-     * @return callable
+     * @return callable|array{class-string, string}
      */
     public function getCallable()
     {
@@ -128,5 +112,29 @@ class RuntimeCallee implements Callee
     {
         return $this->reflection instanceof ReflectionMethod
             && !$this->reflection->isStatic();
+    }
+
+    /**
+     * @param callable|array{class-string, string} $callable
+     */
+    protected function throwIfInstanceMethod(callable|array $callable, string $hookType): void
+    {
+        if ($this->isAnInstanceMethod()) {
+            if (is_array($callable)) {
+                $className = $callable[0];
+                $methodName = $callable[1];
+            } else {
+                $reflection = new ReflectionMethod($callable);
+                $className = $reflection->getDeclaringClass()->getShortName();
+                $methodName = $reflection->getName();
+            }
+
+            throw new BadCallbackException(sprintf(
+                '%s hook callback: %s::%s() must be a static method',
+                $hookType,
+                $className,
+                $methodName
+            ), $callable);
+        }
     }
 }

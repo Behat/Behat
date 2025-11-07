@@ -23,24 +23,15 @@ use Behat\Testwork\Hook\Scope\HookScope;
 final class HookRepository
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-
-    /**
      * Initializes repository.
-     *
-     * @param EnvironmentManager $environmentManager
      */
-    public function __construct(EnvironmentManager $environmentManager)
-    {
-        $this->environmentManager = $environmentManager;
+    public function __construct(
+        private readonly EnvironmentManager $environmentManager,
+    ) {
     }
 
     /**
      * Returns all available hooks for a specific environment.
-     *
-     * @param Environment $environment
      *
      * @return Hook[]
      */
@@ -48,16 +39,12 @@ final class HookRepository
     {
         return array_filter(
             $this->environmentManager->readEnvironmentCallees($environment),
-            function (Callee $callee) {
-                return $callee instanceof Hook;
-            }
+            fn (Callee $callee) => $callee instanceof Hook
         );
     }
 
     /**
      * Returns hooks for a specific event.
-     *
-     * @param HookScope $scope
      *
      * @return Hook[]
      */

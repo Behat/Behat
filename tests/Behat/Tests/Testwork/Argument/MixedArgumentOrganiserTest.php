@@ -3,22 +3,25 @@
 namespace Behat\Tests\Testwork\Argument;
 
 use Behat\Testwork\Argument\MixedArgumentOrganiser;
+use DateTime;
+use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
+use ReflectionFunction;
+use stdClass;
 
 final class MixedArgumentOrganiserTest extends TestCase
 {
     private $organiser;
 
-    function setUp() : void
+    protected function setUp(): void
     {
         $this->organiser = new MixedArgumentOrganiser();
     }
 
-    /** @test */
-    function it_organises_nothing_if_no_args()
+    public function testThatItOrganisesNothingIfNoArgs(): void
     {
-        $r = new \ReflectionFunction(
-            function(\DateTimeInterface $d) {}
+        $r = new ReflectionFunction(
+            static function (DateTimeInterface $d) {}
         );
         $args = [];
 
@@ -27,32 +30,30 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame([], $organised);
     }
 
-    /** @test */
-    function it_matches_args_by_position()
+    public function testThatItMatchesArgsByPosition(): void
     {
-        $r = new \ReflectionFunction(
-            function($x, $y) {}
+        $r = new ReflectionFunction(
+            static function ($x, $y) {}
         );
         $args = [
             1,
             2,
-            3
+            3,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
 
-        $this->assertSame([1,2], $organised);
+        $this->assertSame([1, 2], $organised);
     }
 
-    /** @test */
-    function it_matches_args_by_name()
+    public function testThatItMatchesArgsByName(): void
     {
-        $r = new \ReflectionFunction(
-            function($date) {}
+        $r = new ReflectionFunction(
+            static function ($date) {}
         );
         $args = [
-            'date' => $date = new \DateTime(),
-            'x' => new \stdClass()
+            'date' => $date = new DateTime(),
+            'x' => new stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -60,15 +61,14 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame(['date' => $date], $organised);
     }
 
-    /** @test */
-    function it_matches_args_by_type()
+    public function testThatItMatchesArgsByType(): void
     {
-        $r = new \ReflectionFunction(
-            function(\DateTimeInterface $d) {}
+        $r = new ReflectionFunction(
+            static function (DateTimeInterface $d) {}
         );
         $args = [
-            'x' => $date = new \DateTime(),
-            'y' => new \stdClass()
+            'x' => $date = new DateTime(),
+            'y' => new stdClass(),
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -76,15 +76,14 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame([$date], $organised);
     }
 
-    /** @test */
-    function it_matches_args_by_name_over_type()
+    public function testThatItMatchesArgsByNameOverType(): void
     {
-        $r = new \ReflectionFunction(
-            function(\DateTimeInterface $a, $date) {}
+        $r = new ReflectionFunction(
+            static function (DateTimeInterface $a, $date) {}
         );
         $args = [
-            'date' => $date = new \DateTime(),
-            'x' => 1
+            'date' => $date = new DateTime(),
+            'x' => 1,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);
@@ -93,20 +92,19 @@ final class MixedArgumentOrganiserTest extends TestCase
     }
 
     /**
-     * @test
      * @requires PHP >= 8.0
      */
-    function it_matches_union_types()
+    public function testThatItMatchesUnionTypes(): void
     {
-        $r = eval(<<<CODE
+        $r = eval(<<<PHP
             return new \ReflectionFunction(
               function(int|\DateTimeInterface \$a) {}
             );
-CODE
+PHP
         );
         $args = [
-            'date' => $date = new \DateTime(),
-            'x' => 1
+            'date' => $date = new DateTime(),
+            'x' => 1,
         ];
 
         $organised = $this->organiser->organiseArguments($r, $args);

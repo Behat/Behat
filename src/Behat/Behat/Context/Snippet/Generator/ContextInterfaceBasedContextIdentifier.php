@@ -11,6 +11,7 @@
 namespace Behat\Behat\Context\Snippet\Generator;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
+use Behat\Behat\Context\SnippetAcceptingContext;
 
 /**
  * Identifier that uses context interfaces to guess which one is target.
@@ -21,13 +22,10 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
  */
 final class ContextInterfaceBasedContextIdentifier implements TargetContextIdentifier
 {
-    /**
-     * {@inheritdoc}
-     */
     public function guessTargetContextClass(ContextEnvironment $environment)
     {
         foreach ($environment->getContextClasses() as $class) {
-            if (in_array('Behat\Behat\Context\SnippetAcceptingContext', class_implements($class))) {
+            if (in_array(SnippetAcceptingContext::class, class_implements($class))) {
                 return $class;
             }
         }

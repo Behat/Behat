@@ -13,10 +13,10 @@ namespace Behat\Behat\Output\Node\Printer\JUnit;
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
 use Behat\Behat\Output\Node\Printer\FeaturePrinter;
 use Behat\Behat\Output\Statistics\PhaseStatistics;
-use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\JUnitOutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -26,53 +26,59 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class JUnitFeaturePrinter implements FeaturePrinter
 {
-    /**
-     * @var PhaseStatistics
-     */
-    private $statistics;
+    private ?FeatureNode $currentFeature = null;
 
-    /**
-     * @var JUnitDurationListener|null
-     */
-    private $durationListener;
-
-    public function __construct(PhaseStatistics $statistics, JUnitDurationListener $durationListener = null)
-    {
-        $this->statistics = $statistics;
-        $this->durationListener = $durationListener;
+    public function __construct(
+        private readonly PhaseStatistics $statistics,
+        private readonly ?JUnitDurationListener $durationListener = null,
+        private readonly ?ConfigurablePathPrinter $configurablePathPrinter = null,
+    ) {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature)
+    {
+        $this->statistics->reset();
+        $this->currentFeature = $feature;
+        /** @var JUnitOutputPrinter $outputPrinter */
+        $outputPrinter = $formatter->getOutputPrinter();
+        $outputPrinter->addTestsuite();
+    }
+
+    public function printFooter(Formatter $formatter, TestResult $result)
     {
         $stats = $this->statistics->getScenarioStatCounts();
 
-        if (0 === count($stats)) {
-            $totalCount = 0;
-        } else {
-            $totalCount = array_sum($stats);
-        }
+        $totalCount = 0 === count($stats) ? 0 : (int) array_sum($stats);
 
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $outputPrinter->addTestsuite(array(
-            'name' => $feature->getTitle(),
+        $featureAttributes = [
+            'name' => $this->currentFeature->getTitle(),
+        ];
+
+        $file = $this->currentFeature->getFile();
+        if ($file && $this->configurablePathPrinter instanceof ConfigurablePathPrinter) {
+            $featureAttributes['file'] = $this->configurablePathPrinter->processPathsInText(
+                $file,
+                applyEditorUrl: false,
+            );
+        }
+
+        $featureAttributes += [
             'tests' => $totalCount,
             'skipped' => $stats[TestResult::SKIPPED],
             'failures' => $stats[TestResult::FAILED],
-            'errors' => $stats[TestResult::PENDING] + $stats[StepResult::UNDEFINED],
-            'time' => $this->durationListener ? $this->durationListener->getFeatureDuration($feature) : '',
-        ));
-        $this->statistics->reset();
-    }
+            'errors' => $stats[TestResult::PENDING] + $stats[TestResult::UNDEFINED],
+        ];
 
-    /**
-     * {@inheritDoc}
-     */
-    public function printFooter(Formatter $formatter, TestResult $result)
-    {
+        if ($formatter->getParameter('timer') && $this->durationListener instanceof JUnitDurationListener) {
+            $featureAttributes['time'] = $this->durationListener->getFeatureDuration($this->currentFeature);
+        }
+
+        $outputPrinter->extendTestsuiteAttributes($featureAttributes);
+
+        $this->statistics->reset();
+        $this->currentFeature = null;
     }
 }

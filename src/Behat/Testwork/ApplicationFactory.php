@@ -55,7 +55,7 @@ abstract class ApplicationFactory
     /**
      * Returns user config path.
      *
-     * @return null|string
+     * @return string|null
      */
     abstract protected function getConfigPath();
 

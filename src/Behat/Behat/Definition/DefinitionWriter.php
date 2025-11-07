@@ -22,30 +22,17 @@ use Behat\Testwork\Suite\Suite;
 final class DefinitionWriter
 {
     /**
-     * @var EnvironmentManager
-     */
-    private $environmentManager;
-    /**
-     * @var DefinitionRepository
-     */
-    private $repository;
-
-    /**
      * Initializes writer.
-     *
-     * @param EnvironmentManager   $environmentManager
-     * @param DefinitionRepository $repository
      */
-    public function __construct(EnvironmentManager $environmentManager, DefinitionRepository $repository)
-    {
-        $this->environmentManager = $environmentManager;
-        $this->repository = $repository;
+    public function __construct(
+        private readonly EnvironmentManager $environmentManager,
+        private readonly DefinitionRepository $repository,
+    ) {
     }
 
     /**
      * Prints definitions for provided suite using printer.
      *
-     * @param DefinitionPrinter $printer
      * @param Suite             $suite
      */
     public function printSuiteDefinitions(DefinitionPrinter $printer, $suite)

@@ -22,21 +22,13 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
 final class BeforeFeatureTested extends FeatureTested implements BeforeTested
 {
     /**
-     * @var FeatureNode
-     */
-    private $feature;
-
-    /**
      * Initializes event.
-     *
-     * @param Environment $env
-     * @param FeatureNode $feature
      */
-    public function __construct(Environment $env, FeatureNode $feature)
-    {
+    public function __construct(
+        Environment $env,
+        private readonly FeatureNode $feature,
+    ) {
         parent::__construct($env);
-
-        $this->feature = $feature;
     }
 
     /**

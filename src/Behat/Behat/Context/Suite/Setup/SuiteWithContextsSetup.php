@@ -26,51 +26,32 @@ use Composer\Autoload\ClassLoader;
 final class SuiteWithContextsSetup implements SuiteSetup
 {
     /**
-     * @var ClassLoader
-     */
-    private $autoloader;
-    /**
-     * @var null|FilesystemLogger
-     */
-    private $logger;
-    /**
      * @var ClassGenerator[]
      */
-    private $classGenerators = array();
+    private $classGenerators = [];
 
     /**
      * Initializes setup.
-     *
-     * @param ClassLoader           $autoloader
-     * @param null|FilesystemLogger $logger
      */
-    public function __construct(ClassLoader $autoloader, FilesystemLogger $logger = null)
-    {
-        $this->autoloader = $autoloader;
-        $this->logger = $logger;
+    public function __construct(
+        private readonly ClassLoader $autoloader,
+        private readonly ?FilesystemLogger $logger = null,
+    ) {
     }
 
     /**
      * Registers class generator.
-     *
-     * @param ClassGenerator $generator
      */
     public function registerClassGenerator(ClassGenerator $generator)
     {
         $this->classGenerators[] = $generator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsSuite(Suite $suite)
     {
         return $suite->hasSetting('contexts');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setupSuite(Suite $suite)
     {
         foreach ($this->getNormalizedContextClasses($suite) as $class) {
@@ -89,16 +70,12 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Returns normalized context classes.
      *
-     * @param Suite $suite
-     *
      * @return string[]
      */
     private function getNormalizedContextClasses(Suite $suite)
     {
         return array_map(
-            function ($context) {
-                return is_array($context) ? current(array_keys($context)) : $context;
-            },
+            fn ($context) => is_array($context) ? current(array_keys($context)) : $context,
             $this->getSuiteContexts($suite)
         );
     }
@@ -106,9 +83,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Returns array of context classes configured for the provided suite.
      *
-     * @param Suite $suite
-     *
-     * @return string[]
+     * @return array<string|array>
      *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
      */
@@ -118,7 +93,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
         if (!is_array($contexts)) {
             throw new SuiteConfigurationException(
-                sprintf('`contexts` setting of the "%s" suite is expected to be an array, `%s` given.',
+                sprintf(
+                    '`contexts` setting of the "%s" suite is expected to be an array, `%s` given.',
                     $suite->getName(),
                     gettype($contexts)
                 ),
@@ -138,7 +114,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     {
         mkdir($path, 0777, true);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->directoryCreated($path, 'place your context classes here');
         }
     }
@@ -153,7 +129,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     {
         file_put_contents($path, $content);
 
-        if ($this->logger) {
+        if ($this->logger instanceof FilesystemLogger) {
             $this->logger->fileCreated($path, 'place your definitions, transformations and hooks here');
         }
     }
@@ -169,11 +145,11 @@ final class SuiteWithContextsSetup implements SuiteSetup
      */
     private function findClassFile($class)
     {
-        list($classpath, $classname) = $this->findClasspathAndClass($class);
+        [$classpath, $classname] = $this->findClasspathAndClass($class);
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
 
         foreach ($this->autoloader->getPrefixes() as $prefix => $dirs) {
-            if (0 === strpos($class, $prefix)) {
+            if (str_starts_with($class, $prefix)) {
                 return current($dirs) . DIRECTORY_SEPARATOR . $classpath;
             }
         }
@@ -191,10 +167,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Generates class using registered class generators.
      *
-     * @param Suite  $suite
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     private function generateClass(Suite $suite, $class)
     {
@@ -234,13 +209,13 @@ final class SuiteWithContextsSetup implements SuiteSetup
             $classpath = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, 0, $pos)) . DIRECTORY_SEPARATOR;
             $classname = substr($class, $pos + 1);
 
-            return array($classpath, $classname);
+            return [$classpath, $classname];
         }
 
         // PEAR-like class name
         $classpath = null;
         $classname = $class;
 
-        return array($classpath, $classname);
+        return [$classpath, $classname];
     }
 }

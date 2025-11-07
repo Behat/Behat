@@ -26,10 +26,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettyScenarioPrinter implements ScenarioPrinter
 {
     /**
-     * @var PrettyPathPrinter
-     */
-    private $pathPrinter;
-    /**
      * @var string
      */
     private $indentText;
@@ -41,20 +37,18 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Initializes printer.
      *
-     * @param PrettyPathPrinter $pathPrinter
-     * @param integer           $indentation
-     * @param integer           $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
-    public function __construct(PrettyPathPrinter $pathPrinter, $indentation = 2, $subIndentation = 2)
-    {
-        $this->pathPrinter = $pathPrinter;
+    public function __construct(
+        private readonly PrettyPathPrinter $pathPrinter,
+        $indentation = 2,
+        $subIndentation = 2,
+    ) {
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario)
     {
         if ($scenario instanceof TaggedNodeInterface) {
@@ -67,9 +61,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         $this->printDescription($formatter->getOutputPrinter(), $scenario->getTitle());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printFooter(Formatter $formatter, TestResult $result)
     {
         $formatter->getOutputPrinter()->writeln();
@@ -78,7 +69,6 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario tags.
      *
-     * @param OutputPrinter $printer
      * @param string[]      $tags
      */
     private function printTags(OutputPrinter $printer, array $tags)
@@ -87,14 +77,13 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
             return;
         }
 
-        $tags = array_map(array($this, 'prependTagWithTagSign'), $tags);
+        $tags = array_map([$this, 'prependTagWithTagSign'], $tags);
         $printer->writeln(sprintf('%s{+tag}%s{-tag}', $this->indentText, implode(' ', $tags)));
     }
 
     /**
      * Prints scenario keyword.
      *
-     * @param OutputPrinter $printer
      * @param string        $keyword
      */
     private function printKeyword(OutputPrinter $printer, $keyword)
@@ -105,8 +94,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario title (first line of long title).
      *
-     * @param OutputPrinter $printer
-     * @param string        $longTitle
+     * @param string|null   $longTitle
      */
     private function printTitle(OutputPrinter $printer, $longTitle)
     {
@@ -121,8 +109,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     /**
      * Prints scenario description (other lines of long title).
      *
-     * @param OutputPrinter $printer
-     * @param string        $longTitle
+     * @param string|null   $longTitle
      */
     private function printDescription(OutputPrinter $printer, $longTitle)
     {
@@ -143,6 +130,11 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      */
     private function prependTagWithTagSign($tag)
     {
+        if (str_starts_with($tag, '@')) {
+            return $tag;
+        }
+
+        // The legacy mode of the behat/gherkin parser is trimming the `@` from tags so we need to re-add it for pretty-printing
         return '@' . $tag;
     }
 }

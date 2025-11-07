@@ -21,31 +21,18 @@ use Behat\Testwork\Suite\Suite;
 class StaticEnvironment implements Environment
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-
-    /**
      * Initializes environment.
-     *
-     * @param Suite $suite
      */
-    public function __construct(Suite $suite)
-    {
-        $this->suite = $suite;
+    public function __construct(
+        private readonly Suite $suite,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function getSuite()
     {
         return $this->suite;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     final public function bindCallee(Callee $callee)
     {
         return $callee->getCallable();

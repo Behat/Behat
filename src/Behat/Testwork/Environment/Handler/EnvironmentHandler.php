@@ -26,16 +26,12 @@ interface EnvironmentHandler
     /**
      * Checks if handler supports provided suite.
      *
-     * @param Suite $suite
-     *
      * @return bool
      */
     public function supportsSuite(Suite $suite);
 
     /**
      * Builds environment object based on provided suite.
-     *
-     * @param Suite $suite
      *
      * @return Environment
      */
@@ -44,18 +40,12 @@ interface EnvironmentHandler
     /**
      * Checks if handler supports provided environment.
      *
-     * @param Environment $environment
-     * @param mixed       $testSubject
-     *
      * @return bool
      */
     public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null);
 
     /**
      * Isolates provided environment.
-     *
-     * @param Environment $environment
-     * @param mixed       $testSubject
      *
      * @return Environment
      */

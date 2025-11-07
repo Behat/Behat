@@ -20,6 +20,8 @@ use Behat\Testwork\Suite\Suite;
  * @see SpecificationFinder
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @template-covariant T
  */
 interface SpecificationLocator
 {
@@ -33,10 +35,9 @@ interface SpecificationLocator
     /**
      * Locates specifications and wraps them into iterator.
      *
-     * @param Suite  $suite
-     * @param string $locator
+     * @param string|null $locator
      *
-     * @return SpecificationIterator
+     * @return SpecificationIterator<T>
      */
     public function locateSpecifications(Suite $suite, $locator);
 }

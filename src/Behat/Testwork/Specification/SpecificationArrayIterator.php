@@ -19,30 +19,27 @@ use Behat\Testwork\Suite\Suite;
  * Return instance of this class from locator if specifications cannot be searched lazily.
  *
  * @author Christophe Coevoet <stof@notk.org>
+ *
+ * @template T
+ *
+ * @implements SpecificationIterator<T>
+ *
+ * @extends ArrayIterator<int, T>
  */
 final class SpecificationArrayIterator extends ArrayIterator implements SpecificationIterator
 {
     /**
-     * @var Suite
-     */
-    private $suite;
-
-    /**
      * Initializes iterator.
      *
-     * @param Suite   $suite
-     * @param mixed[] $specifications
+     * @param array<int, T> $specifications
      */
-    public function __construct(Suite $suite, $specifications = array())
-    {
-        $this->suite = $suite;
-
+    public function __construct(
+        private readonly Suite $suite,
+        $specifications = [],
+    ) {
         parent::__construct($specifications);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSuite()
     {
         return $this->suite;

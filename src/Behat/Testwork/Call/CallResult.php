@@ -20,36 +20,16 @@ use Exception;
 final class CallResult
 {
     /**
-     * @var Call
-     */
-    private $call;
-    /**
-     * @var mixed
-     */
-    private $return;
-    /**
-     * @var null|Exception
-     */
-    private $exception;
-    /**
-     * @var null|string
-     */
-    private $stdOut;
-
-    /**
      * Initializes call result.
      *
-     * @param Call           $call
-     * @param mixed          $return
-     * @param null|Exception $exception
-     * @param null|string    $stdOut
+     * @param string|null $stdOut
      */
-    public function __construct(Call $call, $return, Exception $exception = null, $stdOut = null)
-    {
-        $this->call = $call;
-        $this->return = $return;
-        $this->exception = $exception;
-        $this->stdOut = $stdOut;
+    public function __construct(
+        private readonly Call $call,
+        private $return,
+        private readonly ?Exception $exception = null,
+        private $stdOut = null,
+    ) {
     }
 
     /**
@@ -64,8 +44,6 @@ final class CallResult
 
     /**
      * Returns call return value.
-     *
-     * @return mixed
      */
     public function getReturn()
     {
@@ -75,20 +53,20 @@ final class CallResult
     /**
      * Check if call thrown exception.
      *
-     * @psalm-assert-if-true Exception $this->exception
-     * @psalm-assert-if-true Exception $this->getException()
+     * @phpstan-assert-if-true Exception $this->exception
+     * @phpstan-assert-if-true Exception $this->getException()
      *
      * @return bool
      */
     public function hasException()
     {
-        return null !== $this->exception;
+        return $this->exception instanceof Exception;
     }
 
     /**
      * Returns exception thrown by call (if any).
      *
-     * @return null|Exception
+     * @return Exception|null
      */
     public function getException()
     {
@@ -108,7 +86,7 @@ final class CallResult
     /**
      * Returns stdOut produced by call (if any).
      *
-     * @return null|string
+     * @return string|null
      */
     public function getStdOut()
     {

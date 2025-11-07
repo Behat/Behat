@@ -25,33 +25,23 @@ use Behat\Testwork\Tester\Result\TestWithSetupResult;
 final class StepContainerTester
 {
     /**
-     * @var StepTester
-     */
-    private $stepTester;
-
-    /**
      * Initializes tester.
-     *
-     * @param StepTester $stepTester
      */
-    public function __construct(StepTester $stepTester)
-    {
-        $this->stepTester = $stepTester;
+    public function __construct(
+        private readonly StepTester $stepTester,
+    ) {
     }
 
     /**
      * Tests container.
      *
-     * @param Environment            $env
-     * @param FeatureNode            $feature
-     * @param StepContainerInterface $container
      * @param bool                $skip
      *
      * @return TestResult[]
      */
     public function test(Environment $env, FeatureNode $feature, StepContainerInterface $container, $skip)
     {
-        $results = array();
+        $results = [];
         foreach ($container->getSteps() as $step) {
             $setup = $this->stepTester->setUp($env, $feature, $step, $skip);
             $skipSetup = !$setup->isSuccessful() || $skip;

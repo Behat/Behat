@@ -19,6 +19,7 @@ use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
@@ -32,18 +33,6 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class PrettySkippedStepPrinter implements StepPrinter
 {
     /**
-     * @var StepTextPainter
-     */
-    private $textPainter;
-    /**
-     * @var ResultToStringConverter
-     */
-    private $resultConverter;
-    /**
-     * @var PrettyPathPrinter
-     */
-    private $pathPrinter;
-    /**
      * @var string
      */
     private $indentText;
@@ -55,29 +44,20 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Initializes printer.
      *
-     * @param StepTextPainter         $textPainter
-     * @param ResultToStringConverter $resultConverter
-     * @param PrettyPathPrinter       $pathPrinter
-     * @param integer                 $indentation
-     * @param integer                 $subIndentation
+     * @param int $indentation
+     * @param int $subIndentation
      */
     public function __construct(
-        StepTextPainter $textPainter,
-        ResultToStringConverter $resultConverter,
-        PrettyPathPrinter $pathPrinter,
+        private readonly StepTextPainter $textPainter,
+        private readonly ResultToStringConverter $resultConverter,
+        private readonly PrettyPathPrinter $pathPrinter,
         $indentation = 4,
-        $subIndentation = 2
+        $subIndentation = 2,
     ) {
-        $this->textPainter = $textPainter;
-        $this->resultConverter = $resultConverter;
-        $this->pathPrinter = $pathPrinter;
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
         $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
@@ -88,10 +68,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Prints step text.
      *
-     * @param OutputPrinter $printer
      * @param string        $stepType
      * @param string        $stepText
-     * @param StepResult    $result
      */
     private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
     {
@@ -100,7 +78,9 @@ final class PrettySkippedStepPrinter implements StepPrinter
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
             $stepText = $this->textPainter->paintText(
-                $stepText, $definition, new IntegerTestResult(TestResult::SKIPPED)
+                $stepText,
+                $definition,
+                new IntegerTestResult(TestResult::SKIPPED)
             );
         }
 
@@ -110,7 +90,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Prints step multiline arguments.
      *
-     * @param Formatter           $formatter
      * @param ArgumentInterface[] $arguments
      */
     private function printArguments(Formatter $formatter, array $arguments)
@@ -120,7 +99,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         foreach ($arguments as $argument) {
             $text = $this->getArgumentString($argument, !$formatter->getParameter('multiline'));
 
-            $indentedText = implode("\n", array_map(array($this, 'subIndent'), explode("\n", $text)));
+            $indentedText = implode("\n", array_map([$this, 'subIndent'], explode("\n", $text)));
             $formatter->getOutputPrinter()->writeln(sprintf('{+%s}%s{-%s}', $style, $indentedText, $style));
         }
     }
@@ -128,7 +107,6 @@ final class PrettySkippedStepPrinter implements StepPrinter
     /**
      * Returns argument string for provided argument.
      *
-     * @param ArgumentInterface $argument
      * @param bool           $collapse
      *
      * @return string
@@ -144,8 +122,11 @@ final class PrettySkippedStepPrinter implements StepPrinter
 
             return $text;
         }
+        if ($argument instanceof TableNode) {
+            return (string) $argument;
+        }
 
-        return (string) $argument;
+        return '';
     }
 
     /**

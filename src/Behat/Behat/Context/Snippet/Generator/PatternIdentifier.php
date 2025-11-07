@@ -10,8 +10,6 @@
 
 namespace Behat\Behat\Context\Snippet\Generator;
 
-use Behat\Behat\Context\Context;
-
 /**
  * Identifies target pattern for snippets.
  *
@@ -24,7 +22,7 @@ interface PatternIdentifier
      *
      * @param string $contextClass
      *
-     * @return null|string
+     * @return string|null
      */
     public function guessPatternType($contextClass);
 }

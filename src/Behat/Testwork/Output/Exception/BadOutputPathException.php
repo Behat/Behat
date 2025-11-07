@@ -20,20 +20,15 @@ use InvalidArgumentException;
 class BadOutputPathException extends InvalidArgumentException implements PrinterException
 {
     /**
-     * @var string
-     */
-    private $path;
-
-    /**
      * Initializes exception.
      *
      * @param string $message
      * @param string $path
      */
-    public function __construct($message, $path)
-    {
-        $this->path = $path;
-
+    public function __construct(
+        $message,
+        private $path,
+    ) {
         parent::__construct($message);
     }
 

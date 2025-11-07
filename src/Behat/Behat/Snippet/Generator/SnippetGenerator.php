@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Snippet\Generator;
 
+use Behat\Behat\Context\Snippet\Generator\CannotGenerateStepPatternException;
 use Behat\Behat\Snippet\Snippet;
 use Behat\Behat\Snippet\SnippetRegistry;
 use Behat\Gherkin\Node\StepNode;
@@ -27,9 +28,6 @@ interface SnippetGenerator
     /**
      * Checks if generator supports search query.
      *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
      * @return bool
      */
     public function supportsEnvironmentAndStep(Environment $environment, StepNode $step);
@@ -37,10 +35,9 @@ interface SnippetGenerator
     /**
      * Generates snippet from search.
      *
-     * @param Environment $environment
-     * @param StepNode    $step
-     *
      * @return Snippet
+     *
+     * @throws CannotGenerateStepPatternException if the step text cannot be automatically converted to a pattern
      */
     public function generateSnippet(Environment $environment, StepNode $step);
 }

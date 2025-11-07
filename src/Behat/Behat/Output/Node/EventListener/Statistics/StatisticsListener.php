@@ -25,29 +25,14 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class StatisticsListener implements EventListener
 {
     /**
-     * @var Statistics
-     */
-    private $statistics;
-    /**
-     * @var StatisticsPrinter
-     */
-    private $printer;
-
-    /**
      * Initializes listener.
-     *
-     * @param Statistics        $statistics
-     * @param StatisticsPrinter $statisticsPrinter
      */
-    public function __construct(Statistics $statistics, StatisticsPrinter $statisticsPrinter)
-    {
-        $this->statistics = $statistics;
-        $this->printer = $statisticsPrinter;
+    public function __construct(
+        private readonly Statistics $statistics,
+        private readonly StatisticsPrinter $printer,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         $this->startTimerOnBeforeExercise($eventName);
@@ -71,7 +56,6 @@ final class StatisticsListener implements EventListener
     /**
      * Prints statistics on after exercise event.
      *
-     * @param Formatter $formatter
      * @param string    $eventName
      */
     private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, $eventName)

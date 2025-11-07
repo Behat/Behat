@@ -1,0 +1,119 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://behat.org/schemas/test-report.schema.json",
+    "title": "Test Report",
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["tests", "skipped", "failed", "pending", "undefined", "suites"],
+    "properties": {
+        "tests": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "pending": { "type": "integer", "minimum": 0 },
+        "undefined": { "type": "integer", "minimum": 0 },
+        "time": { "$ref": "#/$defs/DurationSeconds" },
+        "suites": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/Suite" }
+        }
+    },
+
+    "$defs": {
+        "DurationSeconds": {
+            "type": "number",
+            "description": "Seconds rounded to 3 decimals (e.g., 0.041)."
+        },
+
+        "FailureEntry": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["message", "type"],
+            "properties": {
+                "message": { "type": "string" },
+                "type": {
+                    "type": "string",
+                    "enum": ["failed", "pending", "undefined", "setup", "teardown"]
+                }
+            }
+        },
+
+        "Suite": {
+            "type": "object",
+            "title": "Suite",
+            "additionalProperties": false,
+            "required": ["name", "tests", "skipped", "failed", "pending", "undefined", "features"],
+            "properties": {
+                "name": { "type": "string" },
+                "tests": { "type": "integer", "minimum": 0 },
+                "skipped": { "type": "integer", "minimum": 0 },
+                "failed": { "type": "integer", "minimum": 0 },
+                "pending": { "type": "integer", "minimum": 0 },
+                "undefined": { "type": "integer", "minimum": 0 },
+                "time": { "$ref": "#/$defs/DurationSeconds" },
+                "features": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/Feature" }
+                },
+                "failures": {
+                    "type": "array",
+                    "description": "Optional suite-level failures (e.g., setup/teardown hook problems).",
+                    "items": { "$ref": "#/$defs/FailureEntry" }
+                }
+            }
+        },
+
+        "Feature": {
+            "type": "object",
+            "title": "Feature",
+            "additionalProperties": false,
+            "required": ["name", "file", "tests", "skipped", "failed", "pending", "undefined", "scenarios"],
+            "properties": {
+                "name": { "type": "string" },
+                "file": { "type": "string" },
+                "tests": { "type": "integer", "minimum": 0 },
+                "skipped": { "type": "integer", "minimum": 0 },
+                "failed": { "type": "integer", "minimum": 0 },
+                "pending": { "type": "integer", "minimum": 0 },
+                "undefined": { "type": "integer", "minimum": 0 },
+                "time": { "$ref": "#/$defs/DurationSeconds" },
+                "scenarios": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/Scenario" }
+                },
+                "failures": {
+                    "type": "array",
+                    "description": "Optional feature-level failures (e.g., AfterFeature teardown errors).",
+                    "items": { "$ref": "#/$defs/FailureEntry" }
+                }
+            }
+        },
+
+        "Scenario": {
+            "type": "object",
+            "title": "Scenario",
+            "additionalProperties": false,
+            "required": ["name", "status", "file", "line"],
+            "properties": {
+                "name": { "type": "string" },
+                "time": { "$ref": "#/$defs/DurationSeconds" },
+                "status": {
+                    "type": "string",
+                    "enum": ["passed", "failed", "pending", "undefined", "skipped"]
+                },
+                "file": { "type": "string" },
+                "line": { "type": "integer", "minimum": 1 },
+                "failures": {
+                    "type": "array",
+                    "description": "Failure entries for the scenario.",
+                    "items": { "$ref": "#/$defs/FailureEntry" }
+                }
+            },
+            "allOf": [
+                {
+                    "if": { "properties": { "status": { "enum": ["failed", "pending", "undefined"] } }, "required": ["status"] },
+                    "then": { "required": ["failures"] }
+                }
+            ]
+        }
+    }
+}

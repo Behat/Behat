@@ -12,20 +12,18 @@ Feature: Support PHP 7 Throwable
           Behat\Behat\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Then;
+      use Behat\Step\When;
 
       class FeatureContext implements Context
       {
-          /**
-           * @When /^I have some code with a fatal error$/
-           */
+          #[When('/^I have some code with a fatal error$/')]
           public function iHaveSomeCodeWithFatalError()
           {
               ("not an object")->method();
           }
 
-          /**
-           * @Then /^I should be skipped$/
-           */
+          #[Then('/^I should be skipped$/')]
           public function iShouldBeSkipped()
           {
           }
@@ -55,7 +53,7 @@ Feature: Support PHP 7 Throwable
 
       --- Failed scenarios:
 
-          features/fatal_errors.feature:6
+          features/fatal_errors.feature:6 (on line 7)
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)

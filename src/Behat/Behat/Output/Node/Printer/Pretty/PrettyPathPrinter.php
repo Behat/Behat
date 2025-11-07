@@ -18,6 +18,7 @@ use Behat\Gherkin\Node\ScenarioLikeInterface as Scenario;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 
 /**
  * Prints paths for scenarios, examples, backgrounds and steps.
@@ -26,34 +27,23 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
  */
 final class PrettyPathPrinter
 {
-    /**
-     * @var WidthCalculator
-     */
-    private $widthCalculator;
-    /**
-     * @var string
-     */
-    private $basePath;
+    private readonly ConfigurablePathPrinter $configurablePathPrinter;
 
     /**
      * Initializes printer.
-     *
-     * @param WidthCalculator $widthCalculator
-     * @param string          $basePath
      */
-    public function __construct(WidthCalculator $widthCalculator, $basePath)
-    {
-        $this->widthCalculator = $widthCalculator;
-        $this->basePath = $basePath;
+    public function __construct(
+        private readonly WidthCalculator $widthCalculator,
+        string $basePath,
+        ?ConfigurablePathPrinter $configurablePathPrinter = null,
+    ) {
+        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath, printAbsolutePaths: false, editorUrl: null);
     }
 
     /**
      * Prints scenario path comment.
      *
-     * @param Formatter   $formatter
-     * @param FeatureNode $feature
-     * @param Scenario    $scenario
-     * @param integer     $indentation
+     * @param int $indentation
      */
     public function printScenarioPath(Formatter $formatter, FeatureNode $feature, Scenario $scenario, $indentation)
     {
@@ -65,7 +55,7 @@ final class PrettyPathPrinter
             return;
         }
 
-        $fileAndLine = sprintf('%s:%s', $this->relativizePaths($feature->getFile()), $scenario->getLine());
+        $fileAndLine = $this->configurablePathPrinter->processPathsInText(sprintf('%s:%s', $feature->getFile(), $scenario->getLine()));
         $headerWidth = $this->widthCalculator->calculateScenarioHeaderWidth($scenario, $indentation);
         $scenarioWidth = $this->widthCalculator->calculateScenarioWidth($scenario, $indentation, 2);
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $headerWidth));
@@ -76,18 +66,14 @@ final class PrettyPathPrinter
     /**
      * Prints step path comment.
      *
-     * @param Formatter  $formatter
-     * @param Scenario   $scenario
-     * @param StepNode   $step
-     * @param StepResult $result
-     * @param integer    $indentation
+     * @param int $indentation
      */
     public function printStepPath(
         Formatter $formatter,
         Scenario $scenario,
         StepNode $step,
         StepResult $result,
-        $indentation
+        $indentation,
     ) {
         $printer = $formatter->getOutputPrinter();
 
@@ -106,10 +92,8 @@ final class PrettyPathPrinter
     /**
      * Prints defined step path.
      *
-     * @param OutputPrinter     $printer
-     * @param DefinedStepResult $result
-     * @param integer           $scenarioWidth
-     * @param integer           $stepWidth
+     * @param int $scenarioWidth
+     * @param int $stepWidth
      */
     private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth)
     {
@@ -117,21 +101,5 @@ final class PrettyPathPrinter
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $stepWidth));
 
         $printer->writeln(sprintf('%s {+comment}# %s{-comment}', $spacing, $path));
-    }
-
-    /**
-     * Transforms path to relative.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    private function relativizePaths($path)
-    {
-        if (!$this->basePath) {
-            return $path;
-        }
-
-        return str_replace($this->basePath . DIRECTORY_SEPARATOR, '', $path);
     }
 }

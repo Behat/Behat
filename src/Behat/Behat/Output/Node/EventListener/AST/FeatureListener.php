@@ -27,29 +27,14 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
 final class FeatureListener implements EventListener
 {
     /**
-     * @var FeaturePrinter
-     */
-    private $featurePrinter;
-    /**
-     * @var SetupPrinter
-     */
-    private $setupPrinter;
-
-    /**
      * Initializes listener.
-     *
-     * @param FeaturePrinter $featurePrinter
-     * @param SetupPrinter   $setupPrinter
      */
-    public function __construct(FeaturePrinter $featurePrinter, SetupPrinter $setupPrinter)
-    {
-        $this->featurePrinter = $featurePrinter;
-        $this->setupPrinter = $setupPrinter;
+    public function __construct(
+        private readonly FeaturePrinter $featurePrinter,
+        private readonly SetupPrinter $setupPrinter,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function listenEvent(Formatter $formatter, Event $event, $eventName)
     {
         if (!$event instanceof FeatureTested) {
@@ -62,9 +47,6 @@ final class FeatureListener implements EventListener
 
     /**
      * Prints feature header on BEFORE event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printHeaderOnBeforeEvent(Formatter $formatter, Event $event)
     {
@@ -78,9 +60,6 @@ final class FeatureListener implements EventListener
 
     /**
      * Prints feature footer on AFTER event.
-     *
-     * @param Formatter $formatter
-     * @param Event     $event
      */
     private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
     {

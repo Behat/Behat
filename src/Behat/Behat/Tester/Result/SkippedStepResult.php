@@ -20,20 +20,13 @@ use Behat\Behat\Definition\SearchResult;
 final class SkippedStepResult implements StepResult, DefinedStepResult
 {
     /**
-     * @var SearchResult
-     */
-    private $searchResult;
-
-    /**
      * Initializes step result.
-     *
-     * @param SearchResult $searchResult
      */
-    public function __construct(SearchResult $searchResult)
-    {
-        $this->searchResult = $searchResult;
+    public function __construct(
+        private readonly SearchResult $searchResult,
+    ) {
     }
-    
+
     /**
      * Returns definition search result.
      *
@@ -44,24 +37,18 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
         return $this->searchResult;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStepDefinition()
     {
         return $this->searchResult->getMatchedDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isPassed()
     {
         return false;
     }
 
     /**
-     * {@inheritdoc}
+     * @return self::SKIPPED
      */
     public function getResultCode()
     {

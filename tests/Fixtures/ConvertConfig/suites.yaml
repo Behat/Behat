@@ -1,0 +1,5 @@
+default:
+    suites:
+        one_suite:
+        another_suite:
+

@@ -26,8 +26,6 @@ interface SuiteScopedResolverFactory
     /**
      * Creates argument resolvers for provided suite.
      *
-     * @param Suite $suite
-     *
      * @return ArgumentResolver[]
      */
     public function generateArgumentResolvers(Suite $suite);

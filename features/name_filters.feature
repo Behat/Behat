@@ -1,7 +1,7 @@
 Feature: Name filters
   In order to run only needed features
   As a Behat user
-  I need to Behat support features & scenario/outline names filtering
+  I need Behat to support features & scenario/outline names filtering
 
   Background:
     Given a file named "features/bootstrap/FeatureContext.php" with:
@@ -11,22 +11,17 @@ Feature: Name filters
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode,
           Behat\Gherkin\Node\TableNode;
+      use Behat\Step\Given;
 
       class FeatureContext implements Context
       {
-          /**
-           * @Given /^Some slow step N(\d+)$/
-           */
+          #[Given('/^Some slow step N(\d+)$/')]
           public function someSlowStepN($num) {}
 
-          /**
-           * @Given /^Some normal step N(\d+)$/
-           */
+          #[Given('/^Some normal step N(\d+)$/')]
           public function someNormalStepN($num) {}
 
-          /**
-           * @Given /^Some fast step N(\d+)$/
-           */
+          #[Given('/^Some fast step N(\d+)$/')]
           public function someFastStepN($num) {}
       }
     """

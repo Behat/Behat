@@ -14,6 +14,7 @@ use Behat\Behat\Output\Node\Printer\CounterPrinter;
 use Behat\Behat\Output\Node\Printer\ListPrinter;
 use Behat\Behat\Output\Node\Printer\StatisticsPrinter;
 use Behat\Behat\Output\Statistics\Statistics;
+use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -25,29 +26,14 @@ use Behat\Testwork\Tester\Result\TestResult;
 final class ProgressStatisticsPrinter implements StatisticsPrinter
 {
     /**
-     * @var CounterPrinter
-     */
-    private $counterPrinter;
-    /**
-     * @var ListPrinter
-     */
-    private $listPrinter;
-
-    /**
      * Initializes printer.
-     *
-     * @param CounterPrinter $counterPrinter
-     * @param ListPrinter    $listPrinter
      */
-    public function __construct(CounterPrinter $counterPrinter, ListPrinter $listPrinter)
-    {
-        $this->counterPrinter = $counterPrinter;
-        $this->listPrinter = $listPrinter;
+    public function __construct(
+        private readonly CounterPrinter $counterPrinter,
+        private readonly ListPrinter $listPrinter,
+    ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function printStatistics(Formatter $formatter, Statistics $statistics)
     {
         $printer = $formatter->getOutputPrinter();
@@ -58,11 +44,22 @@ final class ProgressStatisticsPrinter implements StatisticsPrinter
         $hookStats = $statistics->getFailedHookStats();
         $this->listPrinter->printFailedHooksList($printer, 'failed_hooks_title', $hookStats);
 
-        $stepStats = $statistics->getFailedSteps();
-        $this->listPrinter->printStepList($printer, 'failed_steps_title', TestResult::FAILED, $stepStats);
+        $shortSummary = $formatter->getParameter('short_summary');
+        if ($shortSummary) {
+            $scenarioStats = $statistics->getSkippedScenarios();
+            $this->listPrinter->printScenariosList($printer, 'skipped_scenarios_title', TestResult::SKIPPED, $scenarioStats);
 
-        $stepStats = $statistics->getPendingSteps();
-        $this->listPrinter->printStepList($printer, 'pending_steps_title', TestResult::PENDING, $stepStats);
+            $scenarioStats = $statistics->getFailedScenarios();
+            $failedStepStats = $statistics->getFailedSteps();
+            $this->listPrinter->printScenariosList($printer, 'failed_scenarios_title', TestResult::FAILED, $scenarioStats, $failedStepStats);
+        } else {
+            $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
+            $stepStats = $statistics->getFailedSteps();
+            $this->listPrinter->printStepList($printer, 'failed_steps_title', TestResult::FAILED, $stepStats, $showOutput);
+
+            $stepStats = $statistics->getPendingSteps();
+            $this->listPrinter->printStepList($printer, 'pending_steps_title', TestResult::PENDING, $stepStats, $showOutput);
+        }
 
         $this->counterPrinter->printCounters($printer, 'scenarios_count', $statistics->getScenarioStatCounts());
         $this->counterPrinter->printCounters($printer, 'steps_count', $statistics->getStepStatCounts());
