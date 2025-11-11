@@ -91,7 +91,7 @@ final class ExerciseController implements Controller
                     'No specifications found at path(s) `%s`. This might be because of incorrect paths configuration in your `suites`.',
                     implode(', ', $paths)
                 ),
-                implode(', ', $paths)
+                $paths
             );
         }
 
