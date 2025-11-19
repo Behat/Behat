@@ -32,17 +32,10 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Simp
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
 
-    /**
-     * Initializes transformation.
-     *
-     * @param string      $pattern
-     * @param callable    $callable
-     * @param string|null $description
-     */
     public function __construct(
-        private $pattern,
-        $callable,
-        $description = null,
+        private readonly string $pattern,
+        callable|array $callable,
+        ?string $description = null,
     ) {
         parent::__construct($callable, $description);
     }
