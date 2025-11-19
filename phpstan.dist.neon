@@ -12,7 +12,6 @@ parameters:
             paths:
                 - src/Behat/Behat/Definition/Printer/ConsoleDefinitionPrinter.php
                 - src/Behat/Behat/EventDispatcher/Cli/StopOnFailureController.php
-                - src/Behat/Behat/Output/Node/Printer/JUnit/JUnitScenarioPrinter.php
                 - src/Behat/Behat/Output/Node/Printer/ListPrinter.php
                 - src/Behat/Behat/Tester/Runtime/RuntimeFeatureTester.php
                 - src/Behat/Behat/Transformation/Transformation/ReturnTypeTransformation.php
