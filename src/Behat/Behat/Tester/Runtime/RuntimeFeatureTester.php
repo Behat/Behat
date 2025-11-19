@@ -15,7 +15,6 @@ use Behat\Behat\Tester\ScenarioTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
@@ -33,13 +32,9 @@ use Behat\Testwork\Tester\SpecificationTester;
  */
 final class RuntimeFeatureTester implements SpecificationTester
 {
-    /**
-     * @param EnvironmentManager $envManager deprecated , will be removed in the next major version
-     */
     public function __construct(
         private readonly ScenarioTester $scenarioTester,
         private readonly OutlineTester $outlineTester,
-        EnvironmentManager $envManager,
     ) {
     }
 
