@@ -470,3 +470,86 @@ Feature: Pretty Formatter
       2 scenarios (2 pending)
       6 steps (2 pending, 4 skipped)
       """
+
+  Scenario: Multiple examples tables
+    Given a file named "features/bootstrap/FeatureContext.php" with:
+      """
+      <?php
+
+      use Behat\Behat\Context\Context;
+      use Behat\Step\When;
+      use Behat\Step\Then;
+
+      class FeatureContext implements Context
+      {
+          private string $output;
+
+          #[When('I input :name')]
+          public function input(string $name): void {
+              $this->output = ctype_digit($name)
+                ? "'$name' doesn't look like a name?"
+                : 'Hi Bob';
+          }
+
+          #[Then('I should see :result')]
+          public function assertSee(string $result): void {
+            if ($this->output !== $result) {
+              throw new InvalidArgumentException('Failed - got: '.$this->output);
+            }
+          }
+      }
+      """
+    And a file named "features/test.feature" with:
+      """
+      Feature: Behat can run scenarios with multiple examples tables
+        In order to make the purpose of my examples clear
+        As a feature writer
+        I need to group examples into separate tables
+
+        Scenario Outline: Grouped examples
+          When I input <name>
+          Then I should see "<result>"
+
+          Examples: valid cases
+            | name  | result   |
+            | Bob   | Hi Bob   |
+            | Jenny | Hi Jenny |
+
+          Examples: invalid cases
+            | name   | result                             |
+            | 123456 | '123456' doesn't look like a name? |
+            | Brian  | Sorry Brian, you're banned         |
+      """
+    When I run "behat --no-colors -f pretty --no-snippets"
+    # Note: The structure / descriptions of the separate tables are lost in the output, but the
+    # examples all execute as expected.
+    Then it should fail with:
+      """
+      Feature: Behat can run scenarios with multiple examples tables
+        In order to make the purpose of my examples clear
+        As a feature writer
+        I need to group examples into separate tables
+
+        Scenario Outline: Grouped examples # features/test.feature:6
+          When I input <name>              # FeatureContext::input()
+          Then I should see "<result>"     # FeatureContext::assertSee()
+
+          Examples:
+            | name  | result   |
+            | Bob   | Hi Bob   |
+            | Jenny | Hi Jenny |
+              Failed step: Then I should see "Hi Jenny"
+              Failed - got: Hi Bob (InvalidArgumentException)
+            | 123456 | '123456' doesn't look like a name? |
+            | Brian | Sorry Brian, you're banned |
+              Failed step: Then I should see "Sorry Brian, you're banned"
+              Failed - got: Hi Bob (InvalidArgumentException)
+
+      --- Failed scenarios:
+
+          features/test.feature:13 (on line 8)
+          features/test.feature:18 (on line 8)
+
+      4 scenarios (2 passed, 2 failed)
+      8 steps (6 passed, 2 failed)
+      """

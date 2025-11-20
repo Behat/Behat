@@ -209,6 +209,50 @@ Feature: Scenario Outlines
       30 steps (26 passed, 4 failed)
       """
 
+  Scenario: Outline with multiple examples and failing steps
+    Given a file named "features/math.feature" with:
+      """
+      Feature: Math
+        Background:
+          Given I have basic calculator
+
+        Scenario Outline:
+          Given I have entered <number1>
+          And I have entered <number2>
+          When I multiply
+          Then The result should be <result>
+
+          Examples: Small numbers
+            | number1 | number2 | result |
+            | 1       | 6       | 6      |
+            | 5       | 4       | 10     |
+            | 2       | 3       | 6      |
+
+          Examples: Big numbers
+            | number1 | number2 | result |
+            | 139     | 201     | 99     |
+            | 200     | 300     | 60000  |
+
+      """
+    When I run "behat --no-colors -f progress features/math.feature"
+    Then it should fail with:
+      """
+      .........F.........F.....
+
+      --- Failed steps:
+
+      001 Example: | 5       | 4       | 10     | # features/math.feature:14
+            Then The result should be 10          # features/math.feature:9
+              Failed asserting that 20 matches expected 10.
+
+      002 Example: | 139     | 201     | 99     | # features/math.feature:19
+            Then The result should be 99          # features/math.feature:9
+              Failed asserting that 27939 matches expected 99.
+
+      5 scenarios (3 passed, 2 failed)
+      25 steps (23 passed, 2 failed)
+      """
+
   Scenario: Scenario outline examples isolation
     Given a file named "features/bootstrap/FeatureContext.php" with:
       """
