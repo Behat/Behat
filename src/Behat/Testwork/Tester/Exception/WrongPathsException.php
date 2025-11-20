@@ -20,25 +20,41 @@ use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 final class WrongPathsException extends RuntimeException implements TesterException
 {
     /**
+     * @var list<string>
+     */
+    private readonly array $paths;
+
+    /**
      * Initializes exception.
      *
      * @param string $message
-     * @param string $path
+     * @param string|list<string> $paths
      */
     public function __construct(
         $message,
-        private $path,
+        string|array $paths,
     ) {
         parent::__construct($message);
+        $this->paths = (array) $paths;
     }
 
     /**
      * Returns path that caused exception.
      *
-     * @return string
+     * @return list<string>
      */
-    public function getPath()
+    public function getPaths(): array
     {
-        return $this->path;
+        return $this->paths;
+    }
+
+    /**
+     * Returns path that caused exception.
+     *
+     * @deprecated
+     */
+    public function getPath(): string
+    {
+        return implode(', ', $this->paths);
     }
 }
