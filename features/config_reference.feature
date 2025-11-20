@@ -48,7 +48,7 @@ Feature: Config reference
 
           public function load(ContainerBuilder $container, array $config) {}
 
-          public function process(ContainerBuilder $container) {}
+          public function process(ContainerBuilder $container): void {}
       }
 
       return new CustomExtension;

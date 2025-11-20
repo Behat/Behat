@@ -37,7 +37,7 @@ final class Command extends BaseCommand
     /**
      * Configures the command by running controllers prepare().
      */
-    protected function configure()
+    protected function configure(): void
     {
         foreach ($this->controllers as $controller) {
             $controller->configure($this);

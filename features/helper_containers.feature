@@ -357,7 +357,7 @@ Feature: Per-suite helper containers
           public function getConfigKey() { return 'container_provider'; }
           public function configure(ArrayNodeDefinition $builder) { }
           public function initialize(ExtensionManager $extensionManager) {}
-          public function process(ContainerBuilder $container) {}
+          public function process(ContainerBuilder $container): void {}
 
           public function load(ContainerBuilder $container, array $config) {
               $definition = new Definition('MyContainer', array());

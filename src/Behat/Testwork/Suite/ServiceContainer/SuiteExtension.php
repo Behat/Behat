@@ -133,7 +133,7 @@ final class SuiteExtension implements Extension
         $this->loadGenericSuiteGenerator($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processGenerators($container);
         $this->processSetups($container);
