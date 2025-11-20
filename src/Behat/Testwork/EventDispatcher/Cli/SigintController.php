@@ -51,10 +51,10 @@ final class SigintController implements Controller
     /**
      * Dispatches AFTER exercise event and exits program.
      */
-    public function abortExercise(): never
+    public function abortExercise(int $signal = SIGINT): never
     {
         $this->eventDispatcher->dispatch(new AfterExerciseAborted(), ExerciseCompleted::AFTER);
 
-        exit(1);
+        exit(128 + $signal);
     }
 }
