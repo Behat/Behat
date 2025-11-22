@@ -89,7 +89,6 @@ final class JUnitFormatterFactory implements FormatterFactory
 
         $definition = new Definition(JUnitScenarioPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
-            new Reference('output.node.listener.junit.outline'),
             new Reference('output.node.listener.junit.duration'),
             new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);

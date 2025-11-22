@@ -11,7 +11,6 @@
 namespace Behat\Behat\Definition\Printer;
 
 use Behat\Behat\Definition\Definition;
-use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Translator\DefinitionTranslator;
 use Behat\Gherkin\Keywords\KeywordsInterface;
 use Behat\Testwork\Suite\Suite;
@@ -25,12 +24,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 {
-    /**
-     * @param PatternTransformer $patternTransformer deprecated, will be removed in the next major version
-     */
     public function __construct(
         private readonly OutputInterface $output,
-        PatternTransformer $patternTransformer,
         private readonly DefinitionTranslator $translator,
         private readonly KeywordsInterface $keywords,
     ) {

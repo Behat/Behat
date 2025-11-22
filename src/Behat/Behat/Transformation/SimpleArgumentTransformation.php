@@ -22,6 +22,11 @@ use ReflectionMethod;
 interface SimpleArgumentTransformation extends Transformation
 {
     /**
+     * @phpstan-param callable $callable
+     */
+    public function __construct(string $pattern, callable|array $callable, ?string $description = null);
+
+    /**
      * Checks if transformation supports given pattern.
      *
      * @param string           $pattern

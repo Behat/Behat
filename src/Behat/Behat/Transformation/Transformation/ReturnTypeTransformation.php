@@ -41,14 +41,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgu
         return '' === $pattern;
     }
 
-    /**
-     * Initializes transformation.
-     *
-     * @param string      $pattern
-     * @param callable    $callable
-     * @param string|null $description
-     */
-    public function __construct($pattern, $callable, $description = null)
+    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
     {
         parent::__construct($callable, $description);
     }

@@ -378,7 +378,6 @@ class PrettyFormatterFactory implements FormatterFactory
 
         $definition = new Definition(ListPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
-            new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
             '%paths.base%',
             new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),

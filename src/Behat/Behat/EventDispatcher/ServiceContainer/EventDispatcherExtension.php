@@ -53,7 +53,6 @@ class EventDispatcherExtension extends BaseExtension
     protected function loadStopOnFailureController(ContainerBuilder $container)
     {
         $definition = new Definition(StopOnFailureController::class, [
-            new Reference(EventDispatcherExtension::DISPATCHER_ID),
         ]);
         $definition->addMethodCall('setStopOnFailureHandler', [new Reference(TestworkTesterExtension::STOP_ON_FAILURE_ID)]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 100]);

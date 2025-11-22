@@ -115,7 +115,6 @@ class TesterExtension extends BaseExtension
         $definition = new Definition(RuntimeFeatureTester::class, [
             new Reference(self::SCENARIO_TESTER_ID),
             new Reference(self::OUTLINE_TESTER_ID),
-            new Reference(EnvironmentExtension::MANAGER_ID),
         ]);
         $container->setDefinition(self::SPECIFICATION_TESTER_ID, $definition);
 

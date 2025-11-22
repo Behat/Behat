@@ -241,7 +241,6 @@ final class DefinitionExtension implements Extension
     {
         $definition = new Definition(ConsoleDefinitionInformationPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
-            new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
             new Reference(GherkinExtension::KEYWORDS_ID),
         ]);
@@ -249,7 +248,6 @@ final class DefinitionExtension implements Extension
 
         $definition = new Definition(ConsoleDefinitionListPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
-            new Reference(self::PATTERN_TRANSFORMER_ID),
             new Reference(self::DEFINITION_TRANSLATOR_ID),
             new Reference(GherkinExtension::KEYWORDS_ID),
         ]);
