@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.27.0] - 2025-11-23
+
+### Changed
+* Use the exit code `130` on `SIGINT` by @andrewnicols in [#1686](https://github.com/Behat/Behat/pull/1686)
+
+### Added
+* Add support for PHP 8.5 by @acoulton in [#1689](https://github.com/Behat/Behat/pull/1689)
+
+### Internal
+* Prepare the pretty printer for future changes in the Gherkin parser by @stof in [#1690](https://github.com/Behat/Behat/pull/1690)
+* Add tests proving that multiple `Examples` tables are supported by @acoulton in [#1696](https://github.com/Behat/Behat/pull/1696)
+
 ## [3.26.0] - 2025-10-28
 
 ### Changed
@@ -1362,6 +1374,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.27.0]: https://github.com/Behat/Behat/compare/v3.26.0...v3.27.0
 [3.26.0]: https://github.com/Behat/Behat/compare/v3.25.0...v3.26.0
 [3.25.0]: https://github.com/Behat/Behat/compare/v3.24.1...v3.25.0
 [3.24.1]: https://github.com/Behat/Behat/compare/v3.24.0...v3.24.1
