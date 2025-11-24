@@ -16,8 +16,8 @@
     "require": {
         "php": ">=8.1 <8.6",
         "ext-mbstring": "*",
-        "behat/gherkin": "^4.12.0",
         "composer-runtime-api": "^2.2",
+        "behat/gherkin": "^4.12.0",
         "composer/xdebug-handler": "^1.4 || ^2.0 || ^3.0",
         "nikic/php-parser": "^4.19.2 || ^5.2",
         "psr/container": "^1.0 || ^2.0",
@@ -31,14 +31,14 @@
 
     "require-dev": {
         "opis/json-schema": "^2.5",
+        "php-cs-fixer/shim": "^3.89",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^9.6",
         "rector/rector": "2.1.7",
         "sebastian/diff": "^4.0",
-        "symfony/polyfill-php84": "^1.31",
-        "symfony/process": "^5.4 || ^6.4 || ^7.0",
         "symfony/filesystem": "^5.4 || ^6.4 || ^7.0",
-        "php-cs-fixer/shim": "^3.89"
+        "symfony/polyfill-php84": "^1.31",
+        "symfony/process": "^5.4 || ^6.4 || ^7.0"
     },
 
     "suggest": {
@@ -86,5 +86,8 @@
         "rector-fix": "rector"
     },
 
-    "bin": ["bin/behat"]
+    "bin": ["bin/behat"],
+    "config": {
+        "sort-packages": true
+    }
 }
