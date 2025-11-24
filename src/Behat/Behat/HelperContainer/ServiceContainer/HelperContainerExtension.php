@@ -76,7 +76,7 @@ final class HelperContainerExtension implements Extension
         $container->setDefinition(CallExtension::CALL_FILTER_TAG . '.helper_container', $definition);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::HELPER_CONTAINER_TAG);
 

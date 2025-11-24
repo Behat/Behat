@@ -66,7 +66,7 @@ final class SpecificationExtension implements Extension
         $this->loadFinder($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processLocators($container);
     }
