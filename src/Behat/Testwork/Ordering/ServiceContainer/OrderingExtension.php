@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Ordering\ServiceContainer;
 
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
-use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\Ordering\Cli\OrderController;
 use Behat\Testwork\Ordering\OrderedExercise;
 use Behat\Testwork\Ordering\Orderer\RandomOrderer;
@@ -107,7 +106,6 @@ final class OrderingExtension implements Extension
     private function loadOrderController(ContainerBuilder $container)
     {
         $definition = new Definition(OrderController::class, [
-            new Reference(EventDispatcherExtension::DISPATCHER_ID),
             new Reference(TesterExtension::EXERCISE_WRAPPER_TAG . '.ordering'),
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 250]);

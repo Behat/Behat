@@ -11,7 +11,6 @@
 namespace Behat\Behat\Output\Node\Printer\JUnit;
 
 use Behat\Behat\Output\Node\EventListener\JUnit\JUnitDurationListener;
-use Behat\Behat\Output\Node\EventListener\JUnit\JUnitOutlineStoreListener;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\NamedScenarioInterface;
@@ -30,10 +29,6 @@ final class JUnitScenarioPrinter
 {
     public function __construct(
         private readonly ResultToStringConverter $resultConverter,
-        /*
-         * @deprecated the outlineStoreListener is no longer used but kept for BC. It will be removed in the next major
-         */
-        JUnitOutlineStoreListener $outlineStoreListener,
         private readonly ?JUnitDurationListener $durationListener = null,
         private readonly ?ConfigurablePathPrinter $configurablePathPrinter = null,
     ) {

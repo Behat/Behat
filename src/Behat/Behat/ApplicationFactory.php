@@ -49,13 +49,6 @@ use Composer\InstalledVersions;
  */
 final class ApplicationFactory extends BaseFactory
 {
-    /**
-     * @deprecated this constant will not be updated for releases after 3.13.0 and will be removed in the next major.
-     * You can use composer's runtime API to get the behat version if you need it - see getVersion() in this class for
-     * an example. Note that composer's versions will not always be simple numeric values.
-     */
-    public const VERSION = '3.13.0';
-
     protected function getName()
     {
         return 'behat';

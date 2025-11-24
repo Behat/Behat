@@ -18,7 +18,6 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Preloads scenarios and then modifies the order when --order is passed.
@@ -32,11 +31,7 @@ final class OrderController implements Controller
      */
     private $orderers = [];
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher deprecated, will be removed in the next major version
-     */
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
         private readonly OrderedExercise $exercise,
     ) {
     }

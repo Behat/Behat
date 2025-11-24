@@ -23,7 +23,6 @@ use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Config\Formatter\ShowOutputOption;
-use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Hook\Scope\HookScope;
@@ -40,12 +39,8 @@ final class ListPrinter
 {
     private readonly ConfigurablePathPrinter $configurablePathPrinter;
 
-    /**
-     * @param ExceptionPresenter $exceptionPresenter deprecated , will be removed in the next major version
-     */
     public function __construct(
         private readonly ResultToStringConverter $resultConverter,
-        ExceptionPresenter $exceptionPresenter,
         private readonly TranslatorInterface $translator,
         string $basePath,
         ?ConfigurablePathPrinter $configurablePathPrinter = null,

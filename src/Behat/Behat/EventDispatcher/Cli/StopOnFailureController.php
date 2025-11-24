@@ -16,7 +16,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Stops tests on first scenario failure.
@@ -31,15 +30,6 @@ final class StopOnFailureController implements Controller
      * @var StopOnFailureHandler
      */
     private $stopOnFailureHandler;
-
-    /**
-     * Initializes controller.
-     *
-     * @param EventDispatcherInterface $eventDispatcher deprecated, events are now dispatched in the StopOnFailureHandler
-     */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-    }
 
     /**
      * @required
