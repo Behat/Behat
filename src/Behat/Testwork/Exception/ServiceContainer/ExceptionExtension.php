@@ -89,7 +89,7 @@ final class ExceptionExtension implements Extension
         $this->loadVerbosityController($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processStringers($container);
     }

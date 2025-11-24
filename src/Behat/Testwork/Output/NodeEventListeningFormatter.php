@@ -43,7 +43,7 @@ final class NodeEventListeningFormatter implements Formatter
      *
      * @return array The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [TestworkEventDispatcher::BEFORE_ALL_EVENTS => 'listenEvent'];
     }

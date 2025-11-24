@@ -124,7 +124,7 @@ final class GherkinExtension implements Extension
         $this->loadFilesystemRerunScenariosListLocator($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processLoaders($container);
     }

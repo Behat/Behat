@@ -72,7 +72,7 @@ final class PathOptionsExtension implements Extension
         $this->loadPathOptionsController($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
     }
 

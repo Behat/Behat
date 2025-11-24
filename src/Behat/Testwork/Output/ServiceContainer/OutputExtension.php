@@ -103,7 +103,7 @@ final class OutputExtension implements Extension
         $this->loadManager($container, $config);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processFormatters($container);
         $this->processDynamicallyRegisteredFormatters($container);

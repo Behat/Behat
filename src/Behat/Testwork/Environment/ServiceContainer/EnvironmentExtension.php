@@ -71,7 +71,7 @@ final class EnvironmentExtension implements Extension
         $this->loadStaticEnvironmentHandler($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processHandlers($container);
         $this->processReaders($container);
