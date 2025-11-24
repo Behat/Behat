@@ -89,5 +89,20 @@
     "bin": ["bin/behat"],
     "config": {
         "sort-packages": true
-    }
+    },
+
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/carlos-granados"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/acoulton"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/stof"
+        }
+    ]
 }
