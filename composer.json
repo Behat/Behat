@@ -62,12 +62,6 @@
         }
     },
 
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.x-dev"
-        }
-    },
-
     "scripts": {
         "all-tests": [
             "@cs",
