@@ -16,6 +16,7 @@ use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
@@ -26,6 +27,7 @@ use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\ExceptionResult;
+use Behat\Testwork\Tester\Result\TestResult;
 
 /**
  * Prints step.
@@ -63,6 +65,14 @@ final class PrettyStepPrinter implements StepPrinter
 
     public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
     {
+        if ($result->getResultCode() === TestResult::SKIPPED) {
+            $printSkipped = $formatter->getParameter(PrettyFormatter::PRINT_SKIPPED_STEPS_SETTING);
+
+            if ($printSkipped === false) {
+                return;
+            }
+        }
+
         $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments(), $result);
