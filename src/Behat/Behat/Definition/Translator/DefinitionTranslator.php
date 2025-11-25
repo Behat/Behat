@@ -44,7 +44,7 @@ final class DefinitionTranslator
     {
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();
-        $cacheKey = sprintf('%s|%s|%s', $assetsId, $pattern, $language ?? '');
+        $cacheKey = sprintf('%s|%s|%s', $assetsId, $pattern, $language ?? $this->getLocale());
 
         if (isset($this->translationCache[$cacheKey])) {
             $translatedPattern = $this->translationCache[$cacheKey];
