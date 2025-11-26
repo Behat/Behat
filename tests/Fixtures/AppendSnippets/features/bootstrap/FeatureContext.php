@@ -59,6 +59,10 @@ class FeatureContext implements Context
     {
     }
 
+    /**
+     * This dummy method is added just so that PHP-CS-Fixer does not
+     * complain about unused import `use` statements.
+     */
     private function useClasses(PyStringNode $node, TableNode $table)
     {
         throw new PendingException();
