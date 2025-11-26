@@ -10,11 +10,14 @@ final class PrettyFormatter extends Formatter
 {
     public const NAME = 'pretty';
 
+    public const PRINT_SKIPPED_STEPS_PARAMETER_NAME = 'printSkippedSteps';
+
     private const TIMER_SETTING = 'timer';
     private const EXPAND_SETTING = 'expand';
     private const PATHS_SETTING = 'paths';
     private const MULTILINE_SETTING = 'multiline';
     private const SHORT_SUMMARY_SETTING = 'short_summary';
+    public const PRINT_SKIPPED_STEPS_SETTING = 'print_skipped_steps';
 
     /**
      * @param bool $timer show time and memory usage at the end of the test run
@@ -26,6 +29,7 @@ final class PrettyFormatter extends Formatter
      *                                     formatter output (yes, no, on-fail)
      * @param bool $shortSummary if we should print the short summary which just lists scenarios
      *                           or the long summary which lists steps
+     * @param bool $printSkippedSteps if we should print skipped steps in the output
      */
     public function __construct(
         bool $timer = true,
@@ -34,6 +38,7 @@ final class PrettyFormatter extends Formatter
         bool $multiline = true,
         ShowOutputOption $showOutput = ShowOutputOption::Yes,
         bool $shortSummary = true,
+        bool $printSkippedSteps = true,
         ...$baseOptions,
     ) {
         $settings = [
@@ -43,6 +48,7 @@ final class PrettyFormatter extends Formatter
             self::MULTILINE_SETTING => $multiline,
             ShowOutputOption::OPTION_NAME => $showOutput->value,
             self::SHORT_SUMMARY_SETTING => $shortSummary,
+            self::PRINT_SKIPPED_STEPS_SETTING => $printSkippedSteps,
         ];
         $settings = [...$settings, ...$baseOptions];
         parent::__construct(name: self::NAME, settings: $settings);

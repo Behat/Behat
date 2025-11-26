@@ -147,6 +147,7 @@ final class ProfileTest extends TestCase
                     'output_verbosity' => 2,
                     'show_output' => 'yes',
                     'short_summary' => true,
+                    'print_skipped_steps' => true,
                 ],
                 'progress' => [
                     'timer' => false,
