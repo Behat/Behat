@@ -13,8 +13,14 @@ Feature: Config inheritance
 
   Scenario: Config should successfully inherit parent one for default profiles
     When I run "behat features/configs.feature"
-    Then it should pass
+    Then the output should contain:
+    """
+    testing
+    """
 
   Scenario: Config should successfully inherit parent one for custom profiles
     When I run "behat --profile custom_profile features/configs.feature"
-    Then it should pass
+    Then the output should contain:
+    """
+    testing
+    """
