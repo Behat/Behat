@@ -82,7 +82,7 @@ class TransformationExtension implements Extension
         $this->loadRepository($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processArgumentsTransformers($container);
     }

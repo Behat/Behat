@@ -75,7 +75,7 @@ class EventDispatcherExtension implements Extension
         $this->loadEventDispatchingSuiteTester($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processSubscribers($container);
     }
