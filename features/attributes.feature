@@ -3,46 +3,17 @@ Feature: attributes
   As a tester
   I need to be able to use PHP Attributes
 
+  Background:
+    Given I initialise the working directory from the "Attributes" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
+
   Scenario: Step Attributes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
-
-      class FeatureContext implements \Behat\Behat\Context\Context
-      {
-          #[Given('I have :count apple(s)')]
-          #[Given('I have :count banana(s)')]
-          public function iHaveFruit($count) { }
-
-          #[When('I eat :count apple(s)')]
-          #[When('I eat :count banana(s)')]
-          public function iEatFruit($count) { }
-
-          #[Then('I should have :count apple(s)')]
-          #[Then('I should have :count banana(s)')]
-          public function iShouldHaveFruit($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Fruit story
-        In order to eat fruit
-        As a little kid
-        I need to have fruit in my pocket
-
-        Scenario: I'm little hungry for apples
-          Given I have 3 apples
-          When I eat 1 apple
-          Then I should have 2 apples
-
-        Scenario: I'm little hungry for bananas
-          Given I have 3 bananas
-          When I eat 1 banana
-          Then I should have 2 bananas
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option                | value           |
+      | --profile             | step_attributes |
+      | features/some.feature |                 |
     Then it should pass with:
       """
       Feature: Fruit story
@@ -51,91 +22,31 @@ Feature: attributes
         I need to have fruit in my pocket
 
         Scenario: I'm little hungry for apples # features/some.feature:6
-          Given I have 3 apples                # FeatureContext::iHaveFruit()
-          When I eat 1 apple                   # FeatureContext::iEatFruit()
-          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
+          Given I have 3 apples                # StepAttributesContext::iHaveFruit()
+          When I eat 1 apple                   # StepAttributesContext::iEatFruit()
+          Then I should have 2 apples          # StepAttributesContext::iShouldHaveFruit()
 
         Scenario: I'm little hungry for bananas # features/some.feature:11
-          Given I have 3 bananas                # FeatureContext::iHaveFruit()
-          When I eat 1 banana                   # FeatureContext::iEatFruit()
-          Then I should have 2 bananas          # FeatureContext::iShouldHaveFruit()
+          Given I have 3 bananas                # StepAttributesContext::iHaveFruit()
+          When I eat 1 banana                   # StepAttributesContext::iEatFruit()
+          Then I should have 2 bananas          # StepAttributesContext::iShouldHaveFruit()
 
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
 
   Scenario: Hook Feature Hook Attributes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
-      use Behat\Hook\BeforeFeature, Behat\Hook\AfterFeature;
-
-      class FeatureContext implements \Behat\Behat\Context\Context
-      {
-          #[BeforeFeature]
-          public static function beforeFeature()
-          {
-              echo '= BEFORE FEATURE =';
-          }
-
-          #[AfterFeature]
-          public static function afterFeature()
-          {
-              echo '= AFTER FEATURE =';
-          }
-
-          #[BeforeFeature('Fruit story')]
-          public static function beforeFruitStory()
-          {
-              echo '= BEFORE FRUIT STORY =';
-          }
-
-          #[AfterFeature('Fruit story')]
-          public static function afterFruitStory()
-          {
-              echo '= AFTER FRUIT STORY =';
-          }
-
-          #[Given('I have :count apple(s)')]
-          #[Given('I have :count banana(s)')]
-          public function iHaveFruit($count) { }
-
-          #[When('I eat :count apple(s)')]
-          #[When('I eat :count banana(s)')]
-          public function iEatFruit($count) { }
-
-          #[Then('I should have :count apple(s)')]
-          #[Then('I should have :count banana(s)')]
-          public function iShouldHaveFruit($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Fruit story
-        In order to eat fruit
-        As a little kid
-        I need to have fruit in my pocket
-
-        Scenario: I'm little hungry for apples
-          Given I have 3 apples
-          When I eat 1 apple
-          Then I should have 2 apples
-
-        Scenario: I'm little hungry for bananas
-          Given I have 3 bananas
-          When I eat 1 banana
-          Then I should have 2 bananas
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option                | value         |
+      | --profile             | feature_hooks |
+      | features/some.feature |               |
     Then it should pass with:
       """
-      ┌─ @BeforeFeature # FeatureContext::beforeFeature()
+      ┌─ @BeforeFeature # FeatureHookAttributesContext::beforeFeature()
       │
       │  = BEFORE FEATURE =
       │
-      ┌─ @BeforeFeature Fruit story # FeatureContext::beforeFruitStory()
+      ┌─ @BeforeFeature Fruit story # FeatureHookAttributesContext::beforeFruitStory()
       │
       │  = BEFORE FRUIT STORY =
       │
@@ -145,95 +56,34 @@ Feature: attributes
         I need to have fruit in my pocket
 
         Scenario: I'm little hungry for apples # features/some.feature:6
-          Given I have 3 apples                # FeatureContext::iHaveFruit()
-          When I eat 1 apple                   # FeatureContext::iEatFruit()
-          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
+          Given I have 3 apples                # FeatureHookAttributesContext::iHaveFruit()
+          When I eat 1 apple                   # FeatureHookAttributesContext::iEatFruit()
+          Then I should have 2 apples          # FeatureHookAttributesContext::iShouldHaveFruit()
 
         Scenario: I'm little hungry for bananas # features/some.feature:11
-          Given I have 3 bananas                # FeatureContext::iHaveFruit()
-          When I eat 1 banana                   # FeatureContext::iEatFruit()
-          Then I should have 2 bananas          # FeatureContext::iShouldHaveFruit()
+          Given I have 3 bananas                # FeatureHookAttributesContext::iHaveFruit()
+          When I eat 1 banana                   # FeatureHookAttributesContext::iEatFruit()
+          Then I should have 2 bananas          # FeatureHookAttributesContext::iShouldHaveFruit()
 
       │
       │  = AFTER FEATURE =
       │
-      └─ @AfterFeature # FeatureContext::afterFeature()
+      └─ @AfterFeature # FeatureHookAttributesContext::afterFeature()
 
       │
       │  = AFTER FRUIT STORY =
       │
-      └─ @AfterFeature Fruit story # FeatureContext::afterFruitStory()
+      └─ @AfterFeature Fruit story # FeatureHookAttributesContext::afterFruitStory()
 
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
 
   Scenario: Hook Scenario Hook Attributes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
-      use Behat\Hook\BeforeScenario, Behat\Hook\AfterScenario;
-
-      class FeatureContext implements \Behat\Behat\Context\Context
-      {
-          #[BeforeScenario]
-          public function beforeScenario()
-          {
-              echo '= BEFORE SCENARIO =';
-          }
-
-          #[BeforeScenario('@bananas')]
-          public function beforeBananas()
-          {
-              echo '= BEFORE BANANAS =';
-          }
-
-          #[AfterScenario]
-          public function afterScenario()
-          {
-              echo '= AFTER SCENARIO =';
-          }
-
-          #[AfterScenario('@bananas')]
-          public function afterBananas()
-          {
-              echo '= AFTER BANANAS =';
-          }
-
-          #[Given('I have :count apple(s)')]
-          #[Given('I have :count banana(s)')]
-          public function iHaveFruit($count) { }
-
-          #[When('I eat :count apple(s)')]
-          #[When('I eat :count banana(s)')]
-          public function iEatFruit($count) { }
-
-          #[Then('I should have :count apple(s)')]
-          #[Then('I should have :count banana(s)')]
-          public function iShouldHaveFruit($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Fruit story
-        In order to eat fruit
-        As a little kid
-        I need to have fruit in my pocket
-
-        Scenario: I'm little hungry for apples
-          Given I have 3 apples
-          When I eat 1 apple
-          Then I should have 2 apples
-
-        @bananas
-        Scenario: I'm little hungry for bananas
-          Given I have 3 bananas
-          When I eat 1 banana
-          Then I should have 2 bananas
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option                          | value          |
+      | --profile                       | scenario_hooks |
+      | features/some-with-tags.feature |                |
     Then it should pass with:
       """
       Feature: Fruit story
@@ -241,119 +91,58 @@ Feature: attributes
         As a little kid
         I need to have fruit in my pocket
 
-        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+        ┌─ @BeforeScenario # ScenarioHookAttributesContext::beforeScenario()
         │
         │  = BEFORE SCENARIO =
         │
-        Scenario: I'm little hungry for apples # features/some.feature:6
-          Given I have 3 apples                # FeatureContext::iHaveFruit()
-          When I eat 1 apple                   # FeatureContext::iEatFruit()
-          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
+        Scenario: I'm little hungry for apples # features/some-with-tags.feature:6
+          Given I have 3 apples                # ScenarioHookAttributesContext::iHaveFruit()
+          When I eat 1 apple                   # ScenarioHookAttributesContext::iEatFruit()
+          Then I should have 2 apples          # ScenarioHookAttributesContext::iShouldHaveFruit()
         │
         │  = AFTER SCENARIO =
         │
-        └─ @AfterScenario # FeatureContext::afterScenario()
+        └─ @AfterScenario # ScenarioHookAttributesContext::afterScenario()
 
-        ┌─ @BeforeScenario # FeatureContext::beforeScenario()
+        ┌─ @BeforeScenario # ScenarioHookAttributesContext::beforeScenario()
         │
         │  = BEFORE SCENARIO =
         │
-        ┌─ @BeforeScenario @bananas # FeatureContext::beforeBananas()
+        ┌─ @BeforeScenario @bananas # ScenarioHookAttributesContext::beforeBananas()
         │
         │  = BEFORE BANANAS =
         │
         @bananas
-        Scenario: I'm little hungry for bananas # features/some.feature:12
-          Given I have 3 bananas                # FeatureContext::iHaveFruit()
-          When I eat 1 banana                   # FeatureContext::iEatFruit()
-          Then I should have 2 bananas          # FeatureContext::iShouldHaveFruit()
+        Scenario: I'm little hungry for bananas # features/some-with-tags.feature:12
+          Given I have 3 bananas                # ScenarioHookAttributesContext::iHaveFruit()
+          When I eat 1 banana                   # ScenarioHookAttributesContext::iEatFruit()
+          Then I should have 2 bananas          # ScenarioHookAttributesContext::iShouldHaveFruit()
         │
         │  = AFTER SCENARIO =
         │
-        └─ @AfterScenario # FeatureContext::afterScenario()
+        └─ @AfterScenario # ScenarioHookAttributesContext::afterScenario()
         │
         │  = AFTER BANANAS =
         │
-        └─ @AfterScenario @bananas # FeatureContext::afterBananas()
+        └─ @AfterScenario @bananas # ScenarioHookAttributesContext::afterBananas()
 
       2 scenarios (2 passed)
       6 steps (6 passed)
       """
 
-  @suite-hooks
   Scenario: Hook Suite Hook Attributes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
-      use Behat\Hook\BeforeSuite, Behat\Hook\AfterSuite;
-
-      class FeatureContext implements \Behat\Behat\Context\Context
-      {
-          #[BeforeSuite]
-          public static function beforeSuite()
-          {
-              echo '= BEFORE SUITE =';
-          }
-
-          #[BeforeSuite('apples')]
-          public static function beforeSuiteApples()
-          {
-              echo '= BEFORE APPLES =';
-          }
-
-          #[AfterSuite]
-          public static function afterSuite()
-          {
-              echo '= AFTER SUITE =';
-          }
-
-          #[AfterSuite('apples')]
-          public static function afterSuiteApples()
-          {
-              echo '= AFTER APPLES =';
-          }
-
-          #[Given('I have :count apple(s)')]
-          public function iHaveFruit($count) { }
-
-          #[When('I eat :count apple(s)')]
-          public function iEatFruit($count) { }
-
-          #[Then('I should have :count apple(s)')]
-          public function iShouldHaveFruit($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Fruit story
-        In order to eat fruit
-        As a little kid
-        I need to have fruit in my pocket
-
-        Scenario: I'm little hungry for apples
-          Given I have 3 apples
-          When I eat 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "behat.yaml" with:
-      """
-      default:
-        suites:
-          apples:
-            contexts:
-              - FeatureContext
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features --suite apples"
+    When I run behat with the following additional options:
+      | option                  | value       |
+      | --profile               | suite_hooks |
+      | features/apples.feature |             |
     Then it should pass with:
       """
-      ┌─ @BeforeSuite # FeatureContext::beforeSuite()
+      ┌─ @BeforeSuite # SuiteHookAttributesContext::beforeSuite()
       │
       │  = BEFORE SUITE =
       │
 
-      ┌─ @BeforeSuite apples # FeatureContext::beforeSuiteApples()
+      ┌─ @BeforeSuite apples # SuiteHookAttributesContext::beforeSuiteApples()
       │
       │  = BEFORE APPLES =
       │
@@ -363,90 +152,30 @@ Feature: attributes
         As a little kid
         I need to have fruit in my pocket
 
-        Scenario: I'm little hungry for apples # features/some.feature:6
-          Given I have 3 apples                # FeatureContext::iHaveFruit()
-          When I eat 1 apple                   # FeatureContext::iEatFruit()
-          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
+        Scenario: I'm little hungry for apples # features/apples.feature:6
+          Given I have 3 apples                # SuiteHookAttributesContext::iHaveFruit()
+          When I eat 1 apple                   # SuiteHookAttributesContext::iEatFruit()
+          Then I should have 2 apples          # SuiteHookAttributesContext::iShouldHaveFruit()
 
       │
       │  = AFTER SUITE =
       │
-      └─ @AfterSuite # FeatureContext::afterSuite()
+      └─ @AfterSuite # SuiteHookAttributesContext::afterSuite()
 
       │
       │  = AFTER APPLES =
       │
-      └─ @AfterSuite apples # FeatureContext::afterSuiteApples()
+      └─ @AfterSuite apples # SuiteHookAttributesContext::afterSuiteApples()
 
       1 scenario (1 passed)
       3 steps (3 passed)
       """
 
   Scenario: Hook Step Hook Attributes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Step\Given, Behat\Step\When, Behat\Step\Then;
-      use Behat\Hook\BeforeStep, Behat\Hook\AfterStep;
-
-      class FeatureContext implements \Behat\Behat\Context\Context
-      {
-          #[BeforeStep]
-          public function beforeStep()
-          {
-              echo '= BEFORE STEP =';
-          }
-
-          #[AfterStep]
-          public function afterStep()
-          {
-              echo '= AFTER STEP =';
-          }
-
-          #[BeforeStep('I have 3 apples')]
-          public function beforeApples()
-          {
-              echo '= BEFORE APPLES =';
-          }
-
-          #[AfterStep('I have 3 apples')]
-          public function afterApples()
-          {
-              echo '= AFTER APPLES =';
-          }
-
-          #[Given('I have :count apple(s)')]
-          #[Given('I have :count banana(s)')]
-          public function iHaveFruit($count) { }
-
-          #[When('I eat :count apple(s)')]
-          #[When('I eat :count banana(s)')]
-          public function iEatFruit($count) { }
-
-          #[Then('I should have :count apple(s)')]
-          #[Then('I should have :count banana(s)')]
-          public function iShouldHaveFruit($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Fruit story
-        In order to eat fruit
-        As a little kid
-        I need to have fruit in my pocket
-
-        Scenario: I'm little hungry for apples
-          Given I have 3 apples
-          When I eat 1 apple
-          Then I should have 2 apples
-
-        Scenario: I'm little hungry for bananas
-          Given I have 3 bananas
-          When I eat 1 banana
-          Then I should have 2 bananas
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option                | value      |
+      | --profile             | step_hooks |
+      | features/some.feature |            |
     Then it should pass with:
       """
       Feature: Fruit story
@@ -455,70 +184,70 @@ Feature: attributes
         I need to have fruit in my pocket
 
         Scenario: I'm little hungry for apples # features/some.feature:6
-          ┌─ @BeforeStep # FeatureContext::beforeStep()
+          ┌─ @BeforeStep # StepHookAttributesContext::beforeStep()
           │
           │  = BEFORE STEP =
           │
-          ┌─ @BeforeStep I have 3 apples # FeatureContext::beforeApples()
+          ┌─ @BeforeStep I have 3 apples # StepHookAttributesContext::beforeApples()
           │
           │  = BEFORE APPLES =
           │
-          Given I have 3 apples                # FeatureContext::iHaveFruit()
+          Given I have 3 apples                # StepHookAttributesContext::iHaveFruit()
           │
           │  = AFTER STEP =
           │
-          └─ @AfterStep # FeatureContext::afterStep()
+          └─ @AfterStep # StepHookAttributesContext::afterStep()
           │
           │  = AFTER APPLES =
           │
-          └─ @AfterStep I have 3 apples # FeatureContext::afterApples()
-          ┌─ @BeforeStep # FeatureContext::beforeStep()
+          └─ @AfterStep I have 3 apples # StepHookAttributesContext::afterApples()
+          ┌─ @BeforeStep # StepHookAttributesContext::beforeStep()
           │
           │  = BEFORE STEP =
           │
-          When I eat 1 apple                   # FeatureContext::iEatFruit()
+          When I eat 1 apple                   # StepHookAttributesContext::iEatFruit()
           │
           │  = AFTER STEP =
           │
-          └─ @AfterStep # FeatureContext::afterStep()
-          ┌─ @BeforeStep # FeatureContext::beforeStep()
+          └─ @AfterStep # StepHookAttributesContext::afterStep()
+          ┌─ @BeforeStep # StepHookAttributesContext::beforeStep()
           │
           │  = BEFORE STEP =
           │
-          Then I should have 2 apples          # FeatureContext::iShouldHaveFruit()
+          Then I should have 2 apples          # StepHookAttributesContext::iShouldHaveFruit()
           │
           │  = AFTER STEP =
           │
-          └─ @AfterStep # FeatureContext::afterStep()
+          └─ @AfterStep # StepHookAttributesContext::afterStep()
 
         Scenario: I'm little hungry for bananas # features/some.feature:11
-          ┌─ @BeforeStep # FeatureContext::beforeStep()
+          ┌─ @BeforeStep # StepHookAttributesContext::beforeStep()
           │
           │  = BEFORE STEP =
           │
-          Given I have 3 bananas                # FeatureContext::iHaveFruit()
+          Given I have 3 bananas                # StepHookAttributesContext::iHaveFruit()
           │
           │  = AFTER STEP =
           │
-          └─ @AfterStep # FeatureContext::afterStep()
-          ┌─ @BeforeStep # FeatureContext::beforeStep()
+          └─ @AfterStep # StepHookAttributesContext::afterStep()
+          ┌─ @BeforeStep # StepHookAttributesContext::beforeStep()
           │
           │  = BEFORE STEP =
           │
-          When I eat 1 banana                   # FeatureContext::iEatFruit()
+          When I eat 1 banana                   # StepHookAttributesContext::iEatFruit()
           │
           │  = AFTER STEP =
           │
-          └─ @AfterStep # FeatureContext::afterStep()
-          ┌─ @BeforeStep # FeatureContext::beforeStep()
+          └─ @AfterStep # StepHookAttributesContext::afterStep()
+          ┌─ @BeforeStep # StepHookAttributesContext::beforeStep()
           │
           │  = BEFORE STEP =
           │
-          Then I should have 2 bananas          # FeatureContext::iShouldHaveFruit()
+          Then I should have 2 bananas          # StepHookAttributesContext::iShouldHaveFruit()
           │
           │  = AFTER STEP =
           │
-          └─ @AfterStep # FeatureContext::afterStep()
+          └─ @AfterStep # StepHookAttributesContext::afterStep()
 
       2 scenarios (2 passed)
       6 steps (6 passed)
