@@ -3,8 +3,7 @@ name: Build
 on:
   push:
     branches:
-      - master
-      - 4.x
+      - '*.x'
     paths-ignore:
       - '**.md'
   pull_request:
