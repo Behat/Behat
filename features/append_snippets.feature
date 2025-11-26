@@ -4,109 +4,7 @@ Feature: Append snippets option
   I need to be able to autoappend snippets to context
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $apples = 0;
-          private $parameters;
-
-          public function __construct(array $parameters = array()) {
-              $this->parameters = $parameters;
-          }
-
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              $this->apples = intval($count);
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              $this->apples -= intval($count);
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              $this->apples += intval($count);
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
-          }
-
-          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              \PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
-          }
-
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              \PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              \PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
-          }
-
-          private function doSomethingUndefinedWith() {}
-      }
-      """
-    And a file named "features/apples.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Background:
-          Given I have 3 apples
-
-        Scenario: I'm little hungry
-          When I ate 1 apple
-          Then I should have 3 apples
-
-        Scenario: Found more apples
-          When I found 5 apples
-          Then I should have 8 apples
-
-        Scenario: Found more apples
-          When I found 2 apples
-          Then I should have 5 apples
-          And do something undefined with $
-
-        Scenario Outline: Other situations
-          When I ate <ate> apples
-          And I found <found> apples
-          Then I should have <result> apples
-          And do something undefined with \1
-
-          Examples:
-            | ate | found | result |
-            | 3   | 1     | 1      |
-            | 0   | 4     | 8      |
-            | 2   | 2     | 3      |
-
-        Scenario: Multilines
-          Given pystring:
-            '''
-            some pystring
-            '''
-          And pystring 5:
-            '''
-            other pystring
-            '''
-          And table:
-            | col1 | col2 |
-            | val1 | val2 |
-      """
+    Given I initialise the working directory from the "AppendSnippets" fixtures folder
 
   Scenario: Append snippets to main context
     When I run "behat -f progress --append-snippets --snippets-for=FeatureContext --snippets-type=regex"
@@ -114,10 +12,10 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Behat\Context\Context;
+      use Behat\Behat\Tester\Exception\PendingException;
+      use Behat\Gherkin\Node\PyStringNode;
+      use Behat\Gherkin\Node\TableNode;
       use Behat\Step\Given;
       use Behat\Step\Then;
       use Behat\Step\When;
@@ -127,42 +25,60 @@ Feature: Append snippets option
           private $apples = 0;
           private $parameters;
 
-          public function __construct(array $parameters = array()) {
+          public function __construct(array $parameters = [])
+          {
               $this->parameters = $parameters;
           }
 
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
+          #[Given('/^I have (\\d+) apples?$/')]
+          public function iHaveApples($count)
+          {
               $this->apples = intval($count);
           }
 
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
+          #[When('/^I ate (\\d+) apples?$/')]
+          public function iAteApples($count)
+          {
               $this->apples -= intval($count);
           }
 
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
+          #[When('/^I found (\\d+) apples?$/')]
+          public function iFoundApples($count)
+          {
               $this->apples += intval($count);
           }
 
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
+          #[Then('/^I should have (\\d+) apples$/')]
+          public function iShouldHaveApples($count)
+          {
+              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
           }
 
           #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              \PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
+          public function contextParameterShouldBeEqualTo($key, $val)
+          {
+              PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
           }
 
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              \PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              \PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
+          #[Given('/^context parameter "([^"]*)" should be array with (\\d+) elements$/')]
+          public function contextParameterShouldBeArrayWithElements($key, $count)
+          {
+              PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
+              PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
           }
 
-          private function doSomethingUndefinedWith() {}
+          private function doSomethingUndefinedWith()
+          {
+          }
+
+          /**
+           * This dummy method is added just so that PHP-CS-Fixer does not
+           * complain about unused import `use` statements.
+           */
+          private function useClasses(PyStringNode $node, TableNode $table)
+          {
+              throw new PendingException();
+          }
 
           #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith2(): void
@@ -197,114 +113,77 @@ Feature: Append snippets option
       """
 
   Scenario: Append snippets to main context with auto use PendingException
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $apples = 0;
-          private $parameters;
-
-          public function __construct(array $parameters = array()) {
-              $this->parameters = $parameters;
-          }
-
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              $this->apples = intval($count);
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              $this->apples -= intval($count);
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              $this->apples += intval($count);
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
-          }
-
-          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              \PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
-          }
-
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              \PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              \PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
-          }
-
-          private function doSomethingUndefinedWith() {}
-      }
-      """
-    When I run "behat -f progress --append-snippets --snippets-for=FeatureContext --snippets-type=regex"
-    Then "features/bootstrap/FeatureContext.php" file should contain:
+    When I run "behat -f progress --append-snippets --snippets-for=FeatureContextNoPendingException --snippets-type=regex --profile=no_pending_exception"
+    Then "features/bootstrap/FeatureContextNoPendingException.php" file should contain:
       """
       <?php
 
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
+      use Behat\Gherkin\Node\PyStringNode;
+      use Behat\Gherkin\Node\TableNode;
       use Behat\Step\Given;
       use Behat\Step\Then;
       use Behat\Step\When;
 
-      class FeatureContext implements Context
+      class FeatureContextNoPendingException implements Context
       {
           private $apples = 0;
           private $parameters;
 
-          public function __construct(array $parameters = array()) {
+          public function __construct(array $parameters = [])
+          {
               $this->parameters = $parameters;
           }
 
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
+          #[Given('/^I have (\\d+) apples?$/')]
+          public function iHaveApples($count)
+          {
               $this->apples = intval($count);
           }
 
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
+          #[When('/^I ate (\\d+) apples?$/')]
+          public function iAteApples($count)
+          {
               $this->apples -= intval($count);
           }
 
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
+          #[When('/^I found (\\d+) apples?$/')]
+          public function iFoundApples($count)
+          {
               $this->apples += intval($count);
           }
 
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
+          #[Then('/^I should have (\\d+) apples$/')]
+          public function iShouldHaveApples($count)
+          {
+              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
           }
 
           #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              \PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
+          public function contextParameterShouldBeEqualTo($key, $val)
+          {
+              PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
           }
 
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              \PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              \PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
+          #[Given('/^context parameter "([^"]*)" should be array with (\\d+) elements$/')]
+          public function contextParameterShouldBeArrayWithElements($key, $count)
+          {
+              PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
+              PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
           }
 
-          private function doSomethingUndefinedWith() {}
+          private function doSomethingUndefinedWith()
+          {
+          }
+
+          /**
+           * This dummy method is added just so that PHP-CS-Fixer does not
+           * complain about unused import `use` statements.
+           */
+          private function useClasses(PyStringNode $node, TableNode $table)
+          {
+          }
 
           #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith2(): void
@@ -339,60 +218,8 @@ Feature: Append snippets option
       """
 
   Scenario: Append snippets to main context with auto use PendingException
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $apples = 0;
-          private $parameters;
-
-          public function __construct(array $parameters = array()) {
-              $this->parameters = $parameters;
-          }
-
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              $this->apples = intval($count);
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              $this->apples -= intval($count);
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              $this->apples += intval($count);
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
-          }
-
-          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              \PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
-          }
-
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              \PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              \PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
-          }
-
-          private function doSomethingUndefinedWith() {}
-      }
-      """
-    When I run "behat -f progress --append-snippets --snippets-for=FeatureContext --snippets-type=regex"
-    Then "features/bootstrap/FeatureContext.php" file should contain:
+    When I run "behat -f progress --append-snippets --snippets-for=FeatureContextMinimalImports --snippets-type=regex --profile=minimal_imports"
+    Then "features/bootstrap/FeatureContextMinimalImports.php" file should contain:
       """
       <?php
 
@@ -404,47 +231,56 @@ Feature: Append snippets option
       use Behat\Step\Then;
       use Behat\Step\When;
 
-      class FeatureContext implements Context
+      class FeatureContextMinimalImports implements Context
       {
           private $apples = 0;
           private $parameters;
 
-          public function __construct(array $parameters = array()) {
+          public function __construct(array $parameters = [])
+          {
               $this->parameters = $parameters;
           }
 
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
+          #[Given('/^I have (\\d+) apples?$/')]
+          public function iHaveApples($count)
+          {
               $this->apples = intval($count);
           }
 
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
+          #[When('/^I ate (\\d+) apples?$/')]
+          public function iAteApples($count)
+          {
               $this->apples -= intval($count);
           }
 
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
+          #[When('/^I found (\\d+) apples?$/')]
+          public function iFoundApples($count)
+          {
               $this->apples += intval($count);
           }
 
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              \PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
+          #[Then('/^I should have (\\d+) apples$/')]
+          public function iShouldHaveApples($count)
+          {
+              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
           }
 
           #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              \PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
+          public function contextParameterShouldBeEqualTo($key, $val)
+          {
+              PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
           }
 
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              \PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              \PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
+          #[Given('/^context parameter "([^"]*)" should be array with (\\d+) elements$/')]
+          public function contextParameterShouldBeArrayWithElements($key, $count)
+          {
+              PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
+              PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
           }
 
-          private function doSomethingUndefinedWith() {}
+          private function doSomethingUndefinedWith()
+          {
+          }
 
           #[Then('/^do something undefined with \$$/')]
           public function doSomethingUndefinedWith2(): void
@@ -479,40 +315,7 @@ Feature: Append snippets option
       """
 
   Scenario: Append snippets to accepting context only
-    Given a file named "features/bootstrap/FirstContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\TableNode;
-      use Behat\Gherkin\Node\PyStringNode;
-
-      class FirstContext implements Context
-      {
-      }
-      """
-    And a file named "features/bootstrap/SecondContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Behat\Context\Context;
-
-      class SecondContext implements Context
-      {
-      }
-      """
-    And a file named "behat.yml" with:
-      """
-      default:
-        suites:
-          first:
-            contexts: [ FirstContext ]
-          second:
-            contexts: [ SecondContext ]
-      """
-    When I run "behat -f progress --append-snippets --snippets-for=FirstContext --snippets-type=regex --no-colors"
+    When I run "behat -f progress --append-snippets --snippets-for=FirstContext --snippets-type=regex --no-colors --profile=multicontext"
     Then it should pass with:
       """
       UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU
@@ -557,13 +360,13 @@ Feature: Append snippets option
       """
       <?php
 
+      use Behat\Gherkin\Node\TableNode;
+      use Behat\Gherkin\Node\PyStringNode;
       use Behat\Step\Then;
       use Behat\Step\When;
       use Behat\Step\Given;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\TableNode;
-      use Behat\Gherkin\Node\PyStringNode;
 
       class FirstContext implements Context
       {
@@ -633,7 +436,6 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
 
       class SecondContext implements Context
