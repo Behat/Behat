@@ -21,6 +21,11 @@ use Behat\Testwork\Suite\Suite;
 final class DefinitionTranslator
 {
     /**
+     * @var array<string, string>
+     */
+    private array $translationCache = [];
+
+    /**
      * Initialises definition translator.
      */
     public function __construct(
@@ -39,8 +44,15 @@ final class DefinitionTranslator
     {
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();
+        $cacheKey = sprintf('%s|%s|%s', $assetsId, $pattern, $language ?? $this->getLocale());
 
-        $translatedPattern = $this->translator->trans($pattern, [], $assetsId, $language);
+        if (isset($this->translationCache[$cacheKey])) {
+            $translatedPattern = $this->translationCache[$cacheKey];
+        } else {
+            $translatedPattern = $this->translator->trans($pattern, [], $assetsId, $language);
+            $this->translationCache[$cacheKey] = $translatedPattern;
+        }
+
         if ($pattern != $translatedPattern) {
             return new TranslatedDefinition($definition, $translatedPattern, $language);
         }
