@@ -3,32 +3,19 @@ Feature: Step Definitions Override Attributes
   As a step definitions developer
   I need to be able to override definition methods using step definition attributes
 
+  Background:
+    Given I initialise the working directory from the "DefinitionsOverride" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value                |
+      | --no-colors |                      |
+      | --format    | progress             |
+      | --config    | behat-attributes.php |
+
   Scenario: Overridden method without own attribute will inherit parent pattern
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Then;
-
-      class ParentContext
-      {
-          #[Then(':token should be :value')]
-          public function shouldBe($token, $value) {}
-      }
-
-      class FeatureContext extends ParentContext implements Context
-      {
-          public function shouldBe($token, $value) {}
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should be 10
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                         | value   |
+      | --profile                      | inherit |
+      | features/step_patterns.feature |         |
     Then it should pass with:
       """
       .
@@ -38,33 +25,10 @@ Feature: Step Definitions Override Attributes
       """
 
   Scenario: Overridden method with different attribute will have both patterns
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Then;
-
-      class ParentContext
-      {
-          #[Then(':token should be :value')]
-          public function shouldBe($token, $value) {}
-      }
-
-      class FeatureContext extends ParentContext implements Context
-      {
-          #[Then(':token should be equal to :value')]
-          public function shouldBe($token, $value) {}
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should be equal to 10
-          Then 5 should be 10
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                              | value         |
+      | --profile                           | both_patterns |
+      | features/step_patterns_both.feature |               |
     Then it should pass with:
       """
       ..
@@ -74,35 +38,10 @@ Feature: Step Definitions Override Attributes
       """
 
   Scenario: Overridden method with parent attribute and child annotation
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Then;
-
-      class ParentContext
-      {
-          #[Then(':token should be :value')]
-          public function shouldBe($token, $value) {}
-      }
-
-      class FeatureContext extends ParentContext implements Context
-      {
-          /**
-           * @Then :token should be equal to :value
-           */
-          public function shouldBe($token, $value) {}
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should be equal to 10
-          Then 5 should be 10
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                              | value                             |
+      | --profile                           | parent_attribute_child_annotation |
+      | features/step_patterns_both.feature |                                   |
     Then it should pass with:
       """
       ..
@@ -112,35 +51,10 @@ Feature: Step Definitions Override Attributes
       """
 
   Scenario: Overridden method with parent annotation and child attribute
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Then;
-
-      class ParentContext
-      {
-          /**
-           * @Then :token should be :value
-           */
-          public function shouldBe($token, $value) {}
-      }
-
-      class FeatureContext extends ParentContext implements Context
-      {
-          #[Then(':token should be equal to :value')]
-          public function shouldBe($token, $value) {}
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should be equal to 10
-          Then 5 should be 10
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                              | value                             |
+      | --profile                           | parent_annotation_child_attribute |
+      | features/step_patterns_both.feature |                                   |
     Then it should pass with:
       """
       ..
