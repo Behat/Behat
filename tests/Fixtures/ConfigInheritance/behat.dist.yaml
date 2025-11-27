@@ -1,0 +1,19 @@
+default:
+  suites:
+    default:
+      contexts:
+        - FeatureContext: [ { param1: val1, param2: val1 } ]
+  extensions:
+    custom_extension.php:
+      param1: val1
+      param2: val1
+
+custom_profile:
+  suites:
+    default:
+      contexts:
+        - FeatureContext: [ { param1: val1, param2: val1 } ]
+  extensions:
+    custom_extension.php:
+      param1: val1
+      param2: val1
