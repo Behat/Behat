@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit colors="true" bootstrap="vendor/autoload.php">
-    <testsuites>
-        <testsuite name="Behat test suite">
-            <directory>./tests/Behat/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./src/Behat/</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>./src/Behat/</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="Behat test suite">
+      <directory>./tests/Behat/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
