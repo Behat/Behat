@@ -29,5 +29,6 @@ return (new Config())
         ],
         'single_line_throw' => false, //override Symfony
         'yoda_style' => false, //override Symfony
+        'phpdoc_to_comment' => false, //incorrectly changes @var tags
     ])
     ->setFinder($finder);

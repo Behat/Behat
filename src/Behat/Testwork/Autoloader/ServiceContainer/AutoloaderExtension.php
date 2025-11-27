@@ -66,7 +66,7 @@ final class AutoloaderExtension implements Extension
             ->treatNullLike([])
             ->treatFalseLike([])
         ;
-        assert($builder instanceof ArrayNodeDefinition);
+        /** @var ArrayNodeDefinition $builder */
         $builder
             ->prototype('scalar')->end()
         ;

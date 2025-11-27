@@ -86,7 +86,7 @@ final class OutputExtension implements Extension
                     ->then(fn ($a) => array_merge($a, ['enabled' => true]))
                 ->end()
         ;
-        assert($builder instanceof ArrayNodeDefinition);
+        /** @var ArrayNodeDefinition $builder */
         $builder
                 ->useAttributeAsKey('name')
                 ->treatTrueLike(['enabled' => true])

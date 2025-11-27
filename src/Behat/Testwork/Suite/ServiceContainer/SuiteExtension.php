@@ -95,7 +95,7 @@ final class SuiteExtension implements Extension
                     })
                 ->end()
         ;
-        assert($builder instanceof ArrayNodeDefinition);
+        /** @var ArrayNodeDefinition $builder */
         $childrenBuilder = $builder
                 ->normalizeKeys(false)
                 ->addDefaultsIfNotSet()
