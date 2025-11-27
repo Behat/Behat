@@ -3,30 +3,19 @@ Feature: Step Definition Pattern Annotations
   As a step definitions developer
   I need to be able to use complex and weird patterns using annotations
 
+  Background:
+    Given I initialise the working directory from the "DefinitionsPatterns" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value                 |
+      | --no-colors |                       |
+      | --config    | behat-annotations.php |
+
   Scenario: Pattern with token at the start of the step
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Then :token should be :value
-           */
-          public function shouldBe($token, $value) {
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should be 10
-          Then "foo" should be "bar"
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                       | value       |
+      | --format                     | progress    |
+      | --profile                    | token_start |
+      | features/token_start.feature |             |
     Then it should pass with:
       """
       ..
@@ -36,38 +25,19 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: Pattern with decimal point
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Then :token should have value of £:value
-           */
-          public function shouldHaveValueOf($token, $value) {
-            echo $value;
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should have value of £10
-          And 7 should have value of £7.2
-      """
-    When I run "behat -f pretty --no-colors"
+    When I run behat with the following additional options:
+      | option                          | value         |
+      | --format                        | pretty        |
+      | --profile                       | decimal_point |
+      | features/decimal_point.feature  |               |
     Then it should pass with:
       """
       Feature: Step Pattern
 
-        Scenario:                         # features/step_patterns.feature:2
-          Then 5 should have value of £10 # FeatureContext::shouldHaveValueOf()
+        Scenario:                         # features/decimal_point.feature:2
+          Then 5 should have value of £10 # DecimalPointAnnotations::shouldHaveValueOf()
             │ 10
-          And 7 should have value of £7.2 # FeatureContext::shouldHaveValueOf()
+          And 7 should have value of £7.2 # DecimalPointAnnotations::shouldHaveValueOf()
             │ 7.2
 
       1 scenario (1 passed)
@@ -75,41 +45,21 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: Pattern with string including point
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Then :token should have value of :first.:second
-           */
-          public function shouldHaveValueOf($token, $first, $second) {
-            echo $first . ' + ' . $second;
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should have value of two.three
-          And 7 should have value of three.4
-          And 7 should have value of 3.four
-      """
-    When I run "behat -f pretty --no-colors"
+    When I run behat with the following additional options:
+      | option                              | value              |
+      | --format                            | pretty             |
+      | --profile                           | string_with_point  |
+      | features/string_with_point.feature  |                    |
     Then it should pass with:
       """
       Feature: Step Pattern
 
-        Scenario:                               # features/step_patterns.feature:2
-          Then 5 should have value of two.three # FeatureContext::shouldHaveValueOf()
+        Scenario:                               # features/string_with_point.feature:2
+          Then 5 should have value of two.three # StringWithPointAnnotations::shouldHaveValueOf()
             │ two + three
-          And 7 should have value of three.4    # FeatureContext::shouldHaveValueOf()
+          And 7 should have value of three.4    # StringWithPointAnnotations::shouldHaveValueOf()
             │ three + 4
-          And 7 should have value of 3.four     # FeatureContext::shouldHaveValueOf()
+          And 7 should have value of 3.four     # StringWithPointAnnotations::shouldHaveValueOf()
             │ 3 + four
 
       1 scenario (1 passed)
@@ -117,389 +67,24 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: Pattern with broken regex
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Then /I am (foo/
-           */
-          public function invalidRegex() {
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then I am foo
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                         | value        |
+      | --format                       | progress     |
+      | --profile                      | broken_regex |
+      | features/broken_regex.feature  |              |
     Then it should fail with:
       """
-      The regex `/I am (foo/` is invalid:
+      In RegexPatternPolicy.php line 69:
+      
+        The regex `/I am (foo/` is invalid: preg_match(): Compilation failed: missing closing parenthesis at offset 9
       """
 
-  Scenario: Pattern with default values
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given only second :second
-           */
-          public function invalidRegex($first = 'foo', $second = 'fiz') {
-            PHPUnit\Framework\Assert::assertEquals('foo', $first);
-            PHPUnit\Framework\Assert::assertEquals('bar', $second);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given only second "bar"
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Definition parameter with default null value
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I don't provide parameter
-           * @Given I can provide parameter :param
-           */
-          public function parameterCouldBeNull($param = null) {
-            PHPUnit\Framework\Assert::assertNull($param);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I don't provide parameter
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Using too long token names
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I provide parameter :too12345678911234567890123456789012
-           */
-          public function parameterCouldBeNull($param) {}
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I provide parameter 123
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should fail with:
-      """
-      Token name should not exceed 32 characters, but `too12345678911234567890123456789012` was used.
-      """
-
-  Scenario: Multiline definitions
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I don'\
-           * t provide \
-           *      parameter
-           * @Given I can provide \
-           *        parameter :param
-           */
-          public function parameterCouldBeNull($param = null) {
-            PHPUnit\Framework\Assert::assertNull($param);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I don't provide parameter
-          And I can provide parameter 2
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should fail with:
-      """
-      .F
-
-      --- Failed steps:
-
-      001 Scenario:                       # features/step_patterns.feature:2
-            And I can provide parameter 2 # features/step_patterns.feature:4
-              Failed asserting that '2' is null.
-
-      1 scenario (1 failed)
-      2 steps (1 passed, 1 failed)
-      """
-
-  Scenario: Definition parameter with ordered values
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I can provide parameters :someParam and :someParam2
-           */
-          public function multipleWrongNamedParameters($param1, $param2) {
-            PHPUnit\Framework\Assert::assertEquals('one', $param1);
-            PHPUnit\Framework\Assert::assertEquals('two', $param2);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-    """
-      Feature: Step Pattern
-        Scenario:
-          Given I can provide parameters "one" and two
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Definition parameter with both ordered and named values
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I can provide parameters :someParam and :someParam2
-           */
-          public function multipleWrongNamedParameters($param1, $someParam) {
-            PHPUnit\Framework\Assert::assertEquals('two', $param1);
-            PHPUnit\Framework\Assert::assertEquals('one', $someParam);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I can provide parameters "one" and two
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Definition parameter with hard mixture of ordered and named values
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I can provide :count parameters :firstParam and :otherParam
-           */
-          public function multipleWrongNamedParameters($param1, $firstParam, $count) {
-            PHPUnit\Framework\Assert::assertEquals('two', $param1);
-            PHPUnit\Framework\Assert::assertEquals('one', $firstParam);
-            PHPUnit\Framework\Assert::assertEquals(2, $count);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I can provide 2 parameters "one" and two
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Definition parameter with hard mixture of ordered, named values and multiline argument
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I can provide :count parameters :firstParam and :otherParam with:
-           */
-          public function multipleWrongNamedParameters($param1, $firstParam, $count, $string) {
-            PHPUnit\Framework\Assert::assertEquals('two', $param1);
-            PHPUnit\Framework\Assert::assertEquals('one', $firstParam);
-            PHPUnit\Framework\Assert::assertEquals(2, $count);
-            PHPUnit\Framework\Assert::assertEquals("Test", (string) $string);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I can provide 2 parameters "one" and two with:
-            '''
-            Test
-            '''
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Definition parameter followed by colon
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I can provide :count parameters for :name:
-           */
-          public function multipleWrongNamedParameters($count, $name, $string) {
-          PHPUnit\Framework\Assert::assertEquals('2', $count);
-            PHPUnit\Framework\Assert::assertEquals('thing', $name);
-            PHPUnit\Framework\Assert::assertEquals("Test", (string) $string);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I can provide 2 parameters for "thing":
-            '''
-            Test
-            '''
-      """
-    When I run "behat -f progress --no-colors"
-    Then it should pass with:
-      """
-      .
-
-      1 scenario (1 passed)
-      1 step (1 passed)
-      """
-
-  Scenario: Definition parameter with optional parameters
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Then /^the (?:JSON|json)(?: response)?(?: at "(?<path>.*)")? should(?<isNegative> not)? be:$/
-           */
-          public function checkEquality($path = null, $isNegative = null, PyStringNode $json = null)
-          {
-              PHPUnit\Framework\Assert::assertNull($path);
-              PHPUnit\Framework\Assert::assertNull($isNegative);
-              PHPUnit\Framework\Assert::assertNotNull($json);
-          }
-
-          /**
-           * @Then /^the other (?:JSON|json)(?: response)?(?: at "(?<path>.*)")? should(?<isNegative> not)? be:$/
-           */
-          public function checkEquality2($json = null, $path = null, $isNegative = null)
-          {
-              PHPUnit\Framework\Assert::assertNull($path);
-              PHPUnit\Framework\Assert::assertNull($isNegative);
-              PHPUnit\Framework\Assert::assertNotNull($json);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then the JSON should be:
-            '''
-            Test
-            '''
-          And the other JSON should be:
-            '''
-            Test
-            '''
-      """
-    When I run "behat -f progress --no-colors"
+  Scenario: Custom regex
+    When I run behat with the following additional options:
+      | option                         | value        |
+      | --format                       | progress     |
+      | --profile                      | custom_regex |
+      | features/custom_regex.feature  |              |
     Then it should pass with:
       """
       ..
@@ -509,29 +94,11 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: Definition parameter with decimal number following string
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I have a package v:version
-           */
-          public function multipleWrongNamedParameters($version) {
-          PHPUnit\Framework\Assert::assertEquals('2.5', $version);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I have a package v2.5
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                           | value          |
+      | --format                         | progress       |
+      | --profile                        | decimal_number |
+      | features/decimal_number.feature  |                |
     Then it should pass with:
       """
       .
@@ -541,29 +108,11 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: Empty parameter value
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @When I enter the string :input
-           */
-          public function multipleWrongNamedParameters($input) {
-          PHPUnit\Framework\Assert::assertEquals('', $input);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          When I enter the string ""
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                             | value           |
+      | --format                           | progress        |
+      | --profile                          | empty_parameter |
+      | features/empty_parameter.feature   |                 |
     Then it should pass with:
       """
       .
@@ -573,30 +122,11 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: UNIX path as parameter
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Then images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/
-           */
-          public function multipleWrongNamedParameters($arg1, $arg2) {
-          PHPUnit\Framework\Assert::assertEquals('0001', $arg1);
-          PHPUnit\Framework\Assert::assertEquals('01', $arg2);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then images should be uploaded to web/uploads/media/default/0001/01/
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                       | value     |
+      | --format                     | progress  |
+      | --profile                    | unix_path |
+      | features/unix_path.feature   |           |
     Then it should pass with:
       """
       .
@@ -606,29 +136,11 @@ Feature: Step Definition Pattern Annotations
       """
 
   Scenario: Negative number parameters without quotes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-          /**
-           * @Given I have a negative number :num
-           */
-          public function multipleWrongNamedParameters($num) {
-          PHPUnit\Framework\Assert::assertEquals('-3', $num);
-          }
-      }
-      """
-    And a file named "features/step_patterns.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I have a negative number -3
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                             | value           |
+      | --format                           | progress        |
+      | --profile                          | negative_number |
+      | features/negative_number.feature   |                 |
     Then it should pass with:
       """
       .
