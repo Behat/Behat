@@ -17,13 +17,14 @@ use Behat\Behat\Transformation\Transformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Exception;
+use Stringable;
 
 /**
  * Pattern-based transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class PatternTransformation extends RuntimeCallee implements Transformation
+final class PatternTransformation extends RuntimeCallee implements Stringable, Transformation
 {
     /**
      * Initializes transformation.

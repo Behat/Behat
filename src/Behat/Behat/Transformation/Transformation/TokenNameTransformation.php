@@ -16,13 +16,14 @@ use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
+use Stringable;
 
 /**
  * Token name based transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TokenNameTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class TokenNameTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     public const PATTERN_REGEX = '/^\:\w+$/';
 

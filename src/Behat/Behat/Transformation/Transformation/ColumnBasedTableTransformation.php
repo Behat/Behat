@@ -17,13 +17,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
+use Stringable;
 
 /**
  * Column-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ColumnBasedTableTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class ColumnBasedTableTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     public const PATTERN_REGEX = '/^table\:(?:\*|[[:print:]]+)$/u';
 

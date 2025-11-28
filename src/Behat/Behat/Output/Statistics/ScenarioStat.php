@@ -12,13 +12,14 @@ namespace Behat\Behat\Output\Statistics;
 
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
+use Stringable;
 
 /**
  * Behat scenario stat.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ScenarioStat
+final class ScenarioStat implements Stringable
 {
     /**
      * @param TestResult::*|TestResults::NO_TESTS $resultCode

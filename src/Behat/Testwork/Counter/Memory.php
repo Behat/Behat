@@ -10,12 +10,14 @@
 
 namespace Behat\Testwork\Counter;
 
+use Stringable;
+
 /**
  * Counts amount of system memory being used.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class Memory
+final class Memory implements Stringable
 {
     /**
      * @var string[]

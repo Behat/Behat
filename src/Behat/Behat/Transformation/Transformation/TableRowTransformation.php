@@ -17,13 +17,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
+use Stringable;
 
 /**
  * Table row transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TableRowTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class TableRowTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     public const PATTERN_REGEX = '/^row\:[[:print:]]+$/u';
 

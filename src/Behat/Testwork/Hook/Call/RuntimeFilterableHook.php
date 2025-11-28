@@ -11,13 +11,14 @@
 namespace Behat\Testwork\Hook\Call;
 
 use Behat\Testwork\Hook\FilterableHook;
+use Stringable;
 
 /**
  * Represents runtime hook, filterable by filter string.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class RuntimeFilterableHook extends RuntimeHook implements FilterableHook
+abstract class RuntimeFilterableHook extends RuntimeHook implements Stringable, FilterableHook
 {
     /**
      * Initializes hook.

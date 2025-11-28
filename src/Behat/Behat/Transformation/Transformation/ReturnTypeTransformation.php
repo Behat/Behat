@@ -22,13 +22,14 @@ use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use Stringable;
 
 /**
  * By-type object transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class ReturnTypeTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
     {

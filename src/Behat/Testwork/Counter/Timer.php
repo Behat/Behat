@@ -11,13 +11,14 @@
 namespace Behat\Testwork\Counter;
 
 use Behat\Testwork\Counter\Exception\TimerException;
+use Stringable;
 
 /**
  * Provides time counting functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class Timer
+final class Timer implements Stringable
 {
     /**
      * @var float|null
