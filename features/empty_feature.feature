@@ -3,24 +3,15 @@ Feature: Empty feature
   As a BDD practitioner
   I need to be able to leave scenario titles without steps for time being
 
+  Background:
+    Given I initialise the working directory from the "EmptyFeature" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value    |
+      | --no-colors |          |
+      | --format    | progress |
+
   Scenario: Empty scenario
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-    """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context
-      {
-      }
-      """
-    And a file named "features/empty_scenario.feature" with:
-      """
-      Feature:
-
-        Scenario: show error
-      """
-    When I run "behat --no-colors -f progress"
+    When I run "behat"
     Then it should pass with:
       """
       No scenarios
