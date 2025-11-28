@@ -4,40 +4,13 @@ Feature: Setting order of execution
   I should be able to specify the order in which they are run
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-    """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-
-      class FeatureContext implements Context
-      {
-          #[Given('I have :num orange(s)')]
-           public function iHaveOranges($num){}
-      }
-      """
-    And a file named "features/order1.feature" with:
-    """
-      Feature: Feature 1
-
-        Scenario:
-          Given I have 1 orange
-          Then I have 1 orange
-      """
-    And a file named "features/order2.feature" with:
-    """
-      Feature: Feature 2
-
-        Scenario:
-          Given I have 2 oranges
-          Then I have 2 oranges
-      """
+    Given I initialise the working directory from the "ExecutionOrder" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
   Scenario: No order specified
-    When I run "behat -fpretty --no-colors"
+    When I run "behat"
     Then it should pass with:
       """
       Feature: Feature 1
@@ -57,14 +30,14 @@ Feature: Setting order of execution
       """
 
     Scenario: Unknown order
-      When I run "behat -fpretty --order=foo"
+      When I run "behat --order=foo"
       Then it should fail with:
       """
       Order option 'foo' was not recognised
       """
 
   Scenario: Reverse order
-    When I run "behat -fpretty --order=reverse --no-colors"
+    When I run "behat --order=reverse"
     Then it should pass with:
       """
       Feature: Feature 2
@@ -84,5 +57,5 @@ Feature: Setting order of execution
       """
 
   Scenario: Random order
-    When I run "behat -fpretty --order=random"
-    Then it should pass
+      When I run "behat --order=random"
+      Then it should pass
