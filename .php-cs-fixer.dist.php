@@ -29,5 +29,8 @@ return (new Config())
         ],
         'single_line_throw' => false, //override Symfony
         'yoda_style' => false, //override Symfony
+        'phpdoc_to_comment' => [ // Keep as a phpdoc if it contains the `@var` annotation
+            'ignored_tags' => ['var'],
+        ],
     ])
     ->setFinder($finder);

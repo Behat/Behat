@@ -47,7 +47,7 @@ final class PathOptionsExtension implements Extension
             ->scalarNode('print_absolute_paths')
             ->defaultFalse()
             ->end();
-        assert($builder instanceof NodeBuilder);
+        /** @var NodeBuilder $builder */
         $builder
             ->scalarNode('editor_url')
             ->defaultNull()
