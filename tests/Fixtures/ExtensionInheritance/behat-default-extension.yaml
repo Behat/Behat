@@ -1,0 +1,6 @@
+default:
+  extensions:
+    custom_extension.php: ~
+
+custom_profile:
+  extensions: ~
