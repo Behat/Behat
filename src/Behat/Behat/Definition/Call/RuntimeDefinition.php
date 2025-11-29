@@ -12,13 +12,14 @@ namespace Behat\Behat\Definition\Call;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Testwork\Call\RuntimeCallee;
+use Stringable;
 
 /**
  * Represents a step definition created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-abstract class RuntimeDefinition extends RuntimeCallee implements Definition
+abstract class RuntimeDefinition extends RuntimeCallee implements Stringable, Definition
 {
     private bool $used = false;
 

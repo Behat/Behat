@@ -16,13 +16,14 @@ use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
+use Stringable;
 
 /**
  * Name and return type object transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     /**
      * @var TokenNameTransformation

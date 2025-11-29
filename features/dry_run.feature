@@ -4,82 +4,13 @@ Feature: Dry run
   I need to have a --dry-run option
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Hook\BeforeScenario;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          #[BeforeScenario]
-          public static function beforeScenario() {
-              echo "HOOK: before scenario";
-          }
-
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              echo "STEP: I have $count apples";
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              echo "STEP: I ate $count apples";
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              echo "STEP: I found $count apples";
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              echo "STEP: I should have $count apples";
-          }
-      }
-      """
-    And a file named "features/apples.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Background:
-          Given I have 3 apples
-
-        Scenario: I'm little hungry
-          When I ate 1 apple
-          Then I should have 3 apples
-
-        Scenario: Found more apples
-          When I found 5 apples
-          Then I should have 8 apples
-
-        Scenario: Found more apples
-          When I found 2 apples
-          Then I should have 5 apples
-
-        Scenario Outline: Other situations
-          When I ate <ate> apples
-          And I found <found> apples
-          Then I should have <result> apples
-
-          Examples:
-            | ate | found | result |
-            | 3   | 1     | 1      |
-            | 0   | 4     | 8      |
-            | 2   | 2     | 3      |
-      """
+    Given I initialise the working directory from the "DryRun" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
   Scenario: Just run feature
-    When I run "behat --no-colors --format-settings='{\"paths\": false}' features/apples.feature"
+    When I run "behat --format-settings='{\"paths\": false}' features/apples.feature"
     Then it should pass with:
       """
       Feature: Apples story
@@ -165,7 +96,7 @@ Feature: Dry run
       """
 
   Scenario: Run feature with --dry-run
-    When I run "behat --no-colors --dry-run features/apples.feature"
+    When I run "behat --dry-run features/apples.feature"
     Then it should pass with:
       """
       Feature: Apples story

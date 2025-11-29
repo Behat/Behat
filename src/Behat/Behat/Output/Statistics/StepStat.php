@@ -11,6 +11,7 @@
 namespace Behat\Behat\Output\Statistics;
 
 use Behat\Behat\Tester\Result\StepResult;
+use Stringable;
 
 /**
  * Behat step stat.
@@ -19,7 +20,7 @@ use Behat\Behat\Tester\Result\StepResult;
  *
  * @deprecated in favour of StepStatV2 and to be removed in 4.0
  */
-class StepStat
+class StepStat implements Stringable
 {
     /**
      * @param StepResult::* $resultCode

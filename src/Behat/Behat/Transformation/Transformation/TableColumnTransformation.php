@@ -17,8 +17,9 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
+use Stringable;
 
-final class TableColumnTransformation extends RuntimeCallee implements SimpleArgumentTransformation
+final class TableColumnTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     public const PATTERN_REGEX = '/^column\:[[:print:]]+$/u';
 

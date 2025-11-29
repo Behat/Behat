@@ -11,13 +11,14 @@
 namespace Behat\Behat\Definition\Translator;
 
 use Behat\Behat\Definition\Definition;
+use Stringable;
 
 /**
  * Represents definition translated to the specific language.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class TranslatedDefinition implements Definition
+final class TranslatedDefinition implements Stringable, Definition
 {
     /**
      * Initialises translated definition.

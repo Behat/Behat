@@ -11,13 +11,14 @@
 namespace Behat\Behat\Output\Statistics;
 
 use Behat\Behat\Tester\Result\StepResult;
+use Stringable;
 
 /**
  * Second iteration of Behat step stat, with a scenario information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class StepStatV2 extends StepStat
+final class StepStatV2 extends StepStat implements Stringable
 {
     /**
      * @param StepResult::* $resultCode

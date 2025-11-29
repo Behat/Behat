@@ -12,6 +12,7 @@ namespace Behat\Behat\Transformation\Call;
 
 use Behat\Behat\Transformation\Transformation;
 use Behat\Testwork\Call\RuntimeCallee;
+use Stringable;
 
 /**
  * Transformation that is created and executed in the runtime.
@@ -20,7 +21,7 @@ use Behat\Testwork\Call\RuntimeCallee;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class RuntimeTransformation extends RuntimeCallee implements Transformation
+final class RuntimeTransformation extends RuntimeCallee implements Stringable, Transformation
 {
     /**
      * Initializes transformation.
