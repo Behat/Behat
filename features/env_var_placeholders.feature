@@ -4,48 +4,16 @@ Feature: Symfony Env Var Placeholders
   I need to be able to use environment variables in the behat.yml configuration file
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Then;
-
-      class FeatureContext implements Context
-      {
-          private $value;
-
-          public function __construct($value) {
-              $this->value = $value;
-          }
-
-          #[Then('/the value should be configured as "([^"]+)"/')]
-          public function theValueShouldBeConfiguredAs($expected) {
-              PHPUnit\Framework\Assert::assertEquals($expected, $this->value);
-          }
-      }
-      """
-    And a file named "features/env_var.feature" with:
-      """
-      Feature: Environment variables
-
-        Scenario:
-          Then the value should be configured as "some environment variable value"
-      """
-    And a file named "behat.yml" with:
-      """
-      default:
-        suites:
-          default:
-            contexts:
-              - FeatureContext:
-                - '%env(MY_ENV_VAR)%'
-      """
+    Given I initialise the working directory from the "EnvVarPlaceholders" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
   Scenario:
     When the "MY_ENV_VAR" environment variable is set to "some environment variable value"
-    And I run "behat --no-colors"
+    And I run "behat"
     Then it should pass with:
       """
       1 scenario (1 passed)
+      1 step (1 passed)
       """
