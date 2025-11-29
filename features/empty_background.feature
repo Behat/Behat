@@ -3,29 +3,19 @@ Feature: Empty background
   As a BDD practitioner
   I need to be able to leave background definition without steps
 
+  Background:
+    Given I initialise the working directory from the "EmptyBackground" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value    |
+      | --no-colors |          |
+      | --format    | progress |
+
   Scenario: Empty background
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-    """
-    <?php
-
-    use Behat\Behat\Context\Context;
-
-    class FeatureContext implements Context
-    {
-        /** @When this scenario executes */
-        public function thisScenarioExecutes() {}
-    }
-    """
-    And a file named "features/empty_background.feature" with:
-    """
-    Feature: Empty background
-      Background:
-
-      Scenario: scenario 1
-        When this scenario executes
-    """
-    When I run "behat --no-colors -f progress"
+    When I run "behat features/empty_background.feature"
     Then it should pass with:
-    """
-    1 scenario (1 passed)
-    """
+      """
+      .
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
