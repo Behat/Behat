@@ -4,82 +4,19 @@ Feature: I18n Attributes
   I need to have i18n support using attributes
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $value = 0;
-
-          #[Given('/Я ввел (\d+)/')]
-          public function iHaveEntered($number) {
-              $this->value = intval($number);
-          }
-
-          #[Then('/Я должен иметь (\d+)/')]
-          public function iShouldHave($number) {
-              PHPUnit\Framework\Assert::assertEquals(intval($number), $this->value);
-          }
-
-          #[When('/Я добавлю (\d+)/')]
-          public function iAdd($number) {
-              $this->value += intval($number);
-          }
-
-          #[When('/^Что-то еще не сделано$/')]
-          public function somethingNotDone() {
-              throw new PendingException();
-          }
-      }
-      """
-    And a file named "features/World.feature" with:
-      """
-      # language: ru
-      Функционал: Постоянство мира
-        Чтобы поддерживать стабильными тесты
-        Как разработчик функционала
-        Я хочу чтобы Мир сбрасывался между сценариями
-
-        Предыстория:
-          Если Я ввел 10
-
-        Сценарий: Неопределен
-          То Я должен иметь 10
-          И Добавить "нормальное" число
-          То Я должен иметь 10
-
-        Сценарий: В ожидании
-          То Я должен иметь 10
-          И Что-то еще не сделано
-          То Я должен иметь 10
-
-        Сценарий: Провален
-          Если Я добавлю 4
-          То Я должен иметь 13
-
-        Структура сценария: Пройдено и Провалено
-          Допустим Я должен иметь 10
-          Если Я добавлю <значение>
-          То Я должен иметь <результат>
-
-          Примеры:
-            | значение | результат |
-            |  5       | 16        |
-            |  10      | 20        |
-            |  23      | 32        |
-      """
+    Given I initialise the working directory from the "I18n" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option          | value                |
+      | --no-colors     |                      |
+      | --config        | behat-attributes.php |
+      | --snippets-for  | FeatureContext       |
+      | --snippets-type | regex                |
 
   Scenario: Pretty
-    When I run "behat --no-colors -f pretty --lang=ru --snippets-for=FeatureContext --snippets-type=regex"
+    When I run behat with the following additional options:
+      | option   | value  |
+      | --format | pretty |
+      | --lang   | ru     |
     Then it should fail with:
       """
       Функционал: Постоянство мира
@@ -88,38 +25,38 @@ Feature: I18n Attributes
         Я хочу чтобы Мир сбрасывался между сценариями
 
         Предыстория:     # features/World.feature:7
-          Если Я ввел 10 # FeatureContext::iHaveEntered()
+          Если Я ввел 10 # FeatureContextAttributes::iHaveEntered()
 
         Сценарий: Неопределен           # features/World.feature:10
-          То Я должен иметь 10          # FeatureContext::iShouldHave()
+          То Я должен иметь 10          # FeatureContextAttributes::iShouldHave()
           И Добавить "нормальное" число
-          То Я должен иметь 10          # FeatureContext::iShouldHave()
+          То Я должен иметь 10          # FeatureContextAttributes::iShouldHave()
 
         Сценарий: В ожидании      # features/World.feature:15
-          То Я должен иметь 10    # FeatureContext::iShouldHave()
-          И Что-то еще не сделано # FeatureContext::somethingNotDone()
+          То Я должен иметь 10    # FeatureContextAttributes::iShouldHave()
+          И Что-то еще не сделано # FeatureContextAttributes::somethingNotDone()
             TODO: write pending definition
-          То Я должен иметь 10    # FeatureContext::iShouldHave()
+          То Я должен иметь 10    # FeatureContextAttributes::iShouldHave()
 
         Сценарий: Провален     # features/World.feature:20
-          Если Я добавлю 4     # FeatureContext::iAdd()
-          То Я должен иметь 13 # FeatureContext::iShouldHave()
-            Failed asserting that 14 matches expected 13.
+          Если Я добавлю 4     # FeatureContextAttributes::iAdd()
+          То Я должен иметь 13 # FeatureContextAttributes::iShouldHave()
+            Failed asserting that 14 matches expected 13. (Exception)
 
         Структура сценария: Пройдено и Провалено # features/World.feature:24
-          Допустим Я должен иметь 10             # FeatureContext::iShouldHave()
-          Если Я добавлю <значение>              # FeatureContext::iAdd()
-          То Я должен иметь <результат>          # FeatureContext::iShouldHave()
+          Допустим Я должен иметь 10             # FeatureContextAttributes::iShouldHave()
+          Если Я добавлю <значение>              # FeatureContextAttributes::iAdd()
+          То Я должен иметь <результат>          # FeatureContextAttributes::iShouldHave()
 
           Примеры:
             | значение | результат |
             | 5        | 16        |
               Проваленные шаг: То Я должен иметь 16
-              Failed asserting that 15 matches expected 16.
+              Failed asserting that 15 matches expected 16. (Exception)
             | 10       | 20        |
             | 23       | 32        |
               Проваленные шаг: То Я должен иметь 32
-              Failed asserting that 33 matches expected 32.
+              Failed asserting that 33 matches expected 32. (Exception)
 
       --- Проваленные сценарии:
 
@@ -130,22 +67,16 @@ Feature: I18n Attributes
       6 сценариев (1 пройден, 3 провалено, 1 не определен, 1 в ожидании)
       23 шага (16 пройдено, 3 провалено, 1 не определен, 1 в ожидании, 2 пропущено)
 
-      --- FeatureContext не содержит необходимых определений. Вы можете добавить их используя шаблоны:
+      --- Шаблоны для следующих шагов в среде default не были сгенерированы (проверьте ваши настройки):
 
-          #[Then('/^Добавить "([^"]*)" число$/')]
-          public function stepDefinition1($arg1): void
-          {
-              throw new PendingException();
-          }
-
-      --- Не забудьте эти 2 use утверждения:
-
-          use Behat\Behat\Tester\Exception\PendingException;
-          use Behat\Step\Then;
+          И Добавить "нормальное" число
       """
 
   Scenario: Progress
-    When I run "behat --no-colors -f progress --lang=ru --snippets-for=FeatureContext --snippets-type=regex"
+    When I run behat with the following additional options:
+      | option   | value    |
+      | --format | progress |
+      | --lang   | ru       |
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -154,41 +85,35 @@ Feature: I18n Attributes
 
       001 Сценарий: Провален     # features/World.feature:20
             То Я должен иметь 13 # features/World.feature:22
-              Failed asserting that 14 matches expected 13.
+              Failed asserting that 14 matches expected 13. (Exception)
 
       002 Example: | 5        | 16        | # features/World.feature:31
             То Я должен иметь 16            # features/World.feature:27
-              Failed asserting that 15 matches expected 16.
+              Failed asserting that 15 matches expected 16. (Exception)
 
       003 Example: | 23       | 32        | # features/World.feature:33
             То Я должен иметь 32            # features/World.feature:27
-              Failed asserting that 33 matches expected 32.
+              Failed asserting that 33 matches expected 32. (Exception)
 
       --- Шаги в ожидании:
 
       001 Сценарий: В ожидании      # features/World.feature:15
-            И Что-то еще не сделано # FeatureContext::somethingNotDone()
+            И Что-то еще не сделано # FeatureContextAttributes::somethingNotDone()
               TODO: write pending definition
 
       6 сценариев (1 пройден, 3 провалено, 1 не определен, 1 в ожидании)
       23 шага (16 пройдено, 3 провалено, 1 не определен, 1 в ожидании, 2 пропущено)
 
-      --- FeatureContext не содержит необходимых определений. Вы можете добавить их используя шаблоны:
+      --- Шаблоны для следующих шагов в среде default не были сгенерированы (проверьте ваши настройки):
 
-          #[Then('/^Добавить "([^"]*)" число$/')]
-          public function stepDefinition1($arg1): void
-          {
-              throw new PendingException();
-          }
-
-      --- Не забудьте эти 2 use утверждения:
-
-          use Behat\Behat\Tester\Exception\PendingException;
-          use Behat\Step\Then;
+          И Добавить "нормальное" число
       """
 
   Scenario: Progress with unexisting locale
-    When I run "behat --no-colors -f progress --lang=xx --snippets-for=FeatureContext --snippets-type=regex"
+    When I run behat with the following additional options:
+      | option   | value    |
+      | --format | progress |
+      | --lang   | xx       |
     Then it should fail with:
       """
       ..U-..P-..F...F.......F
@@ -197,78 +122,26 @@ Feature: I18n Attributes
 
       001 Сценарий: Провален     # features/World.feature:20
             То Я должен иметь 13 # features/World.feature:22
-              Failed asserting that 14 matches expected 13.
+              Failed asserting that 14 matches expected 13. (Exception)
 
       002 Example: | 5        | 16        | # features/World.feature:31
             То Я должен иметь 16            # features/World.feature:27
-              Failed asserting that 15 matches expected 16.
+              Failed asserting that 15 matches expected 16. (Exception)
 
       003 Example: | 23       | 32        | # features/World.feature:33
             То Я должен иметь 32            # features/World.feature:27
-              Failed asserting that 33 matches expected 32.
+              Failed asserting that 33 matches expected 32. (Exception)
 
       --- Pending steps:
 
       001 Сценарий: В ожидании      # features/World.feature:15
-            И Что-то еще не сделано # FeatureContext::somethingNotDone()
+            И Что-то еще не сделано # FeatureContextAttributes::somethingNotDone()
               TODO: write pending definition
 
       6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
       23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)
 
-      --- FeatureContext has missing steps. Define them with these snippets:
+      --- Use --snippets-for CLI option to generate snippets for following default suite steps:
 
-          #[Then('/^Добавить "([^"]*)" число$/')]
-          public function stepDefinition1($arg1): void
-          {
-              throw new PendingException();
-          }
-
-      --- Don't forget these 2 use statements:
-
-          use Behat\Behat\Tester\Exception\PendingException;
-          use Behat\Step\Then;
-      """
-
-  Scenario: Progress with unexisting locale
-    When I run "behat --no-colors -f progress --lang=xx --snippets-for=FeatureContext --snippets-type=regex"
-    Then it should fail with:
-      """
-      ..U-..P-..F...F.......F
-
-      --- Failed steps:
-
-      001 Сценарий: Провален     # features/World.feature:20
-            То Я должен иметь 13 # features/World.feature:22
-              Failed asserting that 14 matches expected 13.
-
-      002 Example: | 5        | 16        | # features/World.feature:31
-            То Я должен иметь 16            # features/World.feature:27
-              Failed asserting that 15 matches expected 16.
-
-      003 Example: | 23       | 32        | # features/World.feature:33
-            То Я должен иметь 32            # features/World.feature:27
-              Failed asserting that 33 matches expected 32.
-
-      --- Pending steps:
-
-      001 Сценарий: В ожидании      # features/World.feature:15
-            И Что-то еще не сделано # FeatureContext::somethingNotDone()
-              TODO: write pending definition
-
-      6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
-      23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)
-
-      --- FeatureContext has missing steps. Define them with these snippets:
-
-          #[Then('/^Добавить "([^"]*)" число$/')]
-          public function stepDefinition1($arg1): void
-          {
-              throw new PendingException();
-          }
-
-      --- Don't forget these 2 use statements:
-
-          use Behat\Behat\Tester\Exception\PendingException;
-          use Behat\Step\Then;
+          И Добавить "нормальное" число
       """
