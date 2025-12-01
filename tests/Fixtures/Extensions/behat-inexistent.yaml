@@ -1,0 +1,7 @@
+default:
+  extensions:
+    inexistent_extension: ~
+  suites:
+    default:
+      contexts:
+        - InexistentExtensionContext
