@@ -96,7 +96,7 @@ class TesterExtension extends BaseExtension
         $this->loadPendingExceptionStringer($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         parent::process($container);
 

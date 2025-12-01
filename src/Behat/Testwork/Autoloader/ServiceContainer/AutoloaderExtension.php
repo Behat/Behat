@@ -79,7 +79,7 @@ final class AutoloaderExtension implements Extension
         $this->setLoaderPrefixes($container, $config);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processLoaderPrefixes($container);
     }
