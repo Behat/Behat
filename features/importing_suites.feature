@@ -4,97 +4,16 @@ Feature: Importing suites
   I need an ability to import external suite configuration files
 
   Background:
-    Given a file named "features/bootstrap/FirstContext.php" with:
-      """
-      <?php
-
-      class FirstContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/SecondContext.php" with:
-      """
-      <?php
-
-      class SecondContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "config/suites/first.php" with:
-      """
-      <?php
-
-      $config = new Behat\Config\Config([
-        'default' => [
-          'suites' => [
-            'first' => [
-              'contexts' => [ 'FirstContext' ],
-            ],
-          ],
-        ],
-      ]);
-
-      return $config;
-
-      """
-    And a file named "config/suites/second.php" with:
-      """
-      <?php
-
-      $config = new Behat\Config\Config([
-        'default' => [
-          'suites' => [
-            'second' => [
-              'contexts' => [ 'SecondContext' ],
-            ],
-          ],
-        ],
-      ]);
-
-      return $config;
-
-      """
+    Given I initialise the working directory from the "ImportingSuites" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
   Scenario: Importing one suite
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      $config = new Behat\Config\Config();
-      $config->import('config/suites/first.php');
-
-      return $config;
-
-      """
-    When I run "behat --suite=first --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option   | value                |
+      | --config | behat-import-one.php |
+      | --suite  | first                |
     Then it should pass with:
       """
       Feature: Apples story
@@ -112,20 +31,10 @@ Feature: Importing suites
       """
 
   Scenario: Importing two suites, running one
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      $config = new Behat\Config\Config();
-      $config
-        ->import('config/suites/first.php')
-        ->import('config/suites/second.php')
-      ;
-
-      return $config;
-
-      """
-    When I run "behat --suite=first --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option   | value                |
+      | --config | behat-import-two.php |
+      | --suite  | first                |
     Then it should pass with:
       """
       Feature: Apples story
@@ -143,17 +52,9 @@ Feature: Importing suites
       """
 
   Scenario: Importing two suites, running all
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      $config = new Behat\Config\Config();
-      $config->import(['config/suites/first.php', 'config/suites/second.php']);
-
-      return $config;
-
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run behat with the following additional options:
+      | option   | value                  |
+      | --config | behat-import-array.php |
     Then it should pass with:
       """
       Feature: Apples story
