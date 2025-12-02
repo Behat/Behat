@@ -4,54 +4,17 @@ Feature: Legacy Snippets
   use functionality described in `snippets.feature` instead!
 
   Background:
-    Given a file named "features/coffee.feature" with:
-      """
-      Feature: Snippets
-
-        Background:
-          Given I have magically created 10$
-
-        Scenario: Single quotes
-          When I have chosen 'coffee with turkey' in coffee machine
-          Then I should have 'turkey with coffee sauce'
-          And I should get a 'super/string':
-            '''
-            Test #1
-            '''
-          And I should get a simple string:
-            '''
-            Test #2
-            '''
-
-        Scenario: Double quotes
-          When I have chosen "pizza tea" in coffee machine
-          And do something undefined with \1
-          Then I should have "pizza tea"
-          And I should get a "super/string":
-            '''
-            Test #1
-            '''
-          And I should get a simple string:
-            '''
-            Test #2
-            '''
-      """
+    Given I initialise the working directory from the "LegacySnippets" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option       | value    |
+      | --no-colors  |          |
+      | --format     | progress |
 
   Scenario: Regex snippets
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements CustomSnippetAcceptingContext {
-          public static function getAcceptedSnippetType() { return 'regex'; }
-      }
-      """
-    When I run "behat --no-colors -f progress features/coffee.feature"
+    When I run behat with the following additional options:
+      | option                  | value                    |
+      | --config                | behat-regex-snippets.php |
+      | features/coffee.feature |                          |
     Then it should pass with:
       """
       UUUUUUUUUUU
@@ -59,7 +22,7 @@ Feature: Legacy Snippets
       2 scenarios (2 undefined)
       11 steps (11 undefined)
 
-      --- FeatureContext has missing steps. Define them with these snippets:
+      --- FeatureContextCustomSnippet has missing steps. Define them with these snippets:
 
           #[Given('/^I have magically created (\d+)\$$/')]
           public function iHaveMagicallyCreated($arg1): void
@@ -114,24 +77,26 @@ Feature: Legacy Snippets
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 5 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
+          use Behat\Step\When;
+          use Behat\Step\Then;
+          use Behat\Gherkin\Node\PyStringNode;
       """
 
   Scenario: Regex snippets are working
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\CustomSnippetAcceptingContext,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements CustomSnippetAcceptingContext {
-          public static function getAcceptedSnippetType() { return 'regex'; }
-      }
-      """
-    When I run "behat --no-colors -f progress --append-snippets features/coffee.feature"
-    And I run "behat --no-colors -f progress features/coffee.feature"
+    When I run behat with the following additional options:
+      | option                  | value                   |
+      | --config                | behat-regex-working.php |
+      | --append-snippets       |                         |
+      | features/coffee.feature |                         |
+    And I run behat with the following additional options:
+      | option                  | value                   |
+      | --config                | behat-regex-working.php |
+      | features/coffee.feature |                         |
     Then it should pass with:
       """
       P----P-----
@@ -139,11 +104,11 @@ Feature: Legacy Snippets
       --- Pending steps:
 
       001 Scenario: Single quotes              # features/coffee.feature:6
-            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+            Given I have magically created 10$ # FeatureContextRegex::iHaveMagicallyCreated()
               TODO: write pending definition
 
       002 Scenario: Double quotes              # features/coffee.feature:18
-            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+            Given I have magically created 10$ # FeatureContextRegex::iHaveMagicallyCreated()
               TODO: write pending definition
 
       2 scenarios (2 pending)
@@ -151,18 +116,10 @@ Feature: Legacy Snippets
       """
 
   Scenario: Turnip snippets
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\SnippetAcceptingContext,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements SnippetAcceptingContext { }
-      """
-    When I run "behat --no-colors -f progress features/coffee.feature"
+    When I run behat with the following additional options:
+      | option                  | value            |
+      | --config                | behat-append.php |
+      | features/coffee.feature |                  |
     Then it should pass with:
       """
       UUUUUUUUUUU
@@ -170,7 +127,7 @@ Feature: Legacy Snippets
       2 scenarios (2 undefined)
       11 steps (11 undefined)
 
-      --- FeatureContext has missing steps. Define them with these snippets:
+      --- FeatureContextSnippetAccepting has missing steps. Define them with these snippets:
 
           #[Given('I have magically created :arg1$')]
           public function iHaveMagicallyCreated($arg1): void
@@ -207,22 +164,26 @@ Feature: Legacy Snippets
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 5 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
+          use Behat\Step\When;
+          use Behat\Step\Then;
+          use Behat\Gherkin\Node\PyStringNode;
       """
 
   Scenario: Turnip snippets are working
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\SnippetAcceptingContext,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements SnippetAcceptingContext { }
-      """
-    When I run "behat --no-colors -f progress --append-snippets features/coffee.feature"
-    And I run "behat --no-colors -f progress features/coffee.feature"
+    When I run behat with the following additional options:
+      | option                  | value            |
+      | --config                | behat-append.php |
+      | --append-snippets       |                  |
+      | features/coffee.feature |                  |
+    And I run behat with the following additional options:
+      | option                  | value            |
+      | --config                | behat-append.php |
+      | features/coffee.feature |                  |
     Then it should pass with:
       """
       P----P-----
@@ -230,11 +191,11 @@ Feature: Legacy Snippets
       --- Pending steps:
 
       001 Scenario: Single quotes              # features/coffee.feature:6
-            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+            Given I have magically created 10$ # FeatureContextSnippetAccepting::iHaveMagicallyCreated()
               TODO: write pending definition
 
       002 Scenario: Double quotes              # features/coffee.feature:18
-            Given I have magically created 10$ # FeatureContext::iHaveMagicallyCreated()
+            Given I have magically created 10$ # FeatureContextSnippetAccepting::iHaveMagicallyCreated()
               TODO: write pending definition
 
       2 scenarios (2 pending)
@@ -242,55 +203,58 @@ Feature: Legacy Snippets
       """
 
   Scenario: Numbers with decimal points
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\SnippetAcceptingContext;
-
-      class FeatureContext implements SnippetAcceptingContext {}
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should have value of £10
-          And 7 should have value of £7.2
-      """
-    When I run "behat -f progress --no-colors --append-snippets"
-    And I run "behat -f pretty --no-colors"
+    When I run behat with the following additional options:
+      | option                   | value             |
+      | --config                 | behat-decimal.php |
+      | features/decimal.feature |                   |
     Then it should pass with:
       """
-      Feature: Step Pattern
+      UU
 
-        Scenario:                         # features/coffee.feature:2
-          Then 5 should have value of £10 # FeatureContext::shouldHaveValueOf£()
-            TODO: write pending definition
-          And 7 should have value of £7.2 # FeatureContext::shouldHaveValueOf£()
+      1 scenario (1 undefined)
+      2 steps (2 undefined)
+
+      --- FeatureContextDecimal has missing steps. Define them with these snippets:
+
+          #[Then(':arg1 should have value of £:arg2')]
+          public function shouldHaveValueOf£($arg1, $arg2): void
+          {
+              throw new PendingException();
+          }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
+      """
+    When I run behat with the following additional options:
+      | option                   | value             |
+      | --config                 | behat-decimal.php |
+      | --append-snippets        |                   |
+      | features/decimal.feature |                   |
+    And I run behat with the following additional options:
+      | option                   | value             |
+      | --config                 | behat-decimal.php |
+      | features/decimal.feature |                   |
+    Then it should pass with:
+      """
+      P-
+
+      --- Pending steps:
+
+      001 Scenario:                         # features/decimal.feature:2
+            Then 5 should have value of £10 # FeatureContextDecimal::shouldHaveValueOf£()
+              TODO: write pending definition
 
       1 scenario (1 pending)
       2 steps (1 pending, 1 skipped)
       """
 
   Scenario: Parameter with decimal number following string
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Behat\Context\SnippetAcceptingContext;
-
-      class FeatureContext implements Context, SnippetAcceptingContext
-      {
-      }
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I have a package v2.5
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                   | value             |
+      | --config                 | behat-package.php |
+      | features/package.feature |                   |
     Then it should pass with:
       """
       U
@@ -298,34 +262,25 @@ Feature: Legacy Snippets
       1 scenario (1 undefined)
       1 step (1 undefined)
 
-      --- FeatureContext has missing steps. Define them with these snippets:
+      --- FeatureContextPackage has missing steps. Define them with these snippets:
 
           #[Given('I have a package v2.5')]
           public function iHaveAPackageV25(): void
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Given;
       """
 
   Scenario: Step with slashes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Behat\Context\SnippetAcceptingContext;
-
-      class FeatureContext implements Context, SnippetAcceptingContext
-      {
-      }
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then images should be uploaded to web/uploads/media/default/0001/01/
-      """
-    When I run "behat -f progress --no-colors"
+    When I run behat with the following additional options:
+      | option                   | value             |
+      | --config                 | behat-slashes.php |
+      | features/slashes.feature |                   |
     Then it should pass with:
       """
       U
@@ -333,11 +288,16 @@ Feature: Legacy Snippets
       1 scenario (1 undefined)
       1 step (1 undefined)
 
-      --- FeatureContext has missing steps. Define them with these snippets:
+      --- FeatureContextSlashes has missing steps. Define them with these snippets:
 
           #[Then('images should be uploaded to web\/uploads\/media\/default\/:arg1\/:arg2\/')]
           public function imagesShouldBeUploadedToWebUploadsMediaDefault($arg1, $arg2): void
           {
               throw new PendingException();
           }
+
+      --- Don't forget these 2 use statements:
+
+          use Behat\Behat\Tester\Exception\PendingException;
+          use Behat\Step\Then;
       """
