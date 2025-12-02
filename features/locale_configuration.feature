@@ -4,42 +4,25 @@ Feature: Locale configuration
   I need to be able to the locale inside the configuration file
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
+    Given I initialise the working directory from the "LocaleConfiguration" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
-      use Behat\Behat\Context\Context,
-        Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-        Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context
-      {
-      }
-      """
-
-  Scenario:
-    Given a file named "behat.yml" with:
-      """
-      default:
-        translation:
-          locale: fr
-      """
-    When I run "behat --no-colors -f progress"
+  Scenario: French locale
+    When I run behat with the following additional options:
+      | option                 | value              |
+      | --config               | behat-french.php   |
     Then it should pass with:
       """
       Pas de scénario
       Pas d'étape
       """
 
-  Scenario:
-    Given a file named "behat.yml" with:
-      """
-      default:
-        translation:
-          locale: en
-      """
-    When I run "behat --no-colors -f progress"
+  Scenario: English locale
+    When I run behat with the following additional options:
+      | option                 | value              |
+      | --config               | behat-english.php  |
     Then it should pass with:
       """
       No scenarios
