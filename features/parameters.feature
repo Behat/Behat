@@ -4,79 +4,13 @@ Feature: Parameters
   I need to be able to configure Behat through environment variable
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $result;
-          private $numbers;
-
-          #[Given('/I have basic calculator/')]
-          public function iHaveBasicCalculator() {
-              $this->result  = 0;
-              $this->numbers = array();
-          }
-
-          #[Given('/I have entered (\d+)/')]
-          public function iHaveEntered($number) {
-              $this->numbers[] = intval($number);
-          }
-
-          #[When('/I add/')]
-          public function iAdd() {
-              $this->result  = array_sum($this->numbers);
-              $this->numbers = array();
-          }
-
-          #[When('/I sub/')]
-          public function iSub() {
-              $this->result  = array_shift($this->numbers);
-              $this->result -= array_sum($this->numbers);
-              $this->numbers = array();
-          }
-
-          #[Then('/The result should be (\d+)/')]
-          public function theResultShouldBe($result) {
-              PHPUnit\Framework\Assert::assertEquals($result, $this->result);
-          }
-      }
-      """
-    And a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Background:
-          Given I have basic calculator
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I add
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 12      | 22     |
-            | 5       | 3       | 8      |
-            | 5       | 5       | 10     |
-      """
-    And a file named "behat.yml" with:
-      """
-      default:
-        formatters:
-          progress: ~
-      """
+    Given I initialise the working directory from the "Parameters" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
   Scenario:
-    When I run "behat --no-colors"
+    When I run "behat --config=behat-progress.php"
     Then it should pass with:
       """
       ...............
@@ -90,12 +24,7 @@ Feature: Parameters
       """
       {"formatters": {"pretty": {"paths": false, "timer": false}}}
       """
-    And a file named "behat.yml" with:
-      """
-      default:
-        formatters: ~
-      """
-    When I run "behat --no-colors"
+    When I run "behat --config=behat-empty-formatters.php"
     Then it should pass with:
       """
       Feature: Math
@@ -124,12 +53,7 @@ Feature: Parameters
       """
       {"formatters": {"pretty": {"timer": false}}}
       """
-    And a file named "behat.yml" with:
-      """
-      default:
-        formatters: ~
-      """
-    When I run "behat --no-colors"
+    When I run "behat --config=behat-empty-formatters.php"
     Then it should pass with:
       """
       Feature: Math
