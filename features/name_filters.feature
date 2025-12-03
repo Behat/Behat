@@ -4,55 +4,13 @@ Feature: Name filters
   I need Behat to support features & scenario/outline names filtering
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
+  Given I initialise the working directory from the "NameFilters" fixtures folder
+  And I provide the following options for all behat invocations:
+    | option      | value |
+    | --no-colors |       |
 
-      use Behat\Behat\Context\Context;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^Some slow step N(\d+)$/')]
-          public function someSlowStepN($num) {}
-
-          #[Given('/^Some normal step N(\d+)$/')]
-          public function someNormalStepN($num) {}
-
-          #[Given('/^Some fast step N(\d+)$/')]
-          public function someFastStepN($num) {}
-      }
-    """
-    And a file named "features/feature1.feature" with:
-      """
-      Feature: First Feature
-
-        Background:
-          Given Some slow step N11
-
-        Scenario: First Scenario
-          Given Some slow step N12
-          And Some normal step N13
-
-        Scenario: Second Scenario
-          Given Some fast step N14
-      """
-    And a file named "features/feature2.feature" with:
-      """
-      Feature: Second Feature
-
-        Background:
-          Given Some normal step N21
-
-        Scenario: First Scenario
-          Given Some slow step N22
-          And Some fast step N23
-      """
-
-  Scenario: First Name
-    When I run "behat --no-colors -f pretty --name First"
+Scenario: First Name
+    When I run "behat --name First"
     Then it should pass with:
       """
       Feature: First Feature
@@ -81,7 +39,7 @@ Feature: Name filters
       """
 
   Scenario: Second Name
-    When I run "behat --no-colors -f pretty --name 'Second Scenario'"
+    When I run "behat --name 'Second Scenario'"
     Then it should pass with:
       """
       Feature: First Feature
@@ -97,7 +55,7 @@ Feature: Name filters
       """
 
   Scenario: RegEx
-    When I run "behat --no-colors -f pretty --name '/nd Scenario$/'"
+    When I run "behat --name '/nd Scenario$/'"
     Then it should pass with:
       """
       Feature: First Feature
