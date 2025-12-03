@@ -4,105 +4,15 @@ Feature: Multiple formats
   I need to be able to specify multiple output formats to behat
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $apples = 0;
-          private $parameters;
-
-          public function __construct(array $parameters = array()) {
-              $this->parameters = $parameters;
-          }
-
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              $this->apples = intval($count);
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              $this->apples -= intval($count);
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              $this->apples += intval($count);
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
-          }
-
-          #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
-          public function contextParameterShouldBeEqualTo($key, $val) {
-              PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
-          }
-
-          #[Given('/^context parameter "([^"]*)" should be array with (\d+) elements$/')]
-          public function contextParameterShouldBeArrayWithElements($key, $count) {
-              PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-              PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
-          }
-      }
-      """
-    And a file named "features/apples.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Background:
-          Given I have 3 apples
-
-        Scenario: I'm little hungry
-          When I ate 1 apple
-          Then I should have 3 apples
-
-        Scenario: Found more apples
-          When I found 5 apples
-          Then I should have 8 apples
-
-        Scenario: Found more apples
-          When I found 2 apples
-          Then I should have 5 apples
-          And do something undefined
-
-        Scenario Outline: Other situations
-          When I ate <ate> apples
-          And I found <found> apples
-          Then I should have <result> apples
-
-          Examples:
-            | ate | found | result |
-            | 3   | 1     | 1      |
-            | 0   | 4     | 8      |
-            | 2   | 2     | 3      |
-
-        Scenario: Multilines
-          Given pystring:
-            '''
-            some pystring
-            '''
-          And table:
-            | col1 | col2 |
-            | val1 | val2 |
-      """
+    Given I initialise the working directory from the "MultipleFormats" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option          | value          |
+      | --no-colors     |                |
+      | --snippets-for  | FeatureContext |
+      | --snippets-type | regex          |
 
   Scenario: 2 formats, default output
-    When I run "behat --no-colors -f pretty -f progress --format-settings='{\"multiline\": false}' --snippets-for=FeatureContext --snippets-type=regex"
+    When I run "behat -f pretty -f progress --format-settings='{\"multiline\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -190,7 +100,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, same output
-    When I run "behat --no-colors -f pretty -f progress --out=std --format-settings='{\"multiline\": false}' --snippets-for=FeatureContext --snippets-type=regex"
+    When I run "behat -f pretty -f progress --out=std --format-settings='{\"multiline\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -278,7 +188,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write first to file
-    When I run "behat --no-colors -f pretty -o apples.pretty -f progress -o std --format-settings='{\"multiline\": false, \"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
+    When I run "behat -f pretty -o apples.pretty -f progress -o std --format-settings='{\"multiline\": false, \"paths\": false}'"
     Then it should fail with:
       """
       ..F......U.......F.....UU
@@ -369,7 +279,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write second to file
-    When I run "behat --no-colors -f pretty -o std --format=progress --out=apples.progress --format-settings='{\"multiline\": false, \"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
+    When I run "behat -f pretty -o std --format=progress --out=apples.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
     Then it should fail with:
       """
       Feature: Apples story
@@ -460,7 +370,7 @@ Feature: Multiple formats
       """
 
   Scenario: 2 formats, write both to files
-    When I run "behat --no-colors -f pretty -o app.pretty -f progress -o app.progress --format-settings='{\"multiline\": false, \"paths\": false}' --snippets-for=FeatureContext --snippets-type=regex"
+    When I run "behat -f pretty -o app.pretty -f progress -o app.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
     Then it should fail with:
       """
       --- FeatureContext has missing steps. Define them with these snippets:
