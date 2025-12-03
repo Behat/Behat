@@ -4,96 +4,14 @@ Feature: Scenario Outlines
   I want to write scenario outlines
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $result;
-          private $numbers;
-
-          #[Given('/^I have basic calculator$/')]
-           public function iHaveBasicCalculator() {
-              $this->result = 0;
-              $this->numbers = array();
-           }
-
-           #[Given('/^I have entered (\d+)$/')]
-           public function iHaveEntered($number) {
-              $this->numbers[] = intval($number);
-           }
-
-           #[When('/^I add$/')]
-           public function iAdd() {
-               foreach ($this->numbers as $number) {
-                   $this->result += $number;
-               }
-               $this->numbers = array();
-           }
-
-           #[When('/^I sub$/')]
-           public function iSub() {
-               $this->result = array_shift($this->numbers);
-               foreach ($this->numbers as $number) {
-                   $this->result -= $number;
-               }
-               $this->numbers = array();
-           }
-
-           #[When('/^I multiply$/')]
-           public function iMultiply() {
-               $this->result = array_shift($this->numbers);
-               foreach ($this->numbers as $number) {
-                   $this->result *= $number;
-               }
-               $this->numbers = array();
-           }
-
-           #[When('/^I div$/')]
-           public function iDiv() {
-               $this->result = array_shift($this->numbers);
-               foreach ($this->numbers as $number) {
-                   $this->result /= $number;
-               }
-               $this->numbers = array();
-           }
-
-           #[Then('/^The result should be (\d+)$/')]
-           public function theResultShouldBe($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
-           }
-      }
-      """
+    Given I initialise the working directory from the "Outlines" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value    |
+      | --no-colors |          |
+      | --format    | progress |
 
   Scenario: Basic scenario outline
-    Given a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Background:
-          Given I have basic calculator
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I add
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 12      | 22     |
-            | 5       | 3       | 8      |
-            | 5       | 5       | 10     |
-      """
-    When I run "behat --no-colors -f progress features/math.feature"
+    When I run "behat features/math-basic.feature"
     Then it should pass with:
       """
       ...............
@@ -103,41 +21,7 @@ Feature: Scenario Outlines
       """
 
   Scenario: Multiple scenario outlines
-    Given a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Background:
-          Given I have basic calculator
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I multiply
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 12      | 120    |
-            | 5       | 3       | 15     |
-
-        Scenario:
-          Given I have entered 10
-          And I have entered 3
-          When I sub
-          Then The result should be 7
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I div
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 2       | 5      |
-            | 50      | 5       | 10     |
-      """
-    When I run "behat --no-colors -f progress features/math.feature"
+    When I run "behat features/math-multiple.feature"
     Then it should pass with:
       """
       .........................
@@ -147,62 +31,27 @@ Feature: Scenario Outlines
       """
 
   Scenario: Multiple scenario outlines with failing steps
-    Given a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Background:
-          Given I have basic calculator
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I multiply
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 12      | 120    |
-            | 5       | 4       | 15     |
-
-        Scenario:
-          Given I have entered 10
-          And I have entered 4
-          When I sub
-          Then The result should be 7
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I div
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 2       | 5      |
-            | 50      | 10      | 2      |
-            | 50      | 10      | 4      |
-      """
-    When I run "behat --no-colors -f progress features/math.feature"
+    When I run "behat features/math-failing.feature"
     Then it should fail with:
       """
       .........F....F.........F....F
 
       --- Failed steps:
 
-      001 Example: | 5       | 4       | 15     | # features/math.feature:14
-            Then The result should be 15          # features/math.feature:9
+      001 Example: | 5       | 4       | 15     | # features/math-failing.feature:14
+            Then The result should be 15          # features/math-failing.feature:9
               Failed asserting that 20 matches expected 15.
 
-      002 Scenario:                     # features/math.feature:16
-            Then The result should be 7 # features/math.feature:20
+      002 Scenario:                     # features/math-failing.feature:16
+            Then The result should be 7 # features/math-failing.feature:20
               Failed asserting that 6 matches expected 7.
 
-      003 Example: | 50      | 10      | 2      | # features/math.feature:31
-            Then The result should be 2           # features/math.feature:26
+      003 Example: | 50      | 10      | 2      | # features/math-failing.feature:31
+            Then The result should be 2           # features/math-failing.feature:26
               Failed asserting that 5 matches expected 2.
 
-      004 Example: | 50      | 10      | 4      | # features/math.feature:32
-            Then The result should be 4           # features/math.feature:26
+      004 Example: | 50      | 10      | 4      | # features/math-failing.feature:32
+            Then The result should be 4           # features/math-failing.feature:26
               Failed asserting that 5 matches expected 4.
 
       6 scenarios (2 passed, 4 failed)
@@ -210,43 +59,19 @@ Feature: Scenario Outlines
       """
 
   Scenario: Outline with multiple examples and failing steps
-    Given a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Background:
-          Given I have basic calculator
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I multiply
-          Then The result should be <result>
-
-          Examples: Small numbers
-            | number1 | number2 | result |
-            | 1       | 6       | 6      |
-            | 5       | 4       | 10     |
-            | 2       | 3       | 6      |
-
-          Examples: Big numbers
-            | number1 | number2 | result |
-            | 139     | 201     | 99     |
-            | 200     | 300     | 60000  |
-
-      """
-    When I run "behat --no-colors -f progress features/math.feature"
+    When I run "behat features/math-multiple-examples.feature"
     Then it should fail with:
       """
       .........F.........F.....
 
       --- Failed steps:
 
-      001 Example: | 5       | 4       | 10     | # features/math.feature:14
-            Then The result should be 10          # features/math.feature:9
+      001 Example: | 5       | 4       | 10     | # features/math-multiple-examples.feature:14
+            Then The result should be 10          # features/math-multiple-examples.feature:9
               Failed asserting that 20 matches expected 10.
 
-      002 Example: | 139     | 201     | 99     | # features/math.feature:19
-            Then The result should be 99          # features/math.feature:9
+      002 Example: | 139     | 201     | 99     | # features/math-multiple-examples.feature:19
+            Then The result should be 99          # features/math-multiple-examples.feature:9
               Failed asserting that 27939 matches expected 99.
 
       5 scenarios (3 passed, 2 failed)
@@ -254,43 +79,7 @@ Feature: Scenario Outlines
       """
 
   Scenario: Scenario outline examples isolation
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $number = 0;
-
-          #[When('I add :number')]
-           public function iAdd($number) {
-              $this->number += intval($number);
-           }
-
-           #[Then('the result should be :result')]
-           public function theResultShouldBe($result) {
-              PHPUnit\Framework\Assert::assertEquals(intval($result), $this->number);
-           }
-      }
-      """
-    And a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Scenario Outline:
-          When I add <add>
-          Then the result should be <result>
-
-          Examples:
-            | add | result |
-            | 12  | 12     |
-            | 3   | 3      |
-            | 5   | 5      |
-      """
-    When I run "behat --no-colors -f progress features/math.feature"
+    When I run "behat --profile=isolation features/math-isolation.feature"
     Then it should pass with:
       """
       ......
