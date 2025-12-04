@@ -4,97 +4,13 @@ Feature: Filters
   I need to be able to use gherkin filters
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Given;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^Some slow step N(\d+)$/')]
-          public function someSlowStepN($num) {}
-
-          #[Given('/^Some normal step N(\d+)$/')]
-          public function someNormalStepN($num) {}
-
-          #[Given('/^Some fast step N(\d+)$/')]
-          public function someFastStepN($num) {}
-      }
-      """
-    And a file named "features/feature1.feature" with:
-      """
-      @tag1
-      Feature: A simple feature
-        In order to ...
-        As a first user
-        I need to ...
-
-        Background:
-          Given Some slow step N11
-
-        Scenario:
-          Given Some slow step N12
-          And Some normal step N13
-
-        Scenario:
-          Given Some fast step N14
-      """
-    And a file named "features/feature2.feature" with:
-      """
-      @tag2
-      Feature: Second feature
-        In order to ...
-        As a second user
-        I need to ...
-
-        Background:
-          Given Some slow step N11
-
-        Scenario:
-          Given Some slow step N12
-          And Some normal step N13
-
-        Scenario:
-          Given Some fast step N14
-      """
-    And a file named "features/feature3.feature" with:
-      """
-      @tag2
-      Feature: A bit less simple feature
-        In order to ...
-        As a third user
-        I need to ...
-
-        Background:
-          Given Some slow step N11
-
-        Scenario:
-          Given Some slow step N12
-          And Some normal step N13
-
-        Scenario:
-          Given Some fast step N14
-      """
+    Given I initialise the working directory from the "ProfileFilters" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
 
   Scenario: Tag filters
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Filter\TagFilter;
-
-      return (new Config())
-        ->withProfile(
-          (new Profile('default'))
-            ->withFilter(new TagFilter('tag2'))
-        )
-      ;
-      """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --config=behat-tag-filter.php"
     Then it should pass with:
       """
       @tag2
@@ -134,22 +50,7 @@ Feature: Filters
       """
 
   Scenario: Role filters
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Filter\RoleFilter;
-
-      return (new Config())
-        ->withProfile(
-          (new Profile('default'))
-            ->withFilter(new RoleFilter('second user'))
-        )
-      ;
-      """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --config=behat-role-filter.php"
     Then it should pass with:
       """
       @tag2
@@ -173,22 +74,7 @@ Feature: Filters
       """
 
   Scenario: Narrative filters
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Filter\NarrativeFilter;
-
-      return (new Config())
-        ->withProfile(
-          (new Profile('default'))
-            ->withFilter(new NarrativeFilter('/As a (?:second|third) user/'))
-        )
-      ;
-      """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --config=behat-narrative-filter.php"
     Then it should pass with:
       """
       @tag2
@@ -228,22 +114,7 @@ Feature: Filters
       """
 
   Scenario: Name filters
-    Given a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Filter\NameFilter;
-
-      return (new Config())
-        ->withProfile(
-          (new Profile('default'))
-            ->withFilter(new NameFilter('simple feature'))
-        )
-      ;
-      """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --config=behat-name-filter.php"
     Then it should pass with:
       """
       @tag1
@@ -278,58 +149,44 @@ Feature: Filters
         Scenario:                  # features/feature3.feature:14
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
-      4 scenarios (4 passed)
-      10 steps (10 passed)
-      """
-
-  Scenario: Filters override
-    Given a file named "features/wip.feature" with:
-      """
       @tag1 @wip
       Feature: A simple feature
         In order to ...
         As a first user
         I need to ...
 
-        Background:
-          Given Some slow step N11
-
-        Scenario:
-          Given Some slow step N12
-          And Some normal step N13
-
-        Scenario:
-          Given Some fast step N14
-      """
-    Given a file named "behat.yml" with:
-      """
-      default:
-        gherkin:
-          filters:
-            tags: ~@wip
-
-      wip:
-        gherkin:
-          filters:
-            name: A simple feature
-      """
-    When I run "behat --no-colors -f pretty -p wip features/wip.feature"
-    Then it should pass with:
-      """
-      @tag1 @wip
-      Feature: A simple feature
-        In order to ...
-        As a first user
-        I need to ...
-
-        Background:                # features/wip.feature:7
+        Background:                # features/wip/wip.feature:7
           Given Some slow step N11 # FeatureContext::someSlowStepN()
 
-        Scenario:                  # features/wip.feature:10
+        Scenario:                  # features/wip/wip.feature:10
           Given Some slow step N12 # FeatureContext::someSlowStepN()
           And Some normal step N13 # FeatureContext::someNormalStepN()
 
-        Scenario:                  # features/wip.feature:14
+        Scenario:                  # features/wip/wip.feature:14
+          Given Some fast step N14 # FeatureContext::someFastStepN()
+
+      6 scenarios (6 passed)
+      15 steps (15 passed)
+      """
+
+  Scenario: Filters override
+  When I run "behat --config=behat-filters-override.php -p wip features/wip/wip.feature"
+  Then it should pass with:
+      """
+      @tag1 @wip
+      Feature: A simple feature
+        In order to ...
+        As a first user
+        I need to ...
+
+        Background:                # features/wip/wip.feature:7
+          Given Some slow step N11 # FeatureContext::someSlowStepN()
+
+        Scenario:                  # features/wip/wip.feature:10
+          Given Some slow step N12 # FeatureContext::someSlowStepN()
+          And Some normal step N13 # FeatureContext::someNormalStepN()
+
+        Scenario:                  # features/wip/wip.feature:14
           Given Some fast step N14 # FeatureContext::someFastStepN()
 
       2 scenarios (2 passed)
