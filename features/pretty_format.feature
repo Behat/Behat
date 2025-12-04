@@ -3,80 +3,14 @@ Feature: Pretty Formatter
   As a feature writer
   I need to have pretty formatter
 
+  Background:
+    Given I initialise the working directory from the "PrettyFormat" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
+
   Scenario: Complex
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $value;
-
-          #[Given('/I have entered (\d+)/')]
-          public function iHaveEntered($num) {
-              $this->value = $num;
-          }
-
-          #[Then('/I must have (\d+)/')]
-          public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
-          }
-
-          #[When('/I add (\d+)/')]
-          public function iAdd($num) {
-              $this->value += $num;
-          }
-
-          #[When('/^Something not done yet$/')]
-          public function somethingNotDoneYet() {
-              throw new PendingException();
-          }
-      }
-      """
-    And a file named "features/World.feature" with:
-      """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
-
-        Background:
-          Given I have entered 10
-
-        Scenario: Undefined
-          Then I must have 10
-          And Something new
-          Then I must have 10
-
-        Scenario: Pending
-          Then I must have 10
-          And Something not done yet
-          Then I must have 10
-
-        Scenario: Failed
-          When I add 4
-          Then I must have 13
-
-        Scenario Outline: Passed & Failed
-          Given I must have 10
-          When I add <value>
-          Then I must have <result>
-
-          Examples:
-            | value | result |
-            |  5    | 16     |
-            |  10   | 20     |
-            |  23   | 32     |
-      """
-    When I run "behat --no-colors -f pretty --snippets-for=FeatureContext --snippets-type=regex"
+    When I run "behat features/World.feature"
     Then it should fail with:
       """
       Feature: World consistency
@@ -127,72 +61,13 @@ Feature: Pretty Formatter
       6 scenarios (1 passed, 3 failed, 1 undefined, 1 pending)
       23 steps (16 passed, 3 failed, 1 undefined, 1 pending, 2 skipped)
 
-      --- FeatureContext has missing steps. Define them with these snippets:
+      --- Use --snippets-for CLI option to generate snippets for following default suite steps:
 
-          #[Then('/^Something new$/')]
-          public function somethingNew(): void
-          {
-              throw new PendingException();
-          }
+          And Something new
       """
 
   Scenario: Multiline titles
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $value;
-
-          #[Given('/I have entered (\d+)/')]
-          public function iHaveEntered($num) {
-              $this->value = $num;
-          }
-
-          #[Then('/I must have (\d+)/')]
-          public function iMustHave($num) {
-              PHPUnit\Framework\Assert::assertEquals($num, $this->value);
-          }
-
-          #[When('/I (add|subtract) the value (\d+)/')]
-          public function iAddOrSubtract($op, $num) {
-              if ($op == 'add')
-                $this->value += $num;
-              elseif ($op == 'subtract')
-                $this->value -= $num;
-          }
-      }
-      """
-    And a file named "features/World.feature" with:
-      """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
-
-        Background:
-          Given I have entered 10
-
-        Scenario: Adding some interesting
-                  value
-          Then I must have 10
-          And I add the value 6
-          Then I must have 16
-
-        Scenario: Subtracting
-                  some
-                  value
-          Then I must have 10
-          And I subtract the value 6
-          Then I must have 4
-      """
-    When I run "behat --no-colors -f pretty"
+    When I run "behat --profile=multiline features/WorldMultiline.feature"
     Then it should pass with:
       """
       Feature: World consistency
@@ -200,86 +75,28 @@ Feature: Pretty Formatter
         As a features developer
         I want, that "World" flushes between scenarios
 
-        Background:               # features/World.feature:6
-          Given I have entered 10 # FeatureContext::iHaveEntered()
+        Background:               # features/WorldMultiline.feature:6
+          Given I have entered 10 # FeatureContextMultiline::iHaveEntered()
 
-        Scenario: Adding some interesting # features/World.feature:9
+        Scenario: Adding some interesting # features/WorldMultiline.feature:9
                   value
-          Then I must have 10             # FeatureContext::iMustHave()
-          And I add the value 6           # FeatureContext::iAddOrSubtract()
-          Then I must have 16             # FeatureContext::iMustHave()
+          Then I must have 10             # FeatureContextMultiline::iMustHave()
+          And I add the value 6           # FeatureContextMultiline::iAddOrSubtract()
+          Then I must have 16             # FeatureContextMultiline::iMustHave()
 
-        Scenario: Subtracting        # features/World.feature:15
+        Scenario: Subtracting        # features/WorldMultiline.feature:15
                   some
                   value
-          Then I must have 10        # FeatureContext::iMustHave()
-          And I subtract the value 6 # FeatureContext::iAddOrSubtract()
-          Then I must have 4         # FeatureContext::iMustHave()
+          Then I must have 10        # FeatureContextMultiline::iMustHave()
+          And I subtract the value 6 # FeatureContextMultiline::iAddOrSubtract()
+          Then I must have 4         # FeatureContextMultiline::iMustHave()
 
       2 scenarios (2 passed)
       8 steps (8 passed)
       """
 
     Scenario: Don't print undefined exceptions in outline
-      Given a file named "features/bootstrap/FeatureContext.php" with:
-        """
-        <?php
-
-        use Behat\Behat\Context\Context;
-        use Behat\Gherkin\Node\PyStringNode,
-            Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-        class FeatureContext implements Context
-        {
-            private $value = 10;
-
-            #[Then('/I must have "([^"]+)"/')]
-            public function iMustHave($num) {
-                PHPUnit\Framework\Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
-            }
-
-            #[When('/I add "([^"]+)"/')]
-            public function iAdd($num) {
-                $this->value += intval(preg_replace('/[^\d]+/', '', $num));
-            }
-        }
-        """
-      And a file named "features/ls.feature" with:
-        """
-        Feature: ls
-          In order to see the directory structure
-          As a UNIX user
-          I need to be able to list the current directory's contents
-
-          Background:
-            Given I have a file named "foo"
-
-          Scenario: List 2 files in a directory
-            Given I have a file named "bar"
-            When I run "ls"
-            Then I should see "bar" in output
-            And I should see "foo" in output
-
-          Scenario: List 1 file and 1 dir
-            Given I have a directory named "dir"
-            When I run "ls"
-            Then I should see "dir" in output
-            And I should see "foo" in output
-
-          Scenario Outline:
-            Given I have a <object> named "<name>"
-            When I run "ls"
-            Then I should see "<name>" in output
-            And I should see "foo" in output
-
-            Examples:
-              | object    | name |
-              | file      | bar  |
-              | directory | dir  |
-        """
-      When I run "behat --no-colors features/ls.feature --no-snippets"
+      When I run "behat --profile=ls features/ls.feature --no-snippets"
       Then it should pass with:
         """
         Feature: ls
@@ -318,54 +135,7 @@ Feature: Pretty Formatter
         """
 
   Scenario: Multiline titles
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context
-      {}
-      """
-    And a file named "features/World.feature" with:
-      """
-      Feature: World consistency
-        In order to maintain stable behaviors
-        As a features developer
-        I want, that "World" flushes between scenarios
-
-        Background: Some background
-          title
-            with
-        multiple lines
-
-          Given I have entered 10
-
-        Scenario: Undefined
-                  scenario or
-                  whatever
-          Then I must have 10
-          And Something new
-          Then I must have 10
-
-      Scenario Outline: Passed & Failed
-      steps and other interesting stuff
-        he-he-he
-
-          Given I must have 10
-          When I add <value>
-          Then I must have <result>
-
-          Examples:
-            | value | result |
-            |  5    | 16     |
-            |  10   | 20     |
-            |  23   | 32     |
-      """
-    When I run "behat --no-colors -f pretty --no-snippets"
+    When I run "behat --profile=empty features/WorldMultilineBackgroundScenario.feature --no-snippets"
     Then it should pass with:
       """
       Feature: World consistency
@@ -373,20 +143,20 @@ Feature: Pretty Formatter
         As a features developer
         I want, that "World" flushes between scenarios
 
-        Background: Some background # features/World.feature:6
+        Background: Some background # features/WorldMultilineBackgroundScenario.feature:6
           title
             with
           multiple lines
           Given I have entered 10
 
-        Scenario: Undefined   # features/World.feature:13
+        Scenario: Undefined   # features/WorldMultilineBackgroundScenario.feature:13
                   scenario or
                   whatever
           Then I must have 10
           And Something new
           Then I must have 10
 
-        Scenario Outline: Passed & Failed # features/World.feature:20
+        Scenario Outline: Passed & Failed # features/WorldMultilineBackgroundScenario.feature:20
           steps and other interesting stuff
           he-he-he
           Given I must have 10
@@ -404,44 +174,7 @@ Feature: Pretty Formatter
       """
 
   Scenario: Background with failing step and 2 scenarios
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\TableNode;
-      use Behat\Step\Given;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^.*$/')]
-          public function anything(?TableNode $table = null): void {
-              throw new PendingException();
-          }
-      }
-      """
-    And a file named "features/test.feature" with:
-      """
-      Feature: Customer can see the cost of their purchase in basket
-        In order to see the cost of my purchase
-        As a customer
-        I need to see the totals of my basket
-
-        Background:
-          Given there are the following products in the catalog
-            | name     | price |
-            | trousers | 12    |
-
-        Scenario: £12 delivery £3
-          Given I have an empty basket
-          When I add the product "trousers" to my basket
-
-        Scenario: £12 delivery £3
-          Given I have an empty basket
-          When I add the product "trousers" to my basket
-      """
-    When I run "behat --no-colors -f pretty --no-snippets"
+    When I run "behat --profile=background_failing features/test.feature --no-snippets"
     Then it should pass with:
       """
       Feature: Customer can see the cost of their purchase in basket
@@ -450,77 +183,29 @@ Feature: Pretty Formatter
         I need to see the totals of my basket
 
         Background:                                             # features/test.feature:6
-          Given there are the following products in the catalog # FeatureContext::anything()
+          Given there are the following products in the catalog # FeatureContextBackgroundFailing::anything()
             | name     | price |
             | trousers | 12    |
             TODO: write pending definition
 
         Scenario: £12 delivery £3                        # features/test.feature:11
-          Given I have an empty basket                   # FeatureContext::anything()
-          When I add the product "trousers" to my basket # FeatureContext::anything()
+          Given I have an empty basket                   # FeatureContextBackgroundFailing::anything()
+          When I add the product "trousers" to my basket # FeatureContextBackgroundFailing::anything()
 
         Scenario: £12 delivery £3                        # features/test.feature:15
-          Given there are the following products in the catalog # FeatureContext::anything()
+          Given there are the following products in the catalog # FeatureContextBackgroundFailing::anything()
             | name     | price |
             | trousers | 12    |
             TODO: write pending definition
-          Given I have an empty basket                   # FeatureContext::anything()
-          When I add the product "trousers" to my basket # FeatureContext::anything()
+          Given I have an empty basket                   # FeatureContextBackgroundFailing::anything()
+          When I add the product "trousers" to my basket # FeatureContextBackgroundFailing::anything()
 
       2 scenarios (2 pending)
       6 steps (2 pending, 4 skipped)
       """
 
   Scenario: Multiple examples tables
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\When;
-      use Behat\Step\Then;
-
-      class FeatureContext implements Context
-      {
-          private string $output;
-
-          #[When('I input :name')]
-          public function input(string $name): void {
-              $this->output = ctype_digit($name)
-                ? "'$name' doesn't look like a name?"
-                : 'Hi Bob';
-          }
-
-          #[Then('I should see :result')]
-          public function assertSee(string $result): void {
-            if ($this->output !== $result) {
-              throw new InvalidArgumentException('Failed - got: '.$this->output);
-            }
-          }
-      }
-      """
-    And a file named "features/test.feature" with:
-      """
-      Feature: Behat can run scenarios with multiple examples tables
-        In order to make the purpose of my examples clear
-        As a feature writer
-        I need to group examples into separate tables
-
-        Scenario Outline: Grouped examples
-          When I input <name>
-          Then I should see "<result>"
-
-          Examples: valid cases
-            | name  | result   |
-            | Bob   | Hi Bob   |
-            | Jenny | Hi Jenny |
-
-          Examples: invalid cases
-            | name   | result                             |
-            | 123456 | '123456' doesn't look like a name? |
-            | Brian  | Sorry Brian, you're banned         |
-      """
-    When I run "behat --no-colors -f pretty --no-snippets"
+    When I run "behat --profile=multiple_examples features/testMultipleExamples.feature --no-snippets"
     # Note: The structure / descriptions of the separate tables are lost in the output, but the
     # examples all execute as expected.
     Then it should fail with:
@@ -530,9 +215,9 @@ Feature: Pretty Formatter
         As a feature writer
         I need to group examples into separate tables
 
-        Scenario Outline: Grouped examples # features/test.feature:6
-          When I input <name>              # FeatureContext::input()
-          Then I should see "<result>"     # FeatureContext::assertSee()
+        Scenario Outline: Grouped examples # features/testMultipleExamples.feature:6
+          When I input <name>              # FeatureContextMultipleExamples::input()
+          Then I should see "<result>"     # FeatureContextMultipleExamples::assertSee()
 
           Examples:
             | name  | result   |
@@ -547,8 +232,8 @@ Feature: Pretty Formatter
 
       --- Failed scenarios:
 
-          features/test.feature:13 (on line 8)
-          features/test.feature:18 (on line 8)
+          features/testMultipleExamples.feature:13 (on line 8)
+          features/testMultipleExamples.feature:18 (on line 8)
 
       4 scenarios (2 passed, 2 failed)
       8 steps (6 passed, 2 failed)
