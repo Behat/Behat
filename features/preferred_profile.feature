@@ -4,103 +4,13 @@ Feature: Preferred Profiles
   I need to be able to specify a preferred profile
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          private $result;
-          private $numbers;
-
-          #[Given('/I have basic calculator/')]
-          public function iHaveBasicCalculator() {
-              $this->result  = 0;
-              $this->numbers = array();
-          }
-
-          #[Given('/I have entered (\d+)/')]
-          public function iHaveEntered($number) {
-              $this->numbers[] = intval($number);
-          }
-
-          #[When('/I add/')]
-          public function iAdd() {
-              $this->result  = array_sum($this->numbers);
-              $this->numbers = array();
-          }
-
-          #[When('/I sub/')]
-          public function iSub() {
-              $this->result  = array_shift($this->numbers);
-              $this->result -= array_sum($this->numbers);
-              $this->numbers = array();
-          }
-
-          #[Then('/The result should be (\d+)/')]
-          public function theResultShouldBe($result) {
-              PHPUnit\Framework\Assert::assertEquals($result, $this->result);
-          }
-      }
-      """
-    And a file named "features/math.feature" with:
-      """
-      Feature: Math
-        Background:
-          Given I have basic calculator
-
-        Scenario Outline:
-          Given I have entered <number1>
-          And I have entered <number2>
-          When I add
-          Then The result should be <result>
-
-          Examples:
-            | number1 | number2 | result |
-            | 10      | 12      | 22     |
-            | 5       | 3       | 8      |
-            | 5       | 5       | 10     |
-      """
-    And a file named "pretty.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Formatter\PrettyFormatter;
-      use Behat\Config\Formatter\ProgressFormatter;
-
-      $profile = (new Profile('pretty_without_paths'))
-        ->disableFormatter(ProgressFormatter::NAME)
-        ->withFormatter(new PrettyFormatter(paths: false))
-      ;
-
-      return (new Config())->withProfile($profile);
-
-      """
-    And a file named "behat.yml" with:
-      """
-      default:
-
-      progress:
-        formatters:
-          progress: true
-          pretty: false
-
-      preferredProfileName:
-        progress
-
-      imports:
-        - pretty.php
-      """
+  Given I initialise the working directory from the "PreferredProfile" fixtures folder
+  And I provide the following options for all behat invocations:
+    | option      | value |
+    | --no-colors |       |
 
   Scenario:
-    Given I run "behat --no-colors features/math.feature"
+    When I run "behat features/math.feature"
     Then it should pass with:
       """
       ...............
@@ -110,7 +20,7 @@ Feature: Preferred Profiles
       """
 
   Scenario:
-    Given I run "behat --no-colors features/math.feature --profile progress"
+    When I run "behat features/math.feature --profile progress"
     Then it should pass with:
       """
       ...............
@@ -120,7 +30,7 @@ Feature: Preferred Profiles
       """
 
   Scenario:
-    Given I run "behat --no-colors --profile pretty_without_paths"
+    When I run "behat --profile pretty_without_paths"
     Then it should pass with:
       """
       Feature: Math
