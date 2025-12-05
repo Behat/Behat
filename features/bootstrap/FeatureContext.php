@@ -122,6 +122,29 @@ class FeatureContext implements Context
     }
 
     /**
+     * Copies a file from source to destination in current workdir.
+     *
+     * @Given /^I copy "([^"]*)" to "([^"]*)"$/
+     *
+     * @param string $source source file path (relative to workdir)
+     * @param string $destination destination file path (relative to workdir)
+     */
+    public function iCopyFileTo($source, $destination)
+    {
+        $sourcePath = $this->workingDir . '/' . $source;
+        $destinationPath = $this->workingDir . '/' . $destination;
+
+        if (!file_exists($sourcePath)) {
+            throw new RuntimeException(sprintf('Source file "%s" does not exist (full path: %s)', $source, $sourcePath));
+        }
+
+        $this->filesystem->copy($sourcePath, $destinationPath, true);
+
+        // Update timestamp to bypass file cache
+        touch($destinationPath);
+    }
+
+    /**
      * Creates a noop feature context in current workdir.
      *
      * @Given /^(?:there is )?a some feature context$/
