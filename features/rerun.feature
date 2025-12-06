@@ -55,7 +55,20 @@ Feature: Rerun
   Given I run "behat features/apples.feature"
   And I copy "features/apples-fixed.feature" to "features/apples.feature"
   When I run "behat features/apples.feature"
-  And I run "behat features/apples.feature --rerun"
+  Then it should fail with:
+    """
+    ..F..................
+
+    --- Failed steps:
+
+    001 Scenario: I'm little hungry   # features/apples.feature:9
+          Then I should have 3 apples # features/apples.feature:11
+            Failed asserting that 2 matches expected 3.
+
+    6 scenarios (5 passed, 1 failed)
+    21 steps (20 passed, 1 failed)
+    """
+  When I run "behat features/apples.feature --rerun"
   Then it should fail with:
     """
     ..F
