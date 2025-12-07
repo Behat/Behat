@@ -56,6 +56,7 @@ class PathOptionsController implements Controller
         // Parse comma-separated list into an array
         $removePrefixArray = [];
         if ($removePrefix !== null) {
+            assert(is_string($removePrefix), '--remove-prefix option should be string or null');
             $removePrefixArray = explode(',', $removePrefix);
         }
 
