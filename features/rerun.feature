@@ -54,10 +54,10 @@ Feature: Rerun
   Scenario: Fixing scenario removes it from the rerun log
   Given I run "behat features/apples.feature"
   And I copy "features/apples-fixed.feature" to "features/apples.feature"
-  When I run "behat features/apples.feature"
+  When I run "behat features/apples.feature --rerun"
   Then it should fail with:
     """
-    ..F..................
+    ..F....
 
     --- Failed steps:
 
@@ -65,11 +65,11 @@ Feature: Rerun
           Then I should have 3 apples # features/apples.feature:11
             Failed asserting that 2 matches expected 3.
 
-    6 scenarios (5 passed, 1 failed)
-    21 steps (20 passed, 1 failed)
+    2 scenarios (1 passed, 1 failed)
+    7 steps (6 passed, 1 failed)
     """
-  When I run "behat features/apples.feature --rerun"
-  Then it should fail with:
+  And I run "behat features/apples.feature --rerun"
+  And it should fail with:
     """
     ..F
 
