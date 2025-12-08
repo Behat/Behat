@@ -65,10 +65,8 @@ final class WidthCalculator
      * Calculates scenario header width.
      *
      * @param int $indentation
-     *
-     * @return int
      */
-    public function calculateScenarioHeaderWidth(Scenario $scenario, $indentation)
+    public function calculateScenarioHeaderWidth(Scenario $scenario, $indentation): int
     {
         $indentText = str_repeat(' ', intval($indentation));
 
@@ -87,10 +85,8 @@ final class WidthCalculator
      * Calculates step width.
      *
      * @param int $indentation
-     *
-     * @return int
      */
-    public function calculateStepWidth(StepNode $step, $indentation)
+    public function calculateStepWidth(StepNode $step, $indentation): int
     {
         $indentText = str_repeat(' ', intval($indentation));
 

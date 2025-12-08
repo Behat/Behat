@@ -76,10 +76,7 @@ final class ExerciseController implements Controller
             );
     }
 
-    /**
-     * @return int
-     */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $paths = $this->extractUniquePaths($input);
         $specs = $this->findSpecifications($paths);

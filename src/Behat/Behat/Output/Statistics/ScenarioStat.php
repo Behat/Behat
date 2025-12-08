@@ -55,7 +55,7 @@ final class ScenarioStat implements Stringable
      *
      * @return TestResult::*|TestResults::NO_TESTS
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return $this->resultCode;
     }

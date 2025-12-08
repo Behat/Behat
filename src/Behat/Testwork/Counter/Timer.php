@@ -72,20 +72,16 @@ final class Timer implements Stringable
 
     /**
      * Returns number of minutes passed.
-     *
-     * @return int
      */
-    public function getMinutes()
+    public function getMinutes(): int
     {
         return intval(floor($this->getTime() / 60));
     }
 
     /**
      * Returns number of seconds passed.
-     *
-     * @return float
      */
-    public function getSeconds()
+    public function getSeconds(): float
     {
         return round($this->getTime() - ($this->getMinutes() * 60), 3);
     }

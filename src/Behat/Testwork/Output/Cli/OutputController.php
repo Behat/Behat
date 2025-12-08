@@ -191,10 +191,8 @@ class OutputController implements Controller
 
     /**
      * Returns formatters description.
-     *
-     * @return string
      */
-    private function getFormatterDescriptions()
+    private function getFormatterDescriptions(): string
     {
         return implode(
             PHP_EOL,

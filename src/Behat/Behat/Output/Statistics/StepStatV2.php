@@ -72,7 +72,7 @@ final class StepStatV2 extends StepStat implements Stringable
      *
      * @return StepResult::*
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return $this->resultCode;
     }

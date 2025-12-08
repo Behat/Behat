@@ -26,10 +26,8 @@ final class Memory implements Stringable
 
     /**
      * Returns current memory usage.
-     *
-     * @return int
      */
-    public function getMemoryUsage()
+    public function getMemoryUsage(): int
     {
         return memory_get_usage();
     }
