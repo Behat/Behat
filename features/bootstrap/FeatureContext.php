@@ -314,7 +314,7 @@ EOL;
 
         $this->answerString = $answerString;
 
-        $this->options = '--format-settings=\'{"timer": false}\'';
+        $this->options = '--no-colors --format-settings=\'{"timer": false}\'';
         $this->iRunBehat($argumentsString);
     }
 
@@ -412,6 +412,22 @@ EOL;
         }
 
         Assert::assertEquals($text, $fileContent);
+    }
+
+    #[Then(':path file should contain text:')]
+    public function fileShouldContainText(string $path, PyStringNode $text): void
+    {
+        $path = $this->workingDir.'/'.$path;
+        Assert::assertFileExists($path);
+
+        $fileContent = file_get_contents($path);
+        $expectedText = (string) $this->getExpectedOutput($text);
+
+        if (!str_contains($fileContent, $expectedText)) {
+            throw new UnexpectedValueException(
+                sprintf('File "%s" does not contain expected text.', $path)
+            );
+        }
     }
 
     /**
