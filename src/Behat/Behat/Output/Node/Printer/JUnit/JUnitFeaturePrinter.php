@@ -35,7 +35,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
     ) {
     }
 
-    public function printHeader(Formatter $formatter, FeatureNode $feature)
+    public function printHeader(Formatter $formatter, FeatureNode $feature): void
     {
         $this->statistics->reset();
         $this->currentFeature = $feature;
@@ -44,7 +44,7 @@ final class JUnitFeaturePrinter implements FeaturePrinter
         $outputPrinter->addTestsuite();
     }
 
-    public function printFooter(Formatter $formatter, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result): void
     {
         $stats = $this->statistics->getScenarioStatCounts();
 

@@ -50,7 +50,7 @@ final class SnippetsController implements Controller
     /**
      * Configures command to be executable by the controller.
      */
-    public function configure(Command $command)
+    public function configure(Command $command): void
     {
         $command
             ->addOption(
@@ -94,7 +94,7 @@ final class SnippetsController implements Controller
     /**
      * Registers undefined step.
      */
-    public function registerUndefinedStep(AfterStepTested $event)
+    public function registerUndefinedStep(AfterStepTested $event): void
     {
         if (TestResult::UNDEFINED === $event->getTestResult()->getResultCode()) {
             $this->registry->registerUndefinedStep($event->getEnvironment(), $event->getStep());
@@ -104,7 +104,7 @@ final class SnippetsController implements Controller
     /**
      * Appends all snippets to corresponding targets.
      */
-    public function appendAllSnippets()
+    public function appendAllSnippets(): void
     {
         $snippets = $this->registry->getSnippets();
         if ($snippets) {
@@ -117,7 +117,7 @@ final class SnippetsController implements Controller
     /**
      * Prints all snippets.
      */
-    public function printAllSnippets()
+    public function printAllSnippets(): void
     {
         $snippets = $this->registry->getSnippets();
         if ($snippets) {
@@ -140,7 +140,7 @@ final class SnippetsController implements Controller
     /**
      * Prints all undefined steps.
      */
-    public function printUndefinedSteps()
+    public function printUndefinedSteps(): void
     {
         $undefined = $this->registry->getUndefinedSteps();
         if ($undefined) {

@@ -35,7 +35,7 @@ final class FeatureListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         if (!$event instanceof FeatureTested) {
             return;
@@ -48,7 +48,7 @@ final class FeatureListener implements EventListener
     /**
      * Prints feature header on BEFORE event.
      */
-    private function printHeaderOnBeforeEvent(Formatter $formatter, Event $event)
+    private function printHeaderOnBeforeEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof AfterFeatureSetup) {
             return;
@@ -61,7 +61,7 @@ final class FeatureListener implements EventListener
     /**
      * Prints feature footer on AFTER event.
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
+    private function printFooterOnAfterEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof AfterFeatureTested) {
             return;

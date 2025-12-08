@@ -19,7 +19,7 @@ use Behat\Testwork\Suite\Suite;
  */
 final class ConsoleDefinitionListPrinter extends ConsoleDefinitionPrinter
 {
-    public function printDefinitions(Suite $suite, $definitions)
+    public function printDefinitions(Suite $suite, $definitions): void
     {
         $output = [];
 

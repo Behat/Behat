@@ -52,7 +52,7 @@ final class PrettySetupPrinter implements SetupPrinter
         $this->indentText = str_repeat(' ', intval($indentation));
     }
 
-    public function printSetup(Formatter $formatter, Setup $setup)
+    public function printSetup(Formatter $formatter, Setup $setup): void
     {
         if (!$setup instanceof HookedSetup) {
             return;
@@ -63,7 +63,7 @@ final class PrettySetupPrinter implements SetupPrinter
         }
     }
 
-    public function printTeardown(Formatter $formatter, Teardown $teardown)
+    public function printTeardown(Formatter $formatter, Teardown $teardown): void
     {
         if (!$teardown instanceof HookedTeardown) {
             return;
@@ -77,7 +77,7 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints setup hook call result.
      */
-    private function printSetupHookCallResult(OutputPrinter $printer, CallResult $callResult)
+    private function printSetupHookCallResult(OutputPrinter $printer, CallResult $callResult): void
     {
         if (!$callResult->hasStdOut() && !$callResult->hasException()) {
             return;
@@ -106,7 +106,7 @@ final class PrettySetupPrinter implements SetupPrinter
     /**
      * Prints teardown hook call result.
      */
-    private function printTeardownHookCallResult(OutputPrinter $printer, CallResult $callResult)
+    private function printTeardownHookCallResult(OutputPrinter $printer, CallResult $callResult): void
     {
         if (!$callResult->hasStdOut() && !$callResult->hasException()) {
             return;
@@ -137,7 +137,7 @@ final class PrettySetupPrinter implements SetupPrinter
      *
      * @param string        $indentText
      */
-    private function printHookCallStdOut(OutputPrinter $printer, CallResult $callResult, $indentText)
+    private function printHookCallStdOut(OutputPrinter $printer, CallResult $callResult, $indentText): void
     {
         if (!$callResult->hasStdOut()) {
             return;
@@ -158,7 +158,7 @@ final class PrettySetupPrinter implements SetupPrinter
      *
      * @param string        $indentText
      */
-    private function printHookCallException(OutputPrinter $printer, CallResult $callResult, $indentText)
+    private function printHookCallException(OutputPrinter $printer, CallResult $callResult, $indentText): void
     {
         if (!$callResult->hasException()) {
             return;

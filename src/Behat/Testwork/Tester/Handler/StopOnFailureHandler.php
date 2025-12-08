@@ -31,7 +31,7 @@ final class StopOnFailureHandler
     ) {
     }
 
-    public function registerListeners()
+    public function registerListeners(): void
     {
         $this->eventDispatcher->addListener(ScenarioTested::AFTER, $this->exitOnFailure(...), -100);
         $this->eventDispatcher->addListener(ExampleTested::AFTER, $this->exitOnFailure(...), -100);
@@ -40,7 +40,7 @@ final class StopOnFailureHandler
     /**
      * Exits if scenario is a failure and if stopper is enabled.
      */
-    public function exitOnFailure(AfterScenarioTested $event)
+    public function exitOnFailure(AfterScenarioTested $event): void
     {
         if (ResultInterpreter::PASS === $this->resultInterpreter->interpretResult($event->getTestResult())) {
             return;

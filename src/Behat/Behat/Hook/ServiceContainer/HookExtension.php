@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class HookExtension extends BaseExtension
 {
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         parent::load($container, $config);
 
@@ -41,7 +41,7 @@ final class HookExtension extends BaseExtension
     /**
      * Loads hookable testers.
      */
-    protected function loadHookableTesters(ContainerBuilder $container)
+    protected function loadHookableTesters(ContainerBuilder $container): void
     {
         parent::loadHookableTesters($container);
 
@@ -83,7 +83,7 @@ final class HookExtension extends BaseExtension
     /**
      * Loads hook annotation reader.
      */
-    private function loadAnnotationReader(ContainerBuilder $container)
+    private function loadAnnotationReader(ContainerBuilder $container): void
     {
         $definition = new Definition(HookAnnotationReader::class);
         $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
@@ -93,7 +93,7 @@ final class HookExtension extends BaseExtension
     /**
      * Loads hook attribute reader.
      */
-    private function loadAttributeReader(ContainerBuilder $container)
+    private function loadAttributeReader(ContainerBuilder $container): void
     {
         $definition = new Definition(HookAttributeReader::class, [
             new Reference(DefinitionExtension::DOC_BLOCK_HELPER_ID),

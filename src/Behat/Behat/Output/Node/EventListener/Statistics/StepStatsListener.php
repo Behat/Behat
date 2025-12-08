@@ -47,7 +47,7 @@ final class StepStatsListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($eventName);
@@ -59,7 +59,7 @@ final class StepStatsListener implements EventListener
     /**
      * Captures current feature file path to the ivar on feature BEFORE event.
      */
-    private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event)
+    private function captureCurrentFeaturePathOnBeforeFeatureEvent(Event $event): void
     {
         if (!$event instanceof BeforeFeatureTested) {
             return;
@@ -73,7 +73,7 @@ final class StepStatsListener implements EventListener
      *
      * @param string $eventName
      */
-    private function forgetCurrentFeaturePathOnAfterFeatureEvent($eventName)
+    private function forgetCurrentFeaturePathOnAfterFeatureEvent($eventName): void
     {
         if (FeatureTested::AFTER !== $eventName) {
             return;
@@ -85,7 +85,7 @@ final class StepStatsListener implements EventListener
     /**
      * Captures current scenario title and path on scenario BEFORE event.
      */
-    private function captureScenarioOnBeforeFeatureEvent(Event $event)
+    private function captureScenarioOnBeforeFeatureEvent(Event $event): void
     {
         if (!$event instanceof BeforeScenarioTested) {
             return;
@@ -95,7 +95,7 @@ final class StepStatsListener implements EventListener
         $this->scenarioPath = sprintf('%s:%s', $this->currentFeaturePath, $event->getScenario()->getLine());
     }
 
-    private function forgetScenarioOnAfterFeatureEvent($eventName)
+    private function forgetScenarioOnAfterFeatureEvent($eventName): void
     {
         if (ScenarioTested::AFTER !== $eventName) {
             return;
@@ -107,7 +107,7 @@ final class StepStatsListener implements EventListener
     /**
      * Captures step stats on step AFTER event.
      */
-    private function captureStepStatsOnAfterEvent(Event $event)
+    private function captureStepStatsOnAfterEvent(Event $event): void
     {
         if (!$event instanceof AfterStepTested) {
             return;

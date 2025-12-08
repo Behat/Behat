@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
@@ -19,7 +20,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php81: true)
-    ->withTypeCoverageLevel(17)
+    ->withTypeCoverageLevel(20)
     ->withSkip([
         StringableForToStringRector::class,
         ReturnTypeFromStrictConstantReturnRector::class => [
@@ -49,10 +50,38 @@ return RectorConfig::configure()
             __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
         ],
         ReturnTypeFromReturnNewRector::class => [
+            // Would be a BC break
             __DIR__.'/src/Behat/Behat/Output/ServiceContainer/Formatter/PrettyFormatterFactory.php',
             __DIR__.'/src/Behat/Behat/Output/ServiceContainer/Formatter/ProgressFormatterFactory.php',
+            __DIR__.'/src/Behat/Behat/Transformation/ServiceContainer/TransformationExtension.php',
             __DIR__.'/src/Behat/Testwork/Output/Printer/Factory/ConsoleOutputFactory.php',
             __DIR__.'/src/Behat/Testwork/Output/Printer/Factory/FilesystemOutputFactory.php',
+        ],
+        AddVoidReturnTypeWhereNoReturnRector::class => [
+            // Would be a BC break
+            __DIR__.'/src/Behat/Behat/EventDispatcher/ServiceContainer/EventDispatcherExtension.php',
+            __DIR__.'/src/Behat/Behat/Output/Node/EventListener/Flow/FireOnlySiblingsListener.php',
+            __DIR__.'/src/Behat/Behat/Output/Node/EventListener/Flow/FirstBackgroundFiresFirstListener.php',
+            __DIR__.'/src/Behat/Behat/Output/Node/EventListener/Flow/OnlyFirstBackgroundFiresListener.php',
+            __DIR__.'/src/Behat/Behat/Output/Node/Printer/JUnit/JUnitSetupPrinter.php',
+            __DIR__.'/src/Behat/Behat/Output/Node/Printer/JUnit/JUnitStepPrinter.php',
+            __DIR__.'/src/Behat/Behat/Output/ServiceContainer/Formatter/PrettyFormatterFactory.php',
+            __DIR__.'/src/Behat/Behat/Output/ServiceContainer/Formatter/ProgressFormatterFactory.php',
+            __DIR__.'/src/Behat/Behat/Snippet/Printer/ConsoleSnippetPrinter.php',
+            __DIR__.'/src/Behat/Behat/Snippet/ServiceContainer/SnippetExtension.php',
+            __DIR__.'/src/Behat/Behat/Tester/ServiceContainer/TesterExtension.php',
+            __DIR__.'/src/Behat/Behat/Transformation/ServiceContainer/TransformationExtension.php',
+            __DIR__.'/src/Behat/Config/Converter/ConfigConverterTools.php',
+            __DIR__.'/src/Behat/Testwork/EventDispatcher/ServiceContainer/EventDispatcherExtension.php',
+            __DIR__.'/src/Behat/Testwork/Hook/ServiceContainer/HookExtension.php',
+            __DIR__.'/src/Behat/Testwork/Output/Cli/OutputController.php',
+            __DIR__.'/src/Behat/Testwork/Output/Node/EventListener/ChainEventListener.php',
+            __DIR__.'/src/Behat/Testwork/Output/Node/EventListener/Flow/FireOnlyIfFormatterParameterListener.php',
+            __DIR__.'/src/Behat/Testwork/Output/Printer/Factory/FilesystemOutputFactory.php',
+            __DIR__.'/src/Behat/Testwork/Output/Printer/Factory/OutputFactory.php',
+            __DIR__.'/src/Behat/Testwork/Output/Printer/StreamOutputPrinter.php',
+            __DIR__.'/src/Behat/Testwork/PathOptions/Cli/PathOptionsController.php',
+            __DIR__.'/src/Behat/Testwork/Tester/ServiceContainer/TesterExtension.php',
         ],
     ])
     ->withImportNames(

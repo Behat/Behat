@@ -39,7 +39,7 @@ final class JUnitScenarioPrinter
     ) {
     }
 
-    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null)
+    public function printOpenTag(Formatter $formatter, FeatureNode $feature, ScenarioLikeInterface $scenario, TestResult $result, ?string $file = null): void
     {
         assert($scenario instanceof NamedScenarioInterface);
         $name = implode(' ', array_map(fn ($l): string => trim((string) $l), explode("\n", $scenario->getName() ?? '')));

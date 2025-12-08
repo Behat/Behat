@@ -40,7 +40,7 @@ final class ContextSnippetsController implements Controller
     ) {
     }
 
-    public function configure(SymfonyCommand $command)
+    public function configure(SymfonyCommand $command): void
     {
         $command
             ->addOption(

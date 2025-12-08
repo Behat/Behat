@@ -154,7 +154,7 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * Parses paths consequently.
      */
-    private function moveToNextAvailableFeature()
+    private function moveToNextAvailableFeature(): void
     {
         while (!count($this->features) && $this->position < count($this->paths)) {
             $this->features = $this->parseFeature($this->paths[$this->position]);

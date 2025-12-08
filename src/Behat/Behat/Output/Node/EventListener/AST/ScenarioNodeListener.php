@@ -34,7 +34,7 @@ final class ScenarioNodeListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         if (!$event instanceof ScenarioLikeTested) {
             return;
@@ -47,7 +47,7 @@ final class ScenarioNodeListener implements EventListener
     /**
      * Prints scenario/background header on BEFORE event.
      */
-    private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, string $eventName)
+    private function printHeaderOnBeforeEvent(Formatter $formatter, ScenarioLikeTested $event, string $eventName): void
     {
         if ($this->beforeEventName !== $eventName || !$event instanceof AfterSetup) {
             return;
@@ -63,7 +63,7 @@ final class ScenarioNodeListener implements EventListener
     /**
      * Prints scenario/background footer on AFTER event.
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, string $eventName)
+    private function printFooterOnAfterEvent(Formatter $formatter, ScenarioLikeTested $event, string $eventName): void
     {
         if ($this->afterEventName !== $eventName || !$event instanceof AfterTested) {
             return;

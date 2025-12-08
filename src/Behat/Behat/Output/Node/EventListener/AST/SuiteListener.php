@@ -32,7 +32,7 @@ final class SuiteListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         if ($event instanceof AfterSuiteSetup) {
             $this->setupPrinter->printSetup($formatter, $event->getSetup());

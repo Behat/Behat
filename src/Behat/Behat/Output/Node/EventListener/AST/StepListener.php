@@ -37,7 +37,7 @@ final class StepListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureScenarioOnScenarioEvent($event);
         $this->forgetScenarioOnAfterEvent($eventName);
@@ -48,7 +48,7 @@ final class StepListener implements EventListener
     /**
      * Captures scenario into the ivar on scenario/background/example BEFORE event.
      */
-    private function captureScenarioOnScenarioEvent(Event $event)
+    private function captureScenarioOnScenarioEvent(Event $event): void
     {
         if (!$event instanceof ScenarioLikeTested) {
             return;
@@ -62,7 +62,7 @@ final class StepListener implements EventListener
      *
      * @param string $eventName
      */
-    private function forgetScenarioOnAfterEvent($eventName)
+    private function forgetScenarioOnAfterEvent($eventName): void
     {
         if (!in_array($eventName, [ScenarioTested::AFTER, ExampleTested::AFTER])) {
             return;
@@ -71,7 +71,7 @@ final class StepListener implements EventListener
         $this->scenario = null;
     }
 
-    private function printStepSetupOnBeforeEvent(Formatter $formatter, Event $event)
+    private function printStepSetupOnBeforeEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof AfterStepSetup) {
             return;
@@ -85,7 +85,7 @@ final class StepListener implements EventListener
     /**
      * Prints step on AFTER event.
      */
-    private function printStepOnAfterEvent(Formatter $formatter, Event $event)
+    private function printStepOnAfterEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof AfterStepTested) {
             return;

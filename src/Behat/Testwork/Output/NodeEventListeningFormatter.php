@@ -53,7 +53,7 @@ final class NodeEventListeningFormatter implements Formatter
      *
      * @param string|null $eventName
      */
-    public function listenEvent(Event $event, $eventName = null)
+    public function listenEvent(Event $event, $eventName = null): void
     {
         if (null === $eventName) {
             $eventName = method_exists($event, 'getName') ? $event->getName() : $event::class;
@@ -77,7 +77,7 @@ final class NodeEventListeningFormatter implements Formatter
         return $this->printer;
     }
 
-    public function setParameter($name, $value)
+    public function setParameter($name, $value): void
     {
         $this->parameters[$name] = $value;
     }

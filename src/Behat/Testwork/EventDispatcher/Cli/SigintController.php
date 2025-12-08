@@ -33,7 +33,7 @@ final class SigintController implements Controller
     ) {
     }
 
-    public function configure(Command $command)
+    public function configure(Command $command): void
     {
     }
 

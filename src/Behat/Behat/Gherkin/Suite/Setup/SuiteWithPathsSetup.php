@@ -37,7 +37,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
         return $suite->hasSetting('paths') && is_array($suite->getSetting('paths'));
     }
 
-    public function setupSuite(Suite $suite)
+    public function setupSuite(Suite $suite): void
     {
         foreach ($suite->getSetting('paths') as $locator) {
             if (!str_starts_with((string) $locator, '@') && !is_dir($path = $this->locatePath($locator))) {
@@ -51,7 +51,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
      *
      * @param string $path
      */
-    private function createFeatureDirectory($path)
+    private function createFeatureDirectory($path): void
     {
         mkdir($path, 0777, true);
 

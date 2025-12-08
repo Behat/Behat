@@ -94,15 +94,15 @@ final class ContextExtension implements Extension
         return 'contexts';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadFactory($container);
         $this->loadArgumentResolverFactory($container);
@@ -132,7 +132,7 @@ final class ContextExtension implements Extension
     /**
      * Loads context factory.
      */
-    private function loadFactory(ContainerBuilder $container)
+    private function loadFactory(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextFactory::class, [
             new Reference(ArgumentExtension::CONSTRUCTOR_ARGUMENT_ORGANISER_ID),
@@ -143,7 +143,7 @@ final class ContextExtension implements Extension
     /**
      * Loads argument resolver factory used in the environment handler.
      */
-    private function loadArgumentResolverFactory(ContainerBuilder $container)
+    private function loadArgumentResolverFactory(ContainerBuilder $container): void
     {
         $definition = new Definition(CompositeArgumentResolverFactory::class);
         $container->setDefinition(self::AGGREGATE_RESOLVER_FACTORY_ID, $definition);
@@ -152,7 +152,7 @@ final class ContextExtension implements Extension
     /**
      * Loads context environment handlers.
      */
-    private function loadEnvironmentHandler(ContainerBuilder $container)
+    private function loadEnvironmentHandler(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextEnvironmentHandler::class, [
             new Reference(self::FACTORY_ID),
@@ -165,7 +165,7 @@ final class ContextExtension implements Extension
     /**
      * Loads context environment readers.
      */
-    private function loadEnvironmentReader(ContainerBuilder $container)
+    private function loadEnvironmentReader(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextEnvironmentReader::class);
         $definition->addTag(EnvironmentExtension::READER_TAG, ['priority' => 50]);
@@ -175,7 +175,7 @@ final class ContextExtension implements Extension
     /**
      * Loads context environment setup.
      */
-    private function loadSuiteSetup(ContainerBuilder $container)
+    private function loadSuiteSetup(ContainerBuilder $container): void
     {
         $definition = new Definition(SuiteWithContextsSetup::class, [
             new Reference(AutoloaderExtension::CLASS_LOADER_ID),
@@ -188,7 +188,7 @@ final class ContextExtension implements Extension
     /**
      * Loads context snippet appender.
      */
-    private function loadSnippetAppender(ContainerBuilder $container)
+    private function loadSnippetAppender(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextSnippetAppender::class, [
             new Reference(FilesystemExtension::LOGGER_ID),
@@ -200,7 +200,7 @@ final class ContextExtension implements Extension
     /**
      * Loads context snippet generators.
      */
-    private function loadSnippetGenerators(ContainerBuilder $container)
+    private function loadSnippetGenerators(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextSnippetGenerator::class, [
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
@@ -209,7 +209,7 @@ final class ContextExtension implements Extension
         $container->setDefinition(self::CONTEXT_SNIPPET_GENERATOR_ID, $definition);
     }
 
-    protected function loadSnippetsController(ContainerBuilder $container)
+    protected function loadSnippetsController(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextSnippetsController::class, [
             new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID),
@@ -222,7 +222,7 @@ final class ContextExtension implements Extension
     /**
      * Loads default context class generators.
      */
-    private function loadDefaultClassGenerators(ContainerBuilder $container)
+    private function loadDefaultClassGenerators(ContainerBuilder $container): void
     {
         $definition = new Definition(SimpleClassGenerator::class);
         $definition->addTag(self::CLASS_GENERATOR_TAG, ['priority' => 50]);
@@ -232,7 +232,7 @@ final class ContextExtension implements Extension
     /**
      * Loads default context readers.
      */
-    private function loadDefaultContextReaders(ContainerBuilder $container)
+    private function loadDefaultContextReaders(ContainerBuilder $container): void
     {
         $this->loadAnnotatedContextReader($container);
 
@@ -244,7 +244,7 @@ final class ContextExtension implements Extension
     /**
      * Loads AnnotatedContextReader.
      */
-    private function loadAnnotatedContextReader(ContainerBuilder $container)
+    private function loadAnnotatedContextReader(ContainerBuilder $container): void
     {
         $definition = new Definition(AnnotatedContextReader::class, [
             new Reference(self::DOC_BLOCK_HELPER_ID),
@@ -278,7 +278,7 @@ final class ContextExtension implements Extension
     /**
      * Loads TranslatableContextReader.
      */
-    private function loadTranslatableContextReader(ContainerBuilder $container)
+    private function loadTranslatableContextReader(ContainerBuilder $container): void
     {
         $definition = new Definition(TranslatableContextReader::class, [
             new Reference(TranslatorExtension::TRANSLATOR_ID),
@@ -295,7 +295,7 @@ final class ContextExtension implements Extension
     /**
      * Loads DocBlockHelper.
      */
-    private function loadDocblockHelper(ContainerBuilder $container)
+    private function loadDocblockHelper(ContainerBuilder $container): void
     {
         $definition = new Definition(DocBlockHelper::class);
 
@@ -305,7 +305,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all class resolvers.
      */
-    private function processClassResolvers(ContainerBuilder $container)
+    private function processClassResolvers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_RESOLVER_TAG);
         $definition = $container->getDefinition(self::ENVIRONMENT_HANDLER_ID);
@@ -320,7 +320,7 @@ final class ContextExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    private function processArgumentResolverFactories($container)
+    private function processArgumentResolverFactories($container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::SUITE_SCOPED_RESOLVER_FACTORY_TAG);
         $definition = $container->getDefinition(self::AGGREGATE_RESOLVER_FACTORY_ID);
@@ -333,7 +333,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all argument resolvers.
      */
-    private function processArgumentResolvers(ContainerBuilder $container)
+    private function processArgumentResolvers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_RESOLVER_TAG);
         $definition = $container->getDefinition(self::FACTORY_ID);
@@ -346,7 +346,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all context initializers.
      */
-    private function processContextInitializers(ContainerBuilder $container)
+    private function processContextInitializers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::INITIALIZER_TAG);
         $definition = $container->getDefinition(self::FACTORY_ID);
@@ -359,7 +359,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all context readers.
      */
-    private function processContextReaders(ContainerBuilder $container)
+    private function processContextReaders(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::READER_TAG);
         $definition = $container->getDefinition(self::ENVIRONMENT_READER_ID);
@@ -372,7 +372,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all class generators.
      */
-    private function processClassGenerators(ContainerBuilder $container)
+    private function processClassGenerators(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CLASS_GENERATOR_TAG);
         $definition = $container->getDefinition(self::SUITE_SETUP_ID);
@@ -385,7 +385,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all annotation readers.
      */
-    private function processAnnotationReaders(ContainerBuilder $container)
+    private function processAnnotationReaders(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ANNOTATION_READER_TAG);
         $definition = $container->getDefinition(self::ANNOTATED_CONTEXT_READER_ID);
@@ -398,7 +398,7 @@ final class ContextExtension implements Extension
     /**
      * Processes all attribute readers.
      */
-    private function processAttributeReaders(ContainerBuilder $container)
+    private function processAttributeReaders(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ATTRIBUTE_READER_TAG);
         $definition = $container->getDefinition(self::ATTRIBUTED_CONTEXT_READER_ID);

@@ -61,11 +61,11 @@ final class SuiteExtension implements Extension
         return 'suites';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $builder = $builder
             ->defaultValue(['default' => [
@@ -123,7 +123,7 @@ final class SuiteExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->setSuiteConfigurations($container, $config);
         $this->loadRegistryController($container);
@@ -142,7 +142,7 @@ final class SuiteExtension implements Extension
     /**
      * Generates and sets suites parameter to container.
      */
-    private function setSuiteConfigurations(ContainerBuilder $container, array $suites)
+    private function setSuiteConfigurations(ContainerBuilder $container, array $suites): void
     {
         $configuredSuites = [];
         foreach ($suites as $name => $config) {
@@ -162,7 +162,7 @@ final class SuiteExtension implements Extension
     /**
      * Loads suite registry controller.
      */
-    private function loadRegistryController(ContainerBuilder $container)
+    private function loadRegistryController(ContainerBuilder $container): void
     {
         $definition = new Definition(SuiteController::class, [
             new Reference(self::REGISTRY_ID),
@@ -175,7 +175,7 @@ final class SuiteExtension implements Extension
     /**
      * Loads suite bootstrap controller.
      */
-    private function loadBootstrapController(ContainerBuilder $container)
+    private function loadBootstrapController(ContainerBuilder $container): void
     {
         $definition = new Definition(InitializationController::class, [
             new Reference(self::REGISTRY_ID),
@@ -188,7 +188,7 @@ final class SuiteExtension implements Extension
     /**
      * Loads suite registry.
      */
-    private function loadRegistry(ContainerBuilder $container)
+    private function loadRegistry(ContainerBuilder $container): void
     {
         $definition = new Definition(SuiteRegistry::class);
         $container->setDefinition(self::REGISTRY_ID, $definition);
@@ -197,7 +197,7 @@ final class SuiteExtension implements Extension
     /**
      * Loads suite bootstrapper.
      */
-    private function loadBootstrapper(ContainerBuilder $container)
+    private function loadBootstrapper(ContainerBuilder $container): void
     {
         $definition = new Definition(SuiteBootstrapper::class);
         $container->setDefinition(self::BOOTSTRAPPER_ID, $definition);
@@ -206,7 +206,7 @@ final class SuiteExtension implements Extension
     /**
      * Loads generic suite generator.
      */
-    private function loadGenericSuiteGenerator(ContainerBuilder $container)
+    private function loadGenericSuiteGenerator(ContainerBuilder $container): void
     {
         $container->setParameter('suite.generic.default_settings', []);
 
@@ -220,7 +220,7 @@ final class SuiteExtension implements Extension
     /**
      * Processes suite generators.
      */
-    private function processGenerators(ContainerBuilder $container)
+    private function processGenerators(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::GENERATOR_TAG);
         $definition = $container->getDefinition(self::REGISTRY_ID);
@@ -233,7 +233,7 @@ final class SuiteExtension implements Extension
     /**
      * Processes suite setups.
      */
-    private function processSetups(ContainerBuilder $container)
+    private function processSetups(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::SETUP_TAG);
         $definition = $container->getDefinition(self::BOOTSTRAPPER_ID);

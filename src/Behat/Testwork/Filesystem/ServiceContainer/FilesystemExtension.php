@@ -36,15 +36,15 @@ final class FilesystemExtension implements Extension
         return 'filesystem';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadFilesystemLogger($container);
     }
@@ -56,7 +56,7 @@ final class FilesystemExtension implements Extension
     /**
      * Loads filesystem logger.
      */
-    protected function loadFilesystemLogger(ContainerBuilder $container)
+    protected function loadFilesystemLogger(ContainerBuilder $container): void
     {
         $definition = new Definition(ConsoleFilesystemLogger::class, [
             '%paths.base%',

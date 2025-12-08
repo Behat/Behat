@@ -41,20 +41,20 @@ final class PrettyExamplePrinter implements ExamplePrinter
         $this->indentText = str_repeat(' ', intval($indentation));
     }
 
-    public function printHeader(Formatter $formatter, FeatureNode $feature, ExampleNode $example)
+    public function printHeader(Formatter $formatter, FeatureNode $feature, ExampleNode $example): void
     {
         $this->printTitle($formatter->getOutputPrinter(), $example);
         $this->pathPrinter->printScenarioPath($formatter, $feature, $example, mb_strlen($this->indentText, 'utf8'));
     }
 
-    public function printFooter(Formatter $formatter, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result): void
     {
     }
 
     /**
      * Prints example title.
      */
-    private function printTitle(OutputPrinter $printer, ExampleNode $example)
+    private function printTitle(OutputPrinter $printer, ExampleNode $example): void
     {
         $printer->write(sprintf('%s%s', $this->indentText, $example->getTitle()));
     }

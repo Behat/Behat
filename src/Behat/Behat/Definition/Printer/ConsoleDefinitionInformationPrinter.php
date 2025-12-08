@@ -30,12 +30,12 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
      *
      * @param string $criterion
      */
-    public function setSearchCriterion($criterion)
+    public function setSearchCriterion($criterion): void
     {
         $this->searchCriterion = $criterion;
     }
 
-    public function printDefinitions(Suite $suite, $definitions)
+    public function printDefinitions(Suite $suite, $definitions): void
     {
         $this->printDefinitionsWithOptionalSuite($definitions, $suite);
     }

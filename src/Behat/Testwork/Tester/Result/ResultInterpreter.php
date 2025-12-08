@@ -30,7 +30,7 @@ final class ResultInterpreter
     /**
      * Registers result interpretation.
      */
-    public function registerResultInterpretation(ResultInterpretation $interpretation)
+    public function registerResultInterpretation(ResultInterpretation $interpretation): void
     {
         $this->interpretations[] = $interpretation;
     }

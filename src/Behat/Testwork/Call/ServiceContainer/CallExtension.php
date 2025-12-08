@@ -57,11 +57,11 @@ final class CallExtension implements Extension
         return 'calls';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $builder
             ->addDefaultsIfNotSet()
@@ -72,13 +72,13 @@ final class CallExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadCallCenter($container);
         $this->loadCallHandlers($container, $config['error_reporting']);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processCallFilters($container);
         $this->processCallHandlers($container);
@@ -89,7 +89,7 @@ final class CallExtension implements Extension
     /**
      * Loads call center service.
      */
-    protected function loadCallCenter(ContainerBuilder $container)
+    protected function loadCallCenter(ContainerBuilder $container): void
     {
         $definition = new Definition(CallCenter::class);
         $container->setDefinition(self::CALL_CENTER_ID, $definition);
@@ -100,7 +100,7 @@ final class CallExtension implements Extension
      *
      * @param int $errorReporting
      */
-    protected function loadCallHandlers(ContainerBuilder $container, $errorReporting)
+    protected function loadCallHandlers(ContainerBuilder $container, $errorReporting): void
     {
         $definition = new Definition(RuntimeCallHandler::class, [$errorReporting]);
         $definition->addTag(self::CALL_HANDLER_TAG, ['priority' => 50]);
@@ -110,7 +110,7 @@ final class CallExtension implements Extension
     /**
      * Registers all call filters to the CallCenter.
      */
-    protected function processCallFilters(ContainerBuilder $container)
+    protected function processCallFilters(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_FILTER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
@@ -123,7 +123,7 @@ final class CallExtension implements Extension
     /**
      * Registers all call handlers to the CallCenter.
      */
-    protected function processCallHandlers(ContainerBuilder $container)
+    protected function processCallHandlers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_HANDLER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
@@ -136,7 +136,7 @@ final class CallExtension implements Extension
     /**
      * Registers all call result filters to the CallCenter.
      */
-    protected function processResultFilters(ContainerBuilder $container)
+    protected function processResultFilters(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::RESULT_FILTER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
@@ -149,7 +149,7 @@ final class CallExtension implements Extension
     /**
      * Registers all exception handlers to the CallCenter.
      */
-    private function processExceptionHandlers(ContainerBuilder $container)
+    private function processExceptionHandlers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::EXCEPTION_HANDLER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);

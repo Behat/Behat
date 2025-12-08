@@ -32,7 +32,7 @@ final class Timer implements Stringable
     /**
      * Starts timer.
      */
-    public function start()
+    public function start(): void
     {
         $this->starTime = microtime(true);
     }
@@ -42,7 +42,7 @@ final class Timer implements Stringable
      *
      * @throws TimerException If timer has not been started
      */
-    public function stop()
+    public function stop(): void
     {
         if (!$this->starTime) {
             throw new TimerException('You can not stop timer that has not been started.');

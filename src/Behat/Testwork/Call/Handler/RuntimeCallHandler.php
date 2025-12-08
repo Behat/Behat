@@ -116,7 +116,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Starts error handler and stdout buffering.
      */
-    private function startErrorAndOutputBuffering(Call $call)
+    private function startErrorAndOutputBuffering(Call $call): void
     {
         $errorReporting = $call->getErrorReportingLevel() ?: $this->errorReportingLevel;
         $this->previousErrorReporting = error_reporting($errorReporting);
@@ -127,7 +127,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * Stops error handler and stdout buffering.
      */
-    private function stopErrorAndOutputBuffering()
+    private function stopErrorAndOutputBuffering(): void
     {
         if ($this->obStarted) {
             ob_end_clean();

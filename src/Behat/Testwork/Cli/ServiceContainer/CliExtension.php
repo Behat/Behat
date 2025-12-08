@@ -58,21 +58,21 @@ final class CliExtension implements Extension
         return 'cli';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadCommand($container);
         $this->loadSyntheticServices($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processControllers($container);
     }
@@ -80,14 +80,14 @@ final class CliExtension implements Extension
     /**
      * Loads application command.
      */
-    protected function loadCommand(ContainerBuilder $container)
+    protected function loadCommand(ContainerBuilder $container): void
     {
         $definition = new Definition(Command::class, ['%cli.command.name%', []]);
         $definition->setPublic(true);
         $container->setDefinition(self::COMMAND_ID, $definition);
     }
 
-    protected function loadSyntheticServices(ContainerBuilder $container)
+    protected function loadSyntheticServices(ContainerBuilder $container): void
     {
         $container->register(self::INPUT_ID)->setSynthetic(true)->setPublic(true);
         $container->register(self::OUTPUT_ID)->setSynthetic(true)->setPublic(true);
@@ -96,7 +96,7 @@ final class CliExtension implements Extension
     /**
      * Processes all controllers in container.
      */
-    protected function processControllers(ContainerBuilder $container)
+    protected function processControllers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CONTROLLER_TAG);
         $container->getDefinition(self::COMMAND_ID)->replaceArgument(1, $references);

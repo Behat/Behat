@@ -78,21 +78,21 @@ final class OrderingExtension implements Extension
      * to hook into the configuration of other extensions providing such an
      * extension point.
      */
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
     /**
      * Setups configuration for the extension.
      */
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
     /**
      * Loads extension services into temporary container.
      */
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadOrderController($container);
         $this->loadOrderedExercise($container);
@@ -102,7 +102,7 @@ final class OrderingExtension implements Extension
     /**
      * Loads order controller.
      */
-    private function loadOrderController(ContainerBuilder $container)
+    private function loadOrderController(ContainerBuilder $container): void
     {
         $definition = new Definition(OrderController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
@@ -115,7 +115,7 @@ final class OrderingExtension implements Extension
     /**
      * Loads exercise wrapper that enables ordering.
      */
-    private function loadOrderedExercise(ContainerBuilder $container)
+    private function loadOrderedExercise(ContainerBuilder $container): void
     {
         $definition = new Definition(OrderedExercise::class, [
             new Reference(TesterExtension::EXERCISE_ID),
@@ -127,7 +127,7 @@ final class OrderingExtension implements Extension
     /**
      * Defines default orderers.
      */
-    private function loadDefaultOrderers(ContainerBuilder $container)
+    private function loadDefaultOrderers(ContainerBuilder $container): void
     {
         $definition = new Definition(ReverseOrderer::class);
         $definition->addTag(self::ORDERER_TAG, ['priority' => -9999]);

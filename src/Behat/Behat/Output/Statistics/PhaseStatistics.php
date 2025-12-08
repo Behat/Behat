@@ -38,7 +38,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Resets the statistics.
      */
-    public function reset()
+    public function reset(): void
     {
         $this->statistics = new TotalStatistics();
     }
@@ -46,7 +46,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Starts timer.
      */
-    public function startTimer()
+    public function startTimer(): void
     {
         $this->statistics->startTimer();
     }
@@ -54,7 +54,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Stops timer.
      */
-    public function stopTimer()
+    public function stopTimer(): void
     {
         $this->statistics->stopTimer();
     }
@@ -82,7 +82,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Registers scenario stat.
      */
-    public function registerScenarioStat(ScenarioStat $stat)
+    public function registerScenarioStat(ScenarioStat $stat): void
     {
         $this->statistics->registerScenarioStat($stat);
     }
@@ -90,7 +90,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Registers step stat.
      */
-    public function registerStepStat(StepStat $stat)
+    public function registerStepStat(StepStat $stat): void
     {
         $this->statistics->registerStepStat($stat);
     }
@@ -98,7 +98,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Registers hook stat.
      */
-    public function registerHookStat(HookStat $stat)
+    public function registerHookStat(HookStat $stat): void
     {
         $this->statistics->registerHookStat($stat);
     }

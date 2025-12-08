@@ -308,15 +308,13 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  mixed[]               &$candidates Resolved arguments
      * @param  mixed[]               &$arguments  Argument mapping
      * @param  callable              $predicate   Callable predicate to apply to each candidate
-     *
-     * @return void
      */
     private function applyPredicateToTypehintedArguments(
         array $parameters,
         array &$candidates,
         array &$arguments,
         $predicate,
-    ) {
+    ): void {
         $filtered = $this->filterApplicableTypehintedParameters($parameters);
 
         foreach ($filtered as $num => $parameter) {
@@ -465,7 +463,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * This is used to share state between get*Arguments() methods.
      */
-    private function markAllArgumentsUndefined()
+    private function markAllArgumentsUndefined(): void
     {
         $this->definedArguments = [];
     }
@@ -475,7 +473,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param int $position
      */
-    private function markArgumentDefined($position)
+    private function markArgumentDefined($position): void
     {
         $this->definedArguments[$position] = true;
     }

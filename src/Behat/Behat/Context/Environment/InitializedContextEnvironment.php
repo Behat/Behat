@@ -47,12 +47,12 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
     /**
      * Registers context instance in the environment.
      */
-    public function registerContext(Context $context)
+    public function registerContext(Context $context): void
     {
         $this->contexts[$context::class] = $context;
     }
 
-    public function setServiceContainer(?ContainerInterface $container = null)
+    public function setServiceContainer(?ContainerInterface $container = null): void
     {
         $this->serviceContainer = $container;
     }

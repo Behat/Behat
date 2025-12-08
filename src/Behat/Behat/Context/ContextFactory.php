@@ -48,7 +48,7 @@ final class ContextFactory
     /**
      * Registers context argument resolver.
      */
-    public function registerArgumentResolver(ArgumentResolver $resolver)
+    public function registerArgumentResolver(ArgumentResolver $resolver): void
     {
         $this->argumentResolvers[] = $resolver;
     }
@@ -56,7 +56,7 @@ final class ContextFactory
     /**
      * Registers context initializer.
      */
-    public function registerContextInitializer(ContextInitializer $initializer)
+    public function registerContextInitializer(ContextInitializer $initializer): void
     {
         $this->contextInitializers[] = $initializer;
     }
@@ -121,7 +121,7 @@ final class ContextFactory
     /**
      * Initializes context class and returns new context instance.
      */
-    private function initializeInstance(Context $context)
+    private function initializeInstance(Context $context): void
     {
         foreach ($this->contextInitializers as $initializer) {
             $initializer->initializeContext($context);

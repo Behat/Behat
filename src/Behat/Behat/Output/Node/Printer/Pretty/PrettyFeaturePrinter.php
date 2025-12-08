@@ -44,7 +44,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    public function printHeader(Formatter $formatter, FeatureNode $feature)
+    public function printHeader(Formatter $formatter, FeatureNode $feature): void
     {
         $this->printTags($formatter->getOutputPrinter(), $feature->getTags());
 
@@ -52,7 +52,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
         $this->printDescription($formatter->getOutputPrinter(), $feature);
     }
 
-    public function printFooter(Formatter $formatter, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result): void
     {
     }
 
@@ -61,7 +61,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
      *
      * @param string[]      $tags
      */
-    private function printTags(OutputPrinter $printer, array $tags)
+    private function printTags(OutputPrinter $printer, array $tags): void
     {
         if (!count($tags)) {
             return;
@@ -74,7 +74,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * Prints feature title using provided printer.
      */
-    private function printTitle(OutputPrinter $printer, FeatureNode $feature)
+    private function printTitle(OutputPrinter $printer, FeatureNode $feature): void
     {
         $printer->write(sprintf('%s{+keyword}%s:{-keyword}', $this->indentText, $feature->getKeyword()));
 
@@ -88,7 +88,7 @@ final class PrettyFeaturePrinter implements FeaturePrinter
     /**
      * Prints feature description using provided printer.
      */
-    private function printDescription(OutputPrinter $printer, FeatureNode $feature)
+    private function printDescription(OutputPrinter $printer, FeatureNode $feature): void
     {
         if (!$feature->getDescription()) {
             $printer->writeln();

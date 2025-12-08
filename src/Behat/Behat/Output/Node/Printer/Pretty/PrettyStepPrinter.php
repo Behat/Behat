@@ -63,7 +63,7 @@ final class PrettyStepPrinter implements StepPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result): void
     {
         if ($result->getResultCode() === TestResult::SKIPPED) {
             $printSkipped = $formatter->getParameter(PrettyFormatter::PRINT_SKIPPED_STEPS_SETTING);
@@ -90,7 +90,7 @@ final class PrettyStepPrinter implements StepPrinter
      * @param string        $stepType
      * @param string        $stepText
      */
-    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
+    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result): void
     {
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
@@ -106,7 +106,7 @@ final class PrettyStepPrinter implements StepPrinter
      *
      * @param ArgumentInterface[] $arguments
      */
-    private function printArguments(Formatter $formatter, array $arguments, StepResult $result)
+    private function printArguments(Formatter $formatter, array $arguments, StepResult $result): void
     {
         $style = $this->resultConverter->convertResultToString($result);
 
@@ -121,7 +121,7 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step output (if has one).
      */
-    private function printStdOut(OutputPrinter $printer, StepResult $result)
+    private function printStdOut(OutputPrinter $printer, StepResult $result): void
     {
         if (!$result instanceof ExecutedStepResult || null === $result->getCallResult()->getStdOut()) {
             return;
@@ -142,7 +142,7 @@ final class PrettyStepPrinter implements StepPrinter
     /**
      * Prints step exception (if has one).
      */
-    private function printException(OutputPrinter $printer, StepResult $result)
+    private function printException(OutputPrinter $printer, StepResult $result): void
     {
         $style = $this->resultConverter->convertResultToString($result);
 

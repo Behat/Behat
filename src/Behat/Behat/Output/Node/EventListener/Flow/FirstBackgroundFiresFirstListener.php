@@ -66,7 +66,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      *
      * @param string $eventName
      */
-    private function flushStatesIfBeginningOfTheFeature($eventName)
+    private function flushStatesIfBeginningOfTheFeature($eventName): void
     {
         if (FeatureTested::BEFORE !== $eventName) {
             return;
@@ -80,7 +80,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      *
      * @param string $eventName
      */
-    private function markFirstBackgroundPrintedAfterBackground($eventName)
+    private function markFirstBackgroundPrintedAfterBackground($eventName): void
     {
         if (BackgroundTested::AFTER !== $eventName) {
             return;
@@ -108,7 +108,7 @@ class FirstBackgroundFiresFirstListener implements EventListener
      *
      * @param string    $eventName
      */
-    private function fireDelayedEventsOnAfterBackground(Formatter $formatter, $eventName)
+    private function fireDelayedEventsOnAfterBackground(Formatter $formatter, $eventName): void
     {
         if (BackgroundTested::AFTER !== $eventName) {
             return;

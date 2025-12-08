@@ -27,7 +27,7 @@ final class SuiteBootstrapper
     /**
      * Registers suite setup.
      */
-    public function registerSuiteSetup(SuiteSetup $setup)
+    public function registerSuiteSetup(SuiteSetup $setup): void
     {
         $this->setups[] = $setup;
     }
@@ -37,7 +37,7 @@ final class SuiteBootstrapper
      *
      * @param Suite[] $suites
      */
-    public function bootstrapSuites(array $suites)
+    public function bootstrapSuites(array $suites): void
     {
         array_map($this->bootstrapSuite(...), $suites);
     }
@@ -45,7 +45,7 @@ final class SuiteBootstrapper
     /**
      * Bootstraps provided suite using registered setup.
      */
-    public function bootstrapSuite(Suite $suite)
+    public function bootstrapSuite(Suite $suite): void
     {
         foreach ($this->setups as $setup) {
             if ($setup->supportsSuite($suite)) {

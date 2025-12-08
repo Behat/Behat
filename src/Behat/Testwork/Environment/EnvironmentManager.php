@@ -36,7 +36,7 @@ final class EnvironmentManager
     /**
      * Registers environment handler.
      */
-    public function registerEnvironmentHandler(EnvironmentHandler $handler)
+    public function registerEnvironmentHandler(EnvironmentHandler $handler): void
     {
         $this->handlers[] = $handler;
     }
@@ -44,7 +44,7 @@ final class EnvironmentManager
     /**
      * Registers environment reader.
      */
-    public function registerEnvironmentReader(EnvironmentReader $reader)
+    public function registerEnvironmentReader(EnvironmentReader $reader): void
     {
         $this->readers[] = $reader;
     }

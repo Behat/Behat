@@ -139,7 +139,7 @@ class OutputController implements Controller
      *
      * @param bool $decorated
      */
-    private function configureOutputs(array $formats, array $outputs, $decorated = false)
+    private function configureOutputs(array $formats, array $outputs, $decorated = false): void
     {
         if (1 == count($outputs) && !$this->isStandardOutput($outputs[0])) {
             $outputPath = $this->locateOutputPath($outputs[0]);
@@ -213,7 +213,7 @@ class OutputController implements Controller
      *
      * @param string $jsonSettings
      */
-    private function loadJsonSettings($jsonSettings)
+    private function loadJsonSettings($jsonSettings): void
     {
         $settings = @json_decode($jsonSettings, true);
 

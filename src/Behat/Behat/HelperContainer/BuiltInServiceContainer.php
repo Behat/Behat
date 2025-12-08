@@ -145,7 +145,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      *
      * @throws WrongServicesConfigurationException
      */
-    private function assertFactoryMethodExists(ReflectionClass $class, $methodName)
+    private function assertFactoryMethodExists(ReflectionClass $class, $methodName): void
     {
         if (!$class->hasMethod($methodName)) {
             throw new WrongServicesConfigurationException(sprintf(
@@ -161,7 +161,7 @@ final class BuiltInServiceContainer implements PsrContainerInterface
      *
      * @throws WrongServicesConfigurationException
      */
-    private function assertFactoryMethodIsStatic(ReflectionMethod $method)
+    private function assertFactoryMethodIsStatic(ReflectionMethod $method): void
     {
         if (!$method->isStatic()) {
             throw new WrongServicesConfigurationException(sprintf(

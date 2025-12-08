@@ -34,7 +34,7 @@ final class PatternTransformer
     /**
      * Registers pattern policy.
      */
-    public function registerPatternPolicy(PatternPolicy $policy)
+    public function registerPatternPolicy(PatternPolicy $policy): void
     {
         $this->policies[] = $policy;
         $this->patternToRegexpCache = [];

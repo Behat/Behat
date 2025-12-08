@@ -31,7 +31,7 @@ final class GherkinTranslationsController implements Controller
     ) {
     }
 
-    public function configure(SymfonyCommand $command)
+    public function configure(SymfonyCommand $command): void
     {
     }
 

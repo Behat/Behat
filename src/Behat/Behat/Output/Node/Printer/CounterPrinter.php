@@ -35,7 +35,7 @@ final class CounterPrinter
      *
      * @param string        $intro
      */
-    public function printCounters(OutputPrinter $printer, $intro, array $stats)
+    public function printCounters(OutputPrinter $printer, $intro, array $stats): void
     {
         $stats = array_filter($stats, fn ($count): bool => 0 !== $count);
 

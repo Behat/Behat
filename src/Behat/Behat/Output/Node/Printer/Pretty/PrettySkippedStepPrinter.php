@@ -58,7 +58,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result): void
     {
         $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
@@ -71,7 +71,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
      * @param string        $stepType
      * @param string        $stepText
      */
-    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result)
+    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result): void
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
@@ -92,7 +92,7 @@ final class PrettySkippedStepPrinter implements StepPrinter
      *
      * @param ArgumentInterface[] $arguments
      */
-    private function printArguments(Formatter $formatter, array $arguments)
+    private function printArguments(Formatter $formatter, array $arguments): void
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 

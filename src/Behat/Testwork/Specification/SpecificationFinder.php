@@ -32,7 +32,7 @@ final class SpecificationFinder
      *
      * @param SpecificationLocator<T> $locator
      */
-    public function registerSpecificationLocator(SpecificationLocator $locator)
+    public function registerSpecificationLocator(SpecificationLocator $locator): void
     {
         $this->specificationLocators[] = $locator;
     }

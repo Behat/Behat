@@ -62,7 +62,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * Registers context class resolver.
      */
-    public function registerClassResolver(ClassResolver $resolver)
+    public function registerClassResolver(ClassResolver $resolver): void
     {
         $this->classResolvers[] = $resolver;
     }

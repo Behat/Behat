@@ -61,7 +61,7 @@ final class OutlineTableListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         if ($event instanceof StepTested) {
             $this->captureStepEvent($event);
@@ -81,7 +81,7 @@ final class OutlineTableListener implements EventListener
     /**
      * Captures step tested event.
      */
-    private function captureStepEvent(StepTested $event)
+    private function captureStepEvent(StepTested $event): void
     {
         if ($event instanceof AfterStepSetup) {
             $this->stepBeforeTestedEvents[$event->getStep()->getLine()] = $event;
@@ -93,7 +93,7 @@ final class OutlineTableListener implements EventListener
     /**
      * Captures outline into the ivar on outline BEFORE event.
      */
-    private function captureOutlineOnBeforeOutlineEvent(Event $event)
+    private function captureOutlineOnBeforeOutlineEvent(Event $event): void
     {
         if (!$event instanceof BeforeOutlineTested) {
             return;
@@ -106,7 +106,7 @@ final class OutlineTableListener implements EventListener
     /**
      * Captures example setup on example BEFORE event.
      */
-    private function captureExampleSetupOnBeforeEvent(Event $event)
+    private function captureExampleSetupOnBeforeEvent(Event $event): void
     {
         if (!$event instanceof AfterScenarioSetup) {
             return;
@@ -120,7 +120,7 @@ final class OutlineTableListener implements EventListener
      *
      * @param string $eventName
      */
-    private function forgetOutlineOnAfterOutlineEvent($eventName)
+    private function forgetOutlineOnAfterOutlineEvent($eventName): void
     {
         if (OutlineTested::AFTER !== $eventName) {
             return;
@@ -134,7 +134,7 @@ final class OutlineTableListener implements EventListener
      *
      * @param string    $eventName
      */
-    private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
+    private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName): void
     {
         if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
@@ -156,7 +156,7 @@ final class OutlineTableListener implements EventListener
      *
      * @param string    $eventName
      */
-    private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName)
+    private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName): void
     {
         if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
@@ -187,7 +187,7 @@ final class OutlineTableListener implements EventListener
     /**
      * Prints outline footer on outline AFTER event.
      */
-    private function printFooterOnAfterEvent(Formatter $formatter, Event $event)
+    private function printFooterOnAfterEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof AfterOutlineTested) {
             return;

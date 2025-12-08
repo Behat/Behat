@@ -45,7 +45,7 @@ final class SyntaxController implements Controller
     /**
      * Configures command to be executable by the controller.
      */
-    public function configure(Command $command)
+    public function configure(Command $command): void
     {
         $command
             ->addOption(

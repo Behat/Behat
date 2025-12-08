@@ -31,7 +31,7 @@ final class CompositeFactory implements SuiteScopedResolverFactory
     /**
      * Registers factory.
      */
-    public function registerFactory(SuiteScopedResolverFactory $factory)
+    public function registerFactory(SuiteScopedResolverFactory $factory): void
     {
         $this->factories[] = $factory;
     }

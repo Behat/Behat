@@ -54,7 +54,7 @@ final class ConfigurationLoader
      *
      * @param string|null $variable
      */
-    public function setEnvironmentVariableName($variable)
+    public function setEnvironmentVariableName($variable): void
     {
         $this->environmentVariable = $variable;
     }
@@ -74,7 +74,7 @@ final class ConfigurationLoader
      *
      * @param string|null $path
      */
-    public function setConfigurationFilePath($path)
+    public function setConfigurationFilePath($path): void
     {
         $this->configurationPath = $path;
     }

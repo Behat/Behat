@@ -28,7 +28,7 @@ final class JUnitSuitePrinter implements SuitePrinter
     ) {
     }
 
-    public function printHeader(Formatter $formatter, Suite $suite)
+    public function printHeader(Formatter $formatter, Suite $suite): void
     {
         if ($this->statistics instanceof PhaseStatistics) {
             $this->statistics->reset();
@@ -39,7 +39,7 @@ final class JUnitSuitePrinter implements SuitePrinter
         $outputPrinter->createNewFile($suite->getName());
     }
 
-    public function printFooter(Formatter $formatter, Suite $suite)
+    public function printFooter(Formatter $formatter, Suite $suite): void
     {
         $formatter->getOutputPrinter()->flush();
     }

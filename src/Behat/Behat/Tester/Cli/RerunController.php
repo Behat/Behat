@@ -59,7 +59,7 @@ final class RerunController implements Controller
     /**
      * Configures command to be executable by the controller.
      */
-    public function configure(Command $command)
+    public function configure(Command $command): void
     {
         $command->addOption(
             '--rerun',
@@ -105,7 +105,7 @@ final class RerunController implements Controller
     /**
      * Records scenario if it is failed.
      */
-    public function collectFailedScenario(AfterScenarioTested $event)
+    public function collectFailedScenario(AfterScenarioTested $event): void
     {
         if (!$this->getFileName()) {
             return;
@@ -125,7 +125,7 @@ final class RerunController implements Controller
     /**
      * Writes failed scenarios cache.
      */
-    public function writeCache()
+    public function writeCache(): void
     {
         if (!$this->getFileName()) {
             return;

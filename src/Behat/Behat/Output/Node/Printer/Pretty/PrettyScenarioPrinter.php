@@ -49,7 +49,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario)
+    public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario): void
     {
         if ($scenario instanceof TaggedNodeInterface) {
             $this->printTags($formatter->getOutputPrinter(), $scenario->getTags());
@@ -61,7 +61,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         $this->printDescription($formatter->getOutputPrinter(), $scenario->getTitle());
     }
 
-    public function printFooter(Formatter $formatter, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result): void
     {
         $formatter->getOutputPrinter()->writeln();
     }
@@ -71,7 +71,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      *
      * @param string[]      $tags
      */
-    private function printTags(OutputPrinter $printer, array $tags)
+    private function printTags(OutputPrinter $printer, array $tags): void
     {
         if (!count($tags)) {
             return;
@@ -86,7 +86,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      *
      * @param string        $keyword
      */
-    private function printKeyword(OutputPrinter $printer, $keyword)
+    private function printKeyword(OutputPrinter $printer, $keyword): void
     {
         $printer->write(sprintf('%s{+keyword}%s:{-keyword}', $this->indentText, $keyword));
     }
@@ -96,7 +96,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      *
      * @param string|null   $longTitle
      */
-    private function printTitle(OutputPrinter $printer, $longTitle)
+    private function printTitle(OutputPrinter $printer, $longTitle): void
     {
         $description = explode("\n", $longTitle ?? '');
         $title = array_shift($description);
@@ -111,7 +111,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      *
      * @param string|null   $longTitle
      */
-    private function printDescription(OutputPrinter $printer, $longTitle)
+    private function printDescription(OutputPrinter $printer, $longTitle): void
     {
         $lines = explode("\n", $longTitle ?? '');
         array_shift($lines);

@@ -53,15 +53,15 @@ final class SpecificationExtension implements Extension
         return 'specifications';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadFinder($container);
     }
@@ -74,7 +74,7 @@ final class SpecificationExtension implements Extension
     /**
      * Loads specification finder.
      */
-    private function loadFinder(ContainerBuilder $container)
+    private function loadFinder(ContainerBuilder $container): void
     {
         $definition = new Definition(SpecificationFinder::class);
         $container->setDefinition(self::FINDER_ID, $definition);
@@ -83,7 +83,7 @@ final class SpecificationExtension implements Extension
     /**
      * Processes specification locators.
      */
-    private function processLocators(ContainerBuilder $container)
+    private function processLocators(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::LOCATOR_TAG);
         $definition = $container->getDefinition(self::FINDER_ID);

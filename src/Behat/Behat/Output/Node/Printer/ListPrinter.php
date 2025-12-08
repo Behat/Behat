@@ -61,7 +61,7 @@ final class ListPrinter
      * @param ScenarioStat[] $scenarioStats
      * @param StepStat[]     $stepStats
      */
-    public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null)
+    public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null): void
     {
         if (!count($scenarioStats)) {
             return;
@@ -95,7 +95,7 @@ final class ListPrinter
         $resultCode,
         array $stepStats,
         ?ShowOutputOption $showOutput = ShowOutputOption::InSummary,
-    ) {
+    ): void {
         if (!count($stepStats)) {
             return;
         }
@@ -162,7 +162,7 @@ final class ListPrinter
         ?string $stdOut,
         ?string $error,
         ?ShowOutputOption $showOutput,
-    ) {
+    ): void {
         $path = $this->configurablePathPrinter->processPathsInText($path);
         $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
 
@@ -224,7 +224,7 @@ final class ListPrinter
         StepStatV2 $stat,
         string $style,
         ?ShowOutputOption $showOutput,
-    ) {
+    ): void {
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
         $printer->writeln(

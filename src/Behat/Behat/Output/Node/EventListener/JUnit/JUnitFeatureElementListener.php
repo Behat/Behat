@@ -61,7 +61,7 @@ final class JUnitFeatureElementListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->captureSuiteSetupEvent($formatter, $event);
         $this->printFeatureOnBeforeEvent($formatter, $event);
@@ -172,7 +172,7 @@ final class JUnitFeatureElementListener implements EventListener
     /**
      * Prints the feature on AFTER event.
      */
-    private function printFeatureOnAfterEvent(Formatter $formatter, Event $event)
+    private function printFeatureOnAfterEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof AfterFeatureTested) {
             return;

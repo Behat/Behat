@@ -34,7 +34,7 @@ final class PrettyStatisticsPrinter implements StatisticsPrinter
     ) {
     }
 
-    public function printStatistics(Formatter $formatter, Statistics $statistics)
+    public function printStatistics(Formatter $formatter, Statistics $statistics): void
     {
         $printer = $formatter->getOutputPrinter();
 

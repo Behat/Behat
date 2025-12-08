@@ -30,7 +30,7 @@ final class DefinitionFinder
     /**
      * Registers definition search engine.
      */
-    public function registerSearchEngine(SearchEngine $searchEngine)
+    public function registerSearchEngine(SearchEngine $searchEngine): void
     {
         $this->engines[] = $searchEngine;
     }

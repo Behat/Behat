@@ -42,7 +42,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Registers class generator.
      */
-    public function registerClassGenerator(ClassGenerator $generator)
+    public function registerClassGenerator(ClassGenerator $generator): void
     {
         $this->classGenerators[] = $generator;
     }
@@ -52,7 +52,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
         return $suite->hasSetting('contexts');
     }
 
-    public function setupSuite(Suite $suite)
+    public function setupSuite(Suite $suite): void
     {
         foreach ($this->getNormalizedContextClasses($suite) as $class) {
             if (class_exists($class)) {
@@ -110,7 +110,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $path
      */
-    private function createContextDirectory($path)
+    private function createContextDirectory($path): void
     {
         mkdir($path, 0777, true);
 
@@ -125,7 +125,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      * @param string $path
      * @param string $content
      */
-    private function createContextFile($path, $content)
+    private function createContextFile($path, $content): void
     {
         file_put_contents($path, $content);
 
@@ -186,7 +186,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $classpath
      */
-    private function ensureContextDirectory($classpath)
+    private function ensureContextDirectory($classpath): void
     {
         if (!is_dir(dirname($classpath))) {
             $this->createContextDirectory(dirname($classpath));

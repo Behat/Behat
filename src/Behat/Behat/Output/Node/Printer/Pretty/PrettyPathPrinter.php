@@ -45,7 +45,7 @@ final class PrettyPathPrinter
      *
      * @param int $indentation
      */
-    public function printScenarioPath(Formatter $formatter, FeatureNode $feature, Scenario $scenario, $indentation)
+    public function printScenarioPath(Formatter $formatter, FeatureNode $feature, Scenario $scenario, $indentation): void
     {
         $printer = $formatter->getOutputPrinter();
 
@@ -74,7 +74,7 @@ final class PrettyPathPrinter
         StepNode $step,
         StepResult $result,
         $indentation,
-    ) {
+    ): void {
         $printer = $formatter->getOutputPrinter();
 
         if (!$result instanceof DefinedStepResult || !$result->getStepDefinition() || !$formatter->getParameter('paths')) {
@@ -95,7 +95,7 @@ final class PrettyPathPrinter
      * @param int $scenarioWidth
      * @param int $stepWidth
      */
-    private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth)
+    private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth): void
     {
         $path = $result->getStepDefinition()->getPath();
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $stepWidth));

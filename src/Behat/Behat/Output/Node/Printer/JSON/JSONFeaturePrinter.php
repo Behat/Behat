@@ -30,7 +30,7 @@ final class JSONFeaturePrinter implements FeaturePrinter
     ) {
     }
 
-    public function printHeader(Formatter $formatter, FeatureNode $feature)
+    public function printHeader(Formatter $formatter, FeatureNode $feature): void
     {
         $this->statistics->reset();
         $this->currentFeature = $feature;
@@ -39,7 +39,7 @@ final class JSONFeaturePrinter implements FeaturePrinter
         $outputPrinter->addFeature();
     }
 
-    public function printFooter(Formatter $formatter, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result): void
     {
         $stats = $this->statistics->getScenarioStatCounts();
 

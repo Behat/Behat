@@ -29,7 +29,7 @@ final class Validator
      *
      * @throws UnknownParameterValueException
      */
-    public function validateArguments(ReflectionFunctionAbstract $function, array $arguments)
+    public function validateArguments(ReflectionFunctionAbstract $function, array $arguments): void
     {
         foreach ($function->getParameters() as $num => $parameter) {
             $this->validateArgument($parameter, $num, $arguments);
@@ -41,7 +41,7 @@ final class Validator
      *
      * @param int $parameterIndex
      */
-    private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments)
+    private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments): void
     {
         if ($parameter->isDefaultValueAvailable()) {
             return;

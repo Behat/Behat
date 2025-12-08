@@ -79,11 +79,11 @@ final class GherkinExtension implements Extension
         return 'gherkin';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $childrenBuilder = $builder
             ->addDefaultsIfNotSet()
@@ -108,7 +108,7 @@ final class GherkinExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadParameters($container);
         $this->loadGherkin($container);
@@ -132,7 +132,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads default container parameters.
      */
-    private function loadParameters(ContainerBuilder $container)
+    private function loadParameters(ContainerBuilder $container): void
     {
         $container->setParameter(
             'suite.generic.default_settings',
@@ -146,7 +146,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads gherkin service.
      */
-    private function loadGherkin(ContainerBuilder $container)
+    private function loadGherkin(ContainerBuilder $container): void
     {
         $definition = new Definition(Gherkin::class);
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -155,7 +155,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads keyword services.
      */
-    private function loadKeywords(ContainerBuilder $container)
+    private function loadKeywords(ContainerBuilder $container): void
     {
         $definition = new Definition(CachedArrayKeywords::class);
         $definition->setFactory([CachedArrayKeywords::class, 'withDefaultKeywords']);
@@ -170,7 +170,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads gherkin parser.
      */
-    private function loadParser(ContainerBuilder $container)
+    private function loadParser(ContainerBuilder $container): void
     {
         $definition = new Definition(Parser::class, [
             new Reference('gherkin.lexer'),
@@ -188,7 +188,7 @@ final class GherkinExtension implements Extension
      *
      * @param string           $cachePath
      */
-    private function loadDefaultLoaders(ContainerBuilder $container, $cachePath)
+    private function loadDefaultLoaders(ContainerBuilder $container, $cachePath): void
     {
         $definition = new Definition(GherkinFileLoader::class, [
             new Reference('gherkin.parser'),
@@ -209,7 +209,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads profile-level gherkin filters.
      */
-    private function loadProfileFilters(ContainerBuilder $container, array $filters)
+    private function loadProfileFilters(ContainerBuilder $container, array $filters): void
     {
         $gherkin = $container->getDefinition(self::MANAGER_ID);
         foreach ($filters as $type => $filterString) {
@@ -221,7 +221,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads syntax controller.
      */
-    private function loadSyntaxController(ContainerBuilder $container)
+    private function loadSyntaxController(ContainerBuilder $container): void
     {
         $definition = new Definition(SyntaxController::class, [
             new Reference(self::KEYWORDS_DUMPER_ID),
@@ -234,7 +234,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads filter controller.
      */
-    private function loadFilterController(ContainerBuilder $container)
+    private function loadFilterController(ContainerBuilder $container): void
     {
         $definition = new Definition(FilterController::class, [
             new Reference(self::MANAGER_ID),
@@ -246,7 +246,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads suite with paths setup.
      */
-    private function loadSuiteWithPathsSetup(ContainerBuilder $container)
+    private function loadSuiteWithPathsSetup(ContainerBuilder $container): void
     {
         $definition = new Definition(SuiteWithPathsSetup::class, [
             '%paths.base%',
@@ -259,7 +259,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads filesystem feature locator.
      */
-    private function loadFilesystemFeatureLocator(ContainerBuilder $container)
+    private function loadFilesystemFeatureLocator(ContainerBuilder $container): void
     {
         $definition = new Definition(FilesystemFeatureLocator::class, [
             new Reference(self::MANAGER_ID),
@@ -272,7 +272,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads filesystem scenarios list locator.
      */
-    private function loadFilesystemScenariosListLocator(ContainerBuilder $container)
+    private function loadFilesystemScenariosListLocator(ContainerBuilder $container): void
     {
         $definition = new Definition(FilesystemScenariosListLocator::class, [
             new Reference(self::MANAGER_ID),
@@ -284,7 +284,7 @@ final class GherkinExtension implements Extension
     /**
      * Loads filesystem rerun scenarios list locator.
      */
-    private function loadFilesystemRerunScenariosListLocator(ContainerBuilder $container)
+    private function loadFilesystemRerunScenariosListLocator(ContainerBuilder $container): void
     {
         $definition = new Definition(FilesystemRerunScenariosListLocator::class, [
             new Reference(self::MANAGER_ID),
@@ -296,7 +296,7 @@ final class GherkinExtension implements Extension
     /**
      * Processes all available gherkin loaders.
      */
-    private function processLoaders(ContainerBuilder $container)
+    private function processLoaders(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::LOADER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);

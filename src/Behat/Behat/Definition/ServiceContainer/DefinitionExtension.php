@@ -84,11 +84,11 @@ final class DefinitionExtension implements Extension
         return 'definitions';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $builder
             ->addDefaultsIfNotSet()
@@ -98,7 +98,7 @@ final class DefinitionExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadFinder($container);
         $this->loadRepository($container);
@@ -124,7 +124,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition finder.
      */
-    private function loadFinder(ContainerBuilder $container)
+    private function loadFinder(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionFinder::class);
         $container->setDefinition(self::FINDER_ID, $definition);
@@ -133,7 +133,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition repository.
      */
-    private function loadRepository(ContainerBuilder $container)
+    private function loadRepository(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionRepository::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
@@ -144,7 +144,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition writer.
      */
-    private function loadWriter(ContainerBuilder $container)
+    private function loadWriter(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionWriter::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
@@ -156,7 +156,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition pattern transformer.
      */
-    private function loadPatternTransformer(ContainerBuilder $container)
+    private function loadPatternTransformer(ContainerBuilder $container): void
     {
         $definition = new Definition(PatternTransformer::class);
         $container->setDefinition(self::PATTERN_TRANSFORMER_ID, $definition);
@@ -165,7 +165,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition translator.
      */
-    private function loadDefinitionTranslator(ContainerBuilder $container)
+    private function loadDefinitionTranslator(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionTranslator::class, [
             new Reference(TranslatorExtension::TRANSLATOR_ID),
@@ -176,7 +176,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads default search engines.
      */
-    private function loadDefaultSearchEngines(ContainerBuilder $container)
+    private function loadDefaultSearchEngines(ContainerBuilder $container): void
     {
         $definition = new Definition(RepositorySearchEngine::class, [
             new Reference(self::REPOSITORY_ID),
@@ -197,7 +197,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads default pattern policies.
      */
-    private function loadDefaultPatternPolicies(ContainerBuilder $container)
+    private function loadDefaultPatternPolicies(ContainerBuilder $container): void
     {
         $definition = new Definition(TurnipPatternPolicy::class, [
             new Reference(self::STEP_METHOD_NAME_SUGGESTER_ID),
@@ -215,7 +215,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition annotation reader.
      */
-    private function loadAnnotationReader(ContainerBuilder $container)
+    private function loadAnnotationReader(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionAnnotationReader::class);
         $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
@@ -225,7 +225,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition Attribute reader.
      */
-    private function loadAttributeReader(ContainerBuilder $container)
+    private function loadAttributeReader(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionAttributeReader::class, [
             new Reference(self::DOC_BLOCK_HELPER_ID),
@@ -237,7 +237,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads definition printers.
      */
-    private function loadDefinitionPrinters(ContainerBuilder $container)
+    private function loadDefinitionPrinters(ContainerBuilder $container): void
     {
         $definition = new Definition(ConsoleDefinitionInformationPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
@@ -280,7 +280,7 @@ final class DefinitionExtension implements Extension
     /**
      * Loads DocBlockHelper.
      */
-    private function loadDocblockHelper(ContainerBuilder $container)
+    private function loadDocblockHelper(ContainerBuilder $container): void
     {
         $definition = new Definition(DocBlockHelper::class);
 
@@ -290,7 +290,7 @@ final class DefinitionExtension implements Extension
     /**
      * Processes all search engines in the container.
      */
-    private function processSearchEngines(ContainerBuilder $container)
+    private function processSearchEngines(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::SEARCH_ENGINE_TAG);
         $definition = $container->getDefinition(self::FINDER_ID);
@@ -303,7 +303,7 @@ final class DefinitionExtension implements Extension
     /**
      * Processes all pattern policies.
      */
-    private function processPatternPolicies(ContainerBuilder $container)
+    private function processPatternPolicies(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::PATTERN_POLICY_TAG);
         $definition = $container->getDefinition(self::PATTERN_TRANSFORMER_ID);

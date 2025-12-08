@@ -32,7 +32,7 @@ final class AttributeContextReader implements ContextReader
     /**
      * Registers attribute reader.
      */
-    public function registerAttributeReader(AttributeReader $reader)
+    public function registerAttributeReader(AttributeReader $reader): void
     {
         $this->readers[] = $reader;
     }

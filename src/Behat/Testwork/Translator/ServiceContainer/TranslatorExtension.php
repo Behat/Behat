@@ -41,11 +41,11 @@ final class TranslatorExtension implements Extension
         return 'translation';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $defaultLanguage = $this->getDefaultLanguage() ?: 'en';
 
@@ -65,7 +65,7 @@ final class TranslatorExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadTranslator($container, $config['locale'], $config['fallback_locale']);
         $this->loadController($container);
@@ -81,7 +81,7 @@ final class TranslatorExtension implements Extension
      * @param string           $locale
      * @param string           $fallbackLocale
      */
-    private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale)
+    private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale): void
     {
         $definition = new Definition(Translator::class, [$locale]);
         $container->setDefinition(self::TRANSLATOR_ID, $definition);
@@ -121,7 +121,7 @@ final class TranslatorExtension implements Extension
     /**
      * Loads translator controller.
      */
-    private function loadController(ContainerBuilder $container)
+    private function loadController(ContainerBuilder $container): void
     {
         $definition = new Definition(LanguageController::class, [
             new Reference(self::TRANSLATOR_ID),

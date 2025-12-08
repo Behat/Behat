@@ -69,7 +69,7 @@ final class OrderedExercise implements Exercise
     /**
      * Replace the algorithm being used for prioritisation.
      */
-    public function setOrderer(Orderer $orderer)
+    public function setOrderer(Orderer $orderer): void
     {
         $this->orderer = $orderer;
     }

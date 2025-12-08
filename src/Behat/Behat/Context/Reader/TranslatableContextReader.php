@@ -58,7 +58,7 @@ final class TranslatableContextReader implements ContextReader
      *
      * @throws UnknownTranslationResourceException
      */
-    private function addTranslationResource($path, $assetsId)
+    private function addTranslationResource($path, $assetsId): void
     {
         match ($ext = pathinfo($path, PATHINFO_EXTENSION)) {
             'yml' => $this->addTranslatorResource('yaml', $path, basename($path, '.' . $ext), $assetsId),
@@ -79,7 +79,7 @@ final class TranslatableContextReader implements ContextReader
      * @param string $language
      * @param string $assetsId
      */
-    private function addTranslatorResource($type, $path, $language, $assetsId)
+    private function addTranslatorResource($type, $path, $language, $assetsId): void
     {
         $this->translator->addResource($type, $path, $language, $assetsId);
     }

@@ -33,7 +33,7 @@ final class StatisticsListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->startTimerOnBeforeExercise($eventName);
         $this->printStatisticsOnAfterExerciseEvent($formatter, $eventName);
@@ -44,7 +44,7 @@ final class StatisticsListener implements EventListener
      *
      * @param string $eventName
      */
-    private function startTimerOnBeforeExercise($eventName)
+    private function startTimerOnBeforeExercise($eventName): void
     {
         if (ExerciseCompleted::BEFORE !== $eventName) {
             return;
@@ -58,7 +58,7 @@ final class StatisticsListener implements EventListener
      *
      * @param string    $eventName
      */
-    private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, $eventName)
+    private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, $eventName): void
     {
         if (ExerciseCompleted::AFTER !== $eventName) {
             return;

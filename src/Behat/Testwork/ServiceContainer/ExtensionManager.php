@@ -51,7 +51,7 @@ final class ExtensionManager
      *
      * @param string|null $path
      */
-    public function setExtensionsPath($path)
+    public function setExtensionsPath($path): void
     {
         $this->extensionsPath = $path;
     }
@@ -107,7 +107,7 @@ final class ExtensionManager
     /**
      * Initializes all activated and predefined extensions.
      */
-    public function initializeExtensions()
+    public function initializeExtensions(): void
     {
         foreach ($this->extensions as $extension) {
             $extension->initialize($this);

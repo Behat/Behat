@@ -54,7 +54,7 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * Registers annotation reader.
      */
-    public function registerAnnotationReader(AnnotationReader $reader)
+    public function registerAnnotationReader(AnnotationReader $reader): void
     {
         $this->readers[] = $reader;
     }

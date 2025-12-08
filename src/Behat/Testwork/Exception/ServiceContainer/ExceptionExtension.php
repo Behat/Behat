@@ -60,11 +60,11 @@ final class ExceptionExtension implements Extension
         return 'exceptions';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $builder
             ->addDefaultsIfNotSet()
@@ -82,7 +82,7 @@ final class ExceptionExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadPresenter($container, $config['verbosity']);
         $this->loadDefaultStringers($container);
@@ -99,7 +99,7 @@ final class ExceptionExtension implements Extension
      *
      * @param int $verbosity
      */
-    protected function loadPresenter(ContainerBuilder $container, $verbosity)
+    protected function loadPresenter(ContainerBuilder $container, $verbosity): void
     {
         $definition = new Definition(ExceptionPresenter::class, [
             '%paths.base%',
@@ -112,7 +112,7 @@ final class ExceptionExtension implements Extension
     /**
      * Loads default stringer.
      */
-    protected function loadDefaultStringers(ContainerBuilder $container)
+    protected function loadDefaultStringers(ContainerBuilder $container): void
     {
         $definition = new Definition(PHPUnitExceptionStringer::class);
         $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
@@ -126,7 +126,7 @@ final class ExceptionExtension implements Extension
     /**
      * Processes all available exception stringers.
      */
-    protected function processStringers(ContainerBuilder $container)
+    protected function processStringers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::STRINGER_TAG);
         $definition = $container->getDefinition(self::PRESENTER_ID);
@@ -141,7 +141,7 @@ final class ExceptionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadVerbosityController($container)
+    protected function loadVerbosityController($container): void
     {
         $definition = new Definition(VerbosityController::class, [
             new Reference(self::PRESENTER_ID),

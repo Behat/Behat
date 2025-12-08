@@ -42,7 +42,7 @@ final class SuiteRegistry implements SuiteRepository
     /**
      * Registers suite generator.
      */
-    public function registerSuiteGenerator(SuiteGenerator $generator)
+    public function registerSuiteGenerator(SuiteGenerator $generator): void
     {
         $this->generators[] = $generator;
         $this->suitesGenerated = false;
@@ -56,7 +56,7 @@ final class SuiteRegistry implements SuiteRepository
      *
      * @throws SuiteConfigurationException
      */
-    public function registerSuiteConfiguration($name, $type, array $settings)
+    public function registerSuiteConfiguration($name, $type, array $settings): void
     {
         if (isset($this->suiteConfigurations[$name])) {
             throw new SuiteConfigurationException(sprintf(

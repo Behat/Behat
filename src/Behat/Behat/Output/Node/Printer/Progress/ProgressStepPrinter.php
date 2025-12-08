@@ -43,7 +43,7 @@ final class ProgressStepPrinter implements StepPrinter
     ) {
     }
 
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result)
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result): void
     {
         $printer = $formatter->getOutputPrinter();
         $style = $this->resultConverter->convertResultToString($result);

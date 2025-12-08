@@ -29,7 +29,7 @@ final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
     /**
      * Registers factory.
      */
-    public function registerFactory(ArgumentResolverFactory $factory)
+    public function registerFactory(ArgumentResolverFactory $factory): void
     {
         $this->factories[] = $factory;
     }

@@ -61,7 +61,7 @@ final class OutputExtension implements Extension
     /**
      * Registers formatter factory.
      */
-    public function registerFormatterFactory(FormatterFactory $factory)
+    public function registerFormatterFactory(FormatterFactory $factory): void
     {
         $this->factories[] = $factory;
     }
@@ -71,11 +71,11 @@ final class OutputExtension implements Extension
         return 'formatters';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $builder = $builder
             ->defaultValue([$this->defaultFormatter => ['enabled' => true]])
@@ -96,7 +96,7 @@ final class OutputExtension implements Extension
         ;
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadOutputController($container);
         $this->loadFormatters($container);
@@ -112,7 +112,7 @@ final class OutputExtension implements Extension
     /**
      * Loads output controller.
      */
-    private function loadOutputController(ContainerBuilder $container)
+    private function loadOutputController(ContainerBuilder $container): void
     {
         $definition = new Definition(OutputController::class, [
             new Reference(self::MANAGER_ID),
@@ -124,7 +124,7 @@ final class OutputExtension implements Extension
     /**
      * Loads output manager.
      */
-    private function loadManager(ContainerBuilder $container, array $formatters)
+    private function loadManager(ContainerBuilder $container, array $formatters): void
     {
         $definition = new Definition(OutputManager::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
@@ -147,7 +147,7 @@ final class OutputExtension implements Extension
     /**
      * Loads default formatters using registered factories.
      */
-    private function loadFormatters(ContainerBuilder $container)
+    private function loadFormatters(ContainerBuilder $container): void
     {
         foreach ($this->factories as $factory) {
             $factory->buildFormatter($container);
@@ -157,7 +157,7 @@ final class OutputExtension implements Extension
     /**
      * Processes formatters using registered factories.
      */
-    private function processFormatters(ContainerBuilder $container)
+    private function processFormatters(ContainerBuilder $container): void
     {
         foreach ($this->factories as $factory) {
             $factory->processFormatter($container);
@@ -167,7 +167,7 @@ final class OutputExtension implements Extension
     /**
      * Processes all available output formatters.
      */
-    private function processDynamicallyRegisteredFormatters(ContainerBuilder $container)
+    private function processDynamicallyRegisteredFormatters(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::FORMATTER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);

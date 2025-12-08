@@ -44,7 +44,7 @@ final class OrderController implements Controller
     /**
      * Configures command to be executable by the controller.
      */
-    public function configure(SymfonyCommand $command)
+    public function configure(SymfonyCommand $command): void
     {
         $command->addOption(
             '--order',
@@ -79,7 +79,7 @@ final class OrderController implements Controller
     /**
      * Register a new available controller.
      */
-    public function registerOrderer(Orderer $orderer)
+    public function registerOrderer(Orderer $orderer): void
     {
         $this->orderers[$orderer->getName()] = $orderer;
     }

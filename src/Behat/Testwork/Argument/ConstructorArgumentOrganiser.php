@@ -61,7 +61,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
         ReflectionMethod $constructor,
         array $passedArguments,
         array $organisedArguments,
-    ) {
+    ): void {
         foreach (array_keys($passedArguments) as $key) {
             if (array_key_exists($key, $organisedArguments)) {
                 continue;

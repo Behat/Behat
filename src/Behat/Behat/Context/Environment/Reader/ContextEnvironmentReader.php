@@ -32,7 +32,7 @@ final class ContextEnvironmentReader implements EnvironmentReader
     /**
      * Registers context loader.
      */
-    public function registerContextReader(ContextReader $contextReader)
+    public function registerContextReader(ContextReader $contextReader): void
     {
         $this->contextReaders[] = $contextReader;
     }

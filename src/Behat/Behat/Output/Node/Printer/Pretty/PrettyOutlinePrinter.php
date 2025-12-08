@@ -54,7 +54,7 @@ final class PrettyOutlinePrinter implements OutlinePrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline)
+    public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline): void
     {
         $this->scenarioPrinter->printHeader($formatter, $feature, $outline);
 
@@ -62,7 +62,7 @@ final class PrettyOutlinePrinter implements OutlinePrinter
         $this->printExamplesTableHeader($formatter->getOutputPrinter(), $outline->getExampleTable());
     }
 
-    public function printFooter(Formatter $formatter, TestResult $result)
+    public function printFooter(Formatter $formatter, TestResult $result): void
     {
         $formatter->getOutputPrinter()->writeln();
     }
@@ -72,7 +72,7 @@ final class PrettyOutlinePrinter implements OutlinePrinter
      *
      * @param StepNode[]  $steps
      */
-    private function printExamplesSteps(Formatter $formatter, OutlineNode $outline, array $steps)
+    private function printExamplesSteps(Formatter $formatter, OutlineNode $outline, array $steps): void
     {
         foreach ($steps as $step) {
             $this->stepPrinter->printStep($formatter, $outline, $step, new UndefinedStepResult());
@@ -84,7 +84,7 @@ final class PrettyOutlinePrinter implements OutlinePrinter
     /**
      * Prints examples table header.
      */
-    private function printExamplesTableHeader(OutputPrinter $printer, ExampleTableNode $table)
+    private function printExamplesTableHeader(OutputPrinter $printer, ExampleTableNode $table): void
     {
         $printer->writeln(sprintf('%s{+keyword}%s:{-keyword}', $this->indentText, $table->getKeyword()));
 

@@ -47,7 +47,7 @@ final class ContainerLoader
     /**
      * Loads container extension.
      */
-    public function load(ContainerBuilder $container, array $configs)
+    public function load(ContainerBuilder $container, array $configs): void
     {
         $configs = $this->initializeExtensions($container, $configs);
         $config = $this->processConfig($configs);
@@ -111,7 +111,7 @@ final class ContainerLoader
      *
      * @throws ExtensionException
      */
-    private function loadExtensions(ContainerBuilder $container, array $config)
+    private function loadExtensions(ContainerBuilder $container, array $config): void
     {
         // Load default extensions first
         foreach ($this->extensionManager->getExtensions() as $extension) {
@@ -140,7 +140,7 @@ final class ContainerLoader
     /**
      * Loads extension configuration.
      */
-    private function loadExtension(ContainerBuilder $container, Extension $extension, array $config)
+    private function loadExtension(ContainerBuilder $container, Extension $extension, array $config): void
     {
         $tempContainer = new ContainerBuilder(new ParameterBag([
             'paths.base' => $container->getParameter('paths.base'),

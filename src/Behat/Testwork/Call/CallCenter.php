@@ -46,7 +46,7 @@ final class CallCenter
     /**
      * Registers call filter.
      */
-    public function registerCallFilter(CallFilter $filter)
+    public function registerCallFilter(CallFilter $filter): void
     {
         $this->callFilters[] = $filter;
     }
@@ -54,7 +54,7 @@ final class CallCenter
     /**
      * Registers call handler.
      */
-    public function registerCallHandler(CallHandler $handler)
+    public function registerCallHandler(CallHandler $handler): void
     {
         $this->callHandlers[] = $handler;
     }
@@ -62,7 +62,7 @@ final class CallCenter
     /**
      * Registers call result filter.
      */
-    public function registerResultFilter(ResultFilter $filter)
+    public function registerResultFilter(ResultFilter $filter): void
     {
         $this->resultFilters[] = $filter;
     }
@@ -70,7 +70,7 @@ final class CallCenter
     /**
      * Registers result exception handler.
      */
-    public function registerExceptionHandler(ExceptionHandler $handler)
+    public function registerExceptionHandler(ExceptionHandler $handler): void
     {
         $this->exceptionHandlers[] = $handler;
     }

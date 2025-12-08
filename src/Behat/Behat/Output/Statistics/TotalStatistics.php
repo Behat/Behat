@@ -71,7 +71,7 @@ final class TotalStatistics implements Statistics
         $this->memory = new Memory();
     }
 
-    public function resetAllCounters()
+    public function resetAllCounters(): void
     {
         $this->scenarioCounters = $this->stepCounters = [
             TestResult::PASSED => 0,
@@ -85,7 +85,7 @@ final class TotalStatistics implements Statistics
     /**
      * Starts timer.
      */
-    public function startTimer()
+    public function startTimer(): void
     {
         $this->timer->start();
     }
@@ -93,7 +93,7 @@ final class TotalStatistics implements Statistics
     /**
      * Stops timer.
      */
-    public function stopTimer()
+    public function stopTimer(): void
     {
         $this->timer->stop();
     }
@@ -121,7 +121,7 @@ final class TotalStatistics implements Statistics
     /**
      * Registers scenario stat.
      */
-    public function registerScenarioStat(ScenarioStat $stat)
+    public function registerScenarioStat(ScenarioStat $stat): void
     {
         if (TestResults::NO_TESTS === $stat->getResultCode()) {
             return;
@@ -141,7 +141,7 @@ final class TotalStatistics implements Statistics
     /**
      * Registers step stat.
      */
-    public function registerStepStat(StepStat $stat)
+    public function registerStepStat(StepStat $stat): void
     {
         ++$this->stepCounters[$stat->getResultCode()];
 
@@ -157,7 +157,7 @@ final class TotalStatistics implements Statistics
     /**
      * Registers hook stat.
      */
-    public function registerHookStat(HookStat $stat)
+    public function registerHookStat(HookStat $stat): void
     {
         if ($stat->isSuccessful()) {
             return;

@@ -28,7 +28,7 @@ final class SnippetWriter
     /**
      * Registers snippet appender.
      */
-    public function registerSnippetAppender(SnippetAppender $appender)
+    public function registerSnippetAppender(SnippetAppender $appender): void
     {
         $this->appenders[] = $appender;
     }
@@ -38,7 +38,7 @@ final class SnippetWriter
      *
      * @param AggregateSnippet[] $snippets
      */
-    public function appendSnippets(array $snippets)
+    public function appendSnippets(array $snippets): void
     {
         foreach ($snippets as $snippet) {
             $this->appendSnippet($snippet);
@@ -50,7 +50,7 @@ final class SnippetWriter
      *
      * @param AggregateSnippet[] $snippets
      */
-    public function printSnippets(SnippetPrinter $printer, array $snippets)
+    public function printSnippets(SnippetPrinter $printer, array $snippets): void
     {
         $printableSnippets = [];
         foreach ($snippets as $snippet) {
@@ -76,7 +76,7 @@ final class SnippetWriter
      *
      * @param UndefinedStep[] $undefinedSteps
      */
-    public function printUndefinedSteps(SnippetPrinter $printer, array $undefinedSteps)
+    public function printUndefinedSteps(SnippetPrinter $printer, array $undefinedSteps): void
     {
         $printableSteps = [];
         foreach ($undefinedSteps as $undefinedStep) {
@@ -98,7 +98,7 @@ final class SnippetWriter
     /**
      * Appends snippet to appropriate targets.
      */
-    private function appendSnippet(AggregateSnippet $snippet)
+    private function appendSnippet(AggregateSnippet $snippet): void
     {
         foreach ($this->appenders as $appender) {
             if (!$appender->supportsSnippet($snippet)) {

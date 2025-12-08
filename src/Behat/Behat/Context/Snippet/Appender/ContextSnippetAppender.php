@@ -35,7 +35,7 @@ final class ContextSnippetAppender implements SnippetAppender
         return 'context' === $snippet->getType();
     }
 
-    public function appendSnippet(AggregateSnippet $snippet)
+    public function appendSnippet(AggregateSnippet $snippet): void
     {
         foreach ($snippet->getTargets() as $contextClass) {
             $reflection = new ReflectionClass($contextClass);
@@ -93,7 +93,7 @@ final class ContextSnippetAppender implements SnippetAppender
      *
      * @param string           $path
      */
-    private function logSnippetAddition(AggregateSnippet $snippet, $path)
+    private function logSnippetAddition(AggregateSnippet $snippet, $path): void
     {
         if (!$this->logger instanceof FilesystemLogger) {
             return;
