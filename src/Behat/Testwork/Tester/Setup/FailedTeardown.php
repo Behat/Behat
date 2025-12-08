@@ -17,12 +17,12 @@ namespace Behat\Testwork\Tester\Setup;
  */
 final class FailedTeardown implements Teardown
 {
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return false;
     }
 
-    public function hasOutput()
+    public function hasOutput(): bool
     {
         return false;
     }

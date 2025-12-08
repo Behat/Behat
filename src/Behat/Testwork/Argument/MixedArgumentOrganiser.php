@@ -142,10 +142,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Check if a given value is typehinted in the argument list.
      *
      * @param  ReflectionParameter[] $parameters
-     *
-     * @return bool
      */
-    private function isParameterTypehintedInArgumentList(array $parameters, $value)
+    private function isParameterTypehintedInArgumentList(array $parameters, $value): bool
     {
         if (!is_object($value)) {
             return false;
@@ -344,7 +342,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
         array &$candidates,
         array &$arguments,
         $predicate,
-    ) {
+    ): bool {
         foreach ($candidates as $candidateIndex => $candidate) {
             foreach ($this->getReflectionClassesFromParameter($parameter) as $class) {
                 if ($predicate($class, $candidate)) {

@@ -45,10 +45,8 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Checks if any call in collection throws an exception.
-     *
-     * @return bool
      */
-    public function hasExceptions()
+    public function hasExceptions(): bool
     {
         foreach ($this->results as $result) {
             if ($result->hasException()) {
@@ -61,10 +59,8 @@ final class CallResults implements Countable, IteratorAggregate
 
     /**
      * Checks if any call in collection produces an output.
-     *
-     * @return bool
      */
-    public function hasStdOuts()
+    public function hasStdOuts(): bool
     {
         foreach ($this->results as $result) {
             if ($result->hasStdOut()) {

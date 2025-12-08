@@ -73,7 +73,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         return new Pattern($methodName, $pattern, $count);
     }
 
-    public function supportsPattern($pattern)
+    public function supportsPattern($pattern): bool
     {
         return true;
     }

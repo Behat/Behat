@@ -45,7 +45,7 @@ final class RuntimeCallHandler implements CallHandler
         $this->validator = new Validator();
     }
 
-    public function supportsCall(Call $call)
+    public function supportsCall(Call $call): bool
     {
         return true;
     }
@@ -69,11 +69,9 @@ final class RuntimeCallHandler implements CallHandler
      * @param string $file
      * @param int    $line
      *
-     * @return bool
-     *
      * @throws CallErrorException
      */
-    public function handleError($level, $message, $file, $line)
+    public function handleError($level, $message, $file, $line): bool
     {
         if ($this->errorLevelIsNotReportable($level)) {
             return false;

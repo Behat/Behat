@@ -104,10 +104,7 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
         return 'PatternTransform ' . $this->pattern;
     }
 
-    /**
-     * @return bool
-     */
-    private function match($regexPattern, $argumentValue, &$match)
+    private function match($regexPattern, $argumentValue, &$match): bool
     {
         if (is_string($argumentValue) && preg_match($regexPattern, $argumentValue, $match)) {
             // take arguments from capture groups if there are some

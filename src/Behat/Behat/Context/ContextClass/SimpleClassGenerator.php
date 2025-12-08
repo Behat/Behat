@@ -48,7 +48,7 @@ class {className} implements Context
 
 PHP;
 
-    public function supportsSuiteAndClass(Suite $suite, $contextClass)
+    public function supportsSuiteAndClass(Suite $suite, $contextClass): bool
     {
         return true;
     }

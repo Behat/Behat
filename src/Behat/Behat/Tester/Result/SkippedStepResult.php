@@ -42,7 +42,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
         return $this->searchResult->getMatchedDefinition();
     }
 
-    public function isPassed()
+    public function isPassed(): bool
     {
         return false;
     }

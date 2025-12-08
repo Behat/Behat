@@ -21,7 +21,7 @@ use Behat\Testwork\Suite\Suite;
  */
 final class StaticEnvironmentHandler implements EnvironmentHandler
 {
-    public function supportsSuite(Suite $suite)
+    public function supportsSuite(Suite $suite): bool
     {
         return true;
     }

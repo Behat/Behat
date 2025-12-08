@@ -29,7 +29,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     ) {
     }
 
-    public function hasException()
+    public function hasException(): bool
     {
         return true;
     }
@@ -42,7 +42,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
         return $this->searchException;
     }
 
-    public function isPassed()
+    public function isPassed(): bool
     {
         return false;
     }

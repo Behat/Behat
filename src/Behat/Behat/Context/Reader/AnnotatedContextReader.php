@@ -198,10 +198,8 @@ final class AnnotatedContextReader implements ContextReader
      * Checks if provided doc line is one of the ignored annotations.
      *
      * @param string $docLine
-     *
-     * @return bool
      */
-    private function isIgnoredAnnotation($docLine)
+    private function isIgnoredAnnotation($docLine): bool
     {
         $lowDocLine = strtolower($docLine);
         foreach (self::$ignoreAnnotations as $ignoredAnnotation) {

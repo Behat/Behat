@@ -151,10 +151,8 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is a BEFORE step with setup that produced output.
-     *
-     * @return bool
      */
-    private function isBeforeStepEventWithOutput(Event $event)
+    private function isBeforeStepEventWithOutput(Event $event): bool
     {
         if ($event instanceof AfterStepSetup && $event->hasOutput()) {
             $this->stepSetupHadOutput = true;
@@ -167,10 +165,8 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is an AFTER step with teardown that produced output.
-     *
-     * @return bool
      */
-    private function isAfterStepWithOutput(Event $event)
+    private function isAfterStepWithOutput(Event $event): bool
     {
         if ($event instanceof AfterStepTested && ($this->stepSetupHadOutput || $event->hasOutput())) {
             $this->stepSetupHadOutput = false;
