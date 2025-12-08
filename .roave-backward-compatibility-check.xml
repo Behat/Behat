@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<roave-bc-check
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://github.com/Roave/BackwardCompatibilityCheck/raw/refs/heads/8.18.x/Resources/schema.xsd">
+    <baseline>
+        <!--
+          Adding strict types to a parameter may be a technical BC break, but historically we have not considered them
+          to be if they match the phpdoc. Parameter type changes will be reviewed manually by maintainers.
+        -->
+        <ignored-regex>#CHANGED: The parameter .+? changed from no type to#</ignored-regex>
+    </baseline>
+</roave-bc-check>
