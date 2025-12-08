@@ -39,7 +39,7 @@ class EnvironmentCall implements Call
      *
      * @return Environment
      */
-    final public function getEnvironment(): Environment
+    final public function getEnvironment()
     {
         return $this->environment;
     }
