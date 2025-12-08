@@ -35,20 +35,16 @@ final class BeforeOutlineTested extends OutlineTested implements BeforeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns outline node.
-     *
-     * @return OutlineNode
      */
-    public function getOutline()
+    public function getOutline(): OutlineNode
     {
         return $this->outline;
     }

@@ -41,12 +41,12 @@ final class BeforeSuiteScope implements SuiteScope
         return $this->environment->getSuite();
     }
 
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }
 
-    public function getSpecificationIterator()
+    public function getSpecificationIterator(): SpecificationIterator
     {
         return $this->iterator;
     }

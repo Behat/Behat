@@ -34,17 +34,15 @@ final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
         parent::__construct($env);
     }
 
-    public function getSpecificationIterator()
+    public function getSpecificationIterator(): SpecificationIterator
     {
         return $this->iterator;
     }
 
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }

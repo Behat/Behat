@@ -90,7 +90,7 @@ final class CallResults implements Countable, IteratorAggregate
      *
      * @return CallResult[]
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->results;
     }

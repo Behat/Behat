@@ -67,7 +67,7 @@ final class LazyFeatureIterator implements SpecificationIterator
         $this->filters = array_merge($this->getSuiteFilters($this->suite), $filters);
     }
 
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }

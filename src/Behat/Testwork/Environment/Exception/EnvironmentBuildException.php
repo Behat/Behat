@@ -34,10 +34,8 @@ final class EnvironmentBuildException extends RuntimeException implements Enviro
 
     /**
      * Returns suite that caused exception.
-     *
-     * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }

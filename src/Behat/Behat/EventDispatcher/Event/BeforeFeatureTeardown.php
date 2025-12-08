@@ -35,20 +35,16 @@ final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardow
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }

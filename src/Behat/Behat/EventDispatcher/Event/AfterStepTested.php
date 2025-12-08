@@ -41,40 +41,32 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns step node.
-     *
-     * @return StepNode
      */
-    public function getStep()
+    public function getStep(): StepNode
     {
         return $this->step;
     }
 
     /**
      * Returns current test result.
-     *
-     * @return StepResult
      */
-    public function getTestResult()
+    public function getTestResult(): StepResult
     {
         return $this->result;
     }
 
     /**
      * Returns current test teardown.
-     *
-     * @return Teardown
      */
-    public function getTeardown()
+    public function getTeardown(): Teardown
     {
         return $this->teardown;
     }

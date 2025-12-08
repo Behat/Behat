@@ -33,20 +33,16 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
 
     /**
      * Returns definition search result.
-     *
-     * @return SearchResult
      */
-    public function getSearchResult()
+    public function getSearchResult(): SearchResult
     {
         return $this->searchResult;
     }
 
     /**
      * Returns definition call result or null if no call were made.
-     *
-     * @return CallResult
      */
-    public function getCallResult()
+    public function getCallResult(): CallResult
     {
         return $this->callResult;
     }

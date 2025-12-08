@@ -68,7 +68,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
      *
      * @return TestResult[]
      */
-    public function toArray()
+    public function toArray(): array
     {
         return $this->results;
     }

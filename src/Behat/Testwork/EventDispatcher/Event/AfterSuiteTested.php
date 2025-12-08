@@ -36,27 +36,23 @@ final class AfterSuiteTested extends SuiteTested implements AfterTested
         parent::__construct($env);
     }
 
-    public function getSpecificationIterator()
+    public function getSpecificationIterator(): SpecificationIterator
     {
         return $this->iterator;
     }
 
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }
 
     /**
      * Returns current test teardown.
-     *
-     * @return Teardown
      */
-    public function getTeardown()
+    public function getTeardown(): Teardown
     {
         return $this->teardown;
     }

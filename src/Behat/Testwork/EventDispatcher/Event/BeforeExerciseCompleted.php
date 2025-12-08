@@ -29,7 +29,10 @@ final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeT
     ) {
     }
 
-    public function getSpecificationIterators()
+    /**
+     * @return SpecificationIterator[]
+     */
+    public function getSpecificationIterators(): array
     {
         return $this->specificationIterators;
     }

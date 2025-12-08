@@ -34,17 +34,15 @@ final class AfterSuiteSetup extends SuiteTested implements AfterSetup
         parent::__construct($env);
     }
 
-    public function getSpecificationIterator()
+    public function getSpecificationIterator(): SpecificationIterator
     {
         return $this->iterator;
     }
 
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

@@ -38,10 +38,8 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
@@ -60,20 +58,16 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
 
     /**
      * Returns background node.
-     *
-     * @return BackgroundNode
      */
-    public function getBackground()
+    public function getBackground(): BackgroundNode
     {
         return $this->background;
     }
 
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

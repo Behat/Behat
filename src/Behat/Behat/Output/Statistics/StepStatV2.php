@@ -79,20 +79,16 @@ final class StepStatV2 extends StepStat implements Stringable
 
     /**
      * Returns step error (if has one).
-     *
-     * @return string|null
      */
-    public function getError()
+    public function getError(): ?string
     {
         return $this->error;
     }
 
     /**
      * Returns step output (if has one).
-     *
-     * @return string|null
      */
-    public function getStdOut()
+    public function getStdOut(): ?string
     {
         return $this->stdOut;
     }

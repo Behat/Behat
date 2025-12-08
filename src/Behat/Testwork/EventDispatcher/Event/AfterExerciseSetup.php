@@ -31,17 +31,18 @@ final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
     ) {
     }
 
-    public function getSpecificationIterators()
+    /**
+     * @return SpecificationIterator[]
+     */
+    public function getSpecificationIterators(): array
     {
         return $this->specificationIterators;
     }
 
     /**
      * Returns exercise setup result.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

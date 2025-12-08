@@ -40,7 +40,7 @@ final class SpecificationArrayIterator extends ArrayIterator implements Specific
         parent::__construct($specifications);
     }
 
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }

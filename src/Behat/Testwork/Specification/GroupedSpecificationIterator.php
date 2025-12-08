@@ -62,7 +62,7 @@ final class GroupedSpecificationIterator implements SpecificationIterator
         );
     }
 
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }

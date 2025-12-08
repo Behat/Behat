@@ -31,20 +31,16 @@ final class UndefinedStep
 
     /**
      * Returns environment that needs this step.
-     *
-     * @return Environment
      */
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }
 
     /**
      * Returns undefined step node.
-     *
-     * @return StepNode
      */
-    public function getStep()
+    public function getStep(): StepNode
     {
         return $this->step;
     }

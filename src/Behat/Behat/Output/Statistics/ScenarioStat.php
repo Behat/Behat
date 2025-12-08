@@ -34,10 +34,8 @@ final class ScenarioStat implements Stringable
 
     /**
      * Returns scenario title.
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }

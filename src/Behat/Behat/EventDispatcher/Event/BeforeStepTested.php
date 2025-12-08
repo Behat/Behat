@@ -35,20 +35,16 @@ final class BeforeStepTested extends StepTested implements BeforeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns step node.
-     *
-     * @return StepNode
      */
-    public function getStep()
+    public function getStep(): StepNode
     {
         return $this->step;
     }

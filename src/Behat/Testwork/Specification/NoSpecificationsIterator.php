@@ -34,10 +34,8 @@ final class NoSpecificationsIterator extends EmptyIterator implements Specificat
 
     /**
      * Returns suite that was used to load subjects.
-     *
-     * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }

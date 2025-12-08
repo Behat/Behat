@@ -23,6 +23,7 @@ use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
+use Exception;
 
 /**
  * Listens and records hook stats.
@@ -94,7 +95,7 @@ final class HookStatsListener implements EventListener
         $scope = $call->getScope();
         $path = $callee->getPath();
         $stdOut = $hookCallResult->getStdOut();
-        $error = $hookCallResult->getException()
+        $error = $hookCallResult->getException() instanceof Exception
             ? $this->exceptionPresenter->presentException($hookCallResult->getException())
             : null;
 

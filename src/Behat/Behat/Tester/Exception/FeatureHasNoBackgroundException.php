@@ -35,10 +35,8 @@ final class FeatureHasNoBackgroundException extends RuntimeException implements 
 
     /**
      * Returns feature that caused exception.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }

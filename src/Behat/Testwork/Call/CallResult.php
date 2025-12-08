@@ -34,10 +34,8 @@ final class CallResult
 
     /**
      * Returns call.
-     *
-     * @return Call
      */
-    public function getCall()
+    public function getCall(): Call
     {
         return $this->call;
     }
@@ -63,10 +61,8 @@ final class CallResult
 
     /**
      * Returns exception thrown by call (if any).
-     *
-     * @return Exception|null
      */
-    public function getException()
+    public function getException(): ?Exception
     {
         return $this->exception;
     }

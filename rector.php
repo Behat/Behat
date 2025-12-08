@@ -9,6 +9,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictRet
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
 
@@ -20,7 +21,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php81: true)
-    ->withTypeCoverageLevel(20)
+    ->withTypeCoverageLevel(21)
     ->withSkip([
         StringableForToStringRector::class,
         ReturnTypeFromStrictConstantReturnRector::class => [
@@ -82,6 +83,25 @@ return RectorConfig::configure()
             __DIR__.'/src/Behat/Testwork/Output/Printer/StreamOutputPrinter.php',
             __DIR__.'/src/Behat/Testwork/PathOptions/Cli/PathOptionsController.php',
             __DIR__.'/src/Behat/Testwork/Tester/ServiceContainer/TesterExtension.php',
+        ],
+        ReturnTypeFromStrictTypedPropertyRector::class => [
+            // Would be a BC break
+            __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
+            __DIR__.'/src/Behat/Config/Converter/UsedClassesCollector.php',
+            __DIR__.'/src/Behat/Testwork/Environment/Call/EnvironmentCall.php',
+            __DIR__.'/src/Behat/Testwork/Call/RuntimeCallee.php',
+            __DIR__.'/src/Behat/Testwork/Environment/StaticEnvironment.php',
+            __DIR__.'/src/Behat/Testwork/Output/Printer/StreamOutputPrinter.php',
+            // The interface for getScenario on these events is actually broken (says it returns ScenarioInterface
+            // but it actually returns ScenarioLikeInterface) so we need to fix that (in 4.0) first
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/AfterBackgroundSetup.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/AfterBackgroundTested.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/BeforeBackgroundTeardown.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/BeforeBackgroundTested.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/AfterScenarioSetup.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/AfterScenarioTested.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/BeforeScenarioTeardown.php',
+            __DIR__.'/src/Behat/Behat/EventDispatcher/Event/BeforeScenarioTested.php',
         ],
     ])
     ->withImportNames(

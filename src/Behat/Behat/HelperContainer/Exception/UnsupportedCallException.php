@@ -34,10 +34,8 @@ final class UnsupportedCallException extends InvalidArgumentException implements
 
     /**
      * Returns a call that caused exception.
-     *
-     * @return Call
      */
-    public function getCall()
+    public function getCall(): Call
     {
         return $this->call;
     }

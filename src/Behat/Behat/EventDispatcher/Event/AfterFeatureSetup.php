@@ -35,20 +35,16 @@ final class AfterFeatureSetup extends FeatureTested implements AfterSetup
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

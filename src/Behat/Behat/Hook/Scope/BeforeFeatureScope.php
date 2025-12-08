@@ -50,20 +50,16 @@ final class BeforeFeatureScope implements FeatureScope
 
     /**
      * Returns hook environment.
-     *
-     * @return Environment
      */
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }
 
     /**
      * Returns scope feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }

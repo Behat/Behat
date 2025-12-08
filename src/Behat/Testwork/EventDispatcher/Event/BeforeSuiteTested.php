@@ -32,7 +32,7 @@ final class BeforeSuiteTested extends SuiteTested implements BeforeTested
         parent::__construct($env);
     }
 
-    public function getSpecificationIterator()
+    public function getSpecificationIterator(): SpecificationIterator
     {
         return $this->iterator;
     }

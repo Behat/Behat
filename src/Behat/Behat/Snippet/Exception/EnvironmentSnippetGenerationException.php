@@ -34,10 +34,8 @@ final class EnvironmentSnippetGenerationException extends RuntimeException imple
 
     /**
      * Returns environment that caused exception.
-     *
-     * @return Environment
      */
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }

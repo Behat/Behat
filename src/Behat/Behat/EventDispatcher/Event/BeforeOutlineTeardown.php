@@ -37,30 +37,24 @@ final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardow
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns outline node.
-     *
-     * @return OutlineNode
      */
-    public function getOutline()
+    public function getOutline(): OutlineNode
     {
         return $this->outline;
     }
 
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }

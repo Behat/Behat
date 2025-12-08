@@ -37,30 +37,24 @@ final class AfterOutlineSetup extends OutlineTested implements AfterSetup
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns outline node.
-     *
-     * @return OutlineNode
      */
-    public function getOutline()
+    public function getOutline(): OutlineNode
     {
         return $this->outline;
     }
 
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

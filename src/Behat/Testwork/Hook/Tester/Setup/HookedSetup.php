@@ -45,10 +45,8 @@ final class HookedSetup implements Setup
 
     /**
      * Returns hook call results.
-     *
-     * @return CallResults
      */
-    public function getHookCallResults()
+    public function getHookCallResults(): CallResults
     {
         return $this->hookCallResults;
     }

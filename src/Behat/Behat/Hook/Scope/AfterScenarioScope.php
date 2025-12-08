@@ -55,40 +55,32 @@ final class AfterScenarioScope implements ScenarioScope, AfterTestScope
 
     /**
      * Returns hook environment.
-     *
-     * @return Environment
      */
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }
 
     /**
      * Returns scope feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns scenario.
-     *
-     * @return ScenarioInterface
      */
-    public function getScenario()
+    public function getScenario(): ScenarioInterface
     {
         return $this->scenario;
     }
 
     /**
      * Returns test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }

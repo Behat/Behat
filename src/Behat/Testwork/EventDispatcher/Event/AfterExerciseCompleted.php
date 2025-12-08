@@ -33,27 +33,26 @@ final class AfterExerciseCompleted extends ExerciseCompleted implements AfterTes
     ) {
     }
 
-    public function getSpecificationIterators()
+    /**
+     * @return SpecificationIterator[]
+     */
+    public function getSpecificationIterators(): array
     {
         return $this->specificationIterators;
     }
 
     /**
      * Returns exercise test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }
 
     /**
      * Returns exercise teardown result.
-     *
-     * @return Teardown
      */
-    public function getTeardown()
+    public function getTeardown(): Teardown
     {
         return $this->teardown;
     }

@@ -33,10 +33,8 @@ final class BeforeFeatureTested extends FeatureTested implements BeforeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }

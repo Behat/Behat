@@ -57,7 +57,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         $this->serviceContainer = $container;
     }
 
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->suite;
     }
@@ -110,7 +110,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         return $this->contexts[$class];
     }
 
-    public function getServiceContainer()
+    public function getServiceContainer(): ?ContainerInterface
     {
         return $this->serviceContainer;
     }

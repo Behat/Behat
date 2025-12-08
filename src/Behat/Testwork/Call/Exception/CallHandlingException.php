@@ -34,10 +34,8 @@ final class CallHandlingException extends RuntimeException implements CallExcept
 
     /**
      * Returns call that caused exception.
-     *
-     * @return Call
      */
-    public function getCall()
+    public function getCall(): Call
     {
         return $this->call;
     }

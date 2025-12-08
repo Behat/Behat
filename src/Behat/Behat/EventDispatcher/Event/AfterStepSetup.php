@@ -37,30 +37,24 @@ final class AfterStepSetup extends StepTested implements AfterSetup
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
     /**
      * Returns step node.
-     *
-     * @return StepNode
      */
-    public function getStep()
+    public function getStep(): StepNode
     {
         return $this->step;
     }
 
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

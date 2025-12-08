@@ -36,10 +36,8 @@ final class TransformationCall extends EnvironmentCall
 
     /**
      * Returns transformed definition.
-     *
-     * @return Definition
      */
-    public function getDefinition()
+    public function getDefinition(): Definition
     {
         return $this->definition;
     }

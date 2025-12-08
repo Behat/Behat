@@ -13,7 +13,6 @@ namespace Behat\Behat\Definition\Cli;
 use Behat\Behat\Definition\DefinitionWriter;
 use Behat\Behat\Definition\Printer\ConsoleDefinitionInformationPrinter;
 use Behat\Behat\Definition\Printer\ConsoleDefinitionListPrinter;
-use Behat\Behat\Definition\Printer\DefinitionPrinter;
 use Behat\Testwork\Cli\Controller;
 use Behat\Testwork\Suite\SuiteRepository;
 use Symfony\Component\Console\Command\Command;
@@ -71,10 +70,8 @@ final class AvailableDefinitionsController implements Controller
      * Returns definition printer for provided option argument.
      *
      * @param string $argument
-     *
-     * @return DefinitionPrinter
      */
-    private function getDefinitionPrinter($argument)
+    private function getDefinitionPrinter($argument): ConsoleDefinitionListPrinter|ConsoleDefinitionInformationPrinter
     {
         if ('l' === $argument) {
             return $this->listPrinter;

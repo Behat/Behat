@@ -35,10 +35,8 @@ final class EnvironmentIsolationException extends RuntimeException implements En
 
     /**
      * Returns environment that caused exception.
-     *
-     * @return Environment
      */
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }

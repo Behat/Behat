@@ -42,10 +42,8 @@ final class GenericSuite implements Suite
 
     /**
      * Returns suite settings.
-     *
-     * @return array
      */
-    public function getSettings()
+    public function getSettings(): array
     {
         return $this->settings;
     }

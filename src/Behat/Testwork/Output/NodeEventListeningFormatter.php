@@ -72,7 +72,7 @@ final class NodeEventListeningFormatter implements Formatter
         return $this->description;
     }
 
-    public function getOutputPrinter()
+    public function getOutputPrinter(): OutputPrinter
     {
         return $this->printer;
     }
