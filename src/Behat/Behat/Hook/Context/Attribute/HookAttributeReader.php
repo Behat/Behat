@@ -21,23 +21,24 @@ use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
 use Behat\Hook\BeforeSuite;
 use Behat\Hook\Hook;
+use Behat\Testwork\Hook\Call\RuntimeHook;
 use ReflectionAttribute;
 use ReflectionMethod;
 
 final class HookAttributeReader implements AttributeReader
 {
     /**
-     * @var string[]
+     * @var array<class-string<Hook>, class-string<RuntimeHook>>
      */
     private const KNOWN_ATTRIBUTES = [
-        AfterFeature::class => 'Behat\Behat\Hook\Call\AfterFeature',
-        AfterScenario::class => 'Behat\Behat\Hook\Call\AfterScenario',
-        AfterStep::class => 'Behat\Behat\Hook\Call\AfterStep',
-        BeforeFeature::class => 'Behat\Behat\Hook\Call\BeforeFeature',
-        BeforeScenario::class => 'Behat\Behat\Hook\Call\BeforeScenario',
-        BeforeStep::class => 'Behat\Behat\Hook\Call\BeforeStep',
-        BeforeSuite::class => 'Behat\Testwork\Hook\Call\BeforeSuite',
-        AfterSuite::class => 'Behat\Testwork\Hook\Call\AfterSuite',
+        AfterFeature::class => \Behat\Behat\Hook\Call\AfterFeature::class,
+        AfterScenario::class => \Behat\Behat\Hook\Call\AfterScenario::class,
+        AfterStep::class => \Behat\Behat\Hook\Call\AfterStep::class,
+        BeforeFeature::class => \Behat\Behat\Hook\Call\BeforeFeature::class,
+        BeforeScenario::class => \Behat\Behat\Hook\Call\BeforeScenario::class,
+        BeforeStep::class => \Behat\Behat\Hook\Call\BeforeStep::class,
+        BeforeSuite::class => \Behat\Testwork\Hook\Call\BeforeSuite::class,
+        AfterSuite::class => \Behat\Testwork\Hook\Call\AfterSuite::class,
     ];
 
     /**
@@ -48,7 +49,10 @@ final class HookAttributeReader implements AttributeReader
     ) {
     }
 
-    public function readCallees(string $contextClass, ReflectionMethod $method)
+    /**
+     * @return list<RuntimeHook>
+     */
+    public function readCallees(string $contextClass, ReflectionMethod $method): array
     {
         $attributes = $method->getAttributes(Hook::class, ReflectionAttribute::IS_INSTANCEOF);
 

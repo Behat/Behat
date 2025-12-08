@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context\Attribute;
 
+use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
 
 /**
@@ -24,7 +25,7 @@ interface AttributeReader
     /**
      * Reads all callees associated with a provided method.
      *
-     * @return array
+     * @return list<RuntimeCallee>
      */
     public function readCallees(string $contextClass, ReflectionMethod $method);
 }

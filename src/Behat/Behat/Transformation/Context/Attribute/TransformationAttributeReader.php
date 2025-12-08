@@ -30,7 +30,7 @@ final class TransformationAttributeReader implements AttributeReader
     }
 
     /**
-     * @return Transformation[]
+     * @return list<Transformation>
      */
     public function readCallees(string $contextClass, ReflectionMethod $method): array
     {

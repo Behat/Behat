@@ -44,7 +44,10 @@ final class DefinitionAttributeReader implements AttributeReader
     ) {
     }
 
-    public function readCallees(string $contextClass, ReflectionMethod $method)
+    /**
+     * @return list<Call\RuntimeDefinition>
+     */
+    public function readCallees(string $contextClass, ReflectionMethod $method): array
     {
         $attributes = $method->getAttributes(Attribute\Definition::class, ReflectionAttribute::IS_INSTANCEOF);
 
