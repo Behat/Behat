@@ -113,10 +113,8 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Gets and validates arguments from schema.
-     *
-     * @return array
      */
-    private function getAndValidateArguments(array $schema)
+    private function getAndValidateArguments(array $schema): array
     {
         return isset($schema['arguments']) ? (array) $schema['arguments'] : [];
     }
