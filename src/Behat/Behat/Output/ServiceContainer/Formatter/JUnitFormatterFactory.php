@@ -179,10 +179,8 @@ final class JUnitFormatterFactory implements FormatterFactory
 
     /**
      * Creates output printer definition.
-     *
-     * @return Definition
      */
-    private function createOutputPrinterDefinition()
+    private function createOutputPrinterDefinition(): Definition
     {
         return new Definition(JUnitOutputPrinter::class, [
             new Definition(FilesystemOutputFactory::class),

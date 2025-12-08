@@ -82,10 +82,8 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Executes single call.
-     *
-     * @return CallResult
      */
-    private function executeCall(Call $call)
+    private function executeCall(Call $call): CallResult
     {
         $reflection = $call->getCallee()->getReflection();
         $callable = $call->getBoundCallable();

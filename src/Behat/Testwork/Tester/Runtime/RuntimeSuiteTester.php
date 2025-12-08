@@ -16,8 +16,10 @@ use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Behat\Testwork\Tester\SpecificationTester;
 use Behat\Testwork\Tester\SuiteTester;
 
@@ -42,12 +44,12 @@ final class RuntimeSuiteTester implements SuiteTester
     ) {
     }
 
-    public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
+    public function setUp(Environment $env, SpecificationIterator $iterator, $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
+    public function test(Environment $env, SpecificationIterator $iterator, $skip = false): TestResult
     {
         $results = [];
         foreach ($iterator as $specification) {
@@ -63,7 +65,7 @@ final class RuntimeSuiteTester implements SuiteTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
+    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

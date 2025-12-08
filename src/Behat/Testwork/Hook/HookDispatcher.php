@@ -34,10 +34,8 @@ final class HookDispatcher
 
     /**
      * Dispatches hooks for a specified event.
-     *
-     * @return CallResults
      */
-    public function dispatchScopeHooks(HookScope $scope)
+    public function dispatchScopeHooks(HookScope $scope): CallResults
     {
         $results = [];
         foreach ($this->repository->getScopeHooks($scope) as $hook) {

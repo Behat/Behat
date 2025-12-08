@@ -54,7 +54,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         return null === $type || 'turnip' === $type;
     }
 
-    public function generatePattern($stepText)
+    public function generatePattern($stepText): Pattern
     {
         $count = 0;
         $pattern = $stepText;

@@ -18,8 +18,10 @@ use Behat\Testwork\Environment\EnvironmentManager;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Scenario tester that isolates the environment for each scenario.
@@ -37,12 +39,12 @@ final class IsolatingScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): TestResult
     {
         $isolatedEnvironment = $this->envManager->isolateEnvironment($env, $scenario);
 
@@ -56,7 +58,7 @@ final class IsolatingScenarioTester implements ScenarioTester
         return new TestWithSetupResult($setup, $integerResult, $teardown);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

@@ -15,6 +15,7 @@ use Behat\Gherkin\Gherkin;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Specification\Locator\SpecificationLocator;
 use Behat\Testwork\Specification\NoSpecificationsIterator;
+use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -39,7 +40,7 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
         return ['a scenarios list file <comment>(*.scenarios)</comment>.'];
     }
 
-    public function locateSpecifications(Suite $suite, $locator)
+    public function locateSpecifications(Suite $suite, $locator): SpecificationIterator
     {
         if (null === $locator || !is_file($locator) || 'scenarios' !== pathinfo($locator, PATHINFO_EXTENSION)) {
             return new NoSpecificationsIterator($suite);

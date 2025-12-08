@@ -20,8 +20,10 @@ use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
 use Behat\Testwork\Tester\Result\TestWithSetupResult;
+use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Tester executing scenario or example tests in the runtime.
@@ -39,12 +41,12 @@ final class RuntimeScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip = false)
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip = false): TestResult
     {
         $results = [];
 
@@ -60,7 +62,7 @@ final class RuntimeScenarioTester implements ScenarioTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }
@@ -69,10 +71,8 @@ final class RuntimeScenarioTester implements ScenarioTester
      * Tests background of the provided feature against provided environment.
      *
      * @param bool     $skip
-     *
-     * @return TestResult
      */
-    private function testBackground(Environment $env, FeatureNode $feature, $skip)
+    private function testBackground(Environment $env, FeatureNode $feature, $skip): TestWithSetupResult
     {
         $setup = $this->backgroundTester->setUp($env, $feature, $skip);
         $skipSetup = !$setup->isSuccessful() || $skip;

@@ -261,7 +261,7 @@ final class ContextExtension implements Extension
     /**
      * Loads AttributedContextReader.
      */
-    private function loadAttributedContextReader(ContainerBuilder $container)
+    private function loadAttributedContextReader(ContainerBuilder $container): Definition
     {
         $definition = new Definition(AttributeContextReader::class);
         $container->setDefinition(self::ATTRIBUTED_CONTEXT_READER_ID, $definition);

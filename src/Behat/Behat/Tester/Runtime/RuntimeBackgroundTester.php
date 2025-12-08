@@ -18,8 +18,10 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 use Behat\Testwork\Tester\Result\TestResults;
+use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Tester executing background tests in the runtime.
@@ -36,12 +38,12 @@ final class RuntimeBackgroundTester implements BackgroundTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, $skip)
+    public function test(Environment $env, FeatureNode $feature, $skip): TestResult
     {
         $background = $feature->getBackground();
 
@@ -61,7 +63,7 @@ final class RuntimeBackgroundTester implements BackgroundTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

@@ -23,7 +23,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Extends Symfony console application with testwork functionality.
@@ -181,10 +180,8 @@ final class Application extends BaseApplication
 
     /**
      * Creates container instance, loads extensions and freezes it.
-     *
-     * @return ContainerInterface
      */
-    private function createContainer(InputInterface $input, OutputInterface $output)
+    private function createContainer(InputInterface $input, OutputInterface $output): ContainerBuilder
     {
         $basePath = rtrim($this->getBasePath(), DIRECTORY_SEPARATOR);
 

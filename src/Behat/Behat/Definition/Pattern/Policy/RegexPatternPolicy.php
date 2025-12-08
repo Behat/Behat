@@ -44,7 +44,7 @@ final class RegexPatternPolicy implements PatternPolicy
         return 'regex' === $type;
     }
 
-    public function generatePattern($stepText)
+    public function generatePattern($stepText): Pattern
     {
         $methodName = $this->methodNameSuggester->suggest(
             preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),

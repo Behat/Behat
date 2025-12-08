@@ -122,10 +122,8 @@ final class ExerciseController implements Controller
      * Tests exercise specifications.
      *
      * @param SpecificationIterator[] $specifications
-     *
-     * @return TestResult
      */
-    private function testSpecifications(InputInterface $input, array $specifications)
+    private function testSpecifications(InputInterface $input, array $specifications): TestResult
     {
         $skip = $input->getOption('dry-run') || $this->skip;
 

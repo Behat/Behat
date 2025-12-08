@@ -12,11 +12,12 @@ namespace Behat\Testwork\Output\Printer\Factory;
 
 use Behat\Testwork\Output\Exception\BadOutputPathException;
 use Behat\Testwork\Output\Exception\MissingOutputPathException;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
 final class FileOutputFactory extends OutputFactory
 {
-    public function createOutput($stream = null)
+    public function createOutput($stream = null): OutputInterface
     {
         if ($this->getOutputPath() === null) {
             throw new MissingOutputPathException(

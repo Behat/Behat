@@ -312,11 +312,9 @@ final class GherkinExtension implements Extension
      * @param string $type
      * @param string $filterString
      *
-     * @return Definition
-     *
      * @throws ExtensionException If filter type is not recognised
      */
-    private function createFilterDefinition($type, $filterString)
+    private function createFilterDefinition($type, $filterString): Definition
     {
         if ('role' === $type) {
             return new Definition(RoleFilter::class, [$filterString]);

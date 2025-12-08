@@ -122,10 +122,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
 
     /**
      * Creates built-in service container with provided settings.
-     *
-     * @return BuiltInServiceContainer
      */
-    private function createContainerFromArray(array $settings)
+    private function createContainerFromArray(array $settings): BuiltInServiceContainer
     {
         return new BuiltInServiceContainer($settings);
     }

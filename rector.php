@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
@@ -18,7 +19,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php81: true)
-    ->withTypeCoverageLevel(15)
+    ->withTypeCoverageLevel(17)
     ->withSkip([
         StringableForToStringRector::class,
         ReturnTypeFromStrictConstantReturnRector::class => [
@@ -46,6 +47,12 @@ return RectorConfig::configure()
         NumericReturnTypeFromStrictReturnsRector::class => [
             // Would be a BC break
             __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
+        ],
+        ReturnTypeFromReturnNewRector::class => [
+            __DIR__.'/src/Behat/Behat/Output/ServiceContainer/Formatter/PrettyFormatterFactory.php',
+            __DIR__.'/src/Behat/Behat/Output/ServiceContainer/Formatter/ProgressFormatterFactory.php',
+            __DIR__.'/src/Behat/Testwork/Output/Printer/Factory/ConsoleOutputFactory.php',
+            __DIR__.'/src/Behat/Testwork/Output/Printer/Factory/FilesystemOutputFactory.php',
         ],
     ])
     ->withImportNames(

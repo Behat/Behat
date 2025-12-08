@@ -26,7 +26,7 @@ final class StaticEnvironmentHandler implements EnvironmentHandler
         return true;
     }
 
-    public function buildEnvironment(Suite $suite)
+    public function buildEnvironment(Suite $suite): Environment
     {
         return new StaticEnvironment($suite);
     }

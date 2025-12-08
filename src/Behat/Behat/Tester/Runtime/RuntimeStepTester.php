@@ -26,8 +26,10 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Environment\Environment;
+use Behat\Testwork\Tester\Setup\Setup;
 use Behat\Testwork\Tester\Setup\SuccessfulSetup;
 use Behat\Testwork\Tester\Setup\SuccessfulTeardown;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Tester executing step tests in the runtime.
@@ -45,12 +47,12 @@ final class RuntimeStepTester implements StepTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false)
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false): StepResult
     {
         try {
             $search = $this->searchDefinition($env, $feature, $step);
@@ -62,7 +64,7 @@ final class RuntimeStepTester implements StepTester
         return $result;
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }
@@ -81,10 +83,8 @@ final class RuntimeStepTester implements StepTester
      * Tests found definition.
      *
      * @param bool      $skip
-     *
-     * @return StepResult
      */
-    private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, $skip)
+    private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, $skip): StepResult
     {
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();
@@ -113,10 +113,8 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Creates definition call.
-     *
-     * @return DefinitionCall
      */
-    private function createDefinitionCall(Environment $env, FeatureNode $feature, SearchResult $search, StepNode $step)
+    private function createDefinitionCall(Environment $env, FeatureNode $feature, SearchResult $search, StepNode $step): DefinitionCall
     {
         $definition = $search->getMatchedDefinition();
         $arguments = $search->getMatchedArguments();
