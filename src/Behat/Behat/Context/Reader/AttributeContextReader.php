@@ -12,7 +12,7 @@ namespace Behat\Behat\Context\Reader;
 
 use Behat\Behat\Context\Attribute\AttributeReader;
 use Behat\Behat\Context\Environment\ContextEnvironment;
-use Behat\Testwork\Call\Callee;
+use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -37,7 +37,10 @@ final class AttributeContextReader implements ContextReader
         $this->readers[] = $reader;
     }
 
-    public function readContextCallees(ContextEnvironment $environment, $contextClass)
+    /**
+     * @return list<RuntimeCallee>
+     */
+    public function readContextCallees(ContextEnvironment $environment, $contextClass): array
     {
         $reflection = new ReflectionClass($contextClass);
 
@@ -52,7 +55,10 @@ final class AttributeContextReader implements ContextReader
         return $callees;
     }
 
-    private function readMethodCallees(string $contextClass, ReflectionMethod $method)
+    /**
+     * @return list<RuntimeCallee>
+     */
+    private function readMethodCallees(string $contextClass, ReflectionMethod $method): array
     {
         $callees = [];
 
@@ -67,7 +73,7 @@ final class AttributeContextReader implements ContextReader
     }
 
     /**
-     * @return array<int, Callee>
+     * @return list<RuntimeCallee>
      */
     private function readParentCallees(
         string $contextClass,

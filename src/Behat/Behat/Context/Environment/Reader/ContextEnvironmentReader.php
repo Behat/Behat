@@ -42,7 +42,10 @@ final class ContextEnvironmentReader implements EnvironmentReader
         return $environment instanceof ContextEnvironment;
     }
 
-    public function readEnvironmentCallees(Environment $environment)
+    /**
+     * @return list<Callee>
+     */
+    public function readEnvironmentCallees(Environment $environment): array
     {
         if (!$environment instanceof ContextEnvironment) {
             throw new EnvironmentReadException(sprintf(
@@ -67,9 +70,9 @@ final class ContextEnvironmentReader implements EnvironmentReader
      *
      * @param string             $contextClass
      *
-     * @return Callee[]
+     * @return list<Callee>
      */
-    private function readContextCallees(ContextEnvironment $environment, $contextClass)
+    private function readContextCallees(ContextEnvironment $environment, $contextClass): array
     {
         $callees = [];
         foreach ($this->contextReaders as $loader) {

@@ -59,7 +59,10 @@ final class AnnotatedContextReader implements ContextReader
         $this->readers[] = $reader;
     }
 
-    public function readContextCallees(ContextEnvironment $environment, $contextClass)
+    /**
+     * @return list<Callee>
+     */
+    public function readContextCallees(ContextEnvironment $environment, $contextClass): array
     {
         $reflection = new ReflectionClass($contextClass);
 
@@ -78,9 +81,9 @@ final class AnnotatedContextReader implements ContextReader
      *
      * @param string           $class
      *
-     * @return Callee[]
+     * @return list<Callee>
      */
-    private function readMethodCallees($class, ReflectionMethod $method)
+    private function readMethodCallees($class, ReflectionMethod $method): array
     {
         $callees = [];
 
@@ -107,9 +110,9 @@ final class AnnotatedContextReader implements ContextReader
      * @param string           $class
      * @param string           $docBlock
      *
-     * @return Callee[]
+     * @return list<Callee>
      */
-    private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock)
+    private function readDocBlockCallees($class, ReflectionMethod $method, $docBlock): array
     {
         $callees = [];
         $description = $this->docBlockHelper->extractDescription($docBlock);
