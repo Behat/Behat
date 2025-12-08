@@ -35,13 +35,13 @@ so that we adhere to [Semantic Versioning v2.0.0](http://semver.org/spec/v2.0.0.
 6. Make sure you [ran the tests](#running-tests) and didn't break anything. That will save some time on
 [GitHub actions](https://github.com/Behat/Behat/actions)
 7. Commit your code and submit a Pull Request, providing a clear description of the change, including
-the motivation for the proposal. 
+the motivation for the proposal.
 
-Please note: Each Pull Request should contain only one new feature or bugfix. If the changes are large, 
+Please note: Each Pull Request should contain only one new feature or bugfix. If the changes are large,
 please structure them into multiple smaller commits. If you need to make small refactorings or internal
-changes - for example to fix an already-failing test, rename private variables, or reformat an existing 
-method to make your own change readable - this can be included in the Pull Request but must be 
-committed separately with its own commit message(s). If possible, make these the first commits on 
+changes - for example to fix an already-failing test, rename private variables, or reformat an existing
+method to make your own change readable - this can be included in the Pull Request but must be
+committed separately with its own commit message(s). If possible, make these the first commits on
 your branch to make review easier.
 
 ## Backwards compatibility
@@ -54,6 +54,26 @@ your change. Not following these rules will cause a rejection of your PR. Except
 where BC break is introduced as a measure to fix a serious issue.
 
 You can read detailed guidance on what BC means in [Symfony2 BC guide](http://symfony.com/doc/current/contributing/code/bc.html).
+
+### Running automated backwards compatibility checks
+
+We use `roave/backward-compatibility-check` in CI to automatically check for BC breaks. Due to dependency conflicts,
+this is not required as a composer dependency. Instead, you can:
+
+* Use it as a docker image (see
+  [the project docs](https://github.com/Roave/BackwardCompatibilityCheck?tab=readme-ov-file#install-with-docker)) - note
+  that at time of writing the docker images do not appear to be up to date with the latest package releases.
+* Require it as a standalone tool with composer. You could do this as a `composer global require`, or by
+  requiring it into an empty composer.json in any local directory. Note that the tool requires `git` to be installed as
+  well as number of PHP extensions.
+
+The `check-bc` job in our [GitHub actions workflow](.github/workflows/build.yml) provides an example of installing and
+running the tool in a standalone local directory for linux-based systems.
+
+After installation, switch back to your Behat directory (if required) and run the docker container / global / absolute
+path to `vendor/bin/roave-backward-compatibility-check`
+
+**NOTE:** the tool will only detect / report local changes that you have already committed.
 
 ## Running tests
 
