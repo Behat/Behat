@@ -94,19 +94,15 @@ final class ConfigurationLoader
      *
      * @param string $profile Profile name
      *
-     * @return array
+     * @return list<mixed>
      *
      * @throws ConfigurationLoadingException
      */
-    public function loadConfiguration($profile = 'default')
+    public function loadConfiguration($profile = 'default'): array
     {
-        $configs = [];
         $this->profileFound = false;
 
-        // first is ENV config
-        foreach ($this->loadEnvironmentConfiguration() as $config) {
-            $configs[] = $config;
-        }
+        $configs = $this->loadEnvironmentConfiguration();
 
         // second is file configuration (if there is some)
         if ($this->configurationPath) {
@@ -141,11 +137,11 @@ final class ConfigurationLoader
     /**
      * Loads information from environment variable.
      *
-     * @return array
+     * @return list<mixed>
      *
      * @throws ConfigurationLoadingException If environment variable environment var is set to invalid JSON
      */
-    protected function loadEnvironmentConfiguration()
+    protected function loadEnvironmentConfiguration(): array
     {
         $configs = [];
 
@@ -228,10 +224,8 @@ final class ConfigurationLoader
      *
      * @param string $basePath
      * @param string $profile
-     *
-     * @return array
      */
-    private function loadConfigs($basePath, array $config, $profile)
+    private function loadConfigs($basePath, array $config, $profile): array
     {
         $configs = [];
 
@@ -280,10 +274,8 @@ final class ConfigurationLoader
      *
      * @param string $basePath
      * @param string $profile
-     *
-     * @return array
      */
-    private function loadImports($basePath, array $paths, $profile)
+    private function loadImports($basePath, array $paths, $profile): array
     {
         $configs = [];
         foreach ($paths as $path) {

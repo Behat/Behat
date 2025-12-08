@@ -42,9 +42,9 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      * duplication and also drops the first full match element from the
      * array.
      *
-     * @return mixed[]
+     * @return list<mixed>
      */
-    private function cleanupMatchDuplicates(array $match)
+    private function cleanupMatchDuplicates(array $match): array
     {
         $cleanMatch = array_slice($match, 1);
         $arguments = [];

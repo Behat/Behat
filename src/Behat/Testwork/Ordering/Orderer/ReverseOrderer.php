@@ -20,6 +20,13 @@ use Behat\Testwork\Specification\SpecificationIterator;
  */
 final class ReverseOrderer implements Orderer
 {
+    /**
+     * @template T
+     *
+     * @param SpecificationIterator<T>[] $scenarioIterators
+     *
+     * @return list<SpecificationIterator<T>>
+     */
     public function order(array $scenarioIterators)
     {
         $orderedFeatures = $this->orderFeatures($scenarioIterators);
@@ -33,9 +40,9 @@ final class ReverseOrderer implements Orderer
      *
      * @param SpecificationIterator<T>[] $scenarioIterators
      *
-     * @return SpecificationIterator<T>[]
+     * @return list<SpecificationIterator<T>>
      */
-    private function orderFeatures(array $scenarioIterators)
+    private function orderFeatures(array $scenarioIterators): array
     {
         $orderedSuites = [];
 

@@ -27,9 +27,9 @@ final class ServiceProcessor
      *
      * @param string           $tag
      *
-     * @return Reference[]
+     * @return list<Reference>
      */
-    public function findAndSortTaggedServices(ContainerBuilder $container, $tag)
+    public function findAndSortTaggedServices(ContainerBuilder $container, $tag): array
     {
         $serviceTags = [];
         foreach ($container->findTaggedServiceIds($tag) as $id => $tags) {

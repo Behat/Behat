@@ -36,11 +36,9 @@ final class ArgumentAutowirer
     /**
      * Autowires given arguments using provided container.
      *
-     * @return array
-     *
      * @throws ContainerExceptionInterface if unset argument typehint can not be resolved from container
      */
-    public function autowireArguments(ReflectionFunctionAbstract $reflection, array $arguments)
+    public function autowireArguments(ReflectionFunctionAbstract $reflection, array $arguments): array
     {
         $newArguments = $arguments;
         foreach ($reflection->getParameters() as $index => $parameter) {

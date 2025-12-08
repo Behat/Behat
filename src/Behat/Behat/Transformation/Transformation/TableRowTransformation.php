@@ -57,7 +57,10 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
         return $this->pattern === 'row:' . implode(',', $argumentArgumentValue->getRow(0));
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    /**
+     * @return list<mixed>
+     */
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): array
     {
         $rows = [];
         foreach ($argumentValue as $row) {

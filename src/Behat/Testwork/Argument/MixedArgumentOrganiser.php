@@ -180,7 +180,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function prepareNamedArguments(array $parameters, array $namedArguments)
+    private function prepareNamedArguments(array $parameters, array $namedArguments): array
     {
         $arguments = [];
 
@@ -215,7 +215,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[] Ordered list of arguments, index is the constructor argument position, value is what will be injected
      */
-    private function prepareTypehintedArguments(array $parameters, array $typehintedArguments)
+    private function prepareTypehintedArguments(array $parameters, array $typehintedArguments): array
     {
         $arguments = [];
 
@@ -396,7 +396,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function prepareNumberedArguments(array $parameters, array $numberedArguments)
+    private function prepareNumberedArguments(array $parameters, array $numberedArguments): array
     {
         $arguments = [];
 
@@ -422,7 +422,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function prepareDefaultArguments(array $parameters)
+    private function prepareDefaultArguments(array $parameters): array
     {
         $arguments = [];
 
@@ -447,7 +447,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @return mixed[]
      */
-    private function reorderArguments(array $parameters, array $arguments)
+    private function reorderArguments(array $parameters, array $arguments): array
     {
         $orderedArguments = [];
 

@@ -101,9 +101,9 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * Returns list of filters from suite settings.
      *
-     * @return FeatureFilterInterface[]
+     * @return list<FeatureFilterInterface>
      */
-    private function getSuiteFilters(Suite $suite)
+    private function getSuiteFilters(Suite $suite): array
     {
         if (!$suite->hasSetting('filters') || !is_array($suite->getSetting('filters'))) {
             return [];

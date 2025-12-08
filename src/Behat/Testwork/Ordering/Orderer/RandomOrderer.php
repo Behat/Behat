@@ -20,7 +20,14 @@ use Behat\Testwork\Specification\SpecificationIterator;
  */
 final class RandomOrderer implements Orderer
 {
-    public function order(array $scenarioIterators)
+    /**
+     * @template T
+     *
+     * @param SpecificationIterator<T>[] $scenarioIterators
+     *
+     * @return list<SpecificationIterator<T>>
+     */
+    public function order(array $scenarioIterators): array
     {
         $orderedFeatures = $this->orderFeatures($scenarioIterators);
         shuffle($orderedFeatures);
@@ -33,9 +40,9 @@ final class RandomOrderer implements Orderer
      *
      * @param SpecificationIterator<T>[] $scenarioIterators
      *
-     * @return SpecificationIterator<T>[]
+     * @return list<SpecificationIterator<T>>
      */
-    private function orderFeatures(array $scenarioIterators)
+    private function orderFeatures(array $scenarioIterators): array
     {
         $orderedSuites = [];
 

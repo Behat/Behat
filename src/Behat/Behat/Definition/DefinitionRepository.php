@@ -32,11 +32,11 @@ final class DefinitionRepository
     /**
      * Returns all available definitions for a specific environment.
      *
-     * @return Definition[]
+     * @return list<Definition>
      *
      * @throws RedundantStepException
      */
-    public function getEnvironmentDefinitions(Environment $environment)
+    public function getEnvironmentDefinitions(Environment $environment): array
     {
         $patterns = [];
         $definitions = [];

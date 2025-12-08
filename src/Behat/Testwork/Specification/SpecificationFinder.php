@@ -42,7 +42,7 @@ final class SpecificationFinder
      *
      * @return string[]
      */
-    public function getExampleLocators()
+    public function getExampleLocators(): array
     {
         $examples = [];
         foreach ($this->specificationLocators as $locator) {
@@ -59,7 +59,7 @@ final class SpecificationFinder
      *
      * @return list<SpecificationIterator<T>>
      */
-    public function findSuitesSpecifications(array $suites, ?string $locator = null)
+    public function findSuitesSpecifications(array $suites, ?string $locator = null): array
     {
         $iterators = [];
         foreach ($suites as $suite) {
@@ -76,7 +76,7 @@ final class SpecificationFinder
      *
      * @return list<SpecificationIterator<T>>
      */
-    private function findSuiteSpecifications(Suite $suite, $locator = null)
+    private function findSuiteSpecifications(Suite $suite, $locator = null): array
     {
         $iterators = [];
         foreach ($this->specificationLocators as $specificationLocator) {

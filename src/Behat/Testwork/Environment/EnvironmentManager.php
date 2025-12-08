@@ -96,7 +96,7 @@ final class EnvironmentManager
      *
      * @return Callee[]
      */
-    public function readEnvironmentCallees(Environment $environment)
+    public function readEnvironmentCallees(Environment $environment): array
     {
         $callees = [];
         foreach ($this->readers as $reader) {
