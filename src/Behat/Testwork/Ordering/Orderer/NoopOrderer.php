@@ -22,10 +22,7 @@ final class NoopOrderer implements Orderer
         return $scenarioIterators;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'null';
     }

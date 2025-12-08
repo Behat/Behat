@@ -79,7 +79,7 @@ final class DefinitionExtension implements Extension
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'definitions';
     }
@@ -315,20 +315,16 @@ final class DefinitionExtension implements Extension
 
     /**
      * returns list printer service id.
-     *
-     * @return string
      */
-    private function getListPrinterId()
+    private function getListPrinterId(): string
     {
         return 'definition.list_printer';
     }
 
     /**
      * Returns information printer service id.
-     *
-     * @return string
      */
-    private function getInformationPrinterId()
+    private function getInformationPrinterId(): string
     {
         return 'definition.information_printer';
     }

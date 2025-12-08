@@ -31,7 +31,7 @@ final class BeforeStep extends RuntimeStepHook
         parent::__construct(StepScope::BEFORE, $filterString, $callable, $description);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'BeforeStep';
     }

@@ -36,7 +36,7 @@ final class TranslatorExtension implements Extension
      */
     public const TRANSLATOR_ID = 'translator';
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'translation';
     }

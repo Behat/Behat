@@ -42,10 +42,8 @@ final class AutoloaderExtension implements Extension
 
     /**
      * Returns the extension config key.
-     *
-     * @return string
      */
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'autoload';
     }

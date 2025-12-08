@@ -31,7 +31,7 @@ final class FilesystemExtension implements Extension
      */
     public const LOGGER_ID = 'filesystem.logger';
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'filesystem';
     }

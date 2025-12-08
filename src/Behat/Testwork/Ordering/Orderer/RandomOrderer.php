@@ -58,10 +58,7 @@ final class RandomOrderer implements Orderer
         return $orderedSuites;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'random';
     }

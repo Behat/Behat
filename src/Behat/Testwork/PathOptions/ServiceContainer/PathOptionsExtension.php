@@ -30,7 +30,7 @@ final class PathOptionsExtension implements Extension
 {
     public const CONFIGURABLE_PATH_PRINTER_ID = 'configurable.path.printer';
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'path_options';
     }

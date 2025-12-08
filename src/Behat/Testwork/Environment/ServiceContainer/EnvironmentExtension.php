@@ -52,7 +52,7 @@ final class EnvironmentExtension implements Extension
         $this->processor = $processor ?: new ServiceProcessor();
     }
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'environments';
     }

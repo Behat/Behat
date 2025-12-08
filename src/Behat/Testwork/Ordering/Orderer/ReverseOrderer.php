@@ -69,10 +69,7 @@ final class ReverseOrderer implements Orderer
         return array_reverse($orderedSuites);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'reverse';
     }

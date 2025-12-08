@@ -31,7 +31,7 @@ final class BeforeScenario extends RuntimeScenarioHook
         parent::__construct(ScenarioScope::BEFORE, $filterString, $callable, $description);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'BeforeScenario';
     }

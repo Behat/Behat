@@ -34,7 +34,7 @@ final class ArgumentExtension implements Extension
     public const PREG_MATCH_ARGUMENT_ORGANISER_ID = 'argument.preg_match_organiser';
     public const CONSTRUCTOR_ARGUMENT_ORGANISER_ID = 'argument.constructor_organiser';
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'argument';
     }

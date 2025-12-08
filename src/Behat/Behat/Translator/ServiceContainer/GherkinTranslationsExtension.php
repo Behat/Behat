@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class GherkinTranslationsExtension implements Extension
 {
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'gherkin_translations';
     }

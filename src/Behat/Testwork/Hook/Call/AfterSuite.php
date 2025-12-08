@@ -33,10 +33,8 @@ final class AfterSuite extends RuntimeSuiteHook
 
     /**
      * Returns hook name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'AfterSuite';
     }

@@ -31,7 +31,7 @@ final class AfterStep extends RuntimeStepHook
         parent::__construct(StepScope::AFTER, $filterString, $callable, $description);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'AfterStep';
     }

@@ -56,7 +56,7 @@ final class ApplicationFactory extends BaseFactory
      */
     public const VERSION = '3.13.0';
 
-    protected function getName()
+    protected function getName(): string
     {
         return 'behat';
     }
@@ -98,7 +98,7 @@ final class ApplicationFactory extends BaseFactory
         ];
     }
 
-    protected function getEnvironmentVariableName()
+    protected function getEnvironmentVariableName(): string
     {
         return 'BEHAT_PARAMS';
     }

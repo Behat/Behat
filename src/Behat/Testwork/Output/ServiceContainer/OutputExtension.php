@@ -66,7 +66,7 @@ final class OutputExtension implements Extension
         $this->factories[] = $factory;
     }
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'formatters';
     }

@@ -90,7 +90,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
         return 80;
     }
 
-    public function getPattern()
+    public function getPattern(): string
     {
         return '';
     }
