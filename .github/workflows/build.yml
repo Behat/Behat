@@ -151,6 +151,32 @@ jobs:
       - name: Run Rector
         run: ./vendor/bin/rector --dry-run
 
+  check-bc:
+    name: Check for BC breaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+
+      - name: "Install roave/backward-compatibility-check"
+        # Installing in a standalone directory to avoid any dependency conflicts / changes.
+        # There is a docker action, but it appears to be outdated compared to php releases and doesn't appear to support
+        # pinning to a major release.
+        run: |
+          mkdir bc-check
+          cd bc-check
+          composer require --no-interaction roave/backward-compatibility-check:^8.17
+
+      - name: "Check for BC breaks"
+        run: |
+          bc-check/vendor/bin/roave-backward-compatibility-check \
+            --format=github-actions
+
   build-phar:
     name: Build PHAR file
     runs-on: ubuntu-latest
