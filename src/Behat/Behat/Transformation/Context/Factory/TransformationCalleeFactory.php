@@ -47,9 +47,9 @@ class TransformationCalleeFactory
     /**
      * Returns list of default transformations.
      *
-     * @return class-string<SimpleArgumentTransformation>[]
+     * @return list<class-string<SimpleArgumentTransformation>>
      */
-    private static function simpleTransformations()
+    private static function simpleTransformations(): array
     {
         return [
             RowBasedTableTransformation::class,

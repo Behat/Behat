@@ -42,7 +42,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     ) {
     }
 
-    public function getLocatorExamples()
+    public function getLocatorExamples(): array
     {
         return [
             'a dir <comment>(features/)</comment>',

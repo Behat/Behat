@@ -67,7 +67,7 @@ final class ApplicationFactory extends BaseFactory
         return InstalledVersions::getVersion('behat/behat');
     }
 
-    protected function getDefaultExtensions()
+    protected function getDefaultExtensions(): array
     {
         $processor = new ServiceProcessor();
 
@@ -138,9 +138,9 @@ final class ApplicationFactory extends BaseFactory
     /**
      * Returns default formatter factories.
      *
-     * @return FormatterFactory[]
+     * @return list<FormatterFactory>
      */
-    private function getDefaultFormatterFactories(ServiceProcessor $processor)
+    private function getDefaultFormatterFactories(ServiceProcessor $processor): array
     {
         return [
             new PrettyFormatterFactory($processor),

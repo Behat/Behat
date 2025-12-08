@@ -35,9 +35,9 @@ final class ConsoleOutputFactory extends BaseFactory
     /**
      * Returns default styles.
      *
-     * @return OutputFormatterStyle[string]
+     * @return array<string, OutputFormatterStyle>
      */
-    private function getDefaultStyles()
+    private function getDefaultStyles(): array
     {
         return [
             'keyword' => new OutputFormatterStyle(null, null, ['bold']),

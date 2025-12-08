@@ -101,9 +101,9 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param ReflectionParameter[] $parameters
      * @param mixed[]               $arguments
      *
-     * @return array
+     * @return array{array<string, mixed>, list<mixed>, list<mixed>}
      */
-    private function splitArguments(array $parameters, array $arguments)
+    private function splitArguments(array $parameters, array $arguments): array
     {
         $parameterNames = array_map(
             fn (ReflectionParameter $parameter): string => $parameter->getName(),

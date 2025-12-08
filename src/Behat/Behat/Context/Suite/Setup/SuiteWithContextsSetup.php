@@ -198,9 +198,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $class
      *
-     * @return array
+     * @return array{?string, string}
      */
-    private function findClasspathAndClass($class)
+    private function findClasspathAndClass($class): array
     {
         if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name

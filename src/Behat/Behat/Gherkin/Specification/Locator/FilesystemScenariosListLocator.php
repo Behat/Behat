@@ -34,7 +34,7 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
     ) {
     }
 
-    public function getLocatorExamples()
+    public function getLocatorExamples(): array
     {
         return ['a scenarios list file <comment>(*.scenarios)</comment>.'];
     }
