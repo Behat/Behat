@@ -48,10 +48,8 @@ final class Memory implements Stringable
      * Humanizes usage information.
      *
      * @param int $bytes
-     *
-     * @return string
      */
-    private function humanize($bytes)
+    private function humanize($bytes): string
     {
         $e = intval(floor(log($bytes) / log(1024)));
 

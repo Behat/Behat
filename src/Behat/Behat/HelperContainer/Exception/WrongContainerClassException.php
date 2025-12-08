@@ -28,10 +28,8 @@ final class WrongContainerClassException extends InvalidArgumentException implem
 
     /**
      * Returns not found classname.
-     *
-     * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }

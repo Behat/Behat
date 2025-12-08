@@ -159,10 +159,8 @@ final class PrettyStepPrinter implements StepPrinter
      * Returns argument string for provided argument.
      *
      * @param bool           $collapse
-     *
-     * @return string
      */
-    private function getArgumentString(ArgumentInterface $argument, $collapse = false)
+    private function getArgumentString(ArgumentInterface $argument, $collapse = false): string
     {
         if ($collapse) {
             return '...';
@@ -184,10 +182,8 @@ final class PrettyStepPrinter implements StepPrinter
      * Indents text to the subIndentation level.
      *
      * @param string $text
-     *
-     * @return string
      */
-    private function subIndent($text)
+    private function subIndent($text): string
     {
         return $this->subIndentText . $text;
     }

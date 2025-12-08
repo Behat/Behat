@@ -102,7 +102,7 @@ final class ExceptionPresenter
         return trim($this->configurablePathPrinter->processPathsInText($exception->getMessage()) . ' (' . $exception::class . ')');
     }
 
-    private function removeBehatCallsFromTrace(Exception $exception)
+    private function removeBehatCallsFromTrace(Exception $exception): string
     {
         $traceOutput = '';
         foreach ($exception->getTrace() as $i => $trace) {

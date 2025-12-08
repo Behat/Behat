@@ -144,10 +144,8 @@ final class RerunController implements Controller
 
     /**
      * Generates cache key.
-     *
-     * @return string
      */
-    private function generateKey(InputInterface $input)
+    private function generateKey(InputInterface $input): string
     {
         return md5(
             $input->getParameterOption(['--profile', '-p']) .

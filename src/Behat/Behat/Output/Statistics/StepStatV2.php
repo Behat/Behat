@@ -37,40 +37,32 @@ final class StepStatV2 extends StepStat implements Stringable
 
     /**
      * Returns associated scenario text.
-     *
-     * @return string
      */
-    public function getScenarioText()
+    public function getScenarioText(): string
     {
         return $this->scenarioTitle;
     }
 
     /**
      * Returns associated scenario path.
-     *
-     * @return string
      */
-    public function getScenarioPath()
+    public function getScenarioPath(): string
     {
         return $this->scenarioPath;
     }
 
     /**
      * Returns step text.
-     *
-     * @return string
      */
-    public function getStepText()
+    public function getStepText(): string
     {
         return $this->stepText;
     }
 
     /**
      * Returns step path.
-     *
-     * @return string
      */
-    public function getStepPath()
+    public function getStepPath(): string
     {
         return $this->stepPath;
     }

@@ -163,10 +163,8 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      * Indents text to the subIndentation level.
      *
      * @param string $text
-     *
-     * @return string
      */
-    private function subIndent($text)
+    private function subIndent($text): string
     {
         return $this->subIndentText . $text;
     }

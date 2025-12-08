@@ -139,11 +139,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @param string $class
      *
-     * @return string
-     *
      * @throws ContextNotFoundException If class file could not be determined
      */
-    private function findClassFile($class)
+    private function findClassFile($class): string
     {
         [$classpath, $classname] = $this->findClasspathAndClass($class);
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';

@@ -26,7 +26,7 @@ final class TestworkExceptionStringer implements ExceptionStringer
         return $exception instanceof TestworkException || $exception instanceof CallErrorException;
     }
 
-    public function stringException(Exception $exception, $verbosity)
+    public function stringException(Exception $exception, $verbosity): string
     {
         return trim($exception->getMessage());
     }

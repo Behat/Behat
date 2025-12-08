@@ -7,6 +7,7 @@ use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -16,7 +17,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php81: true)
-    ->withTypeCoverageLevel(11)
+    ->withTypeCoverageLevel(12)
     ->withSkip([
         StringableForToStringRector::class,
         ReturnTypeFromStrictConstantReturnRector::class => [
@@ -34,6 +35,12 @@ return RectorConfig::configure()
             // Would be a BC break
             __DIR__.'/src/Behat/Behat/Tester/Exception/Stringer/PendingExceptionStringer.php',
             __DIR__.'/src/Behat/Testwork/Call/RuntimeCallee.php',
+        ],
+        StringReturnTypeFromStrictStringReturnsRector::class => [
+            // Would be a BC break
+            __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
+            __DIR__.'/src/Behat/Behat/Tester/Exception/Stringer/PendingExceptionStringer.php',
+            __DIR__.'/src/Behat/Behat/Transformation/ServiceContainer/TransformationExtension.php',
         ],
     ])
     ->withImportNames(

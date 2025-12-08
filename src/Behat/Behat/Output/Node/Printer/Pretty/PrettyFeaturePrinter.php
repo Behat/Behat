@@ -107,10 +107,8 @@ final class PrettyFeaturePrinter implements FeaturePrinter
      * Prepends tags string with tag-sign.
      *
      * @param string $tag
-     *
-     * @return string
      */
-    private function prependTagWithTagSign($tag)
+    private function prependTagWithTagSign($tag): string
     {
         if (str_starts_with($tag, '@')) {
             return $tag;

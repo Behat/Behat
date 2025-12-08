@@ -21,10 +21,8 @@ final class ResultToStringConverter
 {
     /**
      * Converts provided test result to a string.
-     *
-     * @return string
      */
-    public function convertResultToString(TestResult $result)
+    public function convertResultToString(TestResult $result): string
     {
         return $this->convertResultCodeToString($result->getResultCode());
     }
@@ -33,10 +31,8 @@ final class ResultToStringConverter
      * Converts provided result code to a string.
      *
      * @param int $resultCode
-     *
-     * @return string
      */
-    public function convertResultCodeToString($resultCode)
+    public function convertResultCodeToString($resultCode): string
     {
         return match ($resultCode) {
             TestResult::SKIPPED => 'skipped',

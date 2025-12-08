@@ -53,7 +53,7 @@ PHP;
         return true;
     }
 
-    public function generateClass(Suite $suite, $contextClass)
+    public function generateClass(Suite $suite, $contextClass): string
     {
         $fqn = $contextClass;
 

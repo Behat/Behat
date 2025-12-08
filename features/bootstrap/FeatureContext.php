@@ -492,7 +492,7 @@ EOL;
         );
     }
 
-    private function getExpectedOutput(PyStringNode $expectedText)
+    private function getExpectedOutput(PyStringNode $expectedText): string
     {
         $text = strtr($expectedText, [
             '\'\'\'' => '"""',

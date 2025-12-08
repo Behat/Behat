@@ -64,10 +64,8 @@ final class Validator
 
     /**
      * Returns function path for a provided reflection.
-     *
-     * @return string
      */
-    private function getFunctionPath(ReflectionFunctionAbstract $function)
+    private function getFunctionPath(ReflectionFunctionAbstract $function): string
     {
         if ($function instanceof ReflectionMethod) {
             return sprintf(

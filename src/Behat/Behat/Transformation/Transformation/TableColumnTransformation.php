@@ -118,7 +118,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
         return 30;
     }
 
-    public function getPattern()
+    public function getPattern(): string
     {
         return $this->pattern;
     }

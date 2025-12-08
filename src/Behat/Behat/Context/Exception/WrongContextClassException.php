@@ -31,10 +31,8 @@ final class WrongContextClassException extends InvalidArgumentException implemen
 
     /**
      * Returns not found classname.
-     *
-     * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }

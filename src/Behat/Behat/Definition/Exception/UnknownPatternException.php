@@ -28,10 +28,8 @@ final class UnknownPatternException extends InvalidArgumentException implements 
 
     /**
      * Returns pattern that caused exception.
-     *
-     * @return string
      */
-    public function getPattern()
+    public function getPattern(): string
     {
         return $this->pattern;
     }
