@@ -39,7 +39,7 @@ final class RegexPatternPolicy implements PatternPolicy
     ) {
     }
 
-    public function supportsPatternType($type)
+    public function supportsPatternType($type): bool
     {
         return 'regex' === $type;
     }
@@ -55,7 +55,7 @@ final class RegexPatternPolicy implements PatternPolicy
         return new Pattern($methodName, '/^' . $stepRegex . '$/', $placeholderCount);
     }
 
-    public function supportsPattern($pattern)
+    public function supportsPattern($pattern): bool
     {
         return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', $pattern);
     }

@@ -50,10 +50,8 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
      * Checks if Feature matches specified filter.
      *
      * @param string   $filterString
-     *
-     * @return bool
      */
-    private function isStepMatch(StepNode $step, $filterString)
+    private function isStepMatch(StepNode $step, $filterString): bool
     {
         if ('/' === $filterString[0]) {
             return 1 === preg_match($filterString, $step->getText());

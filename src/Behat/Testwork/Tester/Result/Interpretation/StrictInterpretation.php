@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class StrictInterpretation implements ResultInterpretation
 {
-    public function isFailure(TestResult $result)
+    public function isFailure(TestResult $result): bool
     {
         return !$result->isPassed();
     }

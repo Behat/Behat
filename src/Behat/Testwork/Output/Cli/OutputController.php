@@ -167,10 +167,8 @@ class OutputController implements Controller
      * Checks if provided output identifier represents standard output.
      *
      * @param string $outputId
-     *
-     * @return bool
      */
-    private function isStandardOutput($outputId)
+    private function isStandardOutput($outputId): bool
     {
         return 'std' === $outputId || 'null' === $outputId || 'false' === $outputId;
     }
@@ -179,10 +177,8 @@ class OutputController implements Controller
      * Returns whether the file path is an absolute path.
      *
      * @param string $file A file path
-     *
-     * @return bool
      */
-    private function isAbsolutePath($file)
+    private function isAbsolutePath($file): bool
     {
         return $file[0] == '/' || $file[0] == '\\'
             || (

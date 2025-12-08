@@ -27,7 +27,7 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
 {
     public const PATTERN_REGEX = '/^\:\w+$/';
 
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }
@@ -47,7 +47,7 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue): bool
     {
         return ':' . $argumentIndex === $this->pattern;
     }

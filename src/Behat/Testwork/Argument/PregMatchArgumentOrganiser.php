@@ -69,10 +69,8 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
      *
      * @param int     $keyIndex
      * @param mixed[] $keys
-     *
-     * @return bool
      */
-    private function isKeyAStringAndNextOneIsAnInteger($keyIndex, array $keys)
+    private function isKeyAStringAndNextOneIsAnInteger($keyIndex, array $keys): bool
     {
         $keyIsAString = is_string($keys[$keyIndex]);
         $nextKeyIsAnInteger = isset($keys[$keyIndex + 1]) && is_int($keys[$keyIndex + 1]);

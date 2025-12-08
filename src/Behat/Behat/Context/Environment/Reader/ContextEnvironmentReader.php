@@ -37,7 +37,7 @@ final class ContextEnvironmentReader implements EnvironmentReader
         $this->contextReaders[] = $contextReader;
     }
 
-    public function supportsEnvironment(Environment $environment)
+    public function supportsEnvironment(Environment $environment): bool
     {
         return $environment instanceof ContextEnvironment;
     }

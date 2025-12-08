@@ -55,10 +55,8 @@ final class CallResult
      *
      * @phpstan-assert-if-true Exception $this->exception
      * @phpstan-assert-if-true Exception $this->getException()
-     *
-     * @return bool
      */
-    public function hasException()
+    public function hasException(): bool
     {
         return $this->exception instanceof Exception;
     }
@@ -75,10 +73,8 @@ final class CallResult
 
     /**
      * Checks if call produced stdOut.
-     *
-     * @return bool
      */
-    public function hasStdOut()
+    public function hasStdOut(): bool
     {
         return null !== $this->stdOut;
     }

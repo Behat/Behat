@@ -39,7 +39,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     ) {
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue): bool
     {
         return count($this->repository->getEnvironmentTransformations($definitionCall->getEnvironment())) > 0;
     }

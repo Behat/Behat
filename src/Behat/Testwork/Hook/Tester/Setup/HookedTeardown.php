@@ -38,7 +38,7 @@ final class HookedTeardown implements Teardown
         return $this->teardown->isSuccessful();
     }
 
-    public function hasOutput()
+    public function hasOutput(): bool
     {
         return $this->hookCallResults->hasStdOuts() || $this->hookCallResults->hasExceptions();
     }

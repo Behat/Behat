@@ -81,10 +81,8 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Checks if step call, setup or teardown produced any output (stdOut or exception).
-     *
-     * @return bool
      */
-    public function hasOutput()
+    public function hasOutput(): bool
     {
         return $this->teardownHasOutput() || $this->resultHasException() || $this->resultCallHasOutput();
     }
@@ -101,10 +99,8 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Checks if result has produced exception.
-     *
-     * @return bool
      */
-    private function resultHasException()
+    private function resultHasException(): bool
     {
         return $this->result instanceof ExceptionResult && $this->result->getException();
     }

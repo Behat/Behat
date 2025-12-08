@@ -30,7 +30,7 @@ final class ContextSnippetAppender implements SnippetAppender
     ) {
     }
 
-    public function supportsSnippet(AggregateSnippet $snippet)
+    public function supportsSnippet(AggregateSnippet $snippet): bool
     {
         return 'context' === $snippet->getType();
     }
@@ -62,10 +62,8 @@ final class ContextSnippetAppender implements SnippetAppender
      *
      * @param string $class
      * @param string $contextFileContent
-     *
-     * @return bool
      */
-    private function isClassImported($class, $contextFileContent)
+    private function isClassImported($class, $contextFileContent): bool
     {
         $classImportRegex = sprintf(
             '@use[^;]*%s.*;@ms',

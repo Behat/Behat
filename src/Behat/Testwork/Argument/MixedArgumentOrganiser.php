@@ -130,10 +130,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Checks that provided argument key is a string and it matches some parameter name.
      *
      * @param string[] $parameterNames
-     *
-     * @return bool
      */
-    private function isStringKeyAndExistsInParameters($argumentKey, $parameterNames)
+    private function isStringKeyAndExistsInParameters($argumentKey, $parameterNames): bool
     {
         return is_string($argumentKey) && in_array($argumentKey, $parameterNames);
     }
@@ -367,10 +365,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param  ReflectionClass $reflectionClass Typehinted argument
      * @param  mixed           $candidate       Resolved argument
-     *
-     * @return bool
      */
-    private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate)
+    private function classMatchingPredicateForTypehintedArguments(ReflectionClass $reflectionClass, $candidate): bool
     {
         return $reflectionClass->getName() === $candidate::class;
     }
@@ -488,10 +484,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * Checks if an argument at provided position is defined.
      *
      * @param int $position
-     *
-     * @return bool
      */
-    private function isArgumentDefined($position)
+    private function isArgumentDefined($position): bool
     {
         return isset($this->definedArguments[$position]);
     }

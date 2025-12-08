@@ -145,10 +145,8 @@ final class RuntimeCallHandler implements CallHandler
      * Checks if provided error level is not reportable.
      *
      * @param int $level
-     *
-     * @return bool
      */
-    private function errorLevelIsNotReportable($level)
+    private function errorLevelIsNotReportable($level): bool
     {
         return !(error_reporting() & $level);
     }

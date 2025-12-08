@@ -27,7 +27,7 @@ final class IntegerTestResult implements TestResult
     ) {
     }
 
-    public function isPassed()
+    public function isPassed(): bool
     {
         return self::PASSED == $this->getResultCode();
     }

@@ -29,7 +29,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
 {
     public const PATTERN_REGEX = '/^rowtable\:[[:print:]]+$/u';
 
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }

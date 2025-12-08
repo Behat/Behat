@@ -36,7 +36,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
         $this->argumentTransformers[] = $transformer;
     }
 
-    public function supportsCall(Call $call)
+    public function supportsCall(Call $call): bool
     {
         return $call instanceof DefinitionCall;
     }

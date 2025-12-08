@@ -153,10 +153,8 @@ final class AnnotatedContextReader implements ContextReader
      * Checks if provided doc lien is empty.
      *
      * @param string $docLine
-     *
-     * @return bool
      */
-    private function isEmpty($docLine)
+    private function isEmpty($docLine): bool
     {
         return '' == $docLine;
     }
@@ -165,10 +163,8 @@ final class AnnotatedContextReader implements ContextReader
      * Checks if provided doc line is not an annotation.
      *
      * @param string $docLine
-     *
-     * @return bool
      */
-    private function isNotAnnotation($docLine)
+    private function isNotAnnotation($docLine): bool
     {
         return !str_starts_with($docLine, '@');
     }

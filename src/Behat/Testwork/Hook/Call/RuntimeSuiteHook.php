@@ -59,10 +59,8 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
      * Checks if Feature matches specified filter.
      *
      * @param string $filterString
-     *
-     * @return bool
      */
-    private function isSuiteMatch(Suite $suite, $filterString)
+    private function isSuiteMatch(Suite $suite, $filterString): bool
     {
         if ('/' === $filterString[0]) {
             return 1 === preg_match($filterString, $suite->getName());

@@ -19,7 +19,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class SoftInterpretation implements ResultInterpretation
 {
-    public function isFailure(TestResult $result)
+    public function isFailure(TestResult $result): bool
     {
         return TestResult::FAILED <= $result->getResultCode();
     }

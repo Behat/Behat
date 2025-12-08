@@ -28,7 +28,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
 {
     public const PATTERN_REGEX = '/^row\:[[:print:]]+$/u';
 
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, $pattern);
     }

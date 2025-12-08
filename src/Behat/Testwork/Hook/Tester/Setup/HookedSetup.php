@@ -38,7 +38,7 @@ final class HookedSetup implements Setup
         return $this->setup->isSuccessful();
     }
 
-    public function hasOutput()
+    public function hasOutput(): bool
     {
         return $this->hookCallResults->hasStdOuts() || $this->hookCallResults->hasExceptions();
     }

@@ -82,7 +82,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         return $environment;
     }
 
-    public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null)
+    public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null): bool
     {
         return $environment instanceof UninitializedContextEnvironment;
     }

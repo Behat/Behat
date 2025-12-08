@@ -56,7 +56,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return $this->searchResult->getMatchedDefinition();
     }
 
-    public function hasException()
+    public function hasException(): bool
     {
         return null !== $this->getException();
     }
@@ -82,7 +82,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return self::PASSED;
     }
 
-    public function isPassed()
+    public function isPassed(): bool
     {
         return self::PASSED == $this->getResultCode();
     }

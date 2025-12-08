@@ -50,7 +50,7 @@ final class HookStat
         return $this->name;
     }
 
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         return null === $this->error;
     }

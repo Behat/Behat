@@ -32,7 +32,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
     ) {
     }
 
-    public function supportsSuite(Suite $suite)
+    public function supportsSuite(Suite $suite): bool
     {
         return $suite->hasSetting('paths') && is_array($suite->getSetting('paths'));
     }
@@ -80,10 +80,8 @@ final class SuiteWithPathsSetup implements SuiteSetup
      * Returns whether the file path is an absolute path.
      *
      * @param string $file A file path
-     *
-     * @return bool
      */
-    private function isAbsolutePath($file)
+    private function isAbsolutePath($file): bool
     {
         return $file[0] == '/' || $file[0] == '\\'
             || (

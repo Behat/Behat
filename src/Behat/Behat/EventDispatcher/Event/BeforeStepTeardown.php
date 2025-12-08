@@ -70,20 +70,16 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
 
     /**
      * Checks if step call produced any output (stdOut or exception).
-     *
-     * @return bool
      */
-    public function hasOutput()
+    public function hasOutput(): bool
     {
         return $this->resultHasException() || $this->resultCallHasOutput();
     }
 
     /**
      * Checks if result has produced exception.
-     *
-     * @return bool
      */
-    private function resultHasException()
+    private function resultHasException(): bool
     {
         return $this->result instanceof ExceptionResult && $this->result->getException();
     }

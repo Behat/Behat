@@ -49,7 +49,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     ) {
     }
 
-    public function supportsPatternType($type)
+    public function supportsPatternType($type): bool
     {
         return null === $type || 'turnip' === $type;
     }

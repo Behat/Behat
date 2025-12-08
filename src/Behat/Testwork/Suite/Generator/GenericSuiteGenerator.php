@@ -27,7 +27,7 @@ final class GenericSuiteGenerator implements SuiteGenerator
     ) {
     }
 
-    public function supportsTypeAndSettings($type, array $settings)
+    public function supportsTypeAndSettings($type, array $settings): bool
     {
         return null === $type;
     }

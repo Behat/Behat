@@ -54,10 +54,8 @@ final class GenericSuite implements Suite
      * Checks if a setting with provided name exists.
      *
      * @param string $key
-     *
-     * @return bool
      */
-    public function hasSetting($key)
+    public function hasSetting($key): bool
     {
         return array_key_exists($key, $this->settings);
     }

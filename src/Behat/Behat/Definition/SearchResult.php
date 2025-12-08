@@ -31,10 +31,8 @@ final class SearchResult
 
     /**
      * Checks if result contains a match.
-     *
-     * @return bool
      */
-    public function hasMatch()
+    public function hasMatch(): bool
     {
         return $this->definition instanceof Definition;
     }

@@ -26,7 +26,7 @@ use Throwable;
  */
 final class PHPUnitExceptionStringer implements ExceptionStringer
 {
-    public function supportsException(Exception $exception)
+    public function supportsException(Exception $exception): bool
     {
         return $exception instanceof PHPUnit_Framework_Exception
             || $exception instanceof \PHPUnit\Framework\Exception;

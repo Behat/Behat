@@ -141,10 +141,8 @@ class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is a step event which setup or teardown produced any output.
-     *
-     * @return bool
      */
-    private function isStepEventWithOutput(Event $event)
+    private function isStepEventWithOutput(Event $event): bool
     {
         return $this->isBeforeStepEventWithOutput($event) || $this->isAfterStepWithOutput($event);
     }

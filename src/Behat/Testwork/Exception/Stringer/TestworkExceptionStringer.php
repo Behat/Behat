@@ -21,7 +21,7 @@ use Exception;
  */
 final class TestworkExceptionStringer implements ExceptionStringer
 {
-    public function supportsException(Exception $exception)
+    public function supportsException(Exception $exception): bool
     {
         return $exception instanceof TestworkException || $exception instanceof CallErrorException;
     }

@@ -29,7 +29,7 @@ use Psr\Container\ContainerInterface;
  */
 final class ServicesResolver implements CallFilter
 {
-    public function supportsCall(Call $call)
+    public function supportsCall(Call $call): bool
     {
         return ($call instanceof DefinitionCall || $call instanceof TransformationCall)
             && $call->getEnvironment() instanceof ServiceContainerEnvironment;
