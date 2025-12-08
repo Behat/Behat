@@ -76,7 +76,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Stri
         return $result->getReturn();
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 50;
     }

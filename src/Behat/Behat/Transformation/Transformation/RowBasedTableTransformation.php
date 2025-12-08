@@ -92,7 +92,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
         return $result->getReturn();
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 50;
     }

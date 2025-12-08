@@ -70,7 +70,7 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
         return $result->getReturn();
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 50;
     }

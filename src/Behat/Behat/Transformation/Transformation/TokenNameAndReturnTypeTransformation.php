@@ -79,7 +79,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
         return $result->getReturn();
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 100;
     }

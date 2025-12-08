@@ -83,7 +83,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
         return $rows;
     }
 
-    public function getPriority()
+    public function getPriority(): int
     {
         return 50;
     }
