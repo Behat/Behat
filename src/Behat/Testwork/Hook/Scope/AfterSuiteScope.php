@@ -33,7 +33,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
     ) {
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self::AFTER;
     }

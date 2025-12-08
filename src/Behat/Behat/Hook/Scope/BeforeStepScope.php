@@ -34,10 +34,8 @@ final class BeforeStepScope implements StepScope
 
     /**
      * Returns hook scope name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::BEFORE;
     }

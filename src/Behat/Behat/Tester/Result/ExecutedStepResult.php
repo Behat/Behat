@@ -69,7 +69,7 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
     /**
      * @return self::PENDING|self::FAILED|self::PASSED
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         if ($this->callResult->hasException() && $this->callResult->getException() instanceof PendingException) {
             return self::PENDING;

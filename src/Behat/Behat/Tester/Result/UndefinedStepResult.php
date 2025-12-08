@@ -25,7 +25,7 @@ final class UndefinedStepResult implements StepResult
     /**
      * @return self::UNDEFINED
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return self::UNDEFINED;
     }

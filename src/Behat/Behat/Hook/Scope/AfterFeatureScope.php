@@ -35,10 +35,8 @@ final class AfterFeatureScope implements FeatureScope, AfterTestScope
 
     /**
      * Returns hook scope name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::AFTER;
     }

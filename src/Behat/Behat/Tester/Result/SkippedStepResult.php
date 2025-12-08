@@ -50,7 +50,7 @@ final class SkippedStepResult implements StepResult, DefinedStepResult
     /**
      * @return self::SKIPPED
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return self::SKIPPED;
     }

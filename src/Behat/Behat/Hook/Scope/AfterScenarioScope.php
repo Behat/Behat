@@ -37,10 +37,8 @@ final class AfterScenarioScope implements ScenarioScope, AfterTestScope
 
     /**
      * Returns hook scope name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::AFTER;
     }

@@ -50,7 +50,7 @@ final class FailedStepSearchResult implements StepResult, ExceptionResult
     /**
      * @return self::FAILED
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return self::FAILED;
     }

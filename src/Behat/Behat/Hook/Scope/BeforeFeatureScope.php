@@ -32,10 +32,8 @@ final class BeforeFeatureScope implements FeatureScope
 
     /**
      * Returns hook scope name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return self::BEFORE;
     }

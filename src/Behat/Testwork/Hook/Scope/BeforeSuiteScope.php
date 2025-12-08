@@ -31,7 +31,7 @@ final class BeforeSuiteScope implements SuiteScope
     ) {
     }
 
-    public function getName()
+    public function getName(): string
     {
         return self::BEFORE;
     }
