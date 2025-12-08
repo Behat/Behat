@@ -28,7 +28,7 @@ class StaticEnvironment implements Environment
     ) {
     }
 
-    final public function getSuite()
+    final public function getSuite(): Suite
     {
         return $this->suite;
     }

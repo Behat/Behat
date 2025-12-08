@@ -36,15 +36,13 @@ class EnvironmentCall implements Call
 
     /**
      * Returns environment this call is executed from.
-     *
-     * @return Environment
      */
-    final public function getEnvironment()
+    final public function getEnvironment(): Environment
     {
         return $this->environment;
     }
 
-    final public function getCallee()
+    final public function getCallee(): Callee
     {
         return $this->callee;
     }
@@ -54,7 +52,7 @@ class EnvironmentCall implements Call
         return $this->environment->bindCallee($this->callee);
     }
 
-    final public function getArguments()
+    final public function getArguments(): array
     {
         return $this->arguments;
     }

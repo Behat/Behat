@@ -88,9 +88,7 @@ return RectorConfig::configure()
             // Would be a BC break
             __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
             __DIR__.'/src/Behat/Config/Converter/UsedClassesCollector.php',
-            __DIR__.'/src/Behat/Testwork/Environment/Call/EnvironmentCall.php',
             __DIR__.'/src/Behat/Testwork/Call/RuntimeCallee.php',
-            __DIR__.'/src/Behat/Testwork/Environment/StaticEnvironment.php',
             __DIR__.'/src/Behat/Testwork/Output/Printer/StreamOutputPrinter.php',
             // The interface for getScenario on these events is actually broken (says it returns ScenarioInterface
             // but it actually returns ScenarioLikeInterface) so we need to fix that (in 4.0) first
