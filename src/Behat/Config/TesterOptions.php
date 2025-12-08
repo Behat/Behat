@@ -134,7 +134,7 @@ final class TesterOptions implements ConfigConverterInterface
         // Remove any now-empty groups (e.g. 'testers' => []) from the settings array
         // Then if necessary provide any remaining settings to the object constructor. These are likely not used by
         // Behat, but we want them in the generated config for the user to review.
-        $this->settings = array_filter($this->settings, static fn ($g) => $g !== []);
+        $this->settings = array_filter($this->settings, static fn ($g): bool => $g !== []);
         if ($this->settings !== []) {
             ConfigConverterTools::addArgumentsToConstructor([$this->settings], $optionsObject);
         }

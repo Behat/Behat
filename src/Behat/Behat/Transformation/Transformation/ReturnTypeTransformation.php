@@ -172,7 +172,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
      */
     private function hasName($index)
     {
-        return fn (ReflectionParameter $parameter) => $index === $parameter->getName();
+        return fn (ReflectionParameter $parameter): bool => $index === $parameter->getName();
     }
 
     /**
@@ -184,7 +184,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
      */
     private function hasPosition($index)
     {
-        return fn (ReflectionParameter $parameter) => $index === $parameter->getPosition();
+        return fn (ReflectionParameter $parameter): bool => $index === $parameter->getPosition();
     }
 
     /**

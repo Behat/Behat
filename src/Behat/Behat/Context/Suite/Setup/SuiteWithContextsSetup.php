@@ -75,7 +75,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     private function getNormalizedContextClasses(Suite $suite)
     {
         return array_map(
-            fn ($context) => is_array($context) ? current(array_keys($context)) : $context,
+            fn ($context): mixed => is_array($context) ? current(array_keys($context)) : $context,
             $this->getSuiteContexts($suite)
         );
     }

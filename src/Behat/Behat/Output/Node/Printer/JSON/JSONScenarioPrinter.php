@@ -50,7 +50,7 @@ final class JSONScenarioPrinter implements ScenarioPrinter
     {
         $scenario = $this->currentScenario;
         assert($scenario instanceof NamedScenarioInterface);
-        $name = implode(' ', array_map(fn ($l) => trim($l), explode("\n", $scenario->getName() ?? '')));
+        $name = implode(' ', array_map(fn ($l): string => trim((string) $l), explode("\n", $scenario->getName() ?? '')));
 
         $scenarioAttributes = [
             'name' => $name,

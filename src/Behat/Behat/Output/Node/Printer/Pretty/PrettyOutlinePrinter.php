@@ -104,6 +104,6 @@ final class PrettyOutlinePrinter implements OutlinePrinter
     {
         $style = $this->resultConverter->convertResultCodeToString(TestResult::SKIPPED);
 
-        return fn ($col) => sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
+        return fn ($col): string => sprintf('{+%s_param}%s{-%s_param}', $style, $col, $style);
     }
 }

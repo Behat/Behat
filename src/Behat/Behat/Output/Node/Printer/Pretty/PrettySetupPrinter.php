@@ -143,7 +143,7 @@ final class PrettySetupPrinter implements SetupPrinter
             return;
         }
 
-        $pad = (fn ($line) => sprintf(
+        $pad = (fn ($line): string => sprintf(
             '%s│  {+stdout}%s{-stdout}',
             $indentText,
             $line
@@ -164,7 +164,7 @@ final class PrettySetupPrinter implements SetupPrinter
             return;
         }
 
-        $pad = (fn ($l) => sprintf(
+        $pad = (fn ($l): string => sprintf(
             '%s╳  {+exception}%s{-exception}',
             $indentText,
             $l

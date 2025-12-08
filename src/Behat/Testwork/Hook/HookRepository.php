@@ -39,7 +39,7 @@ final class HookRepository
     {
         return array_filter(
             $this->environmentManager->readEnvironmentCallees($environment),
-            fn (Callee $callee) => $callee instanceof Hook
+            fn (Callee $callee): bool => $callee instanceof Hook
         );
     }
 

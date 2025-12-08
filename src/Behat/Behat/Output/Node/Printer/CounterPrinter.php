@@ -37,7 +37,7 @@ final class CounterPrinter
      */
     public function printCounters(OutputPrinter $printer, $intro, array $stats)
     {
-        $stats = array_filter($stats, fn ($count) => 0 !== $count);
+        $stats = array_filter($stats, fn ($count): bool => 0 !== $count);
 
         $totalCount = 0 === count($stats) ? 0 : array_sum($stats);
 

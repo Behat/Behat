@@ -52,7 +52,7 @@ final class ExerciseController implements Controller
     public function configure(Command $command)
     {
         $locatorsExamples = implode(PHP_EOL, array_map(
-            fn ($locator) => '- ' . $locator,
+            fn ($locator): string => '- ' . $locator,
             $this->specificationFinder->getExampleLocators()
         ));
 

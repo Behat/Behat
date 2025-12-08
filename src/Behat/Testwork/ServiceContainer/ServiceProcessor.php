@@ -38,8 +38,8 @@ final class ServiceProcessor
             $serviceTags[] = array_merge(['priority' => 0], $firstTags, ['id' => $id]);
         }
 
-        usort($serviceTags, fn ($tag1, $tag2) => $tag2['priority'] - $tag1['priority']);
-        $serviceReferences = array_map(fn ($tag) => new Reference($tag['id']), $serviceTags);
+        usort($serviceTags, fn ($tag1, $tag2): int|float => $tag2['priority'] - $tag1['priority']);
+        $serviceReferences = array_map(fn ($tag): Reference => new Reference($tag['id']), $serviceTags);
 
         return $serviceReferences;
     }

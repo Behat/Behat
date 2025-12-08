@@ -88,7 +88,7 @@ final class UnusedDefinitionsController implements Controller
 
     public function printUnusedDefinitions(): void
     {
-        $unusedDefinitions = array_filter($this->definitionUsage, fn ($definition) => $definition['used'] === false);
+        $unusedDefinitions = array_filter($this->definitionUsage, fn ($definition): bool => $definition['used'] === false);
         $unusedDefinitions = array_column($unusedDefinitions, 'definition');
 
         $this->printer->printUnusedDefinitions($unusedDefinitions);

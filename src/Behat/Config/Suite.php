@@ -108,7 +108,7 @@ final class Suite implements ConfigConverterInterface
         unset($this->settings[self::CONTEXTS_SETTING]);
 
         // Contexts can be configured with or without constructor arguments.
-        $hasAnyWithArguments = (bool) array_filter($contexts, fn ($c) => is_array($c));
+        $hasAnyWithArguments = (bool) array_filter($contexts, fn ($c): bool => is_array($c));
 
         if (!$hasAnyWithArguments) {
             // All the contexts are just class names, we can add them as a single `->withContexts` call

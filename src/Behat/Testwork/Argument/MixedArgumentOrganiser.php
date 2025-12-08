@@ -106,7 +106,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     private function splitArguments(array $parameters, array $arguments)
     {
         $parameterNames = array_map(
-            fn (ReflectionParameter $parameter) => $parameter->getName(),
+            fn (ReflectionParameter $parameter): string => $parameter->getName(),
             $parameters
         );
 
@@ -252,7 +252,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     {
         return array_filter(
             $parameters,
-            fn ($parameter, $num) => !$this->isArgumentDefined($num)
+            fn ($parameter, $num): bool => !$this->isArgumentDefined($num)
             && $this->getReflectionClassesFromParameter($parameter),
             ARRAY_FILTER_USE_BOTH
         );

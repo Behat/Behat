@@ -505,38 +505,38 @@ EOL;
         if ('/' !== DIRECTORY_SEPARATOR) {
             $text = preg_replace_callback(
                 '/[ "](features|tests)\/[^\n "]+/',
-                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
             $text = preg_replace_callback(
                 '/\<span class\="path"\>features\/[^\<]+/',
-                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 (string) $text
             );
             $text = preg_replace_callback(
                 '/\+[fd] [^ ]+/',
-                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 (string) $text
             );
 
             // error stacktrace
             $text = preg_replace_callback(
                 '/#\d+ [^:]+:/',
-                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 (string) $text
             );
 
             // texts with absolute paths
             $text = preg_replace_callback(
                 '/\{BASE_PATH\}[^\n \<"]+/',
-                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 (string) $text
             );
 
             // texts in editor URLs
             $text = preg_replace_callback(
                 '/open\?file[^\<"]+/',
-                fn ($matches) => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
+                fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 (string) $text
             );
         }
