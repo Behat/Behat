@@ -9,8 +9,6 @@ Feature: Rerun
       | option      | value    |
       | --no-colors |          |
       | --format    | progress |
-
-  Scenario: Run one feature with 2 failed and 3 passing scenarios
     When I run "behat features/apples.feature"
     Then it should fail with:
       """
@@ -31,7 +29,6 @@ Feature: Rerun
       """
 
   Scenario: Rerun only failed scenarios
-    Given I run "behat features/apples.feature"
     When I run "behat features/apples.feature --rerun"
     Then it should fail with:
     """
@@ -52,8 +49,7 @@ Feature: Rerun
     """
 
   Scenario: Fixing scenario removes it from the rerun log
-  Given I run "behat features/apples.feature"
-  And I copy "features/apples-fixed.feature" to "features/apples.feature"
+  Given I copy "features/apples-fixed.feature" to "features/apples.feature"
   When I run "behat features/apples.feature --rerun"
   Then it should fail with:
     """
@@ -68,8 +64,8 @@ Feature: Rerun
     2 scenarios (1 passed, 1 failed)
     7 steps (6 passed, 1 failed)
     """
-  And I run "behat features/apples.feature --rerun"
-  And it should fail with:
+  When I run "behat features/apples.feature --rerun"
+  Then it should fail with:
     """
     ..F
 
