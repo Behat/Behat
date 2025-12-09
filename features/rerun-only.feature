@@ -56,7 +56,8 @@ Feature: Rerun
       """
 
   Scenario: Nothing is run if no failure was recorded in the rerun file
-    When I run "behat features/apples-no-error.feature"
+    Given I copy "features/apples-no-error.feature" to "features/apples.feature"
+    When I run "behat features/apples.feature"
     Then it should pass with:
       """
       .....................
@@ -64,7 +65,7 @@ Feature: Rerun
       6 scenarios (6 passed)
       21 steps (21 passed)
       """
-    When I run "behat features/apples-no-error.feature --rerun-only"
+    When I run "behat features/apples.feature --rerun-only"
     Then it should pass with:
     """
     No failure found, exiting

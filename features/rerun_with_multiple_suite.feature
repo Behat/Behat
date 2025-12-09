@@ -10,8 +10,8 @@ Feature: Rerun with multiple suite
       | --no-colors |          |
       | --format    | progress |
 
-  Scenario: Run feature with 6 failed and 12 passing scenarios
-    When I run "behat"
+  Scenario: Rerun only failed scenarios, 4 from default suite and 2 from suite2
+    Given I run "behat"
     Then it should fail with:
       """
       ..F.............F......F.............F......F.............F....
@@ -45,9 +45,6 @@ Feature: Rerun with multiple suite
       18 scenarios (12 passed, 6 failed)
       63 steps (57 passed, 6 failed)
       """
-
-  Scenario: Rerun only failed scenarios, 4 from default suite and 2 from suite2
-    Given I run "behat"
     When I run "behat --rerun"
     Then it should fail with:
     """
@@ -85,6 +82,23 @@ Feature: Rerun with multiple suite
 
   Scenario: Fixing scenarios removes it from the rerun log
     Given I run "behat features/apples.feature"
+    Then it should fail with:
+      """
+      ..F.............F....
+
+      --- Failed steps:
+
+      001 Scenario: I'm little hungry   # features/apples.feature:9
+            Then I should have 3 apples # features/apples.feature:11
+              Failed asserting that 2 matches expected 3.
+
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:29
+            Then I should have 8 apples     # features/apples.feature:24
+              Failed asserting that 7 matches expected 8.
+
+      6 scenarios (4 passed, 2 failed)
+      21 steps (19 passed, 2 failed)
+      """
     And I copy "features/bananas-fixed.feature" to "features/bananas.feature"
     When I run "behat"
     Then it should fail with:
