@@ -7,7 +7,7 @@ Feature: Apples story
     Given I have 3 apples
 
   Scenario: I'm little hungry
-    When I ate 1 apple
+    When I ate 1 apples
     Then I should have 3 apples
 
   Scenario: Found more apples

@@ -11,6 +11,7 @@ use PHPUnit\Framework\Assert;
 class FeatureContext implements Context
 {
     private int $apples = 0;
+    private int $bananas = 0;
     private array $parameters;
 
     public function __construct(array $parameters = [])
@@ -18,28 +19,28 @@ class FeatureContext implements Context
         $this->parameters = $parameters;
     }
 
-    #[Given('/^I have (\\d+) apples?$/')]
-    public function iHaveApples(string $count): void
+    #[Given('/^I have (\\d+) (apples|bananas)$/')]
+    public function iHaveFruit(string $count, string $fruit): void
     {
-        $this->apples = (int) $count;
+        $this->{$fruit} = (int) $count;
     }
 
-    #[When('/^I ate (\\d+) apples?$/')]
-    public function iAteApples(string $count): void
+    #[When('/^I ate (\\d+) (apples|bananas)$/')]
+    public function iAteFruit(string $count, string $fruit): void
     {
-        $this->apples -= (int) $count;
+        $this->{$fruit} -= (int) $count;
     }
 
-    #[When('/^I found (\\d+) apples?$/')]
-    public function iFoundApples(string $count): void
+    #[When('/^I found (\\d+) (apples|bananas)$/')]
+    public function iFoundFruit(string $count, string $fruit): void
     {
-        $this->apples += (int) $count;
+        $this->{$fruit} += (int) $count;
     }
 
-    #[Then('/^I should have (\\d+) apples$/')]
-    public function iShouldHaveApples(string $count): void
+    #[Then('/^I should have (\\d+) (apples|bananas)$/')]
+    public function iShouldHaveFruit(string $count, string $fruit): void
     {
-        Assert::assertEquals((int) $count, $this->apples);
+        Assert::assertEquals((int) $count, $this->{$fruit});
     }
 
     #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
