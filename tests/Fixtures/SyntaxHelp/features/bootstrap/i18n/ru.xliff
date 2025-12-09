@@ -1,0 +1,15 @@
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file original="global" source-language="en" target-language="ru" datatype="plaintext">
+    <header />
+    <body>
+      <trans-unit id="i-have-apples">
+        <source>/^I have (\d+) apples?$/</source>
+        <target>/^у меня (\d+) яблоко?$/</target>
+      </trans-unit>
+      <trans-unit id="i-found">
+        <source>/^I found (\d+) apples?$/</source>
+        <target>/^Я нашел (\d+) яблоко?$/</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
