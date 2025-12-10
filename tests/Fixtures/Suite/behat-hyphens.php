@@ -8,7 +8,9 @@ use Behat\Config\Suite;
 
 $profile = (new Profile('default'))
     ->withSuite(
-        new Suite('suite-with-hyphens', ['paths' => []])
+        (new Suite('suite-with-hyphens'))
+            ->withPaths('features/little_kid.feature')
+            ->withContexts('LittleKidContext')
     )
 ;
 

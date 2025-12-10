@@ -147,10 +147,19 @@ Feature: Suites
       """
 
   Scenario: Running suite with a hyphen in suite name
-    Given I clear the default behat options
-    When I run "behat --config=behat-hyphens.php --format progress --suite suite-with-hyphens"
+    When I run "behat --config=behat-hyphens.php --suite suite-with-hyphens"
     Then it should pass with:
       """
-      No scenarios
-      No steps
+      Feature: Apples story
+        In order to eat apple
+        As a little kid
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry   # features/little_kid.feature:6
+          Given I have 3 apples       # LittleKidContext::iHaveApples()
+          When I ate 1 apple          # LittleKidContext::iAteApples()
+          Then I should have 2 apples # LittleKidContext::iShouldHaveApples()
+
+      1 scenario (1 passed)
+      3 steps (3 passed)
       """
