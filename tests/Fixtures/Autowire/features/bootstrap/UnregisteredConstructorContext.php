@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Behat\Step\Given;
 
 class UnregisteredConstructorContext implements Context
 {
@@ -8,7 +9,7 @@ class UnregisteredConstructorContext implements Context
     {
     }
 
-    /** @Given a step */
+    #[Given('a step')]
     public function aStep()
     {
     }

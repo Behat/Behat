@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Behat\Step\Given;
 
 class MixedConstructorArgsContext implements Context
 {
@@ -9,7 +10,7 @@ class MixedConstructorArgsContext implements Context
         PHPUnit\Framework\Assert::assertEquals('Konstantin', $name);
     }
 
-    /** @Given a step */
+    #[Given('a step')]
     public function aStep()
     {
     }

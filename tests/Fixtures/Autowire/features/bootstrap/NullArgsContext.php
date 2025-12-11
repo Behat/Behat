@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Behat\Step\Given;
 
 class NullArgsContext implements Context
 {
@@ -9,7 +10,7 @@ class NullArgsContext implements Context
         PHPUnit\Framework\Assert::assertNull($name);
     }
 
-    /** @Given a step */
+    #[Given('a step')]
     public function aStep()
     {
     }

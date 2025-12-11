@@ -12,6 +12,9 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterSuite;
+use Behat\Hook\BeforeScenario;
+use Behat\Hook\BeforeSuite;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -65,11 +68,9 @@ class FeatureContext implements Context
 
     /**
      * Cleans test folders in the temporary directory.
-     *
-     * @BeforeSuite
-     *
-     * @AfterSuite
      */
+    #[BeforeSuite]
+    #[AfterSuite]
     public static function cleanTestFolders(): void
     {
         (new Filesystem())->remove(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat');
@@ -77,9 +78,8 @@ class FeatureContext implements Context
 
     /**
      * Prepares test folders in the temporary directory.
-     *
-     * @BeforeScenario
      */
+    #[BeforeScenario]
     public function prepareTestFolders(): void
     {
         $dir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'behat' . DIRECTORY_SEPARATOR .
@@ -98,11 +98,10 @@ class FeatureContext implements Context
     /**
      * Creates a file with specified name and context in current workdir.
      *
-     * @Given /^(?:there is )?a file named "([^"]*)" with:$/
-     *
      * @param string       $filename name of the file (relative path)
      * @param PyStringNode $content  PyString string instance
      */
+    #[Given('/^(?:there is )?a file named "([^"]*)" with:$/')]
     public function aFileNamedWith($filename, PyStringNode $content): void
     {
         $content = strtr((string) $content, ["'''" => '"""']);
@@ -110,12 +109,11 @@ class FeatureContext implements Context
     }
 
     /**
-     * Creates a empty file with specified name in current workdir.
-     *
-     * @Given /^(?:there is )?a file named "([^"]*)"$/
+     * Creates an empty file with specified name in current workdir.
      *
      * @param string $filename name of the file (relative path)
      */
+    #[Given('/^(?:there is )?a file named "([^"]*)"$/')]
     public function aFileNamed($filename): void
     {
         $this->createFileInWorkingDir($filename, '');
@@ -124,11 +122,10 @@ class FeatureContext implements Context
     /**
      * Copies a file from source to destination in current workdir.
      *
-     * @Given /^I copy "([^"]*)" to "([^"]*)"$/
-     *
      * @param string $source source file path (relative to workdir)
      * @param string $destination destination file path (relative to workdir)
      */
+    #[Given('/^I copy "([^"]*)" to "([^"]*)"$/')]
     public function iCopyFileTo($source, $destination)
     {
         $sourcePath = $this->workingDir . '/' . $source;
@@ -146,9 +143,8 @@ class FeatureContext implements Context
 
     /**
      * Creates a noop feature context in current workdir.
-     *
-     * @Given /^(?:there is )?a some feature context$/
      */
+    #[Given('/^(?:there is )?a some feature context$/')]
     public function aNoopFeatureContext(): void
     {
         $filename = 'features/bootstrap/FeatureContext.php';
@@ -166,9 +162,8 @@ EOL;
 
     /**
      * Creates a noop feature in current workdir.
-     *
-     * @Given /^(?:there is )?a some feature scenarios/
      */
+    #[Given('/^(?:there is )?a some feature scenarios/')]
     public function aNoopFeature(): void
     {
         $filename = 'features/bootstrap/FeatureContext.php';
@@ -183,10 +178,9 @@ EOL;
     /**
      * Moves user to the specified path.
      *
-     * @Given /^I am in the "([^"]*)" path$/
-     *
      * @param string $path
      */
+    #[Given('/^I am in the "([^"]*)" path$/')]
     public function iAmInThePath($path): void
     {
         $this->moveToNewPath($path);
@@ -195,10 +189,9 @@ EOL;
     /**
      * Checks whether a file at provided path exists.
      *
-     * @Given /^file "([^"]*)" should exist$/
-     *
      * @param   string $path
      */
+    #[Given('/^file "([^"]*)" should exist$/')]
     public function fileShouldExist($path): void
     {
         Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
@@ -206,9 +199,8 @@ EOL;
 
     /**
      * Sets specified ENV variable.
-     *
-     * @When /^the "([^"]*)" environment variable is set to "([^"]*)"$/
      */
+    #[When('/^the "([^"]*)" environment variable is set to "([^"]*)"$/')]
     public function iSetEnvironmentVariable($name, $value): void
     {
         $this->env = [$name => (string) $value];
@@ -216,9 +208,8 @@ EOL;
 
     /**
      * Sets the BEHAT_PARAMS env variable.
-     *
-     * @When /^"BEHAT_PARAMS" environment variable is set to:$/
      */
+    #[When('/^"BEHAT_PARAMS" environment variable is set to:$/')]
     public function iSetBehatParamsEnvironmentVariable(PyStringNode $value): void
     {
         $this->env = ['BEHAT_PARAMS' => (string) $value];
@@ -257,10 +248,9 @@ EOL;
     /**
      * Runs behat command with provided parameters.
      *
-     * @When /^I run "behat(?: ((?:\"|[^"])*))?"$/
-     *
      * @param string $argumentsString
      */
+    #[When('/^I run "behat(?: ((?:\\"|[^"])*))?"$/')]
     public function iRunBehat($argumentsString = ''): void
     {
         $argumentsString = strtr($argumentsString, ['\'' => '"']);
@@ -303,11 +293,10 @@ EOL;
     /**
      * Runs behat command with provided parameters in interactive mode.
      *
-     * @When /^I answer "([^"]+)" when running "behat(?: ((?:\"|[^"])*))?"$/
-     *
      * @param string $answerString
      * @param string $argumentsString
      */
+    #[When('/^I answer "([^"]+)" when running "behat(?: ((?:\\"|[^"])*))?"$/')]
     public function iRunBehatInteractively($answerString, $argumentsString): void
     {
         $this->env['SHELL_INTERACTIVE'] = true;
@@ -320,9 +309,8 @@ EOL;
 
     /**
      * Runs behat command in debug mode.
-     *
-     * @When /^I run behat in debug mode$/
      */
+    #[When('/^I run behat in debug mode$/')]
     public function iRunBehatInDebugMode(): void
     {
         $this->options = '';
@@ -332,10 +320,9 @@ EOL;
     /**
      * Checks whether previously ran command passes|fails with provided output.
      *
-     * @Then /^it should (fail|pass) with:$/
-     *
      * @param 'pass'|'fail' $success
      */
+    #[Then('/^it should (fail|pass) with:$/')]
     public function itShouldPassOrFailWith($success, PyStringNode $text): void
     {
         $isCorrect = $this->exitCodeIsCorrect($success);
@@ -367,10 +354,9 @@ EOL;
     /**
      * Checks whether previously runned command passes|failes with no output.
      *
-     * @Then /^it should (fail|pass) with no output$/
-     *
      * @param 'pass'|'fail' $success
      */
+    #[Then('/^it should (fail|pass) with no output$/')]
     public function itShouldPassOrFailWithNoOutput($success): void
     {
         Assert::assertEmpty($this->getOutput());
@@ -380,11 +366,10 @@ EOL;
     /**
      * Checks whether specified file exists and contains specified string.
      *
-     * @Then /^"([^"]*)" file should contain:$/
-     *
      * @param string       $path file path
      * @param PyStringNode $text file content
      */
+    #[Then('/^"([^"]*)" file should contain:$/')]
     public function fileShouldContain($path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
@@ -433,11 +418,10 @@ EOL;
     /**
      * Checks whether specified content and structure of the xml is correct without worrying about layout.
      *
-     * @Then /^(?:the\s)?"([^"]*)" file xml should be like:$/
-     *
      * @param string       $path file path
      * @param PyStringNode $text file content
      */
+    #[Then('/^(?:the\\s)?"([^"]*)" file xml should be like:$/')]
     public function fileXmlShouldBeLike($path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
@@ -447,11 +431,10 @@ EOL;
     /**
      * Checks whether specified content and structure of the json is correct without worrying about layout.
      *
-     * @Then /^(?:the\s)?"([^"]*)" file json should be like:$/
-     *
      * @param string       $path file path
      * @param PyStringNode $text file content
      */
+    #[Then('/^(?:the\\s)?"([^"]*)" file json should be like:$/')]
     public function fileJSONShouldBeLike($path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
@@ -516,10 +499,9 @@ EOL;
     /**
      * Checks whether last command output contains provided string.
      *
-     * @Then the output should contain:
-     *
      * @param PyStringNode $text PyString text instance
      */
+    #[Then('the output should contain:')]
     public function theOutputShouldContain(PyStringNode $text): void
     {
         if (str_contains($this->getOutput(), (string) $this->getExpectedOutput($text))) {
@@ -588,10 +570,9 @@ EOL;
     /**
      * Checks whether previously ran command failed|passed.
      *
-     * @Then /^it should (fail|pass)$/
-     *
      * @param 'pass'|'fail' $success
      */
+    #[Then('/^it should (fail|pass)$/')]
     public function itShouldPassOrFail($success): void
     {
         $isCorrect = $this->exitCodeIsCorrect($success);
@@ -608,11 +589,10 @@ EOL;
     /**
      * Checks whether the file is valid according to an XML schema.
      *
-     * @Then /^the file "([^"]+)" should be a valid document according to "([^"]+)"$/
-     *
      * @param string $xmlFile
      * @param string $schemaPath relative to features/bootstrap/schema
      */
+    #[Then('/^the file "([^"]+)" should be a valid document according to "([^"]+)"$/')]
     public function xmlShouldBeValid($xmlFile, $schemaPath): void
     {
         $path = $this->workingDir . '/' . $xmlFile;

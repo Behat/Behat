@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Behat\Step\Given;
 
 class ConstructorArgsContext implements Context
 {
@@ -8,7 +9,7 @@ class ConstructorArgsContext implements Context
     {
     }
 
-    /** @Given a step */
+    #[Given('a step')]
     public function aStep()
     {
     }
