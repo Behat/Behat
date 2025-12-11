@@ -4,6 +4,61 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.28.0] - 2025-12-11
+
+### Changed
+
+* Add backwards-compatible return types ahead of symfony8 by @Kocal (cherry-picked by @acoulton) in [#1702](https://github.com/Behat/Behat/pull/1702)
+* Rename the default branch from `master` to `3.x` and remove the `dev-master` composer branch alias
+  by @acoulton in [#1708](https://github.com/Behat/Behat/pull/1708)
+
+### Added
+
+* Add `printSkippedSteps` option to pretty formatter (true by default) by @carlos-granados in [#1705](https://github.com/Behat/Behat/pull/1705)
+* Accept multiple path arguments on CLI
+  This PR was originally contributed to a 4.x branch which was then abandoned. The feature was later implemented in 3.x
+  by a different contributor, but we wanted to also credit the previous work done. The only actual change in this
+  release is an internal (backwards compatible) change to the use of WrongPathsException.
+  By @adrienbrault in [#1397](https://github.com/Behat/Behat/pull/1397) and merged back to 3.x by @acoulton in [#1693](https://github.com/Behat/Behat/pull/1693)
+
+### Fixed
+
+* Improve performance by caching definition translations by @carlos-granados in [#1706](https://github.com/Behat/Behat/pull/1706)
+* Resolve deprecation with symfony/console > 7.4.0, fix phpstan by @acoulton in [#1757](https://github.com/Behat/Behat/pull/1757)
+
+### Internal
+
+* Add funding links - please consider supporting Behat development! by @acoulton in [#1704](https://github.com/Behat/Behat/pull/1704)
+* Fix static analysis in PHP 8.5 by @carlos-granados in [#1719](https://github.com/Behat/Behat/pull/1719)
+* Fix phpunit configuration by @carlos-granados in [#1716](https://github.com/Behat/Behat/pull/1716)
+* Replace friendsofphp/php-cs-fixer by php-cs-fixer/shim by @Kocal (cherry-picked by @acoulton) [#1701](https://github.com/Behat/Behat/pull/1701)
+* Add automated check for BC breaks in CI by @acoulton in [#1762](https://github.com/Behat/Behat/pull/1762)
+* Refactor feature files and improve coverage of `--rerun` and `--rerun-only`
+  by @carlos-granados in [#1770](https://github.com/Behat/Behat/pull/1770), [#1764](https://github.com/Behat/Behat/pull/1764),
+  [#1766](https://github.com/Behat/Behat/pull/1766), and [#1771](https://github.com/Behat/Behat/pull/1771)
+* Refactor all feature files to use test fixtures instead of inline strings by @carlos-granados in [#1707](https://github.com/Behat/Behat/pull/1707),
+  [#1709](https://github.com/Behat/Behat/pull/1709), [#1711](https://github.com/Behat/Behat/pull/1711),
+  [#1713](https://github.com/Behat/Behat/pull/1713), [#1714](https://github.com/Behat/Behat/pull/1714),
+  [#1710](https://github.com/Behat/Behat/pull/1710), [#1715](https://github.com/Behat/Behat/pull/1715),
+  [#1717](https://github.com/Behat/Behat/pull/1717), [#1720](https://github.com/Behat/Behat/pull/1720),
+  [#1721](https://github.com/Behat/Behat/pull/1721), [#1722](https://github.com/Behat/Behat/pull/1722),
+  [#1723](https://github.com/Behat/Behat/pull/1723), [#1724](https://github.com/Behat/Behat/pull/1724),
+  [#1725](https://github.com/Behat/Behat/pull/1725), [#1726](https://github.com/Behat/Behat/pull/1726),
+  [#1729](https://github.com/Behat/Behat/pull/1729), [#1727](https://github.com/Behat/Behat/pull/1727),
+  [#1728](https://github.com/Behat/Behat/pull/1728), [#1730](https://github.com/Behat/Behat/pull/1730),
+  [#1731](https://github.com/Behat/Behat/pull/1731), [#1734](https://github.com/Behat/Behat/pull/1734),
+  [#1735](https://github.com/Behat/Behat/pull/1735), [#1736](https://github.com/Behat/Behat/pull/1736),
+  [#1737](https://github.com/Behat/Behat/pull/1737), [#1738](https://github.com/Behat/Behat/pull/1738),
+  [#1740](https://github.com/Behat/Behat/pull/1740), [#1739](https://github.com/Behat/Behat/pull/1739),
+  [#1741](https://github.com/Behat/Behat/pull/1741), [#1742](https://github.com/Behat/Behat/pull/1742),
+  [#1750](https://github.com/Behat/Behat/pull/1750), [#1751](https://github.com/Behat/Behat/pull/1751),
+  [#1752](https://github.com/Behat/Behat/pull/1752), [#1755](https://github.com/Behat/Behat/pull/1755),
+  [#1753](https://github.com/Behat/Behat/pull/1753), [#1760](https://github.com/Behat/Behat/pull/1760),
+  [#1761](https://github.com/Behat/Behat/pull/1761), [#1756](https://github.com/Behat/Behat/pull/1756),
+  [#1767](https://github.com/Behat/Behat/pull/1767), [#1765](https://github.com/Behat/Behat/pull/1765),
+  [#1769](https://github.com/Behat/Behat/pull/1769), [#1768](https://github.com/Behat/Behat/pull/1768),
+  [#1773](https://github.com/Behat/Behat/pull/1773), and [#1774](https://github.com/Behat/Behat/pull/1774)
+
 ## [3.27.0] - 2025-11-23
 
 ### Changed
@@ -1374,6 +1429,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.28.0]: https://github.com/Behat/Behat/compare/v3.27.0...v3.28.0
 [3.27.0]: https://github.com/Behat/Behat/compare/v3.26.0...v3.27.0
 [3.26.0]: https://github.com/Behat/Behat/compare/v3.25.0...v3.26.0
 [3.25.0]: https://github.com/Behat/Behat/compare/v3.24.1...v3.25.0
