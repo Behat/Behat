@@ -24,6 +24,9 @@ class DocBlockHelper
         // Remove indentation
         $description = preg_replace('/^[\s\t]*/m', '', $docBlock);
 
+        // normalize line endings
+        $description = str_replace("\r\n", "\n", (string) $description);
+
         // Remove block comment syntax
         $description = preg_replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', (string) $description);
 

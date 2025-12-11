@@ -3,12 +3,14 @@ Feature: Syntax helpers
   As a feature writer
   I need to be able to print supported definitions and Gherkin keywords
 
+  Background:
+    Given I initialise the working directory from the "SyntaxHelp" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
+
   Scenario: Print story syntax
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php class FeatureContext implements Behat\Behat\Context\Context {}
-      """
-    When I run "behat --no-colors --story-syntax"
+    When I run "behat --story-syntax"
     Then the output should contain:
       """
       [Business Need|Ability|Feature]: Internal operations
@@ -40,11 +42,7 @@ Feature: Syntax helpers
       """
 
   Scenario: Print story syntax in native language
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php class FeatureContext implements Behat\Behat\Context\Context {}
-      """
-    When I run "behat --no-colors --story-syntax --lang el"
+    When I run "behat --story-syntax --lang el"
     Then the output should contain:
       """
       # language: el
@@ -77,40 +75,7 @@ Feature: Syntax helpers
       """
 
   Scenario: Print available definitions
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^(?:I|We) have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^(?:I|We) ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^(?:I|We) found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          #[Then('/^(?:I|We) should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-      }
-      """
-    When I run "behat --no-colors -dl"
+    When I run "behat --profile=definitions --definitions l"
     Then the output should contain:
       """
       default | Given /^(?:I|We) have (\d+) apples?$/
@@ -120,63 +85,7 @@ Feature: Syntax helpers
       """
 
   Scenario: Print available definitions in native language
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException,
-          Behat\Behat\Context\TranslatableContext;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements TranslatableContext
-      {
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-
-          public static function getTranslationResources() {
-              return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
-          }
-      }
-      """
-    And a file named "features/bootstrap/i18n/ru.xliff" with:
-      """
-      <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-        <file original="global" source-language="en" target-language="ru" datatype="plaintext">
-          <header />
-          <body>
-            <trans-unit id="i-have-apples">
-              <source>/^I have (\d+) apples?$/</source>
-              <target>/^у меня (\d+) яблоко?$/</target>
-            </trans-unit>
-            <trans-unit id="i-found">
-              <source>/^I found (\d+) apples?$/</source>
-              <target>/^Я нашел (\d+) яблоко?$/</target>
-            </trans-unit>
-          </body>
-        </file>
-      </xliff>
-      """
-    When I run "behat --no-colors -dl --lang=ru"
+    When I run "behat --profile=translatable --definitions l --lang=ru"
     Then the output should contain:
       """
       default | Допустим /^у меня (\d+) яблоко?$/
@@ -186,195 +95,55 @@ Feature: Syntax helpers
       """
 
   Scenario: Print extended definitions info
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * Eating apples
-           *
-           * More details on eating apples, and a list:
-           * - one
-           * - two
-           * --
-           * Internal note not showing in help
-           */
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-      }
-      """
-    When I run "behat --no-colors -di"
+    When I run "behat --profile=descriptions --definitions i"
     Then the output should contain:
       """
       default | [Given|*] /^I have (\d+) apples?$/
-              | at `FeatureContext::iHaveApples()`
+              | at `DescriptionsContext::iHaveApples()`
 
       default | [When|*] /^I ate (\d+) apples?$/
-              | Eating apples
+              | Eating apples.
               | More details on eating apples, and a list:
               | - one
               | - two
-              | at `FeatureContext::iAteApples()`
+              | at `DescriptionsContext::iAteApples()`
 
       default | [When|*] /^I found (\d+) apples?$/
-              | at `FeatureContext::iFoundApples()`
+              | at `DescriptionsContext::iFoundApples()`
 
       default | [Then|*] /^I should have (\d+) apples$/
-              | at `FeatureContext::iShouldHaveApples()`
+              | at `DescriptionsContext::iShouldHaveApples()`
       """
 
   Scenario: Print extended definitions info with file name and line numbers
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          /**
-           * Eating apples
-           *
-           * More details on eating apples, and a list:
-           * - one
-           * - two
-           * --
-           * Internal note not showing in help
-           */
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-      }
-      """
-    When I run "behat --no-colors -di -v"
+    When I run "behat --profile=descriptions --definitions i -v"
     Then the output should contain:
       """
       default | [Given|*] /^I have (\d+) apples?$/
-              | at `FeatureContext::iHaveApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[12:14]`
+              | at `DescriptionsContext::iHaveApples()`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%DescriptionsContext.php[14:17]`
 
       default | [When|*] /^I ate (\d+) apples?$/
-              | Eating apples
+              | Eating apples.
               | More details on eating apples, and a list:
               | - one
               | - two
-              | at `FeatureContext::iAteApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[26:28]`
+              | at `DescriptionsContext::iAteApples()`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%DescriptionsContext.php[29:32]`
 
       default | [When|*] /^I found (\d+) apples?$/
-              | at `FeatureContext::iFoundApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[31:33]`
+              | at `DescriptionsContext::iFoundApples()`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%DescriptionsContext.php[35:38]`
 
       default | [Then|*] /^I should have (\d+) apples$/
-              | at `FeatureContext::iShouldHaveApples()`
-              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%FeatureContext.php[36:38]`
+              | at `DescriptionsContext::iShouldHaveApples()`
+              | on `%%WORKING_DIR%%features%%DS%%bootstrap%%DS%%DescriptionsContext.php[41:44]`
       """
 
   Scenario: Search definition
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Exception\PendingException,
-          Behat\Behat\Context\TranslatableContext;
-      use Behat\Step\Given;
-      use Behat\Step\Then;
-      use Behat\Step\When;
-
-      class FeatureContext implements TranslatableContext
-      {
-          #[Given('/^I have (\d+) apples?$/')]
-          public function iHaveApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^I ate (\d+) apples?$/')]
-          public function iAteApples($count) {
-              throw new PendingException();
-          }
-
-          #[When('/^I found (\d+) apples?$/')]
-          public function iFoundApples($count) {
-              throw new PendingException();
-          }
-
-          #[Then('/^I should have (\d+) apples$/')]
-          public function iShouldHaveApples($count) {
-              throw new PendingException();
-          }
-
-          public static function getTranslationResources() {
-              return array(__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff');
-          }
-      }
-      """
-    And a file named "features/bootstrap/i18n/ru.xliff" with:
-      """
-      <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-        <file original="global" source-language="en" target-language="ru" datatype="plaintext">
-          <header />
-          <body>
-            <trans-unit id="i-have-apples">
-              <source>/^I have (\d+) apples?$/</source>
-              <target>/^у меня (\d+) яблоко?$/</target>
-            </trans-unit>
-            <trans-unit id="i-found">
-              <source>/^I found (\d+) apples?$/</source>
-              <target>/^Я нашел (\d+) яблоко?$/</target>
-            </trans-unit>
-          </body>
-        </file>
-      </xliff>
-      """
-    When I run "behat --no-colors --lang=ru -d 'нашел'"
+    When I run "behat --profile=translatable --lang=ru --definitions 'нашел'"
     Then the output should contain:
       """
       default | [Когда|Если|*] /^Я нашел (\d+) яблоко?$/
-              | at `FeatureContext::iFoundApples()`
+              | at `TranslatableDefinitionsContext::iFoundApples()`
       """

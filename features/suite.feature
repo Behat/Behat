@@ -3,67 +3,14 @@ Feature: Suites
   As a feature tester
   I need to be able to use suites
 
+  Background:
+    Given I initialise the working directory from the "Suite" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
+
   Scenario: One feature, two contexts
-    Given a file named "features/bootstrap/FirstContext.php" with:
-      """
-      <?php
-
-      class FirstContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/SecondContext.php" with:
-      """
-      <?php
-
-      class SecondContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/some.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Suite;
-
-      $profile = (new Profile('default'))
-        ->withSuite(new Suite('first', ['contexts' => ['FirstContext']]))
-        ->withSuite((new Suite('second'))->withContexts('SecondContext'))
-      ;
-
-      return (new Config())->withProfile($profile);
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --config=behat-two-suites.php"
     Then it should pass with:
       """
       Feature: Apples story
@@ -91,88 +38,7 @@ Feature: Suites
       """
 
   Scenario: Two contexts, two features
-    Given a file named "features/bootstrap/FirstContext.php" with:
-      """
-      <?php
-
-      class FirstContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/SecondContext.php" with:
-      """
-      <?php
-
-      class SecondContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/first/my.feature" with:
-      """
-      Feature: Apples story #1
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "features/second/my.feature" with:
-      """
-      Feature: Apples story #2
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 30 apples
-          When I ate 10 apple
-          Then I should have 20 apples
-      """
-    And a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Suite;
-
-      $firstSuite = (new Suite('first'))
-        ->withPaths('%paths.base%/features/first')
-        ->withContexts('FirstContext')
-      ;
-
-      $secondSuite = (new Suite('second'))
-        ->withPaths('%paths.base%/features/second')
-        ->withContexts('SecondContext')
-      ;
-
-      $profile = (new Profile('default'))
-        ->withSuite($firstSuite)
-        ->withSuite($secondSuite)
-      ;
-
-      return (new Config())->withProfile($profile);
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --config=behat-two-features.php"
     Then it should pass with:
       """
       Feature: Apples story #1
@@ -190,7 +56,7 @@ Feature: Suites
         As a little kid
         I need to have an apple in my pocket
 
-        Scenario: I'm little hungry    # features/second/my.feature:6
+        Scenario: I'm little hungry    # features/second/their.feature:6
           Given I have 30 apples       # SecondContext::iHaveApples()
           When I ate 10 apple          # SecondContext::iAteApples()
           Then I should have 20 apples # SecondContext::iShouldHaveApples()
@@ -200,161 +66,14 @@ Feature: Suites
       """
 
   Scenario: Suite with `paths` set to string instead of an array
-    Given a file named "features/bootstrap/FirstContext.php" with:
-      """
-      <?php
-
-      class FirstContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/SecondContext.php" with:
-      """
-      <?php
-
-      class SecondContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/first/my.feature" with:
-      """
-      Feature: Apples story #1
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "features/second/my.feature" with:
-      """
-      Feature: Apples story #2
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 30 apples
-          When I ate 10 apple
-          Then I should have 20 apples
-      """
-    And a file named "behat.yml" with:
-      """
-      default:
-        suites:
-          first:
-            paths:    '%paths.base%/features/first'
-            contexts: [ FirstContext ]
-          second:
-            paths:    [ '%paths.base%/features/second' ]
-            contexts: [ SecondContext ]
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --config=behat-invalid-paths.yml"
     Then it should fail with:
       """
       `paths` setting of the "first" suite is expected to be an array, string given.
       """
 
   Scenario: Role-based suites
-    Given a file named "features/bootstrap/LittleKidContext.php" with:
-      """
-      <?php
-
-      class LittleKidContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/BigBrotherContext.php" with:
-      """
-      <?php
-
-      class BigBrotherContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/little_kid.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "features/big_brother.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a big brother
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 15 apples
-          When I ate 10 apple
-          Then I should have 5 apples
-      """
-    And a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Suite;
-      use Behat\Config\Filter\RoleFilter;
-
-      $profile = (new Profile('default'))
-        ->withSuite(
-          (new Suite('little_kid'))
-            ->withContexts(LittleKidContext::class)
-            ->withFilter(new RoleFilter('little kid'))
-        )
-        ->withSuite(
-          (new Suite('big_brother'))
-            ->withContexts(BigBrotherContext::class)
-            ->withFilter(new RoleFilter('big brother'))
-        )
-      ;
-
-      return (new Config())->withProfile($profile);
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --config=behat-role-filters.php"
     Then it should pass with:
       """
       Feature: Apples story
@@ -382,87 +101,7 @@ Feature: Suites
       """
 
   Scenario: Narrative-based suites
-    Given a file named "features/bootstrap/LittleKidContext.php" with:
-      """
-      <?php
-
-      class LittleKidContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/BigBrotherContext.php" with:
-      """
-      <?php
-
-      class BigBrotherContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/little_kid.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "features/big_brother.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a big brother
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 15 apples
-          When I ate 10 apple
-          Then I should have 5 apples
-      """
-    And a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Suite;
-      use Behat\Config\Filter\NarrativeFilter;
-
-      $profile = (new Profile('default'))
-        ->withSuite(
-          (new Suite('little_kid'))
-            ->withContexts(LittleKidContext::class)
-            ->withFilter(new NarrativeFilter('/As a little kid/'))
-        )
-        ->withSuite(
-          (new Suite('big_brother'))
-            ->withContexts(BigBrotherContext::class)
-            ->withFilter(new NarrativeFilter('/As a big brother/'))
-        )
-      ;
-
-      return (new Config())->withProfile($profile);
-      """
-    When I run "behat --no-colors -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --config=behat-narrative-filters.php"
     Then it should pass with:
       """
       Feature: Apples story
@@ -490,87 +129,7 @@ Feature: Suites
       """
 
   Scenario: Running single suite
-    Given a file named "features/bootstrap/LittleKidContext.php" with:
-      """
-      <?php
-
-      class LittleKidContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/bootstrap/BigBrotherContext.php" with:
-      """
-      <?php
-
-      class BigBrotherContext implements \Behat\Behat\Context\Context
-      {
-          /** @Given I have :count apple(s) */
-          public function iHaveApples($count) { }
-
-          /** @When I ate :count apple(s) */
-          public function iAteApples($count) { }
-
-          /** @Then I should have :count apple(s) */
-          public function iShouldHaveApples($count) { }
-      }
-      """
-    And a file named "features/little_kid.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a little kid
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 3 apples
-          When I ate 1 apple
-          Then I should have 2 apples
-      """
-    And a file named "features/big_brother.feature" with:
-      """
-      Feature: Apples story
-        In order to eat apple
-        As a big brother
-        I need to have an apple in my pocket
-
-        Scenario: I'm little hungry
-          Given I have 15 apples
-          When I ate 10 apple
-          Then I should have 5 apples
-      """
-    And a file named "behat.php" with:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\Suite;
-      use Behat\Config\Filter\RoleFilter;
-
-      $profile = (new Profile('default'))
-        ->withSuite(
-          (new Suite('little_kid'))
-            ->withContexts(LittleKidContext::class)
-            ->withFilter(new RoleFilter('little kid'))
-        )
-        ->withSuite(
-          (new Suite('big_brother'))
-            ->withContexts(BigBrotherContext::class)
-            ->withFilter(new RoleFilter('big brother'))
-        )
-      ;
-
-      return (new Config())->withProfile($profile);
-      """
-    When I run "behat --no-colors -s big_brother -fpretty --format-settings='{\"paths\": true}' features"
+    When I run "behat --config=behat-role-filters.php -s big_brother"
     Then it should pass with:
       """
       Feature: Apples story
@@ -588,24 +147,19 @@ Feature: Suites
       """
 
   Scenario: Running suite with a hyphen in suite name
-    Given a file named "behat.yml" with:
-      """
-      default:
-        suites:
-          suite-with-hyphens:
-            paths: {}
-      """
-    And a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      class FeatureContext implements \Behat\Behat\Context\Context
-      {
-      }
-      """
-    When I run "behat --no-colors -f progress --suite suite-with-hyphens"
+    When I run "behat --config=behat-hyphens.php --suite suite-with-hyphens"
     Then it should pass with:
       """
-      No scenarios
-      No steps
+      Feature: Apples story
+        In order to eat apple
+        As a little kid
+        I need to have an apple in my pocket
+
+        Scenario: I'm little hungry   # features/little_kid.feature:6
+          Given I have 3 apples       # LittleKidContext::iHaveApples()
+          When I ate 1 apple          # LittleKidContext::iAteApples()
+          Then I should have 2 apples # LittleKidContext::iShouldHaveApples()
+
+      1 scenario (1 passed)
+      3 steps (3 passed)
       """

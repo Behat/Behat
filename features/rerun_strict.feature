@@ -4,44 +4,28 @@ Feature: Rerun with strict
   I need to have an ability to rerun failed previously scenarios, including those which failed due to the strict option
 
   Background:
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-      use Behat\Step\When;
-
-      class FeatureContext implements Context
-      {
-          #[When('I have a failing step')]
-          public function iHaveAFailingStep(): void
-          {
-              throw new \Exception();
-          }
-
-          #[When('I have a passing step')]
-          public function iHaveAPassingStep(): void
-          {
-          }
-      }
-      """
-    And a file named "features/rerun_strict.feature" with:
-      """
-      Feature: test
-
-        Scenario: missing step
-          When I have a missing step
-
-        Scenario: failing step
-          When I have a failing step
-
-        Scenario: passing step
-          When I have a passing step
-      """
+    Given I initialise the working directory from the "RerunStrict" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value    |
+      | --no-colors |          |
+      | --format    | progress |
 
   Scenario: Rerun feature without strict option
-    When I run "behat --no-colors -f progress -n features/rerun_strict.feature"
-    And I run "behat  --rerun --no-colors -f progress -n features/rerun_strict.feature"
+    When I run "behat features/rerun_strict.feature"
+    Then it should fail with:
+      """
+      UF.
+
+      --- Failed steps:
+
+      001 Scenario: failing step       # features/rerun_strict.feature:6
+            When I have a failing step # features/rerun_strict.feature:7
+              (Exception)
+
+      3 scenarios (1 passed, 1 failed, 1 undefined)
+      3 steps (1 passed, 1 failed, 1 undefined)
+      """
+    And I run "behat --rerun features/rerun_strict.feature"
     Then it should fail with:
       """
       F
@@ -57,9 +41,22 @@ Feature: Rerun with strict
       """
 
     Scenario: Rerun feature with strict option
-        When I run "behat --strict --no-colors -f progress -n features/rerun_strict.feature"
-        And I run "behat --strict --rerun --no-colors -f progress --rerun -n features/rerun_strict.feature"
-        Then it should fail with:
+    When I run "behat --strict features/rerun_strict.feature"
+    Then it should fail with:
+      """
+      UF.
+
+      --- Failed steps:
+
+      001 Scenario: failing step       # features/rerun_strict.feature:6
+            When I have a failing step # features/rerun_strict.feature:7
+              (Exception)
+
+      3 scenarios (1 passed, 1 failed, 1 undefined)
+      3 steps (1 passed, 1 failed, 1 undefined)
+      """
+    And I run "behat --strict --rerun features/rerun_strict.feature"
+    Then it should fail with:
       """
       UF
 

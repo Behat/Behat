@@ -4,52 +4,14 @@ Feature: Snippets generation and addition
   I need tool to generate snippets for me
 
   Background:
-    Given a file named "features/coffee.feature" with:
-      """
-      Feature: Snippets
-
-        Background:
-          Given I have magically created 10$
-
-        Scenario: Single quotes
-          When I have chosen 'coffee with turkey' in coffee machine
-          Then I should have 'turkey with coffee sauce'
-          And I should get a 'super/string':
-            '''
-            Test #1
-            '''
-          And I should get a simple string:
-            '''
-            Test #2
-            '''
-
-        Scenario: Double quotes
-          When I have chosen "pizza tea" in coffee machine
-          And do something undefined with \1
-          Then I should have "pizza tea"
-          And I should get a "super/string":
-            '''
-            Test #1
-            '''
-          And I should get a simple string:
-            '''
-            Test #2
-            '''
-      """
+    Given I initialise the working directory from the "Snippets" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value    |
+      | --no-colors |          |
+      | --format    | progress |
 
   Scenario: Generating regex snippets for particular context
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context {}
-      """
-    When I run "behat --no-colors --snippets-for=FeatureContext --snippets-type=regex -f progress features/coffee.feature"
+    When I run "behat --snippets-for=FeatureContext --snippets-type=regex features/coffee.feature"
     Then it should pass with:
       """
       UUUUUUUUUUU
@@ -123,19 +85,8 @@ Feature: Snippets generation and addition
       """
 
   Scenario: Appending regex snippets to a particular context
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context {}
-      """
-    When I run "behat --no-colors -f progress --snippets-for=FeatureContext --snippets-type=regex --append-snippets features/coffee.feature"
-    And I run "behat --no-colors -f progress features/coffee.feature"
+    When I run "behat --snippets-for=FeatureContext --snippets-type=regex --append-snippets features/coffee.feature"
+    And I run "behat features/coffee.feature"
     Then it should pass with:
       """
       P----P-----
@@ -153,20 +104,17 @@ Feature: Snippets generation and addition
       2 scenarios (2 pending)
       11 steps (2 pending, 9 skipped)
       """
+    And "features/bootstrap/FeatureContext.php" file should contain text:
+      """
+      #[Given('/^I have magically created (\d+)\$$/')]
+      """
+    And "features/bootstrap/FeatureContext.php" file should contain text:
+      """
+      use Behat\Behat\Tester\Exception\PendingException;
+      """
 
   Scenario: Generating turnip snippets for a particular context
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context {}
-      """
-    When I run "behat --no-colors -f progress --snippets-for=FeatureContext features/coffee.feature"
+    When I run "behat --snippets-for=FeatureContext features/coffee.feature"
     Then it should pass with:
       """
       UUUUUUUUUUU
@@ -222,19 +170,8 @@ Feature: Snippets generation and addition
       """
 
   Scenario: Appending turnip snippets to a particular context
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context {}
-      """
-    When I run "behat --no-colors -f progress --append-snippets --snippets-for=FeatureContext features/coffee.feature"
-    And I run "behat --no-colors -f progress features/coffee.feature"
+    When I run "behat --append-snippets --snippets-for=FeatureContext features/coffee.feature"
+    And I run "behat features/coffee.feature"
     Then it should pass with:
       """
       P----P-----
@@ -252,54 +189,51 @@ Feature: Snippets generation and addition
       2 scenarios (2 pending)
       11 steps (2 pending, 9 skipped)
       """
+    And "features/bootstrap/FeatureContext.php" file should contain text:
+      """
+      #[Given('I have magically created :arg1$')]
+      """
+    And "features/bootstrap/FeatureContext.php" file should contain text:
+      """
+      use Behat\Behat\Tester\Exception\PendingException;
+      """
 
   Scenario: Generating snippets for steps that have numbers with decimal points
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context {}
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then 5 should have value of £10
-          And 7 should have value of £7.2
-      """
-    When I run "behat -f progress --no-colors --append-snippets --snippets-for=FeatureContext"
-    And I run "behat -f pretty --no-colors"
+    When I run "behat --append-snippets --snippets-for=FeatureContext features/decimal_points.feature"
+    And I run "behat --format=pretty features/decimal_points.feature"
     Then it should pass with:
       """
       Feature: Step Pattern
 
-        Scenario:                         # features/coffee.feature:2
+        Scenario:                         # features/decimal_points.feature:2
           Then 5 should have value of £10 # FeatureContext::shouldHaveValueOf£()
             TODO: write pending definition
-          And 7 should have value of £7.2 # FeatureContext::shouldHaveValueOf£()
+      P    And 7 should have value of £7.2 # FeatureContext::shouldHaveValueOf£()
+      -
+      1 scenario (1 pending)
+      2 steps (1 pending, 1 skipped)
+
+
+      --- Pending steps:
+
+      001 Scenario:                         # features/decimal_points.feature:2
+            Then 5 should have value of £10 # FeatureContext::shouldHaveValueOf£()
+              TODO: write pending definition
 
       1 scenario (1 pending)
       2 steps (1 pending, 1 skipped)
       """
+    And "features/bootstrap/FeatureContext.php" file should contain text:
+      """
+      #[Then(':arg1 should have value of £:arg2')]
+      """
+    And "features/bootstrap/FeatureContext.php" file should contain text:
+      """
+      use Behat\Behat\Tester\Exception\PendingException;
+      """
 
-  Scenario: Generating snippets for steps that have string followed by decimal number
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context {}
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given I have a package v2.5
-      """
-    When I run "behat -f progress --no-colors --snippets-for=FeatureContext"
+  Scenario: String followed by number with decimal point
+    When I run "behat --snippets-for=FeatureContext features/package_version.feature"
     Then it should pass with:
       """
       U
@@ -322,21 +256,7 @@ Feature: Snippets generation and addition
       """
 
   Scenario: Generating snippets for steps with slashes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context {}
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Then images should be uploaded to web/uploads/media/default/0001/01/
-      """
-    When I run "behat -f progress --no-colors --snippets-for=FeatureContext"
+    When I run "behat --snippets-for=FeatureContext features/upload.feature"
     Then it should pass with:
       """
       U
@@ -359,18 +279,7 @@ Feature: Snippets generation and addition
       """
 
   Scenario: Generating snippets using interactive --snippets-for
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context,
-          Behat\Behat\Tester\Exception\PendingException;
-      use Behat\Gherkin\Node\PyStringNode,
-          Behat\Gherkin\Node\TableNode;
-
-      class FeatureContext implements Context {}
-      """
-    When I answer "1" when running "behat --no-colors -f progress --snippets-for"
+    When I answer "1" when running "behat features/coffee.feature --snippets-for"
     Then it should pass
     And the output should contain:
       """
@@ -422,23 +331,7 @@ Feature: Snippets generation and addition
       """
 
   Scenario: Generating snippets for steps with apostrophes
-    Given a file named "features/bootstrap/FeatureContext.php" with:
-      """
-      <?php
-
-      use Behat\Behat\Context\Context;
-
-      class FeatureContext implements Context {}
-      """
-    And a file named "features/coffee.feature" with:
-      """
-      Feature: Step Pattern
-        Scenario:
-          Given that it's eleven o'clock
-          When the guest's taxi has arrived
-          Then the guest says 'Goodbye'
-      """
-    When I run "behat -f progress --no-colors --snippets-for=FeatureContext"
+    When I run "behat --snippets-for=FeatureContext features/coffee_apostrophes.feature"
     Then it should pass with:
       """
       UUU
