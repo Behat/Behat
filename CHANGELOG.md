@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.29.0] - 2025-12-11
+
+### Changed
+
+* Add initial backwards-compatible return types to final classes, final methods and private methods. These changes
+  should not impact end-users or extension authors.
+  This is work towards [the upcoming 4.0.0 release](https://github.com/Behat/Behat/issues/1743), which will add support
+  for symfony8 and introduce strict types throughout.
+  By @acoulton in [#1763](https://github.com/Behat/Behat/pull/1763)
+
 ## [3.28.0] - 2025-12-11
 
 ### Changed
@@ -1429,6 +1439,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.29.0]: https://github.com/Behat/Behat/compare/v3.28.0...v3.29.0
 [3.28.0]: https://github.com/Behat/Behat/compare/v3.27.0...v3.28.0
 [3.27.0]: https://github.com/Behat/Behat/compare/v3.26.0...v3.27.0
 [3.26.0]: https://github.com/Behat/Behat/compare/v3.25.0...v3.26.0
