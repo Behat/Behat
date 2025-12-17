@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\PathOptions\Printer;
 
+use Behat\Behat\Util\StrictRegex;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 
 final class ConfigurablePathPrinter
@@ -75,7 +76,7 @@ final class ConfigurablePathPrinter
         $basePathPattern = preg_quote($this->basePath . DIRECTORY_SEPARATOR, '/');
         $pattern = '/(' . $basePathPattern . '[^:\s]+)((:|\s+line\s+)(\d+))?/';
 
-        return preg_replace_callback($pattern, function (array $matches): string {
+        return StrictRegex::replaceCallback($pattern, function (array $matches): string {
             $filePath = $matches[1];
             $line = $matches[4] ?? null;
 

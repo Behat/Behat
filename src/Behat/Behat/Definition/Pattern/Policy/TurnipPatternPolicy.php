@@ -56,12 +56,12 @@ final class TurnipPatternPolicy implements PatternPolicy
     public function generatePattern($stepText): Pattern
     {
         $count = 0;
-        $pattern = $stepText;
+        $pattern = (string) $stepText;
         foreach (self::$placeholderPatterns as $replacePattern) {
-            $pattern = preg_replace_callback(
+            $pattern = StrictRegex::replaceCallback(
                 $replacePattern,
                 function () use (&$count) { return ':arg' . ++$count; },
-                (string) $pattern
+                $pattern
             );
         }
         $pattern = $this->escapeAlternationSyntax($pattern);
@@ -111,7 +111,7 @@ final class TurnipPatternPolicy implements PatternPolicy
     {
         $tokenRegex = self::TOKEN_REGEX;
 
-        return preg_replace_callback(
+        return StrictRegex::replaceCallback(
             self::PLACEHOLDER_REGEXP,
             [$this, 'replaceTokenWithRegexCaptureGroup'],
             $regex

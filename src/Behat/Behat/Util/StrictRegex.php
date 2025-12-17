@@ -41,6 +41,24 @@ final class StrictRegex
     }
 
     /**
+     * @param string|list<string> $pattern
+     * @param callable(array<mixed,string>):string $callback
+     *
+     * @throws RegexException if the regex fails
+     */
+    public static function replaceCallback(array|string $pattern,
+        callable $callback,
+        string $subject,
+    ): string {
+        $result = self::callWithErrorCapture(fn (): ?string => preg_replace_callback($pattern, $callback, $subject));
+        if ($result === null) {
+            throw new RegexException('Regex failed: '.preg_last_error_msg(), preg_last_error());
+        }
+
+        return $result;
+    }
+
+    /**
      * @template T of mixed
      *
      * @param callable():T $callable

@@ -7,9 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 use Behat\Behat\Context\Context;
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
+use Behat\Behat\Util\StrictRegex;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\AfterSuite;
@@ -126,7 +126,7 @@ class FeatureContext implements Context
      * @param string $destination destination file path (relative to workdir)
      */
     #[Given('/^I copy "([^"]*)" to "([^"]*)"$/')]
-    public function iCopyFileTo($source, $destination)
+    public function iCopyFileTo($source, $destination): void
     {
         $sourcePath = $this->workingDir . '/' . $source;
         $destinationPath = $this->workingDir . '/' . $destination;
@@ -524,41 +524,41 @@ EOL;
 
         // windows path fix
         if ('/' !== DIRECTORY_SEPARATOR) {
-            $text = preg_replace_callback(
+            $text = StrictRegex::replaceCallback(
                 '/[ "](features|tests)\/[^\n "]+/',
                 fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
                 $text
             );
-            $text = preg_replace_callback(
+            $text = StrictRegex::replaceCallback(
                 '/\<span class\="path"\>features\/[^\<]+/',
                 fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
-                (string) $text
+                $text
             );
-            $text = preg_replace_callback(
+            $text = StrictRegex::replaceCallback(
                 '/\+[fd] [^ ]+/',
                 fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
-                (string) $text
+                $text
             );
 
             // error stacktrace
-            $text = preg_replace_callback(
+            $text = StrictRegex::replaceCallback(
                 '/#\d+ [^:]+:/',
                 fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
-                (string) $text
+                $text
             );
 
             // texts with absolute paths
-            $text = preg_replace_callback(
+            $text = StrictRegex::replaceCallback(
                 '/\{BASE_PATH\}[^\n \<"]+/',
                 fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
-                (string) $text
+                $text
             );
 
             // texts in editor URLs
-            $text = preg_replace_callback(
+            $text = StrictRegex::replaceCallback(
                 '/open\?file[^\<"]+/',
                 fn ($matches): string => str_replace('/', DIRECTORY_SEPARATOR, $matches[0]),
-                (string) $text
+                $text
             );
         }
 

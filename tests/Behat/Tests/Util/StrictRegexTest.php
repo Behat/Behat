@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Behat\Tests\Util;
 
+use BadMethodCallException;
 use Behat\Behat\Util\RegexException;
 use Behat\Behat\Util\StrictRegex;
 use InvalidArgumentException;
@@ -113,6 +114,89 @@ final class StrictRegexTest extends TestCase
         $this->expectException($expectException);
         $this->expectExceptionMessage($expectMsg);
         StrictRegex::replace(...$args);
+    }
+
+    public static function providerReplaceCallbackValidCases(): iterable
+    {
+        return [
+            'no replacement' => [
+                [
+                    '/^old/',
+                    fn () => 'new',
+                    'some thing',
+                ],
+                'some thing',
+            ],
+            'simple replacement' => [
+                [
+                    '/^old/',
+                    fn () => 'new',
+                    'old thing',
+                ],
+                'new thing',
+            ],
+            'replacement with params' => [
+                [
+                    '/[a-z]/',
+                    fn (array $matches) => strtoupper($matches[0]),
+                    'Abcdef',
+                ],
+                'ABCDEF',
+            ],
+            'array replacements' => [
+                [
+                    ['/^old/', '/(thing|object)/'],
+                    fn (array $matches) => strrev($matches[0]),
+                    'old things',
+                ],
+                'dlo gnihts',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerReplaceCallbackValidCases
+     */
+    public function testReplaceCallbackValidCases(array $args, string $expect): void
+    {
+        $this->assertSame(
+            $expect,
+            StrictRegex::replaceCallback(...$args),
+        );
+    }
+
+    public static function providerReplaceCallbackInvalidCases(): iterable
+    {
+        return [
+            'invalid regex pattern' => [
+                [
+                    '/broken',
+                    fn () => throw new BadMethodCallException('Not expected to be called'),
+                    'anything',
+                ],
+                RegexException::class,
+                'No ending delimiter',
+            ],
+            'excessive backtracking' => [
+                [
+                    '/(x+x+)+y/',
+                    fn () => throw new BadMethodCallException('Not expected to be called'),
+                    'xxxxxxxxxxxxy',
+                ],
+                RegexException::class,
+                'Regex failed: Backtrack limit exhausted',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerReplaceCallbackInvalidCases
+     */
+    public function testReplaceCallbackInvalidCases(array $args, string $expectException, string $expectMsg): void
+    {
+        $this->expectException($expectException);
+        $this->expectExceptionMessage($expectMsg);
+        StrictRegex::replaceCallback(...$args);
     }
 
     protected function setUp(): void

@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Output\Printer\Formatter;
 
+use Behat\Behat\Util\RegexException;
+use Behat\Behat\Util\StrictRegex;
 use Symfony\Component\Console\Formatter\OutputFormatter as BaseOutputFormatter;
 
 /**
@@ -32,8 +34,11 @@ final class ConsoleFormatter extends BaseOutputFormatter
      */
     public function format($message): string
     {
-        $formattedMessage = preg_replace_callback(self::CUSTOM_PATTERN, [$this, 'replaceStyle'], $message) ??
-            'Error formatting output: ' . preg_last_error_msg();
+        try {
+            $formattedMessage = StrictRegex::replaceCallback(self::CUSTOM_PATTERN, [$this, 'replaceStyle'], $message);
+        } catch (RegexException $e) {
+            $formattedMessage = 'Error formatting output: '.$e->getMessage();
+        }
 
         return self::replaceHref($formattedMessage);
     }
@@ -65,7 +70,7 @@ final class ConsoleFormatter extends BaseOutputFormatter
      */
     public static function replaceHref(string $message): string
     {
-        return preg_replace_callback(
+        return StrictRegex::replaceCallback(
             self::HREF_PATTERN,
             function ($matches) {
                 $url = $matches[1];
