@@ -104,16 +104,14 @@ final class TurnipPatternPolicy implements PatternPolicy
      * Replaces turnip tokens with regex capture groups.
      *
      * @param string $regex
-     *
-     * @return string
      */
-    private function replaceTokensWithRegexCaptureGroups($regex)
+    private function replaceTokensWithRegexCaptureGroups($regex): string
     {
         $tokenRegex = self::TOKEN_REGEX;
 
         return StrictRegex::replaceCallback(
             self::PLACEHOLDER_REGEXP,
-            [$this, 'replaceTokenWithRegexCaptureGroup'],
+            $this->replaceTokenWithRegexCaptureGroup(...),
             $regex
         );
     }

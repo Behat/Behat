@@ -35,7 +35,7 @@ final class ConsoleFormatter extends BaseOutputFormatter
     public function format($message): string
     {
         try {
-            $formattedMessage = StrictRegex::replaceCallback(self::CUSTOM_PATTERN, [$this, 'replaceStyle'], $message);
+            $formattedMessage = StrictRegex::replaceCallback(self::CUSTOM_PATTERN, $this->replaceStyle(...), $message);
         } catch (RegexException $e) {
             $formattedMessage = 'Error formatting output: '.$e->getMessage();
         }
