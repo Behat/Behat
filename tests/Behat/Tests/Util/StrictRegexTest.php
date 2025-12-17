@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 final class StrictRegexTest extends TestCase
 {
-    private string $original_backtrack_limit;
+    private string $originalBacktrackLimit;
 
     public static function providerReplaceValidCases(): iterable
     {
@@ -202,12 +202,12 @@ final class StrictRegexTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->original_backtrack_limit = ini_set('pcre.backtrack_limit', '2');
+        $this->originalBacktrackLimit = ini_set('pcre.backtrack_limit', '2');
     }
 
     protected function tearDown(): void
     {
-        ini_set('pcre.backtrack_limit', $this->original_backtrack_limit);
+        ini_set('pcre.backtrack_limit', $this->originalBacktrackLimit);
         parent::tearDown();
     }
 }

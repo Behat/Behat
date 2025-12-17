@@ -46,7 +46,8 @@ final class StrictRegex
      *
      * @throws RegexException if the regex fails
      */
-    public static function replaceCallback(array|string $pattern,
+    public static function replaceCallback(
+        array|string $pattern,
         callable $callback,
         string $subject,
     ): string {
