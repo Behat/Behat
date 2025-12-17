@@ -11,6 +11,7 @@
 namespace Behat\Behat\Gherkin\Cli;
 
 use Behat\Behat\Definition\Translator\TranslatorInterface;
+use Behat\Behat\Util\StrictRegex;
 use Behat\Gherkin\Keywords\KeywordsDumper;
 use Behat\Testwork\Cli\Controller;
 use Symfony\Component\Console\Command\Command;
@@ -72,7 +73,7 @@ final class SyntaxController implements Controller
         $output->getFormatter()->setStyle('gherkin_comment', new OutputFormatterStyle('yellow'));
 
         $story = $this->keywordsDumper->dump($this->translator->getLocale());
-        $story = preg_replace('/^\#.*/', '<gherkin_comment>$0</gherkin_comment>', $story);
+        $story = StrictRegex::replace('/^\#.*/', '<gherkin_comment>$0</gherkin_comment>', $story);
         $output->writeln($story);
         $output->writeln('');
 

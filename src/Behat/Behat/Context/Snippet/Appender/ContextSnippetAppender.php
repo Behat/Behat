@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\Snippet\Appender;
 use Behat\Behat\Snippet\AggregateSnippet;
 use Behat\Behat\Snippet\Appender\SnippetAppender;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Util\StrictRegex;
 use Behat\Testwork\Filesystem\FilesystemLogger;
 use ReflectionClass;
 
@@ -48,7 +49,7 @@ final class ContextSnippetAppender implements SnippetAppender
             }
 
             $generated = rtrim(strtr($snippet->getSnippet(), ['\\' => '\\\\', '$' => '\\$']));
-            $content = preg_replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
+            $content = StrictRegex::replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
             $path = $reflection->getFileName();
 
             file_put_contents($path, $content);
@@ -78,14 +79,12 @@ final class ContextSnippetAppender implements SnippetAppender
      *
      * @param string $class
      * @param string $contextFileContent
-     *
-     * @return string
      */
-    private function importClass($class, $contextFileContent)
+    private function importClass($class, $contextFileContent): string
     {
         $replaceWith = '$1use ' . $class . ";\n\$2;";
 
-        return preg_replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
+        return StrictRegex::replace('@^(.*)(use\s+[^;]*);@m', $replaceWith, $contextFileContent, 1);
     }
 
     /**

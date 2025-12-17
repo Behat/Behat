@@ -13,6 +13,7 @@ namespace Behat\Behat\Context\Reader;
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Environment\ContextEnvironment;
+use Behat\Behat\Util\StrictRegex;
 use Behat\Testwork\Call\Callee;
 use ReflectionClass;
 use ReflectionException;
@@ -119,7 +120,7 @@ final class AnnotatedContextReader implements ContextReader
         $docBlock = $this->mergeMultilines($docBlock);
 
         foreach (explode("\n", $docBlock) as $docLine) {
-            $docLine = preg_replace(self::DOCLINE_TRIMMER_REGEX, '', $docLine);
+            $docLine = StrictRegex::replace(self::DOCLINE_TRIMMER_REGEX, '', $docLine);
 
             if ($this->isEmpty($docLine)) {
                 continue;
@@ -141,12 +142,10 @@ final class AnnotatedContextReader implements ContextReader
      * Merges multiline strings (strings ending with "\").
      *
      * @param string $docBlock
-     *
-     * @return string
      */
-    private function mergeMultilines($docBlock)
+    private function mergeMultilines($docBlock): string
     {
-        return preg_replace("#\\\\$\s*+\*\s*+([^\\\\$]++)#m", '$1', $docBlock);
+        return StrictRegex::replace("#\\\\$\s*+\*\s*+([^\\\\$]++)#m", '$1', $docBlock);
     }
 
     /**

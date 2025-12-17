@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Cli;
 
+use Behat\Behat\Util\StrictRegex;
 use Behat\Config\Config;
 use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Config\Converter\CustomPrettyPrinter;
@@ -94,9 +95,9 @@ final class ConvertConfigCommand extends BaseCommand
         // Find the name of the output file
         $outputFileName = $filePath;
         // First, handle cases where `.dist` is part of the extension
-        $outputFileName = preg_replace('/(\.ya?ml)\.dist$|\.dist\.(ya?ml)$/', '.dist.php', $outputFileName);
+        $outputFileName = StrictRegex::replace('/(\.ya?ml)\.dist$|\.dist\.(ya?ml)$/', '.dist.php', $outputFileName);
         // Then, handle regular `.yaml` or `.yml` files
-        $outputFileName = preg_replace('/\.(ya?ml)$/', '.php', (string) $outputFileName);
+        $outputFileName = StrictRegex::replace('/\.(ya?ml)$/', '.php', $outputFileName);
 
         $printer = new CustomPrettyPrinter();
 

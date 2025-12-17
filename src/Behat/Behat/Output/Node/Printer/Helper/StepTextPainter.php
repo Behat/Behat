@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\Printer\Helper;
 
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
+use Behat\Behat\Util\StrictRegex;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -81,7 +82,7 @@ final class StepTextPainter
         }
 
         // Replace "<", ">" with colorized ones
-        $text = preg_replace(
+        $text = StrictRegex::replace(
             '/(<[^>]+>)/',
             "{-$style}{+$paramStyle}\$1{-$paramStyle}{+$style}",
             $text

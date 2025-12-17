@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Context\Annotation;
 
+use Behat\Behat\Util\StrictRegex;
+
 /**
  * Helper class for DocBlock parsing.
  */
@@ -22,20 +24,20 @@ class DocBlockHelper
     public function extractDescription(string $docBlock): string
     {
         // Remove indentation
-        $description = preg_replace('/^[\s\t]*/m', '', $docBlock);
+        $description = StrictRegex::replace('/^[\s\t]*/m', '', $docBlock);
 
         // normalize line endings
-        $description = str_replace("\r\n", "\n", (string) $description);
+        $description = str_replace("\r\n", "\n", $description);
 
         // Remove block comment syntax
-        $description = preg_replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', (string) $description);
+        $description = StrictRegex::replace('/^\/\*\*\s*|^\s*\*\s|^\s*\*\/$/m', '', (string) $description);
 
         // Remove annotations
-        $description = preg_replace('/^@.*$/m', '', (string) $description);
+        $description = StrictRegex::replace('/^@.*$/m', '', $description);
 
         // Ignore docs after a "--" separator
-        if (preg_match('/^--.*$/m', (string) $description)) {
-            $descriptionParts = preg_split('/^--.*$/m', (string) $description);
+        if (preg_match('/^--.*$/m', $description)) {
+            $descriptionParts = preg_split('/^--.*$/m', $description);
             $description = array_shift($descriptionParts);
         }
 

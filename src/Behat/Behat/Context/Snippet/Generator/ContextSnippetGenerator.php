@@ -19,6 +19,7 @@ use Behat\Behat\Snippet\Exception\EnvironmentSnippetGenerationException;
 use Behat\Behat\Snippet\Generator\SnippetGenerator;
 use Behat\Behat\Snippet\Snippet;
 use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Behat\Util\StrictRegex;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
@@ -228,7 +229,7 @@ TPL;
     private function getMethodNameNotExistentInContext(ReflectionClass $reflection, string $methodName, int $methodNumber): array
     {
         while ($reflection->hasMethod($methodName)) {
-            $methodName = preg_replace('/\d+$/', '', $methodName);
+            $methodName = StrictRegex::replace('/\d+$/', '', $methodName);
             $methodName .= $methodNumber++;
         }
 
@@ -246,7 +247,7 @@ TPL;
             }
 
             while ($proposedMethod === $name) {
-                $name = preg_replace('/\d+$/', '', $name);
+                $name = StrictRegex::replace('/\d+$/', '', $name);
                 $name .= $number++;
             }
         }

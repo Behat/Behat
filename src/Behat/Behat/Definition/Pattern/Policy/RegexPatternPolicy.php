@@ -14,9 +14,9 @@ use Behat\Behat\Definition\Exception\InvalidPatternException;
 use Behat\Behat\Definition\Pattern\Pattern;
 use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
 use Behat\Behat\Definition\Pattern\StepMethodNameSuggester;
+use Behat\Behat\Util\StrictRegex;
 
 use function array_keys;
-use function preg_replace;
 
 /**
  * Defines a way to handle regex patterns.
@@ -47,7 +47,7 @@ final class RegexPatternPolicy implements PatternPolicy
     public function generatePattern($stepText): Pattern
     {
         $methodName = $this->methodNameSuggester->suggest(
-            preg_replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),
+            StrictRegex::replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),
         );
         $stepRegex = $this->generateRegex($stepText);
         $placeholderCount = $this->countPlaceholders($stepText, $stepRegex);
@@ -76,12 +76,10 @@ final class RegexPatternPolicy implements PatternPolicy
      * Generates regex from step text.
      *
      * @param string $stepText
-     *
-     * @return string
      */
-    private function generateRegex($stepText)
+    private function generateRegex($stepText): string
     {
-        return preg_replace(
+        return StrictRegex::replace(
             array_keys(self::$replacePatterns),
             array_values(self::$replacePatterns),
             $this->escapeStepText($stepText)
@@ -105,11 +103,9 @@ final class RegexPatternPolicy implements PatternPolicy
      * Returns escaped step text.
      *
      * @param string $stepText
-     *
-     * @return string
      */
-    private function escapeStepText($stepText)
+    private function escapeStepText($stepText): string
     {
-        return preg_replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $stepText);
+        return StrictRegex::replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $stepText);
     }
 }

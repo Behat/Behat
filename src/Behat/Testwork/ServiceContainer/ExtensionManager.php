@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
+use Behat\Behat\Util\StrictRegex;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
 /**
@@ -132,7 +133,7 @@ final class ExtensionManager
     public static function guessFullExtensionClassName(string $locator): string
     {
         $parts = explode('\\', $locator);
-        $name = preg_replace('/Extension$/', '', end($parts)) . 'Extension';
+        $name = StrictRegex::replace('/Extension$/', '', end($parts)) . 'Extension';
 
         return $locator . '\\ServiceContainer\\' . $name;
     }
