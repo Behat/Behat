@@ -29,14 +29,13 @@ class ConsoleFormatterTest extends TestCase
     {
         $consoleFormatter = new ConsoleFormatter(true);
 
-        $original_backtrack_limit = ini_get('pcre.backtrack_limit');
+        $originalBacktrackLimit = ini_set('pcre.backtrack_limit', '100');
+        try {
+            $formattedText = $consoleFormatter->format('{+info}'.str_repeat('a', 1000).'{-info}');
+        } finally {
+            ini_set('pcre.backtrack_limit', $originalBacktrackLimit);
+        }
 
-        ini_set('pcre.backtrack_limit', '100');
-
-        $formattedText = $consoleFormatter->format('{+info}' . str_repeat('a', 1000) . '{-info}');
-
-        ini_set('pcre.backtrack_limit', $original_backtrack_limit);
-
-        $this->assertEquals('Error formatting output: Backtrack limit exhausted', $formattedText);
+        $this->assertEquals('Error formatting output: Regex failed: Backtrack limit exhausted', $formattedText);
     }
 }
