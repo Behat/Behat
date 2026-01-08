@@ -191,6 +191,9 @@ jobs:
           coverage: none
           tools: box
 
+      - name: Install dependencies
+        run: composer update --no-dev -o
+
       - name: Build the PHAR
         run: box compile
 
