@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
+use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -12,9 +13,10 @@ return RectorConfig::configure()
     ])
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
-    ->withPhpSets(php81: true)
+    ->withPhpSets(php82: true)
     ->withSkip([
         StringableForToStringRector::class,
+        ReadOnlyClassRector::class,
     ])
     ->withImportNames(
         removeUnusedImports: true,
