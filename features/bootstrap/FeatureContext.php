@@ -456,6 +456,8 @@ EOL;
 
         $fileContent = preg_replace('/time="\d\.\d{3}"/U', 'time="-IGNORE-VALUE-"', $fileContent);
 
+        $fileContent = $this->normalizePhpFileLineNumbers((string) $fileContent);
+
         // The placeholder is necessary because of different separators on Unix and Windows environments
         $text = str_replace('-DIRECTORY-SEPARATOR-', DIRECTORY_SEPARATOR, $text);
         // used for absolute paths
@@ -479,6 +481,8 @@ EOL;
         Assert::assertIsArray($data);
 
         $fileContent = preg_replace('/"time": [\d.]+/', '"time": -IGNORE-VALUE-', $fileContent);
+
+        $fileContent = $this->normalizePhpFileLineNumbers((string) $fileContent);
 
         $text = str_replace(
             '-DIRECTORY-SEPARATOR-',
@@ -665,7 +669,22 @@ EOL;
         // Replace wrong warning message of HHVM
         $output = str_replace('Notice: Undefined index: ', 'Notice: Undefined offset: ', $output);
 
-        return trim((string) preg_replace('/ +$/m', '', $output));
+        $output = $this->normalizePhpFileLineNumbers($output);
+
+        return trim((string) preg_replace('/ +$/m', '', (string) $output));
+    }
+
+    /**
+     * Normalizes PHP file line numbers to XX to avoid fragile tests.
+     */
+    private function normalizePhpFileLineNumbers(string $content): string
+    {
+        $content = preg_replace('/\.php line \d+/', '.php line XX', $content);
+        $content = preg_replace('/\.php:\d+/', '.php:XX', (string) $content);
+        $content = preg_replace('/\.php\(\d+\)/', '.php(XX)', (string) $content);
+        $content = preg_replace('/\.php&line=\d+/', '.php&line=XX', (string) $content);
+
+        return (string) $content;
     }
 
     private function createFileInWorkingDir(string $filename, string $content): void

@@ -51,7 +51,7 @@ Feature: Stringifying PHPUnit exceptions
               !! There was an error trying to render more details of this PHPUnit\Framework\ExpectationFailedException.
                  You are probably using a PHPUnit version that Behat cannot automatically display failures for.
                  See Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer for details of PHPUnit support.
-                 [RuntimeException] Some internal problem at features/bootstrap/IncompatibleThrowableToStringMapper.php:11
+                 [RuntimeException] Some internal problem at features/bootstrap/IncompatibleThrowableToStringMapper.php:XX
 
       002 Scenario: Compare mismatched ints  # features/with_phpunit_10_broken.feature:13
             Then an integer 1 should equal 2 # features/with_phpunit_10_broken.feature:14
@@ -60,7 +60,7 @@ Feature: Stringifying PHPUnit exceptions
               !! There was an error trying to render more details of this PHPUnit\Framework\ExpectationFailedException.
                  You are probably using a PHPUnit version that Behat cannot automatically display failures for.
                  See Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer for details of PHPUnit support.
-                 [RuntimeException] Some internal problem at features/bootstrap/IncompatibleThrowableToStringMapper.php:11
+                 [RuntimeException] Some internal problem at features/bootstrap/IncompatibleThrowableToStringMapper.php:XX
 
       4 scenarios (2 passed, 2 failed)
       4 steps (2 passed, 2 failed)

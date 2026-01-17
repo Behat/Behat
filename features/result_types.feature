@@ -210,7 +210,7 @@ Feature: Different result types
 
       001 Scenario: Redundant menu       # features/warning.feature:6
             Given customer bought coffee # features/warning.feature:7
-              User Warning: some warning in features/bootstrap/WarningContext.php line 11
+              User Warning: some warning in features/bootstrap/WarningContext.php line XX
 
       1 scenario (1 failed)
       2 steps (1 failed, 1 skipped)

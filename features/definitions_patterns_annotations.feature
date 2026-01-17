@@ -74,7 +74,7 @@ Feature: Step Definition Pattern Annotations
       | features/broken_regex.feature  |              |
     Then it should fail with:
       """
-      In RegexPatternPolicy.php line 69:
+      In RegexPatternPolicy.php line XX:
       
         The regex `/I am (foo/` is invalid: preg_match(): Compilation failed: missing closing parenthesis at offset 9
       """
