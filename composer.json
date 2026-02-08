@@ -32,7 +32,7 @@
     "require-dev": {
         "opis/json-schema": "^2.5",
         "php-cs-fixer/shim": "^3.89",
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "2.1.18",
         "phpunit/phpunit": "^9.6",
         "rector/rector": "2.1.7",
         "sebastian/diff": "^4.0",
