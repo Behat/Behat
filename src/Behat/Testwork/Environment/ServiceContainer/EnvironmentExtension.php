@@ -77,7 +77,7 @@ final class EnvironmentExtension implements Extension
     /**
      * Loads environment manager.
      */
-    protected function loadManager(ContainerBuilder $container): void
+    private function loadManager(ContainerBuilder $container): void
     {
         $definition = new Definition(EnvironmentManager::class);
         $container->setDefinition(self::MANAGER_ID, $definition);
@@ -86,7 +86,7 @@ final class EnvironmentExtension implements Extension
     /**
      * Loads static environments handler.
      */
-    protected function loadStaticEnvironmentHandler(ContainerBuilder $container): void
+    private function loadStaticEnvironmentHandler(ContainerBuilder $container): void
     {
         $definition = new Definition(StaticEnvironmentHandler::class);
         $definition->addTag(self::HANDLER_TAG, ['priority' => 0]);
@@ -96,7 +96,7 @@ final class EnvironmentExtension implements Extension
     /**
      * Processes all environment handlers.
      */
-    protected function processHandlers(ContainerBuilder $container): void
+    private function processHandlers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::HANDLER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);
@@ -109,7 +109,7 @@ final class EnvironmentExtension implements Extension
     /**
      * Processes all environment readers.
      */
-    protected function processReaders(ContainerBuilder $container): void
+    private function processReaders(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::READER_TAG);
         $definition = $container->getDefinition(self::MANAGER_ID);

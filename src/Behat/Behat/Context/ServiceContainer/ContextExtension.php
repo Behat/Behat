@@ -206,7 +206,7 @@ final class ContextExtension implements Extension
         $container->setDefinition(self::CONTEXT_SNIPPET_GENERATOR_ID, $definition);
     }
 
-    protected function loadSnippetsController(ContainerBuilder $container): void
+    private function loadSnippetsController(ContainerBuilder $container): void
     {
         $definition = new Definition(ContextSnippetsController::class, [
             new Reference(self::CONTEXT_SNIPPET_GENERATOR_ID),

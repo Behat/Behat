@@ -22,7 +22,7 @@ final class SimpleClassGenerator implements ClassGenerator
     /**
      * @var string
      */
-    protected static $template = <<<'PHP'
+    private static $template = <<<'PHP'
 <?php
 
 {namespace}use Behat\Behat\Context\Context;

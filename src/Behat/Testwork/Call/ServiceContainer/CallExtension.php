@@ -86,7 +86,7 @@ final class CallExtension implements Extension
     /**
      * Loads call center service.
      */
-    protected function loadCallCenter(ContainerBuilder $container): void
+    private function loadCallCenter(ContainerBuilder $container): void
     {
         $definition = new Definition(CallCenter::class);
         $container->setDefinition(self::CALL_CENTER_ID, $definition);
@@ -97,7 +97,7 @@ final class CallExtension implements Extension
      *
      * @param int $errorReporting
      */
-    protected function loadCallHandlers(ContainerBuilder $container, $errorReporting): void
+    private function loadCallHandlers(ContainerBuilder $container, $errorReporting): void
     {
         $definition = new Definition(RuntimeCallHandler::class, [$errorReporting]);
         $definition->addTag(self::CALL_HANDLER_TAG, ['priority' => 50]);
@@ -107,7 +107,7 @@ final class CallExtension implements Extension
     /**
      * Registers all call filters to the CallCenter.
      */
-    protected function processCallFilters(ContainerBuilder $container): void
+    private function processCallFilters(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_FILTER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
@@ -120,7 +120,7 @@ final class CallExtension implements Extension
     /**
      * Registers all call handlers to the CallCenter.
      */
-    protected function processCallHandlers(ContainerBuilder $container): void
+    private function processCallHandlers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::CALL_HANDLER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);
@@ -133,7 +133,7 @@ final class CallExtension implements Extension
     /**
      * Registers all call result filters to the CallCenter.
      */
-    protected function processResultFilters(ContainerBuilder $container): void
+    private function processResultFilters(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, CallExtension::RESULT_FILTER_TAG);
         $definition = $container->getDefinition(CallExtension::CALL_CENTER_ID);

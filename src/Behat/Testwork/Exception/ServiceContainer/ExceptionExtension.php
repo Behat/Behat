@@ -96,7 +96,7 @@ final class ExceptionExtension implements Extension
      *
      * @param int $verbosity
      */
-    protected function loadPresenter(ContainerBuilder $container, $verbosity): void
+    private function loadPresenter(ContainerBuilder $container, $verbosity): void
     {
         $definition = new Definition(ExceptionPresenter::class, [
             '%paths.base%',
@@ -109,7 +109,7 @@ final class ExceptionExtension implements Extension
     /**
      * Loads default stringer.
      */
-    protected function loadDefaultStringers(ContainerBuilder $container): void
+    private function loadDefaultStringers(ContainerBuilder $container): void
     {
         $definition = new Definition(PHPUnitExceptionStringer::class);
         $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
@@ -123,7 +123,7 @@ final class ExceptionExtension implements Extension
     /**
      * Processes all available exception stringers.
      */
-    protected function processStringers(ContainerBuilder $container): void
+    private function processStringers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::STRINGER_TAG);
         $definition = $container->getDefinition(self::PRESENTER_ID);
@@ -138,7 +138,7 @@ final class ExceptionExtension implements Extension
      *
      * @param ContainerBuilder $container
      */
-    protected function loadVerbosityController($container): void
+    private function loadVerbosityController($container): void
     {
         $definition = new Definition(VerbosityController::class, [
             new Reference(self::PRESENTER_ID),

@@ -56,7 +56,7 @@ final class FilesystemExtension implements Extension
     /**
      * Loads filesystem logger.
      */
-    protected function loadFilesystemLogger(ContainerBuilder $container): void
+    private function loadFilesystemLogger(ContainerBuilder $container): void
     {
         $definition = new Definition(ConsoleFilesystemLogger::class, [
             '%paths.base%',

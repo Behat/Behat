@@ -77,14 +77,14 @@ final class CliExtension implements Extension
     /**
      * Loads application command.
      */
-    protected function loadCommand(ContainerBuilder $container): void
+    private function loadCommand(ContainerBuilder $container): void
     {
         $definition = new Definition(Command::class, ['%cli.command.name%', []]);
         $definition->setPublic(true);
         $container->setDefinition(self::COMMAND_ID, $definition);
     }
 
-    protected function loadSyntheticServices(ContainerBuilder $container): void
+    private function loadSyntheticServices(ContainerBuilder $container): void
     {
         $container->register(self::INPUT_ID)->setSynthetic(true)->setPublic(true);
         $container->register(self::OUTPUT_ID)->setSynthetic(true)->setPublic(true);
@@ -93,7 +93,7 @@ final class CliExtension implements Extension
     /**
      * Processes all controllers in container.
      */
-    protected function processControllers(ContainerBuilder $container): void
+    private function processControllers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::CONTROLLER_TAG);
         $container->getDefinition(self::COMMAND_ID)->replaceArgument(1, $references);

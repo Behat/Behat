@@ -141,7 +141,7 @@ final class ConfigurationLoader
      *
      * @throws ConfigurationLoadingException If environment variable environment var is set to invalid JSON
      */
-    protected function loadEnvironmentConfiguration(): array
+    private function loadEnvironmentConfiguration(): array
     {
         $configs = [];
 
@@ -180,7 +180,7 @@ final class ConfigurationLoader
      *
      * @phpstan-impure
      */
-    protected function loadFileConfiguration($configPath, $profile): array
+    private function loadFileConfiguration($configPath, $profile): array
     {
         if (!is_file($configPath) || !is_readable($configPath)) {
             throw new ConfigurationLoadingException(sprintf('Configuration file `%s` not found.', $configPath));
