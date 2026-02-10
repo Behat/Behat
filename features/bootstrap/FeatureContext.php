@@ -12,6 +12,7 @@ use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Behat\Util\StrictRegex;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterSuite;
 use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeSuite;
@@ -20,11 +21,21 @@ use Behat\Step\Then;
 use Behat\Step\When;
 use Opis\JsonSchema\Validator;
 use PHPUnit\Framework\Assert;
+use React\ChildProcess\Process as ReactProcess;
+use React\EventLoop\Loop;
+use React\Http\Browser;
+use React\Promise\Deferred;
+use React\Promise\Timer\TimeoutException;
+use React\Stream\ReadableStreamInterface;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+
+use function React\Async\await;
+use function React\Promise\Timer\sleep;
+use function React\Promise\Timer\timeout;
 
 /**
  * Behat test suite context.
@@ -59,7 +70,19 @@ class FeatureContext implements Context
      */
     private $answerString;
 
+    private ?ReactProcess $mcpReactProcess = null;
+
+    private string $mcpServerErrorOutput = '';
+
     private ?int $errorLevel = null;
+
+    private ?int $mcpHttpPort = null;
+
+    private ?string $mcpHttpHost = null;
+
+    private ?string $mcpSessionId = null;
+
+    private array $mcpHttpResponses = [];
 
     public function __construct(
         private readonly Filesystem $filesystem = new Filesystem(),
@@ -93,6 +116,29 @@ class FeatureContext implements Context
         }
         $this->workingDir = $dir;
         $this->phpBin = $php;
+    }
+
+    #[AfterScenario]
+    public function stopMcpServer(): void
+    {
+        if (!$this->mcpReactProcess instanceof ReactProcess) {
+            return;
+        }
+
+        if ($this->mcpReactProcess->stdout instanceof ReadableStreamInterface) {
+            $this->mcpReactProcess->stdout->close();
+        }
+        if ($this->mcpReactProcess->stderr instanceof ReadableStreamInterface) {
+            $this->mcpReactProcess->stderr->close();
+        }
+
+        exec('pkill -9 -f "behat --mcp-server"');
+
+        $this->mcpReactProcess = null;
+        $this->mcpHttpPort = null;
+        $this->mcpHttpHost = null;
+        $this->mcpHttpResponses = [];
+        $this->mcpSessionId = null;
     }
 
     /**
@@ -635,6 +681,312 @@ EOL;
             'ignore deprecations' => E_ALL & ~E_DEPRECATED,
             'all' => E_ALL,
         };
+    }
+
+    #[Given('I start the MCP server')]
+    public function iStartTheMcpServer(): void
+    {
+        $command = $this->phpBin . ' ' . BEHAT_BIN_PATH . ' --mcp-server';
+
+        $this->mcpReactProcess = new ReactProcess($command, $this->workingDir);
+        $this->mcpReactProcess->start(Loop::get());
+
+        $this->mcpServerErrorOutput = '';
+        $this->mcpReactProcess->stderr->on('data', function ($chunk) {
+            $this->mcpServerErrorOutput .= $chunk;
+        });
+    }
+
+    #[When('I send an MCP initialize request')]
+    public function iSendAnMcpInitializeRequest(): void
+    {
+        $this->sendMcpRequest('init-1', 'initialize', [
+            'protocolVersion' => '2025-03-26',
+            'clientInfo' => ['name' => 'BehatTestClient', 'version' => '1.0'],
+            'capabilities' => [],
+        ]);
+    }
+
+    #[Then('I should receive a successful MCP initialize response')]
+    public function iShouldReceiveASuccessfulMcpInitializeResponse(): void
+    {
+        $response = $this->readMcpResponse('init-1');
+
+        Assert::assertArrayHasKey('result', $response);
+        Assert::assertArrayNotHasKey('error', $response);
+        Assert::assertEquals('init-1', $response['id']);
+        Assert::assertArrayHasKey('protocolVersion', $response['result']);
+        Assert::assertArrayHasKey('serverInfo', $response['result']);
+
+        $this->sendMcpNotification('notifications/initialized');
+    }
+
+    #[When('I call the MCP tool :toolName')]
+    public function iCallTheMcpTool(string $toolName): void
+    {
+        $this->sendMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => [],
+        ]);
+    }
+
+    #[When('I call the MCP tool :toolName with config :config')]
+    public function iCallTheMcpToolWithConfig(string $toolName, string $config): void
+    {
+        $this->sendMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => ['config' => $config],
+        ]);
+    }
+
+    #[When('I call the MCP tool :toolName with profile :profile')]
+    public function iCallTheMcpToolWithProfile(string $toolName, string $profile): void
+    {
+        $this->sendMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => ['profile' => $profile],
+        ]);
+    }
+
+    #[When('I call the MCP tool :toolName with suite :suite')]
+    public function iCallTheMcpToolWithSuite(string $toolName, string $suite): void
+    {
+        $this->sendMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => ['suite' => $suite],
+        ]);
+    }
+
+    #[When('I call the MCP tool :toolName with paths :paths')]
+    public function iCallTheMcpToolWithPaths(string $toolName, string $paths): void
+    {
+        $this->sendMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => ['paths' => explode(',', $paths)],
+        ]);
+    }
+
+    #[When('I call the MCP tool :toolName with additional options :options')]
+    public function iCallTheMcpToolWithAdditionalOptions(string $toolName, string $options): void
+    {
+        $additionalOptions = [];
+        foreach (explode(',', $options) as $option) {
+            [$key, $value] = explode('=', $option, 2);
+            $additionalOptions[$key] = $value === 'true' ? true : ($value === 'false' ? false : $value);
+        }
+        $this->sendMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => ['additionalOptions' => $additionalOptions],
+        ]);
+    }
+
+    #[Then('I should receive a successful tool response with :tests tests and :failures failures')]
+    public function iShouldReceiveASuccessfulToolResponseWithTestsAndFailures(int $tests, int $failures): void
+    {
+        $response = $this->readMcpResponse('tool-call-1');
+
+        Assert::assertArrayHasKey('result', $response);
+        Assert::assertArrayNotHasKey('error', $response);
+        Assert::assertEquals('tool-call-1', $response['id']);
+
+        $toolResult = json_decode((string) $response['result']['content'][0]['text'], true);
+
+        Assert::assertEquals($tests, $toolResult['tests']);
+        Assert::assertEquals($failures, $toolResult['failed']);
+    }
+
+    #[Then('I should receive a successful tool response with :tests tests and :skipped skipped')]
+    public function iShouldReceiveASuccessfulDryRunToolResponseWithTests(int $tests, int $skipped): void
+    {
+        $response = $this->readMcpResponse('tool-call-1');
+
+        Assert::assertArrayHasKey('result', $response);
+        Assert::assertArrayNotHasKey('error', $response);
+        Assert::assertEquals('tool-call-1', $response['id']);
+
+        $toolResult = json_decode((string) $response['result']['content'][0]['text'], true);
+
+        Assert::assertEquals($tests, $toolResult['tests']);
+        Assert::assertEquals($skipped, $toolResult['skipped']);
+    }
+
+    private function sendMcpNotification(string $method, array $params = []): void
+    {
+        $notification = json_encode([
+            'jsonrpc' => '2.0',
+            'method' => $method,
+            'params' => $params,
+        ]);
+        $this->mcpReactProcess->stdin->write($notification . "\n");
+    }
+
+    private function sendMcpRequest(string $requestId, string $method, array $params = []): void
+    {
+        $request = json_encode([
+            'jsonrpc' => '2.0',
+            'id' => $requestId,
+            'method' => $method,
+            'params' => $params,
+        ]);
+        $this->mcpReactProcess->stdin->write($request . "\n");
+    }
+
+    private function readMcpResponse(string $expectedRequestId): array
+    {
+        $loop = Loop::get();
+        $deferred = new Deferred();
+        $buffer = '';
+        $timeoutSeconds = 5;
+
+        $dataListener = function ($chunk) use (&$buffer, $deferred, $expectedRequestId, &$dataListener) {
+            $buffer .= $chunk;
+            if (str_contains($buffer, "\n")) {
+                $lines = explode("\n", $buffer);
+                $buffer = array_pop($lines);
+
+                foreach ($lines as $line) {
+                    if (in_array(trim($line), ['', '0'], true)) {
+                        continue;
+                    }
+                    $response = json_decode(trim($line), true);
+                    if (is_array($response) && array_key_exists('id', $response) && $response['id'] === $expectedRequestId) {
+                        $this->mcpReactProcess->stdout->removeListener('data', $dataListener);
+                        $deferred->resolve($response);
+
+                        return;
+                    }
+                }
+            }
+        };
+
+        $this->mcpReactProcess->stdout->on('data', $dataListener);
+
+        $promise = timeout($deferred->promise(), $timeoutSeconds, $loop);
+
+        try {
+            return await($promise);
+        } catch (TimeoutException) {
+            $this->mcpReactProcess->stdout->removeListener('data', $dataListener);
+            throw new RuntimeException("Timeout waiting for MCP response with ID '{$expectedRequestId}'");
+        }
+    }
+
+    #[Given('I start the MCP server with HTTP transport')]
+    public function iStartTheMcpServerWithHttpTransport(): void
+    {
+        $this->mcpHttpHost = '127.0.0.1';
+        $this->mcpHttpPort = 19876;
+
+        $command = sprintf(
+            '%s %s --mcp-server --mcp-transport=http --mcp-host=%s --mcp-port=%d',
+            $this->phpBin,
+            BEHAT_BIN_PATH,
+            $this->mcpHttpHost,
+            $this->mcpHttpPort
+        );
+
+        $this->mcpReactProcess = new ReactProcess($command, $this->workingDir);
+        $this->mcpReactProcess->start(Loop::get());
+
+        $this->mcpServerErrorOutput = '';
+        $this->mcpReactProcess->stderr->on('data', function ($chunk) {
+            $this->mcpServerErrorOutput .= $chunk;
+        });
+
+        await(sleep(0.5));
+    }
+
+    #[When('I send an HTTP MCP initialize request')]
+    public function iSendAnHttpMcpInitializeRequest(): void
+    {
+        $this->sendHttpMcpRequest('init-1', 'initialize', [
+            'protocolVersion' => '2025-03-26',
+            'clientInfo' => ['name' => 'BehatTestClient', 'version' => '1.0'],
+            'capabilities' => [],
+        ]);
+    }
+
+    #[Then('I should receive a successful HTTP MCP initialize response')]
+    public function iShouldReceiveASuccessfulHttpMcpInitializeResponse(): void
+    {
+        $response = $this->mcpHttpResponses['init-1'] ?? null;
+
+        Assert::assertNotNull($response);
+        Assert::assertArrayHasKey('result', $response);
+        Assert::assertArrayNotHasKey('error', $response);
+        Assert::assertEquals('init-1', $response['id']);
+        Assert::assertArrayHasKey('protocolVersion', $response['result']);
+        Assert::assertArrayHasKey('serverInfo', $response['result']);
+
+        $this->sendHttpMcpNotification('notifications/initialized');
+    }
+
+    #[When('I call the HTTP MCP tool :toolName')]
+    public function iCallTheHttpMcpTool(string $toolName): void
+    {
+        $this->sendHttpMcpRequest('tool-call-1', 'tools/call', [
+            'name' => $toolName,
+            'arguments' => [],
+        ]);
+    }
+
+    #[Then('I should receive a successful HTTP tool response with :tests tests and :failures failures')]
+    public function iShouldReceiveASuccessfulHttpToolResponse(int $tests, int $failures): void
+    {
+        $response = $this->mcpHttpResponses['tool-call-1'] ?? null;
+
+        Assert::assertNotNull($response);
+        Assert::assertArrayHasKey('result', $response);
+        Assert::assertArrayNotHasKey('error', $response);
+        Assert::assertEquals('tool-call-1', $response['id']);
+
+        $toolResult = json_decode((string) $response['result']['content'][0]['text'], true);
+
+        Assert::assertEquals($tests, $toolResult['tests']);
+        Assert::assertEquals($failures, $toolResult['failed']);
+    }
+
+    private function sendHttpMcpRequest(string $requestId, string $method, array $params = []): void
+    {
+        $browser = new Browser();
+        $url = sprintf('http://%s:%d/mcp', $this->mcpHttpHost, $this->mcpHttpPort);
+
+        $payload = json_encode([
+            'jsonrpc' => '2.0',
+            'id' => $requestId,
+            'method' => $method,
+            'params' => $params,
+        ]);
+
+        $headers = ['Accept' => 'application/json', 'Content-Type' => 'application/json'];
+        if ($this->mcpSessionId !== null && $method !== 'initialize') {
+            $headers['Mcp-Session-Id'] = $this->mcpSessionId;
+        }
+
+        $response = await($browser->post($url, $headers, $payload));
+
+        if ($method === 'initialize' && $response->hasHeader('Mcp-Session-Id')) {
+            $this->mcpSessionId = $response->getHeaderLine('Mcp-Session-Id');
+        }
+
+        $body = (string) $response->getBody();
+        $this->mcpHttpResponses[$requestId] = json_decode($body, true);
+    }
+
+    private function sendHttpMcpNotification(string $method, array $params = []): void
+    {
+        $browser = new Browser();
+        $url = sprintf('http://%s:%d/mcp', $this->mcpHttpHost, $this->mcpHttpPort);
+
+        $payload = json_encode([
+            'jsonrpc' => '2.0',
+            'method' => $method,
+            'params' => $params,
+        ]);
+
+        $headers = ['Accept' => 'application/json', 'Content-Type' => 'application/json', 'Mcp-Session-Id' => $this->mcpSessionId];
+
+        await($browser->post($url, $headers, $payload));
     }
 
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void

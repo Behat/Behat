@@ -80,6 +80,10 @@ final class Application extends BaseApplication
             ),
             new InputOption('--no-colors', null, InputOption::VALUE_NONE, 'Force no ANSI color in the output.'),
             new InputOption('--xdebug', null, InputOption::VALUE_NONE, 'Allow Xdebug to run.'),
+            new InputOption('--mcp-server', null, InputOption::VALUE_NONE, 'Start the MCP server.'),
+            new InputOption('--mcp-transport', null, InputOption::VALUE_REQUIRED, 'MCP server transport (stdio, http).', 'stdio'),
+            new InputOption('--mcp-host', null, InputOption::VALUE_REQUIRED, 'MCP server host for HTTP transport.', '127.0.0.1'),
+            new InputOption('--mcp-port', null, InputOption::VALUE_REQUIRED, 'MCP server port for HTTP transport.', '8080'),
         ]);
     }
 
@@ -152,6 +156,7 @@ final class Application extends BaseApplication
         $commands[] = new DumpReferenceCommand($this->extensionManager);
         $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
         $commands[] = new ConvertConfigCommand($this->configurationLoader);
+        $commands[] = new McpServerCommand();
 
         return $commands;
     }
@@ -230,6 +235,10 @@ final class Application extends BaseApplication
 
         if ($input->hasParameterOption(['--convert-config'])) {
             return 'convert-config';
+        }
+
+        if ($input->hasParameterOption(['--mcp-server'])) {
+            return 'mcp-server';
         }
 
         return $this->getName();
