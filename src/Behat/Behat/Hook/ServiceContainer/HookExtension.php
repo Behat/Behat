@@ -12,7 +12,6 @@ namespace Behat\Behat\Hook\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
-use Behat\Behat\Hook\Context\Annotation\HookAnnotationReader;
 use Behat\Behat\Hook\Context\Attribute\HookAttributeReader;
 use Behat\Behat\Hook\Tester\HookableFeatureTester;
 use Behat\Behat\Hook\Tester\HookableScenarioTester;
@@ -34,7 +33,6 @@ final class HookExtension extends BaseExtension
     {
         parent::load($container, $config);
 
-        $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
     }
 
@@ -78,16 +76,6 @@ final class HookExtension extends BaseExtension
         ]);
         $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, ['priority' => 9999]);
         $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.hookable', $definition);
-    }
-
-    /**
-     * Loads hook annotation reader.
-     */
-    private function loadAnnotationReader(ContainerBuilder $container): void
-    {
-        $definition = new Definition(HookAnnotationReader::class);
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
-        $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.hook', $definition);
     }
 
     /**

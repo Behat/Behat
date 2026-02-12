@@ -13,7 +13,6 @@ namespace Behat\Behat\Transformation\ServiceContainer;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\ServiceContainer\DefinitionExtension;
 use Behat\Behat\Transformation\Call\Filter\DefinitionArgumentsTransformer;
-use Behat\Behat\Transformation\Context\Annotation\TransformationAnnotationReader;
 use Behat\Behat\Transformation\Context\Attribute\TransformationAttributeReader;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Behat\Transformation\Transformer\RepositoryArgumentTransformer;
@@ -74,7 +73,6 @@ class TransformationExtension implements Extension
     {
         $this->loadDefinitionArgumentsTransformer($container);
         $this->loadDefaultTransformers($container);
-        $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
         $this->loadRepository($container);
     }
@@ -107,16 +105,6 @@ class TransformationExtension implements Extension
         ]);
         $definition->addTag(self::ARGUMENT_TRANSFORMER_TAG, ['priority' => 50]);
         $container->setDefinition(self::ARGUMENT_TRANSFORMER_TAG . '.repository', $definition);
-    }
-
-    /**
-     * Loads transformation context annotation reader.
-     */
-    protected function loadAnnotationReader(ContainerBuilder $container)
-    {
-        $definition = new Definition(TransformationAnnotationReader::class);
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
-        $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.transformation', $definition);
     }
 
     /**

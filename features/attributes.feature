@@ -1,5 +1,5 @@
 Feature: attributes
-  In order to keep annotations shorter and faster to parse
+  In order to define steps, hooks, and transformations
   As a tester
   I need to be able to use PHP Attributes
 

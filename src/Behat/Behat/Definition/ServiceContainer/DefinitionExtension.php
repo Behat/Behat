@@ -14,7 +14,6 @@ use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Behat\Definition\Cli\AvailableDefinitionsController;
 use Behat\Behat\Definition\Cli\UnusedDefinitionsController;
-use Behat\Behat\Definition\Context\Annotation\DefinitionAnnotationReader;
 use Behat\Behat\Definition\Context\Attribute\DefinitionAttributeReader;
 use Behat\Behat\Definition\DefinitionFinder;
 use Behat\Behat\Definition\DefinitionRepository;
@@ -105,7 +104,6 @@ final class DefinitionExtension implements Extension
         $this->loadDefaultSearchEngines($container);
         $this->loadStepMethodNameSuggester($container);
         $this->loadDefaultPatternPolicies($container);
-        $this->loadAnnotationReader($container);
         $this->loadAttributeReader($container);
         $this->loadDefinitionPrinters($container);
         $this->loadControllers($container, $config['print_unused_definitions']);
@@ -207,16 +205,6 @@ final class DefinitionExtension implements Extension
         ]);
         $definition->addTag(self::PATTERN_POLICY_TAG, ['priority' => 60]);
         $container->setDefinition(self::PATTERN_POLICY_TAG . '.regex', $definition);
-    }
-
-    /**
-     * Loads definition annotation reader.
-     */
-    private function loadAnnotationReader(ContainerBuilder $container): void
-    {
-        $definition = new Definition(DefinitionAnnotationReader::class);
-        $definition->addTag(ContextExtension::ANNOTATION_READER_TAG, ['priority' => 50]);
-        $container->setDefinition(ContextExtension::ANNOTATION_READER_TAG . '.definition', $definition);
     }
 
     /**

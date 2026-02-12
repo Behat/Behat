@@ -17,7 +17,6 @@ use Behat\Behat\Context\ContextClass\SimpleClassGenerator;
 use Behat\Behat\Context\ContextFactory;
 use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
 use Behat\Behat\Context\Environment\Reader\ContextEnvironmentReader;
-use Behat\Behat\Context\Reader\AnnotatedContextReader;
 use Behat\Behat\Context\Reader\AttributeContextReader;
 use Behat\Behat\Context\Reader\ContextReaderCachedPerContext;
 use Behat\Behat\Context\Reader\ContextReaderCachedPerSuite;
@@ -60,7 +59,6 @@ final class ContextExtension implements Extension
     private const ENVIRONMENT_HANDLER_ID = EnvironmentExtension::HANDLER_TAG . '.context';
     private const ENVIRONMENT_READER_ID = EnvironmentExtension::READER_TAG . '.context';
     private const SUITE_SETUP_ID = SuiteExtension::SETUP_TAG . '.suite_with_contexts';
-    private const ANNOTATED_CONTEXT_READER_ID = self::READER_TAG . '.annotated';
     private const ATTRIBUTED_CONTEXT_READER_ID = self::READER_TAG . '.attributed';
 
     /*
@@ -70,7 +68,6 @@ final class ContextExtension implements Extension
     public const ARGUMENT_RESOLVER_TAG = 'context.argument_resolver';
     public const INITIALIZER_TAG = 'context.initializer';
     public const READER_TAG = 'context.reader';
-    public const ANNOTATION_READER_TAG = 'context.annotation_reader';
     public const ATTRIBUTE_READER_TAG = 'context.attribute_reader';
     public const CLASS_GENERATOR_TAG = 'context.class_generator';
     public const SUITE_SCOPED_RESOLVER_FACTORY_TAG = 'context.argument.suite_resolver_factory';
@@ -122,7 +119,6 @@ final class ContextExtension implements Extension
         $this->processContextInitializers($container);
         $this->processContextReaders($container);
         $this->processClassGenerators($container);
-        $this->processAnnotationReaders($container);
         $this->processAttributeReaders($container);
     }
 
@@ -231,28 +227,9 @@ final class ContextExtension implements Extension
      */
     private function loadDefaultContextReaders(ContainerBuilder $container): void
     {
-        $this->loadAnnotatedContextReader($container);
-
         $this->loadAttributedContextReader($container);
 
         $this->loadTranslatableContextReader($container);
-    }
-
-    /**
-     * Loads AnnotatedContextReader.
-     */
-    private function loadAnnotatedContextReader(ContainerBuilder $container): void
-    {
-        $definition = new Definition(AnnotatedContextReader::class, [
-            new Reference(self::DOC_BLOCK_HELPER_ID),
-        ]);
-        $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID, $definition);
-
-        $definition = new Definition(ContextReaderCachedPerContext::class, [
-            new Reference(self::ANNOTATED_CONTEXT_READER_ID),
-        ]);
-        $definition->addTag(self::READER_TAG, ['priority' => 50]);
-        $container->setDefinition(self::ANNOTATED_CONTEXT_READER_ID . '.cached', $definition);
     }
 
     /**
@@ -376,19 +353,6 @@ final class ContextExtension implements Extension
 
         foreach ($references as $reference) {
             $definition->addMethodCall('registerClassGenerator', [$reference]);
-        }
-    }
-
-    /**
-     * Processes all annotation readers.
-     */
-    private function processAnnotationReaders(ContainerBuilder $container): void
-    {
-        $references = $this->processor->findAndSortTaggedServices($container, self::ANNOTATION_READER_TAG);
-        $definition = $container->getDefinition(self::ANNOTATED_CONTEXT_READER_ID);
-
-        foreach ($references as $reference) {
-            $definition->addMethodCall('registerAnnotationReader', [$reference]);
         }
     }
 

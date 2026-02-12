@@ -37,28 +37,3 @@ Feature: Step Definitions Override Attributes
       2 steps (2 passed)
       """
 
-  Scenario: Overridden method with parent attribute and child annotation
-    When I run behat with the following additional options:
-      | option                              | value                             |
-      | --profile                           | parent_attribute_child_annotation |
-      | features/step_patterns_both.feature |                                   |
-    Then it should pass with:
-      """
-      ..
-
-      1 scenario (1 passed)
-      2 steps (2 passed)
-      """
-
-  Scenario: Overridden method with parent annotation and child attribute
-    When I run behat with the following additional options:
-      | option                              | value                             |
-      | --profile                           | parent_annotation_child_attribute |
-      | features/step_patterns_both.feature |                                   |
-    Then it should pass with:
-      """
-      ..
-
-      1 scenario (1 passed)
-      2 steps (2 passed)
-      """

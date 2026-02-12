@@ -16,14 +16,4 @@ return (new Config())
         ->withSuite(new Suite('default', [
             'contexts' => ['FeatureContextBothAttributes'],
         ]))
-    )
-    ->withProfile((new Profile('parent_attribute_child_annotation'))
-        ->withSuite(new Suite('default', [
-            'contexts' => ['FeatureContextMixedAttributeParentAnnotationChild'],
-        ]))
-    )
-    ->withProfile((new Profile('parent_annotation_child_attribute'))
-        ->withSuite(new Suite('default', [
-            'contexts' => ['FeatureContextMixedAnnotationParentAttributeChild'],
-        ]))
     );

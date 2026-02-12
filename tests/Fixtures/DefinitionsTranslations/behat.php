@@ -6,29 +6,6 @@ use Behat\Config\Suite;
 
 return (new Config())
     ->withProfile(
-        (new Profile('annotations'))
-        ->withSuite(
-            (new Suite('xliff'))
-            ->withPaths('features/calc_ru.feature')
-            ->withContexts('FeatureContextAnnotations')
-        )
-        ->withSuite(
-            (new Suite('yaml'))
-            ->withPaths('features/calc_ru.feature')
-            ->withContexts('YamlContextAnnotations')
-        )
-        ->withSuite(
-            (new Suite('php'))
-            ->withPaths('features/calc_ru.feature')
-            ->withContexts('PhpContextAnnotations')
-        )
-        ->withSuite(
-            (new Suite('arguments'))
-            ->withPaths('features/calc_ru_arguments.feature')
-            ->withContexts('ArgumentsContextAnnotations')
-        )
-    )
-    ->withProfile(
         (new Profile('attributes'))
         ->withSuite(
             (new Suite('xliff'))
