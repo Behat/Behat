@@ -33,31 +33,17 @@ use Symfony\Component\Process\Process;
  */
 class FeatureContext implements Context
 {
-    /**
-     * @var string
-     */
-    private $phpBin;
-    /**
-     * @var Process
-     */
-    private $process;
-    /**
-     * @var string
-     */
-    private $workingDir;
+    private string $phpBin;
 
-    /**
-     * @var string
-     */
-    private $options = '--format-settings=\'{"timer": false}\' --no-interaction';
-    /**
-     * @var array
-     */
-    private $env = [];
-    /**
-     * @var string
-     */
-    private $answerString;
+    private Process $process;
+
+    private string $workingDir;
+
+    private string $options = '--format-settings=\'{"timer": false}\' --no-interaction';
+
+    private array $env = [];
+
+    private ?string $answerString = null;
 
     private ?int $errorLevel = null;
 
@@ -102,7 +88,7 @@ class FeatureContext implements Context
      * @param PyStringNode $content  PyString string instance
      */
     #[Given('/^(?:there is )?a file named "([^"]*)" with:$/')]
-    public function aFileNamedWith($filename, PyStringNode $content): void
+    public function aFileNamedWith(string $filename, PyStringNode $content): void
     {
         $content = strtr((string) $content, ["'''" => '"""']);
         $this->createFileInWorkingDir($filename, $content);
@@ -114,7 +100,7 @@ class FeatureContext implements Context
      * @param string $filename name of the file (relative path)
      */
     #[Given('/^(?:there is )?a file named "([^"]*)"$/')]
-    public function aFileNamed($filename): void
+    public function aFileNamed(string $filename): void
     {
         $this->createFileInWorkingDir($filename, '');
     }
@@ -126,7 +112,7 @@ class FeatureContext implements Context
      * @param string $destination destination file path (relative to workdir)
      */
     #[Given('/^I copy "([^"]*)" to "([^"]*)"$/')]
-    public function iCopyFileTo($source, $destination): void
+    public function iCopyFileTo(string $source, string $destination): void
     {
         $sourcePath = $this->workingDir . '/' . $source;
         $destinationPath = $this->workingDir . '/' . $destination;
@@ -177,53 +163,20 @@ EOL;
 
     /**
      * Moves user to the specified path.
-     *
-     * @param string $path
      */
     #[Given('/^I am in the "([^"]*)" path$/')]
-    public function iAmInThePath($path): void
+    public function iAmInThePath(string $path): void
     {
         $this->moveToNewPath($path);
     }
 
     /**
      * Checks whether a file at provided path exists.
-     *
-     * @param   string $path
      */
     #[Given('/^file "([^"]*)" should exist$/')]
-    public function fileShouldExist($path): void
+    public function fileShouldExist(string $path): void
     {
         Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
-    }
-
-    /**
-     * Sets specified ENV variable.
-     */
-    #[When('/^the "([^"]*)" environment variable is set to "([^"]*)"$/')]
-    public function iSetEnvironmentVariable($name, $value): void
-    {
-        $this->env = [$name => (string) $value];
-    }
-
-    /**
-     * Sets the BEHAT_PARAMS env variable.
-     */
-    #[When('/^"BEHAT_PARAMS" environment variable is set to:$/')]
-    public function iSetBehatParamsEnvironmentVariable(PyStringNode $value): void
-    {
-        $this->env = ['BEHAT_PARAMS' => (string) $value];
-    }
-
-    #[When('I initialise the working directory from the :dir fixtures folder')]
-    public function iSetTheWorkingDirectoryToTheFixturesFolder($dir): void
-    {
-        $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
-        $dir = $basePath . $dir;
-        if (!is_dir($dir)) {
-            throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
-        }
-        $this->filesystem->mirror($dir, $this->workingDir);
     }
 
     #[Given('I clear the default behat options')]
@@ -238,6 +191,45 @@ EOL;
         $this->addBehatOptions($table);
     }
 
+    #[Given('I set the php error_reporting option for the behat command to :level')]
+    public function iSetThePhpErrorReportingOptionForTheBehatCommandTo(string $level): void
+    {
+        $this->errorLevel = match ($level) {
+            'none' => 0,
+            'ignore deprecations' => E_ALL & ~E_DEPRECATED,
+            'all' => E_ALL,
+        };
+    }
+
+    /**
+     * Sets specified ENV variable.
+     */
+    #[When('/^the "([^"]*)" environment variable is set to "([^"]*)"$/')]
+    public function iSetEnvironmentVariable(string $name, string $value): void
+    {
+        $this->env = [$name => (string) $value];
+    }
+
+    /**
+     * Sets the BEHAT_PARAMS env variable.
+     */
+    #[When('/^"BEHAT_PARAMS" environment variable is set to:$/')]
+    public function iSetBehatParamsEnvironmentVariable(PyStringNode $value): void
+    {
+        $this->env = ['BEHAT_PARAMS' => (string) $value];
+    }
+
+    #[When('I initialise the working directory from the :dir fixtures folder')]
+    public function iSetTheWorkingDirectoryToTheFixturesFolder(string $dir): void
+    {
+        $basePath = dirname(__DIR__, 2) . '/tests/Fixtures/';
+        $dir = $basePath . $dir;
+        if (!is_dir($dir)) {
+            throw new RuntimeException(sprintf('The directory "%s" does not exist', $dir));
+        }
+        $this->filesystem->mirror($dir, $this->workingDir);
+    }
+
     #[When('I run behat with the following additional options:')]
     public function iRunBehatWithTheFollowingAdditionalOptions(TableNode $table): void
     {
@@ -247,11 +239,9 @@ EOL;
 
     /**
      * Runs behat command with provided parameters.
-     *
-     * @param string $argumentsString
      */
     #[When('/^I run "behat(?: ((?:\\"|[^"])*))?"$/')]
-    public function iRunBehat($argumentsString = ''): void
+    public function iRunBehat(string $argumentsString = ''): void
     {
         $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
@@ -276,7 +266,7 @@ EOL;
         $this->process->setEnv($this->env);
         $this->process->setWorkingDirectory($this->workingDir);
 
-        if (!empty($this->answerString)) {
+        if ($this->answerString !== null) {
             $this->process->setInput($this->answerString);
         }
 
@@ -292,12 +282,9 @@ EOL;
 
     /**
      * Runs behat command with provided parameters in interactive mode.
-     *
-     * @param string $answerString
-     * @param string $argumentsString
      */
     #[When('/^I answer "([^"]+)" when running "behat(?: ((?:\\"|[^"])*))?"$/')]
-    public function iRunBehatInteractively($answerString, $argumentsString): void
+    public function iRunBehatInteractively(string $answerString, string $argumentsString): void
     {
         $this->env['SHELL_INTERACTIVE'] = true;
 
@@ -323,7 +310,7 @@ EOL;
      * @param 'pass'|'fail' $success
      */
     #[Then('/^it should (fail|pass) with:$/')]
-    public function itShouldPassOrFailWith($success, PyStringNode $text): void
+    public function itShouldPassOrFailWith(string $success, PyStringNode $text): void
     {
         $isCorrect = $this->exitCodeIsCorrect($success);
 
@@ -357,7 +344,7 @@ EOL;
      * @param 'pass'|'fail' $success
      */
     #[Then('/^it should (fail|pass) with no output$/')]
-    public function itShouldPassOrFailWithNoOutput($success): void
+    public function itShouldPassOrFailWithNoOutput(string $success): void
     {
         Assert::assertEmpty($this->getOutput());
         $this->itShouldPassOrFail($success);
@@ -370,7 +357,7 @@ EOL;
      * @param PyStringNode $text file content
      */
     #[Then('/^"([^"]*)" file should contain:$/')]
-    public function fileShouldContain($path, PyStringNode $text): void
+    public function fileShouldContain(string $path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
         Assert::assertFileExists($path);
@@ -422,7 +409,7 @@ EOL;
      * @param PyStringNode $text file content
      */
     #[Then('/^(?:the\\s)?"([^"]*)" file xml should be like:$/')]
-    public function fileXmlShouldBeLike($path, PyStringNode $text): void
+    public function fileXmlShouldBeLike(string $path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
         $this->checkXmlFileContents($path, $text);
@@ -435,20 +422,92 @@ EOL;
      * @param PyStringNode $text file content
      */
     #[Then('/^(?:the\\s)?"([^"]*)" file json should be like:$/')]
-    public function fileJSONShouldBeLike($path, PyStringNode $text): void
+    public function fileJSONShouldBeLike(string $path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
         $this->checkJSONFileContents($path, $text);
     }
 
     #[Then('the :file file should have been removed from the working directory')]
-    public function fileShouldHaveBeenRemoved($file): void
+    public function fileShouldHaveBeenRemoved(string $file): void
     {
         $path = $this->workingDir . '/' . $file;
         Assert::assertFileDoesNotExist($path);
     }
 
-    private function checkXmlFileContents($path, PyStringNode $text): void
+    /**
+     * Checks whether last command output contains provided string.
+     *
+     * @param PyStringNode $text PyString text instance
+     */
+    #[Then('the output should contain:')]
+    public function theOutputShouldContain(PyStringNode $text): void
+    {
+        if (str_contains($this->getOutput(), (string) $this->getExpectedOutput($text))) {
+            return;
+        }
+
+        throw new UnexpectedValueException(
+            $this->getOutputDiff($text)
+        );
+    }
+
+    /**
+     * Checks whether previously ran command failed|passed.
+     *
+     * @param 'pass'|'fail' $success
+     */
+    #[Then('/^it should (fail|pass)$/')]
+    public function itShouldPassOrFail(string $success): void
+    {
+        $isCorrect = $this->exitCodeIsCorrect($success);
+
+        if ($isCorrect) {
+            return;
+        }
+
+        throw new UnexpectedValueException(
+            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode()
+        );
+    }
+
+    /**
+     * Checks whether the file is valid according to an XML schema.
+     *
+     * @param string $schemaPath relative to features/bootstrap/schema
+     */
+    #[Then('/^the file "([^"]+)" should be a valid document according to "([^"]+)"$/')]
+    public function xmlShouldBeValid(string $xmlFile, string $schemaPath): void
+    {
+        $path = $this->workingDir . '/' . $xmlFile;
+        $this->checkXmlIsValid($path, $schemaPath);
+    }
+
+    #[Then('the file :jsonFile should be a valid document according to the json schema :schemaFile')]
+    public function theFileShouldBeAValidDocumentAccordingToTheJsonSchema(string $jsonFile, string $schemaFile): void
+    {
+        $json = json_decode(file_get_contents($this->workingDir . '/' . $jsonFile));
+        $schema = file_get_contents(__DIR__ . '/../../resources/' . $schemaFile);
+
+        $validator = new Validator();
+
+        $result = $validator->validate($json, $schema);
+
+        if (!$result->isValid()) {
+            throw new UnexpectedValueException('JSON is not valid according to schema');
+        }
+    }
+
+    #[Then('the :file file should not exist')]
+    public function theFileShouldNotExist(string $file): void
+    {
+        $path = $this->workingDir . '/' . $file;
+        if (is_file($path)) {
+            throw new Exception("File $file exists");
+        }
+    }
+
+    private function checkXmlFileContents(string $path, PyStringNode $text): void
     {
         Assert::assertFileExists($path);
 
@@ -470,7 +529,7 @@ EOL;
         Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
     }
 
-    private function checkJSONFileContents($path, PyStringNode $text): void
+    private function checkJSONFileContents(string $path, PyStringNode $text): void
     {
         Assert::assertFileExists($path);
 
@@ -498,23 +557,6 @@ EOL;
         );
 
         Assert::assertEquals($text, $fileContent);
-    }
-
-    /**
-     * Checks whether last command output contains provided string.
-     *
-     * @param PyStringNode $text PyString text instance
-     */
-    #[Then('the output should contain:')]
-    public function theOutputShouldContain(PyStringNode $text): void
-    {
-        if (str_contains($this->getOutput(), (string) $this->getExpectedOutput($text))) {
-            return;
-        }
-
-        throw new UnexpectedValueException(
-            $this->getOutputDiff($text)
-        );
     }
 
     private function getExpectedOutput(PyStringNode $expectedText): string
@@ -569,72 +611,6 @@ EOL;
         $text = ConsoleFormatter::replaceHref($text);
 
         return $text;
-    }
-
-    /**
-     * Checks whether previously ran command failed|passed.
-     *
-     * @param 'pass'|'fail' $success
-     */
-    #[Then('/^it should (fail|pass)$/')]
-    public function itShouldPassOrFail($success): void
-    {
-        $isCorrect = $this->exitCodeIsCorrect($success);
-
-        if ($isCorrect) {
-            return;
-        }
-
-        throw new UnexpectedValueException(
-            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode()
-        );
-    }
-
-    /**
-     * Checks whether the file is valid according to an XML schema.
-     *
-     * @param string $xmlFile
-     * @param string $schemaPath relative to features/bootstrap/schema
-     */
-    #[Then('/^the file "([^"]+)" should be a valid document according to "([^"]+)"$/')]
-    public function xmlShouldBeValid($xmlFile, $schemaPath): void
-    {
-        $path = $this->workingDir . '/' . $xmlFile;
-        $this->checkXmlIsValid($path, $schemaPath);
-    }
-
-    #[Then('the file :jsonFile should be a valid document according to the json schema :schemaFile')]
-    public function theFileShouldBeAValidDocumentAccordingToTheJsonSchema($jsonFile, $schemaFile): void
-    {
-        $json = json_decode(file_get_contents($this->workingDir . '/' . $jsonFile));
-        $schema = file_get_contents(__DIR__ . '/../../resources/' . $schemaFile);
-
-        $validator = new Validator();
-
-        $result = $validator->validate($json, $schema);
-
-        if (!$result->isValid()) {
-            throw new UnexpectedValueException('JSON is not valid according to schema');
-        }
-    }
-
-    #[Then('the :file file should not exist')]
-    public function theFileShouldNotExist($file): void
-    {
-        $path = $this->workingDir . '/' . $file;
-        if (is_file($path)) {
-            throw new Exception("File $file exists");
-        }
-    }
-
-    #[Given('I set the php error_reporting option for the behat command to :level')]
-    public function iSetThePhpErrorReportingOptionForTheBehatCommandTo($level): void
-    {
-        $this->errorLevel = match ($level) {
-            'none' => 0,
-            'ignore deprecations' => E_ALL & ~E_DEPRECATED,
-            'all' => E_ALL,
-        };
     }
 
     private function checkXmlIsValid(string $xmlFile, string $schemaPath): void
@@ -692,7 +668,7 @@ EOL;
         $this->filesystem->dumpFile($this->workingDir . DIRECTORY_SEPARATOR . $filename, $content);
     }
 
-    private function moveToNewPath($path): void
+    private function moveToNewPath(string $path): void
     {
         $newWorkingDir = $this->workingDir . '/' . $path;
         $this->filesystem->mkdir($newWorkingDir);
