@@ -17,7 +17,6 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Composer\XdebugHandler\XdebugHandler;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -66,8 +65,6 @@ final class Application extends BaseApplication
                 'Use -vv or --verbose=2 to display backtraces in addition to exceptions.'
             ),
             new InputOption('--help', '-h', InputOption::VALUE_NONE, 'Display this help message.'),
-            new InputOption('--convert-config', null, InputOption::VALUE_NONE, 'Convert the configuration to the PHP format.'),
-            new InputOption('--config-reference', null, InputOption::VALUE_NONE, 'Display the configuration reference.'),
             new InputOption('--debug', null, InputOption::VALUE_NONE, 'Provide debugging information about current environment.'),
             new InputOption('--version', '-V', InputOption::VALUE_NONE, 'Display version.'),
             new InputOption('--no-interaction', '-n', InputOption::VALUE_NONE, 'Do not ask any interactive question.'),
@@ -113,10 +110,6 @@ final class Application extends BaseApplication
             }
         }
 
-        if ($input->hasParameterOption(['--config-reference'])) {
-            $input = new ArrayInput(['--config-reference' => true]);
-        }
-
         if ($path = $input->getParameterOption(['--config', '-c'])) {
             if (!is_file($path)) {
                 throw new ConfigurationLoadingException('The requested config file does not exist');
@@ -149,9 +142,7 @@ final class Application extends BaseApplication
     {
         $commands = parent::getDefaultCommands();
 
-        $commands[] = new DumpReferenceCommand($this->extensionManager);
         $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
-        $commands[] = new ConvertConfigCommand($this->configurationLoader);
 
         return $commands;
     }
@@ -220,16 +211,8 @@ final class Application extends BaseApplication
      */
     protected function getCommandName(InputInterface $input): string
     {
-        if ($input->hasParameterOption(['--config-reference'])) {
-            return 'dump-reference';
-        }
-
         if ($input->hasParameterOption(['--debug'])) {
             return 'debug';
-        }
-
-        if ($input->hasParameterOption(['--convert-config'])) {
-            return 'convert-config';
         }
 
         return $this->getName();

@@ -16,14 +16,26 @@ Feature: Init
 
   Scenario: Custom paths
     Given I am in the "init_test2" path
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        autoload: '%paths.base%/supp'
-        suites:
-          default:
-            paths:    [ '%paths.base%/scenarios' ]
-            contexts: [ CustomContext ]
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      return (new Config())
+          ->withProfile(
+              (new Profile('default', [
+                  'autoload' => '%paths.base%/supp',
+              ]))
+                  ->withSuite(
+                      (new Suite('default', [
+                          'paths' => ['%paths.base%/scenarios'],
+                          'contexts' => ['CustomContext'],
+                      ]))
+                  )
+          );
       """
     When I run "behat --no-colors --init"
     Then it should pass with:
@@ -36,17 +48,32 @@ Feature: Init
 
   Scenario: Multiple suites
     Given I am in the "init_test3" path
-    And a file named "behat.yml" with:
+    And a file named "behat.php" with:
       """
-      default:
-        autoload: '%paths.base%/contexts'
-        suites:
-          suite1:
-            paths:    [ '%paths.base%/scenarios1' ]
-            contexts: [ Custom1Context ]
-          suite2:
-            paths:    [ '%paths.base%/scenarios2' ]
-            contexts: [ Custom2Context ]
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      return (new Config())
+          ->withProfile(
+              (new Profile('default', [
+                  'autoload' => '%paths.base%/contexts',
+              ]))
+                  ->withSuite(
+                      (new Suite('suite1', [
+                          'paths' => ['%paths.base%/scenarios1'],
+                          'contexts' => ['Custom1Context'],
+                      ]))
+                  )
+                  ->withSuite(
+                      (new Suite('suite2', [
+                          'paths' => ['%paths.base%/scenarios2'],
+                          'contexts' => ['Custom2Context'],
+                      ]))
+                  )
+          );
       """
     When I run "behat --no-colors --init"
     Then it should pass with:
@@ -61,16 +88,29 @@ Feature: Init
     And file "contexts/Custom2Context.php" should exist
 
   Scenario: Contexts with arguments
-    Given I am in the "init_test2" path
-    And a file named "behat.yml" with:
+    Given I am in the "init_test4" path
+    And a file named "behat.php" with:
       """
-      default:
-        autoload: '%paths.base%/supp'
-        suites:
-          default:
-            paths:    [ '%paths.base%/scenarios' ]
-            contexts:
-              - CustomContext: [ 'a', 'b' ]
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+      use Behat\Config\Suite;
+
+      return (new Config())
+          ->withProfile(
+              (new Profile('default', [
+                  'autoload' => '%paths.base%/supp',
+              ]))
+                  ->withSuite(
+                      (new Suite('default', [
+                          'paths' => ['%paths.base%/scenarios'],
+                          'contexts' => [
+                              ['CustomContext' => ['a', 'b']],
+                          ],
+                      ]))
+                  )
+          );
       """
     When I run "behat --no-colors --init"
     Then it should pass with:

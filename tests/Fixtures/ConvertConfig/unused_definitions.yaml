@@ -1,3 +1,0 @@
-default:
-    definitions:
-        print_unused_definitions: true

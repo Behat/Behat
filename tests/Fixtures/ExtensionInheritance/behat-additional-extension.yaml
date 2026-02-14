@@ -1,7 +1,0 @@
-default:
-  extensions:
-    custom_extension.php: ~
-
-custom_profile:
-  extensions:
-    custom_extension2.php: ~

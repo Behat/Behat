@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
-use PhpParser\Node\Expr;
-
 final class ProgressFormatter extends Formatter
 {
     public const NAME = 'progress';
@@ -38,13 +36,5 @@ final class ProgressFormatter extends Formatter
     public static function defaults(): array
     {
         return (new self())->toArray();
-    }
-
-    /**
-     * @internal
-     */
-    public function toPhpExpr(): Expr
-    {
-        return $this->toPhpExprForNamedFormatter();
     }
 }

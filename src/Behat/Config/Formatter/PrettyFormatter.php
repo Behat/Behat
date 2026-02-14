@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
-use PhpParser\Node\Expr;
-
 final class PrettyFormatter extends Formatter
 {
     public const NAME = 'pretty';
-
-    public const PRINT_SKIPPED_STEPS_PARAMETER_NAME = 'printSkippedSteps';
 
     private const TIMER_SETTING = 'timer';
     private const EXPAND_SETTING = 'expand';
@@ -57,13 +53,5 @@ final class PrettyFormatter extends Formatter
     public static function defaults(): array
     {
         return (new self())->toArray();
-    }
-
-    /**
-     * @internal
-     */
-    public function toPhpExpr(): Expr
-    {
-        return $this->toPhpExprForNamedFormatter();
     }
 }

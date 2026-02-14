@@ -40,19 +40,6 @@ Feature: Unused definitions
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 
-  Scenario: Print unused definitions from yaml config
-    When I run behat with the following additional options:
-      | option   | value                   |
-      | --config | unused_definitions.yaml |
-    Then it should pass with:
-      """
-      --- 1 unused definition:
-
-      [Then|*] I call a step not used in any feature
-      This is a step that is never used and should be removed.
-      `FeatureContext::stepNotUsedInAnyFeature()`
-      """
-
   Scenario: Print unused definitions from PHP config
     When I run behat with the following additional options:
       | option    | value              |

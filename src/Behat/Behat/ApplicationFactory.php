@@ -101,20 +101,8 @@ final class ApplicationFactory extends BaseFactory
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $configDir = $cwd . 'config' . DIRECTORY_SEPARATOR;
         $paths = [
-            $cwd . 'behat.yaml',
-            $cwd . 'behat.yml',
-            $cwd . 'behat.yaml.dist',
-            $cwd . 'behat.yml.dist',
-            $cwd . 'behat.dist.yaml',
-            $cwd . 'behat.dist.yml',
             $cwd . 'behat.php',
             $cwd . 'behat.dist.php',
-            $configDir . 'behat.yaml',
-            $configDir . 'behat.yml',
-            $configDir . 'behat.yaml.dist',
-            $configDir . 'behat.yml.dist',
-            $configDir . 'behat.dist.yaml',
-            $configDir . 'behat.dist.yml',
             $configDir . 'behat.php',
             $configDir . 'behat.dist.php',
         ];

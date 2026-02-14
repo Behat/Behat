@@ -1,3 +1,0 @@
-default:
-  calls:
-    error_reporting: 32767 #E_ALL

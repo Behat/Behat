@@ -1,7 +1,0 @@
-default:
-  extensions:
-    custom_handlers_extension.php: ~
-  suites:
-    default:
-      contexts:
-        - ExceptionHandlerContext

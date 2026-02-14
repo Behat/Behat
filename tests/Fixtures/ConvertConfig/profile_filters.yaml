@@ -1,5 +1,0 @@
-default:
-    gherkin:
-        filters:
-            name: "john"
-            role: "admin"

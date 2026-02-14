@@ -1,8 +1,0 @@
-default:
-  suites:
-    first:
-      paths: '%paths.base%/features/first'
-      contexts: [ FirstContext ]
-    second:
-      paths: [ '%paths.base%/features/second' ]
-      contexts: [ SecondContext ]

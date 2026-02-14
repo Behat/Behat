@@ -13,7 +13,6 @@ namespace Behat\Testwork\ServiceContainer\Configuration;
 use Behat\Config\ConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use Closure;
-use Symfony\Component\Yaml\Yaml;
 
 use function str_ends_with;
 
@@ -171,12 +170,12 @@ final class ConfigurationLoader
     }
 
     /**
-     * Loads information from YAML configuration file.
+     * Loads information from PHP configuration file.
      *
      * @param string $configPath Config file path
      * @param string $profile    Profile name
      *
-     * @throws ConfigurationLoadingException If config file is not found
+     * @throws ConfigurationLoadingException If config file is not found or is not a PHP file
      *
      * @phpstan-impure
      */
@@ -186,19 +185,19 @@ final class ConfigurationLoader
             throw new ConfigurationLoadingException(sprintf('Configuration file `%s` not found.', $configPath));
         }
 
+        if (!str_ends_with($configPath, '.php')) {
+            throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must be a PHP file.', $configPath));
+        }
+
         $basePath = rtrim(dirname($configPath), DIRECTORY_SEPARATOR);
 
-        if (str_ends_with($configPath, '.php')) {
-            $phpConfig = $this->getPHPConfigObjectClosure($configPath)();
+        $phpConfig = $this->getPHPConfigObjectClosure($configPath)();
 
-            if (!$phpConfig instanceof ConfigInterface) {
-                throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
-            }
-
-            $config = $phpConfig->toArray();
-        } else {
-            $config = (array) Yaml::parse(file_get_contents($configPath));
+        if (!$phpConfig instanceof ConfigInterface) {
+            throw new ConfigurationLoadingException(sprintf('Configuration file `%s` must return an instance of `%s`.', $configPath, ConfigInterface::class));
         }
+
+        $config = $phpConfig->toArray();
 
         return $this->loadConfigs($basePath, $config, $profile);
     }

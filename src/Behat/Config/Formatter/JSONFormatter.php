@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace Behat\Config\Formatter;
 
-use PhpParser\Node\Expr;
-
 final class JSONFormatter extends Formatter
 {
     public const NAME = 'json';
@@ -34,14 +32,6 @@ final class JSONFormatter extends Formatter
         $settings = [...$settings, ...$baseOptions];
 
         parent::__construct(name: self::NAME, settings: $settings);
-    }
-
-    /**
-     * @internal
-     */
-    public function toPhpExpr(): Expr
-    {
-        return $this->toPhpExprForNamedFormatter();
     }
 
     public static function defaults(): array

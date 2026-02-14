@@ -12,7 +12,7 @@ Feature: Profile extension overrides
   Scenario: Default profile has extension loaded
     When I run behat with the following additional options:
       | option                                 | value |
-      | --config behat-default-extension.yaml  |       |
+      | --config behat-default-extension.php  |       |
       | features/extensions-default.feature    |       |
     Then it should pass with:
       """
@@ -29,7 +29,7 @@ Feature: Profile extension overrides
   Scenario: Custom profile disables all extensions
     When I run behat with the following additional options:
       | option                                 | value          |
-      | --config behat-default-extension.yaml  |                |
+      | --config behat-default-extension.php  |                |
       | --profile                              | custom_profile |
       | -vvv                                   |                |
       | features/extensions-disabled.feature   |                |
@@ -48,7 +48,7 @@ Feature: Profile extension overrides
   Scenario: Custom profile has an additional extension
     When I run behat with the following additional options:
       | option                                   | value          |
-      | --config behat-additional-extension.yaml |                |
+      | --config behat-additional-extension.php |                |
       | --profile                                | custom_profile |
       | -vvv                                     |                |
       | features/extensions-additional.feature   |                |

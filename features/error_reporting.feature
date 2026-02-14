@@ -63,28 +63,6 @@ Feature: Error Reporting
     9 steps (7 passed, 1 failed, 1 skipped)
     """
 
-  Scenario: With error reporting set in yaml config
-    Given I set the php error_reporting option for the behat command to "none"
-    When I run behat with the following additional options:
-      | option                                  | value          |
-      | --config                                | all_errors.yml |
-      | features/php_errors_in_scenario.feature |                |
-    Then it should fail with:
-    """
-    --- Failed steps:
-
-    001 Scenario: Access undefined index # features/php_errors_in_scenario.feature:9
-          When I access array index 0    # features/php_errors_in_scenario.feature:10
-            Warning: Undefined array key 0 in features/bootstrap/FeatureContext.php line XX
-
-    002 Scenario: Trigger PHP deprecation # features/php_errors_in_scenario.feature:18
-          When I trim NULL                # features/php_errors_in_scenario.feature:19
-            Deprecated: trim(): Passing null to parameter #1 ($string) of type string is deprecated in features/bootstrap/FeatureContext.php line XX
-
-    3 scenarios (1 passed, 2 failed)
-    9 steps (6 passed, 2 failed, 1 skipped)
-    """
-
   Scenario: With very verbose error reporting
     Given I set the php error_reporting option for the behat command to "all"
     When I run behat with the following additional options:

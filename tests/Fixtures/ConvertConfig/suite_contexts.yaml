@@ -1,6 +1,0 @@
-default:
-    suites:
-        my_suite:
-            contexts:
-                - MyContext
-                - AnotherContext

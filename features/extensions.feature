@@ -27,7 +27,7 @@ Feature: Extensions
   Scenario: Instantiating inexistent extension file
     When I run behat with the following additional options:
       | option   | value                 |
-      | --config | behat-inexistent.yaml |
+      | --config | behat-inexistent.php |
     Then it should fail with:
       """
       `inexistent_extension` extension file or class could not be located.
@@ -36,7 +36,7 @@ Feature: Extensions
   Scenario: Exception handlers extension
     When I run behat with the following additional options:
       | option                              | value                         |
-      | --config                            | behat-exception-handlers.yaml |
+      | --config                            | behat-exception-handlers.php |
       | features/exception_handlers.feature |                               |
     Then it should fail with:
       """

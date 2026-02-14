@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
-use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
-use PhpParser\Node\Expr;
 
 use function is_string;
 
-final class Config implements ConfigInterface, ConfigConverterInterface
+final class Config implements ConfigInterface
 {
     public const IMPORTS_SETTING = 'imports';
     private const PREFERRED_PROFILE_NAME_SETTING = 'preferredProfileName';
-
-    private const IMPORT_FUNCTION = 'import';
-    private const PROFILE_FUNCTION = 'withProfile';
-    private const PREFERRED_PROFILE_FUNCTION = 'withPreferredProfile';
 
     public function __construct(
         private array $settings = [],
@@ -57,44 +51,5 @@ final class Config implements ConfigInterface, ConfigConverterInterface
     public function toArray(): array
     {
         return $this->settings;
-    }
-
-    /**
-     * @internal
-     */
-    public function toPhpExpr(): Expr
-    {
-        $configObject = ConfigConverterTools::createObject(self::class);
-        $expr = $configObject;
-
-        foreach ($this->settings as $settingsName => $settings) {
-            if ($settingsName === self::PREFERRED_PROFILE_NAME_SETTING) {
-                $expr = ConfigConverterTools::addMethodCall(
-                    self::class,
-                    self::PREFERRED_PROFILE_FUNCTION,
-                    [$settings],
-                    $expr
-                );
-            } elseif ($settingsName === self::IMPORTS_SETTING) {
-                $arguments = count($settings) === 1 ? [$settings[0]] : [$settings];
-                $expr = ConfigConverterTools::addMethodCall(
-                    self::class,
-                    self::IMPORT_FUNCTION,
-                    $arguments,
-                    $expr
-                );
-            } else {
-                $profile = new Profile($settingsName, $settings ?? []);
-                $expr = ConfigConverterTools::addMethodCall(
-                    self::class,
-                    self::PROFILE_FUNCTION,
-                    [$profile->toPhpExpr()],
-                    $expr
-                );
-            }
-            unset($this->settings[$settingsName]);
-        }
-
-        return $expr;
     }
 }

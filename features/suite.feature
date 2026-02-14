@@ -66,7 +66,7 @@ Feature: Suites
       """
 
   Scenario: Suite with `paths` set to string instead of an array
-    When I run "behat --config=behat-invalid-paths.yml"
+    When I run "behat --config=behat-invalid-paths.php"
     Then it should fail with:
       """
       `paths` setting of the "first" suite is expected to be an array, string given.
