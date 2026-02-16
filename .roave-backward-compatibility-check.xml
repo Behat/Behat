@@ -55,5 +55,15 @@
         <ignored-regex>#REMOVED: Class Behat\\Behat\\Context\\Reader\\AnnotatedContextReader has been deleted#</ignored-regex>
         <ignored-regex>#REMOVED: Method Behat\\Behat\\.+?\#loadAnnotationReader\(\) was removed#</ignored-regex>
         <ignored-regex>#REMOVED: Constant Behat\\Behat\\Context\\ServiceContainer\\ContextExtension::ANNOTATION_READER_TAG was removed#</ignored-regex>
+
+        <!--
+        YAML config support removal: The following classes, methods and interfaces were removed as part of dropping
+        YAML configuration support. PHP configuration files are now the only supported format.
+        -->
+        <ignored-regex>#REMOVED: Class Behat\\Config\\Converter\\.+? has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Testwork\\Cli\\(DumpReferenceCommand|ConvertConfigCommand) has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: These ancestors of Behat\\Config\\.+? have been removed: \["Behat\\\\Config\\\\ConfigConverterInterface"\]#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Config\\.+?\#toPhpExpr\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Constant Behat\\Config\\Formatter\\PrettyFormatter::PRINT_SKIPPED_STEPS_PARAMETER_NAME was removed#</ignored-regex>
     </baseline>
 </roave-bc-check>
