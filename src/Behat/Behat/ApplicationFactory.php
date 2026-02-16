@@ -99,12 +99,9 @@ final class ApplicationFactory extends BaseFactory
     protected function getConfigPath(): ?string
     {
         $cwd = rtrim(getcwd(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        $configDir = $cwd . 'config' . DIRECTORY_SEPARATOR;
         $paths = [
             $cwd . 'behat.php',
             $cwd . 'behat.dist.php',
-            $configDir . 'behat.php',
-            $configDir . 'behat.dist.php',
         ];
 
         foreach ($paths as $path) {
