@@ -30,10 +30,9 @@ Feature: Init
                   'autoload' => '%paths.base%/supp',
               ]))
                   ->withSuite(
-                      (new Suite('default', [
-                          'paths' => ['%paths.base%/scenarios'],
-                          'contexts' => ['CustomContext'],
-                      ]))
+                      (new Suite('default'))
+                          ->withPaths('%paths.base%/scenarios')
+                          ->withContexts('CustomContext')
                   )
           );
       """
@@ -62,16 +61,14 @@ Feature: Init
                   'autoload' => '%paths.base%/contexts',
               ]))
                   ->withSuite(
-                      (new Suite('suite1', [
-                          'paths' => ['%paths.base%/scenarios1'],
-                          'contexts' => ['Custom1Context'],
-                      ]))
+                      (new Suite('suite1'))
+                          ->withPaths('%paths.base%/scenarios1')
+                          ->withContexts('Custom1Context')
                   )
                   ->withSuite(
-                      (new Suite('suite2', [
-                          'paths' => ['%paths.base%/scenarios2'],
-                          'contexts' => ['Custom2Context'],
-                      ]))
+                      (new Suite('suite2'))
+                          ->withPaths('%paths.base%/scenarios2')
+                          ->withContexts('Custom2Context')
                   )
           );
       """
@@ -103,12 +100,9 @@ Feature: Init
                   'autoload' => '%paths.base%/supp',
               ]))
                   ->withSuite(
-                      (new Suite('default', [
-                          'paths' => ['%paths.base%/scenarios'],
-                          'contexts' => [
-                              ['CustomContext' => ['a', 'b']],
-                          ],
-                      ]))
+                      (new Suite('default'))
+                          ->withPaths('%paths.base%/scenarios')
+                          ->addContext('CustomContext', ['a', 'b'])
                   )
           );
       """
