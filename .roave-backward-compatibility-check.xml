@@ -46,5 +46,14 @@
         <ignored-regex>#CHANGED: The parameter .+? of Behat\\Behat\\Output\\Node\\Printer\\JUnit\\JUnitScenarioPrinter\#__construct\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: (The parameter|Parameter) .+? of Behat\\Behat\\Definition\\Printer\\ConsoleDefinitionPrinter\#__construct\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: The parameter .+? of Behat\\Testwork\\Ordering\\Cli\\OrderController\#__construct\(\)#</ignored-regex>
+
+        <!--
+        Annotation support removal: All annotation-based context readers and related classes have been removed.
+        PHP 8 attributes are now the only supported way to define steps, hooks, and transformations.
+        -->
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\.+?\\Annotation\\.+? has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\Context\\Reader\\AnnotatedContextReader has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\.+?\#loadAnnotationReader\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Constant Behat\\Behat\\Context\\ServiceContainer\\ContextExtension::ANNOTATION_READER_TAG was removed#</ignored-regex>
     </baseline>
 </roave-bc-check>
