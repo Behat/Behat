@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\ServiceContainer;
 
-use Behat\Behat\Util\StrictRegex;
 use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 
 /**
@@ -126,19 +125,6 @@ final class ExtensionManager
     }
 
     /**
-     * Attempts to guess full extension class from relative.
-     *
-     * @internal
-     */
-    public static function guessFullExtensionClassName(string $locator): string
-    {
-        $parts = explode('\\', $locator);
-        $name = StrictRegex::replace('/Extension$/', '', end($parts)) . 'Extension';
-
-        return $locator . '\\ServiceContainer\\' . $name;
-    }
-
-    /**
      * Initializes extension by id.
      *
      * @throws ExtensionInitializationException
@@ -166,10 +152,6 @@ final class ExtensionManager
             return new $class();
         }
 
-        if (class_exists($class = self::guessFullExtensionClassName($locator))) {
-            return new $class();
-        }
-
         if (file_exists($locator)) {
             return require $locator;
         }
@@ -179,7 +161,8 @@ final class ExtensionManager
         }
 
         throw new ExtensionInitializationException(sprintf(
-            '`%s` extension file or class could not be located.',
+            '`%s` extension file or class could not be located. ' .
+            'If you are using a short name, please use the fully qualified class name instead.',
             $locator
         ), $locator);
     }
