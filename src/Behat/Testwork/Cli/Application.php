@@ -134,7 +134,18 @@ final class Application extends BaseApplication
         return parent::doRun($input, $output);
     }
 
-    public function doAddCommand(callable|SymfonyCommand $command): ?SymfonyCommand
+    protected function getDefaultCommands(): array
+    {
+        $commands = parent::getDefaultCommands();
+
+        $commands[] = new DumpReferenceCommand($this->extensionManager);
+        $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
+        $commands[] = new ConvertConfigCommand($this->configurationLoader);
+
+        return $commands;
+    }
+
+    private function doAddCommand(callable|SymfonyCommand $command): ?SymfonyCommand
     {
         // Provide compatibility with all supported symfony/console versions
         // Attempt to use the `addCommand` method added in symfony/console 7.4.0
@@ -147,17 +158,6 @@ final class Application extends BaseApplication
         assert(method_exists($this, 'add'));
 
         return $this->add($command);
-    }
-
-    protected function getDefaultCommands(): array
-    {
-        $commands = parent::getDefaultCommands();
-
-        $commands[] = new DumpReferenceCommand($this->extensionManager);
-        $commands[] = new DebugCommand($this, $this->configurationLoader, $this->extensionManager);
-        $commands[] = new ConvertConfigCommand($this->configurationLoader);
-
-        return $commands;
     }
 
     /**
