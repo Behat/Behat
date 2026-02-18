@@ -4,6 +4,8 @@ imports:
 default:
     testers:
         strict: true
+    deprecations:
+        print_deprecations: true
     formatters:
         pretty:
             paths:    false

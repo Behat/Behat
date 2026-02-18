@@ -29,6 +29,7 @@ use Behat\Testwork\Argument\ServiceContainer\ArgumentExtension;
 use Behat\Testwork\Autoloader\ServiceContainer\AutoloaderExtension;
 use Behat\Testwork\Call\ServiceContainer\CallExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
+use Behat\Testwork\Deprecation\ServiceContainer\DeprecationExtension;
 use Behat\Testwork\Environment\ServiceContainer\EnvironmentExtension;
 use Behat\Testwork\Exception\ServiceContainer\ExceptionExtension;
 use Behat\Testwork\Filesystem\ServiceContainer\FilesystemExtension;
@@ -95,6 +96,7 @@ final class ApplicationFactory extends BaseFactory
             new TransformationExtension($processor),
             new OrderingExtension($processor),
             new HelperContainerExtension($processor),
+            new DeprecationExtension(),
         ];
     }
 

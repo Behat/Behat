@@ -376,6 +376,24 @@ Feature: Convert config
       """
     And the "unused_definitions.yaml" file should have been removed from the working directory
 
+  Scenario: Print deprecations
+    When I run behat with the following additional options:
+      | option   | value                   |
+      | --config | print_deprecations.yaml |
+    Then it should pass
+    And "print_deprecations.php" file should contain:
+      """
+      <?php
+
+      use Behat\Config\Config;
+      use Behat\Config\Profile;
+
+      return (new Config())
+          ->withProfile((new Profile('default'))
+              ->withPrintDeprecations());
+      """
+    And the "print_deprecations.yaml" file should have been removed from the working directory
+
   Scenario: Formatters
     When I run behat with the following additional options:
       | option   | value           |
@@ -522,6 +540,7 @@ Feature: Convert config
                   ->withFilter(new NameFilter('john'))
                   ->withFilter(new RoleFilter('admin')))
               ->withPrintUnusedDefinitions()
+              ->withPrintDeprecations()
               ->withPathOptions(
                   printAbsolutePaths: true,
                   editorUrl: 'phpstorm://open?file={relPath}&line={line}',

@@ -1,0 +1,3 @@
+default:
+    deprecations:
+        print_deprecations: true

@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Cli;
 
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationLoader;
 use Behat\Testwork\ServiceContainer\ContainerLoader;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
@@ -93,6 +94,9 @@ final class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        // Register deprecation collector as early as possible
+        DeprecationCollector::getInstance()->register();
+
         $isXdebugAllowed = $input->hasParameterOption('--xdebug')
             || (extension_loaded('xdebug') && xdebug_is_debugger_active());
 
@@ -125,12 +129,12 @@ final class Application extends BaseApplication
             $this->configurationLoader->setConfigurationFilePath($path);
         }
 
-        $this->addCommand($this->createCommand($input, $output));
+        $this->doAddCommand($this->createCommand($input, $output));
 
         return parent::doRun($input, $output);
     }
 
-    public function addCommand(callable|SymfonyCommand $command): ?SymfonyCommand
+    public function doAddCommand(callable|SymfonyCommand $command): ?SymfonyCommand
     {
         // Provide compatibility with all supported symfony/console versions
         // Attempt to use the `addCommand` method added in symfony/console 7.4.0
