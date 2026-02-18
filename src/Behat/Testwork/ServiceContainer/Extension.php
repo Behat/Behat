@@ -43,13 +43,29 @@ interface Extension extends CompilerPassInterface
 
     /**
      * Setups configuration for the extension.
+     *
+     * NOTE: If your extension implements this method, your composer.json should declare
+     * a direct dependency on the version(s) of symfony/config that you support.
      */
     public function configure(ArrayNodeDefinition $builder);
 
     /**
      * Loads extension services into temporary container.
      *
+     * NOTE: If your extension implements this method, your composer.json should declare
+     * a direct dependency on the version(s) of symfony/dependency-injection that you support.
+     *
      * @param array<string, mixed> $config
      */
     public function load(ContainerBuilder $container, array $config);
+
+    /**
+     * You can modify the container here before it is dumped to PHP code.
+     *
+     *  NOTE: If your extension implements this method, your composer.json should declare
+     *  a direct dependency on the version(s) of symfony/dependency-injection that you support.
+     *
+     * @return void
+     */
+    public function process(ContainerBuilder $container);
 }
