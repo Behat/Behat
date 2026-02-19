@@ -12,6 +12,7 @@ namespace Behat\Behat\Context\Snippet\Generator;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 
 /**
  * Identifier that uses context interfaces to guess which one is target.
@@ -26,6 +27,8 @@ final class ContextInterfaceBasedContextIdentifier implements TargetContextIdent
     {
         foreach ($environment->getContextClasses() as $class) {
             if (in_array(SnippetAcceptingContext::class, class_implements($class))) {
+                DeprecationCollector::trigger('ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.');
+
                 return $class;
             }
         }

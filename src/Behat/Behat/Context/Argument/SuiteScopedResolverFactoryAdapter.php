@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Context\Argument;
 
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
 
 /**
@@ -29,6 +30,7 @@ final class SuiteScopedResolverFactoryAdapter implements ArgumentResolverFactory
     public function __construct(
         private readonly SuiteScopedResolverFactory $factory,
     ) {
+        DeprecationCollector::trigger('SuiteScopedResolverFactoryAdapter is deprecated since 3.4. Use ArgumentResolverFactory instead. It will be removed in 4.0.');
     }
 
     public function createArgumentResolvers(Environment $environment)
