@@ -101,7 +101,7 @@ final class GherkinExtension implements Extension
             ->info('Controls the extent to which gherkin is parsed equivalent to other cucumber tools')
                 // enumFqcn is not available until symfony 7.3
                 ->values(array_map(
-                    fn(GherkinCompatibilityMode $m) => $m->value,
+                    fn (GherkinCompatibilityMode $m) => $m->value,
                     GherkinCompatibilityMode::cases(),
                 ))
                 ->defaultValue(GherkinCompatibilityMode::LEGACY->value)

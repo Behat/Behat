@@ -43,7 +43,7 @@ final class GherkinOptions implements ConfigConverterInterface
     }
 
     /**
-     * Controls the extent to which gherkin is parsed equivalent to other cucumber tools
+     * Controls the extent to which gherkin is parsed equivalent to other cucumber tools.
      *
      * In legacy mode (the default), feature files are parsed as they have been in previous versions of Behat. This
      * differs slightly from the behaviour of current versions of the official cucumber parsers and runners.
