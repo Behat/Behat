@@ -1,1 +1,3 @@
 default:
+  gherkin:
+    compatibility: gherkin-32
