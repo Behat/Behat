@@ -99,8 +99,12 @@ final class GherkinExtension implements Extension
         $childrenBuilder
             ->enumNode('compatibility')
             ->info('Controls the extent to which gherkin is parsed equivalent to other cucumber tools')
-                ->enumFqcn(GherkinCompatibilityMode::class)
-                ->defaultValue(GherkinCompatibilityMode::LEGACY)
+                // enumFqcn is not available until symfony 7.3
+                ->values(array_map(
+                    fn(GherkinCompatibilityMode $m) => $m->value,
+                    GherkinCompatibilityMode::cases(),
+                ))
+                ->defaultValue(GherkinCompatibilityMode::LEGACY->value)
         ;
         $childrenBuilder
             ->arrayNode('filters')
@@ -174,11 +178,11 @@ final class GherkinExtension implements Extension
     /**
      * Loads gherkin parser.
      */
-    private function loadParser(ContainerBuilder $container, GherkinCompatibilityMode $compatibilityMode): void
+    private function loadParser(ContainerBuilder $container, string $compatibilityMode): void
     {
         $definition = new Definition(Parser::class, [
             new Reference('gherkin.lexer'),
-            $compatibilityMode,
+            GherkinCompatibilityMode::from($compatibilityMode),
         ]);
         $container->setDefinition('gherkin.parser', $definition);
 
