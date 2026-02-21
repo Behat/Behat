@@ -8,15 +8,18 @@ use Behat\Config\Filter\NameFilter;
 use Behat\Config\Filter\NarrativeFilter;
 use Behat\Config\Filter\RoleFilter;
 use Behat\Config\Filter\TagFilter;
+use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PhpParser\Node\Expr;
 
 final class GherkinOptions implements ConfigConverterInterface
 {
     private const CACHE_SETTING = 'cache';
+    private const COMPATIBILITY_SETTING = 'compatibility';
     private const FILTERS_SETTING = 'filters';
 
     private const CACHE_FUNCTION = 'withCacheDir';
+    private const COMPATIBILITY_FUNCTION = 'withCompatibilityMode';
     private const FILTER_FUNCTION = 'withFilter';
 
     public function __construct(
@@ -35,6 +38,21 @@ final class GherkinOptions implements ConfigConverterInterface
     public function withCacheDir(string $dir): self
     {
         $this->settings[self::CACHE_SETTING] = $dir;
+
+        return $this;
+    }
+
+    /**
+     * Controls the extent to which gherkin is parsed equivalent to other cucumber tools
+     *
+     * In legacy mode (the default), feature files are parsed as they have been in previous versions of Behat. This
+     * differs slightly from the behaviour of current versions of the official cucumber parsers and runners.
+     *
+     * Other modes will parse identical to the official cucumber parsers.
+     */
+    public function withCompatibilityMode(GherkinCompatibilityMode $mode): self
+    {
+        $this->settings[self::COMPATIBILITY_SETTING] = $mode->value;
 
         return $this;
     }
@@ -59,6 +77,7 @@ final class GherkinOptions implements ConfigConverterInterface
         $expr = $optionsObject;
 
         $this->addCacheToExpr($expr);
+        $this->addCompatibilityModeToExpr($expr);
         $this->addFiltersToExpr($expr);
 
         $arguments = count($this->settings) === 0 ? [] : [$this->settings];
@@ -77,6 +96,19 @@ final class GherkinOptions implements ConfigConverterInterface
                 $expr
             );
             unset($this->settings[self::CACHE_SETTING]);
+        }
+    }
+
+    private function addCompatibilityModeToExpr(Expr &$expr): void
+    {
+        if (isset($this->settings[self::COMPATIBILITY_SETTING])) {
+            $expr = ConfigConverterTools::addMethodCall(
+                self::class,
+                self::COMPATIBILITY_FUNCTION,
+                [GherkinCompatibilityMode::from($this->settings[self::COMPATIBILITY_SETTING])],
+                $expr
+            );
+            unset($this->settings[self::COMPATIBILITY_SETTING]);
         }
     }
 

@@ -23,6 +23,7 @@ use Behat\Gherkin\Filter\NarrativeFilter;
 use Behat\Gherkin\Filter\RoleFilter;
 use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\Gherkin;
+use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Gherkin\Keywords\CachedArrayKeywords;
 use Behat\Gherkin\Keywords\KeywordsDumper;
 use Behat\Gherkin\Lexer;
@@ -96,6 +97,12 @@ final class GherkinExtension implements Extension
                 )
         ;
         $childrenBuilder
+            ->enumNode('compatibility')
+            ->info('Controls the extent to which gherkin is parsed equivalent to other cucumber tools')
+                ->enumFqcn(GherkinCompatibilityMode::class)
+                ->defaultValue(GherkinCompatibilityMode::LEGACY)
+        ;
+        $childrenBuilder
             ->arrayNode('filters')
                 ->info('Sets the gherkin filters (overridable by CLI options)')
                 ->performNoDeepMerging()
@@ -110,7 +117,7 @@ final class GherkinExtension implements Extension
         $this->loadParameters($container);
         $this->loadGherkin($container);
         $this->loadKeywords($container);
-        $this->loadParser($container);
+        $this->loadParser($container, $config['compatibility']);
         $this->loadDefaultLoaders($container, $config['cache']);
         $this->loadProfileFilters($container, $config['filters']);
         $this->loadSyntaxController($container);
@@ -167,10 +174,11 @@ final class GherkinExtension implements Extension
     /**
      * Loads gherkin parser.
      */
-    private function loadParser(ContainerBuilder $container): void
+    private function loadParser(ContainerBuilder $container, GherkinCompatibilityMode $compatibilityMode): void
     {
         $definition = new Definition(Parser::class, [
             new Reference('gherkin.lexer'),
+            $compatibilityMode,
         ]);
         $container->setDefinition('gherkin.parser', $definition);
 

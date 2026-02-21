@@ -502,6 +502,7 @@ Feature: Convert config
       use Behat\Config\Profile;
       use Behat\Config\Suite;
       use Behat\Config\TesterOptions;
+      use Behat\Gherkin\GherkinCompatibilityMode;
       use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 
       return (new Config())
@@ -517,6 +518,7 @@ Feature: Convert config
                   ->withOutputVerbosity(OutputFactory::VERBOSITY_VERBOSE))
               ->withGherkinOptions((new GherkinOptions())
                   ->withCacheDir('/tmp/gherkin-cache')
+                  ->withCompatibilityMode(GherkinCompatibilityMode::GHERKIN_32)
                   ->withFilter(new NameFilter('john'))
                   ->withFilter(new RoleFilter('admin')))
               ->withPrintUnusedDefinitions()
