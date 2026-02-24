@@ -52,7 +52,7 @@ final class GherkinOptions implements ConfigConverterInterface
      */
     public function withCompatibilityMode(GherkinCompatibilityMode $mode): self
     {
-        $this->settings[self::COMPATIBILITY_SETTING] = $mode->value;
+        $this->settings[self::COMPATIBILITY_SETTING] = $mode;
 
         return $this;
     }
