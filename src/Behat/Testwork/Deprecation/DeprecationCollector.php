@@ -17,8 +17,12 @@ final class DeprecationCollector
 {
     private static ?DeprecationCollector $instance = null;
 
-    /** @var array<string, int> */
+    /**
+     * @var array<string, array{count: int, file: string, line: int}>
+     */
     private array $deprecations = [];
+
+    private int $totalCount = 0;
 
     /** @var callable|null */
     private $previousHandler;
@@ -64,9 +68,9 @@ final class DeprecationCollector
     }
 
     /**
-     * Returns all collected deprecations with their counts.
+     * Returns all collected deprecations with their counts and locations.
      *
-     * @return array<string, int>
+     * @return array<string, array{count: int, file: string, line: int}>
      */
     public function getDeprecations(): array
     {
@@ -78,7 +82,7 @@ final class DeprecationCollector
      */
     public function getDeprecationCount(): int
     {
-        return array_sum($this->deprecations);
+        return $this->totalCount;
     }
 
     /**
@@ -86,7 +90,7 @@ final class DeprecationCollector
      */
     public function hasDeprecations(): bool
     {
-        return count($this->deprecations) > 0;
+        return $this->totalCount > 0;
     }
 
     /**
@@ -104,10 +108,13 @@ final class DeprecationCollector
             }
 
             $key = $errstr;
-            if (!isset($this->deprecations[$key])) {
-                $this->deprecations[$key] = 0;
+            if (isset($this->deprecations[$key])) {
+                ++$this->deprecations[$key]['count'];
+            } else {
+                $this->deprecations[$key] = ['count' => 1, 'file' => $errfile, 'line' => $errline];
             }
-            ++$this->deprecations[$key];
+
+            ++$this->totalCount;
 
             return true;
         };

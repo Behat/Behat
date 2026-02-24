@@ -15,6 +15,7 @@ use Behat\Testwork\Deprecation\Cli\DeprecationController;
 use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Deprecation\DeprecationPrinter;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
+use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -74,6 +75,7 @@ final class DeprecationExtension implements Extension
     {
         $definition = new Definition(DeprecationPrinter::class, [
             new Reference(self::COLLECTOR_ID),
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);
         $container->setDefinition(self::PRINTER_ID, $definition);
     }

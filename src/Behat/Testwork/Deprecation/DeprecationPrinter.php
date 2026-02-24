@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Deprecation;
 
+use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -19,6 +20,7 @@ final class DeprecationPrinter
 {
     public function __construct(
         private readonly DeprecationCollector $collector,
+        private readonly ConfigurablePathPrinter $pathPrinter,
     ) {
     }
 
@@ -44,9 +46,13 @@ final class DeprecationPrinter
         ));
         $output->writeln('');
 
-        foreach ($deprecations as $message => $count) {
-            $countText = $count > 1 ? sprintf(' <comment>(%dx)</comment>', $count) : '';
+        foreach ($deprecations as $message => $info) {
+            $countText = $info['count'] > 1 ? sprintf(' <comment>(%dx)</comment>', $info['count']) : '';
             $output->writeln(sprintf('  <comment>⚠</comment> %s%s', $message, $countText));
+
+            $location = sprintf('%s:%d', $info['file'], $info['line']);
+            $processedLocation = $this->pathPrinter->processPathsInText($location);
+            $output->writeln(sprintf('    <comment>→</comment> %s', $processedLocation));
         }
 
         $output->writeln('');

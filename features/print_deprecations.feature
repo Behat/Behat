@@ -29,7 +29,9 @@ Feature: Print deprecations
       2 deprecations triggered (2 unique):
 
         ⚠ This extension triggers a deprecation during initialization
+          → deprecation_extension.php:XX
         ⚠ This extension triggers a deprecation during load
+          → deprecation_extension.php:XX
       """
 
   Scenario: Print deprecations using CLI option
@@ -41,7 +43,24 @@ Feature: Print deprecations
       2 deprecations triggered (2 unique):
 
         ⚠ This extension triggers a deprecation during initialization
+          → deprecation_extension.php:XX
         ⚠ This extension triggers a deprecation during load
+          → deprecation_extension.php:XX
+      """
+
+  Scenario: Print deprecations with absolute paths
+    When I run behat with the following additional options:
+      | option                   | value |
+      | --print-deprecations     |       |
+      | --print-absolute-paths   |       |
+    Then it should pass with:
+      """
+      2 deprecations triggered (2 unique):
+
+        ⚠ This extension triggers a deprecation during initialization
+          → %%WORKING_DIR%%deprecation_extension.php:XX
+        ⚠ This extension triggers a deprecation during load
+          → %%WORKING_DIR%%deprecation_extension.php:XX
       """
 
   Scenario: Deprecations in step definitions and hooks are not printed
