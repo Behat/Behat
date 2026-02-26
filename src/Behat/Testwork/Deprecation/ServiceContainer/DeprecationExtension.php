@@ -18,6 +18,7 @@ use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
+use Behat\Testwork\Tester\ServiceContainer\TesterExtension;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -49,6 +50,9 @@ final class DeprecationExtension implements Extension
                 ->booleanNode('print_behat_deprecations')
                     ->defaultFalse()
                 ->end()
+                ->booleanNode('fail_on_behat_deprecations')
+                    ->defaultFalse()
+                ->end()
             ->end()
         ;
     }
@@ -57,7 +61,7 @@ final class DeprecationExtension implements Extension
     {
         $this->loadCollector($container);
         $this->loadPrinter($container);
-        $this->loadController($container, $config['print_behat_deprecations']);
+        $this->loadController($container, $config['print_behat_deprecations'], $config['fail_on_behat_deprecations']);
     }
 
     public function process(ContainerBuilder $container): void
@@ -80,12 +84,14 @@ final class DeprecationExtension implements Extension
         $container->setDefinition(self::PRINTER_ID, $definition);
     }
 
-    private function loadController(ContainerBuilder $container, bool $printDeprecations): void
+    private function loadController(ContainerBuilder $container, bool $printDeprecations, bool $failOnDeprecations): void
     {
         $definition = new Definition(DeprecationController::class, [
             new Reference(self::COLLECTOR_ID),
             new Reference(self::PRINTER_ID),
+            new Reference(TesterExtension::RESULT_INTERPRETER_ID),
             $printDeprecations,
+            $failOnDeprecations,
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);
         $definition->addTag(EventDispatcherExtension::SUBSCRIBER_TAG);

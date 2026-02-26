@@ -23,6 +23,8 @@ final class TesterOptions implements ConfigConverterInterface
 
     private const PRINT_BEHAT_DEPRECATIONS_SETTING = 'print_behat_deprecations';
 
+    private const FAIL_ON_BEHAT_DEPRECATIONS_SETTING = 'fail_on_behat_deprecations';
+
     private const FUNCTION_NAMES_PER_SETTING = [
         self::CALLS_SETTINGS_GROUP => [
             self::ERROR_REPORTING_SETTING => 'withErrorReporting',
@@ -34,6 +36,7 @@ final class TesterOptions implements ConfigConverterInterface
         ],
         self::DEPRECATIONS_SETTINGS_GROUP => [
             self::PRINT_BEHAT_DEPRECATIONS_SETTING => 'withPrintBehatDeprecations',
+            self::FAIL_ON_BEHAT_DEPRECATIONS_SETTING => 'withFailOnBehatDeprecations',
         ],
     ];
 
@@ -121,6 +124,16 @@ final class TesterOptions implements ConfigConverterInterface
     public function withPrintBehatDeprecations(bool $printDeprecations = true): self
     {
         $this->settings[self::DEPRECATIONS_SETTINGS_GROUP][self::PRINT_BEHAT_DEPRECATIONS_SETTING] = $printDeprecations;
+
+        return $this;
+    }
+
+    /**
+     * Control whether Behat should exit with an error code if deprecations were triggered.
+     */
+    public function withFailOnBehatDeprecations(bool $failOnDeprecations = true): self
+    {
+        $this->settings[self::DEPRECATIONS_SETTINGS_GROUP][self::FAIL_ON_BEHAT_DEPRECATIONS_SETTING] = $failOnDeprecations;
 
         return $this;
     }
