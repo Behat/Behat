@@ -74,3 +74,27 @@ Feature: Print deprecations
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+
+  Scenario: Fail on deprecations passes when no deprecations exist
+    When I run behat with the following additional options:
+      | option   | value                           |
+      | --config | behat-fail-no-deprecations.php  |
+    Then it should pass with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
+
+  Scenario: Fail on deprecations fails when deprecations exist
+    When I run behat with the following additional options:
+      | option   | value                            |
+      | --config | behat-fail-with-deprecations.php |
+    Then it should fail with:
+      """
+      ..
+
+      1 scenario (1 passed)
+      2 steps (2 passed)
+      """
