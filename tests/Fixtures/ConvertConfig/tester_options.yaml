@@ -8,6 +8,14 @@ not-strict:
     testers:
         strict: false
 
+print-deprecations:
+    deprecations:
+        print_behat_deprecations: true
+
+fail-on-deprecations:
+    deprecations:
+        fail_on_behat_deprecations: true
+
 complete:
     calls:
         error_reporting: 24565
@@ -15,3 +23,6 @@ complete:
         strict: true
         stop_on_failure: false
         skip: true
+    deprecations:
+        print_behat_deprecations: true
+        fail_on_behat_deprecations: true

@@ -376,26 +376,6 @@ Feature: Convert config
       """
     And the "unused_definitions.yaml" file should have been removed from the working directory
 
-  Scenario: Print deprecations
-    When I run behat with the following additional options:
-      | option   | value                   |
-      | --config | print_behat_deprecations.yaml |
-    Then it should pass
-    And "print_behat_deprecations.php" file should contain:
-      """
-      <?php
-
-      use Behat\Config\Config;
-      use Behat\Config\Profile;
-      use Behat\Config\TesterOptions;
-
-      return (new Config())
-          ->withProfile((new Profile('default'))
-              ->withTesterOptions((new TesterOptions())
-                  ->withPrintBehatDeprecations()));
-      """
-    And the "print_behat_deprecations.yaml" file should have been removed from the working directory
-
   Scenario: Formatters
     When I run behat with the following additional options:
       | option   | value           |
@@ -491,12 +471,20 @@ Feature: Convert config
           ->withProfile((new Profile('not-strict'))
               ->withTesterOptions((new TesterOptions())
                   ->withStrictResultInterpretation(false)))
+          ->withProfile((new Profile('print-deprecations'))
+              ->withTesterOptions((new TesterOptions())
+                  ->withPrintBehatDeprecations()))
+          ->withProfile((new Profile('fail-on-deprecations'))
+              ->withTesterOptions((new TesterOptions())
+                  ->withFailOnBehatDeprecations()))
           ->withProfile((new Profile('complete'))
               ->withTesterOptions((new TesterOptions())
                   ->withStrictResultInterpretation()
                   ->withStopOnFailure(false)
                   ->withSkipAllTests()
-                  ->withErrorReporting(E_ALL & ~(E_WARNING | E_NOTICE | E_DEPRECATED))));
+                  ->withErrorReporting(E_ALL & ~(E_WARNING | E_NOTICE | E_DEPRECATED))
+                  ->withPrintBehatDeprecations()
+                  ->withFailOnBehatDeprecations()));
       """
     And the "tester_options.yaml" file should have been removed from the working directory
 
@@ -552,7 +540,8 @@ Feature: Convert config
               )
               ->withTesterOptions((new TesterOptions())
                   ->withStrictResultInterpretation()
-                  ->withPrintBehatDeprecations())
+                  ->withPrintBehatDeprecations()
+                  ->withFailOnBehatDeprecations())
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
                   ->addContext(

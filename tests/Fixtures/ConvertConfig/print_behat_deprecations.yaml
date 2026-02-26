@@ -1,3 +1,0 @@
-default:
-    deprecations:
-        print_behat_deprecations: true
