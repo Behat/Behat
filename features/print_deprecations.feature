@@ -98,3 +98,16 @@ Feature: Print deprecations
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+
+  Scenario: Deprecations in tested code still fail when error reporting includes deprecations
+    When I run behat with the following additional options:
+      | option   | value                                  |
+      | --config | behat-error-reporting-deprecations.php |
+    Then it should fail with:
+      """
+      --- Failed steps:
+
+      001 Scenario: A scenario with an unsuppressed deprecation          # features/unsuppressed_deprecation.feature:3
+            Given I run a step that triggers an unsuppressed deprecation # features/unsuppressed_deprecation.feature:4
+              User Deprecated: Deprecation triggered in step definition in features/bootstrap/FeatureContext.php line XX
+      """
