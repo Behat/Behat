@@ -15,17 +15,17 @@ return (new Config())
             )
     )
     ->withProfile(
-        (new Profile('print_deprecations'))
+        (new Profile('print_behat_deprecations'))
             ->withExtension(new Extension('deprecation_extension.php'))
-            ->withPrintDeprecations()
+            ->withPrintBehatDeprecations()
             ->withSuite(
-                (new Suite('print_deprecations'))
+                (new Suite('print_behat_deprecations'))
                     ->withPaths('features/deprecations.feature')
             )
     )
     ->withProfile(
         (new Profile('deprecations_in_steps'))
-            ->withPrintDeprecations()
+            ->withPrintBehatDeprecations()
             ->withSuite(
                 (new Suite('deprecations_in_steps'))
                     ->withPaths('features/deprecations_in_steps.feature')

@@ -7,7 +7,7 @@ use Behat\Config\Suite;
 return (new Config())
     ->withProfile(
         (new Profile('default'))
-            ->withPrintDeprecations()
+            ->withPrintBehatDeprecations()
             ->withSuite(
                 (new Suite('default'))
                     ->withPaths('features/deprecations_in_steps.feature')

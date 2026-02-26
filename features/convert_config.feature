@@ -379,9 +379,9 @@ Feature: Convert config
   Scenario: Print deprecations
     When I run behat with the following additional options:
       | option   | value                   |
-      | --config | print_deprecations.yaml |
+      | --config | print_behat_deprecations.yaml |
     Then it should pass
-    And "print_deprecations.php" file should contain:
+    And "print_behat_deprecations.php" file should contain:
       """
       <?php
 
@@ -390,9 +390,9 @@ Feature: Convert config
 
       return (new Config())
           ->withProfile((new Profile('default'))
-              ->withPrintDeprecations());
+              ->withPrintBehatDeprecations());
       """
-    And the "print_deprecations.yaml" file should have been removed from the working directory
+    And the "print_behat_deprecations.yaml" file should have been removed from the working directory
 
   Scenario: Formatters
     When I run behat with the following additional options:
@@ -540,7 +540,7 @@ Feature: Convert config
                   ->withFilter(new NameFilter('john'))
                   ->withFilter(new RoleFilter('admin')))
               ->withPrintUnusedDefinitions()
-              ->withPrintDeprecations()
+              ->withPrintBehatDeprecations()
               ->withPathOptions(
                   printAbsolutePaths: true,
                   editorUrl: 'phpstorm://open?file={relPath}&line={line}',

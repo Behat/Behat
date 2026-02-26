@@ -5,7 +5,7 @@ default:
     testers:
         strict: true
     deprecations:
-        print_deprecations: true
+        print_behat_deprecations: true
     formatters:
         pretty:
             paths:    false

@@ -44,10 +44,10 @@ final class DeprecationController implements Controller, EventSubscriberInterfac
     public function configure(Command $command): void
     {
         $command->addOption(
-            '--print-deprecations',
+            '--print-behat-deprecations',
             null,
             InputOption::VALUE_NONE,
-            'Print deprecation warnings at the end of the test run.'
+            'Print Behat deprecation warnings at the end of the test run.'
         );
     }
 
@@ -55,7 +55,7 @@ final class DeprecationController implements Controller, EventSubscriberInterfac
     {
         $this->output = $output;
 
-        if ($input->getOption('print-deprecations')) {
+        if ($input->getOption('print-behat-deprecations')) {
             $this->printDeprecations = true;
         }
 

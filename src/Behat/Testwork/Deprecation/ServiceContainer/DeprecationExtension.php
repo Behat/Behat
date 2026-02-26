@@ -46,7 +46,7 @@ final class DeprecationExtension implements Extension
         $builder
             ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('print_deprecations')
+                ->booleanNode('print_behat_deprecations')
                     ->defaultFalse()
                 ->end()
             ->end()
@@ -57,7 +57,7 @@ final class DeprecationExtension implements Extension
     {
         $this->loadCollector($container);
         $this->loadPrinter($container);
-        $this->loadController($container, $config['print_deprecations']);
+        $this->loadController($container, $config['print_behat_deprecations']);
     }
 
     public function process(ContainerBuilder $container): void

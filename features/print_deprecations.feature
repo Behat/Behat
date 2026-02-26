@@ -23,7 +23,7 @@ Feature: Print deprecations
   Scenario: Print deprecations using config option
     When I run behat with the following additional options:
       | option    | value              |
-      | --profile | print_deprecations |
+      | --profile | print_behat_deprecations |
     Then it should pass with:
       """
       2 deprecations triggered (2 unique):
@@ -37,7 +37,7 @@ Feature: Print deprecations
   Scenario: Print deprecations using CLI option
     When I run behat with the following additional options:
       | option               | value |
-      | --print-deprecations |       |
+      | --print-behat-deprecations |       |
     Then it should pass with:
       """
       2 deprecations triggered (2 unique):
@@ -51,7 +51,7 @@ Feature: Print deprecations
   Scenario: Print deprecations with absolute paths
     When I run behat with the following additional options:
       | option                   | value |
-      | --print-deprecations     |       |
+      | --print-behat-deprecations     |       |
       | --print-absolute-paths   |       |
     Then it should pass with:
       """

@@ -25,7 +25,7 @@ final class Profile implements ConfigConverterInterface
     private const DEFINITIONS_SETTING = 'definitions';
     private const PRINT_UNUSED_DEFINITIONS_SETTING = 'print_unused_definitions';
     private const DEPRECATIONS_SETTING = 'deprecations';
-    private const PRINT_DEPRECATIONS_SETTING = 'print_deprecations';
+    private const PRINT_DEPRECATIONS_SETTING = 'print_behat_deprecations';
     private const PATH_OPTIONS_SETTING = 'path_options';
     private const PRINT_ABSOLUTE_PATHS_SETTING = 'print_absolute_paths';
     private const EDITOR_URL_SETTING = 'editor_url';
@@ -35,7 +35,7 @@ final class Profile implements ConfigConverterInterface
     private const FORMATTER_FUNCTION = 'withFormatter';
     private const GHERKIN_FUNCTION = 'withGherkinOptions';
     private const UNUSED_DEFINITIONS_FUNCTION = 'withPrintUnusedDefinitions';
-    private const PRINT_DEPRECATIONS_FUNCTION = 'withPrintDeprecations';
+    private const PRINT_DEPRECATIONS_FUNCTION = 'withPrintBehatDeprecations';
     private const EXTENSION_FUNCTION = 'withExtension';
     private const SUITE_FUNCTION = 'withSuite';
     private const PATH_OPTIONS_FUNCTION = 'withPathOptions';
@@ -117,7 +117,7 @@ final class Profile implements ConfigConverterInterface
         return $this;
     }
 
-    public function withPrintDeprecations(bool $printDeprecations = true): self
+    public function withPrintBehatDeprecations(bool $printDeprecations = true): self
     {
         $this->settings[self::DEPRECATIONS_SETTING][self::PRINT_DEPRECATIONS_SETTING] = $printDeprecations;
 
