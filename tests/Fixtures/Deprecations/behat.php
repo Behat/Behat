@@ -4,6 +4,7 @@ use Behat\Config\Config;
 use Behat\Config\Extension;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
+use Behat\Config\TesterOptions;
 
 return (new Config())
     ->withProfile(
@@ -17,7 +18,9 @@ return (new Config())
     ->withProfile(
         (new Profile('print_behat_deprecations'))
             ->withExtension(new Extension('deprecation_extension.php'))
-            ->withPrintBehatDeprecations()
+            ->withTesterOptions(
+                (new TesterOptions())->withPrintBehatDeprecations()
+            )
             ->withSuite(
                 (new Suite('print_behat_deprecations'))
                     ->withPaths('features/deprecations.feature')
@@ -25,7 +28,9 @@ return (new Config())
     )
     ->withProfile(
         (new Profile('deprecations_in_steps'))
-            ->withPrintBehatDeprecations()
+            ->withTesterOptions(
+                (new TesterOptions())->withPrintBehatDeprecations()
+            )
             ->withSuite(
                 (new Suite('deprecations_in_steps'))
                     ->withPaths('features/deprecations_in_steps.feature')

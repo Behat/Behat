@@ -387,10 +387,12 @@ Feature: Convert config
 
       use Behat\Config\Config;
       use Behat\Config\Profile;
+      use Behat\Config\TesterOptions;
 
       return (new Config())
           ->withProfile((new Profile('default'))
-              ->withPrintBehatDeprecations());
+              ->withTesterOptions((new TesterOptions())
+                  ->withPrintBehatDeprecations()));
       """
     And the "print_behat_deprecations.yaml" file should have been removed from the working directory
 
@@ -540,7 +542,6 @@ Feature: Convert config
                   ->withFilter(new NameFilter('john'))
                   ->withFilter(new RoleFilter('admin')))
               ->withPrintUnusedDefinitions()
-              ->withPrintBehatDeprecations()
               ->withPathOptions(
                   printAbsolutePaths: true,
                   editorUrl: 'phpstorm://open?file={relPath}&line={line}',
@@ -550,7 +551,8 @@ Feature: Convert config
                   ]
               )
               ->withTesterOptions((new TesterOptions())
-                  ->withStrictResultInterpretation())
+                  ->withStrictResultInterpretation()
+                  ->withPrintBehatDeprecations())
               ->withExtension(new Extension('custom_extension.php'))
               ->withSuite((new Suite('my_suite'))
                   ->addContext(

@@ -11,6 +11,8 @@ final class TesterOptions implements ConfigConverterInterface
 
     private const CALLS_SETTINGS_GROUP = 'calls';
 
+    private const DEPRECATIONS_SETTINGS_GROUP = 'deprecations';
+
     private const STRICT_SETTING = 'strict';
 
     private const STOP_ON_FAILURE_SETTING = 'stop_on_failure';
@@ -18,6 +20,8 @@ final class TesterOptions implements ConfigConverterInterface
     private const SKIP_SETTING = 'skip';
 
     private const ERROR_REPORTING_SETTING = 'error_reporting';
+
+    private const PRINT_BEHAT_DEPRECATIONS_SETTING = 'print_behat_deprecations';
 
     private const FUNCTION_NAMES_PER_SETTING = [
         self::CALLS_SETTINGS_GROUP => [
@@ -27,6 +31,9 @@ final class TesterOptions implements ConfigConverterInterface
             self::STOP_ON_FAILURE_SETTING => 'withStopOnFailure',
             self::SKIP_SETTING => 'withSkipAllTests',
             self::STRICT_SETTING => 'withStrictResultInterpretation',
+        ],
+        self::DEPRECATIONS_SETTINGS_GROUP => [
+            self::PRINT_BEHAT_DEPRECATIONS_SETTING => 'withPrintBehatDeprecations',
         ],
     ];
 
@@ -43,7 +50,7 @@ final class TesterOptions implements ConfigConverterInterface
         // Build an array of relevant settings groups. Remove any that are found from the settings array in the Profile
         // object, so that the config converter recognises they have been handled.
         $settings = [];
-        foreach ([self::TESTERS_SETTINGS_GROUP, self::CALLS_SETTINGS_GROUP] as $group) {
+        foreach ([self::TESTERS_SETTINGS_GROUP, self::CALLS_SETTINGS_GROUP, self::DEPRECATIONS_SETTINGS_GROUP] as $group) {
             if (isset($profileSettings[$group])) {
                 $settings[$group] = $profileSettings[$group];
                 unset($profileSettings[$group]);
@@ -104,6 +111,16 @@ final class TesterOptions implements ConfigConverterInterface
     public function withStopOnFailure(bool $stopOnFailure = true): self
     {
         $this->settings[self::TESTERS_SETTINGS_GROUP][self::STOP_ON_FAILURE_SETTING] = $stopOnFailure;
+
+        return $this;
+    }
+
+    /**
+     * Control whether Behat should print deprecation warnings at the end of the test run.
+     */
+    public function withPrintBehatDeprecations(bool $printDeprecations = true): self
+    {
+        $this->settings[self::DEPRECATIONS_SETTINGS_GROUP][self::PRINT_BEHAT_DEPRECATIONS_SETTING] = $printDeprecations;
 
         return $this;
     }
