@@ -15,6 +15,7 @@ use Behat\Behat\Definition\Call\Given;
 use Behat\Behat\Definition\Call\RuntimeDefinition;
 use Behat\Behat\Definition\Call\Then;
 use Behat\Behat\Definition\Call\When;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use ReflectionMethod;
 
 /**
@@ -42,6 +43,8 @@ final class DefinitionAnnotationReader implements AnnotationReader
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
         }
+
+        DeprecationCollector::trigger('Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.');
 
         $type = strtolower($match[1]);
         $class = self::$classes[$type];

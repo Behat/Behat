@@ -17,6 +17,7 @@ use Behat\Behat\Hook\Call\AfterStep;
 use Behat\Behat\Hook\Call\BeforeFeature;
 use Behat\Behat\Hook\Call\BeforeScenario;
 use Behat\Behat\Hook\Call\BeforeStep;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Hook\Call\AfterSuite;
 use Behat\Testwork\Hook\Call\BeforeSuite;
 use Behat\Testwork\Hook\Call\RuntimeHook;
@@ -59,6 +60,8 @@ final class HookAnnotationReader implements AnnotationReader
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
         }
+
+        DeprecationCollector::trigger('Using annotations to define hooks is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.');
 
         $type = strtolower($match[1]);
         $class = self::$classes[$type];
