@@ -26,7 +26,7 @@ class DeprecationExtension implements Extension
 
     public function load(ContainerBuilder $container, array $config): void
     {
-        DeprecationCollector::trigger('This extension triggers a deprecation during load');
+        @trigger_error('This extension triggers a deprecation during load', E_USER_DEPRECATED);
     }
 
     public function process(ContainerBuilder $container): void
