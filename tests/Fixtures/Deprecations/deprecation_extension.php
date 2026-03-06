@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -20,12 +21,12 @@ class DeprecationExtension implements Extension
 
     public function initialize(ExtensionManager $extensionManager): void
     {
-        @trigger_error('This extension triggers a deprecation during initialization', E_USER_DEPRECATED);
+        DeprecationCollector::trigger('This extension triggers a deprecation during initialization');
     }
 
     public function load(ContainerBuilder $container, array $config): void
     {
-        @trigger_error('This extension triggers a deprecation during load', E_USER_DEPRECATED);
+        DeprecationCollector::trigger('This extension triggers a deprecation during load');
     }
 
     public function process(ContainerBuilder $container): void

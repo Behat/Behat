@@ -4,13 +4,14 @@ use Behat\Behat\Context\Context;
 use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 
 class FeatureContext implements Context
 {
     #[BeforeScenario('@deprecation-in-hook')]
     public function beforeScenario(): void
     {
-        @trigger_error('Deprecation triggered in hook', E_USER_DEPRECATED);
+        DeprecationCollector::trigger('Deprecation triggered in hook');
     }
 
     #[Given('I run a step')]
@@ -21,7 +22,7 @@ class FeatureContext implements Context
     #[Given('I run a step that triggers a deprecation')]
     public function iRunAStepThatTriggersADeprecation(): void
     {
-        @trigger_error('Deprecation triggered in step definition', E_USER_DEPRECATED);
+        DeprecationCollector::trigger('Deprecation triggered in step definition');
     }
 
     #[Given('I run a step that triggers an unsuppressed deprecation')]

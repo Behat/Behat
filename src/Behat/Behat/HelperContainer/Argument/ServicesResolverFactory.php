@@ -18,6 +18,7 @@ use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\WrongContainerClassException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Suite\Suite;
 use Psr\Container\ContainerInterface;
@@ -48,10 +49,7 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
      */
     public function generateArgumentResolvers(Suite $suite): array
     {
-        @trigger_error(
-            'SuiteScopedResolverFactory::generateArgumentResolvers() was deprecated and will be removed in 4.0',
-            E_USER_DEPRECATED
-        );
+        DeprecationCollector::trigger('SuiteScopedResolverFactory::generateArgumentResolvers() was deprecated and will be removed in 4.0');
 
         if (!$suite->hasSetting('services')) {
             return [];

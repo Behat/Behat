@@ -90,7 +90,7 @@ final class DeprecationExtension implements Extension
             new Reference(self::COLLECTOR_ID),
             new Reference(self::PRINTER_ID),
             new Reference(TesterExtension::RESULT_INTERPRETER_ID),
-            $printDeprecations,
+            $printDeprecations || $failOnDeprecations,
             $failOnDeprecations,
         ]);
         $definition->addTag(CliExtension::CONTROLLER_TAG, ['priority' => 9999]);

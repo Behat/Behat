@@ -71,6 +71,7 @@ final class DeprecationController implements Controller, EventSubscriberInterfac
 
         if ($input->getOption('fail-on-behat-deprecations')) {
             $this->failOnDeprecations = true;
+            $this->printDeprecations = true;
         }
 
         if ($this->failOnDeprecations) {

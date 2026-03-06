@@ -41,6 +41,19 @@ final class DeprecationCollector
         return self::$instance;
     }
 
+    public static function trigger(string $message): void
+    {
+        $instance = self::getInstance();
+
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        $caller = $backtrace[0];
+
+        $file = $caller['file'] ?? 'unknown';
+        $line = $caller['line'] ?? 0;
+
+        $instance->recordDeprecation($message, $file, $line);
+    }
+
     /**
      * Registers the deprecation error handler.
      */
@@ -107,16 +120,20 @@ final class DeprecationCollector
                 return false;
             }
 
-            $key = $errstr;
-            if (isset($this->deprecations[$key])) {
-                ++$this->deprecations[$key]['count'];
-            } else {
-                $this->deprecations[$key] = ['count' => 1, 'file' => $errfile, 'line' => $errline];
-            }
-
-            ++$this->totalCount;
+            $this->recordDeprecation($errstr, $errfile, $errline);
 
             return true;
         };
+    }
+
+    private function recordDeprecation(string $message, string $file, int $line): void
+    {
+        if (isset($this->deprecations[$message])) {
+            ++$this->deprecations[$message]['count'];
+        } else {
+            $this->deprecations[$message] = ['count' => 1, 'file' => $file, 'line' => $line];
+        }
+
+        ++$this->totalCount;
     }
 }

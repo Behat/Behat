@@ -97,6 +97,13 @@ Feature: Print deprecations
 
       1 scenario (1 passed)
       2 steps (2 passed)
+
+      2 deprecations triggered (2 unique):
+
+        ⚠ This extension triggers a deprecation during initialization
+          → deprecation_extension.php:XX
+        ⚠ This extension triggers a deprecation during load
+          → deprecation_extension.php:XX
       """
 
   Scenario: Deprecations in tested code still fail when error reporting includes deprecations
