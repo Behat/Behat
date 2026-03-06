@@ -44,7 +44,7 @@ interface Extension extends CompilerPassInterface
     /**
      * Setups configuration for the extension.
      *
-     * NOTE: If your extension implements this method, your composer.json should declare
+     * NOTE: If your extension uses the ArrayNodeDefinition passed to this method, your composer.json should declare
      * a direct dependency on the version(s) of symfony/config that you support.
      */
     public function configure(ArrayNodeDefinition $builder);
@@ -52,7 +52,7 @@ interface Extension extends CompilerPassInterface
     /**
      * Loads extension services into temporary container.
      *
-     * NOTE: If your extension implements this method, your composer.json should declare
+     * NOTE: If your extension uses the ContainerBuilder passed to this method, your composer.json should declare
      * a direct dependency on the version(s) of symfony/dependency-injection that you support.
      *
      * @param array<string, mixed> $config
@@ -62,7 +62,7 @@ interface Extension extends CompilerPassInterface
     /**
      * You can modify the container here before it is dumped to PHP code.
      *
-     *  NOTE: If your extension implements this method, your composer.json should declare
+     * NOTE: If your extension uses the ContainerBuilder passed to this method, your composer.json should declare
      *  a direct dependency on the version(s) of symfony/dependency-injection that you support.
      *
      * @return void
