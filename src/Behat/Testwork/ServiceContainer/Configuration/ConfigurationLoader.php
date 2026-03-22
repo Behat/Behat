@@ -24,10 +24,7 @@ use function str_ends_with;
  */
 final class ConfigurationLoader
 {
-    /**
-     * @var bool
-     */
-    private $profileFound;
+    private ?bool $profileFound = null;
     /**
      * @var array
      */

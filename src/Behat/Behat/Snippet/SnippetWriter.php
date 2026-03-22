@@ -23,7 +23,7 @@ final class SnippetWriter
     /**
      * @var SnippetAppender[]
      */
-    private $appenders = [];
+    private array $appenders = [];
 
     /**
      * Registers snippet appender.

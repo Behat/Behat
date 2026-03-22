@@ -23,7 +23,7 @@ final class OutputManager
     /**
      * @var Formatter[]
      */
-    private $formatters = [];
+    private array $formatters = [];
 
     /**
      * Initializes manager.
@@ -82,7 +82,7 @@ final class OutputManager
      *
      * @return Formatter[]
      */
-    public function getFormatters()
+    public function getFormatters(): array
     {
         return $this->formatters;
     }

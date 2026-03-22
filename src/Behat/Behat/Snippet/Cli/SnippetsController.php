@@ -31,10 +31,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class SnippetsController implements Controller
 {
-    /**
-     * @var OutputInterface
-     */
-    private $output;
+    private ?OutputInterface $output = null;
 
     /**
      * Initializes controller.

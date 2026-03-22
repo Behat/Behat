@@ -28,31 +28,31 @@ final class TotalStatistics implements Statistics
     /**
      * @var array<TestResult::*, int>
      */
-    private $scenarioCounters = [];
+    private array $scenarioCounters = [];
     /**
      * @var array<StepResult::*, int>
      */
-    private $stepCounters = [];
+    private array $stepCounters = [];
     /**
      * @var ScenarioStat[]
      */
-    private $failedScenarioStats = [];
+    private array $failedScenarioStats = [];
     /**
      * @var ScenarioStat[]
      */
-    private $skippedScenarioStats = [];
+    private array $skippedScenarioStats = [];
     /**
      * @var StepStat[]
      */
-    private $failedStepStats = [];
+    private array $failedStepStats = [];
     /**
      * @var StepStat[]
      */
-    private $pendingStepStats = [];
+    private array $pendingStepStats = [];
     /**
      * @var HookStat[]
      */
-    private $failedHookStats = [];
+    private array $failedHookStats = [];
 
     /**
      * Initializes statistics.
@@ -171,7 +171,7 @@ final class TotalStatistics implements Statistics
      *
      * @return ScenarioStat[]
      */
-    public function getSkippedScenarios()
+    public function getSkippedScenarios(): array
     {
         return $this->skippedScenarioStats;
     }
@@ -181,7 +181,7 @@ final class TotalStatistics implements Statistics
      *
      * @return ScenarioStat[]
      */
-    public function getFailedScenarios()
+    public function getFailedScenarios(): array
     {
         return $this->failedScenarioStats;
     }
@@ -191,7 +191,7 @@ final class TotalStatistics implements Statistics
      *
      * @return array<StepResult::*, int>
      */
-    public function getStepStatCounts()
+    public function getStepStatCounts(): array
     {
         return $this->stepCounters;
     }
@@ -201,7 +201,7 @@ final class TotalStatistics implements Statistics
      *
      * @return StepStat[]
      */
-    public function getFailedSteps()
+    public function getFailedSteps(): array
     {
         return $this->failedStepStats;
     }
@@ -211,7 +211,7 @@ final class TotalStatistics implements Statistics
      *
      * @return StepStat[]
      */
-    public function getPendingSteps()
+    public function getPendingSteps(): array
     {
         return $this->pendingStepStats;
     }
@@ -221,7 +221,7 @@ final class TotalStatistics implements Statistics
      *
      * @return HookStat[]
      */
-    public function getFailedHookStats()
+    public function getFailedHookStats(): array
     {
         return $this->failedHookStats;
     }

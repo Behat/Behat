@@ -29,7 +29,7 @@ use ReflectionUnionType;
  */
 final class MixedArgumentOrganiser implements ArgumentOrganiser
 {
-    private $definedArguments = [];
+    private array $definedArguments = [];
 
     /**
      * Organises arguments using function reflection.

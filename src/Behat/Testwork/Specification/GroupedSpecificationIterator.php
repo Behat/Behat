@@ -24,10 +24,7 @@ use ReturnTypeWillChange;
  */
 final class GroupedSpecificationIterator implements SpecificationIterator
 {
-    /**
-     * @var int
-     */
-    private $position = 0;
+    private int $position = 0;
 
     /**
      * Initializes iterator.

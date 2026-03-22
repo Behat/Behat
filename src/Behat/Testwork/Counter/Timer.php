@@ -20,14 +20,8 @@ use Stringable;
  */
 final class Timer implements Stringable
 {
-    /**
-     * @var float|null
-     */
-    private $starTime;
-    /**
-     * @var float|null
-     */
-    private $stopTime;
+    private ?float $starTime = null;
+    private ?float $stopTime = null;
 
     /**
      * Starts timer.

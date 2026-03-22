@@ -24,12 +24,12 @@ final class PatternTransformer
     /**
      * @var PatternPolicy[]
      */
-    private $policies = [];
+    private array $policies = [];
 
     /**
      * @var string[]
      */
-    private $patternToRegexpCache = [];
+    private array $patternToRegexpCache = [];
 
     /**
      * Registers pattern policy.

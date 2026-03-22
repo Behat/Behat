@@ -34,7 +34,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      *
      * TODO use a class-string-map type to have an accurate type once https://github.com/phpstan/phpstan/issues/9521 is implemented
      */
-    private $contexts = [];
+    private array $contexts = [];
 
     /**
      * Initializes environment.

@@ -31,18 +31,9 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 class OnlyFirstBackgroundFiresListener implements EventListener
 {
-    /**
-     * @var bool
-     */
-    private $firstBackgroundEnded = false;
-    /**
-     * @var bool
-     */
-    private $inBackground = false;
-    /**
-     * @var bool
-     */
-    private $stepSetupHadOutput = false;
+    private bool $firstBackgroundEnded = false;
+    private bool $inBackground = false;
+    private bool $stepSetupHadOutput = false;
 
     /**
      * Initializes listener.

@@ -27,11 +27,11 @@ final class EnvironmentManager
     /**
      * @var EnvironmentHandler[]
      */
-    private $handlers = [];
+    private array $handlers = [];
     /**
      * @var EnvironmentReader[]
      */
-    private $readers = [];
+    private array $readers = [];
 
     /**
      * Registers environment handler.

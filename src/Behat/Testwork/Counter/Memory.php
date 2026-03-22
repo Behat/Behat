@@ -22,7 +22,7 @@ final class Memory implements Stringable
     /**
      * @var string[]
      */
-    private $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
+    private array $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
 
     /**
      * Returns current memory usage.

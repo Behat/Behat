@@ -26,7 +26,7 @@ final class CompositeFactory implements SuiteScopedResolverFactory
     /**
      * @var SuiteScopedResolverFactory[]
      */
-    private $factories = [];
+    private array $factories = [];
 
     /**
      * Registers factory.

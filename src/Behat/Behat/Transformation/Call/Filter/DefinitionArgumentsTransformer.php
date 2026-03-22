@@ -26,7 +26,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
     /**
      * @var ArgumentTransformer[]
      */
-    private $argumentTransformers = [];
+    private array $argumentTransformers = [];
 
     /**
      * Registers new argument transformer.

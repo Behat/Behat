@@ -27,10 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 final class StopOnFailureController implements Controller
 {
-    /**
-     * @var StopOnFailureHandler
-     */
-    private $stopOnFailureHandler;
+    private StopOnFailureHandler $stopOnFailureHandler;
 
     /**
      * Initializes controller.

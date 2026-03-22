@@ -25,7 +25,7 @@ final class SpecificationFinder
     /**
      * @var SpecificationLocator<T>[]
      */
-    private $specificationLocators = [];
+    private array $specificationLocators = [];
 
     /**
      * Registers specification locator.

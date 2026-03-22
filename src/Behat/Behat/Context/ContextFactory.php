@@ -26,11 +26,11 @@ final class ContextFactory
     /**
      * @var ArgumentResolver[]
      */
-    private $argumentResolvers = [];
+    private array $argumentResolvers = [];
     /**
      * @var ContextInitializer[]
      */
-    private $contextInitializers = [];
+    private array $contextInitializers = [];
     private readonly Validator $validator;
 
     /**

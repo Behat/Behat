@@ -22,7 +22,7 @@ final class SuiteBootstrapper
     /**
      * @var SuiteSetup[]
      */
-    private $setups = [];
+    private array $setups = [];
 
     /**
      * Registers suite setup.

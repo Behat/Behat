@@ -28,7 +28,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * @var ClassGenerator[]
      */
-    private $classGenerators = [];
+    private array $classGenerators = [];
 
     /**
      * Initializes setup.

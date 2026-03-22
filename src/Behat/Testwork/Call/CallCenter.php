@@ -29,19 +29,19 @@ final class CallCenter
     /**
      * @var CallFilter[]
      */
-    private $callFilters = [];
+    private array $callFilters = [];
     /**
      * @var CallHandler[]
      */
-    private $callHandlers = [];
+    private array $callHandlers = [];
     /**
      * @var ResultFilter[]
      */
-    private $resultFilters = [];
+    private array $resultFilters = [];
     /**
      * @var ExceptionHandler[]
      */
-    private $exceptionHandlers = [];
+    private array $exceptionHandlers = [];
 
     /**
      * Registers call filter.

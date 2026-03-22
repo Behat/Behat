@@ -31,7 +31,7 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * @var string[]
      */
-    private static $ignoreAnnotations = [
+    private static array $ignoreAnnotations = [
         '@param',
         '@return',
         '@throws',
@@ -42,7 +42,7 @@ final class AnnotatedContextReader implements ContextReader
     /**
      * @var AnnotationReader[]
      */
-    private $readers = [];
+    private array $readers = [];
 
     /**
      * Initializes reader.

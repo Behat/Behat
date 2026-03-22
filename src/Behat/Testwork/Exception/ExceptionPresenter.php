@@ -28,7 +28,7 @@ final class ExceptionPresenter
     /**
      * @var ExceptionStringer[]
      */
-    private $stringers = [];
+    private array $stringers = [];
 
     private readonly ConfigurablePathPrinter $configurablePathPrinter;
 

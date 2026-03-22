@@ -37,12 +37,12 @@ final class JUnitFeatureElementListener implements EventListener
     /**
      * @var AfterStepTested[]
      */
-    private $afterStepTestedEvents = [];
+    private array $afterStepTestedEvents = [];
 
     /**
      * @var AfterStepSetup[]
      */
-    private $afterStepSetupEvents = [];
+    private array $afterStepSetupEvents = [];
 
     private ?AfterSuiteSetup $afterSuiteSetup = null;
 

@@ -28,10 +28,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class ProgressStepPrinter implements StepPrinter
 {
-    /**
-     * @var int
-     */
-    private $stepsPrinted = 0;
+    private int $stepsPrinted = 0;
 
     private bool $hasPrintedOutput = false;
 

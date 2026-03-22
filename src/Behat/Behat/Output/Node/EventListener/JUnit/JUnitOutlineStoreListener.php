@@ -27,10 +27,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class JUnitOutlineStoreListener implements EventListener
 {
-    /**
-     * @var array
-     */
-    private $lineScenarioMap = [];
+    private array $lineScenarioMap = [];
 
     /**
      * Initializes listener.

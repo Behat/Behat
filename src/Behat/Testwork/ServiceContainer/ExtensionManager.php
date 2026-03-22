@@ -25,10 +25,10 @@ final class ExtensionManager
      */
     private $extensions = [];
     /**
-     * @var Extension[string]
+     * @phpstan-var array<string,Extension>
      */
-    private $locatedExtensions = [];
-    private $debugInformation = [
+    private array $locatedExtensions = [];
+    private array $debugInformation = [
         'extensions_list' => [],
     ];
 
@@ -117,10 +117,8 @@ final class ExtensionManager
 
     /**
      * Returns array with extensions debug information.
-     *
-     * @return array
      */
-    public function debugInformation()
+    public function debugInformation(): array
     {
         return $this->debugInformation;
     }

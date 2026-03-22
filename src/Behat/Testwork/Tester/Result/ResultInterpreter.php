@@ -25,7 +25,7 @@ final class ResultInterpreter
     /**
      * @var ResultInterpretation[]
      */
-    private $interpretations = [];
+    private array $interpretations = [];
 
     /**
      * Registers result interpretation.

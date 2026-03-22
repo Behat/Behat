@@ -38,7 +38,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
     /**
      * @var ClassResolver[]
      */
-    private $classResolvers = [];
+    private array $classResolvers = [];
 
     /**
      * Initializes handler.

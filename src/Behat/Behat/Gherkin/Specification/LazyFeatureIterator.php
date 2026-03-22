@@ -38,18 +38,12 @@ final class LazyFeatureIterator implements SpecificationIterator
      * @var FeatureFilterInterface[]
      */
     private readonly array $filters;
-    /**
-     * @var int
-     */
-    private $position = 0;
+    private int $position = 0;
     /**
      * @var FeatureNode[]
      */
     private $features = [];
-    /**
-     * @var FeatureNode
-     */
-    private $currentFeature;
+    private ?FeatureNode $currentFeature = null;
 
     /**
      * Initializes specifications.
@@ -85,7 +79,7 @@ final class LazyFeatureIterator implements SpecificationIterator
 
     public function valid(): bool
     {
-        return null !== $this->currentFeature;
+        return $this->currentFeature instanceof FeatureNode;
     }
 
     public function key(): int

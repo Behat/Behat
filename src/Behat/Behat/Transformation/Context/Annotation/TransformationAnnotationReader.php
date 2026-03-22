@@ -24,10 +24,7 @@ use ReflectionMethod;
  */
 class TransformationAnnotationReader implements AnnotationReader
 {
-    /**
-     * @var string
-     */
-    private static $regex = '/^\@transform\s*+(.*+)$/i';
+    private static string $regex = '/^\@transform\s*+(.*+)$/i';
 
     /**
      * Loads step callees (if exist) associated with specific method.
