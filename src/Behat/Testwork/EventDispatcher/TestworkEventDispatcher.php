@@ -23,10 +23,7 @@ final class TestworkEventDispatcher extends EventDispatcher
     public const AFTER_ALL_EVENTS = '~*';
     public const DISPATCHER_VERSION = 2;
 
-    /**
-     * @param string|null $eventName
-     */
-    public function getListeners($eventName = null): array
+    public function getListeners(?string $eventName = null): array
     {
         if (null === $eventName || self::BEFORE_ALL_EVENTS === $eventName) {
             return parent::getListeners($eventName);

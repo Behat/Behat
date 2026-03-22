@@ -29,13 +29,12 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Stringable, De
      * @param string      $type
      * @param string      $pattern
      * @param callable    $callable
-     * @param string|null $description
      */
     public function __construct(
         private $type,
         private $pattern,
-        $callable,
-        $description = null,
+        callable|array $callable,
+        ?string $description = null,
     ) {
         parent::__construct($callable, $description);
     }

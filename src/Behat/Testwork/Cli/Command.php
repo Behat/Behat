@@ -24,11 +24,10 @@ final class Command extends BaseCommand
     /**
      * Initializes command.
      *
-     * @param string       $commandName
      * @param Controller[] $controllers
      */
     public function __construct(
-        $commandName,
+        ?string $commandName,
         private readonly array $controllers,
     ) {
         parent::__construct($commandName);

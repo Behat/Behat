@@ -34,13 +34,10 @@ final class Application extends BaseApplication
 {
     /**
      * Initializes application.
-     *
-     * @param string              $name
-     * @param string              $version
      */
     public function __construct(
-        $name,
-        $version,
+        string $name,
+        string $version,
         private readonly ConfigurationLoader $configurationLoader,
         private readonly ExtensionManager $extensionManager,
     ) {
