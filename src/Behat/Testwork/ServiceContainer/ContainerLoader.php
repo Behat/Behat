@@ -61,10 +61,8 @@ final class ContainerLoader
 
     /**
      * Initializes extensions using provided config.
-     *
-     * @return array
      */
-    private function initializeExtensions(ContainerBuilder $container, array $configs)
+    private function initializeExtensions(ContainerBuilder $container, array $configs): array
     {
         $extensions = [];
         foreach ($configs as $i => $config) {
