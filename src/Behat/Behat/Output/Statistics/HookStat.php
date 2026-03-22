@@ -19,10 +19,7 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 final class HookStat
 {
-    /**
-     * @var HookScope|null
-     */
-    private $scope;
+    private ?HookScope $scope = null;
 
     /**
      * Initializes hook stat.
