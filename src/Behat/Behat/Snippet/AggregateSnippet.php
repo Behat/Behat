@@ -100,7 +100,7 @@ final class AggregateSnippet
             array_merge(
                 ...array_values(
                     array_map(
-                        function (Snippet $snippet) {
+                        function (Snippet $snippet): array {
                             if (!$snippet instanceof ContextSnippet) {
                                 return [];
                             }

@@ -72,7 +72,7 @@ final class ConsoleFormatter extends BaseOutputFormatter
     {
         return StrictRegex::replaceCallback(
             self::HREF_PATTERN,
-            function ($matches) {
+            function ($matches): string {
                 $url = $matches[1];
                 $text = $matches[2];
 

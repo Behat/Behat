@@ -195,7 +195,7 @@ class OutputController implements Controller
         return implode(
             PHP_EOL,
             array_map(
-                function (Formatter $formatter) {
+                function (Formatter $formatter): string {
                     $comment = '- <comment>' . $formatter->getName() . '</comment>: ';
                     $comment .= $formatter->getDescription();
 

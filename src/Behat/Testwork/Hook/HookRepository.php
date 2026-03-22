@@ -52,7 +52,7 @@ final class HookRepository
     {
         return array_filter(
             $this->getEnvironmentHooks($scope->getEnvironment()),
-            function (Hook $hook) use ($scope) {
+            function (Hook $hook) use ($scope): bool {
                 if ($scope->getName() !== $hook->getScopeName()) {
                     return false;
                 }

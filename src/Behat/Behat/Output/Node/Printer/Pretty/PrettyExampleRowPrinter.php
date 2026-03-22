@@ -76,7 +76,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
     {
         $resultConverter = $this->resultConverter;
 
-        return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter) {
+        return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter): string {
             $results = [];
             foreach ($stepEvents as $event) {
                 $index = array_search($event->getStep(), $example->getSteps());
