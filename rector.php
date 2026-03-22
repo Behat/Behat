@@ -28,7 +28,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php82: true)
-    ->withTypeCoverageLevel(35)
+    ->withTypeCoverageLevel(36)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
@@ -133,7 +133,7 @@ return RectorConfig::configure()
         ],
         ReturnUnionTypeRector::class => [
             // BC break
-            __DIR__.'/src/Behat\Testwork\Call\RuntimeCallee.php'
+            __DIR__.'/src/Behat\Testwork\Call\RuntimeCallee.php',
         ],
     ])
     ->withImportNames(

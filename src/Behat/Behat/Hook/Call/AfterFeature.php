@@ -24,7 +24,6 @@ final class AfterFeature extends RuntimeFeatureHook
      *
      * @param string|null $filterString
      * @param callable    $callable
-     * @param string|null $description
      */
     public function __construct($filterString, callable|array $callable, ?string $description = null)
     {

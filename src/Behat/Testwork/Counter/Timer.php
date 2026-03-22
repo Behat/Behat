@@ -52,8 +52,6 @@ final class Timer implements Stringable
     }
 
     /**
-     * @return float
-     *
      * @throws TimerException If timer has not been started
      */
     public function getTime(): float

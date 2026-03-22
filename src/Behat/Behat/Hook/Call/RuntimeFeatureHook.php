@@ -31,7 +31,6 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      * @param string                               $scopeName
      * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
-     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
