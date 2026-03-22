@@ -120,10 +120,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
 
     /**
      * Prepends tags string with tag-sign.
-     *
-     * @param string $tag
      */
-    private function prependTagWithTagSign($tag): string
+    private function prependTagWithTagSign(string $tag): string
     {
         if (str_starts_with($tag, '@')) {
             return $tag;

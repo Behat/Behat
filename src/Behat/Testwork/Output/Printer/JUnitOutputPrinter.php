@@ -129,10 +129,9 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
     /**
      * Sets file name.
      *
-     * @param string $fileName
      * @param string $extension The file extension, defaults to "xml"
      */
-    public function setFileName($fileName, $extension = 'xml'): void
+    public function setFileName(string $fileName, string $extension = 'xml'): void
     {
         if ('.' . $extension !== substr($fileName, strlen($extension) + 1)) {
             $fileName .= '.' . $extension;

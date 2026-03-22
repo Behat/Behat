@@ -44,10 +44,8 @@ final class ContextReaderCachedPerSuite implements ContextReader
 
     /**
      * Generates cache key.
-     *
-     * @param string             $contextClass
      */
-    private function generateCacheKey(ContextEnvironment $environment, $contextClass): string
+    private function generateCacheKey(ContextEnvironment $environment, string $contextClass): string
     {
         return $environment->getSuite()->getName() . $contextClass;
     }

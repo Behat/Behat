@@ -77,10 +77,9 @@ final class ContextSnippetAppender implements SnippetAppender
     /**
      * Adds use-block for class.
      *
-     * @param string $class
      * @param string $contextFileContent
      */
-    private function importClass($class, string|bool $contextFileContent): string
+    private function importClass(string $class, string|bool $contextFileContent): string
     {
         $replaceWith = '$1use ' . $class . ";\n\$2;";
 

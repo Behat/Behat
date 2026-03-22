@@ -124,10 +124,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
 
     /**
      * Indents text to the subIndentation level.
-     *
-     * @param string $text
      */
-    private function subIndent($text): string
+    private function subIndent(string $text): string
     {
         return $this->subIndentText . $text;
     }

@@ -48,10 +48,8 @@ final class SuiteWithPathsSetup implements SuiteSetup
 
     /**
      * Creates feature directory.
-     *
-     * @param string $path
      */
-    private function createFeatureDirectory($path): void
+    private function createFeatureDirectory(string $path): void
     {
         mkdir($path, 0777, true);
 
@@ -62,12 +60,8 @@ final class SuiteWithPathsSetup implements SuiteSetup
 
     /**
      * Locates path from a relative one.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    private function locatePath($path)
+    private function locatePath(string $path): string
     {
         if ($this->isAbsolutePath($path)) {
             return $path;
@@ -81,7 +75,7 @@ final class SuiteWithPathsSetup implements SuiteSetup
      *
      * @param string $file A file path
      */
-    private function isAbsolutePath($file): bool
+    private function isAbsolutePath(string $file): bool
     {
         return $file[0] == '/' || $file[0] == '\\'
             || (
