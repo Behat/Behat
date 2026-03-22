@@ -51,7 +51,7 @@ final class JUnitOutputPrinter extends StreamOutputPrinter
      * @param string $name                 The filename (without extension) and default value of the name attribute
      * @param array  $testsuitesAttributes Attributes for the root element
      */
-    public function createNewFile($name, array $testsuitesAttributes = []): void
+    public function createNewFile(string $name, array $testsuitesAttributes = []): void
     {
         // This requires the DOM extension to be enabled.
         if (!extension_loaded('dom')) {

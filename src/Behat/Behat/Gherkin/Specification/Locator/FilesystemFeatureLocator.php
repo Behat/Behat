@@ -102,11 +102,9 @@ final class FilesystemFeatureLocator implements SpecificationLocator
     /**
      * Loads feature files paths from provided path.
      *
-     * @param string $path
-     *
      * @return list<string>
      */
-    private function findFeatureFiles($path): array
+    private function findFeatureFiles(string $path): array
     {
         $absolutePath = $this->findAbsolutePath($path);
 

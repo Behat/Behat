@@ -25,11 +25,9 @@ final class ServiceProcessor
     /**
      * Finds and sorts (by priority) service references by provided tag.
      *
-     * @param string           $tag
-     *
      * @return list<Reference>
      */
-    public function findAndSortTaggedServices(ContainerBuilder $container, $tag): array
+    public function findAndSortTaggedServices(ContainerBuilder $container, string $tag): array
     {
         $serviceTags = [];
         foreach ($container->findTaggedServiceIds($tag) as $id => $tags) {
@@ -53,7 +51,7 @@ final class ServiceProcessor
      * @param string           $target     The id of the service being decorated
      * @param string           $wrapperTag The tag used by wrappers
      */
-    public function processWrapperServices(ContainerBuilder $container, $target, $wrapperTag): void
+    public function processWrapperServices(ContainerBuilder $container, $target, string $wrapperTag): void
     {
         $references = $this->findAndSortTaggedServices($container, $wrapperTag);
 

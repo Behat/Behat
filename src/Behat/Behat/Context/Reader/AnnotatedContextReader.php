@@ -140,10 +140,8 @@ final class AnnotatedContextReader implements ContextReader
 
     /**
      * Merges multiline strings (strings ending with "\").
-     *
-     * @param string $docBlock
      */
-    private function mergeMultilines($docBlock): string
+    private function mergeMultilines(string $docBlock): string
     {
         return StrictRegex::replace("#\\\\$\s*+\*\s*+([^\\\\$]++)#m", '$1', $docBlock);
     }

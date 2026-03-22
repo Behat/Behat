@@ -64,7 +64,7 @@ final class ExtensionManager
      *
      * @return Extension
      */
-    public function activateExtension($locator)
+    public function activateExtension(string $locator)
     {
         $extension = $this->initialize($locator);
 

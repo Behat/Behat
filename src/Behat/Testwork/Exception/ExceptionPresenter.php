@@ -72,7 +72,7 @@ final class ExceptionPresenter
     public function presentException(
         Throwable $exception,
         ?int $verbosity = null,
-        $applyEditorUrl = true,
+        bool $applyEditorUrl = true,
     ): string {
         $verbosity = $verbosity ?: $this->defaultVerbosity;
 

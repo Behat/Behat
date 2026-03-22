@@ -35,10 +35,8 @@ final class DefinitionTranslator
 
     /**
      * Attempts to translate definition using translator and produce translated one on success.
-     *
-     * @param string|null $language
      */
-    public function translateDefinition(Suite $suite, Definition $definition, $language = null): TranslatedDefinition|Definition
+    public function translateDefinition(Suite $suite, Definition $definition, ?string $language = null): TranslatedDefinition|Definition
     {
         $assetsId = $suite->getName();
         $pattern = $definition->getPattern();

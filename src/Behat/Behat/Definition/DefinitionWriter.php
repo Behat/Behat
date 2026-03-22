@@ -32,10 +32,8 @@ final class DefinitionWriter
 
     /**
      * Prints definitions for provided suite using printer.
-     *
-     * @param Suite             $suite
      */
-    public function printSuiteDefinitions(DefinitionPrinter $printer, $suite): void
+    public function printSuiteDefinitions(DefinitionPrinter $printer, Suite $suite): void
     {
         $environment = $this->environmentManager->buildEnvironment($suite);
         $definitions = $this->repository->getEnvironmentDefinitions($environment);

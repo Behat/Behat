@@ -74,10 +74,8 @@ final class RegexPatternPolicy implements PatternPolicy
 
     /**
      * Generates regex from step text.
-     *
-     * @param string $stepText
      */
-    private function generateRegex($stepText): string
+    private function generateRegex(string $stepText): string
     {
         return StrictRegex::replace(
             array_keys(self::$replacePatterns),
@@ -100,10 +98,8 @@ final class RegexPatternPolicy implements PatternPolicy
 
     /**
      * Returns escaped step text.
-     *
-     * @param string $stepText
      */
-    private function escapeStepText($stepText): string
+    private function escapeStepText(string $stepText): string
     {
         return StrictRegex::replace('/([\/\[\]\(\)\\\^\$\.\|\?\*\+\'])/', '\\\\$1', $stepText);
     }

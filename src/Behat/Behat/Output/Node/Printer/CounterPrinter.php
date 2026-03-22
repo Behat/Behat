@@ -32,10 +32,8 @@ final class CounterPrinter
 
     /**
      * Prints scenario and step counters.
-     *
-     * @param string        $intro
      */
-    public function printCounters(OutputPrinter $printer, $intro, array $stats): void
+    public function printCounters(OutputPrinter $printer, string $intro, array $stats): void
     {
         $stats = array_filter($stats, fn ($count): bool => 0 !== $count);
 

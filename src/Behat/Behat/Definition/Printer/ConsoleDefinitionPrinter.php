@@ -50,7 +50,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @param string $text
      */
-    final protected function write($text, bool $lineBreakBefore = false)
+    final protected function write(string|iterable $text, bool $lineBreakBefore = false)
     {
         if ($lineBreakBefore) {
             $this->output->writeln('');
