@@ -57,7 +57,7 @@ final class ContextSnippetsController implements Controller
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $this->generator->setContextIdentifier(
             new AggregateContextIdentifier([

@@ -38,7 +38,7 @@ final class VerbosityController implements Controller
     {
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         if ($output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL) {
             $this->exceptionPresenter->setDefaultVerbosity($output->getVerbosity());

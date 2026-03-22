@@ -42,7 +42,7 @@ final class LanguageController implements Controller
         );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         if (!$input->getOption('lang')) {
             return null;

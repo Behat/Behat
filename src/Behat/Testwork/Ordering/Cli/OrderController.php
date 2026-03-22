@@ -59,7 +59,7 @@ final class OrderController implements Controller
      *
      * @return int|null
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $orderer = $input->getOption('order');
 

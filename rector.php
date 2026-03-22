@@ -9,11 +9,15 @@ use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNullableTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -32,6 +36,8 @@ return RectorConfig::configure()
         ReturnTypeFromStrictConstantReturnRector::class => [
             // Would be a BC break
             __DIR__.'/src/Behat/Behat/Transformation/ServiceContainer/TransformationExtension.php',
+            __DIR__.'/src/Behat/Testwork/Output/Cli/OutputController.php',
+            __DIR__.'/src/Behat/Testwork/PathOptions/Cli/PathOptionsController.php',
         ],
         StringReturnTypeFromStrictScalarReturnsRector::class => [
             // Would be a BC break
@@ -50,6 +56,7 @@ return RectorConfig::configure()
             __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
             __DIR__.'/src/Behat/Behat/Tester/Exception/Stringer/PendingExceptionStringer.php',
             __DIR__.'/src/Behat/Behat/Transformation/ServiceContainer/TransformationExtension.php',
+            __DIR__.'/src/Behat/Testwork/Call/RuntimeCallee.php',
         ],
         NumericReturnTypeFromStrictReturnsRector::class => [
             // Would be a BC break
@@ -105,6 +112,23 @@ return RectorConfig::configure()
             __DIR__.'/src/Behat/Behat/EventDispatcher/Event/AfterScenarioTested.php',
             __DIR__.'/src/Behat/Behat/EventDispatcher/Event/BeforeScenarioTeardown.php',
             __DIR__.'/src/Behat/Behat/EventDispatcher/Event/BeforeScenarioTested.php',
+        ],
+        TypedPropertyFromStrictConstructorRector::class => [
+            // BC break
+            __DIR__.'/src/Behat/Testwork/EventDispatcher/ServiceContainer/EventDispatcherExtension.php',
+        ],
+        ReturnNullableTypeRector::class => [
+            // BC break
+            __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
+            __DIR__.'/src/Behat/Testwork/Call/RuntimeCallee.php',
+        ],
+        ReturnTypeFromStrictNativeCallRector::class => [
+            // BC break
+            __DIR__.'/src/Behat/Behat/Tester/Exception/Stringer/PendingExceptionStringer',
+        ],
+        ReturnTypeFromStrictTypedCallRector::class => [
+            // BC break
+            __DIR__.'/src/Behat/Behat/Tester/Exception/Stringer/PendingExceptionStringer',
         ],
     ])
     ->withImportNames(

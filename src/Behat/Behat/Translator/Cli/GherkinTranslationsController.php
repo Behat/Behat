@@ -35,7 +35,7 @@ final class GherkinTranslationsController implements Controller
     {
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $i18nPath = dirname(__DIR__, 5) . DIRECTORY_SEPARATOR . 'i18n.php';
 

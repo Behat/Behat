@@ -46,7 +46,7 @@ final class StrictController implements Controller
         );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         if (!$this->strict && !$input->getOption('strict')) {
             return null;

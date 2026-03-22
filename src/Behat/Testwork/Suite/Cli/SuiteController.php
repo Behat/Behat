@@ -44,7 +44,7 @@ final class SuiteController implements Controller
         );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $exerciseSuiteName = $input->getOption('suite');
 

@@ -37,7 +37,7 @@ final class SigintController implements Controller
     {
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         if (function_exists('pcntl_signal')) {
             pcntl_async_signals(true);

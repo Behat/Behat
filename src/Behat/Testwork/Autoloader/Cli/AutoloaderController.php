@@ -35,7 +35,7 @@ final class AutoloaderController implements Controller
     {
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $this->loader->register();
 

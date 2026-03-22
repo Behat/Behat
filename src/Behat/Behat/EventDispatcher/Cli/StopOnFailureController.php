@@ -62,7 +62,7 @@ final class StopOnFailureController implements Controller
         );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         if (!$input->getOption('stop-on-failure')) {
             return null;
