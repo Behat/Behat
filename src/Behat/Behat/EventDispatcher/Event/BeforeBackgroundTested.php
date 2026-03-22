@@ -47,6 +47,8 @@ final class BeforeBackgroundTested extends BackgroundTested implements BeforeTes
     /**
      * Returns scenario node.
      *
+     * @deprecated Use getBackground() instead
+     *
      * @return ScenarioLikeInterface
      */
     public function getScenario()
