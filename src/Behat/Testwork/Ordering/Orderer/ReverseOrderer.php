@@ -64,7 +64,7 @@ final class ReverseOrderer implements Orderer
      *
      * @return SpecificationIterator<T>[]
      */
-    private function orderSuites($orderedSuites): array
+    private function orderSuites(array $orderedSuites): array
     {
         return array_reverse($orderedSuites);
     }

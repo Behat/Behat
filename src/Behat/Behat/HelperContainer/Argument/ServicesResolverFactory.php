@@ -105,11 +105,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Creates custom container using class/constructor given.
      *
-     * @param string $settings
-     *
      * @throws WrongServicesConfigurationException
      */
-    private function createContainerFromString($settings)
+    private function createContainerFromString(string $settings)
     {
         if (0 === mb_strpos($settings, '@')) {
             return $this->loadContainerFromContainer(mb_substr($settings, 1));
@@ -129,11 +127,9 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Loads container from string.
      *
-     * @param string $name
-     *
      * @throws WrongServicesConfigurationException
      */
-    private function loadContainerFromContainer($name): object
+    private function loadContainerFromContainer(string $name): object
     {
         $services = $this->container->findTaggedServiceIds(HelperContainerExtension::HELPER_CONTAINER_TAG);
 
@@ -148,10 +144,8 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
 
     /**
      * Creates container from string-based class spec.
-     *
-     * @param string $classSpec
      */
-    private function createContainerFromClassSpec($classSpec)
+    private function createContainerFromClassSpec(string $classSpec)
     {
         $constructor = explode('::', $classSpec);
 
@@ -165,13 +159,11 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     /**
      * Checks if container implements the correct interface and creates resolver using it.
      *
-     * @param bool  $autowire
-     *
      * @return list<ArgumentResolver>
      *
      * @throws WrongContainerClassException
      */
-    private function createResolvers($container, $autowire): array
+    private function createResolvers($container, bool $autowire): array
     {
         if (!$container instanceof ContainerInterface) {
             throw new WrongContainerClassException(

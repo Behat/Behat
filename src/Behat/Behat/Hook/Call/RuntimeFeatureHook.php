@@ -76,11 +76,9 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Checks if feature matches tag filter.
      *
-     * @param string      $filterString
-     *
      * @return bool
      */
-    private function isMatchTagFilter(FeatureNode $feature, $filterString)
+    private function isMatchTagFilter(FeatureNode $feature, string $filterString)
     {
         $filter = new TagFilter($filterString);
 

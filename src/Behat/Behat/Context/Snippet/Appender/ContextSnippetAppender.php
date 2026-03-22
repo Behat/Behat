@@ -64,7 +64,7 @@ final class ContextSnippetAppender implements SnippetAppender
      * @param string $class
      * @param string $contextFileContent
      */
-    private function isClassImported($class, $contextFileContent): bool
+    private function isClassImported($class, string|bool $contextFileContent): bool
     {
         $classImportRegex = sprintf(
             '@use[^;]*%s.*;@ms',
@@ -80,7 +80,7 @@ final class ContextSnippetAppender implements SnippetAppender
      * @param string $class
      * @param string $contextFileContent
      */
-    private function importClass($class, $contextFileContent): string
+    private function importClass($class, string|bool $contextFileContent): string
     {
         $replaceWith = '$1use ' . $class . ";\n\$2;";
 

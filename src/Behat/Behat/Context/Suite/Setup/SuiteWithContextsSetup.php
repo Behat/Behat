@@ -107,10 +107,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Creates context directory in the filesystem.
-     *
-     * @param string $path
      */
-    private function createContextDirectory($path): void
+    private function createContextDirectory(string $path): void
     {
         mkdir($path, 0777, true);
 
@@ -122,10 +120,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Creates context class file in the filesystem.
      *
-     * @param string $path
      * @param string $content
      */
-    private function createContextFile($path, $content): void
+    private function createContextFile(string $path, $content): void
     {
         file_put_contents($path, $content);
 
@@ -183,10 +180,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Ensures that directory for a classpath exists.
-     *
-     * @param string $classpath
      */
-    private function ensureContextDirectory($classpath): void
+    private function ensureContextDirectory(string $classpath): void
     {
         if (!is_dir(dirname($classpath))) {
             $this->createContextDirectory(dirname($classpath));

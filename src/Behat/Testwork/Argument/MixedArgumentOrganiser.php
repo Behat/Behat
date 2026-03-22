@@ -13,6 +13,7 @@ namespace Behat\Testwork\Argument;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
+use Closure;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunctionAbstract;
@@ -131,7 +132,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param string[] $parameterNames
      */
-    private function isStringKeyAndExistsInParameters($argumentKey, $parameterNames): bool
+    private function isStringKeyAndExistsInParameters(int|string $argumentKey, array $parameterNames): bool
     {
         return is_string($argumentKey) && in_array($argumentKey, $parameterNames);
     }
@@ -159,7 +160,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     /**
      * Checks if value matches typehint of provided parameter.
      */
-    private function isValueMatchesTypehintedParameter($value, ReflectionParameter $parameter): bool
+    private function isValueMatchesTypehintedParameter(object $value, ReflectionParameter $parameter): bool
     {
         foreach ($this->getReflectionClassesFromParameter($parameter) as $typehintRefl) {
             if ($typehintRefl->isInstance($value)) {
@@ -307,13 +308,13 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      * @param  ReflectionParameter[] $parameters Reflection Parameters (constructor argument requirements)
      * @param  mixed[]               &$candidates Resolved arguments
      * @param  mixed[]               &$arguments  Argument mapping
-     * @param  callable              $predicate   Callable predicate to apply to each candidate
+     * @param  Closure               $predicate   Callable predicate to apply to each candidate
      */
     private function applyPredicateToTypehintedArguments(
         array $parameters,
         array &$candidates,
         array &$arguments,
-        $predicate,
+        Closure $predicate,
     ): void {
         $filtered = $this->filterApplicableTypehintedParameters($parameters);
 
@@ -481,7 +482,7 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
      *
      * @param int $position
      */
-    private function isArgumentDefined($position): bool
+    private function isArgumentDefined(int|string $position): bool
     {
         return isset($this->definedArguments[$position]);
     }

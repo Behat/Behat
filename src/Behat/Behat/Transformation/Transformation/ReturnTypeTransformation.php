@@ -164,11 +164,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Returns closure to filter parameter by name.
      *
-     * @param string $index
-     *
      * @return Closure
      */
-    private function hasName($index)
+    private function hasName(string $index)
     {
         return fn (ReflectionParameter $parameter): bool => $index === $parameter->getName();
     }

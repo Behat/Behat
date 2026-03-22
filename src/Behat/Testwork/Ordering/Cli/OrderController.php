@@ -56,8 +56,6 @@ final class OrderController implements Controller
 
     /**
      * Executes controller.
-     *
-     * @return int|null
      */
     public function execute(InputInterface $input, OutputInterface $output): null
     {

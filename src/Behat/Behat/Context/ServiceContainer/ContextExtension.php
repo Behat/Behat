@@ -314,10 +314,8 @@ final class ContextExtension implements Extension
 
     /**
      * Processes all argument resolver factories.
-     *
-     * @param ContainerBuilder $container
      */
-    private function processArgumentResolverFactories($container): void
+    private function processArgumentResolverFactories(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::SUITE_SCOPED_RESOLVER_FACTORY_TAG);
         $definition = $container->getDefinition(self::AGGREGATE_RESOLVER_FACTORY_ID);

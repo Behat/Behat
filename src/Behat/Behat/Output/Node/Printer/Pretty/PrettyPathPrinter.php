@@ -93,9 +93,8 @@ final class PrettyPathPrinter
      * Prints defined step path.
      *
      * @param int $scenarioWidth
-     * @param int $stepWidth
      */
-    private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, $stepWidth): void
+    private function printDefinedStepPath(OutputPrinter $printer, DefinedStepResult $result, $scenarioWidth, int $stepWidth): void
     {
         $path = $result->getStepDefinition()->getPath();
         $spacing = str_repeat(' ', max(0, $scenarioWidth - $stepWidth));

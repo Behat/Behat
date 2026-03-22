@@ -74,12 +74,10 @@ final class TranslatableContextReader implements ContextReader
     /**
      * Adds resource to translator instance.
      *
-     * @param string $type
      * @param string $path
-     * @param string $language
      * @param string $assetsId
      */
-    private function addTranslatorResource($type, $path, $language, $assetsId): void
+    private function addTranslatorResource(string $type, $path, string $language, $assetsId): void
     {
         $this->translator->addResource($type, $path, $language, $assetsId);
     }

@@ -136,10 +136,8 @@ class OutputController implements Controller
 
     /**
      * Initializes multiple formatters with different outputs.
-     *
-     * @param bool $decorated
      */
-    private function configureOutputs(array $formats, array $outputs, $decorated = false): void
+    private function configureOutputs(array $formats, array $outputs, bool $decorated = false): void
     {
         if (1 == count($outputs) && !$this->isStandardOutput($outputs[0])) {
             $outputPath = $this->locateOutputPath($outputs[0]);

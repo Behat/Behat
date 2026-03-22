@@ -135,10 +135,8 @@ final class ExceptionExtension implements Extension
 
     /**
      * Loads verbosity controller.
-     *
-     * @param ContainerBuilder $container
      */
-    private function loadVerbosityController($container): void
+    private function loadVerbosityController(ContainerBuilder $container): void
     {
         $definition = new Definition(VerbosityController::class, [
             new Reference(self::PRESENTER_ID),

@@ -103,10 +103,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
 
     /**
      * Returns argument string for provided argument.
-     *
-     * @param bool           $collapse
      */
-    private function getArgumentString(ArgumentInterface $argument, $collapse = false): string
+    private function getArgumentString(ArgumentInterface $argument, bool $collapse = false): string
     {
         if ($collapse) {
             return '...';
