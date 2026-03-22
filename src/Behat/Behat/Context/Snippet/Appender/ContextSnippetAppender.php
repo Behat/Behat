@@ -16,6 +16,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Util\StrictRegex;
 use Behat\Testwork\Filesystem\FilesystemLogger;
 use ReflectionClass;
+use RuntimeException;
 
 /**
  * Appends context-related snippets to their context classes.
@@ -39,8 +40,11 @@ final class ContextSnippetAppender implements SnippetAppender
     public function appendSnippet(AggregateSnippet $snippet): void
     {
         foreach ($snippet->getTargets() as $contextClass) {
-            $reflection = new ReflectionClass($contextClass);
-            $content = file_get_contents($reflection->getFileName());
+            $contextFilePath = $this->getFilePath($contextClass);
+            $content = file_get_contents($contextFilePath);
+            if ($content === false) {
+                throw new RuntimeException('Failed to read context file: ' . $contextFilePath);
+            }
 
             foreach ($snippet->getUsedClasses() as $class) {
                 if (!$this->isClassImported($class, $content)) {
@@ -50,21 +54,29 @@ final class ContextSnippetAppender implements SnippetAppender
 
             $generated = rtrim(strtr($snippet->getSnippet(), ['\\' => '\\\\', '$' => '\\$']));
             $content = StrictRegex::replace('/}\s*$/', "\n" . $generated . "\n}\n", $content);
-            $path = $reflection->getFileName();
 
-            file_put_contents($path, $content);
+            file_put_contents($contextFilePath, $content);
 
-            $this->logSnippetAddition($snippet, $path);
+            $this->logSnippetAddition($snippet, $contextFilePath);
         }
+    }
+
+    private function getFilePath(string $contextClass): string
+    {
+        $reflection = new ReflectionClass($contextClass);
+        $path = $reflection->getFileName();
+
+        if ($path === false) {
+            throw new RuntimeException(sprintf('Failed to get file path for context class "%s".', $contextClass));
+        }
+
+        return $path;
     }
 
     /**
      * Checks if context file already has class in it.
-     *
-     * @param string $class
-     * @param string $contextFileContent
      */
-    private function isClassImported($class, string|bool $contextFileContent): bool
+    private function isClassImported(string $class, string $contextFileContent): bool
     {
         $classImportRegex = sprintf(
             '@use[^;]*%s.*;@ms',
@@ -76,10 +88,8 @@ final class ContextSnippetAppender implements SnippetAppender
 
     /**
      * Adds use-block for class.
-     *
-     * @param string $contextFileContent
      */
-    private function importClass(string $class, string|bool $contextFileContent): string
+    private function importClass(string $class, string $contextFileContent): string
     {
         $replaceWith = '$1use ' . $class . ";\n\$2;";
 
@@ -88,10 +98,8 @@ final class ContextSnippetAppender implements SnippetAppender
 
     /**
      * Logs snippet addition to the provided path (if logger is given).
-     *
-     * @param string           $path
      */
-    private function logSnippetAddition(AggregateSnippet $snippet, $path): void
+    private function logSnippetAddition(AggregateSnippet $snippet, string $path): void
     {
         if (!$this->logger instanceof FilesystemLogger) {
             return;
