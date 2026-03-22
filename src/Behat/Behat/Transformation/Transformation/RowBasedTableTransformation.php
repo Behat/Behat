@@ -101,7 +101,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
         return $this->pattern;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'RowTableTransform ' . $this->pattern;
     }

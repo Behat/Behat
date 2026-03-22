@@ -111,7 +111,7 @@ final class PhaseStatistics implements Statistics
      *
      * @return ScenarioStat[]
      */
-    public function getSkippedScenarios()
+    public function getSkippedScenarios(): array
     {
         return $this->statistics->getSkippedScenarios();
     }
@@ -121,7 +121,7 @@ final class PhaseStatistics implements Statistics
      *
      * @return ScenarioStat[]
      */
-    public function getFailedScenarios()
+    public function getFailedScenarios(): array
     {
         return $this->statistics->getFailedScenarios();
     }
@@ -131,7 +131,7 @@ final class PhaseStatistics implements Statistics
      *
      * @return array<StepResult::*, int>
      */
-    public function getStepStatCounts()
+    public function getStepStatCounts(): array
     {
         return $this->statistics->getStepStatCounts();
     }
@@ -141,7 +141,7 @@ final class PhaseStatistics implements Statistics
      *
      * @return StepStat[]
      */
-    public function getFailedSteps()
+    public function getFailedSteps(): array
     {
         return $this->statistics->getFailedSteps();
     }
@@ -151,7 +151,7 @@ final class PhaseStatistics implements Statistics
      *
      * @return StepStat[]
      */
-    public function getPendingSteps()
+    public function getPendingSteps(): array
     {
         return $this->statistics->getPendingSteps();
     }
@@ -161,7 +161,7 @@ final class PhaseStatistics implements Statistics
      *
      * @return HookStat[]
      */
-    public function getFailedHookStats()
+    public function getFailedHookStats(): array
     {
         return $this->statistics->getFailedHookStats();
     }

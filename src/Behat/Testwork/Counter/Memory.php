@@ -34,10 +34,8 @@ final class Memory implements Stringable
 
     /**
      * Presents memory usage in human-readable form.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->humanize($this->getMemoryUsage());
     }

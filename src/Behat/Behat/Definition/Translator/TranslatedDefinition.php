@@ -98,7 +98,7 @@ final class TranslatedDefinition implements Stringable, Definition
         return $this->definition;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->definition->__toString();
     }

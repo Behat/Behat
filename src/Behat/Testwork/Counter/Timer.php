@@ -80,10 +80,8 @@ final class Timer implements Stringable
 
     /**
      * Returns string representation of time passed.
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         if (!$this->starTime || !$this->stopTime) {
             return '0m0s';

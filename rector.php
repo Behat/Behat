@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
@@ -28,7 +29,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php82: true)
-    ->withTypeCoverageLevel(44)
+    ->withTypeCoverageLevel(45)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
@@ -134,6 +135,12 @@ return RectorConfig::configure()
         ReturnUnionTypeRector::class => [
             // BC break
             __DIR__.'/src/Behat\Testwork\Call\RuntimeCallee.php',
+        ],
+        AddReturnTypeDeclarationBasedOnParentClassMethodRector::class => [
+            __DIR__.'/src/Behat/Testwork/Hook/Call/RuntimeHook.php',
+            __DIR__.'/src/Behat/Testwork/Hook/Call/RuntimeFilterableHook.php',
+            __DIR__.'/src/Behat/Behat/Output/Statistics/StepStat.php',
+            __DIR__.'/src/Behat/Behat/Definition/Call/RuntimeDefinition.php',
         ],
     ])
     ->withImportNames(

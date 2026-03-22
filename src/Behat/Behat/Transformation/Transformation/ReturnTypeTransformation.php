@@ -94,7 +94,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
         return '';
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'ReturnTypeTransform';
     }

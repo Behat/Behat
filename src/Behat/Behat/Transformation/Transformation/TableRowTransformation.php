@@ -92,7 +92,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
         return $this->pattern;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'TableRowTransform ' . $this->pattern;
     }

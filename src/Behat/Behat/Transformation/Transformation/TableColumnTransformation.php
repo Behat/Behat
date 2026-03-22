@@ -123,7 +123,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
         return $this->pattern;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'TableColumnTransform ' . $this->pattern;
     }

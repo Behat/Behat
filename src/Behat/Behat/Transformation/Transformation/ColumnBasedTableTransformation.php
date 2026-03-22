@@ -85,7 +85,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Stri
         return $this->pattern;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return 'ColumnTableTransform ' . $this->pattern;
     }
