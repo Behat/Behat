@@ -22,6 +22,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event in which background was tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterBackgroundTested extends BackgroundTested implements AfterTested
 {

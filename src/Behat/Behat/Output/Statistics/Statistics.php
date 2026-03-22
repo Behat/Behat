@@ -19,6 +19,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Collects and provided exercise statistics.
  *
  * @author Wouter J <wouter@wouterj.nl>
+ *
+ * @api
  */
 interface Statistics
 {

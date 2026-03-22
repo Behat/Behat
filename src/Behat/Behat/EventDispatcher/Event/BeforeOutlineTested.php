@@ -19,6 +19,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  * Represents an event before outline is tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeOutlineTested extends OutlineTested implements BeforeTested
 {

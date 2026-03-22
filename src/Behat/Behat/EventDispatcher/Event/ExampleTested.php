@@ -14,6 +14,8 @@ namespace Behat\Behat\EventDispatcher\Event;
  * Represents an example event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ExampleTested
 {

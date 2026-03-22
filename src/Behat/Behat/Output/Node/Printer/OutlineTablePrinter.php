@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Prints outline table representation headers and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface OutlineTablePrinter
 {

@@ -18,6 +18,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Prints feature headers and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface FeaturePrinter
 {

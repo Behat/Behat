@@ -16,6 +16,8 @@ use Throwable;
  * Represents a result, that possibly produced an exception.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ExceptionResult extends TestResult
 {

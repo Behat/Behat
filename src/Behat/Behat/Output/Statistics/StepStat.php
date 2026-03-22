@@ -11,6 +11,7 @@
 namespace Behat\Behat\Output\Statistics;
 
 use Behat\Behat\Tester\Result\StepResult;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Stringable;
 
 /**
@@ -32,6 +33,7 @@ class StepStat implements Stringable
         private readonly ?string $error = null,
         private readonly ?string $stdOut = null,
     ) {
+        DeprecationCollector::trigger('StepStat is deprecated in favour of StepStatV2 and will be removed in 4.0.');
     }
 
     /**

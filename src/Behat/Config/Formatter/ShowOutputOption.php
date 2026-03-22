@@ -2,6 +2,9 @@
 
 namespace Behat\Config\Formatter;
 
+/**
+ * @api
+ */
 enum ShowOutputOption: string
 {
     public const OPTION_NAME = 'show_output';

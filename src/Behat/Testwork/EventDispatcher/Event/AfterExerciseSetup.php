@@ -17,6 +17,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event in which exercise is prepared to be executed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
 {

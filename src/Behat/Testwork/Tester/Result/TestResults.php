@@ -20,6 +20,8 @@ use IteratorAggregate;
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @implements IteratorAggregate<int, TestResult>
+ *
+ * @api
  */
 final class TestResults implements TestResult, Countable, IteratorAggregate
 {

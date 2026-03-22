@@ -19,6 +19,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  * Represents an event before step test.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeStepTested extends StepTested implements BeforeTested
 {

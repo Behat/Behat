@@ -21,6 +21,8 @@ use Exception;
  * Represents an executed (successfully or not) step result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class ExecutedStepResult implements StepResult, DefinedStepResult, ExceptionResult
 {

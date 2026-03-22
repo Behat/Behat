@@ -19,6 +19,8 @@ use Behat\Testwork\Output\Formatter;
  * Prints step with optional results.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface StepPrinter
 {

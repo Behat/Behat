@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event after step setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterStepSetup extends StepTested implements AfterSetup
 {

@@ -14,6 +14,9 @@ namespace Behat\Config\Formatter;
 
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 final class JSONFormatter extends Formatter
 {
     public const NAME = 'json';
@@ -21,6 +24,8 @@ final class JSONFormatter extends Formatter
     private const TIMER_SETTING = 'timer';
 
     /**
+     * @api
+     *
      * @param bool $timer include run time attributes in generated report
      */
     public function __construct(

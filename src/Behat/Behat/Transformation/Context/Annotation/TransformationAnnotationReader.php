@@ -13,6 +13,7 @@ namespace Behat\Behat\Transformation\Context\Annotation;
 use Behat\Behat\Context\Annotation\AnnotationReader;
 use Behat\Behat\Transformation\Context\Factory\TransformationCalleeFactory;
 use Behat\Behat\Transformation\Transformation;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use ReflectionMethod;
 
 /**
@@ -41,6 +42,8 @@ class TransformationAnnotationReader implements AnnotationReader
         if (!preg_match(self::$regex, $docLine, $match)) {
             return null;
         }
+
+        DeprecationCollector::trigger('Using annotations to define transformations is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.');
 
         $pattern = $match[1];
 

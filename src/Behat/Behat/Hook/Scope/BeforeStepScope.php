@@ -19,6 +19,8 @@ use Behat\Testwork\Suite\Suite;
  * Represents a BeforeStep hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeStepScope implements StepScope
 {

@@ -23,6 +23,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event after step has been tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterStepTested extends StepTested implements AfterTested
 {

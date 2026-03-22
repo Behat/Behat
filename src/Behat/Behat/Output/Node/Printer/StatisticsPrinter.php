@@ -17,6 +17,8 @@ use Behat\Testwork\Output\Formatter;
  * Prints exercise statistics.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface StatisticsPrinter
 {

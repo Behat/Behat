@@ -21,6 +21,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event after scenario has been tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterScenarioTested extends ScenarioTested implements AfterTested
 {

@@ -17,6 +17,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents an exercise event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class ExerciseCompleted extends Event
 {

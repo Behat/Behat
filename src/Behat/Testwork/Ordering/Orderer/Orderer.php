@@ -16,6 +16,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Algorithm for prioritising Specification execution.
  *
  * @author Ciaran McNulty <mail@ciaranmcnulty.com>
+ *
+ * @api
  */
 interface Orderer
 {

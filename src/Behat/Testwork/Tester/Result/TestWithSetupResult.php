@@ -17,6 +17,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents a test result with both setup and teardown attached.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class TestWithSetupResult implements TestResult
 {

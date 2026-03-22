@@ -18,6 +18,8 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  * Represents a feature event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class FeatureTested extends LifecycleEvent implements GherkinNodeTested
 {

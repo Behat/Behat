@@ -16,6 +16,8 @@ use Behat\Behat\Definition\Call\DefinitionCall;
  * Transforms a single argument value.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ArgumentTransformer
 {

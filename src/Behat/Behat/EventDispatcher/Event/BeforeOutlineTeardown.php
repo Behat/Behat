@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event right before outline teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardown
 {

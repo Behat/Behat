@@ -17,6 +17,8 @@ use Behat\Testwork\Tester\Result\ExceptionResult;
  * Represents a step test result with a failed definition search.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class FailedStepSearchResult implements StepResult, ExceptionResult
 {

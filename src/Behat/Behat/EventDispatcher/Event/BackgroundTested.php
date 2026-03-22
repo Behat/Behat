@@ -18,6 +18,8 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  * Represents a background event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class BackgroundTested extends LifecycleEvent implements ScenarioLikeTested
 {

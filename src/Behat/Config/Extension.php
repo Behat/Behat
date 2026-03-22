@@ -8,8 +8,14 @@ use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 final class Extension implements ExtensionConfigInterface
 {
+    /**
+     * @api
+     */
     public function __construct(
         private readonly string $name,
         private readonly array $settings = [],

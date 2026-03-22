@@ -14,12 +14,16 @@ use Attribute;
 
 /**
  * Represents an Attribute for Given steps.
+ *
+ * @api
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Given implements Definition
 {
     /**
      * @param string|null $pattern
+     *
+     * @api
      */
     public function __construct(
         public $pattern = null,

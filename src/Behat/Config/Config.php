@@ -10,6 +10,9 @@ use PhpParser\Node\Expr;
 
 use function is_string;
 
+/**
+ * @api
+ */
 final class Config implements ConfigInterface, ConfigConverterInterface
 {
     public const IMPORTS_SETTING = 'imports';
@@ -19,6 +22,9 @@ final class Config implements ConfigInterface, ConfigConverterInterface
     private const PROFILE_FUNCTION = 'withProfile';
     private const PREFERRED_PROFILE_FUNCTION = 'withPreferredProfile';
 
+    /**
+     * @api
+     */
     public function __construct(
         private array $settings = [],
     ) {

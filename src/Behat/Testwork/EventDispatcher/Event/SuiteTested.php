@@ -16,6 +16,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents a suite event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class SuiteTested extends LifecycleEvent
 {

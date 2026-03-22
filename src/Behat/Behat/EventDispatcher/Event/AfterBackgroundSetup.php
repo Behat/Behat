@@ -21,6 +21,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event right after background was setup for testing.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
 {

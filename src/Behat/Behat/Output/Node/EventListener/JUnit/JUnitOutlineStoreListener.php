@@ -14,6 +14,7 @@ use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\Output\Node\Printer\SuitePrinter;
 use Behat\Gherkin\Node\ExampleNode;
 use Behat\Gherkin\Node\OutlineNode;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
@@ -82,10 +83,12 @@ final class JUnitOutlineStoreListener implements EventListener
     /**
      * @return OutlineNode
      *
-     * @deprecated this method will be removed in the next major as the JUnit formatter no longer uses this information
+     * @deprecated This method will be removed in 4.0 as the JUnit formatter no longer uses this information.
      */
     public function getCurrentOutline(ExampleNode $scenario)
     {
+        DeprecationCollector::trigger('JUnitOutlineStoreListener::getCurrentOutline() is deprecated and will be removed in 4.0 as the JUnit formatter no longer uses this information.');
+
         return $this->lineScenarioMap[$scenario->getLine()];
     }
 }

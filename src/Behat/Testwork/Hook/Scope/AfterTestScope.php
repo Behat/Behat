@@ -16,6 +16,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents a hook scope for After* hooks.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface AfterTestScope extends HookScope
 {

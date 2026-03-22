@@ -16,6 +16,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event right after a test setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface AfterSetup
 {

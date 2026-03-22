@@ -6,6 +6,9 @@ namespace Behat\Config\Formatter;
 
 use Behat\Config\ConfigInterface;
 
+/**
+ * @api
+ */
 interface FormatterConfigInterface extends ConfigInterface
 {
     public function name(): string;

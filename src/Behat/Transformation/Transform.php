@@ -14,10 +14,15 @@ use Attribute;
 
 /**
  * Represents an Attribute for a Transform transformation.
+ *
+ * @api
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class Transform
 {
+    /**
+     * @api
+     */
     public function __construct(
         public readonly string $pattern = '',
     ) {

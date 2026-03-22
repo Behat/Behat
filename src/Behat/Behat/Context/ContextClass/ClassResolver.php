@@ -18,6 +18,8 @@ use Behat\Behat\Context\Environment\Handler\ContextEnvironmentHandler;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ClassResolver
 {

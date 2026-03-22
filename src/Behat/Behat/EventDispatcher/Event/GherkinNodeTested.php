@@ -16,6 +16,8 @@ use Behat\Gherkin\Node\NodeInterface;
  * Represents a Gherkin node based event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface GherkinNodeTested
 {

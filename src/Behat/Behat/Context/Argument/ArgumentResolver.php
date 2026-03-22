@@ -19,6 +19,8 @@ use ReflectionClass;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ArgumentResolver
 {

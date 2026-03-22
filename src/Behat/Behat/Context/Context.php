@@ -14,6 +14,8 @@ namespace Behat\Behat\Context;
  * Marks a custom user-defined class as a behat context.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Context
 {

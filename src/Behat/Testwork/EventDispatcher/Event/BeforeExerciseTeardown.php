@@ -17,6 +17,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event right before exercise teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTeardown
 {

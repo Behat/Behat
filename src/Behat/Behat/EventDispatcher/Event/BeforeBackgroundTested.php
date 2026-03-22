@@ -20,6 +20,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  * Represents a BeforeBackgroundTested event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeBackgroundTested extends BackgroundTested implements BeforeTested
 {

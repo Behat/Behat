@@ -14,6 +14,8 @@ namespace Behat\Behat\Tester\Result;
  * Represents an undefined step result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class UndefinedStepResult implements StepResult
 {

@@ -18,6 +18,8 @@ use Behat\Testwork\Suite\Suite;
  * Represents an event which holds references to current suite and environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class LifecycleEvent extends Event
 {

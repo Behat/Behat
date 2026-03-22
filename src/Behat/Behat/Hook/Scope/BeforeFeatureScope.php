@@ -18,6 +18,8 @@ use Behat\Testwork\Suite\Suite;
  * Represents a BeforeFeature hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeFeatureScope implements FeatureScope
 {

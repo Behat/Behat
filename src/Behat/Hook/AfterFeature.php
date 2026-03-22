@@ -14,11 +14,15 @@ use Attribute;
 
 /**
  * Represents an Attribute for AfterFeature hook.
+ *
+ * @api
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class AfterFeature implements Hook
 {
     /**
+     * @api
+     *
      * @param string|null $filterString
      */
     public function __construct(

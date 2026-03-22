@@ -18,6 +18,8 @@ use Stringable;
  * Behat scenario stat.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class ScenarioStat implements Stringable
 {

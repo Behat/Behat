@@ -22,6 +22,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * in a single suite for instance.
  *
  * @author Wouter J <wouter@wouterj.nl>
+ *
+ * @api
  */
 final class PhaseStatistics implements Statistics
 {

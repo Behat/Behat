@@ -14,12 +14,16 @@ use Attribute;
 
 /**
  * Represents an Attribute for BeforeStep hook.
+ *
+ * @api
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class BeforeStep implements Hook
 {
     /**
      * @param string|null $filterString
+     *
+     * @api
      */
     public function __construct(
         public $filterString = null,

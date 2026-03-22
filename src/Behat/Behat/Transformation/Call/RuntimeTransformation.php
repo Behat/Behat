@@ -12,6 +12,7 @@ namespace Behat\Behat\Transformation\Call;
 
 use Behat\Behat\Transformation\Transformation;
 use Behat\Testwork\Call\RuntimeCallee;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Stringable;
 
 /**
@@ -35,6 +36,8 @@ final class RuntimeTransformation extends RuntimeCallee implements Stringable, T
         $callable,
         $description = null,
     ) {
+        DeprecationCollector::trigger('RuntimeTransformation is deprecated and will be removed in 4.0. Use specific transformations instead.');
+
         parent::__construct($callable, $description);
     }
 

@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an AfterFeature hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterFeatureScope implements FeatureScope, AfterTestScope
 {

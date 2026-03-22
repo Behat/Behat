@@ -9,6 +9,9 @@ use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 class Formatter implements FormatterConfigInterface, ConfigConverterInterface
 {
     private const OUTPUT_VERBOSITY_SETTING = 'output_verbosity';
@@ -31,6 +34,9 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
         self::OUTPUT_STYLES_SETTING => self::OUTPUT_STYLES_FUNCTION,
     ];
 
+    /**
+     * @api
+     */
     public function __construct(
         private readonly string $name,
         private array $settings = [],

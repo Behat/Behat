@@ -19,6 +19,8 @@ use Behat\Testwork\Suite\Suite;
  * Represents a BeforeScenario hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeScenarioScope implements ScenarioScope
 {

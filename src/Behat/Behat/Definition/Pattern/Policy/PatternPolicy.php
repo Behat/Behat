@@ -19,6 +19,8 @@ use Behat\Behat\Definition\Pattern\PatternTransformer;
  * @see PatternTransformer
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface PatternPolicy
 {

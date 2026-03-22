@@ -11,6 +11,7 @@
 namespace Behat\Behat\Context\Snippet\Generator;
 
 use Behat\Behat\Context\CustomSnippetAcceptingContext;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 
 /**
  * Identifier that uses context interfaces to guess the pattern type.
@@ -26,6 +27,8 @@ final class ContextInterfaceBasedPatternIdentifier implements PatternIdentifier
         if (!in_array(CustomSnippetAcceptingContext::class, class_implements($contextClass))) {
             return null;
         }
+
+        DeprecationCollector::trigger('ContextInterfaceBasedPatternIdentifier is deprecated in favour of --snippet-type and will be removed in 4.0.');
 
         return $contextClass::getAcceptedSnippetType();
     }

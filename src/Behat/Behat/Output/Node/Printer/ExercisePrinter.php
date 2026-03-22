@@ -12,6 +12,9 @@ namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Testwork\Output\Formatter;
 
+/**
+ * @api
+ */
 interface ExercisePrinter
 {
     public function printHeader(Formatter $formatter): void;
