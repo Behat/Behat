@@ -15,6 +15,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturn
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
@@ -27,7 +28,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php82: true)
-    ->withTypeCoverageLevel(34)
+    ->withTypeCoverageLevel(35)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
@@ -129,6 +130,10 @@ return RectorConfig::configure()
         ReturnTypeFromStrictTypedCallRector::class => [
             // BC break
             __DIR__.'/src/Behat/Behat/Tester/Exception/Stringer/PendingExceptionStringer',
+        ],
+        ReturnUnionTypeRector::class => [
+            // BC break
+            __DIR__.'/src/Behat\Testwork\Call\RuntimeCallee.php'
         ],
     ])
     ->withImportNames(

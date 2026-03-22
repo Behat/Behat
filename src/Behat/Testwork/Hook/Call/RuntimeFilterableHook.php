@@ -26,13 +26,12 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements Stringable, 
      * @param string      $scopeName
      * @param string|null $filterString
      * @param callable    $callable
-     * @param string|null $description
      */
     public function __construct(
         $scopeName,
         private $filterString,
-        $callable,
-        $description = null,
+        callable|array $callable,
+        ?string $description = null,
     ) {
         parent::__construct($scopeName, $callable, $description);
     }

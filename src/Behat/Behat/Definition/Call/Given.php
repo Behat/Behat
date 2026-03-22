@@ -24,7 +24,7 @@ final class Given extends RuntimeDefinition
      *
      * @param array<object|string, string>|callable $callable
      */
-    public function __construct(string $pattern, $callable, ?string $description = null)
+    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
     {
         parent::__construct(self::KEYWORD, $pattern, $callable, $description);
     }

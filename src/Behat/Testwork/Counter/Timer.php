@@ -56,7 +56,7 @@ final class Timer implements Stringable
      *
      * @throws TimerException If timer has not been started
      */
-    public function getTime()
+    public function getTime(): float
     {
         if (!$this->starTime) {
             throw new TimerException('You can not get time from timer that never been started.');

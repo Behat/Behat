@@ -26,7 +26,7 @@ final class AfterScenario extends RuntimeScenarioHook
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($filterString, $callable, $description = null)
+    public function __construct($filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct(ScenarioScope::AFTER, $filterString, $callable, $description);
     }

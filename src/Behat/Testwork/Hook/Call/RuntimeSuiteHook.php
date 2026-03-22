@@ -28,11 +28,10 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
      * @param string                               $scopeName
      * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
-     * @param string|null                          $description
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($scopeName, $filterString, $callable, $description = null)
+    public function __construct($scopeName, $filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 

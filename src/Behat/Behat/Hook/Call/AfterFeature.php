@@ -26,7 +26,7 @@ final class AfterFeature extends RuntimeFeatureHook
      * @param callable    $callable
      * @param string|null $description
      */
-    public function __construct($filterString, $callable, $description = null)
+    public function __construct($filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct(FeatureScope::AFTER, $filterString, $callable, $description);
     }

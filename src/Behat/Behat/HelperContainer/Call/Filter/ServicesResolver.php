@@ -90,7 +90,7 @@ final class ServicesResolver implements CallFilter
      *
      * @throws UnsupportedCallException if given call is not DefinitionCall or TransformationCall
      */
-    private function repackageCallIfNewArguments(Call $call, array $arguments)
+    private function repackageCallIfNewArguments(Call $call, array $arguments): Call|DefinitionCall|TransformationCall
     {
         if ($arguments === $call->getArguments()) {
             return $call;

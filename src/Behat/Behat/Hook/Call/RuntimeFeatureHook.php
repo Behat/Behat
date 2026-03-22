@@ -35,7 +35,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($scopeName, $filterString, $callable, $description = null)
+    public function __construct($scopeName, $filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
