@@ -78,10 +78,8 @@ abstract class OutputFactory
 
     /**
      * Forces output to be decorated.
-     *
-     * @param bool $decorated
      */
-    public function setOutputDecorated($decorated)
+    public function setOutputDecorated(?bool $decorated)
     {
         $this->outputDecorated = $decorated;
     }

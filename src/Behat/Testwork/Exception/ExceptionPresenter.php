@@ -60,10 +60,8 @@ final class ExceptionPresenter
 
     /**
      * Sets default verbosity to a specified level.
-     *
-     * @param int $defaultVerbosity
      */
-    public function setDefaultVerbosity($defaultVerbosity): void
+    public function setDefaultVerbosity(int $defaultVerbosity): void
     {
         $this->defaultVerbosity = $defaultVerbosity;
     }
