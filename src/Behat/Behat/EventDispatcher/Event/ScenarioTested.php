@@ -16,6 +16,8 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  * Represents a scenario event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class ScenarioTested extends LifecycleEvent implements ScenarioLikeTested
 {

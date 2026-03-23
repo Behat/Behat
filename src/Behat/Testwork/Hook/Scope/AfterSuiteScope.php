@@ -18,6 +18,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents a scope for AfterSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterSuiteScope implements SuiteScope, AfterTestScope
 {

@@ -16,6 +16,8 @@ use ReflectionFunctionAbstract;
  * Represents callable object.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Callee
 {

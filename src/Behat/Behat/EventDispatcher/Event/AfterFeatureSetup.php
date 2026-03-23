@@ -19,6 +19,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event right after feature is setup for a test.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterFeatureSetup extends FeatureTested implements AfterSetup
 {

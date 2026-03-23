@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event before scenario teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
 {

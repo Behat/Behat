@@ -17,6 +17,8 @@ use Behat\Testwork\Suite\Suite;
  * Prints provided definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface DefinitionPrinter
 {

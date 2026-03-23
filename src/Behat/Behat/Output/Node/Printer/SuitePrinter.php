@@ -17,6 +17,8 @@ use Behat\Testwork\Suite\Suite;
  * Prints suite headers and footers.
  *
  * @author Wouter J <wouter@wouterj.nl>
+ *
+ * @api
  */
 interface SuitePrinter
 {

@@ -18,6 +18,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event right before suite teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
 {

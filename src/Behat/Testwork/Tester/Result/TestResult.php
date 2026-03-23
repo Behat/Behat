@@ -14,6 +14,8 @@ namespace Behat\Testwork\Tester\Result;
  * Represents a test result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface TestResult
 {

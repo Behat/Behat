@@ -18,6 +18,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event right after a suite setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterSuiteSetup extends SuiteTested implements AfterSetup
 {

@@ -18,6 +18,8 @@ use Behat\Testwork\Hook\Scope\HookScope;
  * Represents a scenario hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ScenarioScope extends HookScope
 {

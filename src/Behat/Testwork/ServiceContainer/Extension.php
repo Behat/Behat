@@ -21,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * implementations is provided through extensions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Extension extends CompilerPassInterface
 {

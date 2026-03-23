@@ -20,6 +20,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * All testwork console controllers should implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Controller
 {

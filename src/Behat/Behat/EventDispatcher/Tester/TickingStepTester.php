@@ -14,6 +14,7 @@ use Behat\Behat\Tester\Result\StepResult;
 use Behat\Behat\Tester\StepTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
 
 /**
@@ -36,6 +37,7 @@ final class TickingStepTester implements StepTester
     public function __construct(
         private readonly StepTester $baseTester,
     ) {
+        DeprecationCollector::trigger('TickingStepTester is deprecated since signal handling now uses pcntl_signal_dispatch. It will be removed in 4.0.');
     }
 
     public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)

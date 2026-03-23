@@ -18,6 +18,8 @@ use Behat\Behat\Context\Reader\TranslatableContextReader;
  * @see TranslatableContextReader
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface TranslatableContext extends Context
 {

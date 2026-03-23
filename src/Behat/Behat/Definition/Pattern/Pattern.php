@@ -10,6 +10,8 @@
 
 namespace Behat\Behat\Definition\Pattern;
 
+use Behat\Testwork\Deprecation\DeprecationCollector;
+
 /**
  * Step definition pattern.
  *
@@ -27,10 +29,12 @@ final class Pattern
     /**
      * Returns canonical step text.
      *
-     * @deprecated see getSuggestedMethodName
+     * @deprecated Use getSuggestedMethodName() instead. Will be removed in 4.0.
      */
     public function getCanonicalText(): string
     {
+        DeprecationCollector::trigger('Pattern::getCanonicalText() is deprecated. Use getSuggestedMethodName() instead. It will be removed in 4.0.');
+
         return $this->suggestedMethodName;
     }
 

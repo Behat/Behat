@@ -16,6 +16,8 @@ use Behat\Testwork\Call\Callee;
  * Represents a step definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Definition extends Callee
 {

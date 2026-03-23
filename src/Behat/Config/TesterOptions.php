@@ -5,6 +5,9 @@ namespace Behat\Config;
 use Behat\Config\Converter\ConfigConverterTools;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 final class TesterOptions implements ConfigConverterInterface
 {
     private const TESTERS_SETTINGS_GROUP = 'testers';
@@ -68,6 +71,9 @@ final class TesterOptions implements ConfigConverterInterface
         return new self($settings);
     }
 
+    /**
+     * @api
+     */
     public function __construct(
         private array $settings = [],
     ) {

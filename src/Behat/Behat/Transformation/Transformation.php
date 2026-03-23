@@ -16,6 +16,8 @@ use Behat\Testwork\Call\Callee;
  * Step transformation interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Transformation extends Callee
 {

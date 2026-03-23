@@ -17,6 +17,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event right after a test was completed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface AfterTested
 {

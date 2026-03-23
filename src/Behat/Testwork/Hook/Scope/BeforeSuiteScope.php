@@ -17,6 +17,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents a scope for BeforeSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeSuiteScope implements SuiteScope
 {

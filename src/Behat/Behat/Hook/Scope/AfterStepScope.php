@@ -22,6 +22,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an AfterStep hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterStepScope implements StepScope, AfterTestScope
 {

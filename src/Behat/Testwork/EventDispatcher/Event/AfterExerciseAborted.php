@@ -14,6 +14,8 @@ namespace Behat\Testwork\EventDispatcher\Event;
  * Represents an event in which exercise was aborted.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterExerciseAborted extends ExerciseCompleted
 {

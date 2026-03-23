@@ -19,6 +19,8 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  * Represents an outline event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class OutlineTested extends LifecycleEvent implements GherkinNodeTested
 {

@@ -19,6 +19,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  * Represents an event before scenario is tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
 {

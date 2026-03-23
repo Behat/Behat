@@ -16,6 +16,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents an event in which exercise is prepared to be executed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeTested
 {

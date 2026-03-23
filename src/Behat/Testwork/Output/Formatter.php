@@ -19,6 +19,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @see OutputManager
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Formatter extends EventSubscriberInterface
 {

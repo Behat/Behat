@@ -19,6 +19,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event in which suite was tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterSuiteTested extends SuiteTested implements AfterTested
 {

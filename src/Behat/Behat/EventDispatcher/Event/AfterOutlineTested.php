@@ -21,6 +21,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event after outline was tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterOutlineTested extends OutlineTested implements AfterTested
 {

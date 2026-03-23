@@ -22,6 +22,8 @@ use Behat\Testwork\Environment\Environment;
  * @see DefinitionFinder
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface SearchEngine
 {

@@ -17,6 +17,8 @@ use Stringable;
  * Second iteration of Behat step stat, with a scenario information.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class StepStatV2 extends StepStat implements Stringable
 {
@@ -32,7 +34,6 @@ final class StepStatV2 extends StepStat implements Stringable
         private readonly ?string $error = null,
         private readonly ?string $stdOut = null,
     ) {
-        parent::__construct($stepText, $stepPath, $resultCode, $error, $stdOut);
     }
 
     /**
@@ -60,9 +61,25 @@ final class StepStatV2 extends StepStat implements Stringable
     }
 
     /**
+     * Returns step text.
+     */
+    public function getText(): string
+    {
+        return $this->stepText;
+    }
+
+    /**
      * Returns step path.
      */
     public function getStepPath(): string
+    {
+        return $this->stepPath;
+    }
+
+    /**
+     * Returns step path.
+     */
+    public function getPath(): string
     {
         return $this->stepPath;
     }

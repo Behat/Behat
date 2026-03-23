@@ -19,6 +19,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event right before feature is teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardown
 {

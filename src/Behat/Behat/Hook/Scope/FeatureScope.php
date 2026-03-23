@@ -17,6 +17,8 @@ use Behat\Testwork\Hook\Scope\HookScope;
  * Represents a feature hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface FeatureScope extends HookScope
 {

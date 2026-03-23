@@ -17,6 +17,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents an event in which suite is prepared to be tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeSuiteTested extends SuiteTested implements BeforeTested
 {

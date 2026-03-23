@@ -16,6 +16,8 @@ use Behat\Behat\Context\Context;
  * Initializes contexts using custom logic.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ContextInitializer
 {

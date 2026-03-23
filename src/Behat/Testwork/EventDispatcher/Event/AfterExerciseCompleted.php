@@ -18,6 +18,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Represents an event in which exercise was completed.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterExerciseCompleted extends ExerciseCompleted implements AfterTested
 {

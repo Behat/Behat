@@ -16,6 +16,8 @@ use Behat\Behat\Definition\Definition;
  * Represents a step result that contains step definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface DefinedStepResult extends StepResult
 {

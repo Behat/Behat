@@ -23,6 +23,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event before step teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeStepTeardown extends StepTested implements BeforeTeardown
 {

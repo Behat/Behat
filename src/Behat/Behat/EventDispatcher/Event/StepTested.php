@@ -18,6 +18,8 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  * Represents a step event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 abstract class StepTested extends LifecycleEvent implements GherkinNodeTested
 {

@@ -17,6 +17,8 @@ use Behat\Behat\Definition\SearchResult;
  * Represents a skipped step result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class SkippedStepResult implements StepResult, DefinedStepResult
 {

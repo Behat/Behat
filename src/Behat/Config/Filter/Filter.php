@@ -8,8 +8,14 @@ use Behat\Config\ConfigConverterInterface;
 use Behat\Config\Converter\ConfigConverterTools;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 class Filter implements FilterInterface, ConfigConverterInterface
 {
+    /**
+     * @api
+     */
     public function __construct(
         private readonly string $name,
         private readonly string $value,

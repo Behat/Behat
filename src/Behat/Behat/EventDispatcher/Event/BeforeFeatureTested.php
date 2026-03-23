@@ -18,6 +18,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  * Represents an event before feature tested.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class BeforeFeatureTested extends FeatureTested implements BeforeTested
 {

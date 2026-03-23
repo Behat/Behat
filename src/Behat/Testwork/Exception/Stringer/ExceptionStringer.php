@@ -19,6 +19,8 @@ use Exception;
  * @see ExceptionPresenter
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ExceptionStringer
 {

@@ -21,6 +21,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an AfterScenario hook scope.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterScenarioScope implements ScenarioScope, AfterTestScope
 {

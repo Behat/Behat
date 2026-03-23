@@ -20,6 +20,8 @@ use Behat\Testwork\Environment\Environment;
  * @see ContextEnvironmentHandler
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ContextEnvironment extends Environment
 {

@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Result\TestResults;
  * Collects and provided exercise statistics.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class TotalStatistics implements Statistics
 {

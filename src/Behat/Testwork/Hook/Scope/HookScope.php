@@ -22,6 +22,8 @@ use Behat\Testwork\Suite\Suite;
  * @see HookRepository
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface HookScope
 {

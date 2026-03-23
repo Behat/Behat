@@ -20,6 +20,8 @@ use Behat\Testwork\Tester\Setup\Setup;
  * Represents an event after scenario setup.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
 {

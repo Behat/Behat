@@ -17,6 +17,8 @@ use Behat\Testwork\Output\Formatter;
  * Used to define formatter event listeners.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface EventListener
 {

@@ -16,6 +16,9 @@ use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 final class Profile implements ConfigConverterInterface
 {
     private const SUITES_SETTING = 'suites';
@@ -42,6 +45,9 @@ final class Profile implements ConfigConverterInterface
     private const EDITOR_URL_PARAMETER = 'editorUrl';
     private const REMOVE_PREFIX_PARAMETER = 'removePrefix';
 
+    /**
+     * @api
+     */
     public function __construct(
         private readonly string $name,
         private array $settings = [],

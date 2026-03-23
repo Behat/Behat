@@ -18,6 +18,8 @@ use Behat\Testwork\Tester\Setup\Teardown;
  * Behat setup printer interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface SetupPrinter
 {

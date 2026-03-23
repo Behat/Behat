@@ -16,6 +16,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Extends Testwork test result with support for undefined status.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface StepResult extends TestResult
 {

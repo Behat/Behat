@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Behat\Config\Filter;
 
+/**
+ * @api
+ */
 interface FilterInterface
 {
     public function name(): string;

@@ -19,6 +19,8 @@ use Behat\Testwork\Output\Formatter;
  * Prints outline example row results.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ExampleRowPrinter
 {

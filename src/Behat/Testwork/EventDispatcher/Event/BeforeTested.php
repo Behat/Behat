@@ -14,6 +14,8 @@ namespace Behat\Testwork\EventDispatcher\Event;
  * Represents an event just before test setup is started.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface BeforeTested
 {

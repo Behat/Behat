@@ -13,6 +13,9 @@ use Behat\Config\Filter\TagFilter;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 final class Suite implements ConfigConverterInterface
 {
     private const CONTEXTS_SETTING = 'contexts';
@@ -24,6 +27,9 @@ final class Suite implements ConfigConverterInterface
     private const PATHS_FUNCTION = 'withPaths';
     private const FILTER_FUNCTION = 'withFilter';
 
+    /**
+     * @api
+     */
     public function __construct(
         private readonly string $name,
         private array $settings = [],

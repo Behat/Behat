@@ -16,6 +16,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Represents an event right before a teardown.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface BeforeTeardown
 {

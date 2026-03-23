@@ -17,6 +17,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents an event in which suite was aborted.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class AfterSuiteAborted extends SuiteTested
 {

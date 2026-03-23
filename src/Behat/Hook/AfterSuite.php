@@ -14,11 +14,15 @@ use Attribute;
 
 /**
  * Represents an Attribute for AfterSuite hook.
+ *
+ * @api
  */
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 final class AfterSuite implements Hook
 {
     /**
+     * @api
+     *
      * @param string|null $filterString
      */
     public function __construct(

@@ -7,6 +7,8 @@ namespace Behat\Behat\Definition\Pattern;
  *
  * Suggested names do not have to be unique - the ContextSnippetGenerator will add a numerical suffix if the Context
  * already contains a method with the suggested name.
+ *
+ * @api
  */
 interface StepMethodNameSuggester
 {

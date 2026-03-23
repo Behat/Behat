@@ -19,6 +19,8 @@ use Behat\Testwork\Tester\Result\TestResult;
  * Prints example headers and footers.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface ExamplePrinter
 {

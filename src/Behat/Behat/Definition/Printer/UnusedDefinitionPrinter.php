@@ -12,6 +12,9 @@ namespace Behat\Behat\Definition\Printer;
 
 use Behat\Behat\Definition\Definition;
 
+/**
+ * @api
+ */
 interface UnusedDefinitionPrinter
 {
     /**
