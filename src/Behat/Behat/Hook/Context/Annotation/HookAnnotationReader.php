@@ -31,7 +31,7 @@ final class HookAnnotationReader implements AnnotationReader
 {
     private static string $regex = '/^\@(beforesuite|aftersuite|beforefeature|afterfeature|beforescenario|afterscenario|beforestep|afterstep)(?:\s+(.+))?$/i';
     /**
-     * @var string[]
+     * @var array<string,string>
      */
     private static array $classes = [
         'beforesuite' => BeforeSuite::class,

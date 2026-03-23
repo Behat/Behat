@@ -20,7 +20,7 @@ use Behat\Testwork\Suite\Setup\SuiteSetup;
 final class SuiteBootstrapper
 {
     /**
-     * @var SuiteSetup[]
+     * @var list<SuiteSetup>
      */
     private array $setups = [];
 

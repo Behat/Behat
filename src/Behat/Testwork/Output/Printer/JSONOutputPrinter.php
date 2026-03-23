@@ -22,17 +22,17 @@ final class JSONOutputPrinter extends StreamOutputPrinter
     private ?array $exercise = null;
 
     /**
-     * @var array<string, string|int|float|array>[]
+     * @var list<array<string, string|int|float|array>>
      */
     private array $suites = [];
 
     /**
-     * @var array<string, string|int|float|array>[]
+     * @var list<array<string, string|int|float|array>>
      */
     private array $features = [];
 
     /**
-     * @var array<string, string|int|float|array>[]
+     * @var list<array<string, string|int|float|array>>
      */
     private array $scenarios = [];
 

@@ -23,7 +23,7 @@ use Behat\Testwork\Suite\Suite;
 final class SpecificationFinder
 {
     /**
-     * @var SpecificationLocator<T>[]
+     * @var list<SpecificationLocator<T>>
      */
     private array $specificationLocators = [];
 

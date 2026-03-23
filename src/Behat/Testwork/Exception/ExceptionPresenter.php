@@ -26,7 +26,7 @@ use Throwable;
 final class ExceptionPresenter
 {
     /**
-     * @var ExceptionStringer[]
+     * @var list<ExceptionStringer>
      */
     private array $stringers = [];
 

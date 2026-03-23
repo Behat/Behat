@@ -29,7 +29,7 @@ final class AnnotatedContextReader implements ContextReader
     public const DOCLINE_TRIMMER_REGEX = '/^\/\*\*\s*|^\s*\*\s*|\s*\*\/$|\s*$/';
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     private static array $ignoreAnnotations = [
         '@param',
@@ -40,7 +40,7 @@ final class AnnotatedContextReader implements ContextReader
         '@todo',
     ];
     /**
-     * @var AnnotationReader[]
+     * @var list<AnnotationReader>
      */
     private array $readers = [];
 

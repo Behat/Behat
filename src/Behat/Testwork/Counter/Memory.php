@@ -20,7 +20,7 @@ use Stringable;
 final class Memory implements Stringable
 {
     /**
-     * @var string[]
+     * @var list<string>
      */
     private array $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
 

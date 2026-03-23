@@ -27,19 +27,19 @@ use Throwable;
 final class CallCenter
 {
     /**
-     * @var CallFilter[]
+     * @var list<CallFilter>
      */
     private array $callFilters = [];
     /**
-     * @var CallHandler[]
+     * @var list<CallHandler>
      */
     private array $callHandlers = [];
     /**
-     * @var ResultFilter[]
+     * @var list<ResultFilter>
      */
     private array $resultFilters = [];
     /**
-     * @var ExceptionHandler[]
+     * @var list<ExceptionHandler>
      */
     private array $exceptionHandlers = [];
 

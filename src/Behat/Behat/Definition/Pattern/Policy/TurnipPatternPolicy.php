@@ -30,12 +30,12 @@ final class TurnipPatternPolicy implements PatternPolicy
     public const ALTERNATIVE_WORD_REGEXP = '/(\w+)\\\\\/(\w+)/';
 
     /**
-     * @var string[]
+     * @var array<string,string>
      */
     private array $regexCache = [];
 
     /**
-     * @var string[]
+     * @var list<string>
      */
     private static array $placeholderPatterns = [
         "/(?<!\w)\"[^\"]+\"(?!\w)/",

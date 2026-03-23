@@ -24,12 +24,12 @@ final class SuiteRegistry implements SuiteRepository
 {
     private bool $suitesGenerated = false;
     /**
-     * @var SuiteGenerator[]
+     * @var list<SuiteGenerator>
      */
     private array $generators = [];
     private array $suiteConfigurations = [];
     /**
-     * @var Suite[]
+     * @var list<Suite>
      */
     private array $suites = [];
 

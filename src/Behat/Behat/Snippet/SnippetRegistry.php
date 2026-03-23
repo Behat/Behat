@@ -23,15 +23,15 @@ use Behat\Testwork\Environment\Environment;
 final class SnippetRegistry implements SnippetRepository
 {
     /**
-     * @var SnippetGenerator[]
+     * @var list<SnippetGenerator>
      */
     private array $generators = [];
     /**
-     * @var UndefinedStep[]
+     * @var list<UndefinedStep>
      */
     private $undefinedSteps = [];
     /**
-     * @var AggregateSnippet[]
+     * @var list<AggregateSnippet>
      */
     private $snippets = [];
     private bool $snippetsGenerated = false;

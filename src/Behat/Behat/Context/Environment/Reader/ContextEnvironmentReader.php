@@ -25,7 +25,7 @@ use Behat\Testwork\Environment\Reader\EnvironmentReader;
 final class ContextEnvironmentReader implements EnvironmentReader
 {
     /**
-     * @var ContextReader[]
+     * @var list<ContextReader>
      */
     private array $contextReaders = [];
 

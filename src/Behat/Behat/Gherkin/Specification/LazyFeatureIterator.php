@@ -31,16 +31,16 @@ use Behat\Testwork\Suite\Suite;
 final class LazyFeatureIterator implements SpecificationIterator
 {
     /**
-     * @var string[]
+     * @var list<string>
      */
     private $paths = [];
     /**
-     * @var FeatureFilterInterface[]
+     * @var list<FeatureFilterInterface>
      */
     private readonly array $filters;
     private int $position = 0;
     /**
-     * @var FeatureNode[]
+     * @var list<FeatureNode>
      */
     private $features = [];
     private ?FeatureNode $currentFeature = null;

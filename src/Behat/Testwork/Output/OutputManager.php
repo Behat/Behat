@@ -21,7 +21,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 final class OutputManager
 {
     /**
-     * @var Formatter[]
+     * @var array<string,Formatter>
      */
     private array $formatters = [];
 

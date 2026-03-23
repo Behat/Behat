@@ -21,7 +21,7 @@ use Behat\Behat\Snippet\Printer\SnippetPrinter;
 final class SnippetWriter
 {
     /**
-     * @var SnippetAppender[]
+     * @var list<SnippetAppender>
      */
     private array $appenders = [];
 

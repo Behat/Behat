@@ -26,7 +26,7 @@ final class DefinitionAnnotationReader implements AnnotationReader
 {
     private static string $regex = '/^\@(given|when|then)\s+(.+)$/i';
     /**
-     * @var string[]
+     * @var array<string,string>
      */
     private static array $classes = [
         'given' => Given::class,

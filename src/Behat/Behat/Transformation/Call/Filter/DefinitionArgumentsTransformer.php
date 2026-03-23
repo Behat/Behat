@@ -24,7 +24,7 @@ use Behat\Testwork\Call\Filter\CallFilter;
 final class DefinitionArgumentsTransformer implements CallFilter
 {
     /**
-     * @var ArgumentTransformer[]
+     * @var list<ArgumentTransformer>
      */
     private array $argumentTransformers = [];
 

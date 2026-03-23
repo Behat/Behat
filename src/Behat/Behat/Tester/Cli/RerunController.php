@@ -32,7 +32,7 @@ final class RerunController implements Controller
     private readonly ?string $cachePath;
     private ?string $key = null;
     /**
-     * @var array<string, string[]>
+     * @var array<string, list<string>>
      */
     private array $lines = [];
 

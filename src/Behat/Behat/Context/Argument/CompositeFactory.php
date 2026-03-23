@@ -24,7 +24,7 @@ use Behat\Testwork\Suite\Suite;
 final class CompositeFactory implements SuiteScopedResolverFactory
 {
     /**
-     * @var SuiteScopedResolverFactory[]
+     * @var list<SuiteScopedResolverFactory>
      */
     private array $factories = [];
 

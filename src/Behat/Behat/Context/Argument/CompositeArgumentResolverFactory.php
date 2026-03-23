@@ -22,7 +22,7 @@ use Behat\Testwork\Environment\Environment;
 final class CompositeArgumentResolverFactory implements ArgumentResolverFactory
 {
     /**
-     * @var ArgumentResolverFactory[]
+     * @var list<ArgumentResolverFactory>
      */
     private array $factories = [];
 

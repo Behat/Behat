@@ -26,7 +26,7 @@ use Composer\Autoload\ClassLoader;
 final class SuiteWithContextsSetup implements SuiteSetup
 {
     /**
-     * @var ClassGenerator[]
+     * @var list<ClassGenerator>
      */
     private array $classGenerators = [];
 

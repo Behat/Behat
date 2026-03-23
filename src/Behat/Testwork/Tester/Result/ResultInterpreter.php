@@ -23,7 +23,7 @@ final class ResultInterpreter
     public const FAIL = 1;
 
     /**
-     * @var ResultInterpretation[]
+     * @var list<ResultInterpretation>
      */
     private array $interpretations = [];
 

@@ -11,6 +11,7 @@
 namespace Behat\Behat\Context\Reader;
 
 use Behat\Behat\Context\Environment\ContextEnvironment;
+use Behat\Testwork\Call\Callee;
 
 /**
  * Proxies call to another reader and caches context callees for a length of an entire exercise.
@@ -20,7 +21,7 @@ use Behat\Behat\Context\Environment\ContextEnvironment;
 final class ContextReaderCachedPerContext implements ContextReader
 {
     /**
-     * @var array[]
+     * @var array<string, list<Callee>>
      */
     private array $cachedCallees = [];
 

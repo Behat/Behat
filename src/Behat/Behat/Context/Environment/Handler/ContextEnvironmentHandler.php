@@ -36,7 +36,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 {
     private readonly ArgumentResolverFactory $resolverFactory;
     /**
-     * @var ClassResolver[]
+     * @var list<ClassResolver>
      */
     private array $classResolvers = [];
 

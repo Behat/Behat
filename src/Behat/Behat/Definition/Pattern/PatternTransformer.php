@@ -22,12 +22,12 @@ use Behat\Behat\Definition\Pattern\Policy\PatternPolicy;
 final class PatternTransformer
 {
     /**
-     * @var PatternPolicy[]
+     * @var list<PatternPolicy>
      */
     private array $policies = [];
 
     /**
-     * @var string[]
+     * @var array<string,string>
      */
     private array $patternToRegexpCache = [];
 
