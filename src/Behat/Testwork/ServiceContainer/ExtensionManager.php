@@ -21,11 +21,11 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
 final class ExtensionManager
 {
     /**
-     * @var Extension[]
+     * @var array<string,Extension> Map of extensions by config key
      */
-    private $extensions = [];
+    private array $extensions = [];
     /**
-     * @phpstan-var array<string,Extension>
+     * @var array<string,Extension> Map of extensions by locator (phar file name, php file name, class name)
      */
     private array $locatedExtensions = [];
     private array $debugInformation = [
