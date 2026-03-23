@@ -66,7 +66,7 @@ final class SuiteRegistry implements SuiteRepository
     /**
      * Returns all available suites.
      *
-     * @return Suite[]
+     * @return list<Suite>
      */
     public function getSuites()
     {

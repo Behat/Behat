@@ -141,7 +141,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Extracts parameters from provided definition call.
      *
-     * @return ReflectionParameter[]
+     * @return list<ReflectionParameter>
      */
     private function getCallParameters(DefinitionCall $definitionCall)
     {

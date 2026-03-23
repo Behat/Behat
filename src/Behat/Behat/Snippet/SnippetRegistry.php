@@ -62,7 +62,7 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * Returns all generated snippets.
      *
-     * @return AggregateSnippet[]
+     * @return list<AggregateSnippet>
      */
     public function getSnippets()
     {
@@ -74,7 +74,7 @@ final class SnippetRegistry implements SnippetRepository
     /**
      * Returns steps for which there was no snippet generated.
      *
-     * @return UndefinedStep[]
+     * @return list<UndefinedStep>
      */
     public function getUndefinedSteps()
     {

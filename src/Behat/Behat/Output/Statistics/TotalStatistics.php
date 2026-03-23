@@ -169,7 +169,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns skipped scenario stats.
      *
-     * @return ScenarioStat[]
+     * @return list<ScenarioStat>
      */
     public function getSkippedScenarios(): array
     {
@@ -179,7 +179,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns failed scenario stats.
      *
-     * @return ScenarioStat[]
+     * @return list<ScenarioStat>
      */
     public function getFailedScenarios(): array
     {
@@ -199,7 +199,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns failed step stats.
      *
-     * @return StepStat[]
+     * @return list<StepStat>
      */
     public function getFailedSteps(): array
     {
@@ -209,7 +209,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns pending step stats.
      *
-     * @return StepStat[]
+     * @return list<StepStat>
      */
     public function getPendingSteps(): array
     {
@@ -219,7 +219,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns failed hook stats.
      *
-     * @return HookStat[]
+     * @return list<HookStat>
      */
     public function getFailedHookStats(): array
     {

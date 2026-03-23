@@ -88,9 +88,9 @@ final class ExtensionManager
     /**
      * Returns all available extensions.
      *
-     * @return Extension[]
+     * @return array<string,Extension>
      */
-    public function getExtensions()
+    public function getExtensions(): array
     {
         return $this->extensions;
     }

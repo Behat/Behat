@@ -199,7 +199,7 @@ final class OutlineTableListener implements EventListener
     /**
      * Returns currently captured step events results.
      *
-     * @return StepResult[]
+     * @return array<int,StepResult>
      */
     private function getStepTestResults(): array
     {
