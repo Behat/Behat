@@ -479,10 +479,8 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
 
     /**
      * Checks if an argument at provided position is defined.
-     *
-     * @param int $position
      */
-    private function isArgumentDefined(int|string $position): bool
+    private function isArgumentDefined(int $position): bool
     {
         return isset($this->definedArguments[$position]);
     }

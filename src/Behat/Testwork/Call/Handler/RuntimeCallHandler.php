@@ -99,10 +99,8 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Returns buffered stdout.
-     *
-     * @return string|null
      */
-    private function getBufferedStdOut(): string|false|null
+    private function getBufferedStdOut(): ?string
     {
         return ob_get_length() ? ob_get_contents() : null;
     }

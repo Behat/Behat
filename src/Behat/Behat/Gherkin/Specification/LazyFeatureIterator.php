@@ -114,12 +114,11 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * Creates filter of provided type.
      *
-     * @param string $type
      * @param string $filterString
      *
      * @throws SuiteConfigurationException If filter type is not recognised
      */
-    private function createFilter(int|string $type, $filterString, Suite $suite): FeatureFilterInterface
+    private function createFilter(string $type, $filterString, Suite $suite): FeatureFilterInterface
     {
         if ('role' === $type) {
             return new RoleFilter($filterString);

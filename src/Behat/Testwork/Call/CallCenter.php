@@ -150,10 +150,8 @@ final class CallCenter
 
     /**
      * Handles exception using registered handlers and returns a handled one.
-     *
-     * @return Exception
      */
-    private function handleException(Throwable $exception): FatalThrowableError|Exception
+    private function handleException(Throwable $exception): Exception
     {
         foreach ($this->exceptionHandlers as $handler) {
             if (!$handler->supportsException($exception)) {

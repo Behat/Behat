@@ -47,8 +47,6 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 
     /**
      * Writes text to the console.
-     *
-     * @param string $text
      */
     final protected function write(string|iterable $text, bool $lineBreakBefore = false)
     {
