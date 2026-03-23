@@ -23,6 +23,8 @@ use Stringable;
  * Pattern-based transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class PatternTransformation extends RuntimeCallee implements Stringable, Transformation
 {
@@ -30,11 +32,13 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
      * Initializes transformation.
      *
      * @param string      $pattern
-     * @param callable    $callable
+     *
+     * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
         private $pattern,
-        callable|array $callable, ?string $description = null,
+        callable|array $callable,
+        ?string $description = null,
     ) {
         parent::__construct($callable, $description);
     }

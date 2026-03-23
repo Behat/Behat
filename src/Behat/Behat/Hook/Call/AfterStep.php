@@ -11,11 +11,14 @@
 namespace Behat\Behat\Hook\Call;
 
 use Behat\Behat\Hook\Scope\StepScope;
+use Behat\Testwork\Call\RuntimeCallee;
 
 /**
  * Represents an AfterStep hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class AfterStep extends RuntimeStepHook
 {
@@ -23,7 +26,8 @@ final class AfterStep extends RuntimeStepHook
      * Initializes hook.
      *
      * @param string|null $filterString
-     * @param callable    $callable
+     *
+     * @phpstan-param TBehatCallable $callable
      */
     public function __construct($filterString, callable|array $callable, ?string $description = null)
     {

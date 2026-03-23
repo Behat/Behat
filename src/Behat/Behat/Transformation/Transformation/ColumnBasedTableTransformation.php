@@ -23,6 +23,8 @@ use Stringable;
  * Column-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class ColumnBasedTableTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
@@ -37,7 +39,8 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Stri
      * Initializes transformation.
      *
      * @param string      $pattern
-     * @param callable    $callable
+     *
+     * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
         private $pattern,

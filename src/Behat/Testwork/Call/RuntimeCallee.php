@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Call;
 
+use Behat\Behat\Context\Context;
 use Behat\Testwork\Call\Exception\BadCallbackException;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
@@ -19,11 +20,13 @@ use ReflectionMethod;
  * Represents callee created and executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @phpstan-type TBehatCallable callable|array{class-string<Context>, string}
  */
 class RuntimeCallee implements Callee
 {
     /**
-     * @var callable|array{class-string, string}
+     * @var TBehatCallable
      */
     private $callable;
     private ReflectionMethod|ReflectionFunction $reflection;
@@ -70,7 +73,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callable.
      *
-     * @return callable|array{class-string, string}
+     * @return TBehatCallable
      */
     public function getCallable()
     {

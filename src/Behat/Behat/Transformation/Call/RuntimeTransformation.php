@@ -21,6 +21,8 @@ use Stringable;
  * @deprecated Will be removed in 4.0. Use specific transformations instead
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class RuntimeTransformation extends RuntimeCallee implements Stringable, Transformation
 {
@@ -28,7 +30,8 @@ final class RuntimeTransformation extends RuntimeCallee implements Stringable, T
      * Initializes transformation.
      *
      * @param string      $pattern
-     * @param callable    $callable
+     *
+     * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
         private $pattern,

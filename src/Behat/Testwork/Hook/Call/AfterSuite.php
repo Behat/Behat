@@ -10,12 +10,15 @@
 
 namespace Behat\Testwork\Hook\Call;
 
+use Behat\Testwork\Call\RuntimeCallee;
 use Behat\Testwork\Hook\Scope\SuiteScope;
 
 /**
  * Represents AfterSuite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class AfterSuite extends RuntimeSuiteHook
 {
@@ -23,7 +26,8 @@ final class AfterSuite extends RuntimeSuiteHook
      * Initializes hook.
      *
      * @param string|null $filterString
-     * @param callable    $callable
+     *
+     * @phpstan-param TBehatCallable $callable
      */
     public function __construct($filterString, callable|array $callable, ?string $description = null)
     {
