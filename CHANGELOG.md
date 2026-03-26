@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.30.0] - 2026-03-26
+
+### Changed
+
+* Explicitly mark up interfaces, classes & methods that we consider to be the public API.
+  This will not affect our backwards compatibility guarantees for the 3.x series, but from 4.0 onwards we will only
+  guarantee BC for code that is explicitly marked as being part of the API.
+  By @acoulton in [#1807](https://github.com/Behat/Behat/pull/1807)
+* Move `gherkin` configuration to dedicated `GherkinOptions` config object. The previous API for setting filters by
+  calling `->withFilters()` on `Profile` is deprecated and will be removed in 4.0.
+  By @acoulton in [#1798](https://github.com/Behat/Behat/pull/1798)
+* Make `Extension::process()` explicit in the Extension interface & document Extension dependencies.
+  Clarifies that extensions should declare their own dependencies on any symfony packages they interact with directly.
+  By @acoulton in [#1795](https://github.com/Behat/Behat/pull/1795) and [#1804](https://github.com/Behat/Behat/pull/1804)
+* Drop PHP 8.1 support by @carlos-granados in [#1782](https://github.com/Behat/Behat/pull/1782)
+
+### Added
+
+* Support configuring `GherkinCompatibilityMode` to control how Gherkin files are parsed. The default mode behaves
+  identically to legacy parser behaviour. The opt-in experimental `gherkin-32` mode parses equivalent to the official
+  cucumber/gherkin parsers. We expect to make `gherkin-32` the default in the 4.0 release.
+  See [the documentation](https://docs.behat.org/en/latest/user_guide/gherkin/parser_mode.html) for more details.
+  By @acoulton in [#1799](https://github.com/Behat/Behat/pull/1799)
+* Add deprecation collector to capture and print Behat deprecations.
+  Users can opt-in to display and/or fail on deprecations using the methods on the `TesterOptions` config object.
+  Extension developers can log their own runtime deprecations by calling `DeprecationCollector::trigger()`.
+  By @carlos-granados in [#1794](https://github.com/Behat/Behat/pull/1794)
+
+### Internal
+
+* Add backwards-compatible strict types to private / final properties, method parameters, and method returns.
+  By @acoulton in [#1779](https://github.com/Behat/Behat/pull/1779) and [#1808](https://github.com/Behat/Behat/pull/1808)
+* Update all test files to use attributes instead of annotations by @carlos-granados in [#1777](https://github.com/Behat/Behat/pull/1777)
+* Normalize PHP file line numbers in test output to avoid fragile tests by @carlos-granados in [#1783](https://github.com/Behat/Behat/pull/1783)
+* Apply coding style fixes by @carlos-granados in [#1786](https://github.com/Behat/Behat/pull/1786)
+* Reorganize FeatureContext and add PHP types by @carlos-granados in [#1789](https://github.com/Behat/Behat/pull/1789)
+* Add runtime deprecation messages when using deprecated classes / methods by @carlos-granados in [#1805](https://github.com/Behat/Behat/pull/1805)
+* Run Behat's own features in `gherkin-32` parsing mode by @acoulton in [#1801](https://github.com/Behat/Behat/pull/1801)
+* Cast key to string for array_key_exists by @barryswaisland-eagleeye in [#1806](https://github.com/Behat/Behat/pull/1806)
+* Improve type-safety of regex string replacement operations by @acoulton in [#1778](https://github.com/Behat/Behat/pull/1778)
+* Use first-class callables for internal callbacks by @acoulton in [#1780](https://github.com/Behat/Behat/pull/1780)
+
 ## [3.29.0] - 2025-12-11
 
 ### Changed
@@ -1439,6 +1481,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.30.0]: https://github.com/Behat/Behat/compare/v3.29.0...v3.30.0
 [3.29.0]: https://github.com/Behat/Behat/compare/v3.28.0...v3.29.0
 [3.28.0]: https://github.com/Behat/Behat/compare/v3.27.0...v3.28.0
 [3.27.0]: https://github.com/Behat/Behat/compare/v3.26.0...v3.27.0
