@@ -12,15 +12,12 @@ namespace Behat\Behat\HelperContainer\Argument;
 
 use Behat\Behat\Context\Argument\ArgumentResolver;
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
 use Behat\Behat\HelperContainer\BuiltInServiceContainer;
 use Behat\Behat\HelperContainer\Environment\ServiceContainerEnvironment;
 use Behat\Behat\HelperContainer\Exception\WrongContainerClassException;
 use Behat\Behat\HelperContainer\Exception\WrongServicesConfigurationException;
 use Behat\Behat\HelperContainer\ServiceContainer\HelperContainerExtension;
-use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\TaggedContainerInterface;
 
@@ -31,7 +28,7 @@ use Symfony\Component\DependencyInjection\TaggedContainerInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class ServicesResolverFactory implements SuiteScopedResolverFactory, ArgumentResolverFactory
+final class ServicesResolverFactory implements ArgumentResolverFactory
 {
     /**
      * Initialises factory.
@@ -39,25 +36,6 @@ final class ServicesResolverFactory implements SuiteScopedResolverFactory, Argum
     public function __construct(
         private readonly TaggedContainerInterface $container,
     ) {
-    }
-
-    /**
-     * @deprecated as part of SuiteScopedResolverFactory deprecation. Would be removed in 4.0
-     *
-     * @throws WrongServicesConfigurationException
-     * @throws WrongContainerClassException
-     */
-    public function generateArgumentResolvers(Suite $suite): array
-    {
-        DeprecationCollector::trigger('SuiteScopedResolverFactory::generateArgumentResolvers() was deprecated and will be removed in 4.0');
-
-        if (!$suite->hasSetting('services')) {
-            return [];
-        }
-
-        $container = $this->createContainer($suite->getSetting('services'));
-
-        return $this->createResolvers($container, false);
     }
 
     /**

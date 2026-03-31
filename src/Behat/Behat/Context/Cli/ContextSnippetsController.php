@@ -12,8 +12,6 @@ namespace Behat\Behat\Context\Cli;
 
 use Behat\Behat\Context\Snippet\Generator\AggregateContextIdentifier;
 use Behat\Behat\Context\Snippet\Generator\AggregatePatternIdentifier;
-use Behat\Behat\Context\Snippet\Generator\ContextInterfaceBasedContextIdentifier;
-use Behat\Behat\Context\Snippet\Generator\ContextInterfaceBasedPatternIdentifier;
 use Behat\Behat\Context\Snippet\Generator\ContextSnippetGenerator;
 use Behat\Behat\Context\Snippet\Generator\FixedContextIdentifier;
 use Behat\Behat\Context\Snippet\Generator\FixedPatternIdentifier;
@@ -61,7 +59,6 @@ final class ContextSnippetsController implements Controller
     {
         $this->generator->setContextIdentifier(
             new AggregateContextIdentifier([
-                new ContextInterfaceBasedContextIdentifier(),
                 new FixedContextIdentifier($input->getOption('snippets-for')),
                 new InteractiveContextIdentifier($this->translator, $input, $output),
             ])
@@ -69,7 +66,6 @@ final class ContextSnippetsController implements Controller
 
         $this->generator->setPatternIdentifier(
             new AggregatePatternIdentifier([
-                new ContextInterfaceBasedPatternIdentifier(),
                 new FixedPatternIdentifier($input->getOption('snippets-type')),
             ])
         );

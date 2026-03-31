@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Behat\Config;
 
-use Behat\Config\Filter\FilterInterface;
 use Behat\Config\Formatter\FormatterConfigInterface;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 
@@ -58,17 +57,6 @@ final class Profile
         $this->settings[self::EXTENSIONS_SETTING][$extension->name()] = $extension->toArray();
 
         return $this;
-    }
-
-    /**
-     * @deprecated use withGherkinOptions()->withFilter(). This method will be removed in 4.0
-     */
-    public function withFilter(FilterInterface $filter): self
-    {
-        return $this->withGherkinOptions(
-            (new GherkinOptions($this->settings[self::GHERKIN_SETTING] ?? []))
-                ->withFilter($filter)
-        );
     }
 
     public function withFormatter(FormatterConfigInterface $formatter): self

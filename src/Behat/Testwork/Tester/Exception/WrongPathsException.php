@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Tester\Exception;
 
-use Behat\Testwork\Deprecation\DeprecationCollector;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 
 /**
@@ -47,17 +46,5 @@ final class WrongPathsException extends RuntimeException implements TesterExcept
     public function getPaths(): array
     {
         return $this->paths;
-    }
-
-    /**
-     * Returns path that caused exception.
-     *
-     * @deprecated Use getPaths() instead. Will be removed in 4.0.
-     */
-    public function getPath(): string
-    {
-        DeprecationCollector::trigger('WrongPathsException::getPath() is deprecated, use getPaths() instead. It will be removed in 4.0.');
-
-        return implode(', ', $this->paths);
     }
 }

@@ -12,7 +12,6 @@ namespace Behat\Testwork\Exception;
 
 use Behat\Testwork\Call\Exception\FatalThrowableError;
 use Behat\Testwork\Exception\Stringer\ExceptionStringer;
-use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\PathOptions\Printer\ConfigurablePathPrinter;
 use Exception;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,24 +29,10 @@ final class ExceptionPresenter
      */
     private array $stringers = [];
 
-    private readonly ConfigurablePathPrinter $configurablePathPrinter;
-
-    /**
-     * Initializes presenter.
-     *
-     * @param ?string $basePath deprecated, will be removed in next major version
-     */
     public function __construct(
-        ?string $basePath = null,
-        private int $defaultVerbosity = OutputPrinter::VERBOSITY_NORMAL,
-        ?ConfigurablePathPrinter $configurablePathPrinter = null,
+        private int $defaultVerbosity,
+        private readonly ConfigurablePathPrinter $configurablePathPrinter,
     ) {
-        // Historically, this class accepted a null (or not present) value for basePath. This was never passed by Behat,
-        // but was used by third parties to force the class to render exception traces with absolute file paths.
-        // The ConfigurablePathPrinter requires a value, but it is not used if printAbsolutePaths is true.
-        // Therefore, if the user provided null we can safely cast to '' (the working directory) and tell the printer
-        // to show absolute paths.
-        $this->configurablePathPrinter = $configurablePathPrinter ?? new ConfigurablePathPrinter($basePath ?? '', printAbsolutePaths: $basePath === null, editorUrl: null);
     }
 
     /**

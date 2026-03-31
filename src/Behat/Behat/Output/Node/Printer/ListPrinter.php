@@ -20,7 +20,6 @@ use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Statistics\HookStat;
 use Behat\Behat\Output\Statistics\ScenarioStat;
-use Behat\Behat\Output\Statistics\StepStat;
 use Behat\Behat\Output\Statistics\StepStatV2;
 use Behat\Config\Formatter\ShowOutputOption;
 use Behat\Testwork\Hook\Scope\AfterSuiteScope;
@@ -54,7 +53,7 @@ final class ListPrinter
      * @param string         $intro
      * @param int            $resultCode
      * @param ScenarioStat[] $scenarioStats
-     * @param StepStat[]     $stepStats
+     * @param StepStatV2[]     $stepStats
      */
     public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null): void
     {
@@ -82,7 +81,7 @@ final class ListPrinter
      *
      * @param string     $intro
      * @param int        $resultCode
-     * @param StepStat[] $stepStats
+     * @param StepStatV2[] $stepStats
      */
     public function printStepList(
         OutputPrinter $printer,
@@ -101,19 +100,7 @@ final class ListPrinter
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
 
         foreach ($stepStats as $num => $stepStat) {
-            if ($stepStat instanceof StepStatV2) {
-                $this->printStepStat($printer, $num + 1, $stepStat, $style, $showOutput);
-            } elseif ($stepStat instanceof StepStat) {
-                $this->printStat(
-                    $printer,
-                    $stepStat->getText(),
-                    $stepStat->getPath(),
-                    $style,
-                    $stepStat->getStdOut(),
-                    $stepStat->getError(),
-                    $showOutput
-                );
-            }
+            $this->printStepStat($printer, $num + 1, $stepStat, $style, $showOutput);
         }
     }
 
@@ -142,39 +129,6 @@ final class ListPrinter
         if ($simple) {
             $printer->writeln();
         }
-    }
-
-    /**
-     * Prints hook stat.
-     *
-     * @deprecated Remove in 4.0
-     */
-    private function printStat(
-        OutputPrinter $printer,
-        string $name,
-        string $path,
-        string $style,
-        ?string $stdOut,
-        ?string $error,
-        ?ShowOutputOption $showOutput,
-    ): void {
-        $path = $this->configurablePathPrinter->processPathsInText($path);
-        $printer->writeln(sprintf('    {+%s}%s{-%s} {+comment}# %s{-comment}', $style, $name, $style, $path));
-
-        $pad = (fn ($line): string => '      ' . $line);
-
-        if (null !== $stdOut && $showOutput !== ShowOutputOption::No) {
-            $padText = (fn ($line): string => '      │ ' . $line);
-            $stdOutString = array_map($padText, explode("\n", $stdOut));
-            $printer->writeln(implode("\n", $stdOutString));
-        }
-
-        if ($error) {
-            $exceptionString = implode("\n", array_map($pad, explode("\n", $error)));
-            $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $exceptionString, $style));
-        }
-
-        $printer->writeln();
     }
 
     /**
@@ -262,31 +216,27 @@ final class ListPrinter
     }
 
     /**
-     * @param StepStat[] $stepStats
+     * @param StepStatV2[] $stepStats
      */
     private function appendFailingStepText(?array $stepStats, string $path, ScenarioStat $scenarioStat): string
     {
-        $foundStepStat = null;
-        if (null === $stepStats) {
+        if ($stepStats === null) {
             return $path;
         }
 
+        $foundStepStat = null;
         foreach ($stepStats as $stepStat) {
-            // See https://github.com/Behat/Behat/pull/1615#pullrequestreview-2737706542
-            // > although Statistics::getFailedSteps() is typed as returning StepStat[] for BC reasons,
-            // > in practice we only ever create / register instances of StepStatV2. And that has a
-            // > getScenarioPath() which I think should always match the getPath() of ScenarioStat.
-            if ($stepStat instanceof StepStatV2 && $stepStat->getScenarioPath() === $scenarioStat->getPath()) {
+            if ($stepStat->getScenarioPath() === $scenarioStat->getPath()) {
                 $foundStepStat = $stepStat;
                 break;
             }
         }
 
-        if (!$foundStepStat instanceof StepStatV2) {
+        if ($foundStepStat === null) {
             return $path;
         }
 
-        $stepLine = $this->extractLineNumber((string) $foundStepStat->getStepPath());
+        $stepLine = $this->extractLineNumber($foundStepStat->getStepPath());
 
         if ($stepLine !== null) {
             $lineNumber = $this->translator->trans('on_line_number', ['%line%' => $stepLine], 'output');

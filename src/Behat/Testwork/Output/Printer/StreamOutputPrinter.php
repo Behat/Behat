@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\Output\Printer;
 
-use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -41,30 +40,10 @@ class StreamOutputPrinter implements OutputPrinter
         $this->flush();
     }
 
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function getOutputPath()
-    {
-        DeprecationCollector::trigger('StreamOutputPrinter::getOutputPath() is deprecated since 3.1 and will be removed in 4.0.');
-
-        return $this->outputFactory->getOutputPath();
-    }
-
     public function setOutputStyles(array $styles)
     {
         $this->outputFactory->setOutputStyles($styles);
         $this->flush();
-    }
-
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function getOutputStyles()
-    {
-        DeprecationCollector::trigger('StreamOutputPrinter::getOutputStyles() is deprecated since 3.1 and will be removed in 4.0.');
-
-        return $this->outputFactory->getOutputStyles();
     }
 
     public function setOutputDecorated($decorated)
@@ -73,30 +52,10 @@ class StreamOutputPrinter implements OutputPrinter
         $this->flush();
     }
 
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function isOutputDecorated()
-    {
-        DeprecationCollector::trigger('StreamOutputPrinter::isOutputDecorated() is deprecated since 3.1 and will be removed in 4.0.');
-
-        return $this->outputFactory->isOutputDecorated();
-    }
-
     public function setOutputVerbosity($level)
     {
         $this->outputFactory->setOutputVerbosity($level);
         $this->flush();
-    }
-
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function getOutputVerbosity()
-    {
-        DeprecationCollector::trigger('StreamOutputPrinter::getOutputVerbosity() is deprecated since 3.1 and will be removed in 4.0.');
-
-        return $this->outputFactory->getOutputVerbosity();
     }
 
     public function write($messages)

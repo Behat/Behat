@@ -12,8 +12,6 @@ namespace Behat\Behat\Context\Environment\Handler;
 
 use Behat\Behat\Context\Argument\ArgumentResolverFactory;
 use Behat\Behat\Context\Argument\NullFactory;
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactory;
-use Behat\Behat\Context\Argument\SuiteScopedResolverFactoryAdapter;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\ContextClass\ClassResolver;
 use Behat\Behat\Context\ContextFactory;
@@ -42,17 +40,11 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 
     /**
      * Initializes handler.
-     *
-     * @param ArgumentResolverFactory|SuiteScopedResolverFactory $resolverFactory
      */
     public function __construct(
         private readonly ContextFactory $contextFactory,
-        $resolverFactory = null,
+        ?ArgumentResolverFactory $resolverFactory = null,
     ) {
-        if ($resolverFactory && !$resolverFactory instanceof ArgumentResolverFactory) {
-            $resolverFactory = new SuiteScopedResolverFactoryAdapter($resolverFactory);
-        }
-
         $this->resolverFactory = $resolverFactory ?: new NullFactory();
     }
 

@@ -44,11 +44,11 @@ final class TotalStatistics implements Statistics
      */
     private array $skippedScenarioStats = [];
     /**
-     * @var list<StepStat>
+     * @var list<StepStatV2>
      */
     private array $failedStepStats = [];
     /**
-     * @var list<StepStat>
+     * @var list<StepStatV2>
      */
     private array $pendingStepStats = [];
     /**
@@ -133,7 +133,7 @@ final class TotalStatistics implements Statistics
     /**
      * Registers step stat.
      */
-    public function registerStepStat(StepStat $stat): void
+    public function registerStepStat(StepStatV2 $stat): void
     {
         ++$this->stepCounters[$stat->getResultCode()];
 
@@ -201,7 +201,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns failed step stats.
      *
-     * @return list<StepStat>
+     * @return list<StepStatV2>
      */
     public function getFailedSteps(): array
     {
@@ -211,7 +211,7 @@ final class TotalStatistics implements Statistics
     /**
      * Returns pending step stats.
      *
-     * @return list<StepStat>
+     * @return list<StepStatV2>
      */
     public function getPendingSteps(): array
     {

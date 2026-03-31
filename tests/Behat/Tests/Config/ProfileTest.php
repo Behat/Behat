@@ -11,6 +11,7 @@ use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Formatter\ShowOutputOption;
+use Behat\Config\GherkinOptions;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
 use Behat\Testwork\Output\Printer\Factory\OutputFactory;
@@ -101,8 +102,10 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('default');
         $profile
-            ->withFilter(new TagFilter('admin'))
-            ->withFilter(new NameFilter('Managing administrators'))
+            ->withGherkinOptions((new GherkinOptions())
+                ->withFilter(new TagFilter('admin'))
+                ->withFilter(new NameFilter('Managing administrators'))
+            )
         ;
 
         $this->assertEquals([
@@ -119,12 +122,14 @@ final class ProfileTest extends TestCase
     {
         $profile = new Profile('default');
 
-        $profile->withFilter(new TagFilter('tag1'));
-
         $this->expectException(ConfigurationLoadingException::class);
         $this->expectExceptionMessage('The filter "tags" already exists.');
 
-        $profile->withFilter(new TagFilter('tag1'));
+        $profile
+            ->withGherkinOptions((new GherkinOptions())
+                ->withFilter(new TagFilter('tag1'))
+                ->withFilter(new TagFilter('tag1'))
+            );
     }
 
     public function testAddingFormatters(): void

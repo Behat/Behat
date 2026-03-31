@@ -15,12 +15,12 @@ use Behat\Testwork\Exception\Cli\VerbosityController;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer;
 use Behat\Testwork\Exception\Stringer\TestworkExceptionStringer;
-use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -69,13 +69,14 @@ final class ExceptionExtension implements Extension
                 ->scalarNode('verbosity')
                     ->info('Output verbosity')
                     ->example(sprintf(
-                        '%d, %d, %d, %d',
-                        OutputPrinter::VERBOSITY_NORMAL,
-                        OutputPrinter::VERBOSITY_VERBOSE,
-                        OutputPrinter::VERBOSITY_VERY_VERBOSE,
-                        OutputPrinter::VERBOSITY_DEBUG
+                        '%d, %d, %d, %d, %d',
+                        OutputInterface::VERBOSITY_QUIET,
+                        OutputInterface::VERBOSITY_NORMAL,
+                        OutputInterface::VERBOSITY_VERBOSE,
+                        OutputInterface::VERBOSITY_VERY_VERBOSE,
+                        OutputInterface::VERBOSITY_DEBUG
                     ))
-                    ->defaultValue(OutputPrinter::VERBOSITY_NORMAL)
+                    ->defaultValue(OutputInterface::VERBOSITY_NORMAL)
         ;
     }
 
@@ -99,7 +100,6 @@ final class ExceptionExtension implements Extension
     private function loadPresenter(ContainerBuilder $container, $verbosity): void
     {
         $definition = new Definition(ExceptionPresenter::class, [
-            '%paths.base%',
             $verbosity,
             new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
         ]);

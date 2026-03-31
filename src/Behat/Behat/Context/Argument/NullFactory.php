@@ -11,7 +11,6 @@
 namespace Behat\Behat\Context\Argument;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Suite\Suite;
 
 /**
  * NoOp factory. Always returns zero resolvers.
@@ -20,13 +19,8 @@ use Behat\Testwork\Suite\Suite;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class NullFactory implements ArgumentResolverFactory, SuiteScopedResolverFactory
+final class NullFactory implements ArgumentResolverFactory
 {
-    public function generateArgumentResolvers(Suite $suite): array
-    {
-        return [];
-    }
-
     public function createArgumentResolvers(Environment $environment): array
     {
         return [];

@@ -95,11 +95,6 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
         return $result->getReturn();
     }
 
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
-
     public function __toString(): string
     {
         return 'PatternTransform ' . $this->pattern;

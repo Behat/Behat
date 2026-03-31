@@ -142,18 +142,4 @@ class TransformationExtension implements Extension
             $definition->addMethodCall('registerArgumentTransformer', [$reference]);
         }
     }
-
-    /**
-     * Returns definition argument transformer service id.
-     *
-     * @return string
-     *
-     * @deprecated Use DEFINITION_ARGUMENT_TRANSFORMER_ID constant instead
-     *
-     * @todo Remove method in next major version
-     */
-    protected function getDefinitionArgumentTransformerId()
-    {
-        return self::DEFINITION_ARGUMENT_TRANSFORMER_ID;
-    }
 }

@@ -80,5 +80,32 @@
         <ignored-regex>#REMOVED: Class Behat\\Behat\\EventDispatcher\\Cli\\StopOnFailureController has been deleted#</ignored-regex>
         <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadStopOnFailureController\(\) was removed#</ignored-regex>
 
+        <!--
+        Remove all deprecated code in version 4.0
+        -->
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\EventDispatcher\\Tester\\TickingStepTester has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadTickingStepTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\Context\\.+?AcceptingContext has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\Context\\Snippet\\Generator\\ContextInterfaceBased.+?Identifier has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\Context\\Argument\\.+?Factory.*? has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\.+?\\Argument\\.+?Factory\#generateArgumentResolvers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: These ancestors of Behat\\Behat\\.+?\\Argument\\.+?Factory have been removed:#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\Transformation\\Call\\RuntimeTransformation has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Transformation\\Transformation.*?\#getPattern\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension\#getDefinitionArgumentTransformerId\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: The parameter \$stat of Behat\\Behat\\Output\\Statistics.+?\#registerStepStat\(\) changed#</ignored-regex>
+        <ignored-regex>#REMOVED: These ancestors of Behat\\Behat\\Output\\Statistics\\StepStatV2 have been removed:#</ignored-regex>
+        <ignored-regex>#REMOVED: Class Behat\\Behat\\Output\\Statistics\\StepStat has been deleted#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Definition\\Pattern\\Pattern\#getCanonicalText\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Config\\Profile\#withFilter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Constant Behat\\Testwork\\Output\\Printer\\.*?OutputPrinter::VERBOSITY_.+? was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Printer\\.*?OutputPrinter\#getOutputPath\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Printer\\.*?OutputPrinter\#getOutputStyles\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Printer\\.*?OutputPrinter\#isOutputDecorated\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Printer\\.*?OutputPrinter\#getOutputVerbosity\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\Exception\\WrongPathsException\#getPath\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Default parameter value for parameter \$defaultVerbosity of Behat\\Testwork\\Exception\\ExceptionPresenter\#__construct\(\) changed#</ignored-regex>
+        <ignored-regex>#CHANGED: The number of required arguments for Behat\\Testwork\\Exception\\ExceptionPresenter\#__construct\(\) increased#</ignored-regex>
+        <ignored-regex>#CHANGED: The parameter \$.+? of Behat\\Testwork\\Exception\\ExceptionPresenter\#__construct\(\) changed#</ignored-regex>
     </baseline>
 </roave-bc-check>

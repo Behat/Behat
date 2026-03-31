@@ -40,7 +40,6 @@ class EventDispatcherExtension extends BaseExtension
         $this->loadEventDispatchingScenarioTester($container);
         $this->loadEventDispatchingExampleTester($container);
         $this->loadEventDispatchingStepTester($container);
-        $this->loadTickingStepTester($container);
     }
 
     /**
@@ -127,19 +126,5 @@ class EventDispatcherExtension extends BaseExtension
         ]);
         $definition->addTag(TesterExtension::STEP_TESTER_WRAPPER_TAG, ['priority' => -9999]);
         $container->setDefinition(TesterExtension::STEP_TESTER_WRAPPER_TAG . '.event_dispatching', $definition);
-    }
-
-    /**
-     * This method used in the past to load the TickingStepTester to work around
-     * a bug with the scope of declare(ticks) in PHP < 7.1. Since we don't
-     * support those PHP versions anymore loading the TickingStepTester is
-     * no longer needed. This method is left here to prevent breaking BC.
-     *
-     * @todo Remove this method in next major
-     *
-     * @deprecated
-     */
-    protected function loadTickingStepTester(ContainerBuilder $container)
-    {
     }
 }

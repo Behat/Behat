@@ -20,7 +20,7 @@ use Stringable;
  *
  * @api
  */
-final class StepStatV2 extends StepStat implements Stringable
+final class StepStatV2 implements Stringable
 {
     /**
      * @param StepResult::* $resultCode
@@ -115,6 +115,6 @@ final class StepStatV2 extends StepStat implements Stringable
      */
     public function __toString(): string
     {
-        return $this->getPath();
+        return $this->getStepPath();
     }
 }

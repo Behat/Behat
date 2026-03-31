@@ -20,23 +20,6 @@ namespace Behat\Testwork\Output\Printer;
 interface OutputPrinter
 {
     /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public const VERBOSITY_NORMAL = 1;
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public const VERBOSITY_VERBOSE = 2;
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public const VERBOSITY_VERY_VERBOSE = 3;
-    /**
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public const VERBOSITY_DEBUG = 4;
-
-    /**
      * Sets output path.
      *
      * @param string $path
@@ -44,27 +27,9 @@ interface OutputPrinter
     public function setOutputPath($path);
 
     /**
-     * Returns output path.
-     *
-     * @return string|null
-     *
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function getOutputPath();
-
-    /**
      * Sets output styles.
      */
     public function setOutputStyles(array $styles);
-
-    /**
-     * Returns output styles.
-     *
-     * @return array
-     *
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function getOutputStyles();
 
     /**
      * Forces output to be decorated.
@@ -74,29 +39,11 @@ interface OutputPrinter
     public function setOutputDecorated($decorated);
 
     /**
-     * Returns output decoration status.
-     *
-     * @return bool|null
-     *
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function isOutputDecorated();
-
-    /**
      * Sets output verbosity level.
      *
      * @param int $level
      */
     public function setOutputVerbosity($level);
-
-    /**
-     * Returns output verbosity level.
-     *
-     * @return int
-     *
-     * @deprecated since 3.1, to be removed in 4.0
-     */
-    public function getOutputVerbosity();
 
     /**
      * Writes message(s) to output stream.

@@ -56,7 +56,7 @@ interface Statistics
     /**
      * Registers step stat.
      */
-    public function registerStepStat(StepStat $stat);
+    public function registerStepStat(StepStatV2 $stat);
 
     /**
      * Registers hook stat.
@@ -94,14 +94,14 @@ interface Statistics
     /**
      * Returns failed step stats.
      *
-     * @return StepStat[]
+     * @return StepStatV2[]
      */
     public function getFailedSteps();
 
     /**
      * Returns pending step stats.
      *
-     * @return StepStat[]
+     * @return StepStatV2[]
      */
     public function getPendingSteps();
 

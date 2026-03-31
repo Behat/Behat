@@ -85,7 +85,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Registers step stat.
      */
-    public function registerStepStat(StepStat $stat): void
+    public function registerStepStat(StepStatV2 $stat): void
     {
         $this->statistics->registerStepStat($stat);
     }
@@ -141,7 +141,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Returns failed step stats.
      *
-     * @return list<StepStat>
+     * @return list<StepStatV2>
      */
     public function getFailedSteps(): array
     {
@@ -151,7 +151,7 @@ final class PhaseStatistics implements Statistics
     /**
      * Returns pending step stats.
      *
-     * @return list<StepStat>
+     * @return list<StepStatV2>
      */
     public function getPendingSteps(): array
     {
