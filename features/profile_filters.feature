@@ -9,8 +9,8 @@ Feature: Filters
       | option      | value |
       | --no-colors |       |
 
-  Scenario Outline: Tag filters
-    When I run "behat --config=<config_file>"
+  Scenario: Tag filters
+    When I run "behat --config=behat-tag-filter.php"
     Then it should pass with:
       """
       @tag2
@@ -48,11 +48,6 @@ Feature: Filters
       4 scenarios (4 passed)
       10 steps (10 passed)
       """
-
-    Examples:
-      | config_file                     | comment                                   |
-      | behat-tag-filter.php            | Using new method on GherkinOptions object |
-      | behat-tag-filter-on-profile.php | Using deprecated method on Profile object |
 
   Scenario: Role filters
     When I run "behat --config=behat-role-filter.php"
