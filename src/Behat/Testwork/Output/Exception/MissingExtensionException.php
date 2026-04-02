@@ -17,6 +17,6 @@ use RuntimeException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class MissingExtensionException extends RuntimeException implements PrinterException
+final class MissingExtensionException extends RuntimeException implements PrinterException
 {
 }

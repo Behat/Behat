@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class EventDispatcherExtension extends BaseExtension
+final class EventDispatcherExtension extends BaseExtension
 {
     public function load(ContainerBuilder $container, array $config)
     {

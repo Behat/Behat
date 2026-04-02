@@ -19,7 +19,7 @@ use Exception;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PendingExceptionStringer implements ExceptionStringer
+final class PendingExceptionStringer implements ExceptionStringer
 {
     public function supportsException(Exception $exception)
     {

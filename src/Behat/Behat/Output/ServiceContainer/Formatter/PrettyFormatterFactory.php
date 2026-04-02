@@ -65,7 +65,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PrettyFormatterFactory implements FormatterFactory
+final class PrettyFormatterFactory implements FormatterFactory
 {
     private readonly ServiceProcessor $processor;
 

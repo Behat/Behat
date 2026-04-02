@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\StreamOutput;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-class FilesystemOutputFactory extends OutputFactory
+final class FilesystemOutputFactory extends OutputFactory
 {
     private $fileName;
 

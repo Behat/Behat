@@ -21,7 +21,7 @@ use TypeError;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class FatalThrowableError extends ErrorException
+final class FatalThrowableError extends ErrorException
 {
     public function __construct(Throwable $e)
     {

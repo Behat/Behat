@@ -9,6 +9,6 @@ use Exception;
 /**
  * @internal
  */
-class RegexException extends Exception
+final class RegexException extends Exception
 {
 }

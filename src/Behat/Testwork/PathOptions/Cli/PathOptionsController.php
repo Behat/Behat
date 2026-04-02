@@ -22,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class PathOptionsController implements Controller
+final class PathOptionsController implements Controller
 {
     public function __construct(
         private readonly ConfigurablePathPrinter $configurablePathPrinter,

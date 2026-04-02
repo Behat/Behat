@@ -17,7 +17,7 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class MissingOutputPathException extends InvalidArgumentException implements PrinterException
+final class MissingOutputPathException extends InvalidArgumentException implements PrinterException
 {
     public function __construct(string $message)
     {

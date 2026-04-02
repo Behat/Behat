@@ -41,7 +41,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ProgressFormatterFactory implements FormatterFactory
+final class ProgressFormatterFactory implements FormatterFactory
 {
     private readonly ServiceProcessor $processor;
 

@@ -17,7 +17,7 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class BadOutputPathException extends InvalidArgumentException implements PrinterException
+final class BadOutputPathException extends InvalidArgumentException implements PrinterException
 {
     /**
      * Initializes exception.

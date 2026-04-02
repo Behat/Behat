@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TransformationExtension implements Extension
+final class TransformationExtension implements Extension
 {
     /*
      * Available services

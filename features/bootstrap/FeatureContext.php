@@ -31,7 +31,7 @@ use Symfony\Component\Process\Process;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FeatureContext implements Context
+final class FeatureContext implements Context
 {
     private string $phpBin;
 

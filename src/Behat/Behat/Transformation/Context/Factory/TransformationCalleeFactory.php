@@ -29,7 +29,7 @@ use ReflectionMethod;
  *
  * @internal
  */
-class TransformationCalleeFactory
+final class TransformationCalleeFactory
 {
     public static function create(string $contextClass, ReflectionMethod $method, string $pattern, ?string $description): Transformation
     {

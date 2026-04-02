@@ -22,7 +22,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FireOnlySiblingsListener implements EventListener
+final class FireOnlySiblingsListener implements EventListener
 {
     private bool $inContext = false;
 

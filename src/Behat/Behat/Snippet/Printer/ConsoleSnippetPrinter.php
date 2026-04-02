@@ -26,7 +26,7 @@ use function count;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class ConsoleSnippetPrinter implements SnippetPrinter
+final class ConsoleSnippetPrinter implements SnippetPrinter
 {
     /**
      * Initializes printer.

@@ -18,6 +18,6 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class NodeVisitorNotFoundException extends InvalidArgumentException implements OutputException
+final class NodeVisitorNotFoundException extends InvalidArgumentException implements OutputException
 {
 }

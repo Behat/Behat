@@ -27,7 +27,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FirstBackgroundFiresFirstListener implements EventListener
+final class FirstBackgroundFiresFirstListener implements EventListener
 {
     private bool $firstBackgroundEnded = false;
     /**

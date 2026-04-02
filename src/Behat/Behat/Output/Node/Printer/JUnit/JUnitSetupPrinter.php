@@ -16,7 +16,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
 /**
  * @author: Jakob Erdmann <jakob.erdmann@rocket-internet.com>
  */
-class JUnitSetupPrinter implements SetupPrinter
+final class JUnitSetupPrinter implements SetupPrinter
 {
     public function __construct(
         private readonly ExceptionPresenter $exceptionPresenter,

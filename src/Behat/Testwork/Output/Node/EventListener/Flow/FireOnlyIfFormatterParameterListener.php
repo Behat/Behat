@@ -19,7 +19,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FireOnlyIfFormatterParameterListener implements EventListener
+final class FireOnlyIfFormatterParameterListener implements EventListener
 {
     /**
      * Initializes listener.

@@ -37,7 +37,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class TesterExtension extends BaseExtension
+final class TesterExtension extends BaseExtension
 {
     /*
      * Available services

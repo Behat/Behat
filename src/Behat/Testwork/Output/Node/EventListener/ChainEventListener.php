@@ -23,7 +23,7 @@ use IteratorAggregate;
  *
  * @implements IteratorAggregate<int, EventListener>
  */
-class ChainEventListener implements EventListener, Countable, IteratorAggregate
+final class ChainEventListener implements EventListener, Countable, IteratorAggregate
 {
     /**
      * Initializes collection.

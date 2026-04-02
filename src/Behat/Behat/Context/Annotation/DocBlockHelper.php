@@ -15,7 +15,7 @@ use Behat\Behat\Util\StrictRegex;
 /**
  * Helper class for DocBlock parsing.
  */
-class DocBlockHelper
+final class DocBlockHelper
 {
     /**
      * Extracts a description from the provided docblock,

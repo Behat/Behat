@@ -17,7 +17,7 @@ use InvalidArgumentException;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class FormatterNotFoundException extends InvalidArgumentException implements OutputException
+final class FormatterNotFoundException extends InvalidArgumentException implements OutputException
 {
     /**
      * Initializes exception.

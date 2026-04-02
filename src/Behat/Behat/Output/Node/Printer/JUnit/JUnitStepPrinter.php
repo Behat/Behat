@@ -26,7 +26,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  * @author Wouter J <wouter@wouterj.nl>
  * @author James Watson <james@sitepulse.org>
  */
-class JUnitStepPrinter implements StepPrinter
+final class JUnitStepPrinter implements StepPrinter
 {
     public function __construct(
         private readonly ExceptionPresenter $exceptionPresenter,

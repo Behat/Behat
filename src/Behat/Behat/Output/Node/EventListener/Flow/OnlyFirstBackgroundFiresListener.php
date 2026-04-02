@@ -29,7 +29,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class OnlyFirstBackgroundFiresListener implements EventListener
+final class OnlyFirstBackgroundFiresListener implements EventListener
 {
     private bool $firstBackgroundEnded = false;
     private bool $inBackground = false;

@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class SnippetExtension implements Extension
+final class SnippetExtension implements Extension
 {
     /*
      * Available services
