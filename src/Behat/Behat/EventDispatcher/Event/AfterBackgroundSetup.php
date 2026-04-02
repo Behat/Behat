@@ -53,7 +53,7 @@ final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
      *
      * @return ScenarioLikeInterface
      */
-    public function getScenario()
+    public function getScenario(): BackgroundNode
     {
         return $this->background;
     }

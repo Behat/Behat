@@ -39,28 +39,21 @@ final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
-    /**
-     * @return Scenario
-     */
-    public function getScenario()
+    public function getScenario(): Scenario
     {
         return $this->scenario;
     }
 
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup()
+    public function getSetup(): Setup
     {
         return $this->setup;
     }

@@ -39,28 +39,21 @@ final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeard
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
-    /**
-     * @return Scenario
-     */
-    public function getScenario()
+    public function getScenario(): Scenario
     {
         return $this->scenario;
     }
 
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult()
+    public function getTestResult(): TestResult
     {
         return $this->result;
     }

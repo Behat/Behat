@@ -37,18 +37,13 @@ final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature()
+    public function getFeature(): FeatureNode
     {
         return $this->feature;
     }
 
-    /**
-     * @return Scenario
-     */
-    public function getScenario()
+    public function getScenario(): Scenario
     {
         return $this->scenario;
     }
