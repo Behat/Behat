@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioLikeInterface;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -52,8 +51,6 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      * Returns scenario node.
      *
      * @deprecated Use getBackground() instead
-     *
-     * @return ScenarioLikeInterface
      */
     public function getScenario(): BackgroundNode
     {

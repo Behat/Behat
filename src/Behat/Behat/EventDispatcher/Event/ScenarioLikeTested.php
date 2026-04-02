@@ -11,7 +11,7 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\ScenarioLikeInterface;
 
 /**
  * Represents an event of scenario-like structure (Scenario, Background, Example).
@@ -30,7 +30,7 @@ interface ScenarioLikeTested extends GherkinNodeTested
     /**
      * Returns scenario node.
      *
-     * @return ScenarioInterface
+     * @return ScenarioLikeInterface
      */
     public function getScenario();
 }
