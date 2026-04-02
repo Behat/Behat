@@ -33,7 +33,7 @@ final class FilesystemOutputFactory extends OutputFactory
     /**
      * Configure output stream parameters.
      */
-    protected function configureOutputStream(OutputInterface $output)
+    private function configureOutputStream(OutputInterface $output)
     {
         $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
         $output->setVerbosity($verbosity);

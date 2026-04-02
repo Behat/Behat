@@ -44,7 +44,7 @@ final class TransformationExtension implements Extension
      */
     public const ARGUMENT_TRANSFORMER_TAG = 'transformation.argument_transformer';
 
-    protected const DEFINITION_ARGUMENT_TRANSFORMER_ID = CallExtension::CALL_FILTER_TAG . '.definition_argument_transformer';
+    private const DEFINITION_ARGUMENT_TRANSFORMER_ID = CallExtension::CALL_FILTER_TAG . '.definition_argument_transformer';
 
     private readonly ServiceProcessor $processor;
 
@@ -85,7 +85,7 @@ final class TransformationExtension implements Extension
     /**
      * Loads definition arguments transformer.
      */
-    protected function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
+    private function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
     {
         $definition = new Definition(DefinitionArgumentsTransformer::class);
         $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 200]);
@@ -95,7 +95,7 @@ final class TransformationExtension implements Extension
     /**
      * Loads default transformers.
      */
-    protected function loadDefaultTransformers(ContainerBuilder $container)
+    private function loadDefaultTransformers(ContainerBuilder $container)
     {
         $definition = new Definition(RepositoryArgumentTransformer::class, [
             new Reference(self::REPOSITORY_ID),
@@ -122,7 +122,7 @@ final class TransformationExtension implements Extension
     /**
      * Loads transformations repository.
      */
-    protected function loadRepository(ContainerBuilder $container)
+    private function loadRepository(ContainerBuilder $container)
     {
         $definition = new Definition(TransformationRepository::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
@@ -133,7 +133,7 @@ final class TransformationExtension implements Extension
     /**
      * Processes all available argument transformers.
      */
-    protected function processArgumentsTransformers(ContainerBuilder $container)
+    private function processArgumentsTransformers(ContainerBuilder $container)
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_TRANSFORMER_TAG);
         $definition = $container->getDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID);

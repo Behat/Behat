@@ -75,7 +75,7 @@ final class OutputController implements Controller
     /**
      * Configures formatters based on container, input and output configurations.
      */
-    protected function configureFormatters(array $formats, InputInterface $input, OutputInterface $output)
+    private function configureFormatters(array $formats, InputInterface $input, OutputInterface $output)
     {
         $this->enableFormatters($formats);
         $this->setFormattersParameters($input, $output);
@@ -84,7 +84,7 @@ final class OutputController implements Controller
     /**
      * Enables formatters.
      */
-    protected function enableFormatters(array $formats)
+    private function enableFormatters(array $formats)
     {
         if (count($formats)) {
             $this->manager->disableAllFormatters();
@@ -97,7 +97,7 @@ final class OutputController implements Controller
     /**
      * Sets formatters parameters based on input & output.
      */
-    protected function setFormattersParameters(InputInterface $input, OutputInterface $output)
+    private function setFormattersParameters(InputInterface $input, OutputInterface $output)
     {
         $this->manager->setFormattersParameter('output_decorate', $output->isDecorated());
 
@@ -115,7 +115,7 @@ final class OutputController implements Controller
      *
      * @return string
      */
-    protected function locateOutputPath($path)
+    private function locateOutputPath($path)
     {
         if ($this->isAbsolutePath($path)) {
             return $path;

@@ -110,7 +110,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads pretty formatter node event listener.
      */
-    protected function loadRootNodeListener(ContainerBuilder $container)
+    private function loadRootNodeListener(ContainerBuilder $container)
     {
         $definition = new Definition(ChainEventListener::class, [
             [
@@ -187,7 +187,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads formatter itself.
      */
-    protected function loadFormatter(ContainerBuilder $container)
+    private function loadFormatter(ContainerBuilder $container)
     {
         $definition = new Definition(TotalStatistics::class);
         $container->setDefinition('output.pretty.statistics', $definition);
@@ -230,7 +230,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads feature, scenario and step printers.
      */
-    protected function loadCorePrinters(ContainerBuilder $container)
+    private function loadCorePrinters(ContainerBuilder $container)
     {
         $definition = new Definition(PrettyFeaturePrinter::class);
         $container->setDefinition('output.node.printer.pretty.feature', $definition);
@@ -266,7 +266,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads table outline printer.
      */
-    protected function loadTableOutlinePrinter(ContainerBuilder $container)
+    private function loadTableOutlinePrinter(ContainerBuilder $container)
     {
         $definition = new Definition(PrettyOutlineTablePrinter::class, [
             new Reference('output.node.printer.pretty.scenario'),
@@ -286,7 +286,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads expanded outline printer.
      */
-    protected function loadExpandedOutlinePrinter(ContainerBuilder $container)
+    private function loadExpandedOutlinePrinter(ContainerBuilder $container)
     {
         $definition = new Definition(PrettyOutlinePrinter::class, [
             new Reference('output.node.printer.pretty.scenario'),
@@ -313,7 +313,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads hook printers.
      */
-    protected function loadHookPrinters(ContainerBuilder $container)
+    private function loadHookPrinters(ContainerBuilder $container)
     {
         $definition = new Definition(PrettySetupPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
@@ -365,7 +365,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads statistics printer.
      */
-    protected function loadStatisticsPrinter(ContainerBuilder $container)
+    private function loadStatisticsPrinter(ContainerBuilder $container)
     {
         $definition = new Definition(CounterPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
@@ -391,7 +391,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Loads printer helpers.
      */
-    protected function loadPrinterHelpers(ContainerBuilder $container)
+    private function loadPrinterHelpers(ContainerBuilder $container)
     {
         $definition = new Definition(WidthCalculator::class);
         $container->setDefinition('output.node.printer.pretty.width_calculator', $definition);
@@ -411,7 +411,7 @@ final class PrettyFormatterFactory implements FormatterFactory
      *
      * @return Definition
      */
-    protected function createOutputPrinterDefinition()
+    private function createOutputPrinterDefinition()
     {
         return new Definition(StreamOutputPrinter::class, [
             new Definition(ConsoleOutputFactory::class),
@@ -423,7 +423,7 @@ final class PrettyFormatterFactory implements FormatterFactory
      *
      * @return Definition
      */
-    protected function rearrangeBackgroundEvents($listener)
+    private function rearrangeBackgroundEvents($listener)
     {
         return new Definition(FirstBackgroundFiresFirstListener::class, [
             new Definition(OnlyFirstBackgroundFiresListener::class, [
@@ -441,7 +441,7 @@ final class PrettyFormatterFactory implements FormatterFactory
      *
      * @return Definition
      */
-    protected function proxySiblingEvents($beforeEventName, $afterEventName, array $listeners)
+    private function proxySiblingEvents($beforeEventName, $afterEventName, array $listeners)
     {
         return new Definition(
             FireOnlySiblingsListener::class,
@@ -460,7 +460,7 @@ final class PrettyFormatterFactory implements FormatterFactory
      *
      * @return Definition
      */
-    protected function proxyEventsIfParameterIsSet($name, $value, Definition $listener)
+    private function proxyEventsIfParameterIsSet($name, $value, Definition $listener)
     {
         return new Definition(
             FireOnlyIfFormatterParameterListener::class,
@@ -471,7 +471,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Processes all registered pretty formatter node listener wrappers.
      */
-    protected function processListenerWrappers(ContainerBuilder $container)
+    private function processListenerWrappers(ContainerBuilder $container)
     {
         $this->processor->processWrapperServices($container, self::ROOT_LISTENER_ID, self::ROOT_LISTENER_WRAPPER_TAG);
     }

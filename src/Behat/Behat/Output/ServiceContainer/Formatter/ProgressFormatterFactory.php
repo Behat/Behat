@@ -80,7 +80,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads progress formatter node event listener.
      */
-    protected function loadRootNodeListener(ContainerBuilder $container)
+    private function loadRootNodeListener(ContainerBuilder $container)
     {
         $definition = new Definition(StepListener::class, [
             new Reference('output.node.printer.progress.step'),
@@ -91,7 +91,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads feature, scenario and step printers.
      */
-    protected function loadCorePrinters(ContainerBuilder $container)
+    private function loadCorePrinters(ContainerBuilder $container)
     {
         $definition = new Definition(CounterPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
@@ -122,7 +122,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads printer helpers.
      */
-    protected function loadPrinterHelpers(ContainerBuilder $container)
+    private function loadPrinterHelpers(ContainerBuilder $container)
     {
         $definition = new Definition(ResultToStringConverter::class);
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
@@ -131,7 +131,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads formatter itself.
      */
-    protected function loadFormatter(ContainerBuilder $container)
+    private function loadFormatter(ContainerBuilder $container)
     {
         $definition = new Definition(TotalStatistics::class);
         $container->setDefinition('output.progress.statistics', $definition);
@@ -174,7 +174,7 @@ final class ProgressFormatterFactory implements FormatterFactory
      *
      * @return Definition
      */
-    protected function createOutputPrinterDefinition()
+    private function createOutputPrinterDefinition()
     {
         return new Definition(StreamOutputPrinter::class, [
             new Definition(ConsoleOutputFactory::class),
@@ -184,7 +184,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Processes all registered pretty formatter node listener wrappers.
      */
-    protected function processListenerWrappers(ContainerBuilder $container)
+    private function processListenerWrappers(ContainerBuilder $container)
     {
         $this->processor->processWrapperServices($container, self::ROOT_LISTENER_ID, self::ROOT_LISTENER_WRAPPER_TAG);
     }
