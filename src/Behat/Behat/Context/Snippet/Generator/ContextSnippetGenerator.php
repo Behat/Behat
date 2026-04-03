@@ -156,9 +156,15 @@ TPL;
 
         $keywordType = $step->getKeywordType();
         assert(
-            $keywordType === DefinitionCall\Given::KEYWORD
-            || $keywordType === DefinitionCall\When::KEYWORD
-            || $keywordType === DefinitionCall\Then::KEYWORD
+            in_array(
+                $keywordType,
+                [
+                    DefinitionCall\Given::KEYWORD,
+                    DefinitionCall\When::KEYWORD,
+                    DefinitionCall\Then::KEYWORD,
+                ],
+                true,
+            ),
         );
         $usedClasses[] = match ($keywordType) {
             DefinitionCall\Given::KEYWORD => Given::class,
