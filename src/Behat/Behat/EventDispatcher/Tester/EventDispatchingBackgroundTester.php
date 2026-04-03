@@ -41,13 +41,13 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
 
-        $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        $this->eventDispatcher->dispatch($event, BeforeBackgroundTested::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $skip);
 
         $event = new AfterBackgroundSetup($env, $feature, $feature->getBackground(), $setup);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        $this->eventDispatcher->dispatch($event, AfterBackgroundSetup::AFTER_SETUP);
 
         return $setup;
     }

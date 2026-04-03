@@ -46,13 +46,13 @@ final class EventDispatchingSuiteTester implements SuiteTester
     {
         $event = new BeforeSuiteTested($env, $iterator);
 
-        $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        $this->eventDispatcher->dispatch($event, BeforeSuiteTested::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
 
         $event = new AfterSuiteSetup($env, $iterator, $setup);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        $this->eventDispatcher->dispatch($event, AfterSuiteSetup::AFTER_SETUP);
 
         return $setup;
     }
@@ -65,13 +65,13 @@ final class EventDispatchingSuiteTester implements SuiteTester
     public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
-        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        $this->eventDispatcher->dispatch($event, BeforeSuiteTeardown::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 
         $event = new AfterSuiteTested($env, $iterator, $result, $teardown);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER);
+        $this->eventDispatcher->dispatch($event, AfterSuiteTested::AFTER);
 
         return $teardown;
     }

@@ -41,13 +41,13 @@ final class EventDispatchingStepTester implements StepTester
     {
         $event = new BeforeStepTested($env, $feature, $step);
 
-        $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        $this->eventDispatcher->dispatch($event, BeforeStepTested::BEFORE);
 
         $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
 
         $event = new AfterStepSetup($env, $feature, $step, $setup);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        $this->eventDispatcher->dispatch($event, AfterStepSetup::AFTER_SETUP);
 
         return $setup;
     }
@@ -61,13 +61,13 @@ final class EventDispatchingStepTester implements StepTester
     {
         $event = new BeforeStepTeardown($env, $feature, $step, $result);
 
-        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        $this->eventDispatcher->dispatch($event, BeforeStepTeardown::BEFORE_TEARDOWN);
 
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
 
         $event = new AfterStepTested($env, $feature, $step, $result, $teardown);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER);
+        $this->eventDispatcher->dispatch($event, AfterStepTested::AFTER);
 
         return $teardown;
     }

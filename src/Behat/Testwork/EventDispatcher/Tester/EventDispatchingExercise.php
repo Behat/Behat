@@ -44,13 +44,13 @@ final class EventDispatchingExercise implements Exercise
     {
         $event = new BeforeExerciseCompleted($iterators);
 
-        $this->eventDispatcher->dispatch($event, $event::BEFORE);
+        $this->eventDispatcher->dispatch($event, BeforeExerciseCompleted::BEFORE);
 
         $setup = $this->baseExercise->setUp($iterators, $skip);
 
         $event = new AfterExerciseSetup($iterators, $setup);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER_SETUP);
+        $this->eventDispatcher->dispatch($event, AfterExerciseSetup::AFTER_SETUP);
 
         return $setup;
     }
@@ -64,13 +64,13 @@ final class EventDispatchingExercise implements Exercise
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
 
-        $this->eventDispatcher->dispatch($event, $event::BEFORE_TEARDOWN);
+        $this->eventDispatcher->dispatch($event, BeforeExerciseTeardown::BEFORE_TEARDOWN);
 
         $teardown = $this->baseExercise->tearDown($iterators, $skip, $result);
 
         $event = new AfterExerciseCompleted($iterators, $result, $teardown);
 
-        $this->eventDispatcher->dispatch($event, $event::AFTER);
+        $this->eventDispatcher->dispatch($event, AfterExerciseCompleted::AFTER);
 
         return $teardown;
     }
