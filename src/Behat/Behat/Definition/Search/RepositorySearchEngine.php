@@ -105,6 +105,7 @@ final class RepositorySearchEngine implements SearchEngine
             // knowledge of the concept of a Step.
             throw new UnexpectedMultilineArgumentException(
                 $e->getMessage() . PHP_EOL . 'This is probably an error in your step implementation or in ' . $stepLocation,
+                code: $e->getCode(),
                 previous: $e
             );
         }
