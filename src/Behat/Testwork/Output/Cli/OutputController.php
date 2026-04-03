@@ -139,7 +139,7 @@ class OutputController implements Controller
      */
     private function configureOutputs(array $formats, array $outputs, bool $decorated = false): void
     {
-        if (1 == count($outputs) && !$this->isStandardOutput($outputs[0])) {
+        if (1 === count($outputs) && !$this->isStandardOutput($outputs[0])) {
             $outputPath = $this->locateOutputPath($outputs[0]);
 
             $this->manager->setFormattersParameter('output_path', $outputPath);

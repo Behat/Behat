@@ -84,6 +84,6 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
 
     public function isPassed(): bool
     {
-        return self::PASSED == $this->getResultCode();
+        return self::PASSED === $this->getResultCode();
     }
 }

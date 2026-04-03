@@ -134,7 +134,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
             $this->getClassReflection()
         );
 
-        if (count($parameters) == 0) {
+        if (count($parameters) === 0) {
             return null;
         }
 

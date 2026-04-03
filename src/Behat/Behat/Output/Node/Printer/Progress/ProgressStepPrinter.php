@@ -76,7 +76,7 @@ final class ProgressStepPrinter implements StepPrinter
             $this->printStdOut($formatter->getOutputPrinter(), $result);
         }
 
-        if (++$this->stepsPrinted % 70 == 0) {
+        if (++$this->stepsPrinted % 70 === 0) {
             $printer->writeln(' ' . $this->stepsPrinted);
         }
     }
