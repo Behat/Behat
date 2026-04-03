@@ -127,8 +127,8 @@ final class FilesystemFeatureLocator implements SpecificationLocator
             RegexIterator::MATCH
         );
 
-        $paths = array_map('strval', iterator_to_array($iterator));
-        uasort($paths, 'strnatcasecmp');
+        $paths = array_map(strval(...), iterator_to_array($iterator));
+        uasort($paths, strnatcasecmp(...));
 
         return $paths;
     }
