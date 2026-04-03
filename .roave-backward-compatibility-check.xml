@@ -107,5 +107,157 @@
         <ignored-regex>#CHANGED: Default parameter value for parameter \$defaultVerbosity of Behat\\Testwork\\Exception\\ExceptionPresenter\#__construct\(\) changed#</ignored-regex>
         <ignored-regex>#CHANGED: The number of required arguments for Behat\\Testwork\\Exception\\ExceptionPresenter\#__construct\(\) increased#</ignored-regex>
         <ignored-regex>#CHANGED: The parameter \$.+? of Behat\\Testwork\\Exception\\ExceptionPresenter\#__construct\(\) changed#</ignored-regex>
+
+        <!--
+        Make all non-API classes final unless they are extended by Behat (also "removes" protected methods)
+        NB that methods that changed from protected to private are listed twice - once as "removed" and once with the
+        visibility changes.
+        -->
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\PathOptions\\Cli\\PathOptionsController became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Call\\Exception\\FatalThrowableError became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Printer\\Factory\\FilesystemOutputFactory became final#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Printer\\Factory\\FilesystemOutputFactory\#configureOutputStream\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Method configureOutputStream\(\) of class Behat\\Testwork\\Output\\Printer\\Factory\\FilesystemOutputFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Cli\\OutputController became final#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Cli\\OutputController\#configureFormatters\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Cli\\OutputController\#enableFormatters\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Cli\\OutputController\#setFormattersParameters\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Output\\Cli\\OutputController\#locateOutputPath\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Method configureFormatters\(\) of class Behat\\Testwork\\Output\\Cli\\OutputController visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method enableFormatters\(\) of class Behat\\Testwork\\Output\\Cli\\OutputController visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method setFormattersParameters\(\) of class Behat\\Testwork\\Output\\Cli\\OutputController visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method locateOutputPath\(\) of class Behat\\Testwork\\Output\\Cli\\OutputController visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Node\\EventListener\\ChainEventListener became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Node\\EventListener\\Flow\\FireOnlyIfFormatterParameterListener became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Argument\\Exception\\UnexpectedMultilineArgumentException became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Exception\\MissingExtensionException became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Exception\\MissingOutputPathException became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Exception\\FormatterNotFoundException became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Context\\Annotation\\DocBlockHelper became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension became final#</ignored-regex>
+        <ignored-regex>#REMOVED: Constant Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension::DEFINITION_ARGUMENT_TRANSFORMER_ID was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension\#loadDefinitionArgumentsTransformer\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension\#loadDefaultTransformers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension\#loadRepository\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension\#processArgumentsTransformers\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Constant Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension::DEFINITION_ARGUMENT_TRANSFORMER_ID visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadDefinitionArgumentsTransformer\(\) of class Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadDefaultTransformers\(\) of class Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadRepository\(\) of class Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method processArgumentsTransformers\(\) of class Behat\\Behat\\Transformation\\ServiceContainer\\TransformationExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\Exception\\NodeVisitorNotFoundException became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory became final#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory\#loadRootNodeListener\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory\#loadCorePrinters\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory\#loadPrinterHelpers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory\#loadFormatter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory\#createOutputPrinterDefinition\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory\#processListenerWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadRootNodeListener\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadCorePrinters\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadPrinterHelpers\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadFormatter\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method createOutputPrinterDefinition\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method processListenerWrappers\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\ProgressFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory became final#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadRootNodeListener\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadFormatter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadCorePrinters\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadTableOutlinePrinter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadExpandedOutlinePrinter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadHookPrinters\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadStatisticsPrinter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#loadPrinterHelpers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#createOutputPrinterDefinition\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#rearrangeBackgroundEvents\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#proxySiblingEvents\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#proxyEventsIfParameterIsSet\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory\#processListenerWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadRootNodeListener\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadFormatter\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadCorePrinters\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadTableOutlinePrinter\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadExpandedOutlinePrinter\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadHookPrinters\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadStatisticsPrinter\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadPrinterHelpers\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method createOutputPrinterDefinition\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method rearrangeBackgroundEvents\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method proxySiblingEvents\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method proxyEventsIfParameterIsSet\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method processListenerWrappers\(\) of class Behat\\Behat\\Output\\ServiceContainer\\Formatter\\PrettyFormatterFactory visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\Node\\EventListener\\Flow\\FirstBackgroundFiresFirstListener became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\Node\\EventListener\\Flow\\FireOnlySiblingsListener became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\Node\\EventListener\\Flow\\OnlyFirstBackgroundFiresListener became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\Node\\Printer\\JUnit\\JUnitStepPrinter became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Output\\Node\\Printer\\JUnit\\JUnitSetupPrinter became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Tester\\Exception\\Stringer\\PendingExceptionStringer became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Snippet\\Printer\\ConsoleSnippetPrinter became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension became final#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension\#loadController\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension\#loadRegistry\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension\#loadWriter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension\#processGenerators\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension\#processAppenders\(\) was removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadController\(\) of class Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadRegistry\(\) of class Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method loadWriter\(\) of class Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method processGenerators\(\) of class Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Method processAppenders\(\) of class Behat\\Behat\\Snippet\\ServiceContainer\\SnippetExtension visibility reduced from protected to private#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Behat\\Definition\\Translator\\Translator became final#</ignored-regex>
+        <ignored-regex>#CHANGED: Class Behat\\Testwork\\Output\\Exception\\BadOutputPathException became final#</ignored-regex>
+
+        <!-- Make all non-API classes final: methods that remained `protected` in the final classes due to inheritance
+        These methods are still `protected` in the class because they inherit a `protected` method from the parent
+        -->
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadSpecificationTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadScenarioTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadOutlineTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadExampleTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadBackgroundTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadStepTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadRerunController\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#loadPendingExceptionStringer\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#processScenarioTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#processOutlineTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#processExampleTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#processBackgroundTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\Tester\\ServiceContainer\\TesterExtension\#processStepTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingBackgroundTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingFeatureTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingOutlineTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingScenarioTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingExampleTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingStepTester\(\) was removed#</ignored-regex>
+
+        <!-- Make all non-API classes final: misleading reported class
+        These are protected methods / properties that a now-final class previously inherited from the parent. They
+        have of course now been "removed" since it is no longer possible to access them by extending our final class.
+        But obviously I have not actually changed the `Exception` class or these other base classes and the properties/
+        methods are still available to anyone who extends the base.
+        I may look at a PR to roave-bc-checker to fix which class is reported as the BC break location here.
+        -->
+        <ignored-regex>#REMOVED: Property Exception\#.+ was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Property ErrorException\#.+ was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Property Symfony\\Component\\Translation\\Translator\#.+ was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Symfony\\Component\\Translation\\Translator\#.+ was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#loadExerciseController\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#loadStrictController\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#loadResultInterpreter\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#loadExercise\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#loadSuiteTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#processExerciseWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#processSuiteTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#processSpecificationTesterWrappers\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Tester\\ServiceContainer\\TesterExtension\#processResultInterpretations\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Property Behat\\Testwork\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#\$processor was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadSigintController\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatcher\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingExercise\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#loadEventDispatchingSuiteTester\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\EventDispatcher\\ServiceContainer\\EventDispatcherExtension\#processSubscribers\(\) was removed#</ignored-regex>
+
     </baseline>
 </roave-bc-check>
