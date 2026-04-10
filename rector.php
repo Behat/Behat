@@ -1,17 +1,10 @@
 <?php
 
 declare(strict_types=1);
-
-use Ingenerator\RiskyRectorRules\AddStrictTypes\AddParamTypeBasedOnParentClassMethodRector;
-use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddImplicitVoidInterfaceReturnTypeRector;
-use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddMethodTypeConfig;
-use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddParamTypeFromPhpDocRector;
-use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddReturnTypeFromPhpDocRector;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -19,20 +12,13 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withRootFiles()
-//    ->withPreparedSets(codeQuality: true)
-//    ->withPhpSets(php82: true)
+    ->withPreparedSets(codeQuality: true)
+    ->withPhpSets(php82: true)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
         // DI setFactory does not support closures
         ArrayToFirstClassCallableRector::class => [__DIR__ . '/src/Behat/Testwork/Deprecation/ServiceContainer/DeprecationExtension.php'],
-    ])
-    ->withConfiguredRule(AddParamTypeFromPhpDocRector::class, [AddMethodTypeConfig::INTERFACES_ONLY => true])
-    ->withConfiguredRule(AddReturnTypeFromPhpDocRector::class, [AddMethodTypeConfig::INTERFACES_ONLY => true])
-    ->withRules([
-        AddImplicitVoidInterfaceReturnTypeRector::class,
-        AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
-        AddParamTypeBasedOnParentClassMethodRector::class,
     ])
     ->withImportNames(
         removeUnusedImports: true,
