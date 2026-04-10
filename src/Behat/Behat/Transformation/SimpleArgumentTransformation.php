@@ -41,5 +41,5 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Transforms argument value using transformation and returns a new one.
      */
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): void;
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): mixed;
 }

@@ -29,5 +29,5 @@ interface ArgumentTransformer
     /**
      * Transforms argument value using transformation and returns a new one.
      */
-    public function transformArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): void;
+    public function transformArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): mixed;
 }

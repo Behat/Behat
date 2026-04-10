@@ -47,5 +47,5 @@ interface Formatter extends EventSubscriberInterface
     /**
      * Returns parameter name.
      */
-    public function getParameter(string $name): void;
+    public function getParameter(string $name): mixed;
 }
