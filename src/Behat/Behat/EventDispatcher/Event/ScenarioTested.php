@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\EventDispatcher\Event;
 
+use Behat\Gherkin\Node\NodeInterface;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
@@ -26,7 +27,7 @@ abstract class ScenarioTested extends LifecycleEvent implements ScenarioLikeTest
     public const BEFORE_TEARDOWN = 'tester.scenario_tested.before_teardown';
     public const AFTER = 'tester.scenario_tested.after';
 
-    final public function getNode()
+    final public function getNode(): NodeInterface
     {
         return $this->getScenario();
     }

@@ -21,12 +21,12 @@ use Exception;
  */
 final class PendingExceptionStringer implements ExceptionStringer
 {
-    public function supportsException(Exception $exception)
+    public function supportsException(Exception $exception): bool
     {
         return $exception instanceof PendingException;
     }
 
-    public function stringException(Exception $exception, $verbosity)
+    public function stringException(Exception $exception, $verbosity): string
     {
         return trim($exception->getMessage());
     }

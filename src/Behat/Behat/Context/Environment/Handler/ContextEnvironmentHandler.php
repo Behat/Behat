@@ -56,7 +56,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
         $this->classResolvers[] = $resolver;
     }
 
-    public function supportsSuite(Suite $suite)
+    public function supportsSuite(Suite $suite): bool
     {
         return $suite->hasSetting('contexts');
     }

@@ -33,7 +33,7 @@ use Stringable;
  */
 final class ReturnTypeTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method)
+    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
         $returnClass = self::getReturnClass($method);
 
@@ -56,7 +56,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue): bool
     {
         $returnClass = self::getReturnClass($this->getReflection());
 

@@ -41,7 +41,7 @@ final class DefinitionArgumentsTransformer implements CallFilter
         return $call instanceof DefinitionCall;
     }
 
-    public function filterCall(Call $call)
+    public function filterCall(Call $call): Call
     {
         if (!$call instanceof DefinitionCall) {
             throw new UnsupportedCallException(sprintf(

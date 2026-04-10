@@ -11,6 +11,7 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\NodeInterface;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
@@ -42,7 +43,7 @@ abstract class StepTested extends LifecycleEvent implements GherkinNodeTested
      */
     abstract public function getStep();
 
-    final public function getNode()
+    final public function getNode(): NodeInterface
     {
         return $this->getStep();
     }

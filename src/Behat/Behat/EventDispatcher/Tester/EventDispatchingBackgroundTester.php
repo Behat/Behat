@@ -19,6 +19,8 @@ use Behat\Behat\Tester\BackgroundTester;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,7 +39,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, $skip): Setup
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
 
@@ -52,12 +54,12 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         return $setup;
     }
 
-    public function test(Environment $env, FeatureNode $feature, $skip)
+    public function test(Environment $env, FeatureNode $feature, $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result): Teardown
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
 

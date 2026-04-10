@@ -18,6 +18,8 @@ use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Behat\Testwork\Tester\SpecificationTester;
 
 /**
@@ -40,7 +42,7 @@ final class HookableFeatureTester implements SpecificationTester
     ) {
     }
 
-    public function setUp(Environment $env, $spec, $skip)
+    public function setUp(Environment $env, $spec, $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $spec, $skip);
 
@@ -54,12 +56,12 @@ final class HookableFeatureTester implements SpecificationTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, $spec, $skip)
+    public function test(Environment $env, $spec, $skip): TestResult
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    public function tearDown(Environment $env, $spec, $skip, TestResult $result)
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);
 

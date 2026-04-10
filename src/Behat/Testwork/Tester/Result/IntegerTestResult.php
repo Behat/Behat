@@ -35,7 +35,7 @@ final class IntegerTestResult implements TestResult
     /**
      * @return TestResult::*
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         return $this->resultCode;
     }

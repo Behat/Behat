@@ -12,6 +12,7 @@ namespace Behat\Testwork\Hook\Scope;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Suite\Suite;
 
 /**
  * Represents a scope for BeforeSuite hook.
@@ -38,7 +39,7 @@ final class BeforeSuiteScope implements SuiteScope
         return self::BEFORE;
     }
 
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->environment->getSuite();
     }

@@ -50,7 +50,7 @@ abstract class RuntimeFilterableHook extends RuntimeHook implements Stringable, 
         return $this->filterString;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return trim($this->getName() . ' ' . $this->getFilterString());
     }

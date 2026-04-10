@@ -12,6 +12,7 @@ namespace Behat\Testwork\Call\Handler\Exception;
 
 use Behat\Testwork\Call\Handler\ExceptionHandler;
 use Error;
+use Throwable;
 
 /**
  * Handles method not found exceptions.
@@ -24,7 +25,7 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
 {
     public const PATTERN = '/^Call to undefined method ([^:]+)::([^\)]+)\(\)$/';
 
-    final public function supportsException($exception)
+    final public function supportsException($exception): bool
     {
         if (!$exception instanceof Error) {
             return false;
@@ -33,7 +34,7 @@ abstract class MethodNotFoundHandler implements ExceptionHandler
         return null !== $this->extractNonExistentCallable($exception);
     }
 
-    final public function handleException($exception)
+    final public function handleException($exception): Throwable
     {
         assert($exception instanceof Error);
         $this->handleNonExistentMethod($this->extractNonExistentCallable($exception));

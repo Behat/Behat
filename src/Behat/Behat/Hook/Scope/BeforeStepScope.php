@@ -44,10 +44,8 @@ final class BeforeStepScope implements StepScope
 
     /**
      * Returns hook suite.
-     *
-     * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->environment->getSuite();
     }

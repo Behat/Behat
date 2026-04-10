@@ -44,7 +44,7 @@ final class RuntimeCallHandler implements CallHandler
         return true;
     }
 
-    public function handleCall(Call $call)
+    public function handleCall(Call $call): CallResult
     {
         $this->startErrorAndOutputBuffering($call);
         $result = $this->executeCall($call);

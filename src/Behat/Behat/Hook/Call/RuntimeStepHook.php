@@ -23,7 +23,7 @@ use Behat\Testwork\Hook\Scope\HookScope;
  */
 abstract class RuntimeStepHook extends RuntimeFilterableHook
 {
-    public function filterMatches(HookScope $scope)
+    public function filterMatches(HookScope $scope): bool
     {
         if (!$scope instanceof StepScope) {
             return false;

@@ -19,6 +19,8 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,7 +39,7 @@ final class EventDispatchingOutlineTester implements OutlineTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip): Setup
     {
         $event = new BeforeOutlineTested($env, $feature, $outline);
 
@@ -52,12 +54,12 @@ final class EventDispatchingOutlineTester implements OutlineTester
         return $setup;
     }
 
-    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip)
+    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $outline, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result): Teardown
     {
         $event = new BeforeOutlineTeardown($env, $feature, $outline, $result);
 

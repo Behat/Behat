@@ -12,6 +12,7 @@ namespace Behat\Testwork\Hook\Scope;
 
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Specification\SpecificationIterator;
+use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 
 /**
@@ -40,7 +41,7 @@ final class AfterSuiteScope implements SuiteScope, AfterTestScope
         return self::AFTER;
     }
 
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->environment->getSuite();
     }

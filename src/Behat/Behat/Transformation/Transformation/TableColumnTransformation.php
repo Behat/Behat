@@ -25,7 +25,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
 
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+        return 1 === preg_match(self::PATTERN_REGEX, (string) $pattern);
     }
 
     public function __construct(

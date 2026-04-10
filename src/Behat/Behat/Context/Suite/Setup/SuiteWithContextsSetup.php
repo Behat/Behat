@@ -47,7 +47,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
         $this->classGenerators[] = $generator;
     }
 
-    public function supportsSuite(Suite $suite)
+    public function supportsSuite(Suite $suite): bool
     {
         return $suite->hasSetting('contexts');
     }

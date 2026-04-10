@@ -62,12 +62,12 @@ final class NodeEventListeningFormatter implements Formatter
         $this->listener->listenEvent($this, $event, $eventName);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }

@@ -19,6 +19,8 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\ScenarioInterface as Scenario;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -46,7 +48,7 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
     {
         $event = new BeforeScenarioTested($env, $feature, $scenario);
 
@@ -61,12 +63,12 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         return $setup;
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
     {
         $event = new BeforeScenarioTeardown($env, $feature, $scenario, $result);
 

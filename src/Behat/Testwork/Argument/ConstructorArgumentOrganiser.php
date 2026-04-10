@@ -30,7 +30,7 @@ final class ConstructorArgumentOrganiser implements ArgumentOrganiser
     ) {
     }
 
-    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
+    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments): array
     {
         if (!$function instanceof ReflectionMethod) {
             throw new UnsupportedFunctionException(sprintf(

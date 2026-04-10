@@ -37,10 +37,8 @@ abstract class BackgroundTested extends LifecycleEvent implements ScenarioLikeTe
 
     /**
      * Returns node.
-     *
-     * @return NodeInterface
      */
-    final public function getNode()
+    final public function getNode(): NodeInterface
     {
         return $this->getBackground();
     }

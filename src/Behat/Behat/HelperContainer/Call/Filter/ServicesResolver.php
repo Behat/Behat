@@ -38,12 +38,10 @@ final class ServicesResolver implements CallFilter
     /**
      * Filters a call and returns a new one.
      *
-     * @return Call
-     *
      * @throws UnsupportedCallException
      * @throws ContainerExceptionInterface
      */
-    public function filterCall(Call $call)
+    public function filterCall(Call $call): Call
     {
         if ($container = $this->getContainer($call)) {
             $autowirer = new ArgumentAutowirer($container);

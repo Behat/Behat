@@ -33,7 +33,7 @@ class StaticEnvironment implements Environment
         return $this->suite;
     }
 
-    final public function bindCallee(Callee $callee)
+    final public function bindCallee(Callee $callee): callable
     {
         return $callee->getCallable();
     }

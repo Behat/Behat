@@ -20,6 +20,8 @@ use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Scenario tester which dispatches hooks during its execution.
@@ -37,7 +39,7 @@ final class HookableScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
 
@@ -51,12 +53,12 @@ final class HookableScenarioTester implements ScenarioTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip)
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
 

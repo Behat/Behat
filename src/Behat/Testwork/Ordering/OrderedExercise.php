@@ -15,6 +15,8 @@ use Behat\Testwork\Ordering\Orderer\Orderer;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Exercise that is ordered according to a specified algorithm.
@@ -48,17 +50,17 @@ final class OrderedExercise implements Exercise
         $this->orderer = new NoopOrderer();
     }
 
-    public function setUp(array $iterators, $skip)
+    public function setUp(array $iterators, $skip): Setup
     {
         return $this->decoratedExercise->setUp($this->order($iterators), $skip);
     }
 
-    public function test(array $iterators, $skip)
+    public function test(array $iterators, $skip): TestResult
     {
         return $this->decoratedExercise->test($this->order($iterators), $skip);
     }
 
-    public function tearDown(array $iterators, $skip, TestResult $result)
+    public function tearDown(array $iterators, $skip, TestResult $result): Teardown
     {
         return $this->decoratedExercise->tearDown($this->order($iterators), $skip, $result);
     }

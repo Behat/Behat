@@ -45,10 +45,8 @@ final class AfterFeatureScope implements FeatureScope, AfterTestScope
 
     /**
      * Returns hook suite.
-     *
-     * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->environment->getSuite();
     }

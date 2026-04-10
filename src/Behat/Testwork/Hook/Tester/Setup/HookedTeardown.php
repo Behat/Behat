@@ -29,7 +29,7 @@ final class HookedTeardown implements Teardown
     ) {
     }
 
-    public function isSuccessful()
+    public function isSuccessful(): bool
     {
         if ($this->hookCallResults->hasExceptions()) {
             return false;

@@ -45,10 +45,8 @@ abstract class OutlineTested extends LifecycleEvent implements GherkinNodeTested
 
     /**
      * Returns node.
-     *
-     * @return NodeInterface
      */
-    final public function getNode()
+    final public function getNode(): NodeInterface
     {
         return $this->getOutline();
     }

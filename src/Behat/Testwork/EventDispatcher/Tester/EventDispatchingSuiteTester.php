@@ -17,6 +17,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTeardown;
 use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Behat\Testwork\Tester\SuiteTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -42,7 +44,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     ) {
     }
 
-    public function setUp(Environment $env, SpecificationIterator $iterator, $skip)
+    public function setUp(Environment $env, SpecificationIterator $iterator, $skip): Setup
     {
         $event = new BeforeSuiteTested($env, $iterator);
 
@@ -57,12 +59,12 @@ final class EventDispatchingSuiteTester implements SuiteTester
         return $setup;
     }
 
-    public function test(Environment $env, SpecificationIterator $iterator, $skip = false)
+    public function test(Environment $env, SpecificationIterator $iterator, $skip = false): TestResult
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
 
-    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result)
+    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result): Teardown
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
         $this->eventDispatcher->dispatch($event, BeforeSuiteTeardown::BEFORE_TEARDOWN);

@@ -27,7 +27,7 @@ final class PregMatchArgumentOrganiser implements ArgumentOrganiser
     ) {
     }
 
-    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments)
+    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments): array
     {
         $cleanedArguments = $this->cleanupMatchDuplicates($arguments);
 

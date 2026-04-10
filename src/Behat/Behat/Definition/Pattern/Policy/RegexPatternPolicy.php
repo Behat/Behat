@@ -57,10 +57,10 @@ final class RegexPatternPolicy implements PatternPolicy
 
     public function supportsPattern($pattern): bool
     {
-        return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', $pattern);
+        return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', (string) $pattern);
     }
 
-    public function transformPatternToRegex($pattern)
+    public function transformPatternToRegex($pattern): string
     {
         if (false === @preg_match($pattern, 'anything')) {
             $error = error_get_last();

@@ -20,6 +20,8 @@ use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Hook\HookDispatcher;
 use Behat\Testwork\Hook\Tester\Setup\HookedSetup;
 use Behat\Testwork\Hook\Tester\Setup\HookedTeardown;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 
 /**
  * Step tester which dispatches hooks during its execution.
@@ -37,7 +39,7 @@ final class HookableStepTester implements StepTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip)
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
 
@@ -51,12 +53,12 @@ final class HookableStepTester implements StepTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip)
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip): StepResult
     {
         return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result)
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
 

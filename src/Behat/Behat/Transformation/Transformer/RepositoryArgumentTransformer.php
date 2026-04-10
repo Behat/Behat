@@ -57,7 +57,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         return $newValue;
     }
 
-    public function generateRegex($suiteName, $pattern, $language)
+    public function generateRegex($suiteName, $pattern, $language): string
     {
         $translatedPattern = $this->translator->trans($pattern, [], $suiteName, $language);
         if ($pattern == $translatedPattern) {

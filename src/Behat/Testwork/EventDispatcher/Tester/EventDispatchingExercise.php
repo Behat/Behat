@@ -16,6 +16,8 @@ use Behat\Testwork\EventDispatcher\Event\BeforeExerciseCompleted;
 use Behat\Testwork\EventDispatcher\Event\BeforeExerciseTeardown;
 use Behat\Testwork\Tester\Exercise;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,7 +42,7 @@ final class EventDispatchingExercise implements Exercise
     ) {
     }
 
-    public function setUp(array $iterators, $skip)
+    public function setUp(array $iterators, $skip): Setup
     {
         $event = new BeforeExerciseCompleted($iterators);
 
@@ -55,12 +57,12 @@ final class EventDispatchingExercise implements Exercise
         return $setup;
     }
 
-    public function test(array $iterators, $skip = false)
+    public function test(array $iterators, $skip = false): TestResult
     {
         return $this->baseExercise->test($iterators, $skip);
     }
 
-    public function tearDown(array $iterators, $skip, TestResult $result)
+    public function tearDown(array $iterators, $skip, TestResult $result): Teardown
     {
         $event = new BeforeExerciseTeardown($iterators, $result);
 

@@ -115,7 +115,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         return $this->serviceContainer;
     }
 
-    public function bindCallee(Callee $callee)
+    public function bindCallee(Callee $callee): callable
     {
         $callable = $callee->getCallable();
 

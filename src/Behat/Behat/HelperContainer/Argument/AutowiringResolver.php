@@ -34,7 +34,7 @@ final class AutowiringResolver implements ArgumentResolver
         $this->autowirer = new ArgumentAutowirer($container);
     }
 
-    public function resolveArguments(ReflectionClass $classReflection, array $arguments)
+    public function resolveArguments(ReflectionClass $classReflection, array $arguments): array
     {
         if ($constructor = $classReflection->getConstructor()) {
             return $this->autowirer->autowireArguments($constructor, $arguments);

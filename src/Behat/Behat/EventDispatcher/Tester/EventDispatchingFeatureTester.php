@@ -17,6 +17,8 @@ use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\Tester\Result\TestResult;
+use Behat\Testwork\Tester\Setup\Setup;
+use Behat\Testwork\Tester\Setup\Teardown;
 use Behat\Testwork\Tester\SpecificationTester;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -40,7 +42,7 @@ final class EventDispatchingFeatureTester implements SpecificationTester
     ) {
     }
 
-    public function setUp(Environment $env, $spec, $skip)
+    public function setUp(Environment $env, $spec, $skip): Setup
     {
         $event = new BeforeFeatureTested($env, $spec);
 
@@ -55,12 +57,12 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         return $setup;
     }
 
-    public function test(Environment $env, $spec, $skip)
+    public function test(Environment $env, $spec, $skip): TestResult
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    public function tearDown(Environment $env, $spec, $skip, TestResult $result)
+    public function tearDown(Environment $env, $spec, $skip, TestResult $result): Teardown
     {
         $event = new BeforeFeatureTeardown($env, $spec, $result);
 

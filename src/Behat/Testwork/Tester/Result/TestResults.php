@@ -45,7 +45,7 @@ final class TestResults implements TestResult, Countable, IteratorAggregate
     /**
      * @return TestResult::*|TestResults::NO_TESTS
      */
-    public function getResultCode()
+    public function getResultCode(): int
     {
         $resultCode = self::NO_TESTS;
         foreach ($this->results as $result) {

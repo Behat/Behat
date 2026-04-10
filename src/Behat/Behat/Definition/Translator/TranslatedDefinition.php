@@ -11,6 +11,7 @@
 namespace Behat\Behat\Definition\Translator;
 
 use Behat\Behat\Definition\Definition;
+use ReflectionFunctionAbstract;
 use Stringable;
 
 /**
@@ -33,12 +34,12 @@ final class TranslatedDefinition implements Stringable, Definition
     ) {
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->definition->getType();
     }
 
-    public function getPattern()
+    public function getPattern(): string
     {
         return $this->translatedPattern;
     }
@@ -63,22 +64,22 @@ final class TranslatedDefinition implements Stringable, Definition
         return $this->language;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->definition->getDescription();
     }
 
-    public function getPath()
+    public function getPath(): string
     {
         return $this->definition->getPath();
     }
 
-    public function isAMethod()
+    public function isAMethod(): bool
     {
         return $this->definition->isAMethod();
     }
 
-    public function isAnInstanceMethod()
+    public function isAnInstanceMethod(): bool
     {
         return $this->definition->isAnInstanceMethod();
     }
@@ -88,7 +89,7 @@ final class TranslatedDefinition implements Stringable, Definition
         return $this->definition->getCallable();
     }
 
-    public function getReflection()
+    public function getReflection(): ReflectionFunctionAbstract
     {
         return $this->definition->getReflection();
     }

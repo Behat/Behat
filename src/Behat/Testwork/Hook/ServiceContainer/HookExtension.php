@@ -36,7 +36,7 @@ class HookExtension implements Extension
     public const DISPATCHER_ID = 'hook.dispatcher';
     public const REPOSITORY_ID = 'hook.repository';
 
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'hooks';
     }

@@ -42,17 +42,17 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Stringable, De
         parent::__construct($callable, $description);
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    public function getPattern()
+    public function getPattern(): string
     {
         return $this->pattern;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getType() . ' ' . $this->getPattern();
     }

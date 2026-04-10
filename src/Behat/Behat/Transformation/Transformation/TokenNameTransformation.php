@@ -31,7 +31,7 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
 
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+        return 1 === preg_match(self::PATTERN_REGEX, (string) $pattern);
     }
 
     /**

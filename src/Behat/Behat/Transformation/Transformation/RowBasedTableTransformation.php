@@ -33,7 +33,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
 
     public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
     {
-        return 1 === preg_match(self::PATTERN_REGEX, $pattern);
+        return 1 === preg_match(self::PATTERN_REGEX, (string) $pattern);
     }
 
     /**
@@ -51,7 +51,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue)
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue): bool
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;

@@ -38,7 +38,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
         $this->throwIfInstanceMethod($callable, 'Suite');
     }
 
-    public function filterMatches(HookScope $scope)
+    public function filterMatches(HookScope $scope): bool
     {
         if (!$scope instanceof SuiteScope) {
             return false;

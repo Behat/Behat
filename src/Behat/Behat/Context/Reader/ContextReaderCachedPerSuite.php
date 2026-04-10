@@ -33,7 +33,7 @@ final class ContextReaderCachedPerSuite implements ContextReader
     ) {
     }
 
-    public function readContextCallees(ContextEnvironment $environment, $contextClass)
+    public function readContextCallees(ContextEnvironment $environment, $contextClass): array
     {
         $key = $this->generateCacheKey($environment, $contextClass);
 

@@ -32,10 +32,8 @@ final class GenericSuite implements Suite
 
     /**
      * Returns unique suite name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
