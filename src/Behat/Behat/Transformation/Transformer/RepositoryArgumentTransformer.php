@@ -60,7 +60,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     public function generateRegex(string $suiteName, string $pattern, string $language): string
     {
         $translatedPattern = $this->translator->trans($pattern, [], $suiteName, $language);
-        if ($pattern == $translatedPattern) {
+        if ($pattern === $translatedPattern) {
             return $this->patternTransformer->transformPatternToRegex($pattern);
         }
 
