@@ -69,7 +69,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
         return $parameterClass === $returnClass;
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),

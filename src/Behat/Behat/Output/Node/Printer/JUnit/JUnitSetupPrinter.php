@@ -23,14 +23,14 @@ final class JUnitSetupPrinter implements SetupPrinter
     ) {
     }
 
-    public function printSetup(Formatter $formatter, Setup $setup)
+    public function printSetup(Formatter $formatter, Setup $setup): void
     {
         if (!$setup->isSuccessful() && $setup instanceof HookedSetup) {
             $this->handleHookCalls($formatter, $setup->getHookCallResults(), 'setup');
         }
     }
 
-    public function printTeardown(Formatter $formatter, Teardown $teardown)
+    public function printTeardown(Formatter $formatter, Teardown $teardown): void
     {
         if (!$teardown->isSuccessful() && $teardown instanceof HookedTeardown) {
             $this->handleHookCalls($formatter, $teardown->getHookCallResults(), 'teardown');

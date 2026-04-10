@@ -76,7 +76,7 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
         return false;
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),

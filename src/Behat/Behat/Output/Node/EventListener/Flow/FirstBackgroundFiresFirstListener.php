@@ -43,7 +43,7 @@ final class FirstBackgroundFiresFirstListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName)
+    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
         $this->flushStatesIfBeginningOfTheFeature($eventName);
         $this->markFirstBackgroundPrintedAfterBackground($eventName);

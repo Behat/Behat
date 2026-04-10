@@ -44,7 +44,7 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
         return count($this->repository->getEnvironmentTransformations($definitionCall->getEnvironment())) > 0;
     }
 
-    public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
     {
         $environment = $definitionCall->getEnvironment();
         [$simpleTransformations, $normalTransformations] = $this->splitSimpleAndNormalTransformations(

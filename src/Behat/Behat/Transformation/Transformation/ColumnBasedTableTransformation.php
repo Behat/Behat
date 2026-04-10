@@ -60,7 +60,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Stri
             || $this->pattern === 'table:*';
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),

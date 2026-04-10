@@ -34,41 +34,41 @@ class StreamOutputPrinter implements OutputPrinter
         return $this->outputFactory;
     }
 
-    public function setOutputPath($path)
+    public function setOutputPath($path): void
     {
         $this->outputFactory->setOutputPath($path);
         $this->flush();
     }
 
-    public function setOutputStyles(array $styles)
+    public function setOutputStyles(array $styles): void
     {
         $this->outputFactory->setOutputStyles($styles);
         $this->flush();
     }
 
-    public function setOutputDecorated($decorated)
+    public function setOutputDecorated($decorated): void
     {
         $this->outputFactory->setOutputDecorated($decorated);
         $this->flush();
     }
 
-    public function setOutputVerbosity($level)
+    public function setOutputVerbosity($level): void
     {
         $this->outputFactory->setOutputVerbosity($level);
         $this->flush();
     }
 
-    public function write($messages)
+    public function write($messages): void
     {
         $this->getWritingStream()->write($messages, false);
     }
 
-    public function writeln($messages = '')
+    public function writeln($messages = ''): void
     {
         $this->getWritingStream()->write($messages, true);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->output = null;
     }

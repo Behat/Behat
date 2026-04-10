@@ -63,7 +63,7 @@ final class GenericSuite implements Suite
      *
      * @throws ParameterNotFoundException If setting is not set
      */
-    public function getSetting($key)
+    public function getSetting($key): mixed
     {
         if (!$this->hasSetting($key)) {
             throw new ParameterNotFoundException(sprintf(

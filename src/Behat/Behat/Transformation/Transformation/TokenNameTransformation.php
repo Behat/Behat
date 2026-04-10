@@ -54,7 +54,7 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
         return ':' . $argumentIndex === $this->pattern;
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),

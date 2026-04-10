@@ -41,15 +41,15 @@ class HookExtension implements Extension
         return 'hooks';
     }
 
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
     }
 
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $this->loadDispatcher($container);
         $this->loadRepository($container);

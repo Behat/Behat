@@ -57,7 +57,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
             && $this->returnTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue);
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue)
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),
