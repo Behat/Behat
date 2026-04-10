@@ -64,7 +64,7 @@ final class TranslatedDefinition implements Stringable, Definition
         return $this->language;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->definition->getDescription();
     }

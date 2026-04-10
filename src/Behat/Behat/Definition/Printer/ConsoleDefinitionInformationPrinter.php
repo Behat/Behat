@@ -112,8 +112,7 @@ final class ConsoleDefinitionInformationPrinter extends ConsoleDefinitionPrinter
     private function extractDescription(?Suite $suite, Definition $definition): array
     {
         $lines = [];
-        $description = $definition->getDescription();
-        if ($description !== '' && $description !== '0') {
+        if ($description = $definition->getDescription()) {
             $indent = $suite instanceof Suite ? '{space}<def_dimmed>|</def_dimmed> ' : '';
             foreach (explode("\n", $description) as $descriptionLine) {
                 $lines[] = strtr(

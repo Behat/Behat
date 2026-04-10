@@ -31,7 +31,7 @@ interface Callee
     /**
      * Returns callee description.
      */
-    public function getDescription(): string;
+    public function getDescription(): ?string;
 
     /**
      * Returns true if callee is a method, false otherwise.
