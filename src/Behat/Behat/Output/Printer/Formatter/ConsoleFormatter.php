@@ -32,7 +32,7 @@ final class ConsoleFormatter extends BaseOutputFormatter
      *
      * @return string The styled message
      */
-    public function format($message): string
+    public function format(?string $message): string
     {
         try {
             $formattedMessage = StrictRegex::replaceCallback(self::CUSTOM_PATTERN, $this->replaceStyle(...), $message);

@@ -30,7 +30,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
     ) {
     }
 
-    public function directoryCreated($path, $reason): void
+    public function directoryCreated(string $path, string $reason): void
     {
         $this->output->writeln(
             sprintf(
@@ -41,7 +41,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         );
     }
 
-    public function fileCreated($path, $reason): void
+    public function fileCreated(string $path, string $reason): void
     {
         $this->output->writeln(
             sprintf(
@@ -52,7 +52,7 @@ final class ConsoleFilesystemLogger implements FilesystemLogger
         );
     }
 
-    public function fileUpdated($path, $reason): void
+    public function fileUpdated(string $path, string $reason): void
     {
         $this->output->writeln(
             sprintf(

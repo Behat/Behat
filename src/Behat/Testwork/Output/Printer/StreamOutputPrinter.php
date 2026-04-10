@@ -34,7 +34,7 @@ class StreamOutputPrinter implements OutputPrinter
         return $this->outputFactory;
     }
 
-    public function setOutputPath($path): void
+    public function setOutputPath(string $path): void
     {
         $this->outputFactory->setOutputPath($path);
         $this->flush();
@@ -46,24 +46,24 @@ class StreamOutputPrinter implements OutputPrinter
         $this->flush();
     }
 
-    public function setOutputDecorated($decorated): void
+    public function setOutputDecorated(bool $decorated): void
     {
         $this->outputFactory->setOutputDecorated($decorated);
         $this->flush();
     }
 
-    public function setOutputVerbosity($level): void
+    public function setOutputVerbosity(int $level): void
     {
         $this->outputFactory->setOutputVerbosity($level);
         $this->flush();
     }
 
-    public function write($messages): void
+    public function write(string|array $messages): void
     {
         $this->getWritingStream()->write($messages, false);
     }
 
-    public function writeln($messages = ''): void
+    public function writeln(string|array $messages = ''): void
     {
         $this->getWritingStream()->write($messages, true);
     }

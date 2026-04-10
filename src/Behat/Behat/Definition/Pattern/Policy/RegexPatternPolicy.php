@@ -39,12 +39,12 @@ final class RegexPatternPolicy implements PatternPolicy
     ) {
     }
 
-    public function supportsPatternType($type): bool
+    public function supportsPatternType(?string $type): bool
     {
         return 'regex' === $type;
     }
 
-    public function generatePattern($stepText): Pattern
+    public function generatePattern(string $stepText): Pattern
     {
         $methodName = $this->methodNameSuggester->suggest(
             StrictRegex::replace(array_keys(self::$replacePatterns), '', $this->escapeStepText($stepText)),
@@ -55,12 +55,12 @@ final class RegexPatternPolicy implements PatternPolicy
         return new Pattern($methodName, '/^' . $stepRegex . '$/', $placeholderCount);
     }
 
-    public function supportsPattern($pattern): bool
+    public function supportsPattern(string $pattern): bool
     {
         return (bool) preg_match('/^(?:\\{.*\\}|([~\\/#`]).*\1)[imsxADSUXJu]*$/s', (string) $pattern);
     }
 
-    public function transformPatternToRegex($pattern): string
+    public function transformPatternToRegex(string $pattern): string
     {
         if (false === @preg_match($pattern, 'anything')) {
             $error = error_get_last();

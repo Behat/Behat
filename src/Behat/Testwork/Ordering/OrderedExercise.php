@@ -50,17 +50,17 @@ final class OrderedExercise implements Exercise
         $this->orderer = new NoopOrderer();
     }
 
-    public function setUp(array $iterators, $skip): Setup
+    public function setUp(array $iterators, bool $skip): Setup
     {
         return $this->decoratedExercise->setUp($this->order($iterators), $skip);
     }
 
-    public function test(array $iterators, $skip): TestResult
+    public function test(array $iterators, bool $skip): TestResult
     {
         return $this->decoratedExercise->test($this->order($iterators), $skip);
     }
 
-    public function tearDown(array $iterators, $skip, TestResult $result): Teardown
+    public function tearDown(array $iterators, bool $skip, TestResult $result): Teardown
     {
         return $this->decoratedExercise->tearDown($this->order($iterators), $skip, $result);
     }

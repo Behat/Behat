@@ -40,7 +40,7 @@ final class FilesystemScenariosListLocator implements SpecificationLocator
         return ['a scenarios list file <comment>(*.scenarios)</comment>.'];
     }
 
-    public function locateSpecifications(Suite $suite, $locator): SpecificationIterator
+    public function locateSpecifications(Suite $suite, ?string $locator): SpecificationIterator
     {
         if (null === $locator || !is_file($locator) || 'scenarios' !== pathinfo($locator, PATHINFO_EXTENSION)) {
             return new NoSpecificationsIterator($suite);

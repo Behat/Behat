@@ -38,12 +38,12 @@ final class RuntimeBackgroundTester implements BackgroundTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, $skip): TestResult
+    public function test(Environment $env, FeatureNode $feature, bool $skip): TestResult
     {
         $background = $feature->getBackground();
 
@@ -63,7 +63,7 @@ final class RuntimeBackgroundTester implements BackgroundTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, bool $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

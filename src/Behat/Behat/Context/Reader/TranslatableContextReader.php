@@ -34,7 +34,7 @@ final class TranslatableContextReader implements ContextReader
     /**
      * @see TranslatableContext
      */
-    public function readContextCallees(ContextEnvironment $environment, $contextClass): array
+    public function readContextCallees(ContextEnvironment $environment, string $contextClass): array
     {
         $reflClass = new ReflectionClass($contextClass);
 

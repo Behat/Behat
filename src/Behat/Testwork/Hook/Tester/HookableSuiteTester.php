@@ -44,7 +44,7 @@ final class HookableSuiteTester implements SuiteTester
     ) {
     }
 
-    public function setUp(Environment $env, SpecificationIterator $iterator, $skip): Setup
+    public function setUp(Environment $env, SpecificationIterator $iterator, bool $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $iterator, $skip);
 
@@ -58,12 +58,12 @@ final class HookableSuiteTester implements SuiteTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, SpecificationIterator $iterator, $skip): TestResult
+    public function test(Environment $env, SpecificationIterator $iterator, bool $skip): TestResult
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
 
-    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, SpecificationIterator $iterator, bool $skip, TestResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $iterator, $skip, $result);
 

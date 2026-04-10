@@ -72,7 +72,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
         return array_keys($this->contexts);
     }
 
-    public function hasContextClass($class): bool
+    public function hasContextClass(string $class): bool
     {
         return isset($this->contexts[$class]);
     }

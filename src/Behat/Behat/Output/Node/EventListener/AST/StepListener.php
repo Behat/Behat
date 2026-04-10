@@ -37,7 +37,7 @@ final class StepListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         $this->captureScenarioOnScenarioEvent($event);
         $this->forgetScenarioOnAfterEvent($eventName);

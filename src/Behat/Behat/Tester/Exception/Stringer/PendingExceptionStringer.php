@@ -26,7 +26,7 @@ final class PendingExceptionStringer implements ExceptionStringer
         return $exception instanceof PendingException;
     }
 
-    public function stringException(Exception $exception, $verbosity): string
+    public function stringException(Exception $exception, int $verbosity): string
     {
         return trim($exception->getMessage());
     }

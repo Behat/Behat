@@ -39,7 +39,7 @@ final class FireOnlySiblingsListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if ($this->beforeEventName === $eventName) {
             $this->inContext = true;

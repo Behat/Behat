@@ -22,7 +22,7 @@ final class FixedPatternIdentifier implements PatternIdentifier
     ) {
     }
 
-    public function guessPatternType($contextClass): ?string
+    public function guessPatternType(string $contextClass): ?string
     {
         return $this->patternType;
     }

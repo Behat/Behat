@@ -25,7 +25,7 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
 {
     public const PATTERN = "/^Class (?:'|\")([^'\"]+)(?:'|\") not found$/";
 
-    final public function supportsException($exception): bool
+    final public function supportsException(Throwable $exception): bool
     {
         if (!$exception instanceof Error) {
             return false;
@@ -34,7 +34,7 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
         return null !== $this->extractNonExistentClass($exception);
     }
 
-    final public function handleException($exception): Throwable
+    final public function handleException(Throwable $exception): Throwable
     {
         assert($exception instanceof Error);
         $this->handleNonExistentClass($this->extractNonExistentClass($exception));

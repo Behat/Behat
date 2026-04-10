@@ -48,7 +48,7 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): Setup
     {
         $event = new BeforeScenarioTested($env, $feature, $scenario);
 
@@ -63,12 +63,12 @@ final class EventDispatchingScenarioTester implements ScenarioTester
         return $setup;
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): TestResult
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip, TestResult $result): Teardown
     {
         $event = new BeforeScenarioTeardown($env, $feature, $scenario, $result);
 

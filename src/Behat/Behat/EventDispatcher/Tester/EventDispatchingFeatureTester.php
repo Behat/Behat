@@ -57,12 +57,12 @@ final class EventDispatchingFeatureTester implements SpecificationTester
         return $setup;
     }
 
-    public function test(Environment $env, $spec, $skip): TestResult
+    public function test(Environment $env, $spec, bool $skip): TestResult
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    public function tearDown(Environment $env, $spec, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, $spec, bool $skip, TestResult $result): Teardown
     {
         $event = new BeforeFeatureTeardown($env, $spec, $result);
 

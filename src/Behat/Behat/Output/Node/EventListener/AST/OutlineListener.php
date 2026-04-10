@@ -44,7 +44,7 @@ final class OutlineListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         $this->printAndCaptureOutlineHeaderOnBeforeEvent($formatter, $event);
         $this->printAndForgetOutlineFooterOnAfterEvent($formatter, $event);

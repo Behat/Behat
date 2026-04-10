@@ -39,7 +39,7 @@ final class HookableStepTester implements StepTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $feature, $step, $skip);
 
@@ -53,12 +53,12 @@ final class HookableStepTester implements StepTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip): StepResult
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): StepResult
     {
         return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, bool $skip, StepResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $step, $skip, $result);
 

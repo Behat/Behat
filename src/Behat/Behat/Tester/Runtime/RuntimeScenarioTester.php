@@ -41,12 +41,12 @@ final class RuntimeScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip = false): TestResult
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip = false): TestResult
     {
         $results = [];
 
@@ -62,7 +62,7 @@ final class RuntimeScenarioTester implements ScenarioTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

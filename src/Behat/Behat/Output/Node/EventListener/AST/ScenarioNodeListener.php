@@ -34,7 +34,7 @@ final class ScenarioNodeListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if (!$event instanceof ScenarioLikeTested) {
             return;

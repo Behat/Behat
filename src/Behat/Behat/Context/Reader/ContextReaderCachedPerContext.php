@@ -33,7 +33,7 @@ final class ContextReaderCachedPerContext implements ContextReader
     ) {
     }
 
-    public function readContextCallees(ContextEnvironment $environment, $contextClass): array
+    public function readContextCallees(ContextEnvironment $environment, string $contextClass): array
     {
         return $this->cachedCallees[$contextClass] ?? $this->cachedCallees[$contextClass] = $this->childReader->readContextCallees(
             $environment,

@@ -48,12 +48,12 @@ final class TurnipPatternPolicy implements PatternPolicy
     ) {
     }
 
-    public function supportsPatternType($type): bool
+    public function supportsPatternType(?string $type): bool
     {
         return null === $type || 'turnip' === $type;
     }
 
-    public function generatePattern($stepText): Pattern
+    public function generatePattern(string $stepText): Pattern
     {
         $count = 0;
         $pattern = (string) $stepText;
@@ -72,12 +72,12 @@ final class TurnipPatternPolicy implements PatternPolicy
         return new Pattern($methodName, $pattern, $count);
     }
 
-    public function supportsPattern($pattern): bool
+    public function supportsPattern(string $pattern): bool
     {
         return true;
     }
 
-    public function transformPatternToRegex($pattern): string
+    public function transformPatternToRegex(string $pattern): string
     {
         if (!isset($this->regexCache[$pattern])) {
             $this->regexCache[$pattern] = $this->createTransformedRegex($pattern);

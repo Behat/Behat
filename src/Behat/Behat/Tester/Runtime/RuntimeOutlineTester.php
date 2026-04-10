@@ -39,12 +39,12 @@ final class RuntimeOutlineTester implements OutlineTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, OutlineNode $outline, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip = false): TestResult
+    public function test(Environment $env, FeatureNode $feature, OutlineNode $outline, bool $skip = false): TestResult
     {
         $results = [];
         foreach ($outline->getExamples() as $example) {
@@ -60,7 +60,7 @@ final class RuntimeOutlineTester implements OutlineTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, OutlineNode $outline, bool $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

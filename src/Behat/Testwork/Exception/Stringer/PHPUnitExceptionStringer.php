@@ -32,7 +32,7 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
             || $exception instanceof \PHPUnit\Framework\Exception;
     }
 
-    public function stringException(Exception $exception, $verbosity): string
+    public function stringException(Exception $exception, int $verbosity): string
     {
         // PHPUnit assertion exceptions do not include detailed expected / observed info in their messages. Instead,
         // test result printers within PHPUnit are expected to format and present that information separately. The

@@ -28,12 +28,12 @@ final class GenericSuiteGenerator implements SuiteGenerator
     ) {
     }
 
-    public function supportsTypeAndSettings($type, array $settings): bool
+    public function supportsTypeAndSettings(?string $type, array $settings): bool
     {
         return null === $type;
     }
 
-    public function generateSuite($suiteName, array $settings): Suite
+    public function generateSuite(string $suiteName, array $settings): Suite
     {
         return new GenericSuite($suiteName, $this->mergeDefaultSettings($settings));
     }

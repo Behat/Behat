@@ -70,7 +70,7 @@ final class UninitializedContextEnvironment extends StaticEnvironment implements
         return array_keys($this->contextClasses);
     }
 
-    public function hasContextClass($class): bool
+    public function hasContextClass(string $class): bool
     {
         return isset($this->contextClasses[$class]);
     }

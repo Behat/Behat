@@ -39,7 +39,7 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, bool $skip): Setup
     {
         $event = new BeforeBackgroundTested($env, $feature, $feature->getBackground());
 
@@ -54,12 +54,12 @@ final class EventDispatchingBackgroundTester implements BackgroundTester
         return $setup;
     }
 
-    public function test(Environment $env, FeatureNode $feature, $skip): TestResult
+    public function test(Environment $env, FeatureNode $feature, bool $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, bool $skip, TestResult $result): Teardown
     {
         $event = new BeforeBackgroundTeardown($env, $feature, $feature->getBackground(), $result);
 

@@ -39,12 +39,12 @@ final class IsolatingScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): TestResult
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): TestResult
     {
         $isolatedEnvironment = $this->envManager->isolateEnvironment($env, $scenario);
 
@@ -58,7 +58,7 @@ final class IsolatingScenarioTester implements ScenarioTester
         return new TestWithSetupResult($setup, $integerResult, $teardown);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

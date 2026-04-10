@@ -40,7 +40,7 @@ final class AttributeContextReader implements ContextReader
     /**
      * @return list<RuntimeCallee>
      */
-    public function readContextCallees(ContextEnvironment $environment, $contextClass): array
+    public function readContextCallees(ContextEnvironment $environment, string $contextClass): array
     {
         $reflection = new ReflectionClass($contextClass);
 

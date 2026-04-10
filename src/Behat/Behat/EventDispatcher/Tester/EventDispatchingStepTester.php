@@ -39,7 +39,7 @@ final class EventDispatchingStepTester implements StepTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): Setup
     {
         $event = new BeforeStepTested($env, $feature, $step);
 
@@ -54,12 +54,12 @@ final class EventDispatchingStepTester implements StepTester
         return $setup;
     }
 
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip): StepResult
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): StepResult
     {
         return $this->baseTester->test($env, $feature, $step, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, bool $skip, StepResult $result): Teardown
     {
         $event = new BeforeStepTeardown($env, $feature, $step, $result);
 

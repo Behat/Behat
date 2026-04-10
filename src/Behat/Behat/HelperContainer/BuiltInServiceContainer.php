@@ -36,12 +36,12 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     ) {
     }
 
-    public function has($id): bool
+    public function has(string $id): bool
     {
         return array_key_exists($id, $this->schema);
     }
 
-    public function get($id)
+    public function get(string $id)
     {
         if (!$this->has($id)) {
             throw new ServiceNotFoundException(

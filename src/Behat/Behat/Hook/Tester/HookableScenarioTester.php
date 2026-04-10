@@ -39,7 +39,7 @@ final class HookableScenarioTester implements ScenarioTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $feature, $scenario, $skip);
 
@@ -53,12 +53,12 @@ final class HookableScenarioTester implements ScenarioTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, $skip): TestResult
+    public function test(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip): TestResult
     {
         return $this->baseTester->test($env, $feature, $scenario, $skip);
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, Scenario $scenario, bool $skip, TestResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $feature, $scenario, $skip, $result);
 

@@ -43,7 +43,7 @@ class DurationListener implements EventListener
      */
     private array $featureResultStore = [];
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         $this->captureBeforeScenarioEvent($event);
         $this->captureBeforeFeatureTested($event);

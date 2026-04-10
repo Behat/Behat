@@ -36,7 +36,7 @@ final class JSONDurationListener extends DurationListener
 
     private ?float $exerciseResult = null;
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         parent::listenEvent($formatter, $event, $eventName);
         $this->captureExerciseStartEvent($event);

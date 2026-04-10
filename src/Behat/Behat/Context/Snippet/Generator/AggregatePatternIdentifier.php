@@ -26,7 +26,7 @@ final class AggregatePatternIdentifier implements PatternIdentifier
     ) {
     }
 
-    public function guessPatternType($contextClass): ?string
+    public function guessPatternType(string $contextClass): ?string
     {
         foreach ($this->identifiers as $identifier) {
             $pattern = $identifier->guessPatternType($contextClass);

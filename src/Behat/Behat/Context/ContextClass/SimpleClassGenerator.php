@@ -45,12 +45,12 @@ class {className} implements Context
 
 PHP;
 
-    public function supportsSuiteAndClass(Suite $suite, $contextClass): bool
+    public function supportsSuiteAndClass(Suite $suite, string $contextClass): bool
     {
         return true;
     }
 
-    public function generateClass(Suite $suite, $contextClass): string
+    public function generateClass(Suite $suite, string $contextClass): string
     {
         $fqn = $contextClass;
 

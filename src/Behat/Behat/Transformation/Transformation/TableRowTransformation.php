@@ -30,7 +30,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
 {
     public const PATTERN_REGEX = '/^row\:[[:print:]]+$/u';
 
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
+    public static function supportsPatternAndMethod(string $pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, (string) $pattern);
     }
@@ -50,7 +50,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue): bool
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentArgumentValue): bool
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
@@ -62,7 +62,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
     /**
      * @return list<mixed>
      */
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): array
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): array
     {
         $rows = [];
         foreach ($argumentValue as $row) {

@@ -23,7 +23,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
 {
     public const PATTERN_REGEX = '/^column\:[[:print:]]+$/u';
 
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
+    public static function supportsPatternAndMethod(string $pattern, ReflectionMethod $method): bool
     {
         return 1 === preg_match(self::PATTERN_REGEX, (string) $pattern);
     }
@@ -38,7 +38,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
 
     public function supportsDefinitionAndArgument(
         DefinitionCall $definitionCall,
-        $argumentIndex,
+        int|string $argumentIndex,
         $argumentArgumentValue,
     ): bool {
         // The argument passed initially will be a TableNode but if a column transformation
@@ -79,7 +79,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
     public function transformArgument(
         CallCenter $callCenter,
         DefinitionCall $definitionCall,
-        $argumentIndex,
+        int|string $argumentIndex,
         $argumentValue,
     ): array {
         $columnNames = explode(',', substr($this->pattern, 7));

@@ -45,12 +45,12 @@ final class RuntimeExercise implements Exercise
     ) {
     }
 
-    public function setUp(array $iterators, $skip): Setup
+    public function setUp(array $iterators, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(array $iterators, $skip = false): TestResult
+    public function test(array $iterators, bool $skip = false): TestResult
     {
         $results = [];
         foreach (GroupedSpecificationIterator::group($iterators) as $iterator) {
@@ -68,7 +68,7 @@ final class RuntimeExercise implements Exercise
         return new TestResults($results);
     }
 
-    public function tearDown(array $iterators, $skip, TestResult $result): Teardown
+    public function tearDown(array $iterators, bool $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

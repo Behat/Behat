@@ -54,7 +54,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
         ];
     }
 
-    public function locateSpecifications(Suite $suite, $locator): SpecificationIterator
+    public function locateSpecifications(Suite $suite, ?string $locator): SpecificationIterator
     {
         if (!$suite->hasSetting('paths')) {
             return new NoSpecificationsIterator($suite);

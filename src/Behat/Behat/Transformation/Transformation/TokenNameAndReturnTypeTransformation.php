@@ -30,7 +30,7 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
     private readonly TokenNameTransformation $tokenTransformation;
     private readonly ReturnTypeTransformation $returnTransformation;
 
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method): bool
+    public static function supportsPatternAndMethod(string $pattern, ReflectionMethod $method): bool
     {
         return TokenNameTransformation::supportsPatternAndMethod($pattern, $method)
             && ReturnTypeTransformation::supportsPatternAndMethod('', $method);
@@ -51,13 +51,13 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue): bool
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentArgumentValue): bool
     {
         return $this->tokenTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue)
             && $this->returnTransformation->supportsDefinitionAndArgument($definitionCall, $argumentIndex, $argumentArgumentValue);
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue): mixed
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): mixed
     {
         $call = new TransformationCall(
             $definitionCall->getEnvironment(),

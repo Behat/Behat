@@ -47,12 +47,12 @@ final class RuntimeStepTester implements StepTester
     ) {
     }
 
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip): Setup
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip = false): StepResult
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, bool $skip = false): StepResult
     {
         try {
             $search = $this->searchDefinition($env, $feature, $step);
@@ -64,7 +64,7 @@ final class RuntimeStepTester implements StepTester
         return $result;
     }
 
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result): Teardown
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, bool $skip, StepResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

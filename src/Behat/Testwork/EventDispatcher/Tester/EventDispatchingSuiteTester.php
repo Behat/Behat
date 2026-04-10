@@ -44,7 +44,7 @@ final class EventDispatchingSuiteTester implements SuiteTester
     ) {
     }
 
-    public function setUp(Environment $env, SpecificationIterator $iterator, $skip): Setup
+    public function setUp(Environment $env, SpecificationIterator $iterator, bool $skip): Setup
     {
         $event = new BeforeSuiteTested($env, $iterator);
 
@@ -59,12 +59,12 @@ final class EventDispatchingSuiteTester implements SuiteTester
         return $setup;
     }
 
-    public function test(Environment $env, SpecificationIterator $iterator, $skip = false): TestResult
+    public function test(Environment $env, SpecificationIterator $iterator, bool $skip = false): TestResult
     {
         return $this->baseTester->test($env, $iterator, $skip);
     }
 
-    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, SpecificationIterator $iterator, bool $skip, TestResult $result): Teardown
     {
         $event = new BeforeSuiteTeardown($env, $iterator, $result);
         $this->eventDispatcher->dispatch($event, BeforeSuiteTeardown::BEFORE_TEARDOWN);

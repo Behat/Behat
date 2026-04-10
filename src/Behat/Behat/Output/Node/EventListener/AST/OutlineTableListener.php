@@ -61,7 +61,7 @@ final class OutlineTableListener implements EventListener
     ) {
     }
 
-    public function listenEvent(Formatter $formatter, Event $event, $eventName): void
+    public function listenEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if ($event instanceof StepTested) {
             $this->captureStepEvent($event);
