@@ -26,10 +26,10 @@ interface SetupPrinter
     /**
      * Prints setup state.
      */
-    public function printSetup(Formatter $formatter, Setup $setup);
+    public function printSetup(Formatter $formatter, Setup $setup): void;
 
     /**
      * Prints teardown state.
      */
-    public function printTeardown(Formatter $formatter, Teardown $teardown);
+    public function printTeardown(Formatter $formatter, Teardown $teardown): void;
 }

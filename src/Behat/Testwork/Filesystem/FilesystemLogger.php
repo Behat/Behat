@@ -20,15 +20,15 @@ interface FilesystemLogger
     /**
      * Logs directory creation.
      */
-    public function directoryCreated(string $path, string $reason);
+    public function directoryCreated(string $path, string $reason): void;
 
     /**
      * Logs file creation.
      */
-    public function fileCreated(string $path, string $reason);
+    public function fileCreated(string $path, string $reason): void;
 
     /**
      * Logs file update.
      */
-    public function fileUpdated(string $path, string $reason);
+    public function fileUpdated(string $path, string $reason): void;
 }

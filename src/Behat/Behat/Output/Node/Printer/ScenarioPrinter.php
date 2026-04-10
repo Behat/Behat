@@ -27,10 +27,10 @@ interface ScenarioPrinter
     /**
      * Prints scenario header using provided printer.
      */
-    public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario);
+    public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario): void;
 
     /**
      * Prints scenario footer using provided printer.
      */
-    public function printFooter(Formatter $formatter, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result): void;
 }

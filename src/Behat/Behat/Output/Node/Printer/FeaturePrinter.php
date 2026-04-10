@@ -26,10 +26,10 @@ interface FeaturePrinter
     /**
      * Prints feature header using provided formatter.
      */
-    public function printHeader(Formatter $formatter, FeatureNode $feature);
+    public function printHeader(Formatter $formatter, FeatureNode $feature): void;
 
     /**
      * Prints feature footer using provided printer.
      */
-    public function printFooter(Formatter $formatter, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result): void;
 }

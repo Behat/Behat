@@ -29,5 +29,5 @@ interface ExampleRowPrinter
      *
      * @param AfterStepTested[] $events
      */
-    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events);
+    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events): void;
 }

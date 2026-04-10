@@ -30,5 +30,5 @@ interface SuiteSetup
     /**
      * Sets up provided suite.
      */
-    public function setupSuite(Suite $suite);
+    public function setupSuite(Suite $suite): void;
 }

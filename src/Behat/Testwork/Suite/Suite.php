@@ -35,5 +35,5 @@ interface Suite
     /**
      * Returns setting value by its key.
      */
-    public function getSetting(string $key);
+    public function getSetting(string $key): void;
 }

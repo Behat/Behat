@@ -42,10 +42,10 @@ interface Formatter extends EventSubscriberInterface
     /**
      * Sets formatter parameter.
      */
-    public function setParameter(string $name, $value);
+    public function setParameter(string $name, $value): void;
 
     /**
      * Returns parameter name.
      */
-    public function getParameter(string $name);
+    public function getParameter(string $name): void;
 }

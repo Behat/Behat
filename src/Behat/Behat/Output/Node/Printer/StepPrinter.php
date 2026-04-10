@@ -27,5 +27,5 @@ interface StepPrinter
     /**
      * Prints step using provided printer.
      */
-    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result);
+    public function printStep(Formatter $formatter, Scenario $scenario, StepNode $step, StepResult $result): void;
 }

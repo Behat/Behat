@@ -27,10 +27,10 @@ interface ExamplePrinter
     /**
      * Prints example header using provided printer.
      */
-    public function printHeader(Formatter $formatter, FeatureNode $feature, ExampleNode $example);
+    public function printHeader(Formatter $formatter, FeatureNode $feature, ExampleNode $example): void;
 
     /**
      * Prints example footer using provided printer.
      */
-    public function printFooter(Formatter $formatter, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result): void;
 }

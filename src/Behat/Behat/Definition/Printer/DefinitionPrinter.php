@@ -27,5 +27,5 @@ interface DefinitionPrinter
      *
      * @param Definition[] $definitions
      */
-    public function printDefinitions(Suite $suite, array $definitions);
+    public function printDefinitions(Suite $suite, array $definitions): void;
 }

@@ -27,12 +27,12 @@ interface Statistics
     /**
      * Starts timer.
      */
-    public function startTimer();
+    public function startTimer(): void;
 
     /**
      * Stops timer.
      */
-    public function stopTimer();
+    public function stopTimer(): void;
 
     /**
      * Returns timer object.
@@ -47,17 +47,17 @@ interface Statistics
     /**
      * Registers scenario stat.
      */
-    public function registerScenarioStat(ScenarioStat $stat);
+    public function registerScenarioStat(ScenarioStat $stat): void;
 
     /**
      * Registers step stat.
      */
-    public function registerStepStat(StepStatV2 $stat);
+    public function registerStepStat(StepStatV2 $stat): void;
 
     /**
      * Registers hook stat.
      */
-    public function registerHookStat(HookStat $stat);
+    public function registerHookStat(HookStat $stat): void;
 
     /**
      * Returns counters for different scenario result codes.

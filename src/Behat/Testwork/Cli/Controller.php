@@ -28,7 +28,7 @@ interface Controller
     /**
      * Configures command to be executable by the controller.
      */
-    public function configure(SymfonyCommand $command);
+    public function configure(SymfonyCommand $command): void;
 
     /**
      * Executes controller.

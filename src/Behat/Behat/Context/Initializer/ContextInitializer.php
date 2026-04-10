@@ -24,5 +24,5 @@ interface ContextInitializer
     /**
      * Initializes provided context.
      */
-    public function initializeContext(Context $context);
+    public function initializeContext(Context $context): void;
 }

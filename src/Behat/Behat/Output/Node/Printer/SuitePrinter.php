@@ -25,10 +25,10 @@ interface SuitePrinter
     /**
      * Prints suite header using provided formatter.
      */
-    public function printHeader(Formatter $formatter, Suite $suite);
+    public function printHeader(Formatter $formatter, Suite $suite): void;
 
     /**
      * Prints suite footer using provided printer.
      */
-    public function printFooter(Formatter $formatter, Suite $suite);
+    public function printFooter(Formatter $formatter, Suite $suite): void;
 }

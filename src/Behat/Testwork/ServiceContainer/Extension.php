@@ -38,7 +38,7 @@ interface Extension
      * to hook into the configuration of other extensions providing such an
      * extension point.
      */
-    public function initialize(ExtensionManager $extensionManager);
+    public function initialize(ExtensionManager $extensionManager): void;
 
     /**
      * Setups configuration for the extension.
@@ -46,7 +46,7 @@ interface Extension
      * NOTE: If your extension uses the ArrayNodeDefinition passed to this method, your composer.json should declare
      * a direct dependency on the version(s) of symfony/config that you support.
      */
-    public function configure(ArrayNodeDefinition $builder);
+    public function configure(ArrayNodeDefinition $builder): void;
 
     /**
      * Loads extension services into temporary container.
@@ -56,7 +56,7 @@ interface Extension
      *
      * @param array<string, mixed> $config
      */
-    public function load(ContainerBuilder $container, array $config);
+    public function load(ContainerBuilder $container, array $config): void;
 
     /**
      * You can modify the container here before it is dumped to PHP code.

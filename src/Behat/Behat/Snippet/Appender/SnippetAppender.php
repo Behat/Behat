@@ -30,5 +30,5 @@ interface SnippetAppender
     /**
      * Appends snippet to the source.
      */
-    public function appendSnippet(AggregateSnippet $snippet);
+    public function appendSnippet(AggregateSnippet $snippet): void;
 }

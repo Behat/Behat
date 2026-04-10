@@ -27,10 +27,10 @@ interface OutlinePrinter
     /**
      * Prints outline header using provided printer.
      */
-    public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline);
+    public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline): void;
 
     /**
      * Prints outline footer using provided printer.
      */
-    public function printFooter(Formatter $formatter, TestResult $result);
+    public function printFooter(Formatter $formatter, TestResult $result): void;
 }

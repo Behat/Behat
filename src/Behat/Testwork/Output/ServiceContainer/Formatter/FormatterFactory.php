@@ -24,10 +24,10 @@ interface FormatterFactory
     /**
      * Builds formatter configuration.
      */
-    public function buildFormatter(ContainerBuilder $container);
+    public function buildFormatter(ContainerBuilder $container): void;
 
     /**
      * Processes formatter configuration.
      */
-    public function processFormatter(ContainerBuilder $container);
+    public function processFormatter(ContainerBuilder $container): void;
 }

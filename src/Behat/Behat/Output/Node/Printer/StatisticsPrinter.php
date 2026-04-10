@@ -25,5 +25,5 @@ interface StatisticsPrinter
     /**
      * Prints test suite statistics after run.
      */
-    public function printStatistics(Formatter $formatter, Statistics $statistics);
+    public function printStatistics(Formatter $formatter, Statistics $statistics): void;
 }
