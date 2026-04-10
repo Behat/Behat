@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Ingenerator\RiskyRectorRules\AddStrictTypes\AddParamTypeBasedOnParentClassMethodRector;
 use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddImplicitVoidInterfaceReturnTypeRector;
 use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddMethodTypeConfig;
 use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddParamTypeFromPhpDocRector;
@@ -31,6 +32,7 @@ return RectorConfig::configure()
     ->withRules([
         AddImplicitVoidInterfaceReturnTypeRector::class,
         AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
+        AddParamTypeBasedOnParentClassMethodRector::class,
     ])
     ->withImportNames(
         removeUnusedImports: true,
