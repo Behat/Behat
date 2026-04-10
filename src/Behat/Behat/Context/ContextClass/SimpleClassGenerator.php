@@ -55,9 +55,9 @@ PHP;
         $fqn = $contextClass;
 
         $namespace = '';
-        if (false !== $pos = strrpos((string) $fqn, '\\')) {
-            $namespace = 'namespace ' . substr((string) $fqn, 0, $pos) . ";\n\n";
-            $contextClass = substr((string) $fqn, $pos + 1);
+        if (false !== $pos = strrpos($fqn, '\\')) {
+            $namespace = 'namespace ' . substr($fqn, 0, $pos) . ";\n\n";
+            $contextClass = substr($fqn, $pos + 1);
         }
 
         return strtr(
