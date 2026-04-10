@@ -40,7 +40,7 @@ class YamlContextAttributes implements TranslatableContext
         PHPUnit\Framework\Assert::assertEquals($username, $user->name);
     }
 
-    public static function getTranslationResources()
+    public static function getTranslationResources(): array
     {
         return [__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.yml'];
     }

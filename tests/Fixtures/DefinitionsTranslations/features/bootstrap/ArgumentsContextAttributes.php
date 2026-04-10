@@ -27,7 +27,7 @@ class ArgumentsContextAttributes implements TranslatableContext
         PHPUnit\Framework\Assert::assertSame($value, $this->index);
     }
 
-    public static function getTranslationResources()
+    public static function getTranslationResources(): array
     {
         return [__DIR__ . DIRECTORY_SEPARATOR . 'i18n' . DIRECTORY_SEPARATOR . 'ru.xliff'];
     }
