@@ -44,14 +44,14 @@ interface OutputPrinter
      *
      * @param string|array $messages message or array of messages
      */
-    public function write($messages): void;
+    public function write(string|array $messages): void;
 
     /**
      * Writes newlined message(s) to output stream.
      *
      * @param string|array $messages message or array of messages
      */
-    public function writeln($messages = ''): void;
+    public function writeln(string|array $messages = ''): void;
 
     /**
      * Clear output stream, so on next write formatter will need to init (create) it again.

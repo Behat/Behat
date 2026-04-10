@@ -26,10 +26,8 @@ interface PatternPolicy
 {
     /**
      * Checks if policy supports pattern type.
-     *
-     * @param string|null $type
      */
-    public function supportsPatternType($type): bool;
+    public function supportsPatternType(?string $type): bool;
 
     /**
      * Generates pattern for step text.

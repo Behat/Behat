@@ -35,9 +35,7 @@ interface SpecificationLocator
     /**
      * Locates specifications and wraps them into iterator.
      *
-     * @param string|null $locator
-     *
      * @return SpecificationIterator<T>
      */
-    public function locateSpecifications(Suite $suite, $locator): SpecificationIterator;
+    public function locateSpecifications(Suite $suite, ?string $locator): SpecificationIterator;
 }
