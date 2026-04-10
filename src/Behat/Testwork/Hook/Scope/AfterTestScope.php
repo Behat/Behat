@@ -23,8 +23,6 @@ interface AfterTestScope extends HookScope
 {
     /**
      * Returns test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult();
+    public function getTestResult(): TestResult;
 }

@@ -24,15 +24,11 @@ interface AfterTested
 {
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult();
+    public function getTestResult(): TestResult;
 
     /**
      * Returns current test teardown.
-     *
-     * @return Teardown
      */
-    public function getTeardown();
+    public function getTeardown(): Teardown;
 }

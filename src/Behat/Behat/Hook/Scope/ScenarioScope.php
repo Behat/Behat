@@ -28,15 +28,11 @@ interface ScenarioScope extends HookScope
 
     /**
      * Returns scope feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature();
+    public function getFeature(): FeatureNode;
 
     /**
      * Returns scenario.
-     *
-     * @return ScenarioInterface
      */
-    public function getScenario();
+    public function getScenario(): ScenarioInterface;
 }

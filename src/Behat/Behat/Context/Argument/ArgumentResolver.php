@@ -31,5 +31,5 @@ interface ArgumentResolver
      *
      * @return mixed[]
      */
-    public function resolveArguments(ReflectionClass $classReflection, array $arguments);
+    public function resolveArguments(ReflectionClass $classReflection, array $arguments): array;
 }

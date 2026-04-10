@@ -30,7 +30,7 @@ interface SpecificationLocator
      *
      * @return string[]
      */
-    public function getLocatorExamples();
+    public function getLocatorExamples(): array;
 
     /**
      * Locates specifications and wraps them into iterator.
@@ -39,5 +39,5 @@ interface SpecificationLocator
      *
      * @return SpecificationIterator<T>
      */
-    public function locateSpecifications(Suite $suite, $locator);
+    public function locateSpecifications(Suite $suite, $locator): SpecificationIterator;
 }

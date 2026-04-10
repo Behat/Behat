@@ -23,22 +23,16 @@ interface Definition extends Callee
 {
     /**
      * Returns definition type (Given|When|Then).
-     *
-     * @return string
      */
-    public function getType();
+    public function getType(): string;
 
     /**
      * Returns step pattern exactly as it was defined.
-     *
-     * @return string
      */
-    public function getPattern();
+    public function getPattern(): string;
 
     /**
      * Represents definition as a string.
-     *
-     * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

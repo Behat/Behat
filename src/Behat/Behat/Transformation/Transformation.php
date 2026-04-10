@@ -23,8 +23,6 @@ interface Transformation extends Callee
 {
     /**
      * Represents transformation as a string.
-     *
-     * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

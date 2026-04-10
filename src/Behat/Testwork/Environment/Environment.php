@@ -22,15 +22,11 @@ interface Environment
 {
     /**
      * Returns environment suite.
-     *
-     * @return Suite
      */
-    public function getSuite();
+    public function getSuite(): Suite;
 
     /**
      * Creates callable using provided Callee.
-     *
-     * @return callable
      */
-    public function bindCallee(Callee $callee);
+    public function bindCallee(Callee $callee): callable;
 }

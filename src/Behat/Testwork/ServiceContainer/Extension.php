@@ -27,10 +27,8 @@ interface Extension
 {
     /**
      * Returns the extension config key.
-     *
-     * @return string
      */
-    public function getConfigKey();
+    public function getConfigKey(): string;
 
     /**
      * Initializes other extensions.
@@ -65,8 +63,6 @@ interface Extension
      *
      * NOTE: If your extension uses the ContainerBuilder passed to this method, your composer.json should declare
      *  a direct dependency on the version(s) of symfony/dependency-injection that you support.
-     *
-     * @return void
      */
-    public function process(ContainerBuilder $container);
+    public function process(ContainerBuilder $container): void;
 }

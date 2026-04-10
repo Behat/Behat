@@ -26,36 +26,26 @@ interface Formatter extends EventSubscriberInterface
 {
     /**
      * Returns formatter name.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns formatter description.
-     *
-     * @return string
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * Returns formatter output printer.
-     *
-     * @return OutputPrinter
      */
-    public function getOutputPrinter();
+    public function getOutputPrinter(): OutputPrinter;
 
     /**
      * Sets formatter parameter.
-     *
-     * @param string $name
      */
-    public function setParameter($name, $value);
+    public function setParameter(string $name, $value);
 
     /**
      * Returns parameter name.
-     *
-     * @param string $name
      */
-    public function getParameter($name);
+    public function getParameter(string $name);
 }

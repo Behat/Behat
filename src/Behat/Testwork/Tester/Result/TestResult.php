@@ -27,15 +27,13 @@ interface TestResult
 
     /**
      * Checks that test has passed.
-     *
-     * @return bool
      */
-    public function isPassed();
+    public function isPassed(): bool;
 
     /**
      * Returns tester result code.
      *
      * @return TestResult::*|TestResults::NO_TESTS
      */
-    public function getResultCode();
+    public function getResultCode(): int;
 }

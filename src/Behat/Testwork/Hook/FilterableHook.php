@@ -21,8 +21,6 @@ interface FilterableHook extends Hook
 {
     /**
      * Checks that current hook matches provided hook scope.
-     *
-     * @return bool
      */
-    public function filterMatches(HookScope $scope);
+    public function filterMatches(HookScope $scope): bool;
 }

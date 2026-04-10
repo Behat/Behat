@@ -28,15 +28,11 @@ interface StepScope extends HookScope
 
     /**
      * Returns scope feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature();
+    public function getFeature(): FeatureNode;
 
     /**
      * Returns scope step.
-     *
-     * @return StepNode
      */
-    public function getStep();
+    public function getStep(): StepNode;
 }

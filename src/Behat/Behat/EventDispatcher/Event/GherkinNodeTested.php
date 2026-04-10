@@ -23,8 +23,6 @@ interface GherkinNodeTested
 {
     /**
      * Returns node.
-     *
-     * @return NodeInterface
      */
-    public function getNode();
+    public function getNode(): NodeInterface;
 }

@@ -28,29 +28,20 @@ interface SpecificationTester
      * Sets up specification for a test.
      *
      * @param TSpec       $spec
-     * @param bool     $skip
-     *
-     * @return Setup
      */
-    public function setUp(Environment $env, $spec, $skip);
+    public function setUp(Environment $env, $spec, bool $skip): Setup;
 
     /**
      * Tests provided specification.
      *
      * @param TSpec       $spec
-     * @param bool     $skip
-     *
-     * @return TestResult
      */
-    public function test(Environment $env, $spec, $skip);
+    public function test(Environment $env, $spec, bool $skip): TestResult;
 
     /**
      * Tears down specification after a test.
      *
      * @param TSpec       $spec
-     * @param bool     $skip
-     *
-     * @return Teardown
      */
-    public function tearDown(Environment $env, $spec, $skip, TestResult $result);
+    public function tearDown(Environment $env, $spec, bool $skip, TestResult $result): Teardown;
 }

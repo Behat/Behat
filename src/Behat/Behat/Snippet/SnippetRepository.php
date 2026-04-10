@@ -22,12 +22,12 @@ interface SnippetRepository
      *
      * @return AggregateSnippet[]
      */
-    public function getSnippets();
+    public function getSnippets(): array;
 
     /**
      * Returns steps for which there was no snippet generated.
      *
      * @return UndefinedStep[]
      */
-    public function getUndefinedSteps();
+    public function getUndefinedSteps(): array;
 }

@@ -24,8 +24,6 @@ interface ResultInterpretation
 {
     /**
      * Checks if provided test result should be considered as a failure.
-     *
-     * @return bool
      */
-    public function isFailure(TestResult $result);
+    public function isFailure(TestResult $result): bool;
 }

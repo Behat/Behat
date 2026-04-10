@@ -25,19 +25,11 @@ interface ClassResolver
 {
     /**
      * Checks if resolvers supports provided class.
-     *
-     * @param string $contextString
-     *
-     * @return bool
      */
-    public function supportsClass($contextString);
+    public function supportsClass(string $contextString): bool;
 
     /**
      * Resolves context class.
-     *
-     * @param string $contextClass
-     *
-     * @return string
      */
-    public function resolveClass($contextClass);
+    public function resolveClass(string $contextClass): string;
 }

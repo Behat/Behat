@@ -26,8 +26,6 @@ interface SpecificationIterator extends Iterator
 {
     /**
      * Returns suite that was used to load specifications.
-     *
-     * @return Suite
      */
-    public function getSuite();
+    public function getSuite(): Suite;
 }

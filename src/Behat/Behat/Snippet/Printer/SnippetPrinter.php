@@ -23,16 +23,14 @@ interface SnippetPrinter
     /**
      * Prints snippets of the specific target.
      *
-     * @param string             $targetName
      * @param AggregateSnippet[] $snippets
      */
-    public function printSnippets($targetName, array $snippets);
+    public function printSnippets(string $targetName, array $snippets);
 
     /**
      * Prints undefined steps of the specific suite.
      *
-     * @param string     $suiteName
      * @param StepNode[] $steps
      */
-    public function printUndefinedSteps($suiteName, array $steps);
+    public function printUndefinedSteps(string $suiteName, array $steps);
 }

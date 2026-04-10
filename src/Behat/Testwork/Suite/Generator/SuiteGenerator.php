@@ -26,17 +26,11 @@ interface SuiteGenerator
      * Checks if generator support provided suite type and settings.
      *
      * @param string|null $type
-     *
-     * @return bool
      */
-    public function supportsTypeAndSettings($type, array $settings);
+    public function supportsTypeAndSettings($type, array $settings): bool;
 
     /**
      * Generate suite with provided name and settings.
-     *
-     * @param string $suiteName
-     *
-     * @return Suite
      */
-    public function generateSuite($suiteName, array $settings);
+    public function generateSuite(string $suiteName, array $settings): Suite;
 }

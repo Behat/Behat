@@ -22,15 +22,11 @@ interface ScenarioLikeTested extends GherkinNodeTested
 {
     /**
      * Returns feature node.
-     *
-     * @return FeatureNode
      */
-    public function getFeature();
+    public function getFeature(): FeatureNode;
 
     /**
      * Returns scenario node.
-     *
-     * @return ScenarioLikeInterface
      */
-    public function getScenario();
+    public function getScenario(): ScenarioLikeInterface;
 }

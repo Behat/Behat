@@ -28,35 +28,21 @@ interface PatternPolicy
      * Checks if policy supports pattern type.
      *
      * @param string|null $type
-     *
-     * @return bool
      */
-    public function supportsPatternType($type);
+    public function supportsPatternType($type): bool;
 
     /**
      * Generates pattern for step text.
-     *
-     * @param string $stepText
-     *
-     * @return Pattern
      */
-    public function generatePattern($stepText);
+    public function generatePattern(string $stepText): Pattern;
 
     /**
      * Checks if policy supports pattern.
-     *
-     * @param string $pattern
-     *
-     * @return bool
      */
-    public function supportsPattern($pattern);
+    public function supportsPattern(string $pattern): bool;
 
     /**
      * Transforms pattern string to regex.
-     *
-     * @param string $pattern
-     *
-     * @return string
      */
-    public function transformPatternToRegex($pattern);
+    public function transformPatternToRegex(string $pattern): string;
 }

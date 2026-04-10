@@ -19,10 +19,6 @@ interface PatternIdentifier
 {
     /**
      * Attempts to guess the target pattern type from the context.
-     *
-     * @param string $contextClass
-     *
-     * @return string|null
      */
-    public function guessPatternType($contextClass);
+    public function guessPatternType(string $contextClass): ?string;
 }

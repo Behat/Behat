@@ -19,10 +19,8 @@ interface Call
 {
     /**
      * Returns callee.
-     *
-     * @return Callee
      */
-    public function getCallee();
+    public function getCallee(): Callee;
 
     /**
      * Returns bound callable.
@@ -33,10 +31,8 @@ interface Call
 
     /**
      * Returns call arguments.
-     *
-     * @return array
      */
-    public function getArguments();
+    public function getArguments(): array;
 
     /**
      * Returns call error reporting level.

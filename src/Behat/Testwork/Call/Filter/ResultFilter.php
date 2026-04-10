@@ -24,15 +24,11 @@ interface ResultFilter
 {
     /**
      * Checks if filter supports call result.
-     *
-     * @return bool
      */
-    public function supportsResult(CallResult $result);
+    public function supportsResult(CallResult $result): bool;
 
     /**
      * Filters call result and returns a new result.
-     *
-     * @return CallResult
      */
-    public function filterResult(CallResult $result);
+    public function filterResult(CallResult $result): CallResult;
 }

@@ -19,25 +19,16 @@ interface FilesystemLogger
 {
     /**
      * Logs directory creation.
-     *
-     * @param string $path
-     * @param string $reason
      */
-    public function directoryCreated($path, $reason);
+    public function directoryCreated(string $path, string $reason);
 
     /**
      * Logs file creation.
-     *
-     * @param string $path
-     * @param string $reason
      */
-    public function fileCreated($path, $reason);
+    public function fileCreated(string $path, string $reason);
 
     /**
      * Logs file update.
-     *
-     * @param string $path
-     * @param string $reason
      */
-    public function fileUpdated($path, $reason);
+    public function fileUpdated(string $path, string $reason);
 }

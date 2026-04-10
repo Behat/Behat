@@ -28,10 +28,7 @@ interface Orderer
      *
      * @return SpecificationIterator<T>[]
      */
-    public function order(array $scenarioIterators);
+    public function order(array $scenarioIterators): array;
 
-    /**
-     * @return string
-     */
-    public function getName();
+    public function getName(): string;
 }

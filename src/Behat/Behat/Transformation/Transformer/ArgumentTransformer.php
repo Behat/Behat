@@ -23,17 +23,11 @@ interface ArgumentTransformer
 {
     /**
      * Checks if transformer supports argument.
-     *
-     * @param int|string $argumentIndex
-     *
-     * @return bool
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue): bool;
 
     /**
      * Transforms argument value using transformation and returns a new one.
-     *
-     * @param int|string $argumentIndex
      */
-    public function transformArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
+    public function transformArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue);
 }

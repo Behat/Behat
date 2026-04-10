@@ -29,29 +29,20 @@ interface SuiteTester
      * Sets up suite for a test.
      *
      * @param SpecificationIterator<TSpec> $iterator
-     * @param bool               $skip
-     *
-     * @return Setup
      */
-    public function setUp(Environment $env, SpecificationIterator $iterator, $skip);
+    public function setUp(Environment $env, SpecificationIterator $iterator, bool $skip): Setup;
 
     /**
      * Tests provided suite specifications.
      *
      * @param SpecificationIterator<TSpec> $iterator
-     * @param bool               $skip
-     *
-     * @return TestResult
      */
-    public function test(Environment $env, SpecificationIterator $iterator, $skip);
+    public function test(Environment $env, SpecificationIterator $iterator, bool $skip): TestResult;
 
     /**
      * Tears down suite after a test.
      *
      * @param SpecificationIterator<TSpec> $iterator
-     * @param bool               $skip
-     *
-     * @return Teardown
      */
-    public function tearDown(Environment $env, SpecificationIterator $iterator, $skip, TestResult $result);
+    public function tearDown(Environment $env, SpecificationIterator $iterator, bool $skip, TestResult $result): Teardown;
 }

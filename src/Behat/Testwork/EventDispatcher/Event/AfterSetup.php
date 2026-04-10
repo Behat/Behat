@@ -23,8 +23,6 @@ interface AfterSetup
 {
     /**
      * Returns current test setup.
-     *
-     * @return Setup
      */
-    public function getSetup();
+    public function getSetup(): Setup;
 }

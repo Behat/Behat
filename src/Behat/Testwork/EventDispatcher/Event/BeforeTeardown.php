@@ -23,8 +23,6 @@ interface BeforeTeardown
 {
     /**
      * Returns current test result.
-     *
-     * @return TestResult
      */
-    public function getTestResult();
+    public function getTestResult(): TestResult;
 }

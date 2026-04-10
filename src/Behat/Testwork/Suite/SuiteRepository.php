@@ -22,5 +22,5 @@ interface SuiteRepository
      *
      * @return Suite[]
      */
-    public function getSuites();
+    public function getSuites(): array;
 }

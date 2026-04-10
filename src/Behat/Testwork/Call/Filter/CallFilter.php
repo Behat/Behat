@@ -24,15 +24,11 @@ interface CallFilter
 {
     /**
      * Checks if filter supports a call.
-     *
-     * @return bool
      */
-    public function supportsCall(Call $call);
+    public function supportsCall(Call $call): bool;
 
     /**
      * Filters a call and returns a new one.
-     *
-     * @return Call
      */
-    public function filterCall(Call $call);
+    public function filterCall(Call $call): Call;
 }

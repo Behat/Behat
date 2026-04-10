@@ -21,10 +21,8 @@ interface OutputPrinter
 {
     /**
      * Sets output path.
-     *
-     * @param string $path
      */
-    public function setOutputPath($path);
+    public function setOutputPath(string $path);
 
     /**
      * Sets output styles.
@@ -33,17 +31,13 @@ interface OutputPrinter
 
     /**
      * Forces output to be decorated.
-     *
-     * @param bool $decorated
      */
-    public function setOutputDecorated($decorated);
+    public function setOutputDecorated(bool $decorated);
 
     /**
      * Sets output verbosity level.
-     *
-     * @param int $level
      */
-    public function setOutputVerbosity($level);
+    public function setOutputVerbosity(int $level);
 
     /**
      * Writes message(s) to output stream.

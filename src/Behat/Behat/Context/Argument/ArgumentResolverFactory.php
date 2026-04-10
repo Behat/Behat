@@ -26,5 +26,5 @@ interface ArgumentResolverFactory
      *
      * @return ArgumentResolver[]
      */
-    public function createArgumentResolvers(Environment $environment);
+    public function createArgumentResolvers(Environment $environment): array;
 }

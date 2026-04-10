@@ -24,19 +24,13 @@ interface ClassGenerator
 {
     /**
      * Checks if generator supports provided context class.
-     *
-     * @param string $contextClass
-     *
-     * @return bool
      */
-    public function supportsSuiteAndClass(Suite $suite, $contextClass);
+    public function supportsSuiteAndClass(Suite $suite, string $contextClass): bool;
 
     /**
      * Generates context class code.
      *
-     * @param string $contextClass
-     *
      * @return string The context class source code
      */
-    public function generateClass(Suite $suite, $contextClass);
+    public function generateClass(Suite $suite, string $contextClass): string;
 }

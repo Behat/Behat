@@ -27,8 +27,6 @@ interface FeatureScope extends HookScope
 
     /**
      * Returns scope feature.
-     *
-     * @return FeatureNode
      */
-    public function getFeature();
+    public function getFeature(): FeatureNode;
 }

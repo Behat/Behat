@@ -29,22 +29,16 @@ interface HookScope
 {
     /**
      * Returns hook scope name.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns hook suite.
-     *
-     * @return Suite
      */
-    public function getSuite();
+    public function getSuite(): Suite;
 
     /**
      * Returns hook environment.
-     *
-     * @return Environment
      */
-    public function getEnvironment();
+    public function getEnvironment(): Environment;
 }

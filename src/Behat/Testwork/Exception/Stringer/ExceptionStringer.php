@@ -26,17 +26,11 @@ interface ExceptionStringer
 {
     /**
      * Checks if stringer supports provided exception.
-     *
-     * @return bool
      */
-    public function supportsException(Exception $exception);
+    public function supportsException(Exception $exception): bool;
 
     /**
      * Strings provided exception.
-     *
-     * @param int $verbosity
-     *
-     * @return string
      */
-    public function stringException(Exception $exception, $verbosity);
+    public function stringException(Exception $exception, int $verbosity): string;
 }

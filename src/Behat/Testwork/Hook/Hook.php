@@ -21,22 +21,16 @@ interface Hook extends Callee
 {
     /**
      * Returns hook name.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns hook scope name.
-     *
-     * @return string
      */
-    public function getScopeName();
+    public function getScopeName(): string;
 
     /**
      * Represents hook as a string.
-     *
-     * @return string
      */
-    public function __toString();
+    public function __toString(): string;
 }

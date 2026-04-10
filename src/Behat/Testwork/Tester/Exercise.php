@@ -28,29 +28,20 @@ interface Exercise
      * Sets up exercise for a test.
      *
      * @param SpecificationIterator<TSpec>[] $iterators
-     * @param bool                 $skip
-     *
-     * @return Setup
      */
-    public function setUp(array $iterators, $skip);
+    public function setUp(array $iterators, bool $skip): Setup;
 
     /**
      * Tests suites specifications.
      *
      * @param SpecificationIterator<TSpec>[] $iterators
-     * @param bool                 $skip
-     *
-     * @return TestResult
      */
-    public function test(array $iterators, $skip);
+    public function test(array $iterators, bool $skip): TestResult;
 
     /**
      * Tears down exercise after a test.
      *
      * @param SpecificationIterator<TSpec>[] $iterators
-     * @param bool                 $skip
-     *
-     * @return Teardown
      */
-    public function tearDown(array $iterators, $skip, TestResult $result);
+    public function tearDown(array $iterators, bool $skip, TestResult $result): Teardown;
 }

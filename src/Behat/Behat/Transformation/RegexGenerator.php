@@ -19,12 +19,6 @@ interface RegexGenerator
 {
     /**
      * Generates regular expression using provided parameters.
-     *
-     * @param string $suiteName
-     * @param string $pattern
-     * @param string $language
-     *
-     * @return string
      */
-    public function generateRegex($suiteName, $pattern, $language);
+    public function generateRegex(string $suiteName, string $pattern, string $language): string;
 }

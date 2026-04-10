@@ -23,10 +23,8 @@ interface ExceptionResult extends TestResult
 {
     /**
      * Checks that the test result has exception.
-     *
-     * @return bool
      */
-    public function hasException();
+    public function hasException(): bool;
 
     /**
      * Returns exception that test result has.

@@ -25,33 +25,21 @@ interface SimpleArgumentTransformation extends Transformation
 {
     /**
      * Checks if transformation supports given pattern.
-     *
-     * @param string           $pattern
-     *
-     * @return bool
      */
-    public static function supportsPatternAndMethod($pattern, ReflectionMethod $method);
+    public static function supportsPatternAndMethod(string $pattern, ReflectionMethod $method): bool;
 
     /**
      * Returns transformation priority.
-     *
-     * @return int
      */
-    public function getPriority();
+    public function getPriority(): int;
 
     /**
      * Checks if transformation supports argument.
-     *
-     * @param int|string $argumentIndex
-     *
-     * @return bool
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, $argumentIndex, $argumentArgumentValue);
+    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, $argumentArgumentValue): bool;
 
     /**
      * Transforms argument value using transformation and returns a new one.
-     *
-     * @param int|string $argumentIndex
      */
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, $argumentIndex, $argumentValue);
+    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, $argumentValue);
 }

@@ -21,36 +21,26 @@ interface Snippet
 {
     /**
      * Returns snippet type.
-     *
-     * @return string
      */
-    public function getType();
+    public function getType(): string;
 
     /**
      * Returns snippet unique ID (step type independent).
-     *
-     * @return string
      */
-    public function getHash();
+    public function getHash(): string;
 
     /**
      * Returns definition snippet text.
-     *
-     * @return string
      */
-    public function getSnippet();
+    public function getSnippet(): string;
 
     /**
      * Returns step which asked for this snippet.
-     *
-     * @return StepNode
      */
-    public function getStep();
+    public function getStep(): StepNode;
 
     /**
      * Returns snippet target.
-     *
-     * @return string
      */
-    public function getTarget();
+    public function getTarget(): string;
 }

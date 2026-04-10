@@ -26,28 +26,16 @@ interface StepTester
 {
     /**
      * Sets up step for a test.
-     *
-     * @param bool     $skip
-     *
-     * @return Setup
      */
-    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, $skip);
+    public function setUp(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): Setup;
 
     /**
      * Tests step.
-     *
-     * @param bool     $skip
-     *
-     * @return StepResult
      */
-    public function test(Environment $env, FeatureNode $feature, StepNode $step, $skip);
+    public function test(Environment $env, FeatureNode $feature, StepNode $step, bool $skip): StepResult;
 
     /**
      * Tears down step after a test.
-     *
-     * @param bool     $skip
-     *
-     * @return Teardown
      */
-    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, $skip, StepResult $result);
+    public function tearDown(Environment $env, FeatureNode $feature, StepNode $step, bool $skip, StepResult $result): Teardown;
 }

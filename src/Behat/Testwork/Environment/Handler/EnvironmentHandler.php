@@ -25,29 +25,21 @@ interface EnvironmentHandler
 {
     /**
      * Checks if handler supports provided suite.
-     *
-     * @return bool
      */
-    public function supportsSuite(Suite $suite);
+    public function supportsSuite(Suite $suite): bool;
 
     /**
      * Builds environment object based on provided suite.
-     *
-     * @return Environment
      */
-    public function buildEnvironment(Suite $suite);
+    public function buildEnvironment(Suite $suite): Environment;
 
     /**
      * Checks if handler supports provided environment.
-     *
-     * @return bool
      */
-    public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null);
+    public function supportsEnvironmentAndSubject(Environment $environment, $testSubject = null): bool;
 
     /**
      * Isolates provided environment.
-     *
-     * @return Environment
      */
-    public function isolateEnvironment(Environment $environment, $testSubject = null);
+    public function isolateEnvironment(Environment $environment, $testSubject = null): Environment;
 }

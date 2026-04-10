@@ -25,15 +25,11 @@ interface CallHandler
 {
     /**
      * Checks if handler supports call.
-     *
-     * @return bool
      */
-    public function supportsCall(Call $call);
+    public function supportsCall(Call $call): bool;
 
     /**
      * Handles call and returns call result.
-     *
-     * @return CallResult
      */
-    public function handleCall(Call $call);
+    public function handleCall(Call $call): CallResult;
 }

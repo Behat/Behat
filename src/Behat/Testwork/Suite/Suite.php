@@ -19,31 +19,21 @@ interface Suite
 {
     /**
      * Returns unique suite name.
-     *
-     * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns suite settings.
-     *
-     * @return array
      */
-    public function getSettings();
+    public function getSettings(): array;
 
     /**
      * Checks if a setting with provided name exists.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
-    public function hasSetting($key);
+    public function hasSetting(string $key): bool;
 
     /**
      * Returns setting value by its key.
-     *
-     * @param string $key
      */
-    public function getSetting($key);
+    public function getSetting(string $key);
 }

@@ -26,5 +26,5 @@ interface ArgumentOrganiser
      *
      * @return mixed[]
      */
-    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments);
+    public function organiseArguments(ReflectionFunctionAbstract $function, array $arguments): array;
 }

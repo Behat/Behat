@@ -27,24 +27,20 @@ interface ContextEnvironment extends Environment
 {
     /**
      * Checks if environment has any contexts registered.
-     *
-     * @return bool
      */
-    public function hasContexts();
+    public function hasContexts(): bool;
 
     /**
      * Returns list of registered context classes.
      *
      * @return list<class-string<Context>>
      */
-    public function getContextClasses();
+    public function getContextClasses(): array;
 
     /**
      * Checks if environment contains context with the specified class name.
      *
      * @param class-string<Context> $class
-     *
-     * @return bool
      */
-    public function hasContextClass($class);
+    public function hasContextClass(string $class): bool;
 }

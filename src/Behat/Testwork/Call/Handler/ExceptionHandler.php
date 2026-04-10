@@ -23,19 +23,11 @@ interface ExceptionHandler
 {
     /**
      * Checks if handler supports exception.
-     *
-     * @param Throwable $exception
-     *
-     * @return bool
      */
-    public function supportsException($exception);
+    public function supportsException(Throwable $exception): bool;
 
     /**
      * Handles exception and returns new one if necessary.
-     *
-     * @param Throwable $exception
-     *
-     * @return Throwable
      */
-    public function handleException($exception);
+    public function handleException(Throwable $exception): Throwable;
 }
