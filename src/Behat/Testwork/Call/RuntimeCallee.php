@@ -53,7 +53,7 @@ class RuntimeCallee implements Callee
     /**
      * Returns callee description.
      *
-     * @return string
+     * @return ?string
      */
     public function getDescription()
     {

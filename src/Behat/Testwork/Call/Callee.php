@@ -33,7 +33,7 @@ interface Callee
     /**
      * Returns callee description.
      *
-     * @return string
+     * @return ?string
      */
     public function getDescription();
 
