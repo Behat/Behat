@@ -10,6 +10,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -29,6 +30,7 @@ return RectorConfig::configure()
     ->withConfiguredRule(AddReturnTypeFromPhpDocRector::class, [AddMethodTypeConfig::INTERFACES_ONLY => true])
     ->withRules([
         AddImplicitVoidInterfaceReturnTypeRector::class,
+        AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
     ])
     ->withImportNames(
         removeUnusedImports: true,
