@@ -40,12 +40,12 @@ final class RuntimeFeatureTester implements SpecificationTester
     ) {
     }
 
-    public function setUp(Environment $env, $spec, bool $skip): Setup
+    public function setUp(Environment $env, mixed $spec, bool $skip): Setup
     {
         return new SuccessfulSetup();
     }
 
-    public function test(Environment $env, $spec, bool $skip = false): TestResult
+    public function test(Environment $env, mixed $spec, bool $skip = false): TestResult
     {
         $results = [];
         foreach ($spec->getScenarios() as $scenario) {
@@ -63,7 +63,7 @@ final class RuntimeFeatureTester implements SpecificationTester
         return new TestResults($results);
     }
 
-    public function tearDown(Environment $env, $spec, bool $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, mixed $spec, bool $skip, TestResult $result): Teardown
     {
         return new SuccessfulTeardown();
     }

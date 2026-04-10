@@ -42,7 +42,7 @@ final class HookableFeatureTester implements SpecificationTester
     ) {
     }
 
-    public function setUp(Environment $env, $spec, bool $skip): Setup
+    public function setUp(Environment $env, mixed $spec, bool $skip): Setup
     {
         $setup = $this->baseTester->setUp($env, $spec, $skip);
 
@@ -56,12 +56,12 @@ final class HookableFeatureTester implements SpecificationTester
         return new HookedSetup($setup, $hookCallResults);
     }
 
-    public function test(Environment $env, $spec, bool $skip): TestResult
+    public function test(Environment $env, mixed $spec, bool $skip): TestResult
     {
         return $this->baseTester->test($env, $spec, $skip);
     }
 
-    public function tearDown(Environment $env, $spec, bool $skip, TestResult $result): Teardown
+    public function tearDown(Environment $env, mixed $spec, bool $skip, TestResult $result): Teardown
     {
         $teardown = $this->baseTester->tearDown($env, $spec, $skip, $result);
 
