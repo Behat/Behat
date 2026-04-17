@@ -80,7 +80,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads progress formatter node event listener.
      */
-    private function loadRootNodeListener(ContainerBuilder $container)
+    private function loadRootNodeListener(ContainerBuilder $container): void
     {
         $definition = new Definition(StepListener::class, [
             new Reference('output.node.printer.progress.step'),
@@ -91,7 +91,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads feature, scenario and step printers.
      */
-    private function loadCorePrinters(ContainerBuilder $container)
+    private function loadCorePrinters(ContainerBuilder $container): void
     {
         $definition = new Definition(CounterPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
@@ -122,7 +122,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads printer helpers.
      */
-    private function loadPrinterHelpers(ContainerBuilder $container)
+    private function loadPrinterHelpers(ContainerBuilder $container): void
     {
         $definition = new Definition(ResultToStringConverter::class);
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
@@ -131,7 +131,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Loads formatter itself.
      */
-    private function loadFormatter(ContainerBuilder $container)
+    private function loadFormatter(ContainerBuilder $container): void
     {
         $definition = new Definition(TotalStatistics::class);
         $container->setDefinition('output.progress.statistics', $definition);
@@ -182,7 +182,7 @@ final class ProgressFormatterFactory implements FormatterFactory
     /**
      * Processes all registered pretty formatter node listener wrappers.
      */
-    private function processListenerWrappers(ContainerBuilder $container)
+    private function processListenerWrappers(ContainerBuilder $container): void
     {
         $this->processor->processWrapperServices($container, self::ROOT_LISTENER_ID, self::ROOT_LISTENER_WRAPPER_TAG);
     }

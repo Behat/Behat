@@ -107,7 +107,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads specification tester.
      */
-    protected function loadSpecificationTester(ContainerBuilder $container)
+    protected function loadSpecificationTester(ContainerBuilder $container): void
     {
         $definition = new Definition(RuntimeFeatureTester::class, [
             new Reference(self::SCENARIO_TESTER_ID),
@@ -124,7 +124,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads scenario tester.
      */
-    protected function loadScenarioTester(ContainerBuilder $container)
+    protected function loadScenarioTester(ContainerBuilder $container): void
     {
         $definition = new Definition(StepContainerTester::class, [
             new Reference(self::STEP_TESTER_ID),
@@ -152,7 +152,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads outline tester.
      */
-    protected function loadOutlineTester(ContainerBuilder $container)
+    protected function loadOutlineTester(ContainerBuilder $container): void
     {
         $definition = new Definition(RuntimeOutlineTester::class, [
             new Reference(self::EXAMPLE_TESTER_ID),
@@ -165,7 +165,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads example tester.
      */
-    protected function loadExampleTester(ContainerBuilder $container)
+    protected function loadExampleTester(ContainerBuilder $container): void
     {
         $definition = new Definition(StepContainerTester::class, [
             new Reference(self::STEP_TESTER_ID),
@@ -193,7 +193,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads background tester.
      */
-    protected function loadBackgroundTester(ContainerBuilder $container)
+    protected function loadBackgroundTester(ContainerBuilder $container): void
     {
         $definition = new Definition(StepContainerTester::class, [
             new Reference(self::STEP_TESTER_ID),
@@ -209,7 +209,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads step tester.
      */
-    protected function loadStepTester(ContainerBuilder $container)
+    protected function loadStepTester(ContainerBuilder $container): void
     {
         $definition = new Definition(RuntimeStepTester::class, [
             new Reference(DefinitionExtension::FINDER_ID),
@@ -223,7 +223,7 @@ final class TesterExtension extends BaseExtension
      *
      * @param string|null $cachePath
      */
-    protected function loadRerunController(ContainerBuilder $container, $cachePath)
+    protected function loadRerunController(ContainerBuilder $container, $cachePath): void
     {
         $definition = new Definition(RerunController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
@@ -238,7 +238,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Loads pending exception stringer.
      */
-    protected function loadPendingExceptionStringer(ContainerBuilder $container)
+    protected function loadPendingExceptionStringer(ContainerBuilder $container): void
     {
         $definition = new Definition(PendingExceptionStringer::class);
         $definition->addTag(ExceptionExtension::STRINGER_TAG);
@@ -248,7 +248,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Processes all registered scenario tester wrappers.
      */
-    protected function processScenarioTesterWrappers(ContainerBuilder $container)
+    protected function processScenarioTesterWrappers(ContainerBuilder $container): void
     {
         $this->processor->processWrapperServices($container, self::SCENARIO_TESTER_ID, self::SCENARIO_TESTER_WRAPPER_TAG);
     }
@@ -256,7 +256,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Processes all registered outline tester wrappers.
      */
-    protected function processOutlineTesterWrappers(ContainerBuilder $container)
+    protected function processOutlineTesterWrappers(ContainerBuilder $container): void
     {
         $this->processor->processWrapperServices($container, self::OUTLINE_TESTER_ID, self::OUTLINE_TESTER_WRAPPER_TAG);
     }
@@ -264,7 +264,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Processes all registered example tester wrappers.
      */
-    protected function processExampleTesterWrappers(ContainerBuilder $container)
+    protected function processExampleTesterWrappers(ContainerBuilder $container): void
     {
         $this->processor->processWrapperServices($container, self::EXAMPLE_TESTER_ID, self::EXAMPLE_TESTER_WRAPPER_TAG);
     }
@@ -272,7 +272,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Processes all registered background tester wrappers.
      */
-    protected function processBackgroundTesterWrappers(ContainerBuilder $container)
+    protected function processBackgroundTesterWrappers(ContainerBuilder $container): void
     {
         $this->processor->processWrapperServices($container, self::BACKGROUND_TESTER_ID, self::BACKGROUND_TESTER_WRAPPER_TAG);
     }
@@ -280,7 +280,7 @@ final class TesterExtension extends BaseExtension
     /**
      * Processes all registered step tester wrappers.
      */
-    protected function processStepTesterWrappers(ContainerBuilder $container)
+    protected function processStepTesterWrappers(ContainerBuilder $container): void
     {
         $this->processor->processWrapperServices($container, self::STEP_TESTER_ID, self::STEP_TESTER_WRAPPER_TAG);
     }

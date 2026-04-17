@@ -25,7 +25,7 @@ final class FilesystemOutputFactory extends OutputFactory
 {
     private $fileName;
 
-    public function setFileName($fileName)
+    public function setFileName($fileName): void
     {
         $this->fileName = $fileName;
     }
@@ -33,7 +33,7 @@ final class FilesystemOutputFactory extends OutputFactory
     /**
      * Configure output stream parameters.
      */
-    private function configureOutputStream(OutputInterface $output)
+    private function configureOutputStream(OutputInterface $output): void
     {
         $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
         $output->setVerbosity($verbosity);

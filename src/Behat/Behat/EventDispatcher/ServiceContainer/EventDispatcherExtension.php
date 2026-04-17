@@ -45,7 +45,7 @@ final class EventDispatcherExtension extends BaseExtension
     /**
      * Loads event-dispatching background tester.
      */
-    protected function loadEventDispatchingBackgroundTester(ContainerBuilder $container)
+    protected function loadEventDispatchingBackgroundTester(ContainerBuilder $container): void
     {
         $definition = new Definition(EventDispatchingBackgroundTester::class, [
             new Reference(TesterExtension::BACKGROUND_TESTER_ID),
@@ -58,7 +58,7 @@ final class EventDispatcherExtension extends BaseExtension
     /**
      * Loads event-dispatching feature tester.
      */
-    protected function loadEventDispatchingFeatureTester(ContainerBuilder $container)
+    protected function loadEventDispatchingFeatureTester(ContainerBuilder $container): void
     {
         $definition = new Definition(EventDispatchingFeatureTester::class, [
             new Reference(TesterExtension::SPECIFICATION_TESTER_ID),
@@ -71,7 +71,7 @@ final class EventDispatcherExtension extends BaseExtension
     /**
      * Loads event-dispatching outline tester.
      */
-    protected function loadEventDispatchingOutlineTester(ContainerBuilder $container)
+    protected function loadEventDispatchingOutlineTester(ContainerBuilder $container): void
     {
         $definition = new Definition(EventDispatchingOutlineTester::class, [
             new Reference(TesterExtension::OUTLINE_TESTER_ID),
@@ -84,7 +84,7 @@ final class EventDispatcherExtension extends BaseExtension
     /**
      * Loads event-dispatching scenario tester.
      */
-    protected function loadEventDispatchingScenarioTester(ContainerBuilder $container)
+    protected function loadEventDispatchingScenarioTester(ContainerBuilder $container): void
     {
         $definition = new Definition(EventDispatchingScenarioTester::class, [
             new Reference(TesterExtension::SCENARIO_TESTER_ID),
@@ -101,7 +101,7 @@ final class EventDispatcherExtension extends BaseExtension
     /**
      * Loads event-dispatching example tester.
      */
-    protected function loadEventDispatchingExampleTester(ContainerBuilder $container)
+    protected function loadEventDispatchingExampleTester(ContainerBuilder $container): void
     {
         $definition = new Definition(EventDispatchingScenarioTester::class, [
             new Reference(TesterExtension::EXAMPLE_TESTER_ID),
@@ -118,7 +118,7 @@ final class EventDispatcherExtension extends BaseExtension
     /**
      * Loads event-dispatching step tester.
      */
-    protected function loadEventDispatchingStepTester(ContainerBuilder $container)
+    protected function loadEventDispatchingStepTester(ContainerBuilder $container): void
     {
         $definition = new Definition(EventDispatchingStepTester::class, [
             new Reference(TesterExtension::STEP_TESTER_ID),

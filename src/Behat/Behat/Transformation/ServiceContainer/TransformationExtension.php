@@ -85,7 +85,7 @@ final class TransformationExtension implements Extension
     /**
      * Loads definition arguments transformer.
      */
-    private function loadDefinitionArgumentsTransformer(ContainerBuilder $container)
+    private function loadDefinitionArgumentsTransformer(ContainerBuilder $container): void
     {
         $definition = new Definition(DefinitionArgumentsTransformer::class);
         $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 200]);
@@ -95,7 +95,7 @@ final class TransformationExtension implements Extension
     /**
      * Loads default transformers.
      */
-    private function loadDefaultTransformers(ContainerBuilder $container)
+    private function loadDefaultTransformers(ContainerBuilder $container): void
     {
         $definition = new Definition(RepositoryArgumentTransformer::class, [
             new Reference(self::REPOSITORY_ID),
@@ -122,7 +122,7 @@ final class TransformationExtension implements Extension
     /**
      * Loads transformations repository.
      */
-    private function loadRepository(ContainerBuilder $container)
+    private function loadRepository(ContainerBuilder $container): void
     {
         $definition = new Definition(TransformationRepository::class, [
             new Reference(EnvironmentExtension::MANAGER_ID),
@@ -133,7 +133,7 @@ final class TransformationExtension implements Extension
     /**
      * Processes all available argument transformers.
      */
-    private function processArgumentsTransformers(ContainerBuilder $container)
+    private function processArgumentsTransformers(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::ARGUMENT_TRANSFORMER_TAG);
         $definition = $container->getDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID);

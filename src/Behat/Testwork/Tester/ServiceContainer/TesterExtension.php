@@ -148,7 +148,7 @@ abstract class TesterExtension implements Extension
     /**
      * Loads stop on failure handler.
      */
-    private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure)
+    private function loadStopOnFailureHandler(ContainerBuilder $container, ?bool $stopOnFailure): void
     {
         $definition = new Definition(StopOnFailureHandler::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),

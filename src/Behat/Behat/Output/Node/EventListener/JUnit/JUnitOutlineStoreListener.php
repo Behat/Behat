@@ -38,7 +38,7 @@ final class JUnitOutlineStoreListener implements EventListener
         $this->printFooterOnAfterSuiteTestedEvent($formatter, $event);
     }
 
-    private function printHeaderOnBeforeSuiteTestedEvent(Formatter $formatter, Event $event)
+    private function printHeaderOnBeforeSuiteTestedEvent(Formatter $formatter, Event $event): void
     {
         if (!$event instanceof BeforeSuiteTested) {
             return;

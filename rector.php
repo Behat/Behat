@@ -14,7 +14,7 @@ return RectorConfig::configure()
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php82: true)
-    ->withTypeCoverageLevel(18)
+    ->withTypeCoverageLevel(21)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,

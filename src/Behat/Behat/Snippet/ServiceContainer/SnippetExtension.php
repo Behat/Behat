@@ -80,7 +80,7 @@ final class SnippetExtension implements Extension
         $this->processAppenders($container);
     }
 
-    private function loadController(ContainerBuilder $container)
+    private function loadController(ContainerBuilder $container): void
     {
         $definition = new Definition(ConsoleSnippetPrinter::class, [
             new Reference(CliExtension::OUTPUT_ID),
@@ -98,19 +98,19 @@ final class SnippetExtension implements Extension
         $container->setDefinition(CliExtension::CONTROLLER_TAG . '.snippet', $definition);
     }
 
-    private function loadRegistry(ContainerBuilder $container)
+    private function loadRegistry(ContainerBuilder $container): void
     {
         $definition = new Definition(SnippetRegistry::class);
         $container->setDefinition(self::REGISTRY_ID, $definition);
     }
 
-    private function loadWriter(ContainerBuilder $container)
+    private function loadWriter(ContainerBuilder $container): void
     {
         $definition = new Definition(SnippetWriter::class);
         $container->setDefinition(self::WRITER_ID, $definition);
     }
 
-    private function processGenerators(ContainerBuilder $container)
+    private function processGenerators(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::GENERATOR_TAG);
         $definition = $container->getDefinition(self::REGISTRY_ID);
@@ -120,7 +120,7 @@ final class SnippetExtension implements Extension
         }
     }
 
-    private function processAppenders(ContainerBuilder $container)
+    private function processAppenders(ContainerBuilder $container): void
     {
         $references = $this->processor->findAndSortTaggedServices($container, self::APPENDER_TAG);
         $definition = $container->getDefinition(self::WRITER_ID);
