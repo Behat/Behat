@@ -112,7 +112,7 @@ final class SnippetRegistry implements SnippetRepository
                 continue;
             }
 
-            if (!$snippet) {
+            if (!$snippet instanceof Snippet) {
                 continue;
             }
 

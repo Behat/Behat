@@ -33,7 +33,7 @@ abstract class RuntimeStepHook extends RuntimeFilterableHook
             return true;
         }
 
-        if (!empty($filterString)) {
+        if ($filterString !== '') {
             $filter = new NameFilter($filterString);
 
             if ($filter->isFeatureMatch($scope->getFeature())) {

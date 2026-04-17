@@ -45,7 +45,7 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
             return true;
         }
 
-        if (!empty($filterString)) {
+        if ($filterString !== '') {
             return $this->isSuiteMatch($scope->getSuite(), $filterString);
         }
 

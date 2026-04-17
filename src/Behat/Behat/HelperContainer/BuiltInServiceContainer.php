@@ -60,7 +60,8 @@ final class BuiltInServiceContainer implements PsrContainerInterface
         $reflection = new ReflectionClass($schema['class']);
         $arguments = $schema['arguments'];
 
-        if ($factoryMethod = $this->getAndValidateFactoryMethod($reflection, $schema)) {
+        $factoryMethod = $this->getAndValidateFactoryMethod($reflection, $schema);
+        if ($factoryMethod instanceof ReflectionMethod) {
             return $factoryMethod->invokeArgs(null, $arguments);
         }
 
