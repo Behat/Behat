@@ -408,10 +408,8 @@ final class PrettyFormatterFactory implements FormatterFactory
 
     /**
      * Creates output printer definition.
-     *
-     * @return Definition
      */
-    private function createOutputPrinterDefinition()
+    private function createOutputPrinterDefinition(): Definition
     {
         return new Definition(StreamOutputPrinter::class, [
             new Definition(ConsoleOutputFactory::class),
@@ -420,10 +418,8 @@ final class PrettyFormatterFactory implements FormatterFactory
 
     /**
      * Creates root listener definition.
-     *
-     * @return Definition
      */
-    private function rearrangeBackgroundEvents($listener)
+    private function rearrangeBackgroundEvents($listener): Definition
     {
         return new Definition(FirstBackgroundFiresFirstListener::class, [
             new Definition(OnlyFirstBackgroundFiresListener::class, [
@@ -438,10 +434,8 @@ final class PrettyFormatterFactory implements FormatterFactory
      * @param string       $beforeEventName
      * @param string       $afterEventName
      * @param Definition[] $listeners
-     *
-     * @return Definition
      */
-    private function proxySiblingEvents($beforeEventName, $afterEventName, array $listeners)
+    private function proxySiblingEvents($beforeEventName, $afterEventName, array $listeners): Definition
     {
         return new Definition(
             FireOnlySiblingsListener::class,
@@ -457,10 +451,8 @@ final class PrettyFormatterFactory implements FormatterFactory
      * Creates contextual proxy listener.
      *
      * @param string $name
-     *
-     * @return Definition
      */
-    private function proxyEventsIfParameterIsSet($name, $value, Definition $listener)
+    private function proxyEventsIfParameterIsSet($name, $value, Definition $listener): Definition
     {
         return new Definition(
             FireOnlyIfFormatterParameterListener::class,

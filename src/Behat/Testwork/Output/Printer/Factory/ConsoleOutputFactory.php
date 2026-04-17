@@ -26,10 +26,8 @@ class ConsoleOutputFactory extends OutputFactory
 {
     /**
      * Creates output formatter that is used to create a stream.
-     *
-     * @return OutputFormatter
      */
-    protected function createOutputFormatter()
+    protected function createOutputFormatter(): OutputFormatter
     {
         return new OutputFormatter();
     }
@@ -72,7 +70,7 @@ class ConsoleOutputFactory extends OutputFactory
         return $stream;
     }
 
-    public function createOutput($stream = null)
+    public function createOutput($stream = null): StreamOutput
     {
         $stream = $stream ?: $this->createOutputStream();
         $format = $this->createOutputFormatter();

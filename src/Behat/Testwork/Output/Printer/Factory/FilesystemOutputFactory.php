@@ -39,7 +39,7 @@ final class FilesystemOutputFactory extends OutputFactory
         $output->setVerbosity($verbosity);
     }
 
-    public function createOutput($stream = null)
+    public function createOutput($stream = null): StreamOutput
     {
         if ($this->getOutputPath() === null) {
             throw new MissingOutputPathException(

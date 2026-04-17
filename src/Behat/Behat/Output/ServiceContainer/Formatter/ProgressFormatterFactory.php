@@ -171,10 +171,8 @@ final class ProgressFormatterFactory implements FormatterFactory
 
     /**
      * Creates output printer definition.
-     *
-     * @return Definition
      */
-    private function createOutputPrinterDefinition()
+    private function createOutputPrinterDefinition(): Definition
     {
         return new Definition(StreamOutputPrinter::class, [
             new Definition(ConsoleOutputFactory::class),
