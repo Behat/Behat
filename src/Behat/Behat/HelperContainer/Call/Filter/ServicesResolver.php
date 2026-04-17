@@ -60,7 +60,7 @@ final class ServicesResolver implements CallFilter
      *
      * @throws UnsupportedCallException if given call is not EnvironmentCall or environment is not ServiceContainerEnvironment
      */
-    private function getContainer(Call $call)
+    private function getContainer(Call $call): ?ContainerInterface
     {
         if (!$call instanceof EnvironmentCall) {
             throw new UnsupportedCallException(sprintf(
