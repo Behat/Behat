@@ -30,7 +30,7 @@ final class StrictController implements Controller
      */
     public function __construct(
         private readonly ResultInterpreter $resultInterpreter,
-        private bool $strict = false,
+        private readonly bool $strict = false,
     ) {
     }
 

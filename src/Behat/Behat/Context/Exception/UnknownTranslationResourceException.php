@@ -24,7 +24,7 @@ final class UnknownTranslationResourceException extends InvalidArgumentException
      */
     public function __construct(
         string $message,
-        private string $resource,
+        private readonly string $resource,
     ) {
         parent::__construct($message);
     }

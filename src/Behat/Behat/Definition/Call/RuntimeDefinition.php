@@ -31,8 +31,8 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Stringable, De
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private string $type,
-        private string $pattern,
+        private readonly string $type,
+        private readonly string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

@@ -24,7 +24,7 @@ final class BadOutputPathException extends InvalidArgumentException implements P
      */
     public function __construct(
         string $message,
-        private string $path,
+        private readonly string $path,
     ) {
         parent::__construct($message);
     }

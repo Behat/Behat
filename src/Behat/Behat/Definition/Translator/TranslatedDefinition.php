@@ -26,8 +26,8 @@ final class TranslatedDefinition implements Stringable, Definition
      */
     public function __construct(
         private readonly Definition $definition,
-        private string $translatedPattern,
-        private string $language,
+        private readonly string $translatedPattern,
+        private readonly string $language,
     ) {
     }
 

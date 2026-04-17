@@ -42,8 +42,8 @@ final class PrettySetupPrinter implements SetupPrinter
         private readonly ResultToStringConverter $resultConverter,
         private readonly ExceptionPresenter $exceptionPresenter,
         int $indentation = 0,
-        private bool $newlineBefore = false,
-        private bool $newlineAfter = false,
+        private readonly bool $newlineBefore = false,
+        private readonly bool $newlineAfter = false,
     ) {
         $this->indentText = str_repeat(' ', intval($indentation));
     }

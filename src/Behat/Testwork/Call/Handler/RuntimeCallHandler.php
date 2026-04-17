@@ -32,7 +32,7 @@ final class RuntimeCallHandler implements CallHandler
      * Initializes executor.
      */
     public function __construct(
-        private int $errorReportingLevel = E_ALL,
+        private readonly int $errorReportingLevel = E_ALL,
     ) {
         $this->validator = new Validator();
     }

@@ -23,7 +23,7 @@ final class IntegerTestResult implements TestResult
      * @param TestResult::* $resultCode
      */
     public function __construct(
-        private int $resultCode,
+        private readonly int $resultCode,
     ) {
     }
 

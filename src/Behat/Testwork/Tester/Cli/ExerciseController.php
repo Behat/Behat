@@ -43,7 +43,7 @@ final class ExerciseController implements Controller
         private readonly SpecificationFinder $specificationFinder,
         private readonly Exercise $exercise,
         private readonly ResultInterpreter $resultInterpreter,
-        private bool $skip = false,
+        private readonly bool $skip = false,
     ) {
     }
 

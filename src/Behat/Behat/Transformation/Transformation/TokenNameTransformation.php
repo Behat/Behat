@@ -40,7 +40,7 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private string $pattern,
+        private readonly string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

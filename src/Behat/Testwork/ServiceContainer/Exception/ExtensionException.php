@@ -24,7 +24,7 @@ class ExtensionException extends RuntimeException implements ServiceContainerExc
      */
     public function __construct(
         string $message,
-        private string $extensionName,
+        private readonly string $extensionName,
     ) {
         parent::__construct($message);
     }

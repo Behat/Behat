@@ -23,7 +23,7 @@ final class GenericSuite implements Suite
      * Initializes suite.
      */
     public function __construct(
-        private string $name,
+        private readonly string $name,
         private array $settings,
     ) {
     }

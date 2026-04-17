@@ -41,7 +41,7 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Stri
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private string $pattern,
+        private readonly string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

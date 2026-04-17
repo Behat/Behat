@@ -24,7 +24,7 @@ final class UnsupportedPatternTypeException extends InvalidArgumentException imp
      */
     public function __construct(
         string $message,
-        private string $type,
+        private readonly string $type,
     ) {
         parent::__construct($message);
     }

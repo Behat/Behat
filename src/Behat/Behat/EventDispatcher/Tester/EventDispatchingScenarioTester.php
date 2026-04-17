@@ -36,10 +36,10 @@ final class EventDispatchingScenarioTester implements ScenarioTester
     public function __construct(
         private readonly ScenarioTester $baseTester,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private string $beforeEventName,
-        private string $afterSetupEventName,
-        private string $beforeTeardownEventName,
-        private string $afterEventName,
+        private readonly string $beforeEventName,
+        private readonly string $afterSetupEventName,
+        private readonly string $beforeTeardownEventName,
+        private readonly string $afterEventName,
     ) {
     }
 

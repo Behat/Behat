@@ -25,7 +25,7 @@ final class FireOnlyIfFormatterParameterListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private string $name,
+        private readonly string $name,
         private $value,
         private readonly EventListener $descendant,
     ) {

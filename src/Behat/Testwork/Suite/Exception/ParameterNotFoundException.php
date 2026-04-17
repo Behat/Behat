@@ -23,7 +23,7 @@ final class ParameterNotFoundException extends SuiteException
     public function __construct(
         string $message,
         string $name,
-        private string $parameter,
+        private readonly string $parameter,
     ) {
         parent::__construct($message, $name);
     }

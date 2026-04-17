@@ -25,7 +25,7 @@ final class ServiceNotFoundException extends InvalidArgumentException implements
      */
     public function __construct(
         string $message,
-        private string $serviceId,
+        private readonly string $serviceId,
     ) {
         parent::__construct($message);
     }

@@ -24,7 +24,7 @@ final class FormatterNotFoundException extends InvalidArgumentException implemen
      */
     public function __construct(
         string $message,
-        private string $name,
+        private readonly string $name,
     ) {
         parent::__construct($message);
     }

@@ -30,8 +30,8 @@ final class FireOnlySiblingsListener implements EventListener
      * Initializes listener.
      */
     public function __construct(
-        private string $beforeEventName,
-        private string $afterEventName,
+        private readonly string $beforeEventName,
+        private readonly string $afterEventName,
         private readonly EventListener $descendant,
     ) {
     }

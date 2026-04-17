@@ -37,7 +37,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      */
     public function __construct(
         private readonly Gherkin $gherkin,
-        private string $basePath,
+        private readonly string $basePath,
     ) {
     }
 
