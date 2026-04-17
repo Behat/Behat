@@ -66,11 +66,9 @@ final class PatternTransformer
      *
      * @param string $pattern
      *
-     * @return string
-     *
      * @throws UnknownPatternException
      */
-    public function transformPatternToRegex($pattern)
+    public function transformPatternToRegex($pattern): string
     {
         if (!isset($this->patternToRegexpCache[$pattern])) {
             $this->patternToRegexpCache[$pattern] = $this->transformPatternToRegexWithSupportedPolicy($pattern);

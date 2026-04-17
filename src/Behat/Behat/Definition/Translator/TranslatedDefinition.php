@@ -46,10 +46,8 @@ final class TranslatedDefinition implements Stringable, Definition
 
     /**
      * Returns original (not translated) pattern.
-     *
-     * @return string
      */
-    public function getOriginalPattern()
+    public function getOriginalPattern(): string
     {
         return $this->definition->getPattern();
     }
