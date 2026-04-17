@@ -124,7 +124,7 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
      *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
      */
-    private function getSuiteContexts(Suite $suite): mixed
+    private function getSuiteContexts(Suite $suite): array
     {
         if (!is_array($suite->getSetting('contexts'))) {
             throw new SuiteConfigurationException(

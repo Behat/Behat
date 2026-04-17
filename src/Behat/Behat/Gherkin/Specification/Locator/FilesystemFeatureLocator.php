@@ -83,7 +83,7 @@ final class FilesystemFeatureLocator implements SpecificationLocator
      *
      * @throws SuiteConfigurationException If `paths` setting is not an array
      */
-    private function getSuitePaths(Suite $suite): mixed
+    private function getSuitePaths(Suite $suite): array
     {
         if (!is_array($suite->getSetting('paths'))) {
             throw new SuiteConfigurationException(
