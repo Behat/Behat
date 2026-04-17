@@ -61,7 +61,7 @@ final class OutputController implements Controller
             );
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $formats = $input->getOption('format');
         $outputs = $input->getOption('out');

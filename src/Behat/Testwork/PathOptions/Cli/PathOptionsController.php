@@ -47,7 +47,7 @@ final class PathOptionsController implements Controller
         ;
     }
 
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): null
     {
         $printAbsolutePaths = $input->getOption('print-absolute-paths');
         $editorUrl = $input->getOption('editor-url');
