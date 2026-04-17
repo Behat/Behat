@@ -29,7 +29,7 @@ final class CachedContextIdentifier implements TargetContextIdentifier
     ) {
     }
 
-    public function guessTargetContextClass(ContextEnvironment $environment)
+    public function guessTargetContextClass(ContextEnvironment $environment): ?string
     {
         $suiteKey = $environment->getSuite()->getName();
 

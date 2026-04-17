@@ -23,8 +23,6 @@ interface DefinedStepResult extends StepResult
 {
     /**
      * Returns found step definition.
-     *
-     * @return Definition|null
      */
-    public function getStepDefinition();
+    public function getStepDefinition(): ?Definition;
 }

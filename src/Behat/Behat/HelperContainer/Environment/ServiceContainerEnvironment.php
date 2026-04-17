@@ -29,8 +29,6 @@ interface ServiceContainerEnvironment extends Environment
 
     /**
      * Returns environment service container if set.
-     *
-     * @return ContainerInterface|null
      */
-    public function getServiceContainer();
+    public function getServiceContainer(): ?ContainerInterface;
 }

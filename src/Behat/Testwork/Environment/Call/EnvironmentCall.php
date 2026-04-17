@@ -57,7 +57,7 @@ class EnvironmentCall implements Call
         return $this->arguments;
     }
 
-    final public function getErrorReportingLevel()
+    final public function getErrorReportingLevel(): ?int
     {
         return $this->errorReportingLevel;
     }

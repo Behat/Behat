@@ -32,8 +32,6 @@ interface Controller
 
     /**
      * Executes controller.
-     *
-     * @return int|null
      */
-    public function execute(InputInterface $input, OutputInterface $output);
+    public function execute(InputInterface $input, OutputInterface $output): ?int;
 }

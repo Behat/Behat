@@ -29,8 +29,6 @@ interface SearchEngine
 {
     /**
      * Searches for a step definition.
-     *
-     * @return SearchResult|null
      */
-    public function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step);
+    public function searchDefinition(Environment $environment, FeatureNode $feature, StepNode $step): ?SearchResult;
 }

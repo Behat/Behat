@@ -33,7 +33,7 @@ final class AggregateContextIdentifier implements TargetContextIdentifier
     ) {
     }
 
-    public function guessTargetContextClass(ContextEnvironment $environment)
+    public function guessTargetContextClass(ContextEnvironment $environment): ?string
     {
         foreach ($this->identifiers as $identifier) {
             $contextClass = $identifier->guessTargetContextClass($environment);
