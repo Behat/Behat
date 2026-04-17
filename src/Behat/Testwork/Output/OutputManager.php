@@ -128,9 +128,8 @@ final class OutputManager
      * Sets provided parameter to said formatter.
      *
      * @param string $formatter
-     * @param string $parameterName
      */
-    public function setFormatterParameter($formatter, $parameterName, $parameterValue): void
+    public function setFormatterParameter($formatter, string $parameterName, $parameterValue): void
     {
         $formatter = $this->getFormatter($formatter);
         $printer = $formatter->getOutputPrinter();
@@ -171,10 +170,8 @@ final class OutputManager
 
     /**
      * Sets provided parameter to all registered formatters.
-     *
-     * @param string $parameterName
      */
-    public function setFormattersParameter($parameterName, $parameterValue): void
+    public function setFormattersParameter(string $parameterName, $parameterValue): void
     {
         foreach (array_keys($this->formatters) as $formatter) {
             $this->setFormatterParameter($formatter, $parameterName, $parameterValue);

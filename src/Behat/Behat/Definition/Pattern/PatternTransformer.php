@@ -44,11 +44,10 @@ final class PatternTransformer
      * Generates pattern.
      *
      * @param string $type
-     * @param string $stepText
      *
      * @throws UnsupportedPatternTypeException
      */
-    public function generatePattern($type, $stepText): Pattern
+    public function generatePattern($type, string $stepText): Pattern
     {
         foreach ($this->policies as $policy) {
             if ($policy->supportsPatternType($type)) {
