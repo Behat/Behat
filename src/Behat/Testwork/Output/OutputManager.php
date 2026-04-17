@@ -56,13 +56,9 @@ final class OutputManager
     /**
      * Returns formatter by name provided.
      *
-     * @param string $name
-     *
-     * @return Formatter
-     *
      * @throws FormatterNotFoundException
      */
-    public function getFormatter($name)
+    public function getFormatter(string $name): Formatter
     {
         if (!$this->isFormatterRegistered($name)) {
             throw new FormatterNotFoundException(sprintf(
@@ -87,10 +83,8 @@ final class OutputManager
 
     /**
      * Enable formatter by name provided.
-     *
-     * @param string $formatter
      */
-    public function enableFormatter($formatter): void
+    public function enableFormatter(string $formatter): void
     {
         if (!$this->isFormatterRegistered($formatter) && class_exists($formatter)) {
             $formatterInstance = new $formatter();
@@ -106,10 +100,8 @@ final class OutputManager
 
     /**
      * Disable formatter by name provided.
-     *
-     * @param string $formatter
      */
-    public function disableFormatter($formatter): void
+    public function disableFormatter(string $formatter): void
     {
         $this->eventDispatcher->removeSubscriber($this->getFormatter($formatter));
     }
@@ -124,10 +116,8 @@ final class OutputManager
 
     /**
      * Sets provided parameter to said formatter.
-     *
-     * @param string $formatter
      */
-    public function setFormatterParameter($formatter, string $parameterName, $parameterValue): void
+    public function setFormatterParameter(string $formatter, string $parameterName, $parameterValue): void
     {
         $formatter = $this->getFormatter($formatter);
         $printer = $formatter->getOutputPrinter();
@@ -156,10 +146,8 @@ final class OutputManager
 
     /**
      * Sets provided formatter parameters.
-     *
-     * @param string $formatter
      */
-    public function setFormatterParameters($formatter, array $parameters): void
+    public function setFormatterParameters(string $formatter, array $parameters): void
     {
         foreach ($parameters as $key => $val) {
             $this->setFormatterParameter($formatter, $key, $val);

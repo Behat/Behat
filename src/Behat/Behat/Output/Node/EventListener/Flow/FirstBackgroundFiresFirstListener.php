@@ -84,10 +84,8 @@ final class FirstBackgroundFiresFirstListener implements EventListener
 
     /**
      * Checks if provided event should be postponed until background is printed.
-     *
-     * @return bool
      */
-    private function isEventDelayedUntilFirstBackgroundPrinted(Event $event)
+    private function isEventDelayedUntilFirstBackgroundPrinted(Event $event): bool
     {
         if (!$event instanceof ScenarioTested && !$event instanceof OutlineTested && !$event instanceof ExampleTested) {
             return false;

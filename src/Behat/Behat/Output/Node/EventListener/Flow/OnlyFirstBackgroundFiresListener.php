@@ -98,10 +98,8 @@ final class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is skippable.
-     *
-     * @return bool
      */
-    private function isSkippableEvent(Event $event)
+    private function isSkippableEvent(Event $event): bool
     {
         if (!$this->firstBackgroundEnded) {
             return false;
@@ -112,10 +110,8 @@ final class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Checks if provided event is a non-failing step in consequent background.
-     *
-     * @return bool
      */
-    private function isNonFailingConsequentBackgroundStep(Event $event)
+    private function isNonFailingConsequentBackgroundStep(Event $event): bool
     {
         if (!$this->inBackground) {
             return false;

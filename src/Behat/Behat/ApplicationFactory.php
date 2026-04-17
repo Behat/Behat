@@ -55,7 +55,7 @@ final class ApplicationFactory extends BaseFactory
         return 'behat';
     }
 
-    protected function getVersion()
+    protected function getVersion(): string
     {
         // Get the currently installed behat version from composer's runtime API
         return InstalledVersions::getVersion('behat/behat');

@@ -38,12 +38,10 @@ final class ColumnBasedTableTransformation extends RuntimeCallee implements Stri
     /**
      * Initializes transformation.
      *
-     * @param string      $pattern
-     *
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private $pattern,
+        private string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

@@ -60,10 +60,8 @@ final class ExtensionManager
      * Activate extension by its locator.
      *
      * @param string $locator phar file name, php file name, class name
-     *
-     * @return Extension
      */
-    public function activateExtension(string $locator)
+    public function activateExtension(string $locator): Extension
     {
         $extension = $this->initialize($locator);
 

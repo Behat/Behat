@@ -27,12 +27,10 @@ final class StrictController implements Controller
 {
     /**
      * Initializes controller.
-     *
-     * @param bool           $strict
      */
     public function __construct(
         private readonly ResultInterpreter $resultInterpreter,
-        private $strict = false,
+        private bool $strict = false,
     ) {
     }
 

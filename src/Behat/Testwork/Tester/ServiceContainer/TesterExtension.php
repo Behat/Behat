@@ -118,10 +118,8 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads exercise cli controllers.
-     *
-     * @param bool          $skip
      */
-    protected function loadExerciseController(ContainerBuilder $container, $skip = false)
+    protected function loadExerciseController(ContainerBuilder $container, bool $skip = false)
     {
         $definition = new Definition(ExerciseController::class, [
             new Reference(SuiteExtension::REGISTRY_ID),
@@ -163,10 +161,8 @@ abstract class TesterExtension implements Extension
 
     /**
      * Loads exercise cli controllers.
-     *
-     * @param bool          $strict
      */
-    protected function loadStrictController(ContainerBuilder $container, $strict = false)
+    protected function loadStrictController(ContainerBuilder $container, bool $strict = false)
     {
         $definition = new Definition(StrictController::class, [
             new Reference(self::RESULT_INTERPRETER_ID),

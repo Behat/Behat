@@ -94,7 +94,7 @@ final class ConfigurationLoader
      *
      * @throws ConfigurationLoadingException
      */
-    public function loadConfiguration($profile = 'default'): array
+    public function loadConfiguration(string $profile = 'default'): array
     {
         $this->profileFound = false;
 
@@ -122,10 +122,8 @@ final class ConfigurationLoader
 
     /**
      * Returns array with configuration debug information.
-     *
-     * @return array
      */
-    public function debugInformation()
+    public function debugInformation(): array
     {
         return $this->debugInformation;
     }
@@ -176,7 +174,7 @@ final class ConfigurationLoader
      *
      * @phpstan-impure
      */
-    private function loadFileConfiguration($configPath, $profile): array
+    private function loadFileConfiguration(string $configPath, string $profile): array
     {
         if (!is_file($configPath) || !is_readable($configPath)) {
             throw new ConfigurationLoadingException(sprintf('Configuration file `%s` not found.', $configPath));
@@ -215,10 +213,8 @@ final class ConfigurationLoader
 
     /**
      * Loads configs for provided config and profile.
-     *
-     * @param string $profile
      */
-    private function loadConfigs(string $basePath, array $config, $profile): array
+    private function loadConfigs(string $basePath, array $config, string $profile): array
     {
         $configs = [];
 
@@ -280,11 +276,9 @@ final class ConfigurationLoader
     /**
      * Parses import.
      *
-     * @param string $path
-     *
      * @throws ConfigurationLoadingException If import file not found
      */
-    private function parseImport(string $basePath, $path, string $profile): array
+    private function parseImport(string $basePath, string $path, string $profile): array
     {
         if (!file_exists($path) && file_exists($basePath . DIRECTORY_SEPARATOR . $path)) {
             $path = $basePath . DIRECTORY_SEPARATOR . $path;

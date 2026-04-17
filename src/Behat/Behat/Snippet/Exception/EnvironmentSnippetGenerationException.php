@@ -22,11 +22,9 @@ final class EnvironmentSnippetGenerationException extends RuntimeException imple
 {
     /**
      * Initializes exception.
-     *
-     * @param string      $message
      */
     public function __construct(
-        $message,
+        string $message,
         private readonly Environment $environment,
     ) {
         parent::__construct($message);

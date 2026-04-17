@@ -94,10 +94,8 @@ final class CallExtension implements Extension
 
     /**
      * Loads prebuilt call handlers.
-     *
-     * @param int $errorReporting
      */
-    private function loadCallHandlers(ContainerBuilder $container, $errorReporting): void
+    private function loadCallHandlers(ContainerBuilder $container, int $errorReporting): void
     {
         $definition = new Definition(RuntimeCallHandler::class, [$errorReporting]);
         $definition->addTag(self::CALL_HANDLER_TAG, ['priority' => 50]);

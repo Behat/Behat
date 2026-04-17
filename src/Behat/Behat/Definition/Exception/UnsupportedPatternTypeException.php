@@ -21,23 +21,18 @@ final class UnsupportedPatternTypeException extends InvalidArgumentException imp
 {
     /**
      * Initializes exception.
-     *
-     * @param string $message
-     * @param string $type
      */
     public function __construct(
-        $message,
-        private $type,
+        string $message,
+        private string $type,
     ) {
         parent::__construct($message);
     }
 
     /**
      * Returns pattern type that caused exception.
-     *
-     * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }

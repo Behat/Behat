@@ -142,12 +142,8 @@ final class ContextEnvironmentHandler implements EnvironmentHandler
 
     /**
      * Resolves class using registered class resolvers.
-     *
-     * @param string $class
-     *
-     * @return string
      */
-    private function resolveClass($class)
+    private function resolveClass(string $class): string
     {
         foreach ($this->classResolvers as $resolver) {
             if ($resolver->supportsClass($class)) {

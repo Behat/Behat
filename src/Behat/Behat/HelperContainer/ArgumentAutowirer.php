@@ -54,12 +54,8 @@ final class ArgumentAutowirer
      * Checks if given argument is wireable.
      *
      * Argument is wireable if it was not previously set and it has a class type-hint.
-     *
-     * @param int $index
-     *
-     * @return bool
      */
-    private function isArgumentWireable(array $arguments, $index, ReflectionParameter $parameter)
+    private function isArgumentWireable(array $arguments, int $index, ReflectionParameter $parameter): bool
     {
         if (isset($arguments[$index]) || array_key_exists($index, $arguments)) {
             return false;

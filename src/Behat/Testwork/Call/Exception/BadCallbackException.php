@@ -27,10 +27,9 @@ final class BadCallbackException extends InvalidArgumentException implements Cal
     /**
      * Initializes exception.
      *
-     * @param string   $message
      * @param callable $callable
      */
-    public function __construct($message, $callable)
+    public function __construct(string $message, $callable)
     {
         $this->callable = $callable;
 

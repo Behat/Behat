@@ -22,10 +22,8 @@ final class PendingException extends RuntimeException implements TesterException
 {
     /**
      * Initializes pending exception.
-     *
-     * @param string $text
      */
-    public function __construct($text = 'TODO: write pending definition')
+    public function __construct(string $text = 'TODO: write pending definition')
     {
         parent::__construct($text);
     }

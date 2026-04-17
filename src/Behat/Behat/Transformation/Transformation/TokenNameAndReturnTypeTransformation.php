@@ -39,11 +39,9 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
     /**
      * Initializes transformation.
      *
-     * @param string      $pattern
-     *
      * @phpstan-param TBehatCallable $callable
      */
-    public function __construct($pattern, callable|array $callable, ?string $description = null)
+    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
     {
         $this->tokenTransformation = new TokenNameTransformation($pattern, $callable, $description);
         $this->returnTransformation = new ReturnTypeTransformation('', $callable, $description);

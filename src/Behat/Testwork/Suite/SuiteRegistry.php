@@ -45,12 +45,9 @@ final class SuiteRegistry implements SuiteRepository
     /**
      * Registers suite using provided name, type & parameters.
      *
-     * @param string $name
-     * @param string|null $type
-     *
      * @throws SuiteConfigurationException
      */
-    public function registerSuiteConfiguration($name, $type, array $settings): void
+    public function registerSuiteConfiguration(string $name, ?string $type, array $settings): void
     {
         if (isset($this->suiteConfigurations[$name])) {
             throw new SuiteConfigurationException(sprintf(

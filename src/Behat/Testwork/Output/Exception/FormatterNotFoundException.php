@@ -21,23 +21,18 @@ final class FormatterNotFoundException extends InvalidArgumentException implemen
 {
     /**
      * Initializes exception.
-     *
-     * @param string $message
-     * @param string $name
      */
     public function __construct(
-        $message,
-        private $name,
+        string $message,
+        private string $name,
     ) {
         parent::__construct($message);
     }
 
     /**
      * Returns formatter name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

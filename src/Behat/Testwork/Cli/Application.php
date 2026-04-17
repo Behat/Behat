@@ -177,10 +177,8 @@ final class Application extends BaseApplication
 
     /**
      * Returns base path.
-     *
-     * @return string
      */
-    private function getBasePath()
+    private function getBasePath(): string
     {
         if ($configPath = $this->configurationLoader->getConfigurationFilePath()) {
             return realpath(dirname($configPath));

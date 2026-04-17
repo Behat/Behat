@@ -26,12 +26,10 @@ abstract class RuntimeHook extends RuntimeCallee implements Stringable, Hook
     /**
      * Initializes hook.
      *
-     * @param string      $scopeName
-     *
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private $scopeName,
+        private string $scopeName,
         callable|array $callable,
         ?string $description = null,
     ) {

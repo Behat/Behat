@@ -31,17 +31,13 @@ abstract class StepTested extends LifecycleEvent implements GherkinNodeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    abstract public function getFeature();
+    abstract public function getFeature(): FeatureNode;
 
     /**
      * Returns step node.
-     *
-     * @return StepNode
      */
-    abstract public function getStep();
+    abstract public function getStep(): StepNode;
 
     final public function getNode(): NodeInterface
     {

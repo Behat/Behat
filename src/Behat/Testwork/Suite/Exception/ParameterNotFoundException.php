@@ -19,25 +19,19 @@ final class ParameterNotFoundException extends SuiteException
 {
     /**
      * Initializes exception.
-     *
-     * @param string $message
-     * @param string $name
-     * @param string $parameter
      */
     public function __construct(
-        $message,
-        $name,
-        private $parameter,
+        string $message,
+        string $name,
+        private string $parameter,
     ) {
         parent::__construct($message, $name);
     }
 
     /**
      * Returns parameter that caused exception.
-     *
-     * @return string
      */
-    public function getParameter()
+    public function getParameter(): string
     {
         return $this->parameter;
     }

@@ -25,13 +25,12 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string                               $scopeName
      * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($scopeName, $filterString, callable|array $callable, ?string $description = null)
+    public function __construct(string $scopeName, $filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
@@ -56,10 +55,8 @@ abstract class RuntimeSuiteHook extends RuntimeFilterableHook
 
     /**
      * Checks if Feature matches specified filter.
-     *
-     * @param string $filterString
      */
-    private function isSuiteMatch(Suite $suite, $filterString): bool
+    private function isSuiteMatch(Suite $suite, string $filterString): bool
     {
         if ('/' === $filterString[0]) {
             return 1 === preg_match($filterString, $suite->getName());

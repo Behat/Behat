@@ -38,10 +38,8 @@ final class Validator
 
     /**
      * Validates given argument.
-     *
-     * @param int $parameterIndex
      */
-    private function validateArgument(ReflectionParameter $parameter, $parameterIndex, array $givenArguments): void
+    private function validateArgument(ReflectionParameter $parameter, int $parameterIndex, array $givenArguments): void
     {
         if ($parameter->isDefaultValueAvailable()) {
             return;

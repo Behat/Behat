@@ -35,11 +35,9 @@ final class StepContainerTester
     /**
      * Tests container.
      *
-     * @param bool                $skip
-     *
      * @return list<TestResult>
      */
-    public function test(Environment $env, FeatureNode $feature, StepContainerInterface $container, $skip): array
+    public function test(Environment $env, FeatureNode $feature, StepContainerInterface $container, bool $skip): array
     {
         $results = [];
         foreach ($container->getSteps() as $step) {

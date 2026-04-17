@@ -63,10 +63,8 @@ final class ContextFactory
      *
      * @param class-string<Context> $class
      * @param ArgumentResolver[] $singleUseResolvers
-     *
-     * @return Context
      */
-    public function createContext($class, array $arguments = [], array $singleUseResolvers = [])
+    public function createContext(string $class, array $arguments = [], array $singleUseResolvers = []): Context
     {
         $reflection = new ReflectionClass($class);
         $resolvers = array_merge($singleUseResolvers, $this->argumentResolvers);
@@ -84,7 +82,7 @@ final class ContextFactory
      *
      * @return mixed[]
      */
-    private function resolveArguments(ReflectionClass $reflection, array $arguments, array $resolvers)
+    private function resolveArguments(ReflectionClass $reflection, array $arguments, array $resolvers): array
     {
         $newArguments = $arguments;
 

@@ -34,10 +34,8 @@ abstract class OutputFactory
 
     /**
      * Sets output path.
-     *
-     * @param string $path
      */
-    public function setOutputPath($path): void
+    public function setOutputPath(string $path): void
     {
         $this->outputPath = $path;
     }
@@ -62,10 +60,8 @@ abstract class OutputFactory
 
     /**
      * Returns output styles.
-     *
-     * @return array
      */
-    public function getOutputStyles()
+    public function getOutputStyles(): array
     {
         return $this->outputStyles;
     }
@@ -90,28 +86,22 @@ abstract class OutputFactory
 
     /**
      * Sets output verbosity level.
-     *
-     * @param int $level
      */
-    public function setOutputVerbosity($level): void
+    public function setOutputVerbosity(int $level): void
     {
         $this->verbosityLevel = intval($level);
     }
 
     /**
      * Returns output verbosity level.
-     *
-     * @return int
      */
-    public function getOutputVerbosity()
+    public function getOutputVerbosity(): int
     {
         return $this->verbosityLevel;
     }
 
     /**
      * Returns a new output stream.
-     *
-     * @return OutputInterface
      */
-    abstract public function createOutput();
+    abstract public function createOutput(): OutputInterface;
 }

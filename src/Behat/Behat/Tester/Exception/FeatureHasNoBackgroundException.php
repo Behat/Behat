@@ -23,11 +23,9 @@ final class FeatureHasNoBackgroundException extends RuntimeException implements 
 {
     /**
      * Initializes exception.
-     *
-     * @param string      $message
      */
     public function __construct(
-        $message,
+        string $message,
         private readonly FeatureNode $feature,
     ) {
         parent::__construct($message);

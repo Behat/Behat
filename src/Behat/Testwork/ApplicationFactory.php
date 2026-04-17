@@ -26,31 +26,25 @@ abstract class ApplicationFactory
 {
     /**
      * Returns application name.
-     *
-     * @return string
      */
-    abstract protected function getName();
+    abstract protected function getName(): string;
 
     /**
      * Returns current application version.
-     *
-     * @return string
      */
-    abstract protected function getVersion();
+    abstract protected function getVersion(): string;
 
     /**
      * Returns list of extensions enabled by default.
      *
      * @return Extension[]
      */
-    abstract protected function getDefaultExtensions();
+    abstract protected function getDefaultExtensions(): array;
 
     /**
      * Returns the name of configuration environment variable.
-     *
-     * @return string
      */
-    abstract protected function getEnvironmentVariableName();
+    abstract protected function getEnvironmentVariableName(): string;
 
     /**
      * Returns user config path.
@@ -61,10 +55,8 @@ abstract class ApplicationFactory
 
     /**
      * Creates application instance.
-     *
-     * @return Application
      */
-    public function createApplication()
+    public function createApplication(): Application
     {
         $configurationLoader = $this->createConfigurationLoader();
         $extensionManager = $this->createExtensionManager();
@@ -74,20 +66,16 @@ abstract class ApplicationFactory
 
     /**
      * Creates configuration loader.
-     *
-     * @return ConfigurationLoader
      */
-    protected function createConfigurationLoader()
+    protected function createConfigurationLoader(): ConfigurationLoader
     {
         return new ConfigurationLoader($this->getEnvironmentVariableName(), $this->getConfigPath());
     }
 
     /**
      * Creates extension manager.
-     *
-     * @return ExtensionManager
      */
-    protected function createExtensionManager()
+    protected function createExtensionManager(): ExtensionManager
     {
         return new ExtensionManager($this->getDefaultExtensions());
     }

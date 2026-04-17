@@ -87,7 +87,7 @@ final class SuiteWithContextsSetup implements SuiteSetup
      *
      * @throws SuiteConfigurationException If `contexts` setting is not an array
      */
-    private function getSuiteContexts(Suite $suite)
+    private function getSuiteContexts(Suite $suite): array
     {
         $contexts = $suite->getSetting('contexts');
 
@@ -119,10 +119,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Creates context class file in the filesystem.
-     *
-     * @param string $content
      */
-    private function createContextFile(string $path, $content): void
+    private function createContextFile(string $path, string $content): void
     {
         file_put_contents($path, $content);
 
@@ -134,11 +132,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Finds file to store a class.
      *
-     * @param string $class
-     *
      * @throws ContextNotFoundException If class file could not be determined
      */
-    private function findClassFile($class): string
+    private function findClassFile(string $class): string
     {
         [$classpath, $classname] = $this->findClasspathAndClass($class);
         $classpath .= str_replace('_', DIRECTORY_SEPARATOR, $classname) . '.php';
@@ -162,11 +158,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Generates class using registered class generators.
      *
-     * @param string $class
-     *
      * @return string|null
      */
-    private function generateClass(Suite $suite, $class)
+    private function generateClass(Suite $suite, string $class)
     {
         $content = null;
         foreach ($this->classGenerators as $generator) {
@@ -191,11 +185,9 @@ final class SuiteWithContextsSetup implements SuiteSetup
     /**
      * Finds classpath and classname from class.
      *
-     * @param string $class
-     *
      * @return array{?string, string}
      */
-    private function findClasspathAndClass($class): array
+    private function findClasspathAndClass(string $class): array
     {
         if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name

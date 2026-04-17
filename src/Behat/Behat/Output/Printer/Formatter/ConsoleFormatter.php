@@ -48,7 +48,7 @@ final class ConsoleFormatter extends BaseOutputFormatter
      *
      * @return string The replaced style
      */
-    private function replaceStyle(array $match)
+    private function replaceStyle(array $match): string
     {
         if (!$this->isDecorated()) {
             return $match[2];

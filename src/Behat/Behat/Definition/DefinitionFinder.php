@@ -37,10 +37,8 @@ final class DefinitionFinder
 
     /**
      * Searches definition for a provided step in a provided environment.
-     *
-     * @return SearchResult
      */
-    public function findDefinition(Environment $environment, FeatureNode $feature, StepNode $step)
+    public function findDefinition(Environment $environment, FeatureNode $feature, StepNode $step): SearchResult
     {
         foreach ($this->engines as $engine) {
             $result = $engine->searchDefinition($environment, $feature, $step);

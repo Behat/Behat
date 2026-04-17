@@ -30,11 +30,9 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Initializes executor.
-     *
-     * @param int $errorReportingLevel
      */
     public function __construct(
-        private $errorReportingLevel = E_ALL,
+        private int $errorReportingLevel = E_ALL,
     ) {
         $this->validator = new Validator();
     }
@@ -58,14 +56,9 @@ final class RuntimeCallHandler implements CallHandler
      *
      * @see set_error_handler()
      *
-     * @param int    $level
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     *
      * @throws CallErrorException
      */
-    public function handleError($level, $message, $file, $line): bool
+    public function handleError(int $level, string $message, string $file, int $line): bool
     {
         if ($this->errorLevelIsNotReportable($level)) {
             return false;
@@ -133,10 +126,8 @@ final class RuntimeCallHandler implements CallHandler
 
     /**
      * Checks if provided error level is not reportable.
-     *
-     * @param int $level
      */
-    private function errorLevelIsNotReportable($level): bool
+    private function errorLevelIsNotReportable(int $level): bool
     {
         return !(error_reporting() & $level);
     }

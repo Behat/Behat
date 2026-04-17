@@ -68,10 +68,8 @@ final class AvailableDefinitionsController implements Controller
 
     /**
      * Returns definition printer for provided option argument.
-     *
-     * @param string $argument
      */
-    private function getDefinitionPrinter($argument): ConsoleDefinitionListPrinter|ConsoleDefinitionInformationPrinter
+    private function getDefinitionPrinter(string $argument): ConsoleDefinitionListPrinter|ConsoleDefinitionInformationPrinter
     {
         if ('l' === $argument) {
             return $this->listPrinter;

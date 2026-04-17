@@ -110,12 +110,8 @@ final class OutputController implements Controller
 
     /**
      * Locates output path from relative one.
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    private function locateOutputPath($path)
+    private function locateOutputPath(string $path): string
     {
         if ($this->isAbsolutePath($path)) {
             return $path;
@@ -163,10 +159,8 @@ final class OutputController implements Controller
 
     /**
      * Checks if provided output identifier represents standard output.
-     *
-     * @param string $outputId
      */
-    private function isStandardOutput($outputId): bool
+    private function isStandardOutput(string $outputId): bool
     {
         return 'std' === $outputId || 'null' === $outputId || 'false' === $outputId;
     }
@@ -176,7 +170,7 @@ final class OutputController implements Controller
      *
      * @param string $file A file path
      */
-    private function isAbsolutePath($file): bool
+    private function isAbsolutePath(string $file): bool
     {
         return $file[0] == '/' || $file[0] == '\\'
             || (
@@ -208,10 +202,8 @@ final class OutputController implements Controller
 
     /**
      * Loads JSON settings as formatter parameters.
-     *
-     * @param string $jsonSettings
      */
-    private function loadJsonSettings($jsonSettings): void
+    private function loadJsonSettings(string $jsonSettings): void
     {
         $settings = @json_decode($jsonSettings, true);
 

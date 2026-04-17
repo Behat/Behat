@@ -33,20 +33,16 @@ abstract class LifecycleEvent extends Event
 
     /**
      * Returns suite in which this event was fired.
-     *
-     * @return Suite
      */
-    public function getSuite()
+    public function getSuite(): Suite
     {
         return $this->environment->getSuite();
     }
 
     /**
      * Returns environment in which this event was fired.
-     *
-     * @return Environment
      */
-    public function getEnvironment()
+    public function getEnvironment(): Environment
     {
         return $this->environment;
     }

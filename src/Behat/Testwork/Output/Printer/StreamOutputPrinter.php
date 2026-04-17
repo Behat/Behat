@@ -72,10 +72,8 @@ class StreamOutputPrinter implements OutputPrinter
 
     /**
      * Returns output instance, prepared to write.
-     *
-     * @return OutputInterface
      */
-    final protected function getWritingStream()
+    final protected function getWritingStream(): OutputInterface
     {
         if (!$this->output instanceof OutputInterface) {
             $this->output = $this->outputFactory->createOutput();

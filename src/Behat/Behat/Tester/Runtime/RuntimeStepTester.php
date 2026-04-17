@@ -71,10 +71,8 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Searches for a definition.
-     *
-     * @return SearchResult
      */
-    private function searchDefinition(Environment $env, FeatureNode $feature, StepNode $step)
+    private function searchDefinition(Environment $env, FeatureNode $feature, StepNode $step): SearchResult
     {
         return $this->definitionFinder->findDefinition($env, $feature, $step);
     }

@@ -27,11 +27,10 @@ final class WrongPathsException extends RuntimeException implements TesterExcept
     /**
      * Initializes exception.
      *
-     * @param string $message
      * @param string|list<string> $paths
      */
     public function __construct(
-        $message,
+        string $message,
         string|array $paths,
     ) {
         parent::__construct($message);

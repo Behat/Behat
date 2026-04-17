@@ -47,10 +47,8 @@ final class HookDispatcher
 
     /**
      * Dispatches single event hook.
-     *
-     * @return CallResult
      */
-    private function dispatchHook(HookScope $scope, Hook $hook)
+    private function dispatchHook(HookScope $scope, Hook $hook): CallResult
     {
         return $this->callCenter->makeCall(new HookCall($scope, $hook));
     }

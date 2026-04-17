@@ -137,11 +137,9 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Checks if factory method exists.
      *
-     * @param string          $methodName
-     *
      * @throws WrongServicesConfigurationException
      */
-    private function assertFactoryMethodExists(ReflectionClass $class, $methodName): void
+    private function assertFactoryMethodExists(ReflectionClass $class, string $methodName): void
     {
         if (!$class->hasMethod($methodName)) {
             throw new WrongServicesConfigurationException(sprintf(

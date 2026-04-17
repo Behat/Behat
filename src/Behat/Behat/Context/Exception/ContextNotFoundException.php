@@ -21,23 +21,18 @@ final class ContextNotFoundException extends InvalidArgumentException implements
 {
     /**
      * Initializes exception.
-     *
-     * @param string $message
-     * @param string $class
      */
     public function __construct(
-        $message,
-        private $class,
+        string $message,
+        private string $class,
     ) {
         parent::__construct($message);
     }
 
     /**
      * Returns not found classname.
-     *
-     * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return $this->class;
     }

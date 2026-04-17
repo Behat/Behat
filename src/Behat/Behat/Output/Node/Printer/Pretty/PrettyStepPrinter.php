@@ -44,17 +44,14 @@ final class PrettyStepPrinter implements StepPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param int $indentation
-     * @param int $subIndentation
      */
     public function __construct(
         private readonly StepTextPainter $textPainter,
         private readonly ResultToStringConverter $resultConverter,
         private readonly PrettyPathPrinter $pathPrinter,
         private readonly ExceptionPresenter $exceptionPresenter,
-        $indentation = 4,
-        $subIndentation = 2,
+        int $indentation = 4,
+        int $subIndentation = 2,
     ) {
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
@@ -83,11 +80,8 @@ final class PrettyStepPrinter implements StepPrinter
 
     /**
      * Prints step text.
-     *
-     * @param string        $stepType
-     * @param string        $stepText
      */
-    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result): void
+    private function printText(OutputPrinter $printer, string $stepType, string $stepText, StepResult $result): void
     {
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();

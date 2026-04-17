@@ -47,11 +47,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Initializes transformation.
      *
-     * @param string      $pattern
-     *
      * @phpstan-param TBehatCallable $callable
      */
-    public function __construct($pattern, callable|array $callable, ?string $description = null)
+    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
     {
         parent::__construct($callable, $description);
     }
@@ -146,30 +144,24 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
 
     /**
      * Returns appropriate closure for filtering parameter by index.
-     *
-     * @return Closure
      */
-    private function hasIndex(int|string $index)
+    private function hasIndex(int|string $index): Closure
     {
         return is_string($index) ? $this->hasName($index) : $this->hasPosition($index);
     }
 
     /**
      * Returns closure to filter parameter by name.
-     *
-     * @return Closure
      */
-    private function hasName(string $index)
+    private function hasName(string $index): Closure
     {
         return fn (ReflectionParameter $parameter): bool => $index === $parameter->getName();
     }
 
     /**
      * Returns closure to filter parameter by position.
-     *
-     * @return Closure
      */
-    private function hasPosition(int $index)
+    private function hasPosition(int $index): Closure
     {
         return fn (ReflectionParameter $parameter): bool => $index === $parameter->getPosition();
     }

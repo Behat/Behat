@@ -33,12 +33,8 @@ final class StepTextPainter
 
     /**
      * Colorizes step text arguments according to definition.
-     *
-     * @param string     $text
-     *
-     * @return string
      */
-    public function paintText($text, Definition $definition, TestResult $result)
+    public function paintText(string $text, Definition $definition, TestResult $result): string
     {
         $regex = $this->patternTransformer->transformPatternToRegex($definition->getPattern());
         $style = $this->resultConverter->convertResultToString($result);

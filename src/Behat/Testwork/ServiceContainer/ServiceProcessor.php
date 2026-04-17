@@ -51,7 +51,7 @@ final class ServiceProcessor
      * @param string           $target     The id of the service being decorated
      * @param string           $wrapperTag The tag used by wrappers
      */
-    public function processWrapperServices(ContainerBuilder $container, $target, string $wrapperTag): void
+    public function processWrapperServices(ContainerBuilder $container, string $target, string $wrapperTag): void
     {
         $references = $this->findAndSortTaggedServices($container, $wrapperTag);
 

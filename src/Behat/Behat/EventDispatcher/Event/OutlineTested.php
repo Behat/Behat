@@ -31,17 +31,13 @@ abstract class OutlineTested extends LifecycleEvent implements GherkinNodeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    abstract public function getFeature();
+    abstract public function getFeature(): FeatureNode;
 
     /**
      * Returns outline node.
-     *
-     * @return OutlineNode
      */
-    abstract public function getOutline();
+    abstract public function getOutline(): OutlineNode;
 
     /**
      * Returns node.

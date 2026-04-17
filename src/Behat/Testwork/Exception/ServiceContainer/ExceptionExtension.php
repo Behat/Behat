@@ -94,10 +94,8 @@ final class ExceptionExtension implements Extension
 
     /**
      * Loads exception presenter.
-     *
-     * @param int $verbosity
      */
-    private function loadPresenter(ContainerBuilder $container, $verbosity): void
+    private function loadPresenter(ContainerBuilder $container, int $verbosity): void
     {
         $definition = new Definition(ExceptionPresenter::class, [
             $verbosity,

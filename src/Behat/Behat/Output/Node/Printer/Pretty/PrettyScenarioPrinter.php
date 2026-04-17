@@ -33,14 +33,11 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
 
     /**
      * Initializes printer.
-     *
-     * @param int $indentation
-     * @param int $subIndentation
      */
     public function __construct(
         private readonly PrettyPathPrinter $pathPrinter,
-        $indentation = 2,
-        $subIndentation = 2,
+        int $indentation = 2,
+        int $subIndentation = 2,
     ) {
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
@@ -80,10 +77,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
 
     /**
      * Prints scenario keyword.
-     *
-     * @param string        $keyword
      */
-    private function printKeyword(OutputPrinter $printer, $keyword): void
+    private function printKeyword(OutputPrinter $printer, string $keyword): void
     {
         $printer->write(sprintf('%s{+keyword}%s:{-keyword}', $this->indentText, $keyword));
     }

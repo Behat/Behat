@@ -77,11 +77,8 @@ final class TranslatorExtension implements Extension
 
     /**
      * Loads translator service.
-     *
-     * @param string           $locale
-     * @param string           $fallbackLocale
      */
-    private function loadTranslator(ContainerBuilder $container, $locale, $fallbackLocale): void
+    private function loadTranslator(ContainerBuilder $container, string $locale, string $fallbackLocale): void
     {
         $definition = new Definition(Translator::class, [$locale]);
         $container->setDefinition(self::TRANSLATOR_ID, $definition);

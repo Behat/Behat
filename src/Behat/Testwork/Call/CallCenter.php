@@ -77,10 +77,8 @@ final class CallCenter
 
     /**
      * Handles call and its result using registered filters and handlers.
-     *
-     * @return CallResult
      */
-    public function makeCall(Call $call)
+    public function makeCall(Call $call): CallResult
     {
         try {
             return $this->filterResult($this->handleCall($this->filterCall($call)));
@@ -91,10 +89,8 @@ final class CallCenter
 
     /**
      * Filters call using registered filters and returns a filtered one.
-     *
-     * @return Call
      */
-    private function filterCall(Call $call)
+    private function filterCall(Call $call): Call
     {
         foreach ($this->callFilters as $filter) {
             if (!$filter->supportsCall($call)) {
@@ -130,10 +126,8 @@ final class CallCenter
 
     /**
      * Filters call result using registered filters and returns a filtered one.
-     *
-     * @return CallResult
      */
-    private function filterResult(CallResult $result)
+    private function filterResult(CallResult $result): CallResult
     {
         foreach ($this->resultFilters as $filter) {
             if (!$filter->supportsResult($result)) {

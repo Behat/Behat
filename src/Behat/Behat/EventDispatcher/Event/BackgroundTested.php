@@ -30,10 +30,8 @@ abstract class BackgroundTested extends LifecycleEvent implements ScenarioLikeTe
 
     /**
      * Returns background node.
-     *
-     * @return BackgroundNode
      */
-    abstract public function getBackground();
+    abstract public function getBackground(): BackgroundNode;
 
     /**
      * Returns node.

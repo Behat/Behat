@@ -25,13 +25,10 @@ final class NodeEventListeningFormatter implements Formatter
 {
     /**
      * Initializes formatter.
-     *
-     * @param string        $name
-     * @param string        $description
      */
     public function __construct(
-        private $name,
-        private $description,
+        private string $name,
+        private string $description,
         private array $parameters,
         private readonly OutputPrinter $printer,
         private readonly EventListener $listener,

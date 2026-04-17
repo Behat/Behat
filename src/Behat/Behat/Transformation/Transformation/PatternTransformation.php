@@ -31,12 +31,10 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
     /**
      * Initializes transformation.
      *
-     * @param string      $pattern
-     *
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private $pattern,
+        private string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

@@ -28,14 +28,11 @@ abstract class RuntimeDefinition extends RuntimeCallee implements Stringable, De
     /**
      * Initializes definition.
      *
-     * @param string      $type
-     * @param string      $pattern
-     *
      * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
-        private $type,
-        private $pattern,
+        private string $type,
+        private string $pattern,
         callable|array $callable,
         ?string $description = null,
     ) {

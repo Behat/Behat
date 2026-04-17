@@ -26,14 +26,12 @@ final class HookStat
     /**
      * Initializes hook stat.
      *
-     * @param string      $name
-     * @param string      $path
      * @param string|null $error
      * @param string|null $stdOut
      */
     public function __construct(
-        private $name,
-        private $path,
+        private string $name,
+        private string $path,
         private $error = null,
         private $stdOut = null,
     ) {
@@ -66,20 +64,16 @@ final class HookStat
 
     /**
      * Returns hook exception.
-     *
-     * @return string
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
 
     /**
      * Returns hook path.
-     *
-     * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }

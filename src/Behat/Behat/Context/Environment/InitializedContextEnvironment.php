@@ -98,7 +98,7 @@ final class InitializedContextEnvironment implements ContextEnvironment, Service
      *
      * @throws ContextNotFoundException If context is not in the environment
      */
-    public function getContext($class)
+    public function getContext(string $class): Context
     {
         if (!$this->hasContextClass($class)) {
             throw new ContextNotFoundException(sprintf(

@@ -38,16 +38,13 @@ final class PrettyOutlineTablePrinter implements OutlineTablePrinter
 
     /**
      * Initializes printer.
-     *
-     * @param int $indentation
-     * @param int $subIndentation
      */
     public function __construct(
         private readonly ScenarioPrinter $scenarioPrinter,
         private readonly StepPrinter $stepPrinter,
         private readonly ResultToStringConverter $resultConverter,
-        $indentation = 4,
-        $subIndentation = 2,
+        int $indentation = 4,
+        int $subIndentation = 2,
     ) {
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));

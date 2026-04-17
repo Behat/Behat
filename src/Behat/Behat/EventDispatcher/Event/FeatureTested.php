@@ -30,10 +30,8 @@ abstract class FeatureTested extends LifecycleEvent implements GherkinNodeTested
 
     /**
      * Returns feature.
-     *
-     * @return FeatureNode
      */
-    abstract public function getFeature();
+    abstract public function getFeature(): FeatureNode;
 
     /**
      * Returns node.

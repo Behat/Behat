@@ -22,11 +22,9 @@ final class EnvironmentIsolationException extends RuntimeException implements En
 {
     /**
      * Initializes exception.
-     *
-     * @param string      $message
      */
     public function __construct(
-        $message,
+        string $message,
         private readonly Environment $environment,
         private $subject = null,
     ) {

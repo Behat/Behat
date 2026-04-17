@@ -99,10 +99,8 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Checks if result is executed and call result has produced exception or stdOut.
-     *
-     * @return bool
      */
-    private function resultCallHasOutput()
+    private function resultCallHasOutput(): bool
     {
         if (!$this->result instanceof ExecutedStepResult) {
             return false;

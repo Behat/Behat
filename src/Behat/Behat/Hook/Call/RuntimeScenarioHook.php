@@ -40,12 +40,8 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 
     /**
      * Checks if nodes match filter.
-     *
-     * @param string            $filterString
-     *
-     * @return bool
      */
-    protected function isMatch(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
+    protected function isMatch(FeatureNode $feature, ScenarioInterface $scenario, string $filterString): bool
     {
         if (str_contains($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $scenario, $filterString);
@@ -60,12 +56,8 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 
     /**
      * Checks if node match tag filter.
-     *
-     * @param string            $filterString
-     *
-     * @return bool
      */
-    protected function isMatchTagFilter(FeatureNode $feature, ScenarioInterface $scenario, $filterString)
+    protected function isMatchTagFilter(FeatureNode $feature, ScenarioInterface $scenario, string $filterString): bool
     {
         $filter = new TagFilter($filterString);
 
@@ -74,12 +66,8 @@ abstract class RuntimeScenarioHook extends RuntimeFilterableHook
 
     /**
      * Checks if scenario matches name filter.
-     *
-     * @param string            $filterString
-     *
-     * @return bool
      */
-    protected function isMatchNameFilter(ScenarioInterface $scenario, $filterString)
+    protected function isMatchNameFilter(ScenarioInterface $scenario, string $filterString): bool
     {
         $filter = new NameFilter($filterString);
 

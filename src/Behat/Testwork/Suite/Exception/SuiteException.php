@@ -23,13 +23,10 @@ class SuiteException extends InvalidArgumentException implements TestworkExcepti
 {
     /**
      * Initializes exception.
-     *
-     * @param string         $message
-     * @param string         $name
      */
     public function __construct(
-        $message,
-        private $name,
+        string $message,
+        private string $name,
         ?Exception $previous = null,
     ) {
         parent::__construct($message, 0, $previous);
@@ -37,10 +34,8 @@ class SuiteException extends InvalidArgumentException implements TestworkExcepti
 
     /**
      * Returns name of the suite that caused exception.
-     *
-     * @return string
      */
-    public function getSuiteName()
+    public function getSuiteName(): string
     {
         return $this->name;
     }

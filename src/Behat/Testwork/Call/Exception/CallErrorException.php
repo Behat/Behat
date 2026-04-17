@@ -38,7 +38,7 @@ final class CallErrorException extends ErrorException
      * @param string $file    error file
      * @param int    $line    error line
      */
-    public function __construct($level, $message, $file, $line)
+    public function __construct(int $level, string $message, string $file, int $line)
     {
         // E_STRICT is deprecated since PHP 8.4.
         if (defined('E_STRICT') && $level === @E_STRICT) {

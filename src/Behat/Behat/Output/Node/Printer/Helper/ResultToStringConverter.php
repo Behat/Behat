@@ -29,10 +29,8 @@ final class ResultToStringConverter
 
     /**
      * Converts provided result code to a string.
-     *
-     * @param int $resultCode
      */
-    public function convertResultCodeToString($resultCode): string
+    public function convertResultCodeToString(int $resultCode): string
     {
         return match ($resultCode) {
             TestResult::SKIPPED => 'skipped',

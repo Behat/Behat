@@ -44,10 +44,8 @@ abstract class ClassNotFoundHandler implements ExceptionHandler
 
     /**
      * Override to handle non-existent class name.
-     *
-     * @param string $class
      */
-    abstract public function handleNonExistentClass($class);
+    abstract public function handleNonExistentClass(string $class);
 
     /**
      * Extracts missing class name from the exception.

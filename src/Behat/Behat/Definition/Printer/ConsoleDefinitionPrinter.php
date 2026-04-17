@@ -69,10 +69,8 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
 
     /**
      * Translates definition using translator.
-     *
-     * @return Definition
      */
-    final protected function translateDefinition(Suite $suite, Definition $definition)
+    final protected function translateDefinition(Suite $suite, Definition $definition): Definition
     {
         return $this->translator->translateDefinition($suite, $definition);
     }
@@ -87,7 +85,7 @@ abstract class ConsoleDefinitionPrinter implements DefinitionPrinter
      *
      * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
      */
-    final protected function isVerbose()
+    final protected function isVerbose(): bool
     {
         return $this->output->isVerbose();
     }

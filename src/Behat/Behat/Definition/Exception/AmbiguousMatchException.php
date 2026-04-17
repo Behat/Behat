@@ -29,7 +29,7 @@ final class AmbiguousMatchException extends RuntimeException implements SearchEx
      * @param string       $text    step description
      * @param Definition[] $matches ambiguous matches (array of Definition's)
      */
-    public function __construct($text, array $matches)
+    public function __construct(string $text, array $matches)
     {
         $message = sprintf('Ambiguous match of "%s":', $text);
         foreach ($matches as $definition) {

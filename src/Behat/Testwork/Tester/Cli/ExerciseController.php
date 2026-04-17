@@ -37,15 +37,13 @@ final class ExerciseController implements Controller
 {
     /**
      * Initializes controller.
-     *
-     * @param bool             $skip
      */
     public function __construct(
         private readonly SuiteRepository $suiteRepository,
         private readonly SpecificationFinder $specificationFinder,
         private readonly Exercise $exercise,
         private readonly ResultInterpreter $resultInterpreter,
-        private $skip = false,
+        private bool $skip = false,
     ) {
     }
 

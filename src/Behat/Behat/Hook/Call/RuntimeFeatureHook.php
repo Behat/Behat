@@ -28,13 +28,12 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     /**
      * Initializes hook.
      *
-     * @param string                               $scopeName
      * @param string|null                          $filterString
      * @param callable|array{class-string, string} $callable
      *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct($scopeName, $filterString, callable|array $callable, ?string $description = null)
+    public function __construct(string $scopeName, $filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
@@ -54,12 +53,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
         return $this->isMatch($scope->getFeature(), $filterString);
     }
 
-    /**
-     * @param string      $filterString
-     *
-     * @return bool
-     */
-    private function isMatch(FeatureNode $feature, $filterString)
+    private function isMatch(FeatureNode $feature, string $filterString): bool
     {
         if (str_contains($filterString, '@')) {
             return $this->isMatchTagFilter($feature, $filterString);
@@ -74,10 +68,8 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
 
     /**
      * Checks if feature matches tag filter.
-     *
-     * @return bool
      */
-    private function isMatchTagFilter(FeatureNode $feature, string $filterString)
+    private function isMatchTagFilter(FeatureNode $feature, string $filterString): bool
     {
         $filter = new TagFilter($filterString);
 
@@ -86,12 +78,8 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
 
     /**
      * Checks if feature matches name filter.
-     *
-     * @param string      $filterString
-     *
-     * @return bool
      */
-    private function isMatchNameFilter(FeatureNode $feature, $filterString)
+    private function isMatchNameFilter(FeatureNode $feature, string $filterString): bool
     {
         $filter = new NameFilter($filterString);
 

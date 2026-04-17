@@ -21,23 +21,18 @@ final class UnknownTranslationResourceException extends InvalidArgumentException
 {
     /**
      * Initializes exception.
-     *
-     * @param string $message
-     * @param string $resource
      */
     public function __construct(
-        $message,
-        private $resource,
+        string $message,
+        private string $resource,
     ) {
         parent::__construct($message);
     }
 
     /**
      * Returns unsupported resource.
-     *
-     * @return string
      */
-    public function getResource()
+    public function getResource(): string
     {
         return $this->resource;
     }
