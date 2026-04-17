@@ -30,7 +30,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  */
 final class PrettySetupPrinter implements SetupPrinter
 {
-    private string $indentText;
+    private readonly string $indentText;
 
     /**
      * Initializes printer.

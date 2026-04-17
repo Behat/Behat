@@ -32,7 +32,7 @@ use Behat\Testwork\Tester\Result\TestResults;
  */
 final class PrettyExampleRowPrinter implements ExampleRowPrinter
 {
-    private string $indentText;
+    private readonly string $indentText;
     private readonly string $subIndentText;
 
     /**

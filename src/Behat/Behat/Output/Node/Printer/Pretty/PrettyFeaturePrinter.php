@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class PrettyFeaturePrinter implements FeaturePrinter
 {
-    private string $indentText;
+    private readonly string $indentText;
     private readonly string $subIndentText;
 
     /**

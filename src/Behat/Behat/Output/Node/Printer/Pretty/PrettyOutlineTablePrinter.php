@@ -30,7 +30,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class PrettyOutlineTablePrinter implements OutlineTablePrinter
 {
-    private string $indentText;
+    private readonly string $indentText;
     private readonly string $subIndentText;
 
     /**
