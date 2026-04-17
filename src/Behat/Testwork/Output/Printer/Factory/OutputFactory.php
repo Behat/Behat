@@ -23,10 +23,7 @@ abstract class OutputFactory
     public const VERBOSITY_VERY_VERBOSE = 3;
     public const VERBOSITY_DEBUG = 4;
 
-    /**
-     * @var string|null
-     */
-    private $outputPath;
+    private ?string $outputPath = null;
     private array $outputStyles = [];
 
     private ?bool $outputDecorated = null;

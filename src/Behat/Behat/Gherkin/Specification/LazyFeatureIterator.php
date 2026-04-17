@@ -42,7 +42,7 @@ final class LazyFeatureIterator implements SpecificationIterator
     /**
      * @var list<FeatureNode>
      */
-    private $features = [];
+    private array $features = [];
     private ?FeatureNode $currentFeature = null;
 
     /**
