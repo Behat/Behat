@@ -39,7 +39,7 @@ final class OrderedExercise implements Exercise
     /**
      * @var SpecificationIterator<TSpec>[]|null
      */
-    private $ordered;
+    private ?array $ordered = null;
 
     /**
      * @param Exercise<TSpec> $decoratedExercise
@@ -78,7 +78,7 @@ final class OrderedExercise implements Exercise
      *
      * @return SpecificationIterator<TSpec>[]
      */
-    private function order(array $iterators)
+    private function order(array $iterators): array
     {
         if (!$this->ordered || $this->unordered != $iterators) {
             $this->unordered = $iterators;
