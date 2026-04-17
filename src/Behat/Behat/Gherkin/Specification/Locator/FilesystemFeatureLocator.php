@@ -140,10 +140,6 @@ final class FilesystemFeatureLocator implements SpecificationLocator
             return realpath($path);
         }
 
-        if (null === $this->basePath) {
-            return false;
-        }
-
         if (is_file($this->basePath . DIRECTORY_SEPARATOR . $path)
             || is_dir($this->basePath . DIRECTORY_SEPARATOR . $path)
         ) {
