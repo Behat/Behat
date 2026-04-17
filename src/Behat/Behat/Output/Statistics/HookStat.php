@@ -29,8 +29,8 @@ final class HookStat
     public function __construct(
         private readonly string $name,
         private readonly string $path,
-        private ?string $error = null,
-        private ?string $stdOut = null,
+        private readonly ?string $error = null,
+        private readonly ?string $stdOut = null,
     ) {
     }
 

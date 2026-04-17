@@ -8,6 +8,7 @@ use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddReturnTypeFromPhpDocRect
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
+use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Php82\Rector\Class_\ReadOnlyClassRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 
@@ -36,5 +37,6 @@ return RectorConfig::configure()
         AddReturnTypeFromPhpDocRector::class,
         AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
         AddParamTypeBasedOnParentClassMethodRector::class,
+        ReadOnlyPropertyRector::class,
     ])
 ;

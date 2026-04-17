@@ -22,7 +22,7 @@ final class SearchResult
      */
     public function __construct(
         private readonly ?Definition $definition = null,
-        private ?string $matchedText = null,
+        private readonly ?string $matchedText = null,
         private readonly ?array $arguments = null,
     ) {
     }

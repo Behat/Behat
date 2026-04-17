@@ -26,7 +26,7 @@ final class CallResult
         private readonly Call $call,
         private $return,
         private readonly ?Exception $exception = null,
-        private ?string $stdOut = null,
+        private readonly ?string $stdOut = null,
     ) {
     }
 

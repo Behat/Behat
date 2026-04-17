@@ -28,7 +28,7 @@ class EnvironmentCall implements Call
         private readonly Environment $environment,
         private readonly Callee $callee,
         private readonly array $arguments,
-        private ?int $errorReportingLevel = null,
+        private readonly ?int $errorReportingLevel = null,
     ) {
     }
 
