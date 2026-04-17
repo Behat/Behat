@@ -30,10 +30,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class PrettyOutlinePrinter implements OutlinePrinter
 {
-    /**
-     * @var string
-     */
-    private $indentText;
+    private string $indentText;
     private readonly string $subIndentText;
 
     public function __construct(

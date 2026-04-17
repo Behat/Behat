@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddPropertyTypeFromPhpDocRector;
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
 use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
@@ -12,9 +14,9 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withRootFiles()
-    ->withPreparedSets(codeQuality: true)
-    ->withPhpSets(php82: true)
-    ->withTypeCoverageLevel(49)
+//    ->withPreparedSets(codeQuality: true)
+//    ->withPhpSets(php82: true)
+//    ->withTypeCoverageLevel(66)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
@@ -24,4 +26,7 @@ return RectorConfig::configure()
     ->withImportNames(
         removeUnusedImports: true,
     )
+    ->withRules([
+        AddPropertyTypeFromPhpDocRector::class,
+    ])
 ;

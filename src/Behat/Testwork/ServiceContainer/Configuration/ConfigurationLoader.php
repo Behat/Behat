@@ -24,10 +24,7 @@ use function str_ends_with;
 final class ConfigurationLoader
 {
     private ?bool $profileFound = null;
-    /**
-     * @var array
-     */
-    private $debugInformation = [
+    private array $debugInformation = [
         'environment_variable_name' => 'none',
         'environment_variable_content' => 'none',
         'configuration_file_path' => 'none',

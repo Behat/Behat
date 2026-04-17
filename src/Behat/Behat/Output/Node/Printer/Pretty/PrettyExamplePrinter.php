@@ -24,10 +24,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  */
 final class PrettyExamplePrinter implements ExamplePrinter
 {
-    /**
-     * @var string
-     */
-    private $indentText;
+    private string $indentText;
 
     /**
      * Initializes printer.

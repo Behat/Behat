@@ -23,10 +23,7 @@ use ReflectionMethod;
  */
 final class BuiltInServiceContainer implements PsrContainerInterface
 {
-    /**
-     * @var array
-     */
-    private $instances;
+    private array $instances;
 
     /**
      * Initialises container using provided service configuration.
