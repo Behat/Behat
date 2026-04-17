@@ -42,7 +42,7 @@ final class HookStat
         $this->scope = $scope;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
