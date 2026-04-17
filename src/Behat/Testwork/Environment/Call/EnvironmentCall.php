@@ -47,7 +47,7 @@ class EnvironmentCall implements Call
         return $this->callee;
     }
 
-    final public function getBoundCallable()
+    final public function getBoundCallable(): callable
     {
         return $this->environment->bindCallee($this->callee);
     }

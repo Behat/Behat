@@ -83,10 +83,8 @@ final class AfterStepTested extends StepTested implements AfterTested
 
     /**
      * Checks if step teardown has output.
-     *
-     * @return bool
      */
-    private function teardownHasOutput()
+    private function teardownHasOutput(): bool
     {
         return $this->teardown->hasOutput();
     }

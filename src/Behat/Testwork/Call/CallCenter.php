@@ -110,11 +110,9 @@ final class CallCenter
     /**
      * Handles call using registered call handlers.
      *
-     * @return CallResult
-     *
      * @throws CallHandlingException If call handlers didn't produce call result
      */
-    private function handleCall(Call $call)
+    private function handleCall(Call $call): CallResult
     {
         foreach ($this->callHandlers as $handler) {
             if (!$handler->supportsCall($call)) {

@@ -142,7 +142,7 @@ final class ExerciseController implements Controller
      *
      * @return Suite[]
      */
-    private function getAvailableSuites()
+    private function getAvailableSuites(): array
     {
         return $this->suiteRepository->getSuites();
     }

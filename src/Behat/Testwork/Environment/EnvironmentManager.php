@@ -52,11 +52,9 @@ final class EnvironmentManager
     /**
      * Builds new environment for provided test suite.
      *
-     * @return Environment
-     *
      * @throws EnvironmentBuildException
      */
-    public function buildEnvironment(Suite $suite)
+    public function buildEnvironment(Suite $suite): Environment
     {
         foreach ($this->handlers as $handler) {
             if ($handler->supportsSuite($suite)) {
@@ -73,11 +71,9 @@ final class EnvironmentManager
     /**
      * Creates new isolated test environment using built one.
      *
-     * @return Environment
-     *
      * @throws EnvironmentIsolationException If appropriate environment handler is not found
      */
-    public function isolateEnvironment(Environment $environment, $testSubject = null)
+    public function isolateEnvironment(Environment $environment, $testSubject = null): Environment
     {
         foreach ($this->handlers as $handler) {
             if ($handler->supportsEnvironmentAndSubject($environment, $testSubject)) {

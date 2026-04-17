@@ -63,10 +63,8 @@ final class AfterStepSetup extends StepTested implements AfterSetup
 
     /**
      * Checks if step call, setup or teardown produced any output (stdOut or exception).
-     *
-     * @return bool
      */
-    public function hasOutput()
+    public function hasOutput(): bool
     {
         return $this->setup->hasOutput();
     }
