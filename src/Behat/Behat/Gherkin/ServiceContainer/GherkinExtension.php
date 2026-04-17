@@ -201,7 +201,7 @@ final class GherkinExtension implements Extension
             new Reference('gherkin.parser'),
         ]);
 
-        if ($cachePath) {
+        if ($cachePath !== '') {
             $cacheDefinition = new Definition(FileCache::class, [$cachePath]);
         } else {
             $cacheDefinition = new Definition(MemoryCache::class);

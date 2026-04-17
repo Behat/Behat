@@ -155,7 +155,7 @@ final class ListPrinter
             $printer->writeln(implode("\n", $stdOutString));
         }
 
-        if ($hookStat->getError()) {
+        if ($hookStat->getError() !== '') {
             $exceptionString = implode("\n", array_map($pad, explode("\n", $hookStat->getError())));
             $printer->writeln(sprintf('{+%s}%s{-%s}', $style, $exceptionString, $style));
         }

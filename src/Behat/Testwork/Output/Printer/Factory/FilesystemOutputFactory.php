@@ -35,8 +35,12 @@ final class FilesystemOutputFactory extends OutputFactory
      */
     private function configureOutputStream(OutputInterface $output): void
     {
-        $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
-        $output->setVerbosity($verbosity);
+        $output->setVerbosity(
+            match ($this->getOutputVerbosity()) {
+                0 => OutputInterface::VERBOSITY_NORMAL,
+                default => OutputInterface::VERBOSITY_VERBOSE,
+            }
+        );
     }
 
     public function createOutput($stream = null): StreamOutput

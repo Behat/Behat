@@ -59,7 +59,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
             return $this->isMatchTagFilter($feature, $filterString);
         }
 
-        if (!empty($filterString)) {
+        if ($filterString !== '') {
             return $this->isMatchNameFilter($feature, $filterString);
         }
 

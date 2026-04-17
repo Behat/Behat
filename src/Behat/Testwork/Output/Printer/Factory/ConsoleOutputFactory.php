@@ -37,8 +37,12 @@ class ConsoleOutputFactory extends OutputFactory
      */
     protected function configureOutputStream(OutputInterface $output)
     {
-        $verbosity = $this->getOutputVerbosity() ? OutputInterface::VERBOSITY_VERBOSE : OutputInterface::VERBOSITY_NORMAL;
-        $output->setVerbosity($verbosity);
+        $output->setVerbosity(
+            match ($this->getOutputVerbosity()) {
+                0 => OutputInterface::VERBOSITY_NORMAL,
+                default => OutputInterface::VERBOSITY_VERBOSE,
+            }
+        );
 
         if (null !== $this->isOutputDecorated()) {
             $output->getFormatter()->setDecorated($this->isOutputDecorated());
