@@ -92,7 +92,7 @@ final class ProgressStepPrinter implements StepPrinter
 
         $printer->writeln("\n" . $result->getStepDefinition()->getPath() . ':');
         $callResult = $result->getCallResult();
-        $pad = (fn ($line): string => sprintf(
+        $pad = (fn (string $line): string => sprintf(
             '  | {+stdout}%s{-stdout}',
             $line
         ));
