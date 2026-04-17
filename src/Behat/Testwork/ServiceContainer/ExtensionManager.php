@@ -75,11 +75,9 @@ final class ExtensionManager
     /**
      * Returns specific extension by its name.
      *
-     * @param string $key
-     *
      * @return Extension|null
      */
-    public function getExtension($key)
+    public function getExtension(string $key)
     {
         return $this->extensions[$key] ?? null;
     }

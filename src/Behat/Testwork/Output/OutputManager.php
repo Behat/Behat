@@ -47,10 +47,8 @@ final class OutputManager
 
     /**
      * Checks if formatter is registered.
-     *
-     * @param string $name
      */
-    public function isFormatterRegistered($name): bool
+    public function isFormatterRegistered(string $name): bool
     {
         return isset($this->formatters[$name]);
     }
