@@ -26,10 +26,7 @@ class StreamOutputPrinter implements OutputPrinter
     ) {
     }
 
-    /**
-     * @return OutputFactory
-     */
-    protected function getOutputFactory()
+    protected function getOutputFactory(): OutputFactory
     {
         return $this->outputFactory;
     }
