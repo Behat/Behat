@@ -48,7 +48,7 @@ interface Callee
      *
      * @phpstan-return TBehatCallable
      */
-    public function getCallable();
+    public function getCallable(): callable|array;
 
     /**
      * Returns callable reflection.

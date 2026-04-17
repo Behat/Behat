@@ -23,14 +23,11 @@ final class TranslatedDefinition implements Stringable, Definition
 {
     /**
      * Initialises translated definition.
-     *
-     * @param string     $translatedPattern
-     * @param string     $language
      */
     public function __construct(
         private readonly Definition $definition,
-        private $translatedPattern,
-        private $language,
+        private string $translatedPattern,
+        private string $language,
     ) {
     }
 
@@ -54,10 +51,8 @@ final class TranslatedDefinition implements Stringable, Definition
 
     /**
      * Returns language definition was translated to.
-     *
-     * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
@@ -82,7 +77,7 @@ final class TranslatedDefinition implements Stringable, Definition
         return $this->definition->isAnInstanceMethod();
     }
 
-    public function getCallable()
+    public function getCallable(): callable|array
     {
         return $this->definition->getCallable();
     }

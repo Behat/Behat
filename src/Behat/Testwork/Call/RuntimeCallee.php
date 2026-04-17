@@ -71,7 +71,7 @@ class RuntimeCallee implements Callee
      *
      * @return TBehatCallable
      */
-    public function getCallable()
+    public function getCallable(): callable|array
     {
         return $this->callable;
     }
