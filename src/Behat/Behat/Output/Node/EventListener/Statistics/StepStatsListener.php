@@ -70,10 +70,8 @@ final class StepStatsListener implements EventListener
 
     /**
      * Removes current feature file path from the ivar on feature AFTER event.
-     *
-     * @param string $eventName
      */
-    private function forgetCurrentFeaturePathOnAfterFeatureEvent($eventName): void
+    private function forgetCurrentFeaturePathOnAfterFeatureEvent(string $eventName): void
     {
         if (FeatureTested::AFTER !== $eventName) {
             return;
@@ -95,7 +93,7 @@ final class StepStatsListener implements EventListener
         $this->scenarioPath = sprintf('%s:%s', $this->currentFeaturePath, $event->getScenario()->getLine());
     }
 
-    private function forgetScenarioOnAfterFeatureEvent($eventName): void
+    private function forgetScenarioOnAfterFeatureEvent(string $eventName): void
     {
         if (ScenarioTested::AFTER !== $eventName) {
             return;

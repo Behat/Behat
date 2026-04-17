@@ -115,11 +115,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
      *
-     * @param string|int $argumentIndex
-     *
      * @return string|null
      */
-    private function getParameterClassNameByIndex(DefinitionCall $definitionCall, $argumentIndex)
+    private function getParameterClassNameByIndex(DefinitionCall $definitionCall, int|string $argumentIndex)
     {
         $parameters = array_filter(
             array_filter(
@@ -149,11 +147,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Returns appropriate closure for filtering parameter by index.
      *
-     * @param string|int $index
-     *
      * @return Closure
      */
-    private function hasIndex($index)
+    private function hasIndex(int|string $index)
     {
         return is_string($index) ? $this->hasName($index) : $this->hasPosition($index);
     }
@@ -171,11 +167,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Returns closure to filter parameter by position.
      *
-     * @param int $index
-     *
      * @return Closure
      */
-    private function hasPosition($index)
+    private function hasPosition(int $index)
     {
         return fn (ReflectionParameter $parameter): bool => $index === $parameter->getPosition();
     }

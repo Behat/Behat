@@ -86,10 +86,7 @@ final class TurnipPatternPolicy implements PatternPolicy
         return $this->regexCache[$pattern];
     }
 
-    /**
-     * @param string $pattern
-     */
-    private function createTransformedRegex($pattern): string
+    private function createTransformedRegex(string $pattern): string
     {
         $regex = preg_quote($pattern, '/');
 

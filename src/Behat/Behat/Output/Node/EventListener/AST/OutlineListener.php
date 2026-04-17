@@ -97,10 +97,8 @@ final class OutlineListener implements EventListener
 
     /**
      * Prints example footer on example AFTER event.
-     *
-     * @param string    $eventName
      */
-    private function printExampleFooterOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName): void
+    private function printExampleFooterOnAfterExampleEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;

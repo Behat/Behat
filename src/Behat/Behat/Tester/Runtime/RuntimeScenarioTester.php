@@ -69,10 +69,8 @@ final class RuntimeScenarioTester implements ScenarioTester
 
     /**
      * Tests background of the provided feature against provided environment.
-     *
-     * @param bool     $skip
      */
-    private function testBackground(Environment $env, FeatureNode $feature, $skip): TestWithSetupResult
+    private function testBackground(Environment $env, FeatureNode $feature, bool $skip): TestWithSetupResult
     {
         $setup = $this->backgroundTester->setUp($env, $feature, $skip);
         $skipSetup = !$setup->isSuccessful() || $skip;

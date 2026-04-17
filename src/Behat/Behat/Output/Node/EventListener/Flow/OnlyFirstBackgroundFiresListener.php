@@ -59,10 +59,8 @@ final class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Flushes state if the event is the BEFORE feature.
-     *
-     * @param string $eventName
      */
-    private function flushStatesIfBeginningOfTheFeature($eventName): void
+    private function flushStatesIfBeginningOfTheFeature(string $eventName): void
     {
         if (FeatureTested::BEFORE !== $eventName) {
             return;
@@ -74,10 +72,8 @@ final class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Marks beginning or end of the background.
-     *
-     * @param string $eventName
      */
-    private function markBeginningOrEndOfTheBackground($eventName): void
+    private function markBeginningOrEndOfTheBackground(string $eventName): void
     {
         if (BackgroundTested::BEFORE === $eventName) {
             $this->inBackground = true;
@@ -90,10 +86,8 @@ final class OnlyFirstBackgroundFiresListener implements EventListener
 
     /**
      * Marks first background printed.
-     *
-     * @param string $eventName
      */
-    private function markFirstBackgroundPrintedAfterBackground($eventName): void
+    private function markFirstBackgroundPrintedAfterBackground(string $eventName): void
     {
         if (BackgroundTested::AFTER !== $eventName) {
             return;

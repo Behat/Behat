@@ -81,10 +81,8 @@ final class RuntimeStepTester implements StepTester
 
     /**
      * Tests found definition.
-     *
-     * @param bool      $skip
      */
-    private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, $skip): StepResult
+    private function testDefinition(Environment $env, FeatureNode $feature, StepNode $step, SearchResult $search, bool $skip): StepResult
     {
         if (!$search->hasMatch()) {
             return new UndefinedStepResult();

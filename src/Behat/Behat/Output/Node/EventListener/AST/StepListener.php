@@ -59,10 +59,8 @@ final class StepListener implements EventListener
 
     /**
      * Removes scenario from the ivar on scenario/background/example AFTER event.
-     *
-     * @param string $eventName
      */
-    private function forgetScenarioOnAfterEvent($eventName): void
+    private function forgetScenarioOnAfterEvent(string $eventName): void
     {
         if (!in_array($eventName, [ScenarioTested::AFTER, ExampleTested::AFTER])) {
             return;

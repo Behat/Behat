@@ -41,10 +41,8 @@ final class StatisticsListener implements EventListener
 
     /**
      * Starts timer on exercise BEFORE event.
-     *
-     * @param string $eventName
      */
-    private function startTimerOnBeforeExercise($eventName): void
+    private function startTimerOnBeforeExercise(string $eventName): void
     {
         if (ExerciseCompleted::BEFORE !== $eventName) {
             return;
@@ -55,10 +53,8 @@ final class StatisticsListener implements EventListener
 
     /**
      * Prints statistics on after exercise event.
-     *
-     * @param string    $eventName
      */
-    private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, $eventName): void
+    private function printStatisticsOnAfterExerciseEvent(Formatter $formatter, string $eventName): void
     {
         if (ExerciseCompleted::AFTER !== $eventName) {
             return;

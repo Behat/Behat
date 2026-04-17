@@ -117,10 +117,8 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Removes outline from the ivar on outline AFTER event.
-     *
-     * @param string $eventName
      */
-    private function forgetOutlineOnAfterOutlineEvent($eventName): void
+    private function forgetOutlineOnAfterOutlineEvent(string $eventName): void
     {
         if (OutlineTested::AFTER !== $eventName) {
             return;
@@ -131,10 +129,8 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Prints outline header (if has not been printed yet) on example AFTER event.
-     *
-     * @param string    $eventName
      */
-    private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName): void
+    private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
@@ -153,10 +149,8 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Prints example row on example AFTER event.
-     *
-     * @param string    $eventName
      */
-    private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, $eventName): void
+    private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;

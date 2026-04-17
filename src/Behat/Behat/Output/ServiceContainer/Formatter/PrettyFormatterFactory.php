@@ -419,7 +419,7 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Creates root listener definition.
      */
-    private function rearrangeBackgroundEvents($listener): Definition
+    private function rearrangeBackgroundEvents(Reference $listener): Definition
     {
         return new Definition(FirstBackgroundFiresFirstListener::class, [
             new Definition(OnlyFirstBackgroundFiresListener::class, [
@@ -431,11 +431,9 @@ final class PrettyFormatterFactory implements FormatterFactory
     /**
      * Creates contextual proxy listener.
      *
-     * @param string       $beforeEventName
-     * @param string       $afterEventName
      * @param Definition[] $listeners
      */
-    private function proxySiblingEvents($beforeEventName, $afterEventName, array $listeners): Definition
+    private function proxySiblingEvents(string $beforeEventName, string $afterEventName, array $listeners): Definition
     {
         return new Definition(
             FireOnlySiblingsListener::class,
@@ -449,10 +447,8 @@ final class PrettyFormatterFactory implements FormatterFactory
 
     /**
      * Creates contextual proxy listener.
-     *
-     * @param string $name
      */
-    private function proxyEventsIfParameterIsSet($name, $value, Definition $listener): Definition
+    private function proxyEventsIfParameterIsSet(string $name, bool $value, Definition $listener): Definition
     {
         return new Definition(
             FireOnlyIfFormatterParameterListener::class,
