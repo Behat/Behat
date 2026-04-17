@@ -41,10 +41,7 @@ class EventDispatcherExtension implements Extension
      */
     public const SUBSCRIBER_TAG = 'event_dispatcher.subscriber';
 
-    /**
-     * @var ServiceProcessor
-     */
-    protected $processor;
+    protected ServiceProcessor $processor;
 
     /**
      * Initializes extension.

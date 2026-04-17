@@ -25,6 +25,9 @@
         <!-- Addition of strict return types is expected throughout the 4.0 release -->
         <ignored-regex>#CHANGED: The return type of .+? changed from no type to#</ignored-regex>
 
+        <!-- Addition of strict property types is expected throughout the 4.0 release -->
+        <ignored-regex>#CHANGED: Type of property .+? changed from having no type to#</ignored-regex>
+
         <!--
         When running in the 4.x branch, the BC checker installs symfony 8, therefore reports BC breaks in symfony
         classes that we extend (since the 3.x release it compares to installed symfony 7)
