@@ -77,7 +77,7 @@ final class SuiteExtension implements Extension
             ->prototype('array')
                 ->beforeNormalization()
                     ->ifTrue(fn ($suite): bool => is_array($suite) && count($suite))
-                    ->then(function ($suite) {
+                    ->then(function (array $suite): array {
                         $suite['settings'] ??= [];
 
                         foreach ($suite as $key => $val) {
