@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.31.0] - 2025-04-18
+
+### Fixed
+
+* Callee description can be null by @acoulton in [#1821](https://github.com/Behat/Behat/pull/1821)
+* Always populate language in `TranslatedDefinition` by @acoulton in [#1826](https://github.com/Behat/Behat/pull/1826)
+* Return type on ScenarioLikeTested, and add strict returns to `final` events by @acoulton in [#1816](https://github.com/Behat/Behat/pull/1816)
+* Type hinting / safety of TableColumnTransformation by @acoulton in [#1823](https://github.com/Behat/Behat/pull/1823)
+* Incorrect not-null string phpdoc typehints by @acoulton in [#1825](https://github.com/Behat/Behat/pull/1825)
+
+## Internal
+
+* Add more backwards-compatible strict types to private / final properties, method parameters, and method returns
+  By @acoulton in [#1817](https://github.com/Behat/Behat/pull/1817) and [#1818](https://github.com/Behat/Behat/pull/1818)
+* Ignore PHPUnit security advisory related to PHP ini Argument injection
+  [PKSA-5jz8-6tcw-pbk4](https://github.com/advisories/GHSA-qrr6-mg7r-m243) has minimal impact in our CI environment.
+  Contributors installing dev dependencies locally should be aware of the potential risk if an attacker can gain write
+  access to phpunit.xml or shell execution.
+  By @acoulton in [#1827](https://github.com/Behat/Behat/pull/1827)
+
 ## [3.30.0] - 2026-03-26
 
 ### Changed
@@ -1481,6 +1501,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.30.0]: https://github.com/Behat/Behat/compare/v3.30.0...v3.31.0
 [3.30.0]: https://github.com/Behat/Behat/compare/v3.29.0...v3.30.0
 [3.29.0]: https://github.com/Behat/Behat/compare/v3.28.0...v3.29.0
 [3.28.0]: https://github.com/Behat/Behat/compare/v3.27.0...v3.28.0
