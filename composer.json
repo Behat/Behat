@@ -82,6 +82,11 @@
 
     "bin": ["bin/behat"],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "audit": {
+            "ignore": {
+                "PKSA-5jz8-6tcw-pbk4": "PHPunit is a dev dependency, we don't set custom .ini values in our PHPUnit config, and we only run CI of trusted PRs in ephemeral environments."
+            }
+        }
     }
 }
