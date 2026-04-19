@@ -1501,7 +1501,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
-[3.30.0]: https://github.com/Behat/Behat/compare/v3.30.0...v3.31.0
+[3.31.0]: https://github.com/Behat/Behat/compare/v3.30.0...v3.31.0
 [3.30.0]: https://github.com/Behat/Behat/compare/v3.29.0...v3.30.0
 [3.29.0]: https://github.com/Behat/Behat/compare/v3.28.0...v3.29.0
 [3.28.0]: https://github.com/Behat/Behat/compare/v3.27.0...v3.28.0
