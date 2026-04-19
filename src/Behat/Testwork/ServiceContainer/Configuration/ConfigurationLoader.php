@@ -37,47 +37,39 @@ final class ConfigurationLoader
      * @param string|null $configurationPath       Configuration file path
      */
     public function __construct(
-        private $environmentVariable = null,
-        private $configurationPath = null,
+        private ?string $environmentVariable = null,
+        private ?string $configurationPath = null,
     ) {
     }
 
     /**
      * Sets environment variable name.
-     *
-     * @param string|null $variable
      */
-    public function setEnvironmentVariableName($variable): void
+    public function setEnvironmentVariableName(?string $variable): void
     {
         $this->environmentVariable = $variable;
     }
 
     /**
      * Returns environment variable name.
-     *
-     * @return string|null
      */
-    public function getEnvironmentVariableName()
+    public function getEnvironmentVariableName(): ?string
     {
         return $this->environmentVariable;
     }
 
     /**
      * Sets configuration file path.
-     *
-     * @param string|null $path
      */
-    public function setConfigurationFilePath($path): void
+    public function setConfigurationFilePath(?string $path): void
     {
         $this->configurationPath = $path;
     }
 
     /**
      * Returns configuration file path.
-     *
-     * @return string|null
      */
-    public function getConfigurationFilePath()
+    public function getConfigurationFilePath(): ?string
     {
         return $this->configurationPath;
     }

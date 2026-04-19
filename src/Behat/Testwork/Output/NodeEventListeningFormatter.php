@@ -47,10 +47,8 @@ final class NodeEventListeningFormatter implements Formatter
 
     /**
      * Proxies event to the listener.
-     *
-     * @param string|null $eventName
      */
-    public function listenEvent(Event $event, $eventName = null): void
+    public function listenEvent(Event $event, ?string $eventName = null): void
     {
         if (null === $eventName) {
             $eventName = method_exists($event, 'getName') ? $event->getName() : $event::class;

@@ -21,14 +21,12 @@ final class CallResult
 {
     /**
      * Initializes call result.
-     *
-     * @param string|null $stdOut
      */
     public function __construct(
         private readonly Call $call,
         private $return,
         private readonly ?Exception $exception = null,
-        private $stdOut = null,
+        private ?string $stdOut = null,
     ) {
     }
 
@@ -77,10 +75,8 @@ final class CallResult
 
     /**
      * Returns stdOut produced by call (if any).
-     *
-     * @return string|null
      */
-    public function getStdOut()
+    public function getStdOut(): ?string
     {
         return $this->stdOut;
     }

@@ -27,8 +27,6 @@ final class DefinitionCall extends EnvironmentCall
 {
     /**
      * Initializes definition call.
-     *
-     * @param int|null $errorReportingLevel
      */
     public function __construct(
         Environment $environment,
@@ -36,7 +34,7 @@ final class DefinitionCall extends EnvironmentCall
         private readonly StepNode $step,
         Definition $definition,
         array $arguments,
-        $errorReportingLevel = null,
+        ?int $errorReportingLevel = null,
     ) {
         parent::__construct($environment, $definition, $arguments, $errorReportingLevel);
     }

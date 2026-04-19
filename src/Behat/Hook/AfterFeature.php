@@ -22,11 +22,9 @@ final class AfterFeature implements Hook
 {
     /**
      * @api
-     *
-     * @param string|null $filterString
      */
     public function __construct(
-        public $filterString = null,
+        public ?string $filterString = null,
     ) {
     }
 

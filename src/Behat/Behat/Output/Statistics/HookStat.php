@@ -25,15 +25,12 @@ final class HookStat
 
     /**
      * Initializes hook stat.
-     *
-     * @param string|null $error
-     * @param string|null $stdOut
      */
     public function __construct(
         private readonly string $name,
         private readonly string $path,
-        private $error = null,
-        private $stdOut = null,
+        private ?string $error = null,
+        private ?string $stdOut = null,
     ) {
     }
 
@@ -54,10 +51,8 @@ final class HookStat
 
     /**
      * Returns hook standard output (if has some).
-     *
-     * @return string|null
      */
-    public function getStdOut()
+    public function getStdOut(): ?string
     {
         return $this->stdOut;
     }

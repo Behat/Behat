@@ -48,10 +48,8 @@ abstract class ApplicationFactory
 
     /**
      * Returns user config path.
-     *
-     * @return string|null
      */
-    abstract protected function getConfigPath();
+    abstract protected function getConfigPath(): ?string;
 
     /**
      * Creates application instance.

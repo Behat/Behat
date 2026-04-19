@@ -23,14 +23,12 @@ class EnvironmentCall implements Call
 {
     /**
      * Initializes call.
-     *
-     * @param int|null $errorReportingLevel
      */
     public function __construct(
         private readonly Environment $environment,
         private readonly Callee $callee,
         private readonly array $arguments,
-        private $errorReportingLevel = null,
+        private ?int $errorReportingLevel = null,
     ) {
     }
 

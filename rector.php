@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Ingenerator\RiskyRectorRules\AddStrictTypes\AddParamTypeBasedOnParentClassMethodRector;
-use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddMethodTypeConfig;
 use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddParamTypeFromPhpDocRector;
 use Ingenerator\RiskyRectorRules\PhpDocToStrictTypes\AddReturnTypeFromPhpDocRector;
 use Rector\Config\RectorConfig;
@@ -18,11 +17,11 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withRootFiles()
-    ->withPreparedSets(
-        codeQuality: true,
-        typeDeclarations: true,
-    )
-    ->withPhpSets(php82: true)
+//    ->withPreparedSets(
+//        codeQuality: true,
+//        typeDeclarations: true,
+//    )
+//    ->withPhpSets(php82: true)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
@@ -32,9 +31,9 @@ return RectorConfig::configure()
     ->withImportNames(
         removeUnusedImports: true,
     )
-    ->withConfiguredRule(AddParamTypeFromPhpDocRector::class, [AddMethodTypeConfig::INTERFACES_ONLY => true])
-    ->withConfiguredRule(AddReturnTypeFromPhpDocRector::class, [AddMethodTypeConfig::INTERFACES_ONLY => true])
     ->withRules([
+        AddParamTypeFromPhpDocRector::class,
+        AddReturnTypeFromPhpDocRector::class,
         AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
         AddParamTypeBasedOnParentClassMethodRector::class,
     ])

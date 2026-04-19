@@ -157,10 +157,8 @@ final class SuiteWithContextsSetup implements SuiteSetup
 
     /**
      * Generates class using registered class generators.
-     *
-     * @return string|null
      */
-    private function generateClass(Suite $suite, string $class)
+    private function generateClass(Suite $suite, string $class): ?string
     {
         $content = null;
         foreach ($this->classGenerators as $generator) {

@@ -70,11 +70,9 @@ final class BuiltInServiceContainer implements PsrContainerInterface
     /**
      * Gets and validates a service configuration for a service with given ID.
      *
-     * @return array|string
-     *
      * @throws WrongServicesConfigurationException
      */
-    private function getAndValidateServiceSchema(string $id)
+    private function getAndValidateServiceSchema(string $id): array|string
     {
         $schema = $this->schema[$id];
 
@@ -114,10 +112,8 @@ final class BuiltInServiceContainer implements PsrContainerInterface
 
     /**
      * Gets and validates a factory method.
-     *
-     * @return ReflectionMethod|null
      */
-    private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema)
+    private function getAndValidateFactoryMethod(ReflectionClass $reflection, array $schema): ?ReflectionMethod
     {
         if (!isset($schema['factory_method'])) {
             return null;

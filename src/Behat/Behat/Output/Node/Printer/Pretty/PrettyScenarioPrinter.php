@@ -82,10 +82,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
 
     /**
      * Prints scenario title (first line of long title).
-     *
-     * @param string|null   $longTitle
      */
-    private function printTitle(OutputPrinter $printer, $longTitle): void
+    private function printTitle(OutputPrinter $printer, ?string $longTitle): void
     {
         $description = explode("\n", $longTitle ?? '');
         $title = array_shift($description);
@@ -97,10 +95,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
 
     /**
      * Prints scenario description (other lines of long title).
-     *
-     * @param string|null   $longTitle
      */
-    private function printDescription(OutputPrinter $printer, $longTitle): void
+    private function printDescription(OutputPrinter $printer, ?string $longTitle): void
     {
         $lines = explode("\n", $longTitle ?? '');
         array_shift($lines);

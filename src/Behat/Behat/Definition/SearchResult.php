@@ -19,12 +19,10 @@ final class SearchResult
 {
     /**
      * Registers search match.
-     *
-     * @param string|null $matchedText
      */
     public function __construct(
         private readonly ?Definition $definition = null,
-        private $matchedText = null,
+        private ?string $matchedText = null,
         private readonly ?array $arguments = null,
     ) {
     }
@@ -47,10 +45,8 @@ final class SearchResult
 
     /**
      * Returns matched text.
-     *
-     * @return string|null
      */
-    public function getMatchedText()
+    public function getMatchedText(): ?string
     {
         return $this->matchedText;
     }

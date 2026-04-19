@@ -56,8 +56,6 @@ final class ServicesResolver implements CallFilter
     /**
      * Gets container from the call.
      *
-     * @return ContainerInterface|null
-     *
      * @throws UnsupportedCallException if given call is not EnvironmentCall or environment is not ServiceContainerEnvironment
      */
     private function getContainer(Call $call): ?ContainerInterface

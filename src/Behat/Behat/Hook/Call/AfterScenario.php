@@ -25,11 +25,9 @@ final class AfterScenario extends RuntimeScenarioHook
     /**
      * Initializes hook.
      *
-     * @param string|null $filterString
-     *
      * @phpstan-param TBehatCallable $callable
      */
-    public function __construct($filterString, callable|array $callable, ?string $description = null)
+    public function __construct(?string $filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct(ScenarioScope::AFTER, $filterString, $callable, $description);
     }

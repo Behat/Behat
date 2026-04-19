@@ -112,10 +112,8 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
 
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
-     *
-     * @return string|null
      */
-    private function getParameterClassNameByIndex(DefinitionCall $definitionCall, int|string $argumentIndex)
+    private function getParameterClassNameByIndex(DefinitionCall $definitionCall, int|string $argumentIndex): ?string
     {
         $parameters = array_filter(
             array_filter(

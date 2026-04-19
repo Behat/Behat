@@ -21,12 +21,10 @@ use Attribute;
 final class Then implements Definition
 {
     /**
-     * @param string|null $pattern
-     *
      * @api
      */
     public function __construct(
-        public $pattern = null,
+        public ?string $pattern = null,
     ) {
     }
 

@@ -25,11 +25,9 @@ final class AfterFeature extends RuntimeFeatureHook
     /**
      * Initializes hook.
      *
-     * @param string|null $filterString
-     *
      * @phpstan-param TBehatCallable $callable
      */
-    public function __construct($filterString, callable|array $callable, ?string $description = null)
+    public function __construct(?string $filterString, callable|array $callable, ?string $description = null)
     {
         parent::__construct(FeatureScope::AFTER, $filterString, $callable, $description);
     }

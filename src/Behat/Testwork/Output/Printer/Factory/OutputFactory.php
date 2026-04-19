@@ -39,10 +39,8 @@ abstract class OutputFactory
 
     /**
      * Returns output path.
-     *
-     * @return string|null
      */
-    public function getOutputPath()
+    public function getOutputPath(): ?string
     {
         return $this->outputPath;
     }
@@ -73,10 +71,8 @@ abstract class OutputFactory
 
     /**
      * Returns output decoration status.
-     *
-     * @return bool|null
      */
-    public function isOutputDecorated()
+    public function isOutputDecorated(): ?bool
     {
         return $this->outputDecorated;
     }

@@ -21,12 +21,10 @@ use Attribute;
 final class BeforeScenario implements Hook
 {
     /**
-     * @param string|null $filterString
-     *
      * @api
      */
     public function __construct(
-        public $filterString = null,
+        public ?string $filterString = null,
     ) {
     }
 

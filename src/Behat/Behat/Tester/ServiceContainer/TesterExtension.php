@@ -220,10 +220,8 @@ final class TesterExtension extends BaseExtension
 
     /**
      * Loads rerun controller.
-     *
-     * @param string|null $cachePath
      */
-    protected function loadRerunController(ContainerBuilder $container, $cachePath): void
+    protected function loadRerunController(ContainerBuilder $container, ?string $cachePath): void
     {
         $definition = new Definition(RerunController::class, [
             new Reference(EventDispatcherExtension::DISPATCHER_ID),
