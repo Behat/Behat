@@ -7,7 +7,7 @@
 .github export-ignore
 .php-cs-fixer.dist.php export-ignore
 AGENTS.md export-ignore
-behat.yml.dist
+behat.dist.php export-ignore
 box.json export-ignore
 CONTRIBUTING.md export-ignore
 phpstan.dist.neon export-ignore
