@@ -17,6 +17,8 @@ use Behat\Gherkin\Node\ScenarioLikeInterface;
  * Represents an event of scenario-like structure (Scenario, Background, Example).
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @deprecated This will be removed in 4.0, in favour of separate inheritance chains for `ScenarioTested` and `BackgroundTested` events
  */
 interface ScenarioLikeTested extends GherkinNodeTested
 {

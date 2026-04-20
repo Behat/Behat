@@ -12,6 +12,7 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -54,6 +55,8 @@ final class AfterBackgroundTested extends BackgroundTested implements AfterTeste
      */
     public function getScenario(): BackgroundNode
     {
+        DeprecationCollector::trigger(__METHOD__.' is deprecated - use getBackground() instead. This method and the ScenarioLikeTested interface will be removed in 4.0');
+
         return $this->background;
     }
 

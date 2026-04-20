@@ -12,12 +12,14 @@ namespace Behat\Behat\Output\Node\EventListener\AST;
 
 use Behat\Behat\EventDispatcher\Event\AfterStepSetup;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
+use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
 use Behat\Gherkin\Node\ScenarioLikeInterface;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -29,7 +31,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class StepListener implements EventListener
 {
-    private ?ScenarioLikeInterface $scenario = null;
+    private ?ScenarioLikeInterface $scenarioOrBackground = null;
 
     public function __construct(
         private readonly StepPrinter $stepPrinter,
@@ -54,7 +56,14 @@ final class StepListener implements EventListener
             return;
         }
 
-        $this->scenario = $event->getScenario();
+        if (!$event instanceof BackgroundTested && !$event instanceof ScenarioTested) {
+            DeprecationCollector::trigger(sprintf(
+                '%s implements the ScenarioLikeTested interface which is deprecated and will be removed in 4.0.',
+                $event::class
+            ));
+        }
+
+        $this->scenarioOrBackground = $event instanceof BackgroundTested ? $event->getBackground() : $event->getScenario();
     }
 
     /**
@@ -68,7 +77,7 @@ final class StepListener implements EventListener
             return;
         }
 
-        $this->scenario = null;
+        $this->scenarioOrBackground = null;
     }
 
     private function printStepSetupOnBeforeEvent(Formatter $formatter, Event $event): void
@@ -91,7 +100,7 @@ final class StepListener implements EventListener
             return;
         }
 
-        $this->stepPrinter->printStep($formatter, $this->scenario, $event->getStep(), $event->getTestResult());
+        $this->stepPrinter->printStep($formatter, $this->scenarioOrBackground, $event->getStep(), $event->getTestResult());
 
         if ($this->setupPrinter instanceof SetupPrinter) {
             $this->setupPrinter->printTeardown($formatter, $event->getTeardown());

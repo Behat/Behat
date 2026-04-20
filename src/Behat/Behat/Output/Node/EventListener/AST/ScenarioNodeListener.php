@@ -10,9 +10,12 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\BackgroundTested;
 use Behat\Behat\EventDispatcher\Event\ScenarioLikeTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\EventDispatcher\Event\AfterSetup;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
@@ -40,6 +43,13 @@ final class ScenarioNodeListener implements EventListener
             return;
         }
 
+        if (!$event instanceof BackgroundTested && !$event instanceof ScenarioTested) {
+            DeprecationCollector::trigger(sprintf(
+                '%s implements the ScenarioLikeTested interface which is deprecated and will be removed in 4.0.',
+                $event::class
+            ));
+        }
+
         $this->printHeaderOnBeforeEvent($formatter, $event, $eventName);
         $this->printFooterOnAfterEvent($formatter, $event, $eventName);
     }
@@ -57,7 +67,11 @@ final class ScenarioNodeListener implements EventListener
             $this->setupPrinter->printSetup($formatter, $event->getSetup());
         }
 
-        $this->scenarioPrinter->printHeader($formatter, $event->getFeature(), $event->getScenario());
+        $this->scenarioPrinter->printHeader(
+            $formatter,
+            $event->getFeature(),
+            $event instanceof BackgroundTested ? $event->getBackground() : $event->getScenario(),
+        );
     }
 
     /**
