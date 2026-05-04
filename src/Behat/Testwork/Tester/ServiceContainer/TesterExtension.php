@@ -106,7 +106,7 @@ abstract class TesterExtension implements Extension
         $this->loadSpecificationTester($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $this->processExerciseWrappers($container);
         $this->processSuiteTesterWrappers($container);

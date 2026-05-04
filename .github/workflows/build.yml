@@ -57,6 +57,11 @@ jobs:
             composer-mode: update
             symfony-version: '6.4'
 
+          - php: 8.3
+            os: ubuntu-latest
+            composer-mode: update
+            symfony-version: '8.0'
+
     steps:
       - uses: actions/checkout@v4
 

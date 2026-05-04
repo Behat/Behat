@@ -56,7 +56,7 @@ class HookExtension implements Extension
         $this->loadHookableTesters($container);
     }
 
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
     }
 
