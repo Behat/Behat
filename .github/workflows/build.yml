@@ -57,7 +57,12 @@ jobs:
             composer-mode: update
             symfony-version: '6.4'
 
-          - php: 8.3
+          - php: 8.4
+            os: ubuntu-latest
+            composer-mode: update
+            symfony-version: '8.0'
+
+          - php: 8.5
             os: ubuntu-latest
             composer-mode: update
             symfony-version: '8.0'
