@@ -115,7 +115,7 @@ final class StepStatsListener implements EventListener
 
         $result = $event->getTestResult();
         $step = $event->getStep();
-        $text = sprintf('%s %s', $step->getKeyword(), $step->getText());
+        $text = $step->getFullText();
         $exception = $this->getStepException($result);
 
         $path = $this->getStepPath($event, $exception);

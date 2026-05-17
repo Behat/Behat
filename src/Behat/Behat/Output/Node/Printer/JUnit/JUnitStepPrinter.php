@@ -41,7 +41,7 @@ class JUnitStepPrinter implements StepPrinter
         /** @var JUnitOutputPrinter $outputPrinter */
         $outputPrinter = $formatter->getOutputPrinter();
 
-        $message = $step->getKeyword() . ' ' . $step->getText();
+        $message = $step->getFullText();
 
         if ($result instanceof ExceptionResult && $result->hasException()) {
             $message .= ': ' . $this->exceptionPresenter->presentException(

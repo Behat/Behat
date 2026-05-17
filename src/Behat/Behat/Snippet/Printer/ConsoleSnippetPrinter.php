@@ -77,7 +77,7 @@ class ConsoleSnippetPrinter implements SnippetPrinter
         $this->output->writeln('--- ' . $message . PHP_EOL);
 
         foreach ($steps as $step) {
-            $this->output->writeln(sprintf('    <snippet_undefined>%s %s</snippet_undefined>', $step->getKeyword(), $step->getText()));
+            $this->output->writeln(sprintf('    <snippet_undefined>%s</snippet_undefined>', $step->getFullText()));
         }
 
         $this->output->writeln('');

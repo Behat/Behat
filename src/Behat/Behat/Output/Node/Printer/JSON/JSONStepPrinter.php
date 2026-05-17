@@ -36,7 +36,7 @@ final class JSONStepPrinter implements StepPrinter
         $outputPrinter = $formatter->getOutputPrinter();
         assert($outputPrinter instanceof JSONOutputPrinter);
 
-        $message = $step->getKeyword() . ' ' . $step->getText();
+        $message = $step->getFullText();
 
         if ($result instanceof ExceptionResult && $result->hasException()) {
             $message .= ': ' . $this->exceptionPresenter->presentException(

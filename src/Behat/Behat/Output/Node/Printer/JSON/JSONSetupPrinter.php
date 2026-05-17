@@ -58,7 +58,7 @@ final class JSONSetupPrinter implements SetupPrinter
                 $callee = $call->getCallee();
                 $message = $callee->getName();
                 if ($scope instanceof StepScope) {
-                    $message .= ': ' . $scope->getStep()->getKeyword() . ' ' . $scope->getStep()->getText();
+                    $message .= ': ' . $scope->getStep()->getFullText();
                 }
                 $message .= ': ' . $this->exceptionPresenter->presentException(
                     $hookCallResult->getException(),

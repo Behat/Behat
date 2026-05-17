@@ -70,7 +70,7 @@ final class PrettyStepPrinter implements StepPrinter
             }
         }
 
-        $this->printText($formatter->getOutputPrinter(), $step->getKeyword(), $step->getText(), $result);
+        $this->printText($formatter->getOutputPrinter(), $step, $result);
         $this->pathPrinter->printStepPath($formatter, $scenario, $step, $result, mb_strlen($this->indentText, 'utf8'));
         $this->printArguments($formatter, $step->getArguments(), $result);
         $showOutput = $formatter->getParameter(ShowOutputOption::OPTION_NAME);
@@ -83,19 +83,22 @@ final class PrettyStepPrinter implements StepPrinter
 
     /**
      * Prints step text.
-     *
-     * @param string        $stepType
-     * @param string        $stepText
      */
-    private function printText(OutputPrinter $printer, $stepType, $stepText, StepResult $result): void
+    private function printText(OutputPrinter $printer, StepNode $step, StepResult $result): void
     {
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
-            $stepText = $this->textPainter->paintText($stepText, $definition, $result);
+            // We only paint the step text, but we render it as part of the full text (e.g. with the keyword prefix)
+            // The step text is always at the end, so use preg_replace to guarantee that we never modify the keyword
+            // even the edge case that it contains the step text (e.g. in languages with logograms).
+            $stepText = $this->textPainter->paintText($step->getText(), $definition, $result);
+            $fullStepText = preg_replace('/'.preg_quote($step->getText(), '/').'$/', $stepText, $step->getFullText());
+        } else {
+            $fullStepText = $step->getFullText();
         }
 
         $style = $this->resultConverter->convertResultToString($result);
-        $printer->write(sprintf('%s{+%s}%s %s{-%s}', $this->indentText, $style, $stepType, $stepText, $style));
+        $printer->write(sprintf('%s{+%s}%s{-%s}', $this->indentText, $style, $fullStepText, $style));
     }
 
     /**
