@@ -3,8 +3,11 @@
 declare(strict_types=1);
 
 use Behat\Config\Config;
+use Behat\Config\Filter\TagFilter;
+use Behat\Config\GherkinOptions;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
+use Behat\Gherkin\GherkinCompatibilityMode;
 
 $defaultProfile = (new Profile('default'))
     ->withSuite(
@@ -48,6 +51,24 @@ $lsProfile = (new Profile('ls'))
     )
 ;
 
+$parityLegacyProfile = (new Profile('gherkin-parity-legacy'))
+    ->withSuite(
+        (new Suite('default'))
+            ->withContexts('FeatureContext'),
+    )
+    ->withGherkinOptions(
+        (new GherkinOptions())
+            ->withFilter(new TagFilter('@gherkin-parity'))
+            ->withCompatibilityMode(GherkinCompatibilityMode::LEGACY),
+    );
+
+$parityGherkin32Profile = (new Profile('gherkin-parity-gherkin-32', $parityLegacyProfile->toArray()))
+    ->withGherkinOptions(
+        (new GherkinOptions())
+            ->withFilter(new TagFilter('@gherkin-parity'))
+            ->withCompatibilityMode(GherkinCompatibilityMode::GHERKIN_32),
+    );
+
 return (new Config())
     ->withProfile($defaultProfile)
     ->withProfile($multilineProfile)
@@ -55,4 +76,6 @@ return (new Config())
     ->withProfile($backgroundFailingProfile)
     ->withProfile($multipleExamplesProfile)
     ->withProfile($lsProfile)
+    ->withProfile($parityLegacyProfile)
+    ->withProfile($parityGherkin32Profile)
 ;

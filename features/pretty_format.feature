@@ -238,3 +238,47 @@ Feature: Pretty Formatter
       4 scenarios (2 passed, 2 failed)
       8 steps (6 passed, 2 failed)
       """
+
+  Scenario Outline: Consistent output between Gherkin parser compatibility modes
+      When I run behat with the following additional options:
+        | option       | value |
+        | --profile       | gherkin-parity-<compatibility_mode> |
+        | --no-snippets |                                     |
+
+      Then it should fail with:
+        """
+        @gherkin-parity
+        Feature: Parity with basic feature file
+          In order to see that the pretty formatter can handle different gherkin modes
+          As a developer
+          I need to see an example with basic Gherkin syntax
+
+          Background:               # features/gherkin-parity.feature:7
+            Given I have entered 25 # FeatureContext::iHaveEntered()
+
+          Scenario: Simple passing scenario # features/gherkin-parity.feature:11
+            When I add 2                    # FeatureContext::iAdd()
+            Then I must have 27             # FeatureContext::iMustHave()
+
+          Scenario: Simple failing scenario # features/gherkin-parity.feature:15
+            When I add 3                    # FeatureContext::iAdd()
+            Then I must have 30             # FeatureContext::iMustHave()
+              Failed asserting that 28 matches expected '30'.
+
+          @wip @new
+          Scenario: With unknown step # features/gherkin-parity.feature:20
+            When I subtract 15
+            Then I must have 10       # FeatureContext::iMustHave()
+
+        --- Failed scenarios:
+
+            features/gherkin-parity.feature:15 (on line 17)
+
+        3 scenarios (1 passed, 1 failed, 1 undefined)
+        9 steps (6 passed, 1 failed, 1 undefined, 1 skipped)
+        """
+
+    Examples:
+      | compatibility_mode |
+      | legacy             |
+      | gherkin-32         |
