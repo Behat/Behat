@@ -467,7 +467,12 @@ EOL;
         }
 
         throw new UnexpectedValueException(
-            'Expected previous command to ' . strtoupper($success) . ' but got exit code ' . $this->getExitCode()
+            sprintf(
+                "Expected previous command to %s but got exit code %d with output:\n%s",
+                strtoupper($success),
+                $this->getExitCode(),
+                $this->getOutput()
+            )
         );
     }
 
