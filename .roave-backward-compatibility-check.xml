@@ -14,5 +14,11 @@
         <ignored-regex>#CHANGED: The return type of Behat\\Testwork\\Environment\\Call\\EnvironmentCall\#getEnvironment\(\) changed#</ignored-regex>
         <ignored-regex>#CHANGED: The return type of Behat\\Testwork\\Environment\\Call\\EnvironmentCall\#getCallee\(\) changed#</ignored-regex>
         <ignored-regex>#CHANGED: The return type of Behat\\Testwork\\Environment\\Call\\EnvironmentCall\#getArguments\(\) changed#</ignored-regex>
+
+        <!-- The default indentation has changed to produce the same output in most cases as previous versions.
+             We officially don't support configuring this, if end-users are creating an instance with a different
+             indentation then output may change slightly but we don't guarantee human-readable output will be identical
+             between versions anyway. -->
+        <ignored-regex>#CHANGED: Default parameter value for parameter \$subIndentation of Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyScenarioPrinter\#__construct\(\) changed from 2 to 4#</ignored-regex>
     </baseline>
 </roave-bc-check>
