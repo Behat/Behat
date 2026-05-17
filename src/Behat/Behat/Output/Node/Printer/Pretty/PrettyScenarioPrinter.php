@@ -42,7 +42,7 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     public function __construct(
         private readonly PrettyPathPrinter $pathPrinter,
         $indentation = 2,
-        $subIndentation = 2,
+        $subIndentation = 4,
     ) {
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
