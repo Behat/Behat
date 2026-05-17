@@ -4,11 +4,16 @@ Feature: Parity with basic feature file
     As a developer
 I need to see an example with basic Gherkin syntax
 
-  Background:
+  Background: That sets up the calculator
+      to have a starting number
+     for every scenario
+
     Given I have entered 25
 
 
   Scenario: Simple passing scenario
+      describing what happens when
+       numbers are correctly added.
     When  I add 2
     Then  I must have 27
 

@@ -253,26 +253,30 @@ Feature: Pretty Formatter
             As a developer
           I need to see an example with basic Gherkin syntax
 
-          Background:               # features/gherkin-parity.feature:7
-            Given I have entered 25 # FeatureContext::iHaveEntered()
+          Background: That sets up the calculator # features/gherkin-parity.feature:7
+              to have a starting number
+             for every scenario
+            Given I have entered 25               # FeatureContext::iHaveEntered()
 
-          Scenario: Simple passing scenario # features/gherkin-parity.feature:11
+          Scenario: Simple passing scenario # features/gherkin-parity.feature:14
+              describing what happens when
+               numbers are correctly added.
             When I add 2                    # FeatureContext::iAdd()
             Then I must have 27             # FeatureContext::iMustHave()
 
-          Scenario: Simple failing scenario # features/gherkin-parity.feature:15
+          Scenario: Simple failing scenario # features/gherkin-parity.feature:20
             When I add 3                    # FeatureContext::iAdd()
             Then I must have 30             # FeatureContext::iMustHave()
               Failed asserting that 28 matches expected '30'.
 
           @wip @new
-          Scenario: With unknown step # features/gherkin-parity.feature:20
+          Scenario: With unknown step # features/gherkin-parity.feature:25
             When I subtract 15
             Then I must have 10       # FeatureContext::iMustHave()
 
         --- Failed scenarios:
 
-            features/gherkin-parity.feature:15 (on line 17)
+            features/gherkin-parity.feature:20 (on line 22)
 
         3 scenarios (1 passed, 1 failed, 1 undefined)
         9 steps (6 passed, 1 failed, 1 undefined, 1 skipped)
