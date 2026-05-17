@@ -274,12 +274,24 @@ Feature: Pretty Formatter
             When I subtract 15
             Then I must have 10       # FeatureContext::iMustHave()
 
+          @with-examples
+          Scenario Outline: Cases that dynamically check the calculator # features/gherkin-parity.feature:30
+              using inputs from the sets of tables
+            When I add <input>                                          # FeatureContext::iAdd()
+            Then I must have <expect>                                   # FeatureContext::iMustHave()
+
+            Examples:
+              | input | expect |
+              | 3     | 28     |
+              | 4     | 29     |
+              | 180   | 205    |
+
         --- Failed scenarios:
 
             features/gherkin-parity.feature:20 (on line 22)
 
-        3 scenarios (1 passed, 1 failed, 1 undefined)
-        9 steps (6 passed, 1 failed, 1 undefined, 1 skipped)
+        6 scenarios (4 passed, 1 failed, 1 undefined)
+        18 steps (15 passed, 1 failed, 1 undefined, 1 skipped)
         """
 
     Examples:
