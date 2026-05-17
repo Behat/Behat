@@ -19,7 +19,7 @@ Feature: World consistency
 
 Scenario Outline: Passed & Failed
 steps and other interesting stuff
-  he-he-he
+he-he-he
 
     Given I must have 10
     When I add <value>
