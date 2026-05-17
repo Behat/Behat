@@ -93,7 +93,19 @@ final class PrettyFeaturePrinter implements FeaturePrinter
             return;
         }
 
+        // Leading whitespace is handled differently in different parsing modes:
+        // - In gherkin-32, nothing is trimmed and the text exactly matches the feature file.
+        // - In legacy, the parser removes {keywordIndent + 2} spaces from the start of every line.
+        //
+        // For consistent output between modes, we need to find the indentation of the first line (if any). Then
+        // un-indent every line by that amount, then re-indent by our desired indentation.
+        //
+        // The trade-off is that the output might not match the exact indentation within the source feature file.
+        $lines = explode("\n", $feature->getDescription());
+        $internalIndent = preg_match('/^\s*/', $lines[0], $matches) ? $matches[0] : '';
+
         foreach (explode("\n", $feature->getDescription()) as $descriptionLine) {
+            $descriptionLine = preg_replace('/^'.$internalIndent.'/', '', $descriptionLine);
             $printer->writeln(sprintf('%s%s', $this->subIndentText, $descriptionLine));
         }
 

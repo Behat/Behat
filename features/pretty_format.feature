@@ -250,7 +250,7 @@ Feature: Pretty Formatter
         @gherkin-parity
         Feature: Parity with basic feature file
           In order to see that the pretty formatter can handle different gherkin modes
-          As a developer
+            As a developer
           I need to see an example with basic Gherkin syntax
 
           Background:               # features/gherkin-parity.feature:7

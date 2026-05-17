@@ -1,8 +1,8 @@
 @gherkin-parity
 Feature: Parity with basic feature file
   In order to see that the pretty formatter can handle different gherkin modes
-  As a developer
-  I need to see an example with basic Gherkin syntax
+    As a developer
+I need to see an example with basic Gherkin syntax
 
   Background:
     Given I have entered 25
