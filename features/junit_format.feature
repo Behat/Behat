@@ -76,10 +76,11 @@ Feature: JUnit Formatter
       """
     And the file "logs/multiple_features.xml" should be a valid document according to "junit.xsd"
 
-  Scenario: Confirm multiline scenario titles are printed correctly
+  Scenario: Confirm multiline scenario titles are printed correctly in legacy gherkin mode
     When I run behat with the following additional options:
-      | option  | value            |
-      | --suite | multiline_titles |
+      | option    | value                  |
+      | --suite   | multiline_titles       |
+      | --profile | legacy-gherkin-parsing |
     Then it should pass with no output
     And the "logs/multiline_titles.xml" file xml should be like:
       """
@@ -88,6 +89,25 @@ Feature: JUnit Formatter
         <testsuite name="Use multiline titles" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Adding some interesting value" classname="Use multiline titles" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" line="13"/>
           <testcase name="Adding another value" classname="Use multiline titles" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" line="20"/>
+        </testsuite>
+      </testsuites>
+      """
+    And the file "logs/multiline_titles.xml" should be a valid document according to "junit.xsd"
+
+  Scenario: Confirm multiline scenario titles do NOT include the description in gherkin-32 parsing mode
+    # Our test examples are slightly contrived compared to a likely title / description in an actual feature
+    When I run behat with the following additional options:
+      | option    | value              |
+      | --suite   | multiline_titles   |
+      | --profile | gherkin-32-parsing |
+    Then it should pass with no output
+    And the "logs/multiline_titles.xml" file xml should be like:
+      """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites name="multiline_titles">
+        <testsuite name="Use multiline titles" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" tests="2" skipped="0" failures="0" errors="0" time="-IGNORE-VALUE-">
+          <testcase name="Adding some interesting" classname="Use multiline titles" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" line="13"/>
+          <testcase name="Adding" classname="Use multiline titles" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiline_titles.feature" line="20"/>
         </testsuite>
       </testsuites>
       """

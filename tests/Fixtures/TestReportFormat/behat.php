@@ -3,6 +3,7 @@
 use Behat\Config\Config;
 use Behat\Config\Profile;
 use Behat\Config\Suite;
+use Behat\Gherkin\GherkinCompatibilityMode;
 
 return (new Config())
     ->withProfile(
@@ -44,4 +45,10 @@ return (new Config())
                 'features/abort_on_php_error.feature'
             )
         )
+    )
+    ->withProfile((new Profile('gherkin-32-parsing'))
+        ->withGherkinOptions((new Behat\Config\GherkinOptions())->withCompatibilityMode(GherkinCompatibilityMode::GHERKIN_32))
+    )
+    ->withProfile((new Profile('legacy-gherkin-parsing'))
+        ->withGherkinOptions((new Behat\Config\GherkinOptions())->withCompatibilityMode(GherkinCompatibilityMode::LEGACY))
     );
