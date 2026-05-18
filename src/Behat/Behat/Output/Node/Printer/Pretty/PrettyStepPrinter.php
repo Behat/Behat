@@ -29,6 +29,8 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\ExceptionResult;
 use Behat\Testwork\Tester\Result\TestResult;
 
+use function strlen;
+
 /**
  * Prints step.
  *
@@ -92,7 +94,8 @@ final class PrettyStepPrinter implements StepPrinter
             // The step text is always at the end, so use preg_replace to guarantee that we never modify the keyword
             // even the edge case that it contains the step text (e.g. in languages with logograms).
             $stepText = $this->textPainter->paintText($step->getText(), $definition, $result);
-            $fullStepText = preg_replace('/'.preg_quote($step->getText(), '/').'$/', $stepText, $step->getFullText());
+            $prefix = substr($step->getFullText(), 0, -strlen($step->getText()));
+            $fullStepText = $prefix . $stepText;
         } else {
             $fullStepText = $step->getFullText();
         }

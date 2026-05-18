@@ -25,6 +25,8 @@ use Behat\Testwork\Output\Printer\OutputPrinter;
 use Behat\Testwork\Tester\Result\IntegerTestResult;
 use Behat\Testwork\Tester\Result\TestResult;
 
+use function strlen;
+
 /**
  * Prints steps as skipped.
  *
@@ -79,7 +81,8 @@ final class PrettySkippedStepPrinter implements StepPrinter
                 $definition,
                 new IntegerTestResult(TestResult::SKIPPED)
             );
-            $fullStepText = preg_replace('/'.preg_quote($step->getText(), '/').'$/', $stepText, $step->getFullText());
+            $prefix = substr($step->getFullText(), 0, -strlen($step->getText()));
+            $fullStepText = $prefix . $stepText;
         } else {
             $fullStepText = $step->getFullText();
         }
