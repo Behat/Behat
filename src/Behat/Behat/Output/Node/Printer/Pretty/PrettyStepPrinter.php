@@ -90,9 +90,11 @@ final class PrettyStepPrinter implements StepPrinter
     {
         if ($result instanceof DefinedStepResult && $result->getStepDefinition()) {
             $definition = $result->getStepDefinition();
-            // We only paint the step text, but we render it as part of the full text (e.g. with the keyword prefix)
-            // The step text is always at the end, so use preg_replace to guarantee that we never modify the keyword
-            // even the edge case that it contains the step text (e.g. in languages with logograms).
+            // We render the full text, but should only paint the step text - the keyword should not be modified.
+            // It's theoretically possible (e.g. in languages with logograms) that the keyword contains the step text
+            // so we can't just str_replace.
+            // Instead, use a substring to extract the prefix by excluding the last {length of step text} chars.
+            // We can then prepend that to the painted step text to get the final value.
             $stepText = $this->textPainter->paintText($step->getText(), $definition, $result);
             $prefix = substr($step->getFullText(), 0, -strlen($step->getText()));
             $fullStepText = $prefix . $stepText;
