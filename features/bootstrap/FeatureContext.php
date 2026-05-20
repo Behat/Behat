@@ -10,6 +10,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Behat\Util\StrictRegex;
+use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Hook\AfterSuite;
@@ -46,6 +47,8 @@ class FeatureContext implements Context
     private ?string $answerString = null;
 
     private ?int $errorLevel = null;
+
+    private ?GherkinCompatibilityMode $gherkinCompatibilityMode = GherkinCompatibilityMode::GHERKIN_32;
 
     public function __construct(
         private readonly Filesystem $filesystem = new Filesystem(),
@@ -263,7 +266,7 @@ EOL;
 
         // Prepare the process parameters.
         $this->process->setTimeout(20);
-        $this->process->setEnv($this->env);
+        $this->process->setEnv($this->applyDefaultGherkinCompatibilityMode($this->env));
         $this->process->setWorkingDirectory($this->workingDir);
 
         if ($this->answerString !== null) {
@@ -278,6 +281,47 @@ EOL;
         }
 
         $this->process->run();
+    }
+
+    /**
+     * Applies a default gherkin compatibility mode for the current execution.
+     *
+     * I am applying this as an environment variable as the easiest way to ensure it applies in all our scenarios
+     * regardless of the values we specify for CLI flags etc.
+     *
+     * When Behat loads config, environment variables are read *before* any other config. Therefore if a scenario is
+     * configuring an explicit gherkin mode (e.g. in a behat.php profile) that will take precedence.
+     *
+     * @param array<string,string> $env
+     *
+     * @return array<string,string>
+     */
+    private function applyDefaultGherkinCompatibilityMode(array $env): array
+    {
+        if ($this->gherkinCompatibilityMode === null) {
+            // Don't override for this execution, the scenario has explicitly cleared the default
+            return $env;
+        }
+
+        // Merge the default gherkin compatibility into the env vars
+        $behatParams = json_decode($env['BEHAT_PARAMS'] ?? '{}', true);
+        if (isset($behatParams['gherkin']['compatibility'])) {
+            // The scenario has explicitly customised this in the $env already, don't override it
+            return $env;
+        }
+
+        $behatParams['gherkin']['compatibility'] = $this->gherkinCompatibilityMode->value;
+
+        return [
+            ...$env,
+            'BEHAT_PARAMS' => json_encode($behatParams),
+        ];
+    }
+
+    #[Given('the test runner does not configure a default gherkin compatibility mode')]
+    public function clearDefaultGherkinCompatibilityMode(): void
+    {
+        $this->gherkinCompatibilityMode = null;
     }
 
     /**

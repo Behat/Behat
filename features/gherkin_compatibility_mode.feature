@@ -11,6 +11,7 @@ Feature: Gherkin compatibility mode
       | --format    | progress |
 
   Scenario: Legacy parsing by default (ignores invalid language)
+    Given the test runner does not configure a default gherkin compatibility mode
     When I run behat with the following additional options:
       | option    | value   |
       | --profile | default |
