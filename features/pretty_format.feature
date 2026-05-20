@@ -239,10 +239,11 @@ Feature: Pretty Formatter
       8 steps (6 passed, 2 failed)
       """
 
+  @gherkin-mode:has-explicit
   Scenario Outline: Consistent output between Gherkin parser compatibility modes
       When I run behat with the following additional options:
-        | option       | value |
-        | --profile       | gherkin-parity-<compatibility_mode> |
+        | option        | value                               |
+        | --profile     | gherkin-parity-<compatibility_mode> |
         | --no-snippets |                                     |
 
       Then it should fail with:

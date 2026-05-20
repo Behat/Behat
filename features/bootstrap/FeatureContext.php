@@ -48,9 +48,8 @@ class FeatureContext implements Context
 
     private ?int $errorLevel = null;
 
-    private ?GherkinCompatibilityMode $gherkinCompatibilityMode = GherkinCompatibilityMode::GHERKIN_32;
-
     public function __construct(
+        private ?GherkinCompatibilityMode $gherkinCompatibilityMode,
         private readonly Filesystem $filesystem = new Filesystem(),
     ) {
     }
@@ -298,7 +297,7 @@ EOL;
      */
     private function applyDefaultGherkinCompatibilityMode(array $env): array
     {
-        if ($this->gherkinCompatibilityMode === null) {
+        if (!$this->gherkinCompatibilityMode instanceof GherkinCompatibilityMode) {
             // Don't override for this execution, the scenario has explicitly cleared the default
             return $env;
         }

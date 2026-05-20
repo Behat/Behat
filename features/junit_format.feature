@@ -76,6 +76,7 @@ Feature: JUnit Formatter
       """
     And the file "logs/multiple_features.xml" should be a valid document according to "junit.xsd"
 
+  @gherkin-mode:has-explicit
   Scenario: Confirm multiline scenario titles are printed correctly in legacy gherkin mode
     When I run behat with the following additional options:
       | option    | value                  |
@@ -94,6 +95,7 @@ Feature: JUnit Formatter
       """
     And the file "logs/multiline_titles.xml" should be a valid document according to "junit.xsd"
 
+  @gherkin-mode:has-explicit
   Scenario: Confirm multiline scenario titles do NOT include the description in gherkin-32 parsing mode
     # Our test examples are slightly contrived compared to a likely title / description in an actual feature
     When I run behat with the following additional options:
