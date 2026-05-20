@@ -85,6 +85,8 @@ final class JSONScenarioPrinter implements ScenarioPrinter
      */
     private function getNameAndDescription(NamedScenarioInterface $scenario): array
     {
+        $scenarioName = $scenario->getName() ?? '';
+
         if ($scenario instanceof DescribableNodeInterface && $scenario->getDescription()) {
             // All ScenarioLikeInterface defined by behat/gherkin are also DescribableNodeInterface
             // but we can't guarantee that's true if the node has come from third-party code.
@@ -95,16 +97,16 @@ final class JSONScenarioPrinter implements ScenarioPrinter
             // Remove any internal padding from the description as this may not always be consistent and is of no real
             // use to the user.
             return [
-                'name' => $scenario->getName(),
+                'name' => $scenarioName,
                 'description' => implode("\n", array_map(trim(...), explode("\n", $scenario->getDescription()))),
             ];
         }
 
-        if (!str_contains((string) $scenario->getName(), "\n")) {
+        if (!str_contains($scenarioName, "\n")) {
             // It was parsed in gherkin-32 mode with no description, or in legacy mode with a single-line name/title
             // Either way the output is just the name.
             return [
-                'name' => $scenario->getName(),
+                'name' => $scenarioName,
                 'description' => null,
             ];
         }
@@ -112,7 +114,7 @@ final class JSONScenarioPrinter implements ScenarioPrinter
         // It was parsed in legacy mode and has a multi-line name/title. For consistency with previous Behat versions,
         // we trim and join all the lines together to produce a one-line "name".
         return [
-            'name' => implode(' ', array_map(trim(...), explode("\n", $scenario->getName() ?? ''))),
+            'name' => implode(' ', array_map(trim(...), explode("\n", $scenarioName))),
             'description' => null,
         ];
     }
