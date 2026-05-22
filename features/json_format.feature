@@ -229,11 +229,12 @@ Feature: JSON Formatter
       """
     And the file "multiple_features.json" should be a valid document according to the json schema "schema.json"
 
-  Scenario: Confirm multiline scenario titles are printed correctly
+  Scenario: Confirm multiline scenario titles are printed correctly in legacy parsing mode
     When I run behat with the following additional options:
-      | option  | value                 |
-      | --suite | multiline_titles .    |
-      | --out   | multiline_titles.json |
+      | option    | value                  |
+      | --suite   | multiline_titles .     |
+      | --out     | multiline_titles.json  |
+      | --profile | legacy-gherkin-parsing |
     Then it should pass with no output
     And the "multiline_titles.json" file json should be like:
       """
@@ -273,6 +274,67 @@ Feature: JSON Formatter
                               },
                               {
                                   "name": "Adding another value",
+                                  "time": -IGNORE-VALUE-,
+                                  "status": "passed",
+                                  "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",
+                                  "line": 20
+                              }
+                          ]
+                      }
+                  ]
+              }
+          ]
+      }
+      """
+    And the file "multiline_titles.json" should be a valid document according to the json schema "schema.json"
+
+  Scenario: Confirm multiline scenario titles are printed correctly in gherkin-32 parsing mode
+    When I run behat with the following additional options:
+      | option    | value                 |
+      | --suite   | multiline_titles .    |
+      | --out     | multiline_titles.json |
+      | --profile | gherkin-32-parsing    |
+    Then it should pass with no output
+    And the "multiline_titles.json" file json should be like:
+      """
+      {
+          "tests": 2,
+          "skipped": 0,
+          "failed": 0,
+          "pending": 0,
+          "undefined": 0,
+          "time": -IGNORE-VALUE-,
+          "suites": [
+              {
+                  "name": "multiline_titles",
+                  "tests": 2,
+                  "skipped": 0,
+                  "failed": 0,
+                  "pending": 0,
+                  "undefined": 0,
+                  "time": -IGNORE-VALUE-,
+                  "features": [
+                      {
+                          "name": "Use multiline titles",
+                          "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",
+                          "tests": 2,
+                          "skipped": 0,
+                          "failed": 0,
+                          "pending": 0,
+                          "undefined": 0,
+                          "time": -IGNORE-VALUE-,
+                          "scenarios": [
+                              {
+                                  "name": "Adding some interesting",
+                                  "description": "value",
+                                  "time": -IGNORE-VALUE-,
+                                  "status": "passed",
+                                  "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",
+                                  "line": 13
+                              },
+                              {
+                                  "name": "Adding",
+                                  "description": "another\nvalue",
                                   "time": -IGNORE-VALUE-,
                                   "status": "passed",
                                   "file": "features-DIRECTORY-SEPARATOR-multiline_titles.feature",

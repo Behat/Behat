@@ -95,6 +95,7 @@
             "required": ["name", "status", "file", "line"],
             "properties": {
                 "name": { "type": "string" },
+                "description": { "type": "string" },
                 "time": { "$ref": "#/$defs/DurationSeconds" },
                 "status": {
                     "type": "string",
