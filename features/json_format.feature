@@ -229,6 +229,7 @@ Feature: JSON Formatter
       """
     And the file "multiple_features.json" should be a valid document according to the json schema "schema.json"
 
+  @gherkin-mode:has-explicit
   Scenario: Confirm multiline scenario titles are printed correctly in legacy parsing mode
     When I run behat with the following additional options:
       | option    | value                  |
@@ -288,6 +289,7 @@ Feature: JSON Formatter
       """
     And the file "multiline_titles.json" should be a valid document according to the json schema "schema.json"
 
+  @gherkin-mode:has-explicit
   Scenario: Confirm multiline scenario titles are printed correctly in gherkin-32 parsing mode
     When I run behat with the following additional options:
       | option    | value                 |
