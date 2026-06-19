@@ -41,6 +41,9 @@ class RuntimeCallee implements Callee
         private readonly ?string $description = null,
     ) {
         if (is_array($callable)) {
+            if (!$this->isCallableOrBehatContextCallable($callable)) {
+                DeprecationCollector::trigger('Creating '.static::class.' with a non-callable array other than a Behat context method reference is deprecated');
+            }
             $this->reflection = new ReflectionMethod($callable[0], $callable[1]);
             $this->path = $callable[0] . '::' . $callable[1] . '()';
         } else {
@@ -49,6 +52,18 @@ class RuntimeCallee implements Callee
         }
 
         $this->callable = $callable;
+    }
+
+    private function isCallableOrBehatContextCallable(array $callable): bool
+    {
+        if (is_callable($callable)) {
+            return true;
+        }
+
+        return count($callable) === 2
+            && is_string($callable[0])
+            && is_string($callable[1])
+            && is_a($callable[0], Context::class, true);
     }
 
     /**
