@@ -38,7 +38,7 @@ abstract class RuntimeFeatureHook extends RuntimeFilterableHook
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 
-        $this->throwIfInstanceMethod($callable, 'Feature');
+        $this->throwIfCallableIsInstanceMethod('Feature');
     }
 
     public function filterMatches(HookScope $scope)

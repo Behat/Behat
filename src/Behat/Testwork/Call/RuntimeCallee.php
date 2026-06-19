@@ -12,6 +12,7 @@ namespace Behat\Testwork\Call;
 
 use Behat\Behat\Context\Context;
 use Behat\Testwork\Call\Exception\BadCallbackException;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use ReflectionFunction;
 use ReflectionFunctionAbstract;
 use ReflectionMethod;
@@ -113,25 +114,29 @@ class RuntimeCallee implements Callee
 
     /**
      * @param callable|array{class-string, string} $callable
+     *
+     * @deprecated see throwIfCallableIsInstanceMethod()
      */
     protected function throwIfInstanceMethod(callable|array $callable, string $hookType): void
     {
-        if ($this->isAnInstanceMethod()) {
-            if (is_array($callable)) {
-                $className = $callable[0];
-                $methodName = $callable[1];
-            } else {
-                $reflection = new ReflectionMethod($callable);
-                $className = $reflection->getDeclaringClass()->getShortName();
-                $methodName = $reflection->getName();
-            }
+        DeprecationCollector::trigger('throwIfInstanceMethod() is deprecated and will be removed in 4.0 - use throwIfCallableIsInstanceMethod');
+        if ($callable !== $this->callable) {
+            // They have passed a different callable to the one we were initialised with.
+            // Wrap it in a new RuntimeCallee so that we can check it.
+            (new RuntimeCallee($callable))->throwIfCallableIsInstanceMethod($hookType);
+        } else {
+            $this->throwIfCallableIsInstanceMethod($hookType);
+        }
+    }
 
+    final protected function throwIfCallableIsInstanceMethod(string $hookType): void
+    {
+        if ($this->isAnInstanceMethod()) {
             throw new BadCallbackException(sprintf(
-                '%s hook callback: %s::%s() must be a static method',
+                '%s hook callback: %s must be a static method',
                 $hookType,
-                $className,
-                $methodName
-            ), $callable);
+                $this->getPath(),
+            ), $this->getCallable());
         }
     }
 }
