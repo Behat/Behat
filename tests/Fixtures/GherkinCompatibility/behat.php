@@ -14,9 +14,9 @@ return (new Config())
             timer: false,
             paths: false,
         ))
-    )->withProfile((new Profile('gherkin-32'))
+    )->withProfile((new Profile('gherkin-legacy'))
         ->withGherkinOptions((new GherkinOptions())
-            ->withCompatibilityMode(GherkinCompatibilityMode::GHERKIN_32)
+            ->withCompatibilityMode(GherkinCompatibilityMode::LEGACY)
             ->withCacheDir('/tmp/gc')
         )
     )

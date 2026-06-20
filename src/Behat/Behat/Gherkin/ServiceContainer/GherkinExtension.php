@@ -104,7 +104,7 @@ final class GherkinExtension implements Extension
                     fn (GherkinCompatibilityMode $m) => $m->value,
                     GherkinCompatibilityMode::cases(),
                 ))
-                ->defaultValue(GherkinCompatibilityMode::LEGACY->value)
+                ->defaultValue(GherkinCompatibilityMode::GHERKIN_32->value)
         ;
         $childrenBuilder
             ->arrayNode('filters')
