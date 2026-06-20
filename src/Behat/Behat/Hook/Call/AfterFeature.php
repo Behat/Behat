@@ -11,23 +11,18 @@
 namespace Behat\Behat\Hook\Call;
 
 use Behat\Behat\Hook\Scope\FeatureScope;
-use Behat\Testwork\Call\RuntimeCallee;
 
 /**
  * Represents an AfterFeature hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class AfterFeature extends RuntimeFeatureHook
 {
     /**
      * Initializes hook.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
-    public function __construct(?string $filterString, callable|array $callable, ?string $description = null)
+    public function __construct(?string $filterString, callable $callable, ?string $description = null)
     {
         parent::__construct(FeatureScope::AFTER, $filterString, $callable, $description);
     }

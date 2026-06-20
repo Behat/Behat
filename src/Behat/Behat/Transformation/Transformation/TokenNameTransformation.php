@@ -22,8 +22,6 @@ use Stringable;
  * Token name based transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class TokenNameTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
@@ -36,12 +34,10 @@ final class TokenNameTransformation extends RuntimeCallee implements Stringable,
 
     /**
      * Initializes transformation.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
         private readonly string $pattern,
-        callable|array $callable,
+        callable $callable,
         ?string $description = null,
     ) {
         parent::__construct($callable, $description);

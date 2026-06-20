@@ -11,7 +11,6 @@
 namespace Behat\Testwork\Hook\Call;
 
 use Behat\Testwork\Call\Exception\BadCallbackException;
-use Behat\Testwork\Call\RuntimeCallee;
 use Behat\Testwork\Hook\Scope\HookScope;
 use Behat\Testwork\Hook\Scope\SuiteScope;
 use Behat\Testwork\Suite\Suite;
@@ -20,19 +19,15 @@ use Behat\Testwork\Suite\Suite;
  * Represents suite hook executed in the runtime.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 abstract class RuntimeSuiteHook extends RuntimeFilterableHook
 {
     /**
      * Initializes hook.
      *
-     * @phpstan-param TBehatCallable $callable
-     *
      * @throws BadCallbackException If callback is method, but not a static one
      */
-    public function __construct(string $scopeName, ?string $filterString, callable|array $callable, ?string $description = null)
+    public function __construct(string $scopeName, ?string $filterString, callable $callable, ?string $description = null)
     {
         parent::__construct($scopeName, $filterString, $callable, $description);
 

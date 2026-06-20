@@ -24,8 +24,6 @@ use Stringable;
  * Row-based table transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class RowBasedTableTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
@@ -38,12 +36,10 @@ final class RowBasedTableTransformation extends RuntimeCallee implements Stringa
 
     /**
      * Initializes transformation.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
         private readonly string $pattern,
-        callable|array $callable,
+        callable $callable,
         ?string $description = null,
     ) {
         parent::__construct($callable, $description);

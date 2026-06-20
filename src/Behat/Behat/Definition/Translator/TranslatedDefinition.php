@@ -77,7 +77,7 @@ final class TranslatedDefinition implements Stringable, Definition
         return $this->definition->isAnInstanceMethod();
     }
 
-    public function getCallable(): callable|array
+    public function getCallable(): callable
     {
         return $this->definition->getCallable();
     }

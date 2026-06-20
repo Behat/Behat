@@ -11,23 +11,18 @@
 namespace Behat\Behat\Hook\Call;
 
 use Behat\Behat\Hook\Scope\ScenarioScope;
-use Behat\Testwork\Call\RuntimeCallee;
 
 /**
  * Represents an AfterScenario hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class AfterScenario extends RuntimeScenarioHook
 {
     /**
      * Initializes hook.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
-    public function __construct(?string $filterString, callable|array $callable, ?string $description = null)
+    public function __construct(?string $filterString, callable $callable, ?string $description = null)
     {
         parent::__construct(ScenarioScope::AFTER, $filterString, $callable, $description);
     }

@@ -23,6 +23,8 @@ use ReflectionMethod;
  */
 interface SimpleArgumentTransformation extends Transformation
 {
+    public function __construct(string $pattern, callable $callable, ?string $description = null);
+
     /**
      * Checks if transformation supports given pattern.
      */

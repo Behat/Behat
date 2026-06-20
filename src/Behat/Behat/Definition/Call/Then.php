@@ -10,14 +10,10 @@
 
 namespace Behat\Behat\Definition\Call;
 
-use Behat\Testwork\Call\RuntimeCallee;
-
 /**
  * Then steps definition.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class Then extends RuntimeDefinition
 {
@@ -25,10 +21,8 @@ final class Then extends RuntimeDefinition
 
     /**
      * Initializes definition.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
-    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
+    public function __construct(string $pattern, callable $callable, ?string $description = null)
     {
         parent::__construct(self::KEYWORD, $pattern, $callable, $description);
     }

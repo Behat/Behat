@@ -20,9 +20,6 @@ use InvalidArgumentException;
 use ReflectionMethod;
 use Stringable;
 
-/**
- * @phpstan-import-type TBehatCallable from RuntimeCallee
- */
 final class TableColumnTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
     public const PATTERN_REGEX = '/^column\:[[:print:]]+$/u';
@@ -32,12 +29,9 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
         return 1 === preg_match(self::PATTERN_REGEX, (string) $pattern);
     }
 
-    /**
-     * @phpstan-param TBehatCallable $callable
-     */
     public function __construct(
         private readonly string $pattern,
-        callable|array $callable,
+        callable $callable,
         ?string $description = null,
     ) {
         parent::__construct($callable, $description);

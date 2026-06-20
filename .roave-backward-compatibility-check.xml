@@ -255,5 +255,14 @@
         <ignored-regex>#REMOVED: These ancestors of .+ have been removed: \["Behat\\\\Behat\\\\EventDispatcher\\\\Event\\\\ScenarioLikeTested"\]#</ignored-regex>
         <ignored-regex>#REMOVED: Class Behat\\Behat\\EventDispatcher\\Event\\ScenarioLikeTested has been deleted#</ignored-regex>
         <ignored-regex>#REMOVED: Method Behat\\Behat\\EventDispatcher\\Event\\(Before|After)Background.+?\#getScenario\(\) was removed#</ignored-regex>
+
+        <!-- Deprecated RuntimeCallee::throwIfInstanceMethod() removed in favour of RuntimeCallee::throwIfCallableIsInstanceMethod() -->
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\Call\\RuntimeCallee\#throwIfInstanceMethod\(\) was removed#</ignored-regex>
+
+        <!-- Formalised Context class method callback references -->
+        <ignored-regex>#CHANGED: The parameter \$callable of .+ changed from callable|array to callable#</ignored-regex>
+
+        <!-- Required consistent constructor for SimpleArgumentTransformation -->
+        <ignored-regex>#ADDED: Method __construct\(\) was added to interface Behat\\Behat\\Transformation\\SimpleArgumentTransformation#</ignored-regex>
     </baseline>
 </roave-bc-check>

@@ -12,6 +12,7 @@ namespace Behat\Behat\Hook\Context\Attribute;
 
 use Behat\Behat\Context\Annotation\DocBlockHelper;
 use Behat\Behat\Context\Attribute\AttributeReader;
+use Behat\Behat\Context\ContextMethodCallableFactory;
 use Behat\Hook\AfterFeature;
 use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterStep;
@@ -59,7 +60,7 @@ final class HookAttributeReader implements AttributeReader
         $callees = [];
         foreach ($attributes as $attribute) {
             $class = self::KNOWN_ATTRIBUTES[$attribute->getName()];
-            $callable = [$contextClass, $method->getName()];
+            $callable = ContextMethodCallableFactory::makeCallable($contextClass, $method);
             $description = null;
             if ($docBlock = $method->getDocComment()) {
                 $description = $this->docBlockHelper->extractDescription($docBlock);

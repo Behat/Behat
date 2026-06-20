@@ -28,8 +28,6 @@ use Stringable;
  * By-type object transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class ReturnTypeTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
@@ -46,10 +44,8 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
 
     /**
      * Initializes transformation.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
-    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
+    public function __construct(string $pattern, callable $callable, ?string $description = null)
     {
         parent::__construct($callable, $description);
     }

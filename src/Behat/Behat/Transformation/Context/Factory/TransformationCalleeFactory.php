@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Transformation\Context\Factory;
 
+use Behat\Behat\Context\ContextMethodCallableFactory;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\Transformation\ColumnBasedTableTransformation;
@@ -33,7 +34,7 @@ final class TransformationCalleeFactory
 {
     public static function create(string $contextClass, ReflectionMethod $method, string $pattern, ?string $description): Transformation
     {
-        $callable = [$contextClass, $method->getName()];
+        $callable = ContextMethodCallableFactory::makeCallable($contextClass, $method);
 
         foreach (self::simpleTransformations() as $transformation) {
             if ($transformation::supportsPatternAndMethod($pattern, $method)) {

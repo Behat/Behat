@@ -24,19 +24,15 @@ use UnexpectedValueException;
  * Pattern-based transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class PatternTransformation extends RuntimeCallee implements Stringable, Transformation
 {
     /**
      * Initializes transformation.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
     public function __construct(
         private readonly string $pattern,
-        callable|array $callable,
+        callable $callable,
         ?string $description = null,
     ) {
         parent::__construct($callable, $description);

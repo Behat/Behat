@@ -22,8 +22,6 @@ use Stringable;
  * Name and return type object transformation.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
- *
- * @phpstan-import-type TBehatCallable from RuntimeCallee
  */
 final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implements Stringable, SimpleArgumentTransformation
 {
@@ -38,10 +36,8 @@ final class TokenNameAndReturnTypeTransformation extends RuntimeCallee implement
 
     /**
      * Initializes transformation.
-     *
-     * @phpstan-param TBehatCallable $callable
      */
-    public function __construct(string $pattern, callable|array $callable, ?string $description = null)
+    public function __construct(string $pattern, callable $callable, ?string $description = null)
     {
         $this->tokenTransformation = new TokenNameTransformation($pattern, $callable, $description);
         $this->returnTransformation = new ReturnTypeTransformation('', $callable, $description);

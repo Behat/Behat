@@ -8,8 +8,4 @@ parameters:
             paths:
                 - src/Behat/Testwork/Exception/Stringer/PHPUnitExceptionStringer.php
         -
-            identifier: constructor.unusedParameter
-            paths:
-                - src/Behat/Behat/Transformation/Transformation/ReturnTypeTransformation.php
-        -
             identifier: missingType.iterableValue
