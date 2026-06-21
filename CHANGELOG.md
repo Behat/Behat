@@ -4,6 +4,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0-alpha1] - **DATE TBC**
+
+This release introduces a number of breaking changes. We have tried to limit the impact of these on 
+end-users – most are in code that we expect is only referenced internally. There are some 
+unavoidable changes that will affect end-users and extension authors, but we expect you will be 
+able to apply the vast majority of updates using automated tools. See 
+**[DOCS PAGE TO BE WRITTEN]** for advice on upgrading.
+
+For end-users, **this is essentially a stable release, ready to use in your CI**. The only reason 
+for shipping as an alpha first is to allow extension authors to add support for Behat 4.x and 
+feed back on any issues before we finalise 4.0.0.
+
+We expect there will be a small number of breaking changes between 4.0.0-alpha1 and 4.0.0. 
+See **[DOCS PAGE TO BE WRITTEN]** for details.
+
+Behat has no corporate backing - the 4.0 release has taken a huge effort from the volunteer
+maintainers over the last 9 months. If you use Behat for work, please consider showing your
+appreciation by [supporting the project](https://github.com/acoulton/Behat#support-the-project)
+ - even small contributions make a big difference.
+
+### Changed
+
+* Future 4.x releases will not guarantee backwards compatibility except for code that is 
+  explicitly marked as being part of our public API. See **[DOCS PAGE TO BE WRITTEN]**
+* Drop support for using `@annotations` to define steps, hooks, and transformations by @carlos-granados in [#1790](https://github.com/Behat/Behat/pull/1790)
+* Drop support for YAML config and finding files in `config` dir by @carlos-granados in [#1791](https://github.com/Behat/Behat/pull/1791)
+* Drop support for configuring extensions using short names by @carlos-granados in [#1793](https://github.com/Behat/Behat/pull/1793)
+* Use GherkinCompatibilityMode::GHERKIN_32 by default by @acoulton in [#1812](https://github.com/Behat/Behat/pull/1812)
+* Extension interface should not extend third-party interface by @acoulton in [#1796](https://github.com/Behat/Behat/pull/1796)
+* Remove ScenarioLikeTested in favour of separate events by @acoulton in [#1834](https://github.com/Behat/Behat/pull/1834)
+* Add strict parameter, property and return types throughout the codebase 
+  By @acoulton in [#1820](https://github.com/Behat/Behat/pull/1820), [#1822](https://github.com/Behat/Behat/pull/1822), 
+  [#1824](https://github.com/Behat/Behat/pull/1824), and [#1831](https://github.com/Behat/Behat/pull/1831)
+  And by @stof in [#1837](https://github.com/Behat/Behat/pull/1837), [#1836](https://github.com/Behat/Behat/pull/1836), 
+  [#1839](https://github.com/Behat/Behat/pull/1839) and [#1838](https://github.com/Behat/Behat/pull/1838).
+* Use explicit type for late-bound Context callable methods by @acoulton in [#1854](https://github.com/Behat/Behat/pull/1854)
+* Define a mandatory constructor for SimpleArgumentTransformation implementations by @acoulton in [#1854](https://github.com/Behat/Behat/pull/1854)
+* Drop deprecated constants, methods, constructor parameters and similar code.
+  By @acoulton in [#1694](https://github.com/Behat/Behat/pull/1694) 
+  and by @carlos-granados in [#1814](https://github.com/Behat/Behat/pull/1814)
+
+### Added
+
+* Support Symfony 8 by @Kocal in [#1687](https://github.com/Behat/Behat/pull/1687) 
+  and @acoulton in [#1758](https://github.com/Behat/Behat/pull/1758)
+
+### Internal
+
+**NOTE: this includes breaking changes to some classes that are not considered part of the public API from 4.0 onwards.**
+
+* Move StopOnFailureController to Testwork\Tester\Cli namespace by @carlos-granados in [#1809](https://github.com/Behat/Behat/pull/1809)
+* Finalise all non-API classes that are not extended by @acoulton in [#1815](https://github.com/Behat/Behat/pull/1815)
+
+
 ## [3.32.0] - 2026-06-20
 
 ### Added
@@ -1522,6 +1576,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[4.0.0-alpha1]: https://github.com/Behat/Behat/compare/v3.32.0...v4.0.0-alpha1
 [3.32.0]: https://github.com/Behat/Behat/compare/v3.31.0...v3.32.0
 [3.31.0]: https://github.com/Behat/Behat/compare/v3.30.0...v3.31.0
 [3.30.0]: https://github.com/Behat/Behat/compare/v3.29.0...v3.30.0
