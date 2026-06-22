@@ -10,14 +10,14 @@ This release introduces a number of breaking changes. We have tried to limit the
 end-users – most are in code that we expect is only referenced internally. There are some 
 unavoidable changes that will affect end-users and extension authors, but we expect you will be 
 able to apply the vast majority of updates using automated tools. See 
-**[DOCS PAGE TO BE WRITTEN]** for advice on upgrading.
+https://docs.behat.org/en/v4.x/releases/upgrading-to-4.0.html for advice on upgrading.
 
 For end-users, **this is essentially a stable release, ready to use in your CI**. The only reason 
 for shipping as an alpha first is to allow extension authors to add support for Behat 4.x and 
 feed back on any issues before we finalise 4.0.0.
 
 We expect there will be a small number of breaking changes between 4.0.0-alpha1 and 4.0.0. 
-See **[DOCS PAGE TO BE WRITTEN]** for details.
+See https://docs.behat.org/en/v4.x/releases/upgrading-to-4.0.html for details.
 
 Behat has no corporate backing - the 4.0 release has taken a huge effort from the volunteer
 maintainers over the last 9 months. If you use Behat for work, please consider showing your
@@ -27,7 +27,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 ### Changed
 
 * Future 4.x releases will not guarantee backwards compatibility except for code that is 
-  explicitly marked as being part of our public API. See **[DOCS PAGE TO BE WRITTEN]**
+  explicitly marked as being part of our public API. See https://docs.behat.org/en/v4.x/releases/backwards-compatibility.html for details.
 * Drop support for using `@annotations` to define steps, hooks, and transformations by @carlos-granados in [#1790](https://github.com/Behat/Behat/pull/1790)
 * Drop support for YAML config and finding files in `config` dir by @carlos-granados in [#1791](https://github.com/Behat/Behat/pull/1791)
 * Drop support for configuring extensions using short names by @carlos-granados in [#1793](https://github.com/Behat/Behat/pull/1793)
