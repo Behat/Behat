@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [4.0.0-alpha1] - **DATE TBC**
+## [4.0.0-alpha1] - 2026-06-22
 
 This release introduces a number of breaking changes. We have tried to limit the impact of these on 
 end-users – most are in code that we expect is only referenced internally. There are some 
