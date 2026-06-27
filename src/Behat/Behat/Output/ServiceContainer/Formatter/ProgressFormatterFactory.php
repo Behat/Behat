@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\ServiceContainer\Formatter;
 
+use Behat\Behat\Output\Node\EventListener\AST\CurrentFeatureListener;
 use Behat\Behat\Output\Node\EventListener\AST\StepListener;
 use Behat\Behat\Output\Node\EventListener\Statistics\HookStatsListener;
 use Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener;
@@ -49,6 +50,7 @@ class ProgressFormatterFactory implements FormatterFactory
      * Available services
      */
     public const ROOT_LISTENER_ID = 'output.node.listener.progress';
+    public const CURRENT_FEATURE_LISTENER_ID = 'output.node.listener.progress.current_feature';
     public const RESULT_TO_STRING_CONVERTER_ID = 'output.node.printer.result_to_string';
 
     /*
@@ -108,8 +110,14 @@ class ProgressFormatterFactory implements FormatterFactory
         ]);
         $container->setDefinition('output.node.printer.list', $definition);
 
+        $definition = new Definition(CurrentFeatureListener::class);
+        $container->setDefinition(self::CURRENT_FEATURE_LISTENER_ID, $definition);
+
         $definition = new Definition(ProgressStepPrinter::class, [
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference(ExceptionExtension::PRESENTER_ID),
+            new Reference(PathOptionsExtension::CONFIGURABLE_PATH_PRINTER_ID),
+            new Reference(self::CURRENT_FEATURE_LISTENER_ID),
         ]);
         $container->setDefinition('output.node.printer.progress.step', $definition);
 
@@ -146,6 +154,7 @@ class ProgressFormatterFactory implements FormatterFactory
                 ChainEventListener::class,
                 [
                     [
+                        new Reference(self::CURRENT_FEATURE_LISTENER_ID),
                         new Reference(self::ROOT_LISTENER_ID),
                         new Definition(StatisticsListener::class, [
                             new Reference('output.progress.statistics'),
