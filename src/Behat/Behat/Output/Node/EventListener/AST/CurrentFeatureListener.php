@@ -10,8 +10,8 @@
 
 namespace Behat\Behat\Output\Node\EventListener\AST;
 
+use Behat\Behat\EventDispatcher\Event\AfterFeatureTested;
 use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
-use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
@@ -34,7 +34,7 @@ final class CurrentFeatureListener implements EventListener
             $this->currentFeature = $event->getFeature();
         }
 
-        if ($eventName === FeatureTested::AFTER) {
+        if ($event instanceof AfterFeatureTested) {
             $this->currentFeature = null;
         }
     }
