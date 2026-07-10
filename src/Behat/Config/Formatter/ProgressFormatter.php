@@ -13,6 +13,9 @@ final class ProgressFormatter extends Formatter
 {
     public const NAME = 'progress';
 
+    public const INLINE_FAILURES_SETTING = 'inline_failures';
+    public const INLINE_FAILURES_PARAMETER_NAME = 'inlineFailures';
+
     private const TIMER_SETTING = 'timer';
     private const SHORT_SUMMARY_SETTING = 'short_summary';
 
@@ -24,17 +27,21 @@ final class ProgressFormatter extends Formatter
      *                                     formatter output (yes, no, on-fail, in-summary)
      * @param bool $shortSummary if we should print the short summary which just lists scenarios
      *                            or the long summary which lists steps
+     * @param bool $inlineFailures print the detail of each failed, pending or undefined step
+     *                             inline as it happens, instead of only in the end-of-run summary
      */
     public function __construct(
         bool $timer = true,
         ShowOutputOption $showOutput = ShowOutputOption::InSummary,
         bool $shortSummary = false,
+        bool $inlineFailures = false,
         ...$baseOptions,
     ) {
         $settings = [
             self::TIMER_SETTING => $timer,
             ShowOutputOption::OPTION_NAME => $showOutput->value,
             self::SHORT_SUMMARY_SETTING => $shortSummary,
+            self::INLINE_FAILURES_SETTING => $inlineFailures,
         ];
         $settings = [...$settings, ...$baseOptions];
         parent::__construct(name: self::NAME, settings: $settings);

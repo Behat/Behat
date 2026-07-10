@@ -127,6 +127,9 @@ class Formatter implements FormatterConfigInterface, ConfigConverterInterface
             if ($name === self::SHORT_SUMMARY_SETTING) {
                 $name = self::SHORT_SUMMARY_PARAMETER_NAME;
             }
+            if ($name === ProgressFormatter::INLINE_FAILURES_SETTING) {
+                $name = ProgressFormatter::INLINE_FAILURES_PARAMETER_NAME;
+            }
             if ($name === PrettyFormatter::PRINT_SKIPPED_STEPS_SETTING) {
                 $name = PrettyFormatter::PRINT_SKIPPED_STEPS_PARAMETER_NAME;
             }
