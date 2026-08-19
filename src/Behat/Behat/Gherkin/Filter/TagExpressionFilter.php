@@ -82,7 +82,7 @@ final class TagExpressionFilter extends ComplexFilter
     }
 
     /**
-     * @param array<array-key, string> $tags
+     * @param list<string> $tags
      */
     private function evaluateTags(array $tags): bool
     {
