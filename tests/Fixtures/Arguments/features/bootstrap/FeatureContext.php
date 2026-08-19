@@ -3,6 +3,8 @@
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\DataTable;
+use Behat\Step\DocString;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Tests\Fixtures\Assert;
@@ -68,5 +70,43 @@ class FeatureContext implements Context
     #[Given('/^a step with no argument$/')]
     public function aStepWithNoArgument(): void
     {
+    }
+
+    #[Given('/^a data table:$/')]
+    public function aDataTable(DataTable $table)
+    {
+        $this->input = $table;
+    }
+
+    #[Then('/^the data table must be equals to table (\d+)$/')]
+    public function theDataTableMustBeEqualsToTable($number)
+    {
+        PHPUnit\Framework\Assert::assertInstanceOf(DataTable::class, $this->input);
+        PHPUnit\Framework\Assert::assertEquals($this->tables[intval($number)], $this->input->asMaps());
+    }
+
+    #[Given('/^a doc string:$/')]
+    public function aDocString(DocString $string)
+    {
+        $this->input = $string;
+    }
+
+    #[Then('/^the doc string must be equals to string (\d+)$/')]
+    public function theDocStringMustBeEqualsToString($number)
+    {
+        PHPUnit\Framework\Assert::assertInstanceOf(DocString::class, $this->input);
+        PHPUnit\Framework\Assert::assertEquals($this->strings[intval($number)], $this->input->getContent());
+    }
+
+    #[Given('/^a table that could be wrapped or not:$/')]
+    public function aTableThatCouldBeWrappedOrNot(TableNode|DataTable $table)
+    {
+        $this->input = $table;
+    }
+
+    #[Then('/^the argument must be a raw TableNode$/')]
+    public function theArgumentMustBeARawTableNode()
+    {
+        PHPUnit\Framework\Assert::assertInstanceOf(TableNode::class, $this->input);
     }
 }

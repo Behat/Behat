@@ -12,6 +12,8 @@ namespace Behat\Testwork\Argument;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\DataTable;
+use Behat\Step\DocString;
 use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
 use Closure;
 use ReflectionClass;
@@ -88,7 +90,9 @@ final class MixedArgumentOrganiser implements ArgumentOrganiser
     private function hasMultilineArgument(array $arguments): bool
     {
         foreach ($arguments as $argument) {
-            if ($argument instanceof TableNode || $argument instanceof PyStringNode) {
+            if ($argument instanceof TableNode || $argument instanceof PyStringNode
+                || $argument instanceof DataTable || $argument instanceof DocString
+            ) {
                 return true;
             }
         }

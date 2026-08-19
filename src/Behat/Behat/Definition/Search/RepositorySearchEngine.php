@@ -18,11 +18,19 @@ use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Definition\Translator\DefinitionTranslator;
 use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Step\DataTable;
+use Behat\Step\DocString;
 use Behat\Testwork\Argument\ArgumentOrganiser;
 use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
 use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
+use ReflectionFunctionAbstract;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 /**
  * Searches for a step definition using definition repository.
@@ -95,7 +103,7 @@ final class RepositorySearchEngine implements SearchEngine
         }
 
         $function = $definition->getReflection();
-        $match = array_merge($match, array_values($multiline));
+        $match = array_merge($match, $this->wrapMultilineArguments($function, array_values($multiline)));
 
         try {
             $arguments = $this->argumentOrganiser->organiseArguments($function, $match);
@@ -162,5 +170,68 @@ final class RepositorySearchEngine implements SearchEngine
         $namedGroups = count(array_filter(array_keys($match), is_string(...)));
 
         return count($match) - 1 - $namedGroups;
+    }
+
+    /**
+     * Wraps multiline arguments into their dedicated Behat representation
+     * when the definition asks for it.
+     *
+     * The raw Gherkin node always wins: an argument is only wrapped when no
+     * parameter of the definition accepts the node itself, and some parameter
+     * accepts the wrapper.
+     *
+     * @param list<ArgumentInterface> $multiline
+     *
+     * @return list<ArgumentInterface|DataTable|DocString>
+     */
+    private function wrapMultilineArguments(ReflectionFunctionAbstract $function, array $multiline): array
+    {
+        return array_map(
+            function (ArgumentInterface $argument) use ($function) {
+                if ($argument instanceof TableNode
+                    && !$this->someParameterAccepts($function, $argument::class)
+                    && $this->someParameterAccepts($function, DataTable::class)
+                ) {
+                    return new DataTable($argument);
+                }
+
+                if ($argument instanceof PyStringNode
+                    && !$this->someParameterAccepts($function, $argument::class)
+                    && $this->someParameterAccepts($function, DocString::class)
+                ) {
+                    return new DocString($argument);
+                }
+
+                return $argument;
+            },
+            $multiline,
+        );
+    }
+
+    /**
+     * @param class-string $class
+     */
+    private function someParameterAccepts(ReflectionFunctionAbstract $function, string $class): bool
+    {
+        foreach ($function->getParameters() as $parameter) {
+            $type = $parameter->getType();
+            $namedTypes = match (true) {
+                $type instanceof ReflectionNamedType => [$type],
+                $type instanceof ReflectionUnionType,
+                $type instanceof ReflectionIntersectionType => array_filter(
+                    $type->getTypes(),
+                    static fn ($member) => $member instanceof ReflectionNamedType,
+                ),
+                default => [],
+            };
+
+            foreach ($namedTypes as $namedType) {
+                if (!$namedType->isBuiltin() && is_a($class, $namedType->getName(), true)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
