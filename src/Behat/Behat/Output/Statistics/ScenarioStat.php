@@ -30,6 +30,7 @@ final class ScenarioStat implements Stringable
         private ?string $title,
         private readonly string $path,
         private readonly int $resultCode,
+        private readonly ?string $suiteName = null,
     ) {
         $this->title = null;
     }
@@ -58,6 +59,14 @@ final class ScenarioStat implements Stringable
     public function getResultCode(): int
     {
         return $this->resultCode;
+    }
+
+    /**
+     * Returns the name of the suite the scenario was executed in, if known.
+     */
+    public function getSuiteName(): ?string
+    {
+        return $this->suiteName;
     }
 
     /**

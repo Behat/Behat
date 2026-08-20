@@ -16,6 +16,8 @@ use Behat\Behat\EventDispatcher\Event\BeforeFeatureTested;
 use Behat\Behat\Output\Statistics\ScenarioStat;
 use Behat\Behat\Output\Statistics\Statistics;
 use Behat\Testwork\Event\Event;
+use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
 
@@ -26,6 +28,7 @@ use Behat\Testwork\Output\Node\EventListener\EventListener;
  */
 final class ScenarioStatsListener implements EventListener
 {
+    private ?string $currentSuiteName = null;
     private ?string $currentFeaturePath = null;
 
     public function __construct(
@@ -35,9 +38,29 @@ final class ScenarioStatsListener implements EventListener
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
+        $this->captureCurrentSuiteNameOnBeforeSuiteEvent($event);
+        $this->forgetCurrentSuiteNameOnAfterSuiteEvent($event);
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($event);
         $this->captureScenarioOrExampleStatsOnAfterEvent($event);
+    }
+
+    private function captureCurrentSuiteNameOnBeforeSuiteEvent(Event $event): void
+    {
+        if (!$event instanceof BeforeSuiteTested) {
+            return;
+        }
+
+        $this->currentSuiteName = $event->getSuite()->getName();
+    }
+
+    private function forgetCurrentSuiteNameOnAfterSuiteEvent(Event $event): void
+    {
+        if (!$event instanceof AfterSuiteTested) {
+            return;
+        }
+
+        $this->currentSuiteName = null;
     }
 
     /**
@@ -78,7 +101,7 @@ final class ScenarioStatsListener implements EventListener
         $path = sprintf('%s:%d', $this->currentFeaturePath, $scenario->getLine());
         $resultCode = $event->getTestResult()->getResultCode();
 
-        $stat = new ScenarioStat($title, $path, $resultCode);
+        $stat = new ScenarioStat($title, $path, $resultCode, $this->currentSuiteName);
         $this->statistics->registerScenarioStat($stat);
     }
 }

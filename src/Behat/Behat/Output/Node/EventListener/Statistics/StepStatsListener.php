@@ -22,6 +22,8 @@ use Behat\Behat\Tester\Result\DefinedStepResult;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Testwork\Event\Event;
+use Behat\Testwork\EventDispatcher\Event\AfterSuiteTested;
+use Behat\Testwork\EventDispatcher\Event\BeforeSuiteTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
 use Behat\Testwork\Output\Formatter;
 use Behat\Testwork\Output\Node\EventListener\EventListener;
@@ -35,6 +37,7 @@ use Throwable;
  */
 final class StepStatsListener implements EventListener
 {
+    private ?string $currentSuiteName = null;
     private ?string $currentFeaturePath = null;
 
     private ?string $scenarioTitle = null;
@@ -49,11 +52,31 @@ final class StepStatsListener implements EventListener
 
     public function listenEvent(Formatter $formatter, Event $event, $eventName): void
     {
+        $this->captureCurrentSuiteNameOnBeforeSuiteEvent($event);
+        $this->forgetCurrentSuiteNameOnAfterSuiteEvent($event);
         $this->captureCurrentFeaturePathOnBeforeFeatureEvent($event);
         $this->forgetCurrentFeaturePathOnAfterFeatureEvent($eventName);
         $this->captureScenarioOnBeforeFeatureEvent($event);
         $this->forgetScenarioOnAfterFeatureEvent($eventName);
         $this->captureStepStatsOnAfterEvent($event);
+    }
+
+    private function captureCurrentSuiteNameOnBeforeSuiteEvent(Event $event): void
+    {
+        if (!$event instanceof BeforeSuiteTested) {
+            return;
+        }
+
+        $this->currentSuiteName = $event->getSuite()->getName();
+    }
+
+    private function forgetCurrentSuiteNameOnAfterSuiteEvent(Event $event): void
+    {
+        if (!$event instanceof AfterSuiteTested) {
+            return;
+        }
+
+        $this->currentSuiteName = null;
     }
 
     /**
@@ -123,7 +146,7 @@ final class StepStatsListener implements EventListener
         $stdOut = $result instanceof ExecutedStepResult ? $result->getCallResult()->getStdOut() : null;
 
         $resultCode = $result->getResultCode();
-        $stat = new StepStatV2($this->scenarioTitle, $this->scenarioPath, $text, $path, $resultCode, $error, $stdOut);
+        $stat = new StepStatV2($this->scenarioTitle, $this->scenarioPath, $text, $path, $resultCode, $error, $stdOut, $this->currentSuiteName);
 
         $this->statistics->registerStepStat($stat);
     }

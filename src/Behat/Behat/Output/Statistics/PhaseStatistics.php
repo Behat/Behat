@@ -99,6 +99,16 @@ final class PhaseStatistics implements Statistics
     }
 
     /**
+     * Returns the names of the suites that executed at least one scenario.
+     *
+     * @return string[]
+     */
+    public function getSuiteNames(): array
+    {
+        return $this->statistics->getSuiteNames();
+    }
+
+    /**
      * Returns counters for different scenario result codes.
      *
      * @return array<TestResult::*, int>

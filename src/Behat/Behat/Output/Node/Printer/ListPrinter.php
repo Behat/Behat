@@ -61,7 +61,7 @@ final class ListPrinter
      * @param ScenarioStat[] $scenarioStats
      * @param StepStat[]     $stepStats
      */
-    public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null): void
+    public function printScenariosList(OutputPrinter $printer, $intro, $resultCode, array $scenarioStats, ?array $stepStats = null, bool $printSuiteNames = false): void
     {
         if (!count($scenarioStats)) {
             return;
@@ -73,7 +73,7 @@ final class ListPrinter
         $printer->writeln(sprintf('--- {+%s}%s{-%s}' . PHP_EOL, $style, $intro, $style));
         foreach ($scenarioStats as $stat) {
             $path = $this->configurablePathPrinter->processPathsInText((string) $stat);
-
+            $path = $this->appendSuiteName($path, $printSuiteNames ? $stat->getSuiteName() : null);
             $path = $this->appendFailingStepText($stepStats, $path, $stat);
 
             $printer->writeln(sprintf('    {+%s}%s{-%s}', $style, $path, $style));
@@ -95,6 +95,7 @@ final class ListPrinter
         $resultCode,
         array $stepStats,
         ?ShowOutputOption $showOutput = ShowOutputOption::InSummary,
+        bool $printSuiteNames = false,
     ): void {
         if (!count($stepStats)) {
             return;
@@ -107,7 +108,7 @@ final class ListPrinter
 
         foreach ($stepStats as $num => $stepStat) {
             if ($stepStat instanceof StepStatV2) {
-                $this->printStepStat($printer, $num + 1, $stepStat, $style, $showOutput);
+                $this->printStepStat($printer, $num + 1, $stepStat, $style, $showOutput, $printSuiteNames);
             } elseif ($stepStat instanceof StepStat) {
                 $this->printStat(
                     $printer,
@@ -224,6 +225,7 @@ final class ListPrinter
         StepStatV2 $stat,
         string $style,
         ?ShowOutputOption $showOutput,
+        bool $printSuiteName = false,
     ): void {
         $maxLength = max(mb_strlen($stat->getScenarioText(), 'utf8'), mb_strlen($stat->getStepText(), 'utf8') + 2) + 1;
 
@@ -235,7 +237,10 @@ final class ListPrinter
                 $stat->getScenarioText(),
                 $style,
                 str_pad(' ', $maxLength - mb_strlen($stat->getScenarioText(), 'utf8')),
-                $this->configurablePathPrinter->processPathsInText($stat->getScenarioPath())
+                $this->appendSuiteName(
+                    $this->configurablePathPrinter->processPathsInText($stat->getScenarioPath()),
+                    $printSuiteName ? $stat->getSuiteName() : null
+                )
             )
         );
 
@@ -281,7 +286,11 @@ final class ListPrinter
             // > although Statistics::getFailedSteps() is typed as returning StepStat[] for BC reasons,
             // > in practice we only ever create / register instances of StepStatV2. And that has a
             // > getScenarioPath() which I think should always match the getPath() of ScenarioStat.
-            if ($stepStat instanceof StepStatV2 && $stepStat->getScenarioPath() === $scenarioStat->getPath()) {
+            if (
+                $stepStat instanceof StepStatV2
+                && $stepStat->getScenarioPath() === $scenarioStat->getPath()
+                && $stepStat->getSuiteName() === $scenarioStat->getSuiteName()
+            ) {
                 $foundStepStat = $stepStat;
                 break;
             }
@@ -301,6 +310,15 @@ final class ListPrinter
         }
 
         return $path . $lineHelper;
+    }
+
+    private function appendSuiteName(string $path, ?string $suiteName): string
+    {
+        if (null === $suiteName) {
+            return $path;
+        }
+
+        return sprintf('%s (%s)', $path, $suiteName);
     }
 
     private function extractLineNumber(string $path): ?string
