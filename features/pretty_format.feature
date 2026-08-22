@@ -206,8 +206,6 @@ Feature: Pretty Formatter
 
   Scenario: Multiple examples tables
     When I run "behat --profile=multiple_examples features/testMultipleExamples.feature --no-snippets"
-    # Note: The structure / descriptions of the separate tables are lost in the output, but the
-    # examples all execute as expected.
     Then it should fail with:
       """
       Feature: Behat can run scenarios with multiple examples tables
@@ -219,14 +217,17 @@ Feature: Pretty Formatter
           When I input <name>              # FeatureContextMultipleExamples::input()
           Then I should see "<result>"     # FeatureContextMultipleExamples::assertSee()
 
-          Examples:
+          Examples: valid cases
             | name  | result   |
             | Bob   | Hi Bob   |
             | Jenny | Hi Jenny |
               Failed step: Then I should see "Hi Jenny"
               Failed - got: Hi Bob (InvalidArgumentException)
+
+          Examples: invalid cases
+            | name   | result                             |
             | 123456 | '123456' doesn't look like a name? |
-            | Brian | Sorry Brian, you're banned |
+            | Brian  | Sorry Brian, you're banned         |
               Failed step: Then I should see "Sorry Brian, you're banned"
               Failed - got: Hi Bob (InvalidArgumentException)
 
@@ -237,6 +238,70 @@ Feature: Pretty Formatter
 
       4 scenarios (2 passed, 2 failed)
       8 steps (6 passed, 2 failed)
+      """
+
+  Scenario: Multiple examples tables with the expand option
+    When I run "behat --profile=multiple_examples features/testMultipleExamples.feature --no-snippets --format-settings='{\"expand\": true}'"
+    Then it should fail with:
+      """
+      Feature: Behat can run scenarios with multiple examples tables
+        In order to make the purpose of my examples clear
+        As a feature writer
+        I need to group examples into separate tables
+
+        Scenario Outline: Grouped examples # features/testMultipleExamples.feature:6
+          When I input <name>
+          Then I should see "<result>"
+
+          Examples: valid cases
+            | name  | result   |
+            | Bob   | Hi Bob   |         # features/testMultipleExamples.feature:12
+              When I input Bob           # FeatureContextMultipleExamples::input()
+              Then I should see "Hi Bob" # FeatureContextMultipleExamples::assertSee()
+            | Jenny | Hi Jenny |           # features/testMultipleExamples.feature:13
+              When I input Jenny           # FeatureContextMultipleExamples::input()
+              Then I should see "Hi Jenny" # FeatureContextMultipleExamples::assertSee()
+                Failed - got: Hi Bob (InvalidArgumentException)
+
+          Examples: invalid cases
+            | name   | result                             |
+            | 123456 | '123456' doesn't look like a name? |          # features/testMultipleExamples.feature:17
+              When I input 123456                                    # FeatureContextMultipleExamples::input()
+              Then I should see "'123456' doesn't look like a name?" # FeatureContextMultipleExamples::assertSee()
+            | Brian  | Sorry Brian, you're banned         |  # features/testMultipleExamples.feature:18
+              When I input Brian                             # FeatureContextMultipleExamples::input()
+              Then I should see "Sorry Brian, you're banned" # FeatureContextMultipleExamples::assertSee()
+                Failed - got: Hi Bob (InvalidArgumentException)
+
+      --- Failed scenarios:
+
+          features/testMultipleExamples.feature:13 (on line 8)
+          features/testMultipleExamples.feature:18 (on line 8)
+
+      4 scenarios (2 passed, 2 failed)
+      8 steps (6 passed, 2 failed)
+      """
+
+  Scenario: Each examples table is padded and headed independently of the others
+    When I run "behat --profile=multiple_examples features/testDifferentExamplesColumns.feature --no-snippets"
+    Then it should pass with:
+      """
+      Feature: Behat can run scenarios whose examples tables do not share a structure
+
+        Scenario Outline: Differently shaped examples # features/testDifferentExamplesColumns.feature:3
+          When I input <name>                         # FeatureContextMultipleExamples::input()
+          Then I should see "<result>"                # FeatureContextMultipleExamples::assertSee()
+
+          Examples: columns in the order used by the steps
+            | name | result |
+            | Bob  | Hi Bob |
+
+          Examples: the same columns in a different order
+            | result | name |
+            | Hi Bob | Bob  |
+
+      2 scenarios (2 passed)
+      4 steps (4 passed)
       """
 
   @gherkin-mode:has-explicit
@@ -281,10 +346,17 @@ Feature: Pretty Formatter
             When I add <input>                                          # FeatureContext::iAdd()
             Then I must have <expect>                                   # FeatureContext::iMustHave()
 
-            Examples:
+            @simple
+            Examples: First set
+              with a description
               | input | expect |
               | 3     | 28     |
               | 4     | 29     |
+
+            @big
+            Examples: Some more examples
+              that cover bigger numbers
+              | input | expect |
               | 180   | 205    |
 
         --- Failed scenarios:

@@ -12,6 +12,7 @@ namespace Behat\Behat\Output\Node\Printer;
 
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
 
@@ -27,7 +28,8 @@ interface ExampleRowPrinter
     /**
      * Prints example row result using provided printer.
      *
+     * @param ExampleTableNode $exampleTable the examples table that $example was created from
      * @param AfterStepTested[] $events
      */
-    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events): void;
+    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleTableNode $exampleTable, ExampleNode $example, array $events): void;
 }

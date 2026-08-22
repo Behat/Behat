@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer;
 
+use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Output\Formatter;
@@ -28,6 +29,11 @@ interface OutlinePrinter
      * Prints outline header using provided printer.
      */
     public function printHeader(Formatter $formatter, FeatureNode $feature, OutlineNode $outline): void;
+
+    /**
+     * Prints the header of one of the outline's examples tables using the provided printer.
+     */
+    public function printExamplesTableHeader(Formatter $formatter, ExampleTableNode $table): void;
 
     /**
      * Prints outline footer using provided printer.

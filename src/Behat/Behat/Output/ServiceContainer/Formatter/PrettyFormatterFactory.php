@@ -28,12 +28,14 @@ use Behat\Behat\Output\Node\EventListener\Statistics\ScenarioStatsListener;
 use Behat\Behat\Output\Node\EventListener\Statistics\StatisticsListener;
 use Behat\Behat\Output\Node\EventListener\Statistics\StepStatsListener;
 use Behat\Behat\Output\Node\Printer\CounterPrinter;
+use Behat\Behat\Output\Node\Printer\Helper\ExampleTableResolver;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Output\Node\Printer\Helper\StepTextPainter;
 use Behat\Behat\Output\Node\Printer\Helper\WidthCalculator;
 use Behat\Behat\Output\Node\Printer\ListPrinter;
 use Behat\Behat\Output\Node\Printer\Pretty\PrettyExamplePrinter;
 use Behat\Behat\Output\Node\Printer\Pretty\PrettyExampleRowPrinter;
+use Behat\Behat\Output\Node\Printer\Pretty\PrettyExamplesTableHeaderPrinter;
 use Behat\Behat\Output\Node\Printer\Pretty\PrettyFeaturePrinter;
 use Behat\Behat\Output\Node\Printer\Pretty\PrettyOutlinePrinter;
 use Behat\Behat\Output\Node\Printer\Pretty\PrettyOutlineTablePrinter;
@@ -164,6 +166,7 @@ final class PrettyFormatterFactory implements FormatterFactory
                                 new Reference('output.node.printer.pretty.example_row'),
                                 new Reference('output.node.printer.pretty.example_setup'),
                                 new Reference('output.node.printer.pretty.example_step_setup'),
+                                new Reference('output.node.printer.example_table_resolver'),
                             ])
                         ),
                         $this->proxyEventsIfParameterIsSet(
@@ -175,6 +178,7 @@ final class PrettyFormatterFactory implements FormatterFactory
                                 new Reference('output.node.printer.pretty.example_step'),
                                 new Reference('output.node.printer.pretty.example_setup'),
                                 new Reference('output.node.printer.pretty.example_step_setup'),
+                                new Reference('output.node.printer.example_table_resolver'),
                             ])
                         ),
                     ]
@@ -271,7 +275,7 @@ final class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition(PrettyOutlineTablePrinter::class, [
             new Reference('output.node.printer.pretty.scenario'),
             new Reference('output.node.printer.pretty.skipped_step'),
-            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference('output.node.printer.pretty.examples_table_header'),
         ]);
         $container->setDefinition('output.node.printer.pretty.outline_table', $definition);
 
@@ -279,6 +283,7 @@ final class PrettyFormatterFactory implements FormatterFactory
             new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
             new Reference(ExceptionExtension::PRESENTER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
+            new Reference('output.node.printer.example_table_resolver'),
         ]);
         $container->setDefinition('output.node.printer.pretty.example_row', $definition);
     }
@@ -291,7 +296,7 @@ final class PrettyFormatterFactory implements FormatterFactory
         $definition = new Definition(PrettyOutlinePrinter::class, [
             new Reference('output.node.printer.pretty.scenario'),
             new Reference('output.node.printer.pretty.skipped_step'),
-            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+            new Reference('output.node.printer.pretty.examples_table_header'),
         ]);
         $container->setDefinition('output.node.printer.pretty.outline', $definition);
 
@@ -404,6 +409,14 @@ final class PrettyFormatterFactory implements FormatterFactory
 
         $definition = new Definition(ResultToStringConverter::class);
         $container->setDefinition(self::RESULT_TO_STRING_CONVERTER_ID, $definition);
+
+        $definition = new Definition(ExampleTableResolver::class);
+        $container->setDefinition('output.node.printer.example_table_resolver', $definition);
+
+        $definition = new Definition(PrettyExamplesTableHeaderPrinter::class, [
+            new Reference(self::RESULT_TO_STRING_CONVERTER_ID),
+        ]);
+        $container->setDefinition('output.node.printer.pretty.examples_table_header', $definition);
     }
 
     /**

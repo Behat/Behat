@@ -275,5 +275,23 @@
         <ignored-regex>#CHANGED: The parameter .+? of Behat\\Behat\\Transformation\\.+?\#(supportsDefinitionAndArgument|transformArgument)\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: Parameter \d+ of Behat\\Behat\\Transformation\\.+?\#(supportsDefinitionAndArgument|transformArgument)\(\) changed name#</ignored-regex>
         <ignored-regex>#ADDED: Parameter \w+ was added to Method (supportsDefinitionAndArgument|transformArgument)\(\) of class Behat\\Behat\\Transformation\\#</ignored-regex>
+
+        <!--
+        The pretty formatter now prints each of an outline's Examples tables separately, instead of the single merged
+        table that the deprecated OutlineNode::getExampleTable() builds. Rendering a heading per table requires a new
+        method on the outline printer interfaces, and the example row printer has to be told which table the example
+        came from so that it can pad the row and read the column headers from the right one.
+        Grouped by class, as the checker reports one error per parameter.
+        -->
+        <ignored-regex>#ADDED: Method printExamplesTableHeader\(\) was added to interface Behat\\Behat\\Output\\Node\\Printer\\OutlinePrinter#</ignored-regex>
+        <ignored-regex>#ADDED: Method printExamplesTableHeader\(\) was added to interface Behat\\Behat\\Output\\Node\\Printer\\OutlineTablePrinter#</ignored-regex>
+        <ignored-regex>#(ADDED|CHANGED): Parameter exampleTable was added to Method printExampleRow\(\) of class Behat\\Behat\\Output\\Node\\Printer\\ExampleRowPrinter#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\ExampleRowPrinter\#printExampleRow\(\)#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyExampleRowPrinter\#printExampleRow\(\)#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyExampleRowPrinter\#__construct\(\)#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyOutlinePrinter\#__construct\(\)#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyOutlineTablePrinter\#__construct\(\)#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\EventListener\\AST\\OutlineListener\#__construct\(\)#</ignored-regex>
+        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\EventListener\\AST\\OutlineTableListener\#__construct\(\)#</ignored-regex>
     </baseline>
 </roave-bc-check>
