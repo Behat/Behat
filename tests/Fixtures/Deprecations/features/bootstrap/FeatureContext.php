@@ -31,6 +31,16 @@ class FeatureContext implements Context
         trigger_error('Deprecation triggered in step definition', E_USER_DEPRECATED);
     }
 
+    #[Given('/^(Alice|Bob) presses the (?P<button>red|green) button$/')]
+    public function pressesTheButton(string $button): void
+    {
+    }
+
+    #[Given('/^(?:Alice|Bob) pushes the (?P<button>red|green) button$/')]
+    public function pushesTheButton(string $button): void
+    {
+    }
+
     #[Then('the step should pass')]
     public function theStepShouldPass(): void
     {

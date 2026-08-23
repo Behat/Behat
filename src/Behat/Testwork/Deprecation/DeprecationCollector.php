@@ -41,17 +41,25 @@ final class DeprecationCollector
         return self::$instance;
     }
 
-    public static function trigger(string $message): void
+    /**
+     * Records a deprecation.
+     *
+     * By default the deprecation is reported against the caller. Pass $file and $line to report it against
+     * the code that is responsible for the deprecated usage instead, e.g. a user's step definition.
+     */
+    public static function trigger(string $message, ?string $file = null, ?int $line = null): void
     {
         $instance = self::getInstance();
 
-        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
-        $caller = $backtrace[0];
+        if ($file === null) {
+            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+            $caller = $backtrace[0];
 
-        $file = $caller['file'] ?? 'unknown';
-        $line = $caller['line'] ?? 0;
+            $file = $caller['file'] ?? 'unknown';
+            $line = $caller['line'] ?? 0;
+        }
 
-        $instance->recordDeprecation($message, $file, $line);
+        $instance->recordDeprecation($message, $file, $line ?? 0);
     }
 
     /**
