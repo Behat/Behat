@@ -16,6 +16,8 @@ use Throwable;
  * All testwork exceptions implement this interface.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface TestworkException extends Throwable
 {

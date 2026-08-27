@@ -30,6 +30,8 @@ final class HookStat
      * @param string      $path
      * @param string|null $error
      * @param string|null $stdOut
+     *
+     * @api
      */
     public function __construct(
         private $name,

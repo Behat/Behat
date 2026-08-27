@@ -14,6 +14,8 @@ namespace Behat\Testwork\Suite;
  * Represents a Testwork suite. Suite is a collection of tests.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Suite
 {

@@ -25,6 +25,8 @@ final class ScenarioStat implements Stringable
 {
     /**
      * @param TestResult::*|TestResults::NO_TESTS $resultCode
+     *
+     * @api
      */
     public function __construct(
         private ?string $title,

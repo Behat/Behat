@@ -16,6 +16,8 @@ use Behat\Testwork\Specification\SpecificationIterator;
  * Represents a suite hook.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface SuiteScope extends HookScope
 {

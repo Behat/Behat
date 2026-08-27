@@ -17,6 +17,8 @@ use Behat\Testwork\Suite\Suite;
  * Represents Testwork test environment.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface Environment
 {

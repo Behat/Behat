@@ -12,6 +12,9 @@ use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PhpParser\Node\Expr;
 
+/**
+ * @api
+ */
 final class GherkinOptions implements ConfigConverterInterface
 {
     private const CACHE_SETTING = 'cache';
@@ -22,6 +25,9 @@ final class GherkinOptions implements ConfigConverterInterface
     private const COMPATIBILITY_FUNCTION = 'withCompatibilityMode';
     private const FILTER_FUNCTION = 'withFilter';
 
+    /**
+     * @api
+     */
     public function __construct(
         private array $settings = [],
     ) {

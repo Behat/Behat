@@ -24,6 +24,8 @@ final class StepStatV2 extends StepStat implements Stringable
 {
     /**
      * @param StepResult::* $resultCode
+     *
+     * @api
      */
     public function __construct(
         private readonly string $scenarioTitle,
