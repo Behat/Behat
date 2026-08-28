@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
@@ -19,7 +20,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @api
  */
-final class BeforeExerciseCompleted extends ExerciseCompleted implements BeforeTested
+final class BeforeExerciseCompleted extends Event implements ExerciseCompleted, BeforeTested
 {
     /**
      * Initializes event.

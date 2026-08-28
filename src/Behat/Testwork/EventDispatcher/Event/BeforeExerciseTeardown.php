@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -20,7 +21,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeExerciseTeardown extends ExerciseCompleted implements BeforeTeardown
+final class BeforeExerciseTeardown extends Event implements ExerciseCompleted, BeforeTeardown
 {
     /**
      * Initializes event.

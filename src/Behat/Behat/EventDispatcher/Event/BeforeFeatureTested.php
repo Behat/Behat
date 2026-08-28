@@ -21,7 +21,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  *
  * @api
  */
-final class BeforeFeatureTested extends FeatureTested implements BeforeTested
+final class BeforeFeatureTested extends RuntimeFeatureTested implements FeatureTested, BeforeTested
 {
     /**
      * Initializes event.

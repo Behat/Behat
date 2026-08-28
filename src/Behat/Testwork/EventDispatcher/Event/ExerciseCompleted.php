@@ -10,7 +10,6 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
-use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 
 /**
@@ -20,7 +19,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @api
  */
-abstract class ExerciseCompleted extends Event
+interface ExerciseCompleted
 {
     public const BEFORE = 'tester.exercise_completed.before';
     public const AFTER_SETUP = 'tester.exercise_completed.after_setup';
@@ -32,5 +31,5 @@ abstract class ExerciseCompleted extends Event
      *
      * @return SpecificationIterator<mixed>[]
      */
-    abstract public function getSpecificationIterators(): array;
+    public function getSpecificationIterators(): array;
 }

@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeOutlineTeardown extends OutlineTested implements BeforeTeardown
+final class BeforeOutlineTeardown extends RuntimeOutlineTested implements OutlineTested, BeforeTeardown
 {
     /**
      * Initializes event.

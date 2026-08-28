@@ -20,7 +20,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @api
  */
-final class BeforeSuiteTested extends SuiteTested implements BeforeTested
+final class BeforeSuiteTested extends RuntimeLifecycleEvent implements SuiteTested, BeforeTested
 {
     /**
      * Initializes event.

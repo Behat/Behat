@@ -19,7 +19,7 @@ use Behat\Testwork\Specification\SpecificationIterator;
  *
  * @api
  */
-abstract class SuiteTested extends LifecycleEvent
+interface SuiteTested extends LifecycleEvent
 {
     public const BEFORE = 'tester.suite_tested.before';
     public const AFTER_SETUP = 'tester.suite_tested.after_setup';
@@ -31,5 +31,5 @@ abstract class SuiteTested extends LifecycleEvent
      *
      * @return SpecificationIterator<mixed>
      */
-    abstract public function getSpecificationIterator(): SpecificationIterator;
+    public function getSpecificationIterator(): SpecificationIterator;
 }

@@ -26,7 +26,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeStepTeardown extends StepTested implements BeforeTeardown
+final class BeforeStepTeardown extends RuntimeStepTested implements StepTested, BeforeTeardown
 {
     /**
      * Initializes event.

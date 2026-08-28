@@ -10,6 +10,8 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Event\Event;
+
 /**
  * Represents an event in which exercise was aborted.
  *
@@ -17,7 +19,7 @@ namespace Behat\Testwork\EventDispatcher\Event;
  *
  * @api
  */
-final class AfterExerciseAborted extends ExerciseCompleted
+final class AfterExerciseAborted extends Event implements ExerciseCompleted
 {
     public function getSpecificationIterators(): array
     {

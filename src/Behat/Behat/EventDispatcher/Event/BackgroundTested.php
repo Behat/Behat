@@ -12,7 +12,6 @@ namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\BackgroundNode;
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\NodeInterface;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
@@ -22,7 +21,7 @@ use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
  *
  * @api
  */
-abstract class BackgroundTested extends LifecycleEvent implements GherkinNodeTested
+interface BackgroundTested extends LifecycleEvent, GherkinNodeTested
 {
     public const BEFORE = 'tester.background_tested.before';
     public const AFTER_SETUP = 'tester.background_tested.after_setup';
@@ -30,20 +29,12 @@ abstract class BackgroundTested extends LifecycleEvent implements GherkinNodeTes
     public const AFTER = 'tester.background_tested.after';
 
     /**
-     * Returns feature node.
+     * Returns feature.
      */
-    abstract public function getFeature(): FeatureNode;
+    public function getFeature(): FeatureNode;
 
     /**
      * Returns background node.
      */
-    abstract public function getBackground(): BackgroundNode;
-
-    /**
-     * Returns node.
-     */
-    final public function getNode(): NodeInterface
-    {
-        return $this->getBackground();
-    }
+    public function getBackground(): BackgroundNode;
 }

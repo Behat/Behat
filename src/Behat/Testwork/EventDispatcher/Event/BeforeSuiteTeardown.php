@@ -21,7 +21,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeSuiteTeardown extends SuiteTested implements BeforeTeardown
+final class BeforeSuiteTeardown extends RuntimeLifecycleEvent implements SuiteTested, BeforeTeardown
 {
     /**
      * Initializes event.

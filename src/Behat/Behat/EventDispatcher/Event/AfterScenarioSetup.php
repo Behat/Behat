@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterScenarioSetup extends ScenarioTested implements AfterSetup
+final class AfterScenarioSetup extends RuntimeScenarioTested implements ScenarioTested, AfterSetup
 {
     /**
      * Initializes event.

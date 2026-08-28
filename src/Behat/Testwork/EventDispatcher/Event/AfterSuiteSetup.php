@@ -21,7 +21,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterSuiteSetup extends SuiteTested implements AfterSetup
+final class AfterSuiteSetup extends RuntimeLifecycleEvent implements SuiteTested, AfterSetup
 {
     /**
      * Initializes event.

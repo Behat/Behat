@@ -24,7 +24,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @api
  */
-final class AfterBackgroundTested extends BackgroundTested implements AfterTested
+final class AfterBackgroundTested extends RuntimeBackgroundTested implements BackgroundTested, AfterTested
 {
     /**
      * Initializes event.

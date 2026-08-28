@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterBackgroundSetup extends BackgroundTested implements AfterSetup
+final class AfterBackgroundSetup extends RuntimeBackgroundTested implements BackgroundTested, AfterSetup
 {
     /**
      * Initializes event.

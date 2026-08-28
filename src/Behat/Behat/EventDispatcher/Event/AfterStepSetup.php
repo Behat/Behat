@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterStepSetup extends StepTested implements AfterSetup
+final class AfterStepSetup extends RuntimeStepTested implements StepTested, AfterSetup
 {
     /**
      * Initializes event.

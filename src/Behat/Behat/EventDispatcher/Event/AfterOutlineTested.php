@@ -24,7 +24,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @api
  */
-final class AfterOutlineTested extends OutlineTested implements AfterTested
+final class AfterOutlineTested extends RuntimeOutlineTested implements OutlineTested, AfterTested
 {
     /**
      * Initializes event.

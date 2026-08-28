@@ -24,7 +24,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @api
  */
-final class AfterScenarioTested extends ScenarioTested implements AfterTested
+final class AfterScenarioTested extends RuntimeScenarioTested implements ScenarioTested, AfterTested
 {
     /**
      * Initializes event.

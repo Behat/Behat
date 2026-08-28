@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterFeatureSetup extends FeatureTested implements AfterSetup
+final class AfterFeatureSetup extends RuntimeFeatureTested implements FeatureTested, AfterSetup
 {
     /**
      * Initializes event.

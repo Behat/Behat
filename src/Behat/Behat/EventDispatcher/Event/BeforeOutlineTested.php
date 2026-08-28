@@ -22,7 +22,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  *
  * @api
  */
-final class BeforeOutlineTested extends OutlineTested implements BeforeTested
+final class BeforeOutlineTested extends RuntimeOutlineTested implements OutlineTested, BeforeTested
 {
     /**
      * Initializes event.

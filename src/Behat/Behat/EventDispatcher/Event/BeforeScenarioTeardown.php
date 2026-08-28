@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeScenarioTeardown extends ScenarioTested implements BeforeTeardown
+final class BeforeScenarioTeardown extends RuntimeScenarioTested implements ScenarioTested, BeforeTeardown
 {
     /**
      * Initializes event.

@@ -22,7 +22,7 @@ use Behat\Testwork\EventDispatcher\Event\BeforeTested;
  *
  * @api
  */
-final class BeforeScenarioTested extends ScenarioTested implements BeforeTested
+final class BeforeScenarioTested extends RuntimeScenarioTested implements ScenarioTested, BeforeTested
 {
     /**
      * Initializes event.

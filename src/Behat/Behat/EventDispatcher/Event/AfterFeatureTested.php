@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @api
  */
-final class AfterFeatureTested extends FeatureTested implements AfterTested
+final class AfterFeatureTested extends RuntimeFeatureTested implements FeatureTested, AfterTested
 {
     /**
      * Initializes event.

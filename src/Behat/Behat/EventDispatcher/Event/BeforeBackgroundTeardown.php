@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeBackgroundTeardown extends BackgroundTested implements BeforeTeardown
+final class BeforeBackgroundTeardown extends RuntimeBackgroundTested implements BackgroundTested, BeforeTeardown
 {
     /**
      * Initializes event.

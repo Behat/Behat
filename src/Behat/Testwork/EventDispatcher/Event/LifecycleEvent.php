@@ -11,7 +11,6 @@
 namespace Behat\Testwork\EventDispatcher\Event;
 
 use Behat\Testwork\Environment\Environment;
-use Behat\Testwork\Event\Event;
 use Behat\Testwork\Suite\Suite;
 
 /**
@@ -21,29 +20,15 @@ use Behat\Testwork\Suite\Suite;
  *
  * @api
  */
-abstract class LifecycleEvent extends Event
+interface LifecycleEvent
 {
-    /**
-     * Initializes scenario event.
-     */
-    public function __construct(
-        private readonly Environment $environment,
-    ) {
-    }
-
     /**
      * Returns suite in which this event was fired.
      */
-    public function getSuite(): Suite
-    {
-        return $this->environment->getSuite();
-    }
+    public function getSuite(): Suite;
 
     /**
      * Returns environment in which this event was fired.
      */
-    public function getEnvironment(): Environment
-    {
-        return $this->environment;
-    }
+    public function getEnvironment(): Environment;
 }

@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Setup\Teardown;
  *
  * @api
  */
-final class AfterSuiteTested extends SuiteTested implements AfterTested
+final class AfterSuiteTested extends RuntimeLifecycleEvent implements SuiteTested, AfterTested
 {
     /**
      * Initializes event.

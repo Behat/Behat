@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\EventDispatcher\Event;
 
+use Behat\Testwork\Event\Event;
 use Behat\Testwork\Specification\SpecificationIterator;
 use Behat\Testwork\Tester\Setup\Setup;
 
@@ -20,7 +21,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterExerciseSetup extends ExerciseCompleted implements AfterSetup
+final class AfterExerciseSetup extends Event implements ExerciseCompleted, AfterSetup
 {
     /**
      * Initializes event.

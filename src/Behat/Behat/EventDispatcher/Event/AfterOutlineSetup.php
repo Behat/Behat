@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Setup\Setup;
  *
  * @api
  */
-final class AfterOutlineSetup extends OutlineTested implements AfterSetup
+final class AfterOutlineSetup extends RuntimeOutlineTested implements OutlineTested, AfterSetup
 {
     /**
      * Initializes event.

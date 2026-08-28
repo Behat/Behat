@@ -22,7 +22,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @api
  */
-final class BeforeFeatureTeardown extends FeatureTested implements BeforeTeardown
+final class BeforeFeatureTeardown extends RuntimeFeatureTested implements FeatureTested, BeforeTeardown
 {
     /**
      * Initializes event.

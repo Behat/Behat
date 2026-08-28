@@ -11,18 +11,17 @@
 namespace Behat\Behat\EventDispatcher\Event;
 
 use Behat\Gherkin\Node\FeatureNode;
-use Behat\Gherkin\Node\NodeInterface;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\EventDispatcher\Event\LifecycleEvent;
 
 /**
- * Represents an outline event.
+ * Represents a outline event.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  *
  * @api
  */
-abstract class OutlineTested extends LifecycleEvent implements GherkinNodeTested
+interface OutlineTested extends LifecycleEvent, GherkinNodeTested
 {
     public const BEFORE = 'tester.outline_tested.before';
     public const AFTER_SETUP = 'tester.outline_tested.after_setup';
@@ -32,18 +31,10 @@ abstract class OutlineTested extends LifecycleEvent implements GherkinNodeTested
     /**
      * Returns feature.
      */
-    abstract public function getFeature(): FeatureNode;
+    public function getFeature(): FeatureNode;
 
     /**
      * Returns outline node.
      */
-    abstract public function getOutline(): OutlineNode;
-
-    /**
-     * Returns node.
-     */
-    final public function getNode(): NodeInterface
-    {
-        return $this->getOutline();
-    }
+    public function getOutline(): OutlineNode;
 }
