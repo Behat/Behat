@@ -10,7 +10,7 @@
 
 namespace Behat\Behat\Transformation\Transformer;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 
 /**
  * Transforms a single argument value.
@@ -24,10 +24,10 @@ interface ArgumentTransformer
     /**
      * Checks if transformer supports argument.
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): bool;
+    public function supportsDefinitionAndArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): bool;
 
     /**
      * Transforms argument value using transformation and returns a new one.
      */
-    public function transformArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): mixed;
+    public function transformArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): mixed;
 }

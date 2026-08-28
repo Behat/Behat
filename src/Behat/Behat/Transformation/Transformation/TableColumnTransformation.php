@@ -10,11 +10,9 @@
 
 namespace Behat\Behat\Transformation\Transformation;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use InvalidArgumentException;
 use ReflectionMethod;
@@ -38,7 +36,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
     }
 
     public function supportsDefinitionAndArgument(
-        DefinitionCall $definitionCall,
+        TransformationScope $scope,
         int|string $argumentIndex,
         mixed $argumentArgumentValue,
     ): bool {
@@ -83,8 +81,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
      * @return list<mixed[]>
      */
     public function transformArgument(
-        CallCenter $callCenter,
-        DefinitionCall $definitionCall,
+        TransformationScope $scope,
         int|string $argumentIndex,
         mixed $argumentValue,
     ): array {
@@ -100,20 +97,7 @@ final class TableColumnTransformation extends RuntimeCallee implements Stringabl
         foreach ($argumentValue as $row) {
             foreach ($columnNames as $columnName) {
                 if (isset($row[$columnName])) {
-                    $call = new TransformationCall(
-                        $definitionCall->getEnvironment(),
-                        $definitionCall->getCallee(),
-                        $this,
-                        [$row[$columnName]]
-                    );
-
-                    $result = $callCenter->makeCall($call);
-
-                    if ($result->hasException()) {
-                        throw $result->getException();
-                    }
-
-                    $row[$columnName] = $result->getReturn();
+                    $row[$columnName] = $scope->call($this, [$row[$columnName]]);
                 }
             }
             $rows[] = $row;

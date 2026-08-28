@@ -12,8 +12,10 @@ namespace Behat\Behat\Transformation\Call\Filter;
 
 use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Transformation\Exception\UnsupportedCallException;
+use Behat\Behat\Transformation\Scope\RuntimeTransformationScope;
 use Behat\Behat\Transformation\Transformer\ArgumentTransformer;
 use Behat\Testwork\Call\Call;
+use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\Filter\CallFilter;
 
 /**
@@ -27,6 +29,11 @@ final class DefinitionArgumentsTransformer implements CallFilter
      * @var list<ArgumentTransformer>
      */
     private array $argumentTransformers = [];
+
+    public function __construct(
+        private readonly CallCenter $callCenter,
+    ) {
+    }
 
     /**
      * Registers new argument transformer.
@@ -81,12 +88,14 @@ final class DefinitionArgumentsTransformer implements CallFilter
      */
     private function transformArgument(DefinitionCall $definitionCall, int|string $index, mixed $value): mixed
     {
+        $scope = new RuntimeTransformationScope($definitionCall, $this->callCenter);
+
         foreach ($this->argumentTransformers as $transformer) {
-            if (!$transformer->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
+            if (!$transformer->supportsDefinitionAndArgument($scope, $index, $value)) {
                 continue;
             }
 
-            return $transformer->transformArgument($definitionCall, $index, $value);
+            return $transformer->transformArgument($scope, $index, $value);
         }
 
         return $value;

@@ -10,11 +10,9 @@
 
 namespace Behat\Behat\Transformation\Transformation;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\Call\TransformationCall;
 use Behat\Behat\Transformation\RegexGenerator;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 use Behat\Behat\Transformation\Transformation;
-use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Exception;
 use Stringable;
@@ -43,13 +41,13 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
      */
     public function supportsDefinitionAndArgument(
         RegexGenerator $regexGenerator,
-        DefinitionCall $definitionCall,
+        TransformationScope $scope,
         mixed $argumentValue,
     ): bool {
         $regex = $regexGenerator->generateRegex(
-            $definitionCall->getEnvironment()->getSuite()->getName(),
+            $scope->getEnvironment()->getSuite()->getName(),
             $this->pattern,
-            $definitionCall->getFeature()->getLanguage()
+            $scope->getFeature()->getLanguage()
         );
 
         return $this->match($regex, $argumentValue) !== false;
@@ -62,14 +60,13 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
      */
     public function transformArgument(
         RegexGenerator $regexGenerator,
-        CallCenter $callCenter,
-        DefinitionCall $definitionCall,
+        TransformationScope $scope,
         mixed $argumentValue,
     ): mixed {
         $regex = $regexGenerator->generateRegex(
-            $definitionCall->getEnvironment()->getSuite()->getName(),
+            $scope->getEnvironment()->getSuite()->getName(),
             $this->pattern,
-            $definitionCall->getFeature()->getLanguage()
+            $scope->getFeature()->getLanguage()
         );
 
         $arguments = $this->match($regex, $argumentValue);
@@ -82,20 +79,7 @@ final class PatternTransformation extends RuntimeCallee implements Stringable, T
             );
         }
 
-        $call = new TransformationCall(
-            $definitionCall->getEnvironment(),
-            $definitionCall->getCallee(),
-            $this,
-            $arguments
-        );
-
-        $result = $callCenter->makeCall($call);
-
-        if ($result->hasException()) {
-            throw $result->getException();
-        }
-
-        return $result->getReturn();
+        return $scope->call($this, $arguments);
     }
 
     public function __toString(): string
