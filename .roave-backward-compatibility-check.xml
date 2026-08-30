@@ -264,5 +264,17 @@
 
         <!-- Required consistent constructor for SimpleArgumentTransformation -->
         <ignored-regex>#ADDED: Method __construct\(\) was added to interface Behat\\Behat\\Transformation\\SimpleArgumentTransformation#</ignored-regex>
+
+        <!--
+        The event base classes are now interfaces, with their shared implementation moved into internal Runtime*
+        classes. Existing type hints, instanceof checks and event name constants such as ScenarioTested::BEFORE are
+        unaffected; only extending these base classes is no longer possible, which was never intended. As a result
+        the interfaces no longer inherit from Behat's and Symfony's Event classes.
+        -->
+        <ignored-regex>#CHANGED: Class Behat\\(Behat|Testwork)\\EventDispatcher\\Event\\\w+ became an interface#</ignored-regex>
+        <ignored-regex>#REMOVED: These ancestors of Behat\\(Behat|Testwork)\\EventDispatcher\\Event\\\w+ have been removed#</ignored-regex>
+        <ignored-regex>#CHANGED: Method (getNode|getSuite|getEnvironment)\(\) of class Behat\\(Behat|Testwork)\\EventDispatcher\\Event\\\w+ changed from concrete to abstract#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Behat\\Testwork\\EventDispatcher\\Event\\LifecycleEvent\#__construct\(\) was removed#</ignored-regex>
+        <ignored-regex>#REMOVED: Method Symfony\\Contracts\\EventDispatcher\\Event\#(isPropagationStopped|stopPropagation)\(\) was removed#</ignored-regex>
     </baseline>
 </roave-bc-check>
