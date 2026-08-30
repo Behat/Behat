@@ -29,12 +29,11 @@ final class ScenarioStat implements Stringable
      * @api
      */
     public function __construct(
-        private ?string $title,
+        private readonly ?string $title,
         private readonly string $path,
         private readonly int $resultCode,
         private readonly ?string $suiteName = null,
     ) {
-        $this->title = null;
     }
 
     /**
