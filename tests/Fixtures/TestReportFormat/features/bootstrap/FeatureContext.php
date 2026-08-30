@@ -6,6 +6,7 @@ use Behat\Hook\BeforeScenario;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContext implements Context
 {
@@ -32,7 +33,7 @@ class FeatureContext implements Context
     #[Then('/I must have (\d+)/')]
     public function iMustHave($num)
     {
-        PHPUnit\Framework\Assert::assertEquals($num, $this->value);
+        Assert::assertEquals($num, $this->value);
     }
 
     #[BeforeScenario('@setup-error')]

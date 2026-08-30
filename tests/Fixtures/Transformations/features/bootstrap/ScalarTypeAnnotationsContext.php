@@ -1,7 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
-use PHPUnit\Framework\Assert;
+use Behat\Tests\Fixtures\Assert;
 
 class ScalarTypeAnnotationsContext implements Context
 {

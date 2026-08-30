@@ -5,6 +5,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContext implements Context
 {
@@ -48,20 +49,20 @@ class FeatureContext implements Context
     #[Then('/^it must be equals to string (\d+)$/')]
     public function itMustBeEqualsToString($number)
     {
-        PHPUnit\Framework\Assert::assertEquals($this->strings[intval($number)], (string) $this->input);
+        Assert::assertEquals($this->strings[intval($number)], (string) $this->input);
     }
 
     #[Then('/^it must be equals to table (\d+)$/')]
     public function itMustBeEqualsToTable($number)
     {
-        PHPUnit\Framework\Assert::assertEquals($this->tables[intval($number)], $this->input->getHash());
+        Assert::assertEquals($this->tables[intval($number)], $this->input->getHash());
     }
 
     #[Given('/^I have number2 = (?P<number2>\d+) and number1 = (?P<number1>\d+)$/')]
     public function iHaveNumberAndNumber($number1, $number2)
     {
-        PHPUnit\Framework\Assert::assertEquals(13, intval($number1));
-        PHPUnit\Framework\Assert::assertEquals(243, intval($number2));
+        Assert::assertEquals(13, intval($number1));
+        Assert::assertEquals(243, intval($number2));
     }
 
     #[Given('/^a step with no argument$/')]

@@ -2,7 +2,7 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
-use PHPUnit\Framework\Assert;
+use Behat\Tests\Fixtures\Assert;
 
 class WholeTableAnnotationsContext implements Context
 {

@@ -3,6 +3,7 @@
 use Behat\Behat\Context\TranslatableContext;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Behat\Tests\Fixtures\Assert;
 use Behat\Transformation\Transform;
 
 class PhpContextAttributes implements TranslatableContext
@@ -25,7 +26,7 @@ class PhpContextAttributes implements TranslatableContext
     #[Then('/^I should see (\d+) on the screen$/')]
     public function iShouldSeeOnTheScreen($result)
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+        Assert::assertEquals(intval($result), $this->result);
     }
 
     #[Transform('/"([^"]+)" user/')]
@@ -37,7 +38,7 @@ class PhpContextAttributes implements TranslatableContext
     #[Then('/^the ("[^"]+" user) name should be "([^"]*)"$/')]
     public function theUserUsername($user, $username)
     {
-        PHPUnit\Framework\Assert::assertEquals($username, $user->name);
+        Assert::assertEquals($username, $user->name);
     }
 
     public static function getTranslationResources()

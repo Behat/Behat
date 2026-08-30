@@ -11,6 +11,7 @@ use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeStep;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContextAttributes implements Context
 {
@@ -88,13 +89,13 @@ class FeatureContextAttributes implements Context
     #[Then('/^I must have (\\d+)$/')]
     public function iMustHave($number)
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($number), $this->number);
+        Assert::assertEquals(intval($number), $this->number);
     }
 
     #[Then('I must have a scenario filter value of :value')]
     public function iMustHaveScenarioFilter($filterValue)
     {
-        PHPUnit\Framework\Assert::assertEquals($filterValue, $this->scenarioFilter);
+        Assert::assertEquals($filterValue, $this->scenarioFilter);
     }
 
     #[BeforeScenario]

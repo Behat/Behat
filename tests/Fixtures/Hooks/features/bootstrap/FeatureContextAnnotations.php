@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Behat\Behat\Context\Context;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContextAnnotations implements Context
 {
@@ -104,7 +105,7 @@ class FeatureContextAnnotations implements Context
      */
     public function iMustHave($number)
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($number), $this->number);
+        Assert::assertEquals(intval($number), $this->number);
     }
 
     /**
@@ -112,7 +113,7 @@ class FeatureContextAnnotations implements Context
      */
     public function iMustHaveScenarioFilter($filterValue)
     {
-        PHPUnit\Framework\Assert::assertEquals($filterValue, $this->scenarioFilter);
+        Assert::assertEquals($filterValue, $this->scenarioFilter);
     }
 
     /**

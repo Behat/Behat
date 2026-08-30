@@ -6,6 +6,7 @@ use Behat\Behat\Context\Context;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContext implements Context
 {
@@ -67,6 +68,6 @@ class FeatureContext implements Context
     #[Then('/^The result should be (\d+)$/')]
     public function theResultShouldBe($result): void
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+        Assert::assertEquals(intval($result), $this->result);
     }
 }

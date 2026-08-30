@@ -143,11 +143,11 @@ Feature: Different result types
 
       001 Scenario: Check thrown amount         # features/failed.feature:9
             Then I should see 12$ on the screen # features/failed.feature:10
-              Failed asserting that 10 matches expected '12'.
+              Failed asserting that 10 matches expected '12'. (Exception)
 
       002 Scenario: Additional throws           # features/failed.feature:12
             Then I should see 31$ on the screen # features/failed.feature:14
-              Failed asserting that 30 matches expected '31'.
+              Failed asserting that 30 matches expected '31'. (Exception)
 
       2 scenarios (2 failed)
       6 steps (3 passed, 2 failed, 1 skipped)

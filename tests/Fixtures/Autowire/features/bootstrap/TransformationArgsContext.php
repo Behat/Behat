@@ -3,6 +3,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 use Behat\Transformation\Transform;
 
 class TransformationArgsContext implements Context
@@ -22,6 +23,6 @@ class TransformationArgsContext implements Context
     #[Then('the :flag flag should be persisted as :value')]
     public function checkState($flag, $value)
     {
-        PHPUnit\Framework\Assert::assertEquals($value, $flag);
+        Assert::assertEquals($value, $flag);
     }
 }

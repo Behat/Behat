@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Behat\Behat\Context\Context;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 final class FeatureContext implements Context
 {
@@ -23,6 +24,6 @@ final class FeatureContext implements Context
     #[Then('the extension should be loaded')]
     public function theExtensionLoaded(): void
     {
-        PHPUnit\Framework\Assert::assertEquals(['param1' => 'val1', 'param2' => 'val2'], $this->extension);
+        Assert::assertEquals(['param1' => 'val1', 'param2' => 'val2'], $this->extension);
     }
 }

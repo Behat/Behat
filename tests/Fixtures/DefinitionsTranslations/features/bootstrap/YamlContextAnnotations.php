@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\TranslatableContext;
+use Behat\Tests\Fixtures\Assert;
 
 class YamlContextAnnotations implements TranslatableContext
 {
@@ -28,7 +29,7 @@ class YamlContextAnnotations implements TranslatableContext
      */
     public function iShouldSeeOnTheScreen($result)
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($result), $this->result);
+        Assert::assertEquals(intval($result), $this->result);
     }
 
     /** @Transform /"([^"]+)" user/ */
@@ -42,7 +43,7 @@ class YamlContextAnnotations implements TranslatableContext
      */
     public function theUserUsername($user, $username)
     {
-        PHPUnit\Framework\Assert::assertEquals($username, $user->name);
+        Assert::assertEquals($username, $user->name);
     }
 
     public static function getTranslationResources()

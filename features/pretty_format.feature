@@ -35,7 +35,7 @@ Feature: Pretty Formatter
         Scenario: Failed      # features/World.feature:19
           When I add 4        # FeatureContext::iAdd()
           Then I must have 13 # FeatureContext::iMustHave()
-            Failed asserting that 14 matches expected '13'.
+            Failed asserting that 14 matches expected '13'. (Exception)
 
         Scenario Outline: Passed & Failed # features/World.feature:23
           Given I must have 10            # FeatureContext::iMustHave()
@@ -46,11 +46,11 @@ Feature: Pretty Formatter
             | value | result |
             | 5     | 16     |
               Failed step: Then I must have 16
-              Failed asserting that 15 matches expected '16'.
+              Failed asserting that 15 matches expected '16'. (Exception)
             | 10    | 20     |
             | 23    | 32     |
               Failed step: Then I must have 32
-              Failed asserting that 33 matches expected '32'.
+              Failed asserting that 33 matches expected '32'. (Exception)
 
       --- Failed scenarios:
 
@@ -268,7 +268,7 @@ Feature: Pretty Formatter
           Scenario: Simple failing scenario # features/gherkin-parity.feature:20
             When I add 3                    # FeatureContext::iAdd()
             Then I must have 30             # FeatureContext::iMustHave()
-              Failed asserting that 28 matches expected '30'.
+              Failed asserting that 28 matches expected '30'. (Exception)
 
           @wip @new
           Scenario: With unknown step # features/gherkin-parity.feature:25
