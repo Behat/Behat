@@ -40,19 +40,19 @@ Feature: Scenario Outlines
 
       001 Example: | 5       | 4       | 15     | # features/math-failing.feature:14
             Then The result should be 15          # features/math-failing.feature:9
-              Failed asserting that 20 matches expected 15.
+              Failed asserting that 20 matches expected 15. (Exception)
 
       002 Scenario:                     # features/math-failing.feature:16
             Then The result should be 7 # features/math-failing.feature:20
-              Failed asserting that 6 matches expected 7.
+              Failed asserting that 6 matches expected 7. (Exception)
 
       003 Example: | 50      | 10      | 2      | # features/math-failing.feature:31
             Then The result should be 2           # features/math-failing.feature:26
-              Failed asserting that 5 matches expected 2.
+              Failed asserting that 5 matches expected 2. (Exception)
 
       004 Example: | 50      | 10      | 4      | # features/math-failing.feature:32
             Then The result should be 4           # features/math-failing.feature:26
-              Failed asserting that 5 matches expected 4.
+              Failed asserting that 5 matches expected 4. (Exception)
 
       6 scenarios (2 passed, 4 failed)
       30 steps (26 passed, 4 failed)
@@ -68,11 +68,11 @@ Feature: Scenario Outlines
 
       001 Example: | 5       | 4       | 10     | # features/math-multiple-examples.feature:14
             Then The result should be 10          # features/math-multiple-examples.feature:9
-              Failed asserting that 20 matches expected 10.
+              Failed asserting that 20 matches expected 10. (Exception)
 
       002 Example: | 139     | 201     | 99     | # features/math-multiple-examples.feature:19
             Then The result should be 99          # features/math-multiple-examples.feature:9
-              Failed asserting that 27939 matches expected 99.
+              Failed asserting that 27939 matches expected 99. (Exception)
 
       5 scenarios (3 passed, 2 failed)
       25 steps (23 passed, 2 failed)

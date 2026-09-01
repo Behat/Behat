@@ -4,6 +4,7 @@ use Behat\Behat\Context\Context;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContext implements Context
 {
@@ -26,7 +27,7 @@ class FeatureContext implements Context
     #[Then('/^I should get NULL$/')]
     public function iShouldGetNull()
     {
-        PHPUnit\Framework\Assert::assertNull($this->result);
+        Assert::assertNull($this->result);
     }
 
     #[When('/^I push "([^"]*)" to that array$/')]
@@ -38,7 +39,7 @@ class FeatureContext implements Context
     #[Then('/^I should get "([^"]*)"$/')]
     public function iShouldGet($arg1)
     {
-        PHPUnit\Framework\Assert::assertEquals($arg1, $this->result);
+        Assert::assertEquals($arg1, $this->result);
     }
 
     #[When('an exception is thrown')]

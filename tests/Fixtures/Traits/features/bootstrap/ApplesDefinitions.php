@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
-use PHPUnit\Framework\Assert;
+use Behat\Tests\Fixtures\Assert;
 
 trait ApplesDefinitions
 {

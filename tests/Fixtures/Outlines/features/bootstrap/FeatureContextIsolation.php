@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Behat\Behat\Context\Context;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContextIsolation implements Context
 {
@@ -19,6 +20,6 @@ class FeatureContextIsolation implements Context
     #[Then('the result should be :result')]
     public function theResultShouldBe($result): void
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($result), $this->number);
+        Assert::assertEquals(intval($result), $this->number);
     }
 }

@@ -3,6 +3,7 @@
 use Behat\Behat\Context\TranslatableContext;
 use Behat\Step\Given;
 use Behat\Step\Then;
+use Behat\Tests\Fixtures\Assert;
 use Behat\Transformation\Transform;
 
 class ArgumentsContextAttributes implements TranslatableContext
@@ -24,7 +25,7 @@ class ArgumentsContextAttributes implements TranslatableContext
     #[Then('/^the index should be "([^"]*)"$/')]
     public function theIndexShouldBe($value)
     {
-        PHPUnit\Framework\Assert::assertSame($value, $this->index);
+        Assert::assertSame($value, $this->index);
     }
 
     public static function getTranslationResources()

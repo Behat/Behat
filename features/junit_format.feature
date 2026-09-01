@@ -41,14 +41,14 @@ Feature: JUnit Formatter
             <error message="And Something not done yet: TODO: write pending definition" type="pending"/>
           </testcase>
           <testcase name="Failed" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="25">
-            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'. (Exception)"/>
           </testcase>
           <testcase name="Passed &amp; Failed with value=5 #1" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29">
-            <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'."/>
+            <failure message="Then I must have 16: Failed asserting that 15 matches expected '16'. (Exception)"/>
           </testcase>
           <testcase name="Passed &amp; Failed with value=10 #2" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29"/>
           <testcase name="Passed &amp; Failed with value=23 #3" classname="Adding numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="29">
-            <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'."/>
+            <failure message="Then I must have 32: Failed asserting that 33 matches expected '32'. (Exception)"/>
           </testcase>
           <testcase name="Another Outline (5 = 15) #1" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="39"/>
           <testcase name="Another Outline (10 = 20) #2" classname="Adding numbers" status="passed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-single_feature.feature" line="39"/>
@@ -136,7 +136,7 @@ Feature: JUnit Formatter
       <testsuites name="old_man">
         <testsuite name="Adding difficult numbers" file="features-DIRECTORY-SEPARATOR-multiple_suites_2.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Difficult sum" classname="Adding difficult numbers" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-multiple_suites_2.feature" line="11">
-            <failure message="Then I must have 477: Failed asserting that 378 matches expected '477'."/>
+            <failure message="Then I must have 477: Failed asserting that 378 matches expected '477'. (Exception)"/>
           </testcase>
         </testsuite>
       </testsuites>
@@ -175,7 +175,7 @@ Feature: JUnit Formatter
       <testsuites name="stop_on_failure">
         <testsuite name="Stop on failure" file="features-DIRECTORY-SEPARATOR-stop_on_failure.feature" tests="1" skipped="0" failures="1" errors="0" time="-IGNORE-VALUE-">
           <testcase name="Failed" classname="Stop on failure" status="failed" time="-IGNORE-VALUE-" file="features-DIRECTORY-SEPARATOR-stop_on_failure.feature" line="11">
-            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'."/>
+            <failure message="Then I must have 13: Failed asserting that 14 matches expected '13'. (Exception)"/>
           </testcase>
         </testsuite>
       </testsuites>

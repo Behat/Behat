@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Behat\Behat\Context\Context;
 use Behat\Step\Given;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 final class FirstContext implements Context
 {
@@ -18,7 +19,7 @@ final class FirstContext implements Context
     #[Given('service has no state')]
     public function noState(): void
     {
-        PHPUnit\Framework\Assert::assertNull($this->service->number);
+        Assert::assertNull($this->service->number);
     }
 
     #[When('service gets a state of :number in first context')]
