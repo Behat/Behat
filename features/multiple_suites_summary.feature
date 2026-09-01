@@ -19,19 +19,19 @@ Feature: Suite names in the summary lists
 
       001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       002 Example: | 1   | 8      |     # features/apples.feature:24 (default)
             Then I should have 8 apples # features/apples.feature:19
-              Failed asserting that 2 matches expected 8.
+              Failed asserting that 2 matches expected 8. (Exception)
 
       003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       004 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       6 scenarios (2 passed, 4 failed)
       18 steps (14 passed, 4 failed)
@@ -83,7 +83,7 @@ Feature: Suite names in the summary lists
 
       001 Scenario: I'm little hungry    # features/bananas.feature:9
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       1 scenario (1 failed)
       3 steps (2 passed, 1 failed)
