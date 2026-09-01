@@ -12,6 +12,7 @@ use Behat\Tests\Fixtures\Assert;
 class FeatureContext implements Context
 {
     private $input;
+    private $text;
     private $strings = [];
     private $tables = [];
 
@@ -81,8 +82,8 @@ class FeatureContext implements Context
     #[Then('/^the data table must be equals to table (\d+)$/')]
     public function theDataTableMustBeEqualsToTable($number)
     {
-        PHPUnit\Framework\Assert::assertInstanceOf(DataTable::class, $this->input);
-        PHPUnit\Framework\Assert::assertEquals($this->tables[intval($number)], $this->input->asMaps());
+        Assert::assertSame(DataTable::class, $this->input::class);
+        Assert::assertEquals($this->tables[intval($number)], $this->input->asMaps());
     }
 
     #[Given('/^a doc string:$/')]
@@ -94,19 +95,33 @@ class FeatureContext implements Context
     #[Then('/^the doc string must be equals to string (\d+)$/')]
     public function theDocStringMustBeEqualsToString($number)
     {
-        PHPUnit\Framework\Assert::assertInstanceOf(DocString::class, $this->input);
-        PHPUnit\Framework\Assert::assertEquals($this->strings[intval($number)], $this->input->getContent());
+        Assert::assertSame(DocString::class, $this->input::class);
+        Assert::assertEquals($this->strings[intval($number)], $this->input->getContent());
     }
 
-    #[Given('/^a table that could be wrapped or not:$/')]
-    public function aTableThatCouldBeWrappedOrNot(TableNode|DataTable $table)
+    #[Given('/^an untyped step that takes "([^"]*)" and these values:$/')]
+    public function anUntypedStepThatTakesAndTheseValues($text, $table)
     {
         $this->input = $table;
+        $this->text = $text;
     }
 
-    #[Then('/^the argument must be a raw TableNode$/')]
-    public function theArgumentMustBeARawTableNode()
+    #[Given('/^an untyped step that takes "([^"]*)" and this text:$/')]
+    public function anUntypedStepThatTakesAndThisText($text, $string)
     {
-        PHPUnit\Framework\Assert::assertInstanceOf(TableNode::class, $this->input);
+        $this->input = $string;
+        $this->text = $text;
+    }
+
+    #[Then('/^the argument must be a raw (TableNode|PyStringNode)$/')]
+    public function theArgumentMustBeARawGherkinNode($class)
+    {
+        Assert::assertSame('Behat\\Gherkin\\Node\\' . $class, $this->input::class);
+    }
+
+    #[Then('/^the other argument must be "([^"]*)"$/')]
+    public function theOtherArgumentMustBe($expected)
+    {
+        Assert::assertSame($expected, $this->text);
     }
 }

@@ -10,6 +10,7 @@
 
 namespace Behat\Step;
 
+use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
 use Stringable;
 
@@ -25,7 +26,7 @@ use Stringable;
 final class DataTable implements Stringable
 {
     /**
-     * @api
+     * @internal instances are created by Behat, from the Gherkin node of the step
      */
     public function __construct(
         private readonly TableNode $tableNode,
@@ -37,8 +38,6 @@ final class DataTable implements Stringable
      * rows, each row being a list of cell values.
      *
      * @return list<list<string>>
-     *
-     * @api
      */
     public function asLists(): array
     {
@@ -50,8 +49,6 @@ final class DataTable implements Stringable
      * as keys for the values of every following row.
      *
      * @return list<array<string, string>>
-     *
-     * @api
      */
     public function asMaps(): array
     {
@@ -62,9 +59,10 @@ final class DataTable implements Stringable
      * Returns a two-column table as an associative array, mapping the cells
      * of the first column to the cells of the second column.
      *
-     * @return array<string, string>
+     * A row that has more than two cells maps to the list of its remaining
+     * cells, and a single-column row maps to an empty list.
      *
-     * @api
+     * @return array<string, string|list<string>>
      */
     public function asMap(): array
     {
@@ -74,19 +72,23 @@ final class DataTable implements Stringable
     /**
      * Returns the value of a single cell by zero-based row and column indexes.
      *
-     * @api
+     * @throws NodeException when the row or the column does not exist
      */
     public function cell(int $row, int $column): string
     {
-        return $this->row($row)[$column];
+        $cells = $this->row($row);
+
+        if (!array_key_exists($column, $cells)) {
+            throw new NodeException(sprintf('Column #%s does not exist in table.', $column));
+        }
+
+        return $cells[$column];
     }
 
     /**
      * Returns a row as a list of cell values, by zero-based index.
      *
      * @return list<string>
-     *
-     * @api
      */
     public function row(int $index): array
     {
@@ -97,8 +99,6 @@ final class DataTable implements Stringable
      * Returns a column as a list of cell values, by zero-based index.
      *
      * @return list<string>
-     *
-     * @api
      */
     public function column(int $index): array
     {
@@ -107,8 +107,6 @@ final class DataTable implements Stringable
 
     /**
      * Returns the number of rows.
-     *
-     * @api
      */
     public function height(): int
     {
@@ -117,8 +115,6 @@ final class DataTable implements Stringable
 
     /**
      * Returns the number of columns.
-     *
-     * @api
      */
     public function width(): int
     {
@@ -127,8 +123,6 @@ final class DataTable implements Stringable
 
     /**
      * Returns whether the table has no rows at all.
-     *
-     * @api
      */
     public function isEmpty(): bool
     {
@@ -137,8 +131,6 @@ final class DataTable implements Stringable
 
     /**
      * Returns a new table with rows and columns swapped.
-     *
-     * @api
      */
     public function transpose(): self
     {
@@ -153,9 +145,6 @@ final class DataTable implements Stringable
         return new self(new TableNode($transposed));
     }
 
-    /**
-     * @api
-     */
     public function __toString(): string
     {
         return $this->tableNode->getTableAsString();

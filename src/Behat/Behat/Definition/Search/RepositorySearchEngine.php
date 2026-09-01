@@ -176,9 +176,10 @@ final class RepositorySearchEngine implements SearchEngine
      * Wraps multiline arguments into their dedicated Behat representation
      * when the definition asks for it.
      *
-     * The raw Gherkin node always wins: an argument is only wrapped when no
-     * parameter of the definition accepts the node itself, and some parameter
-     * accepts the wrapper.
+     * A step cannot mix both representations of the same multiline argument, so
+     * asking for the wrapper anywhere in the signature is enough to wrap. When no
+     * parameter accepts it, the raw Gherkin node is passed through unchanged and
+     * existing definitions keep working.
      *
      * @param list<ArgumentInterface> $multiline
      *
@@ -189,14 +190,12 @@ final class RepositorySearchEngine implements SearchEngine
         return array_map(
             function (ArgumentInterface $argument) use ($function) {
                 if ($argument instanceof TableNode
-                    && !$this->someParameterAccepts($function, $argument::class)
                     && $this->someParameterAccepts($function, DataTable::class)
                 ) {
                     return new DataTable($argument);
                 }
 
                 if ($argument instanceof PyStringNode
-                    && !$this->someParameterAccepts($function, $argument::class)
                     && $this->someParameterAccepts($function, DocString::class)
                 ) {
                     return new DocString($argument);

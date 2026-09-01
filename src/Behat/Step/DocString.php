@@ -24,7 +24,7 @@ use Stringable;
 final class DocString implements Stringable
 {
     /**
-     * @api
+     * @internal instances are created by Behat, from the Gherkin node of the step
      */
     public function __construct(
         private readonly PyStringNode $pyStringNode,
@@ -33,17 +33,12 @@ final class DocString implements Stringable
 
     /**
      * Returns the text of the doc string.
-     *
-     * @api
      */
     public function getContent(): string
     {
         return $this->pyStringNode->getRaw();
     }
 
-    /**
-     * @api
-     */
     public function __toString(): string
     {
         return $this->pyStringNode->getRaw();

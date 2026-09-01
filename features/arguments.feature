@@ -64,10 +64,10 @@ Feature: Step Arguments
       | features/datatable.feature |       |
     Then it should pass with:
       """
-      ....
+      .....
 
       2 scenarios (2 passed)
-      4 steps (4 passed)
+      5 steps (5 passed)
       """
 
   Scenario: DocString
@@ -76,10 +76,10 @@ Feature: Step Arguments
       | features/docstring.feature |       |
     Then it should pass with:
       """
-      ..
+      .....
 
-      1 scenario (1 passed)
-      2 steps (2 passed)
+      2 scenarios (2 passed)
+      5 steps (5 passed)
       """
 
   Scenario: given TableNode argument that is not defined in context

@@ -2,6 +2,7 @@
 
 namespace Behat\Tests\Step;
 
+use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\DataTable;
 use PHPUnit\Framework\TestCase;
@@ -43,6 +44,65 @@ final class DataTableTest extends TestCase
             'apple' => 'green',
             'plum' => 'purple',
         ], $this->table->asMap());
+    }
+
+    public function testAsMapsIsEmptyWhenTheTableOnlyHasItsHeaderRow(): void
+    {
+        $table = new DataTable(new TableNode([['name', 'colour']]));
+
+        $this->assertSame([], $table->asMaps());
+    }
+
+    public function testAsMapOnASingleColumnTableMapsEveryRowToAnEmptyList(): void
+    {
+        $table = new DataTable(new TableNode([['name'], ['apple']]));
+
+        $this->assertSame(['name' => [], 'apple' => []], $table->asMap());
+    }
+
+    public function testAsMapOnAWiderTableMapsTheFirstCellToTheRemainingOnes(): void
+    {
+        $table = new DataTable(new TableNode([
+            ['name', 'colour', 'size'],
+            ['apple', 'green', 'small'],
+        ]));
+
+        $this->assertSame([
+            'name' => ['colour', 'size'],
+            'apple' => ['green', 'small'],
+        ], $table->asMap());
+    }
+
+    public function testAccessingARowThatDoesNotExistThrows(): void
+    {
+        $this->expectException(NodeException::class);
+        $this->expectExceptionMessage('Rows #9 does not exist in table.');
+
+        $this->table->row(9);
+    }
+
+    public function testAccessingAColumnThatDoesNotExistThrows(): void
+    {
+        $this->expectException(NodeException::class);
+        $this->expectExceptionMessage('Column #9 does not exist in table.');
+
+        $this->table->column(9);
+    }
+
+    public function testAccessingACellOutsideTheRowsThrows(): void
+    {
+        $this->expectException(NodeException::class);
+        $this->expectExceptionMessage('Rows #9 does not exist in table.');
+
+        $this->table->cell(9, 0);
+    }
+
+    public function testAccessingACellOutsideTheColumnsThrows(): void
+    {
+        $this->expectException(NodeException::class);
+        $this->expectExceptionMessage('Column #9 does not exist in table.');
+
+        $this->table->cell(0, 9);
     }
 
     public function testCellIsAccessedByZeroBasedRowAndColumn(): void
