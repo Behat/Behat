@@ -20,7 +20,6 @@ use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
 use Opis\JsonSchema\Validator;
-use PHPUnit\Framework\Assert;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 use Symfony\Component\Filesystem\Filesystem;
@@ -178,7 +177,7 @@ EOL;
     #[Given('/^file "([^"]*)" should exist$/')]
     public function fileShouldExist(string $path): void
     {
-        Assert::assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
+        $this->assertFileExists($this->workingDir . DIRECTORY_SEPARATOR . $path);
     }
 
     #[Given('I clear the default behat options')]
@@ -389,7 +388,11 @@ EOL;
     #[Then('/^it should (fail|pass) with no output$/')]
     public function itShouldPassOrFailWithNoOutput(string $success): void
     {
-        Assert::assertEmpty($this->getOutput());
+        $this->assertStringIsEmpty(
+            $this->getOutput(),
+            'Expected the command to produce no output, but got:'
+        );
+
         $this->itShouldPassOrFail($success);
     }
 
@@ -403,7 +406,7 @@ EOL;
     public function fileShouldContain(string $path, PyStringNode $text): void
     {
         $path = $this->workingDir . '/' . $path;
-        Assert::assertFileExists($path);
+        $this->assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
         // Normalize the line endings in the output
@@ -411,14 +414,18 @@ EOL;
             $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
         }
 
-        Assert::assertEquals($this->getExpectedOutput($text), $fileContent);
+        $this->assertStringsMatch(
+            $this->getExpectedOutput($text),
+            $fileContent,
+            sprintf('The contents of file "%s" do not match the expected text.', $path)
+        );
     }
 
     #[Then(':path file should contain exactly:')]
     public function fileShouldContainExactly(string $path, PyStringNode $text): void
     {
         $path = $this->workingDir.'/'.$path;
-        Assert::assertFileExists($path);
+        $this->assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
         // Normalize the line endings in the output
@@ -426,14 +433,18 @@ EOL;
             $fileContent = str_replace(PHP_EOL, "\n", $fileContent);
         }
 
-        Assert::assertEquals($text, $fileContent);
+        $this->assertStringsMatch(
+            (string) $text,
+            $fileContent,
+            sprintf('The contents of file "%s" do not match the expected text exactly.', $path)
+        );
     }
 
     #[Then(':path file should contain text:')]
     public function fileShouldContainText(string $path, PyStringNode $text): void
     {
         $path = $this->workingDir.'/'.$path;
-        Assert::assertFileExists($path);
+        $this->assertFileExists($path);
 
         $fileContent = file_get_contents($path);
         $expectedText = (string) $this->getExpectedOutput($text);
@@ -475,7 +486,7 @@ EOL;
     public function fileShouldHaveBeenRemoved(string $file): void
     {
         $path = $this->workingDir . '/' . $file;
-        Assert::assertFileDoesNotExist($path);
+        $this->assertFileDoesNotExist($path);
     }
 
     /**
@@ -557,7 +568,7 @@ EOL;
 
     private function checkXmlFileContents(string $path, PyStringNode $text): void
     {
-        Assert::assertFileExists($path);
+        $this->assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
 
@@ -574,18 +585,26 @@ EOL;
         $dom->loadXML($text);
         $dom->formatOutput = true;
 
-        Assert::assertEquals(trim($dom->saveXML(null, LIBXML_NOEMPTYTAG)), $fileContent);
+        $this->assertStringsMatch(
+            trim((string) $dom->saveXML(null, LIBXML_NOEMPTYTAG)),
+            $fileContent,
+            sprintf('The XML in file "%s" does not match the expected document.', $path)
+        );
     }
 
     private function checkJSONFileContents(string $path, PyStringNode $text): void
     {
-        Assert::assertFileExists($path);
+        $this->assertFileExists($path);
 
         $fileContent = trim(file_get_contents($path));
 
         $data = json_decode($fileContent, true, JSON_THROW_ON_ERROR);
 
-        Assert::assertIsArray($data);
+        if (!is_array($data)) {
+            throw new UnexpectedValueException(
+                sprintf('Expected the JSON in file "%s" to decode to an array, but got %s.', $path, get_debug_type($data))
+            );
+        }
 
         $fileContent = preg_replace('/"time": [\d.]+/', '"time": -IGNORE-VALUE-', $fileContent);
 
@@ -604,7 +623,11 @@ EOL;
             $text
         );
 
-        Assert::assertEquals($text, $fileContent);
+        $this->assertStringsMatch(
+            $text,
+            $fileContent,
+            sprintf('The JSON in file "%s" does not match the expected document.', $path)
+        );
     }
 
     private function getExpectedOutput(PyStringNode $expectedText): string
@@ -737,9 +760,52 @@ EOL;
 
     private function getOutputDiff(PyStringNode $expectedText): string
     {
+        return $this->diff($this->getExpectedOutput($expectedText), $this->getOutput());
+    }
+
+    private function diff(string $expected, string $actual): string
+    {
         $differ = new Differ(new DiffOnlyOutputBuilder());
 
-        return $differ->diff($this->getExpectedOutput($expectedText), $this->getOutput());
+        return $differ->diff($expected, $actual);
+    }
+
+    /**
+     * Behat's own test suite deliberately does not depend on an assertion library.
+     *
+     * Steps throw an exception carrying all the detail we want to report, so that the failure is fully described by
+     * its message alone. See https://github.com/Behat/Behat/issues/1746 for background.
+     */
+    private function assertFileExists(string $path): void
+    {
+        if (!file_exists($path)) {
+            throw new UnexpectedValueException(sprintf('Expected file "%s" to exist, but it does not.', $path));
+        }
+    }
+
+    private function assertFileDoesNotExist(string $path): void
+    {
+        if (file_exists($path)) {
+            throw new UnexpectedValueException(sprintf('Expected file "%s" not to exist, but it does.', $path));
+        }
+    }
+
+    private function assertStringsMatch(string $expected, string $actual, string $message): void
+    {
+        if ($expected === $actual) {
+            return;
+        }
+
+        throw new UnexpectedValueException($message . PHP_EOL . PHP_EOL . $this->diff($expected, $actual));
+    }
+
+    private function assertStringIsEmpty(string $actual, string $message): void
+    {
+        if ($actual === '') {
+            return;
+        }
+
+        throw new UnexpectedValueException($message . PHP_EOL . PHP_EOL . $actual);
     }
 
     private function addBehatOptions(TableNode $table): void

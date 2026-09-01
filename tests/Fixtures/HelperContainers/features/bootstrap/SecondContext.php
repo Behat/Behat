@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Behat\Behat\Context\Context;
 use Behat\Step\Then;
+use Behat\Tests\Fixtures\Assert;
 
 final class SecondContext implements Context
 {
@@ -17,6 +18,6 @@ final class SecondContext implements Context
     #[Then('service should have a state of :number in second context')]
     public function checkState(string $number): void
     {
-        PHPUnit\Framework\Assert::assertSame($number, $this->service->number);
+        Assert::assertSame($number, $this->service->number);
     }
 }

@@ -12,6 +12,7 @@ namespace Behat\Behat\Gherkin\ServiceContainer;
 
 use Behat\Behat\Gherkin\Cli\FilterController;
 use Behat\Behat\Gherkin\Cli\SyntaxController;
+use Behat\Behat\Gherkin\Filter\TagExpressionFilter;
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemFeatureLocator;
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemRerunScenariosListLocator;
 use Behat\Behat\Gherkin\Specification\Locator\FilesystemScenariosListLocator;
@@ -336,6 +337,10 @@ final class GherkinExtension implements Extension
             return new Definition(TagFilter::class, [$filterString]);
         }
 
+        if ('tag_expression' === $type) {
+            return new Definition(TagExpressionFilter::class, [$filterString]);
+        }
+
         if ('narrative' === $type) {
             return new Definition(NarrativeFilter::class, [$filterString]);
         }
@@ -343,7 +348,7 @@ final class GherkinExtension implements Extension
         throw new ExtensionException(sprintf(
             '`%s` filter is not supported by the `filters` option of gherkin extension. Supported types are `%s`.',
             $type,
-            implode('`, `', ['narrative', 'role', 'name', 'tags'])
+            implode('`, `', ['narrative', 'role', 'name', 'tags', 'tag_expression'])
         ), 'gherkin');
     }
 }

@@ -20,27 +20,27 @@ Feature: Rerun with multiple suite
 
       001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
             Then I should have 8 apples     # features/apples.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
             Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
             Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       18 scenarios (12 passed, 6 failed)
       63 steps (57 passed, 6 failed)
@@ -54,27 +54,27 @@ Feature: Rerun with multiple suite
 
     001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
           Then I should have 3 apples # features/apples.feature:11
-            Failed asserting that 2 matches expected 3.
+            Failed asserting that 2 matches expected 3. (Exception)
 
     002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
           Then I should have 8 apples     # features/apples.feature:24
-            Failed asserting that 7 matches expected 8.
+            Failed asserting that 7 matches expected 8. (Exception)
 
     003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
           Then I should have 3 bananas # features/bananas.feature:11
-            Failed asserting that 2 matches expected 3.
+            Failed asserting that 2 matches expected 3. (Exception)
 
     004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
           Then I should have 8 bananas    # features/bananas.feature:24
-            Failed asserting that 7 matches expected 8.
+            Failed asserting that 7 matches expected 8. (Exception)
 
     005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
           Then I should have 3 bananas # features/bananas.feature:11
-            Failed asserting that 2 matches expected 3.
+            Failed asserting that 2 matches expected 3. (Exception)
 
     006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
           Then I should have 8 bananas    # features/bananas.feature:24
-            Failed asserting that 7 matches expected 8.
+            Failed asserting that 7 matches expected 8. (Exception)
 
     6 scenarios (6 failed)
     21 steps (15 passed, 6 failed)
@@ -90,27 +90,27 @@ Feature: Rerun with multiple suite
 
       001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
             Then I should have 8 apples     # features/apples.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
             Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
             Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       18 scenarios (12 passed, 6 failed)
       63 steps (57 passed, 6 failed)
@@ -125,11 +125,11 @@ Feature: Rerun with multiple suite
 
       001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
             Then I should have 8 apples     # features/apples.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       18 scenarios (16 passed, 2 failed)
       63 steps (61 passed, 2 failed)
@@ -143,11 +143,11 @@ Feature: Rerun with multiple suite
 
       001 Scenario: I'm little hungry   # features/apples.feature:9
             Then I should have 3 apples # features/apples.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       002 Example: | 0   | 4     | 8      | # features/apples.feature:29
             Then I should have 8 apples     # features/apples.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       2 scenarios (2 failed)
     7 steps (5 passed, 2 failed)
@@ -163,11 +163,11 @@ Feature: Rerun with multiple suite
       
       001 Scenario: I'm little hungry    # features/bananas.feature:9
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
       
       002 Example: | 0   | 4     | 8      | # features/bananas.feature:29
             Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
       
       6 scenarios (4 passed, 2 failed)
       21 steps (19 passed, 2 failed)
@@ -181,11 +181,11 @@ Feature: Rerun with multiple suite
 
       001 Scenario: I'm little hungry    # features/bananas.feature:9
             Then I should have 3 bananas # features/bananas.feature:11
-              Failed asserting that 2 matches expected 3.
+              Failed asserting that 2 matches expected 3. (Exception)
 
       002 Example: | 0   | 4     | 8      | # features/bananas.feature:29
             Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
+              Failed asserting that 7 matches expected 8. (Exception)
 
       2 scenarios (2 failed)
       7 steps (5 passed, 2 failed)

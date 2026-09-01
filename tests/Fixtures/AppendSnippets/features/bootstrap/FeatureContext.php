@@ -7,6 +7,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContext implements Context
 {
@@ -39,20 +40,20 @@ class FeatureContext implements Context
     #[Then('/^I should have (\\d+) apples$/')]
     public function iShouldHaveApples($count)
     {
-        PHPUnit\Framework\Assert::assertEquals(intval($count), $this->apples);
+        Assert::assertEquals(intval($count), $this->apples);
     }
 
     #[Then('/^context parameter "([^"]*)" should be equal to "([^"]*)"$/')]
     public function contextParameterShouldBeEqualTo($key, $val)
     {
-        PHPUnit\Framework\Assert::assertEquals($val, $this->parameters[$key]);
+        Assert::assertEquals($val, $this->parameters[$key]);
     }
 
     #[Given('/^context parameter "([^"]*)" should be array with (\\d+) elements$/')]
     public function contextParameterShouldBeArrayWithElements($key, $count)
     {
-        PHPUnit\Framework\Assert::assertIsArray($this->parameters[$key]);
-        PHPUnit\Framework\Assert::assertEquals(2, count($this->parameters[$key]));
+        Assert::assertIsArray($this->parameters[$key]);
+        Assert::assertEquals(2, count($this->parameters[$key]));
     }
 
     private function doSomethingUndefinedWith()

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Behat\Behat\Context\Context;
 use Behat\Step\Then;
-use PHPUnit\Framework\Assert;
+use Behat\Tests\Fixtures\Assert;
 
 class UnixPathAttributes implements Context
 {

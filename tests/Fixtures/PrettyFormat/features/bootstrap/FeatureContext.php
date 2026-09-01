@@ -7,7 +7,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
-use PHPUnit\Framework\Assert;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContext implements Context
 {

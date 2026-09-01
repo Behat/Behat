@@ -9,6 +9,7 @@ use Behat\Config\Filter\FilterInterface;
 use Behat\Config\Filter\NameFilter;
 use Behat\Config\Filter\NarrativeFilter;
 use Behat\Config\Filter\RoleFilter;
+use Behat\Config\Filter\TagExpressionFilter;
 use Behat\Config\Filter\TagFilter;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PhpParser\Node\Expr;
@@ -184,6 +185,7 @@ final class Suite implements ConfigConverterInterface
                     NarrativeFilter::NAME => new NarrativeFilter($filterValue),
                     RoleFilter::NAME => new RoleFilter($filterValue),
                     TagFilter::NAME => new TagFilter($filterValue),
+                    TagExpressionFilter::NAME => new TagExpressionFilter($filterValue),
                     default => null,
                 };
                 if ($filter !== null) {

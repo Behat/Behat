@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Gherkin\Cli;
 
+use Behat\Behat\Gherkin\Filter\TagExpressionFilter;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\NarrativeFilter;
 use Behat\Gherkin\Filter\RoleFilter;
@@ -57,6 +58,14 @@ final class FilterController implements Controller
                 'matching tag filter expression.'
             )
             ->addOption(
+                '--tag-expression',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Only execute the features or scenarios with tags' . PHP_EOL .
+                'matching the given Cucumber tag expression,' . PHP_EOL .
+                'e.g. "@smoke and not @slow".'
+            )
+            ->addOption(
                 '--role',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -83,6 +92,10 @@ final class FilterController implements Controller
 
         foreach ($input->getOption('tags') as $tags) {
             $filters[] = new TagFilter($tags);
+        }
+
+        if ($tagExpression = $input->getOption('tag-expression')) {
+            $filters[] = new TagExpressionFilter($tagExpression);
         }
 
         if ($role = $input->getOption('role')) {

@@ -98,7 +98,7 @@ Feature: JSON Formatter
                                   "line": 25,
                                   "failures": [
                                       {
-                                          "message": "Then I must have 13: Failed asserting that 14 matches expected '13'.",
+                                          "message": "Then I must have 13: Failed asserting that 14 matches expected '13'. (Exception)",
                                           "type": "failed"
                                       }
                                   ]
@@ -111,7 +111,7 @@ Feature: JSON Formatter
                                   "line": 29,
                                   "failures": [
                                       {
-                                          "message": "Then I must have 16: Failed asserting that 15 matches expected '16'.",
+                                          "message": "Then I must have 16: Failed asserting that 15 matches expected '16'. (Exception)",
                                           "type": "failed"
                                       }
                                   ]
@@ -131,7 +131,7 @@ Feature: JSON Formatter
                                   "line": 29,
                                   "failures": [
                                       {
-                                          "message": "Then I must have 32: Failed asserting that 33 matches expected '32'.",
+                                          "message": "Then I must have 32: Failed asserting that 33 matches expected '32'. (Exception)",
                                           "type": "failed"
                                       }
                                   ]
@@ -424,7 +424,7 @@ Feature: JSON Formatter
                                   "line": 11,
                                   "failures": [
                                       {
-                                          "message": "Then I must have 477: Failed asserting that 378 matches expected '477'.",
+                                          "message": "Then I must have 477: Failed asserting that 378 matches expected '477'. (Exception)",
                                           "type": "failed"
                                       }
                                   ]
@@ -551,7 +551,7 @@ Feature: JSON Formatter
                                   "line": 11,
                                   "failures": [
                                       {
-                                          "message": "Then I must have 13: Failed asserting that 14 matches expected '13'.",
+                                          "message": "Then I must have 13: Failed asserting that 14 matches expected '13'. (Exception)",
                                           "type": "failed"
                                       }
                                   ]

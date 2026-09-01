@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\TranslatableContext;
+use Behat\Tests\Fixtures\Assert;
 
 class ArgumentsContextAnnotations implements TranslatableContext
 {
@@ -21,7 +22,7 @@ class ArgumentsContextAnnotations implements TranslatableContext
     /** @Then /^the index should be "([^"]*)"$/ */
     public function theIndexShouldBe($value)
     {
-        PHPUnit\Framework\Assert::assertSame($value, $this->index);
+        Assert::assertSame($value, $this->index);
     }
 
     public static function getTranslationResources()

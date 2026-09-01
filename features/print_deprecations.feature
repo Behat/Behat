@@ -75,6 +75,18 @@ Feature: Print deprecations
       2 steps (2 passed)
       """
 
+  Scenario: Patterns providing more arguments than the definition accepts are deprecated
+    When I run behat with the following additional options:
+      | option   | value                        |
+      | --config | behat-unused-arguments.php   |
+    Then it should pass with:
+      """
+      2 deprecations triggered (1 unique):
+
+        ⚠ The pattern "/^(Alice|Bob) presses the (?P<button>red|green) button$/" provides 2 arguments but FeatureContext::pressesTheButton() only accepts 1. Silently discarding the extra argument is deprecated and will be an error in Behat 4.0: either add the missing parameters or use non-capturing groups "(?:...)" in the pattern. (2x)
+          → features/bootstrap/FeatureContext.php:XX
+      """
+
   Scenario: Fail on deprecations passes when no deprecations exist
     When I run behat with the following additional options:
       | option   | value                           |

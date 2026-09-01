@@ -3,7 +3,7 @@
 use Behat\Behat\Context\Context;
 use Behat\Step\Given;
 use Behat\Step\Then;
-use PHPUnit\Framework\Assert;
+use Behat\Tests\Fixtures\Assert;
 
 class FailedContext implements Context
 {

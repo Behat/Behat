@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Behat\Behat\Context\Context;
 use Behat\Step\Then;
 use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
 
 class FeatureContextLs implements Context
 {
@@ -13,7 +14,7 @@ class FeatureContextLs implements Context
     #[Then('/I must have "([^"]+)"/')]
     public function iMustHave(string $num): void
     {
-        PHPUnit\Framework\Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
+        Assert::assertEquals(intval(preg_replace('/[^\d]+/', '', $num)), $this->value);
     }
 
     #[When('/I add "([^"]+)"/')]
