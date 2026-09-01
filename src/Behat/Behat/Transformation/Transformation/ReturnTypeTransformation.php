@@ -10,10 +10,8 @@
 
 namespace Behat\Behat\Transformation\Transformation;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
-use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use Closure;
 use ReflectionClass;
@@ -50,7 +48,7 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentArgumentValue): bool
+    public function supportsDefinitionAndArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentArgumentValue): bool
     {
         $returnClass = self::getReturnClass($this->getReflection());
 
@@ -58,27 +56,14 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
             return false;
         }
 
-        $parameterClass = $this->getParameterClassNameByIndex($definitionCall, $argumentIndex);
+        $parameterClass = $this->getParameterClassNameByIndex($scope, $argumentIndex);
 
         return $parameterClass === $returnClass;
     }
 
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): mixed
+    public function transformArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): mixed
     {
-        $call = new TransformationCall(
-            $definitionCall->getEnvironment(),
-            $definitionCall->getCallee(),
-            $this,
-            [$argumentValue]
-        );
-
-        $result = $callCenter->makeCall($call);
-
-        if ($result->hasException()) {
-            throw $result->getException();
-        }
-
-        return $result->getReturn();
+        return $scope->call($this, [$argumentValue]);
     }
 
     public function getPriority(): int
@@ -109,11 +94,11 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
     /**
      * Attempts to get definition parameter using its index (parameter position or name).
      */
-    private function getParameterClassNameByIndex(DefinitionCall $definitionCall, int|string $argumentIndex): ?string
+    private function getParameterClassNameByIndex(TransformationScope $scope, int|string $argumentIndex): ?string
     {
         $parameters = array_filter(
             array_filter(
-                $this->getCallParameters($definitionCall),
+                $this->getCallParameters($scope),
                 $this->hasIndex($argumentIndex)
             ),
             $this->getClassReflection()
@@ -131,9 +116,9 @@ final class ReturnTypeTransformation extends RuntimeCallee implements Stringable
      *
      * @return list<ReflectionParameter>
      */
-    private function getCallParameters(DefinitionCall $definitionCall): array
+    private function getCallParameters(TransformationScope $scope): array
     {
-        return $definitionCall->getCallee()->getReflection()->getParameters();
+        return $scope->getDefinition()->getReflection()->getParameters();
     }
 
     /**

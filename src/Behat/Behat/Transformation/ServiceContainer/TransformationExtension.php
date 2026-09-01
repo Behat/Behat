@@ -87,7 +87,9 @@ final class TransformationExtension implements Extension
      */
     private function loadDefinitionArgumentsTransformer(ContainerBuilder $container): void
     {
-        $definition = new Definition(DefinitionArgumentsTransformer::class);
+        $definition = new Definition(DefinitionArgumentsTransformer::class, [
+            new Reference(CallExtension::CALL_CENTER_ID),
+        ]);
         $definition->addTag(CallExtension::CALL_FILTER_TAG, ['priority' => 200]);
         $container->setDefinition(self::DEFINITION_ARGUMENT_TRANSFORMER_ID, $definition);
     }
@@ -99,7 +101,6 @@ final class TransformationExtension implements Extension
     {
         $definition = new Definition(RepositoryArgumentTransformer::class, [
             new Reference(self::REPOSITORY_ID),
-            new Reference(CallExtension::CALL_CENTER_ID),
             new Reference(DefinitionExtension::PATTERN_TRANSFORMER_ID),
             new Reference(TranslatorExtension::TRANSLATOR_ID),
         ]);

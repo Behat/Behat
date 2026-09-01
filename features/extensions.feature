@@ -33,6 +33,23 @@ Feature: Extensions
       `inexistent_extension` extension file or class could not be located.
       """
 
+  Scenario: Extension can register an argument transformer using only public API
+    When I run behat with the following additional options:
+      | option                               | value                            |
+      | --config                             | behat-argument-transformer.php   |
+      | features/argument_transformer.feature |                                 |
+    Then it should pass with:
+      """
+      Feature:
+
+        Scenario:                      # features/argument_transformer.feature:2
+          Then the argument is "world" # ArgumentTransformerContext::theArgumentIs()
+            │ world [suite=default language=en line=3 pattern=the argument is :value]
+
+      1 scenario (1 passed)
+      1 step (1 passed)
+      """
+
   Scenario: Exception handlers extension
     When I run behat with the following additional options:
       | option                              | value                         |

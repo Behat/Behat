@@ -10,8 +10,7 @@
 
 namespace Behat\Behat\Transformation;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Testwork\Call\CallCenter;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 use ReflectionMethod;
 
 /**
@@ -38,10 +37,10 @@ interface SimpleArgumentTransformation extends Transformation
     /**
      * Checks if transformation supports argument.
      */
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentArgumentValue): bool;
+    public function supportsDefinitionAndArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentArgumentValue): bool;
 
     /**
      * Transforms argument value using transformation and returns a new one.
      */
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): mixed;
+    public function transformArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): mixed;
 }

@@ -10,16 +10,15 @@
 
 namespace Behat\Behat\Transformation\Transformer;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\Transformation\RegexGenerator;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Behat\Transformation\Transformation;
 use Behat\Behat\Transformation\Transformation\PatternTransformation;
 use Behat\Behat\Transformation\TransformationRepository;
 use Behat\Gherkin\Node\ArgumentInterface;
-use Behat\Testwork\Call\CallCenter;
 
 /**
  * Argument transformer based on transformations repository.
@@ -33,26 +32,25 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      */
     public function __construct(
         private readonly TransformationRepository $repository,
-        private readonly CallCenter $callCenter,
         private readonly PatternTransformer $patternTransformer,
         private readonly TranslatorInterface $translator,
     ) {
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): bool
+    public function supportsDefinitionAndArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): bool
     {
-        return count($this->repository->getEnvironmentTransformations($definitionCall->getEnvironment())) > 0;
+        return count($this->repository->getEnvironmentTransformations($scope->getEnvironment())) > 0;
     }
 
-    public function transformArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): mixed
+    public function transformArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): mixed
     {
-        $environment = $definitionCall->getEnvironment();
+        $environment = $scope->getEnvironment();
         [$simpleTransformations, $normalTransformations] = $this->splitSimpleAndNormalTransformations(
             $this->repository->getEnvironmentTransformations($environment)
         );
 
-        $newValue = $this->applySimpleTransformations($simpleTransformations, $definitionCall, $argumentIndex, $argumentValue);
-        $newValue = $this->applyNormalTransformations($normalTransformations, $definitionCall, $argumentIndex, $newValue);
+        $newValue = $this->applySimpleTransformations($simpleTransformations, $scope, $argumentIndex, $argumentValue);
+        $newValue = $this->applyNormalTransformations($normalTransformations, $scope, $argumentIndex, $newValue);
 
         return $newValue;
     }
@@ -72,13 +70,13 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      *
      * @param SimpleArgumentTransformation[] $transformations
      */
-    private function applySimpleTransformations(array $transformations, DefinitionCall $definitionCall, int|string $index, mixed $value): mixed
+    private function applySimpleTransformations(array $transformations, TransformationScope $scope, int|string $index, mixed $value): mixed
     {
         usort($transformations, fn (SimpleArgumentTransformation $t1, SimpleArgumentTransformation $t2): int => $t2->getPriority() <=> $t1->getPriority());
 
         $newValue = $value;
         foreach ($transformations as $transformation) {
-            $newValue = $this->transform($definitionCall, $transformation, $index, $newValue);
+            $newValue = $this->transform($scope, $transformation, $index, $newValue);
         }
 
         return $newValue;
@@ -89,11 +87,11 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
      *
      * @param Transformation[] $transformations
      */
-    private function applyNormalTransformations(array $transformations, DefinitionCall $definitionCall, int|string $index, mixed $value): mixed
+    private function applyNormalTransformations(array $transformations, TransformationScope $scope, int|string $index, mixed $value): mixed
     {
         $newValue = $value;
         foreach ($transformations as $transformation) {
-            $newValue = $this->transform($definitionCall, $transformation, $index, $newValue);
+            $newValue = $this->transform($scope, $transformation, $index, $newValue);
         }
 
         return $newValue;
@@ -102,20 +100,20 @@ final class RepositoryArgumentTransformer implements ArgumentTransformer, RegexG
     /**
      * Transforms argument value using registered transformers.
      */
-    private function transform(DefinitionCall $definitionCall, Transformation $transformation, int|string $index, mixed $value): mixed
+    private function transform(TransformationScope $scope, Transformation $transformation, int|string $index, mixed $value): mixed
     {
         if (is_object($value) && !$value instanceof ArgumentInterface) {
             return $value;
         }
 
         if ($transformation instanceof SimpleArgumentTransformation
-            && $transformation->supportsDefinitionAndArgument($definitionCall, $index, $value)) {
-            return $transformation->transformArgument($this->callCenter, $definitionCall, $index, $value);
+            && $transformation->supportsDefinitionAndArgument($scope, $index, $value)) {
+            return $transformation->transformArgument($scope, $index, $value);
         }
 
         if ($transformation instanceof PatternTransformation
-            && $transformation->supportsDefinitionAndArgument($this, $definitionCall, $value)) {
-            return $transformation->transformArgument($this, $this->callCenter, $definitionCall, $value);
+            && $transformation->supportsDefinitionAndArgument($this, $scope, $value)) {
+            return $transformation->transformArgument($this, $scope, $value);
         }
 
         return $value;

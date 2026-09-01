@@ -10,11 +10,9 @@
 
 namespace Behat\Behat\Transformation\Transformation;
 
-use Behat\Behat\Definition\Call\DefinitionCall;
-use Behat\Behat\Transformation\Call\TransformationCall;
+use Behat\Behat\Transformation\Scope\TransformationScope;
 use Behat\Behat\Transformation\SimpleArgumentTransformation;
 use Behat\Gherkin\Node\TableNode;
-use Behat\Testwork\Call\CallCenter;
 use Behat\Testwork\Call\RuntimeCallee;
 use ReflectionMethod;
 use Stringable;
@@ -44,7 +42,7 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
         parent::__construct($callable, $description);
     }
 
-    public function supportsDefinitionAndArgument(DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentArgumentValue): bool
+    public function supportsDefinitionAndArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentArgumentValue): bool
     {
         if (!$argumentArgumentValue instanceof TableNode) {
             return false;
@@ -56,24 +54,11 @@ final class TableRowTransformation extends RuntimeCallee implements Stringable, 
     /**
      * @return list<mixed>
      */
-    public function transformArgument(CallCenter $callCenter, DefinitionCall $definitionCall, int|string $argumentIndex, mixed $argumentValue): array
+    public function transformArgument(TransformationScope $scope, int|string $argumentIndex, mixed $argumentValue): array
     {
         $rows = [];
         foreach ($argumentValue as $row) {
-            $call = new TransformationCall(
-                $definitionCall->getEnvironment(),
-                $definitionCall->getCallee(),
-                $this,
-                [$row]
-            );
-
-            $result = $callCenter->makeCall($call);
-
-            if ($result->hasException()) {
-                throw $result->getException();
-            }
-
-            $rows[] = $result->getReturn();
+            $rows[] = $scope->call($this, [$row]);
         }
 
         return $rows;
