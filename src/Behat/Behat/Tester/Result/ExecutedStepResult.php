@@ -51,6 +51,22 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
         return $this->callResult;
     }
 
+    /**
+     * Checks if the step printed any output while it ran.
+     */
+    public function hasStdOut(): bool
+    {
+        return $this->callResult->hasStdOut();
+    }
+
+    /**
+     * Returns output printed by the step while it ran, if any.
+     */
+    public function getStdOut(): ?string
+    {
+        return $this->callResult->getStdOut();
+    }
+
     public function getStepDefinition(): ?Definition
     {
         return $this->searchResult->getMatchedDefinition();
