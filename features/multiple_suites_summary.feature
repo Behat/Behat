@@ -4,7 +4,7 @@ Feature: Suite names in the summary lists
   I need the failure summaries to name the suite when more than one suite was executed
 
   Background:
-    Given I initialise the working directory from the "Rerun" fixtures folder
+    Given I initialise the working directory from the "MultipleSuitesSummary" fixtures folder
     And I provide the following options for all behat invocations:
       | option      | value |
       | --no-colors |       |
@@ -13,7 +13,7 @@ Feature: Suite names in the summary lists
     When I run "behat --format progress"
     Then it should fail with:
       """
-      ..F.............F......F.............F......F.............F....
+      ..F........F..F..F
 
       --- Failed steps:
 
@@ -21,28 +21,20 @@ Feature: Suite names in the summary lists
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3.
 
-      002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
-            Then I should have 8 apples     # features/apples.feature:24
-              Failed asserting that 7 matches expected 8.
+      002 Example: | 1   | 8      |     # features/apples.feature:24 (default)
+            Then I should have 8 apples # features/apples.feature:19
+              Failed asserting that 2 matches expected 8.
 
       003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3.
 
-      004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
-            Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
-
-      005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
+      004 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3.
 
-      006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
-            Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
-
-      18 scenarios (12 passed, 6 failed)
-      63 steps (57 passed, 6 failed)
+      6 scenarios (2 passed, 4 failed)
+      18 steps (14 passed, 4 failed)
       """
 
   Scenario: Failed scenarios are annotated with the suite name when several suites run
@@ -52,19 +44,17 @@ Feature: Suite names in the summary lists
       | --format-settings | '{"short_summary": true}' |
     Then it should fail with:
       """
-      ..F.............F......F.............F......F.............F....
+      ..F........F..F..F
 
       --- Failed scenarios:
 
           features/apples.feature:9 (default) (on line 11)
-          features/apples.feature:29 (default) (on line 24)
+          features/apples.feature:24 (default) (on line 19)
           features/bananas.feature:9 (default) (on line 11)
-          features/bananas.feature:29 (default) (on line 24)
           features/bananas.feature:9 (suite2) (on line 11)
-          features/bananas.feature:29 (suite2) (on line 24)
 
-      18 scenarios (12 passed, 6 failed)
-      63 steps (57 passed, 6 failed)
+      6 scenarios (2 passed, 4 failed)
+      18 steps (14 passed, 4 failed)
       """
 
   Scenario: The pretty formatter annotates the failed scenarios too
@@ -75,21 +65,19 @@ Feature: Suite names in the summary lists
       --- Failed scenarios:
 
           features/apples.feature:9 (default) (on line 11)
-          features/apples.feature:29 (default) (on line 24)
+          features/apples.feature:24 (default) (on line 19)
           features/bananas.feature:9 (default) (on line 11)
-          features/bananas.feature:29 (default) (on line 24)
           features/bananas.feature:9 (suite2) (on line 11)
-          features/bananas.feature:29 (suite2) (on line 24)
 
-      18 scenarios (12 passed, 6 failed)
-      63 steps (57 passed, 6 failed)
+      6 scenarios (2 passed, 4 failed)
+      18 steps (14 passed, 4 failed)
       """
 
   Scenario: Suite names are omitted when a single suite runs
     When I run "behat --format progress --suite suite2"
     Then it should fail with:
       """
-      ..F.............F....
+      ..F
 
       --- Failed steps:
 
@@ -97,10 +85,6 @@ Feature: Suite names in the summary lists
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3.
 
-      002 Example: | 0   | 4     | 8      | # features/bananas.feature:29
-            Then I should have 8 bananas    # features/bananas.feature:24
-              Failed asserting that 7 matches expected 8.
-
-      6 scenarios (4 passed, 2 failed)
-      21 steps (19 passed, 2 failed)
+      1 scenario (1 failed)
+      3 steps (2 passed, 1 failed)
       """
