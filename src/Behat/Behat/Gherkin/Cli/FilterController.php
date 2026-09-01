@@ -60,7 +60,7 @@ final class FilterController implements Controller
             ->addOption(
                 '--tag-expression',
                 null,
-                InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                InputOption::VALUE_REQUIRED,
                 'Only execute the features or scenarios with tags' . PHP_EOL .
                 'matching the given Cucumber tag expression,' . PHP_EOL .
                 'e.g. "@smoke and not @slow".'
@@ -94,7 +94,7 @@ final class FilterController implements Controller
             $filters[] = new TagFilter($tags);
         }
 
-        foreach ($input->getOption('tag-expression') as $tagExpression) {
+        if ($tagExpression = $input->getOption('tag-expression')) {
             $filters[] = new TagExpressionFilter($tagExpression);
         }
 
