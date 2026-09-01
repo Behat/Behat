@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Gherkin\Specification;
 
+use Behat\Behat\Gherkin\Filter\TagExpressionFilter;
 use Behat\Gherkin\Filter\FeatureFilterInterface;
 use Behat\Gherkin\Filter\NameFilter;
 use Behat\Gherkin\Filter\NarrativeFilter;
@@ -132,6 +133,10 @@ final class LazyFeatureIterator implements SpecificationIterator
             return new TagFilter($filterString);
         }
 
+        if ('tag_expression' === $type) {
+            return new TagExpressionFilter($filterString);
+        }
+
         if ('narrative' === $type) {
             return new NarrativeFilter($filterString);
         }
@@ -140,7 +145,7 @@ final class LazyFeatureIterator implements SpecificationIterator
             '`%s` filter is not supported by the `%s` suite. Supported types are `%s`.',
             $type,
             $suite->getName(),
-            implode('`, `', ['narrative', 'role', 'name', 'tags'])
+            implode('`, `', ['narrative', 'role', 'name', 'tags', 'tag_expression'])
         ), $suite->getName());
     }
 
