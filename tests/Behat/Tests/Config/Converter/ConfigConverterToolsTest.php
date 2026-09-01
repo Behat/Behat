@@ -136,7 +136,8 @@ final class ConfigConverterToolsTest extends TestCase
                 $obj::class,
                 'withNothing',
                 [],
-                'Method class@anonymous::withNothing() does not exist',
+                // PHP renders the anonymous class name differently across versions, so only assert on the rest
+                '::withNothing() does not exist',
             ],
             'not enough params' => [
                 $obj::class,
