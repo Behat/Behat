@@ -55,6 +55,10 @@ final class TotalStatistics implements Statistics
      * @var list<HookStat>
      */
     private array $failedHookStats = [];
+    /**
+     * @var array<string, true>
+     */
+    private array $suiteNames = [];
 
     /**
      * Initializes statistics.
@@ -121,6 +125,10 @@ final class TotalStatistics implements Statistics
 
         ++$this->scenarioCounters[$stat->getResultCode()];
 
+        if (null !== $stat->getSuiteName()) {
+            $this->suiteNames[$stat->getSuiteName()] = true;
+        }
+
         if (TestResult::FAILED === $stat->getResultCode()) {
             $this->failedScenarioStats[] = $stat;
         }
@@ -156,6 +164,16 @@ final class TotalStatistics implements Statistics
         }
 
         $this->failedHookStats[] = $stat;
+    }
+
+    /**
+     * Returns the names of the suites that executed at least one scenario.
+     *
+     * @return string[]
+     */
+    public function getSuiteNames(): array
+    {
+        return array_keys($this->suiteNames);
     }
 
     /**

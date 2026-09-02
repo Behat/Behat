@@ -33,6 +33,7 @@ final class StepStatV2 extends StepStat implements Stringable
         private readonly int $resultCode,
         private readonly ?string $error = null,
         private readonly ?string $stdOut = null,
+        private readonly ?string $suiteName = null,
     ) {
     }
 
@@ -108,6 +109,14 @@ final class StepStatV2 extends StepStat implements Stringable
     public function getStdOut(): ?string
     {
         return $this->stdOut;
+    }
+
+    /**
+     * Returns the name of the suite the step was executed in, if known.
+     */
+    public function getSuiteName(): ?string
+    {
+        return $this->suiteName;
     }
 
     /**

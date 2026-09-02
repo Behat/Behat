@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+use Behat\Behat\Context\Context;
+use Behat\Step\Given;
+use Behat\Step\Then;
+use Behat\Step\When;
+use Behat\Tests\Fixtures\Assert;
+
+class FeatureContext implements Context
+{
+    private int $apples = 0;
+    private int $bananas = 0;
+
+    #[Given('/^I have (\d+) (apples|bananas)$/')]
+    public function iHaveFruit(string $count, string $fruit): void
+    {
+        $this->{$fruit} = (int) $count;
+    }
+
+    #[When('/^I ate (\d+) (apples|bananas)$/')]
+    public function iAteFruit(string $count, string $fruit): void
+    {
+        $this->{$fruit} -= (int) $count;
+    }
+
+    #[When('/^I found (\d+) (apples|bananas)$/')]
+    public function iFoundFruit(string $count, string $fruit): void
+    {
+        $this->{$fruit} += (int) $count;
+    }
+
+    #[Then('/^I should have (\d+) (apples|bananas)$/')]
+    public function iShouldHaveFruit(string $count, string $fruit): void
+    {
+        Assert::assertEquals((int) $count, $this->{$fruit});
+    }
+}

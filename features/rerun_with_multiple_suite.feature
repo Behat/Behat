@@ -18,27 +18,27 @@ Feature: Rerun with multiple suite
 
       --- Failed steps:
 
-      001 Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      002 Example: | 0   | 4     | 8      | # features/apples.feature:29
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
             Then I should have 8 apples     # features/apples.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
-      003 Scenario: I'm little hungry    # features/bananas.feature:9
+      003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      004 Example: | 0   | 4     | 8      | # features/bananas.feature:29
+      004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
             Then I should have 8 bananas    # features/bananas.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
-      005 Scenario: I'm little hungry    # features/bananas.feature:9
+      005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      006 Example: | 0   | 4     | 8      | # features/bananas.feature:29
+      006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
             Then I should have 8 bananas    # features/bananas.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
@@ -52,27 +52,27 @@ Feature: Rerun with multiple suite
 
     --- Failed steps:
 
-    001 Scenario: I'm little hungry   # features/apples.feature:9
+    001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
           Then I should have 3 apples # features/apples.feature:11
             Failed asserting that 2 matches expected 3. (Exception)
 
-    002 Example: | 0   | 4     | 8      | # features/apples.feature:29
+    002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
           Then I should have 8 apples     # features/apples.feature:24
             Failed asserting that 7 matches expected 8. (Exception)
 
-    003 Scenario: I'm little hungry    # features/bananas.feature:9
+    003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
           Then I should have 3 bananas # features/bananas.feature:11
             Failed asserting that 2 matches expected 3. (Exception)
 
-    004 Example: | 0   | 4     | 8      | # features/bananas.feature:29
+    004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
           Then I should have 8 bananas    # features/bananas.feature:24
             Failed asserting that 7 matches expected 8. (Exception)
 
-    005 Scenario: I'm little hungry    # features/bananas.feature:9
+    005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
           Then I should have 3 bananas # features/bananas.feature:11
             Failed asserting that 2 matches expected 3. (Exception)
 
-    006 Example: | 0   | 4     | 8      | # features/bananas.feature:29
+    006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
           Then I should have 8 bananas    # features/bananas.feature:24
             Failed asserting that 7 matches expected 8. (Exception)
 
@@ -88,27 +88,27 @@ Feature: Rerun with multiple suite
 
       --- Failed steps:
 
-      001 Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      002 Example: | 0   | 4     | 8      | # features/apples.feature:29
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
             Then I should have 8 apples     # features/apples.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
-      003 Scenario: I'm little hungry    # features/bananas.feature:9
+      003 Scenario: I'm little hungry    # features/bananas.feature:9 (default)
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      004 Example: | 0   | 4     | 8      | # features/bananas.feature:29
+      004 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (default)
             Then I should have 8 bananas    # features/bananas.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
-      005 Scenario: I'm little hungry    # features/bananas.feature:9
+      005 Scenario: I'm little hungry    # features/bananas.feature:9 (suite2)
             Then I should have 3 bananas # features/bananas.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      006 Example: | 0   | 4     | 8      | # features/bananas.feature:29
+      006 Example: | 0   | 4     | 8      | # features/bananas.feature:29 (suite2)
             Then I should have 8 bananas    # features/bananas.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
@@ -123,11 +123,11 @@ Feature: Rerun with multiple suite
 
       --- Failed steps:
 
-      001 Scenario: I'm little hungry   # features/apples.feature:9
+      001 Scenario: I'm little hungry   # features/apples.feature:9 (default)
             Then I should have 3 apples # features/apples.feature:11
               Failed asserting that 2 matches expected 3. (Exception)
 
-      002 Example: | 0   | 4     | 8      | # features/apples.feature:29
+      002 Example: | 0   | 4     | 8      | # features/apples.feature:29 (default)
             Then I should have 8 apples     # features/apples.feature:24
               Failed asserting that 7 matches expected 8. (Exception)
 
