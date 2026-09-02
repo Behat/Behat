@@ -9,3 +9,27 @@ parameters:
                 - src/Behat/Testwork/Exception/Stringer/PHPUnitExceptionStringer.php
         -
             identifier: missingType.iterableValue
+
+services:
+    behatApiTags:
+        class: Behat\Tests\PHPStan\ApiTags
+        arguments:
+            apiNamespacePrefixes:
+                - 'Behat\Behat\'
+                - 'Behat\Config\'
+                - 'Behat\Testwork\'
+                - 'Behat\Step\'
+                - 'Behat\Hook\'
+                - 'Behat\Transformation\'
+    -
+        class: Behat\Tests\PHPStan\ApiBoundaryRule
+        arguments:
+            apiTags: @behatApiTags
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Behat\Tests\PHPStan\ApiSupertypeRule
+        arguments:
+            apiTags: @behatApiTags
+        tags:
+            - phpstan.rules.rule
