@@ -2,9 +2,10 @@
 
 namespace Behat\Tests\Step;
 
-use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Step\DataTable;
+use InvalidArgumentException;
+use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
 final class DataTableTest extends TestCase
@@ -29,80 +30,81 @@ final class DataTableTest extends TestCase
         ], $this->table->asLists());
     }
 
-    public function testAsMapsUsesTheFirstRowAsKeys(): void
+    /**
+     * @return array<string, array{array<int, list<string>>, list<array<string, string>>}>
+     */
+    public static function providerAsMaps(): array
     {
-        $this->assertSame([
-            ['name' => 'apple', 'colour' => 'green'],
-            ['name' => 'plum', 'colour' => 'purple'],
-        ], $this->table->asMaps());
+        return [
+            'header row and value rows' => [
+                [['name', 'colour'], ['apple', 'green']],
+                [['name' => 'apple', 'colour' => 'green']],
+            ],
+            'header row only' => [
+                [['name', 'colour']],
+                [],
+            ],
+            'empty table' => [
+                [],
+                [],
+            ],
+        ];
     }
 
-    public function testAsMapMapsTheFirstColumnToTheSecondOne(): void
+    /**
+     * @dataProvider providerAsMaps
+     *
+     * @param array<int, list<string>> $rows
+     * @param list<array<string, string>> $expect
+     */
+    public function testAsMapsUsesTheFirstRowAsKeys(array $rows, array $expect): void
     {
-        $this->assertSame([
-            'name' => 'colour',
-            'apple' => 'green',
-            'plum' => 'purple',
-        ], $this->table->asMap());
+        $this->assertSame($expect, (new DataTable(new TableNode($rows)))->asMaps());
     }
 
-    public function testAsMapsIsEmptyWhenTheTableOnlyHasItsHeaderRow(): void
+    /**
+     * @return array<string, array{array<int, list<string>>, array<string, string|null>}>
+     */
+    public static function providerAsMap(): array
     {
-        $table = new DataTable(new TableNode([['name', 'colour']]));
-
-        $this->assertSame([], $table->asMaps());
+        return [
+            'two columns' => [
+                [['name', 'colour'], ['apple', 'green'], ['plum', 'purple']],
+                ['name' => 'colour', 'apple' => 'green', 'plum' => 'purple'],
+            ],
+            'single column' => [
+                [['name'], ['apple']],
+                ['name' => null, 'apple' => null],
+            ],
+            'empty table' => [
+                [],
+                [],
+            ],
+        ];
     }
 
-    public function testAsMapOnASingleColumnTableMapsEveryRowToAnEmptyList(): void
+    /**
+     * @dataProvider providerAsMap
+     *
+     * @param array<int, list<string>> $rows
+     * @param array<string, string|null> $expect
+     */
+    public function testAsMapMapsTheFirstColumnToTheSecondOne(array $rows, array $expect): void
     {
-        $table = new DataTable(new TableNode([['name'], ['apple']]));
-
-        $this->assertSame(['name' => [], 'apple' => []], $table->asMap());
+        $this->assertSame($expect, (new DataTable(new TableNode($rows)))->asMap());
     }
 
-    public function testAsMapOnAWiderTableMapsTheFirstCellToTheRemainingOnes(): void
+    public function testAsMapRejectsATableWithMoreThanTwoColumns(): void
     {
         $table = new DataTable(new TableNode([
             ['name', 'colour', 'size'],
             ['apple', 'green', 'small'],
         ]));
 
-        $this->assertSame([
-            'name' => ['colour', 'size'],
-            'apple' => ['green', 'small'],
-        ], $table->asMap());
-    }
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A table with 3 columns cannot be converted to a map, it must have at most two columns.');
 
-    public function testAccessingARowThatDoesNotExistThrows(): void
-    {
-        $this->expectException(NodeException::class);
-        $this->expectExceptionMessage('Rows #9 does not exist in table.');
-
-        $this->table->row(9);
-    }
-
-    public function testAccessingAColumnThatDoesNotExistThrows(): void
-    {
-        $this->expectException(NodeException::class);
-        $this->expectExceptionMessage('Column #9 does not exist in table.');
-
-        $this->table->column(9);
-    }
-
-    public function testAccessingACellOutsideTheRowsThrows(): void
-    {
-        $this->expectException(NodeException::class);
-        $this->expectExceptionMessage('Rows #9 does not exist in table.');
-
-        $this->table->cell(9, 0);
-    }
-
-    public function testAccessingACellOutsideTheColumnsThrows(): void
-    {
-        $this->expectException(NodeException::class);
-        $this->expectExceptionMessage('Column #9 does not exist in table.');
-
-        $this->table->cell(0, 9);
+        $table->asMap();
     }
 
     public function testCellIsAccessedByZeroBasedRowAndColumn(): void
@@ -121,6 +123,52 @@ final class DataTableTest extends TestCase
         $this->assertSame(['colour', 'green', 'purple'], $this->table->column(1));
     }
 
+    /**
+     * @return array<string, array{callable(DataTable): mixed, string}>
+     */
+    public static function providerOutOfBoundsAccess(): array
+    {
+        return [
+            'row just past the last one' => [
+                static fn (DataTable $table) => $table->row(3),
+                'Row #3 does not exist in this table, which has 3 rows.',
+            ],
+            'negative row' => [
+                static fn (DataTable $table) => $table->row(-1),
+                'Row #-1 does not exist in this table, which has 3 rows.',
+            ],
+            'column just past the last one' => [
+                static fn (DataTable $table) => $table->column(2),
+                'Column #2 does not exist in this table, which has 2 columns.',
+            ],
+            'negative column' => [
+                static fn (DataTable $table) => $table->column(-1),
+                'Column #-1 does not exist in this table, which has 2 columns.',
+            ],
+            'cell in a row just past the last one' => [
+                static fn (DataTable $table) => $table->cell(3, 0),
+                'Row #3 does not exist in this table, which has 3 rows.',
+            ],
+            'cell in a column just past the last one' => [
+                static fn (DataTable $table) => $table->cell(0, 2),
+                'Column #2 does not exist in this table, which has 2 columns.',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider providerOutOfBoundsAccess
+     *
+     * @param callable(DataTable): mixed $access
+     */
+    public function testAccessingARowColumnOrCellThatDoesNotExistThrows(callable $access, string $expect): void
+    {
+        $this->expectException(OutOfBoundsException::class);
+        $this->expectExceptionMessage($expect);
+
+        $access($this->table);
+    }
+
     public function testHeightCountsAllRows(): void
     {
         $this->assertSame(3, $this->table->height());
@@ -131,6 +179,11 @@ final class DataTableTest extends TestCase
         $this->assertSame(2, $this->table->width());
     }
 
+    public function testANonEmptyTableIsNotEmpty(): void
+    {
+        $this->assertFalse($this->table->isEmpty());
+    }
+
     public function testAnEmptyTableHasNoDimensions(): void
     {
         $table = new DataTable(new TableNode([]));
@@ -139,11 +192,6 @@ final class DataTableTest extends TestCase
         $this->assertSame(0, $table->height());
         $this->assertSame(0, $table->width());
         $this->assertSame([], $table->asLists());
-    }
-
-    public function testANonEmptyTableIsNotEmpty(): void
-    {
-        $this->assertFalse($this->table->isEmpty());
     }
 
     public function testTransposeSwapsRowsAndColumns(): void

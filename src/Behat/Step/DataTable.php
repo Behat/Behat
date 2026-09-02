@@ -10,8 +10,9 @@
 
 namespace Behat\Step;
 
-use Behat\Gherkin\Exception\NodeException;
 use Behat\Gherkin\Node\TableNode;
+use InvalidArgumentException;
+use OutOfBoundsException;
 use Stringable;
 
 /**
@@ -25,9 +26,6 @@ use Stringable;
  */
 final class DataTable implements Stringable
 {
-    /**
-     * @internal instances are created by Behat, from the Gherkin node of the step
-     */
     public function __construct(
         private readonly TableNode $tableNode,
     ) {
@@ -59,27 +57,43 @@ final class DataTable implements Stringable
      * Returns a two-column table as an associative array, mapping the cells
      * of the first column to the cells of the second column.
      *
-     * A row that has more than two cells maps to the list of its remaining
-     * cells, and a single-column row maps to an empty list.
+     * Every row of a single-column table maps to null.
      *
-     * @return array<string, string|list<string>>
+     * @return array<string, string|null>
+     *
+     * @throws InvalidArgumentException when the table has more than two columns
      */
     public function asMap(): array
     {
-        return $this->tableNode->getRowsHash();
+        $width = $this->width();
+
+        if ($width > 2) {
+            throw new InvalidArgumentException(sprintf(
+                'A table with %d columns cannot be converted to a map, it must have at most two columns.',
+                $width,
+            ));
+        }
+
+        $map = [];
+
+        foreach ($this->asLists() as $row) {
+            $map[$row[0]] = $row[1] ?? null;
+        }
+
+        return $map;
     }
 
     /**
      * Returns the value of a single cell by zero-based row and column indexes.
      *
-     * @throws NodeException when the row or the column does not exist
+     * @throws OutOfBoundsException when the row or the column does not exist
      */
     public function cell(int $row, int $column): string
     {
         $cells = $this->row($row);
 
         if (!array_key_exists($column, $cells)) {
-            throw new NodeException(sprintf('Column #%s does not exist in table.', $column));
+            throw new OutOfBoundsException($this->columnIsOutOfBounds($column));
         }
 
         return $cells[$column];
@@ -89,20 +103,38 @@ final class DataTable implements Stringable
      * Returns a row as a list of cell values, by zero-based index.
      *
      * @return list<string>
+     *
+     * @throws OutOfBoundsException when the row does not exist
      */
     public function row(int $index): array
     {
-        return $this->tableNode->getRow($index);
+        $rows = $this->asLists();
+
+        if (!array_key_exists($index, $rows)) {
+            throw new OutOfBoundsException(sprintf(
+                'Row #%d does not exist in this table, which has %d rows.',
+                $index,
+                count($rows),
+            ));
+        }
+
+        return $rows[$index];
     }
 
     /**
      * Returns a column as a list of cell values, by zero-based index.
      *
      * @return list<string>
+     *
+     * @throws OutOfBoundsException when the column does not exist
      */
     public function column(int $index): array
     {
-        return $this->tableNode->getColumn($index);
+        if ($index < 0 || $index >= $this->width()) {
+            throw new OutOfBoundsException($this->columnIsOutOfBounds($index));
+        }
+
+        return array_column($this->asLists(), $index);
     }
 
     /**
@@ -148,5 +180,14 @@ final class DataTable implements Stringable
     public function __toString(): string
     {
         return $this->tableNode->getTableAsString();
+    }
+
+    private function columnIsOutOfBounds(int $index): string
+    {
+        return sprintf(
+            'Column #%d does not exist in this table, which has %d columns.',
+            $index,
+            $this->width(),
+        );
     }
 }
