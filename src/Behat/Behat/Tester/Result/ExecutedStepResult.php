@@ -50,6 +50,8 @@ final class ExecutedStepResult implements StepResult, DefinedStepResult, Excepti
      * Returns definition call result or null if no call were made.
      *
      * @return CallResult<DefinitionCall>
+     *
+     * @internal use hasStdOut()/getStdOut() for step output, or getException() for failures
      */
     public function getCallResult(): CallResult
     {
