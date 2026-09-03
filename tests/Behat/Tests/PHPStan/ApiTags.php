@@ -16,8 +16,10 @@ use PHPStan\Reflection\ReflectionProvider;
 /**
  * Reads the `@api` / `@internal` tags that define our public API.
  *
- * PHPStan's reflection exposes `@internal` but not `@api`, so we read the raw docblocks ourselves and treat both
- * tags the same way for consistency.
+ * PHPStan's reflection exposes `@internal` but not `@api`, so we read the raw docblocks ourselves.
+ *
+ * Constructing a type is opted into separately from using one: `@api` on a class does not promise that callers may
+ * build an instance, so a constructor only counts when it carries the tag itself.
  */
 final class ApiTags
 {
@@ -79,13 +81,22 @@ final class ApiTags
     public function isApiMethod(ClassReflection $class, string $method): bool
     {
         $native = $class->getNativeReflection();
-        $doc = $native->hasMethod($method) ? $native->getMethod($method)->getDocComment() : false;
+        $reflection = $native->hasMethod($method) ? $native->getMethod($method) : null;
+        $doc = $reflection?->getDocComment() ?? false;
 
         if ($this->hasTag($doc, 'internal')) {
             return false;
         }
 
-        return $this->hasTag($doc, 'api') || $this->isApiClass($class);
+        if ($this->hasTag($doc, 'api')) {
+            return true;
+        }
+
+        if ($reflection?->isConstructor() === true) {
+            return false;
+        }
+
+        return $this->isApiClass($class);
     }
 
     private function hasTag(string|false|null $docComment, string $tag): bool
