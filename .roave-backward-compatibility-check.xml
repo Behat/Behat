@@ -275,5 +275,13 @@
         <ignored-regex>#CHANGED: The parameter .+? of Behat\\Behat\\Transformation\\.+?\#(supportsDefinitionAndArgument|transformArgument)\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: Parameter \d+ of Behat\\Behat\\Transformation\\.+?\#(supportsDefinitionAndArgument|transformArgument)\(\) changed name#</ignored-regex>
         <ignored-regex>#ADDED: Parameter \w+ was added to Method (supportsDefinitionAndArgument|transformArgument)\(\) of class Behat\\Behat\\Transformation\\#</ignored-regex>
+
+        <!--
+        Methods marked "@internal" are no longer part of our public API, even though their declaring class is marked
+        "@api". These are only called by Behat itself. ExecutedStepResult::getCallResult() is replaced for end-users by
+        the new hasStdOut() / getStdOut() methods on the same class.
+        -->
+        <ignored-regex>#Behat\\Behat\\Tester\\Result\\ExecutedStepResult\#getCallResult\(\) was (removed|marked "@internal")#</ignored-regex>
+        <ignored-regex>#Behat\\Testwork\\ServiceContainer\\ExtensionManager\#(setExtensionsPath|activateExtension|initializeExtensions|debugInformation)\(\) was (removed|marked "@internal")#</ignored-regex>
     </baseline>
 </roave-bc-check>
