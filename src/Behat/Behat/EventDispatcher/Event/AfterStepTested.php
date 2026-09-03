@@ -110,6 +110,6 @@ final class AfterStepTested extends StepTested implements AfterTested
             return false;
         }
 
-        return $this->result->getCallResult()->hasStdOut() || $this->result->getCallResult()->hasException();
+        return $this->result->hasStdOut() || $this->result->hasException();
     }
 }

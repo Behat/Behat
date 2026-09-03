@@ -91,6 +91,6 @@ final class BeforeStepTeardown extends StepTested implements BeforeTeardown
             return false;
         }
 
-        return $this->result->getCallResult()->hasStdOut() || $this->result->getCallResult()->hasException();
+        return $this->result->hasStdOut() || $this->result->hasException();
     }
 }
