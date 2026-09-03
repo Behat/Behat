@@ -11,7 +11,7 @@ return (new Config())
         (new Profile('default'))
             ->withSuite(
                 (new Suite('default'))
-                    ->withPaths('features/hooks.feature')
+                    ->withPaths('features/scenario_hook.feature')
                     ->withContexts('FeatureContext')
             )
     )

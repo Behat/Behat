@@ -19,7 +19,7 @@ Feature: Rerun scenarios that failed in an after hook
 
       --- Failed hooks:
 
-          AfterScenario @failing-after-scenario-hook "features/hooks.feature:4" # FeatureContext::failAfterScenario()
+          AfterScenario @failing-after-scenario-hook "features/scenario_hook.feature:4" # FeatureContext::failAfterScenario()
             after scenario hook failure (RuntimeException)
 
       2 scenarios (2 passed)
@@ -32,7 +32,7 @@ Feature: Rerun scenarios that failed in an after hook
 
       --- Failed hooks:
 
-          AfterScenario @failing-after-scenario-hook "features/hooks.feature:4" # FeatureContext::failAfterScenario()
+          AfterScenario @failing-after-scenario-hook "features/scenario_hook.feature:4" # FeatureContext::failAfterScenario()
             after scenario hook failure (RuntimeException)
 
       1 scenario (1 passed)
