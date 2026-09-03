@@ -24,6 +24,8 @@ use Behat\Gherkin\Node\ArgumentInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Step\DataTable;
+use Behat\Step\DocString;
 use Behat\Step\Given;
 use Behat\Step\Then;
 use Behat\Step\When;
@@ -173,7 +175,7 @@ TPL;
         };
 
         foreach ($step->getArguments() as $argument) {
-            $usedClasses[] = $argument::class;
+            $usedClasses[] = $this->getMethodArgumentClass($argument);
         }
 
         return $usedClasses;
@@ -284,9 +286,21 @@ TPL;
     private function getMethodArgument(ArgumentInterface $argument): string
     {
         return match (true) {
-            $argument instanceof PyStringNode => 'PyStringNode $string',
-            $argument instanceof TableNode => 'TableNode $table',
+            $argument instanceof PyStringNode => 'DocString $docString',
+            $argument instanceof TableNode => 'DataTable $table',
             default => '__unknown__',
+        };
+    }
+
+    /**
+     * @return class-string
+     */
+    private function getMethodArgumentClass(ArgumentInterface $argument): string
+    {
+        return match (true) {
+            $argument instanceof PyStringNode => DocString::class,
+            $argument instanceof TableNode => DataTable::class,
+            default => $argument::class,
         };
     }
 }
