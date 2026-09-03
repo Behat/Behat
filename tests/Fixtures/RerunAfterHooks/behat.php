@@ -15,4 +15,12 @@ return (new Config())
                     ->withContexts('FeatureContext')
             )
     )
+    ->withProfile(
+        (new Profile('afterFeature'))
+            ->withSuite(
+                (new Suite('default'))
+                    ->withPaths('features/feature_hook.feature', 'features/first.feature')
+                    ->withContexts('FeatureContext', 'AfterFeatureContext')
+            )
+    )
 ;
