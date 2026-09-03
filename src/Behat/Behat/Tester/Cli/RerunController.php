@@ -105,7 +105,11 @@ final class RerunController implements Controller
             return;
         }
 
-        if ($this->resultInterpreter->interpretResult($event->getTestResult()) === ResultInterpreter::PASS) {
+        // A scenario whose steps all passed can still fail through an after-scenario hook: that
+        // failure lives in the teardown, not in the test result, and must be re-run all the same.
+        if ($this->resultInterpreter->interpretResult($event->getTestResult()) === ResultInterpreter::PASS
+            && $event->getTeardown()->isSuccessful()
+        ) {
             return;
         }
 
