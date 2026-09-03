@@ -40,13 +40,13 @@ Feature: Snippets generation and addition
           }
 
           #[Then('/^I should get a \'([^\']*)\':$/')]
-          public function iShouldGetA($arg1, PyStringNode $string): void
+          public function iShouldGetA($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Then('/^I should get a simple string:$/')]
-          public function iShouldGetASimpleString(PyStringNode $string): void
+          public function iShouldGetASimpleString(DocString $docString): void
           {
               throw new PendingException();
           }
@@ -70,7 +70,7 @@ Feature: Snippets generation and addition
           }
 
           #[Then('/^I should get a "([^"]*)":$/')]
-          public function iShouldGetA2($arg1, PyStringNode $string): void
+          public function iShouldGetA2($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
@@ -81,7 +81,7 @@ Feature: Snippets generation and addition
           use Behat\Step\Given;
           use Behat\Step\When;
           use Behat\Step\Then;
-          use Behat\Gherkin\Node\PyStringNode;
+          use Behat\Step\DocString;
       """
 
   Scenario: Appending regex snippets to a particular context
@@ -143,13 +143,13 @@ Feature: Snippets generation and addition
           }
 
           #[Then('I should get a :arg1:')]
-          public function iShouldGetA($arg1, PyStringNode $string): void
+          public function iShouldGetA($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Then('I should get a simple string:')]
-          public function iShouldGetASimpleString(PyStringNode $string): void
+          public function iShouldGetASimpleString(DocString $docString): void
           {
               throw new PendingException();
           }
@@ -166,7 +166,7 @@ Feature: Snippets generation and addition
           use Behat\Step\Given;
           use Behat\Step\When;
           use Behat\Step\Then;
-          use Behat\Gherkin\Node\PyStringNode;
+          use Behat\Step\DocString;
       """
 
   Scenario: Appending turnip snippets to a particular context
@@ -304,13 +304,13 @@ Feature: Snippets generation and addition
           }
 
           #[Then('I should get a :arg1:')]
-          public function iShouldGetA($arg1, PyStringNode $string): void
+          public function iShouldGetA($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Then('I should get a simple string:')]
-          public function iShouldGetASimpleString(PyStringNode $string): void
+          public function iShouldGetASimpleString(DocString $docString): void
           {
               throw new PendingException();
           }
@@ -327,7 +327,7 @@ Feature: Snippets generation and addition
           use Behat\Step\Given;
           use Behat\Step\When;
           use Behat\Step\Then;
-          use Behat\Gherkin\Node\PyStringNode;
+          use Behat\Step\DocString;
       """
 
   Scenario: Generating snippets for steps with apostrophes

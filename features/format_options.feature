@@ -74,13 +74,13 @@ Feature: Format options
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
@@ -151,13 +151,13 @@ Feature: Format options
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
@@ -293,13 +293,13 @@ Feature: Format options
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
@@ -367,13 +367,13 @@ Feature: Format options
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }

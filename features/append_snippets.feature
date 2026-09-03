@@ -12,6 +12,8 @@ Feature: Append snippets option
       """
       <?php
 
+      use Behat\Step\DataTable;
+      use Behat\Step\DocString;
       use Behat\Behat\Context\Context;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Gherkin\Node\PyStringNode;
@@ -94,19 +96,19 @@ Feature: Append snippets option
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^pystring (\d+):$/')]
-          public function pystring2($arg1, PyStringNode $string): void
+          public function pystring2($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
@@ -119,6 +121,8 @@ Feature: Append snippets option
       """
       <?php
 
+      use Behat\Step\DataTable;
+      use Behat\Step\DocString;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
       use Behat\Gherkin\Node\PyStringNode;
@@ -200,19 +204,19 @@ Feature: Append snippets option
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^pystring (\d+):$/')]
-          public function pystring2($arg1, PyStringNode $string): void
+          public function pystring2($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
@@ -225,8 +229,8 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Gherkin\Node\TableNode;
-      use Behat\Gherkin\Node\PyStringNode;
+      use Behat\Step\DataTable;
+      use Behat\Step\DocString;
       use Behat\Behat\Tester\Exception\PendingException;
       use Behat\Behat\Context\Context;
       use Behat\Step\Given;
@@ -298,19 +302,19 @@ Feature: Append snippets option
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^pystring (\d+):$/')]
-          public function pystring2($arg1, PyStringNode $string): void
+          public function pystring2($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
@@ -363,8 +367,8 @@ Feature: Append snippets option
       """
       <?php
 
-      use Behat\Gherkin\Node\TableNode;
-      use Behat\Gherkin\Node\PyStringNode;
+      use Behat\Step\DataTable;
+      use Behat\Step\DocString;
       use Behat\Step\Then;
       use Behat\Step\When;
       use Behat\Step\Given;
@@ -417,19 +421,19 @@ Feature: Append snippets option
           }
 
           #[Given('/^pystring:$/')]
-          public function pystring(PyStringNode $string): void
+          public function pystring(DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^pystring (\d+):$/')]
-          public function pystring2($arg1, PyStringNode $string): void
+          public function pystring2($arg1, DocString $docString): void
           {
               throw new PendingException();
           }
 
           #[Given('/^table:$/')]
-          public function table(TableNode $table): void
+          public function table(DataTable $table): void
           {
               throw new PendingException();
           }
