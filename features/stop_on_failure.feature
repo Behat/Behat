@@ -89,6 +89,26 @@ Feature: Stop on failure via config
       7 steps (5 passed, 1 failed, 1 skipped)
       """
 
+  Scenario: Print unused definitions while stopping on the first failure
+    When  I run behat with the following additional options:
+      | option                     | value |
+      | --stop-on-failure          |       |
+      | --print-unused-definitions |       |
+      | features/failing.feature   |       |
+    Then it should fail with:
+      """
+      --- Failed scenarios:
+
+          features/failing.feature:13 (on line 15)
+
+      2 scenarios (1 passed, 1 failed)
+      7 steps (5 passed, 1 failed, 1 skipped)
+      """
+    And the output should contain:
+      """
+      --- No unused definitions
+      """
+
   Scenario: Do not stop on undefined steps by default
     When  I run behat with the following additional options:
       | option                        | value           |

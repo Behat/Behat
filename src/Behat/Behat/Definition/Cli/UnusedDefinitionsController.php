@@ -68,8 +68,14 @@ final class UnusedDefinitionsController implements Controller
         return null;
     }
 
-    public function registerDefinitionUsages(AfterSuiteTested $event): void
+    public function registerDefinitionUsages(SuiteTested $event): void
     {
+        // A suite cut short by --stop-on-failure is dispatched under the same name as an
+        // AfterSuiteAborted, and has no further definition usage to register.
+        if (!$event instanceof AfterSuiteTested) {
+            return;
+        }
+
         $environmentDefinitions = $this->definitionRepository->getEnvironmentDefinitions($event->getEnvironment());
         foreach ($environmentDefinitions as $definition) {
             if ($definition instanceof RuntimeDefinition) {
