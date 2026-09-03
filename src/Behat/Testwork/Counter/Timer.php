@@ -17,11 +17,20 @@ use Stringable;
  * Provides time counting functionality.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class Timer implements Stringable
 {
     private ?float $starTime = null;
     private ?float $stopTime = null;
+
+    /**
+     * @api
+     */
+    public function __construct()
+    {
+    }
 
     /**
      * Starts timer.

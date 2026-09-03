@@ -17,6 +17,8 @@ use Behat\Testwork\ServiceContainer\Exception\ExtensionInitializationException;
  * Manages both default and 3rd-party extensions.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class ExtensionManager
 {

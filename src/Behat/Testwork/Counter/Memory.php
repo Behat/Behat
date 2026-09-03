@@ -16,6 +16,8 @@ use Stringable;
  * Counts amount of system memory being used.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class Memory implements Stringable
 {
@@ -23,6 +25,13 @@ final class Memory implements Stringable
      * @var list<string>
      */
     private array $units = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
+
+    /**
+     * @api
+     */
+    public function __construct()
+    {
+    }
 
     /**
      * Returns current memory usage.

@@ -21,6 +21,8 @@ use Iterator;
  * @template-covariant T
  *
  * @extends Iterator<int, T>
+ *
+ * @api
  */
 interface SpecificationIterator extends Iterator
 {

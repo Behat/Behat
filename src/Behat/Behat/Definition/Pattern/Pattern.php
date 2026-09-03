@@ -16,9 +16,14 @@ use Behat\Testwork\Deprecation\DeprecationCollector;
  * Step definition pattern.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class Pattern
 {
+    /**
+     * @api
+     */
     public function __construct(
         private readonly string $suggestedMethodName,
         private readonly string $pattern,

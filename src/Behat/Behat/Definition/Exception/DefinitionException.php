@@ -16,6 +16,8 @@ use Behat\Testwork\Exception\TestworkException;
  * Represents an exception thrown during step definition handling.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 interface DefinitionException extends TestworkException
 {

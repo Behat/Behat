@@ -14,6 +14,8 @@ namespace Behat\Behat\Definition;
  * Step definition search result.
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * @api
  */
 final class SearchResult
 {
@@ -21,6 +23,8 @@ final class SearchResult
      * Registers search match.
      *
      * @param string|null $matchedText
+     *
+     * @api
      */
     public function __construct(
         private readonly ?Definition $definition = null,
