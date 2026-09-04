@@ -197,18 +197,17 @@ final class ProgressStepPrinter implements StepPrinter
      */
     private function printStdOut(OutputPrinter $printer, StepResult $result): void
     {
-        if (!$result instanceof ExecutedStepResult || null === $result->getCallResult()->getStdOut()) {
+        if (!$result instanceof ExecutedStepResult || null === $result->getStdOut()) {
             return;
         }
 
         $printer->writeln("\n" . $result->getStepDefinition()->getPath() . ':');
-        $callResult = $result->getCallResult();
         $pad = (fn ($line): string => sprintf(
             '  | {+stdout}%s{-stdout}',
             $line
         ));
 
-        $printer->write(implode("\n", array_map($pad, explode("\n", (string) $callResult->getStdOut()))));
+        $printer->write(implode("\n", array_map($pad, explode("\n", (string) $result->getStdOut()))));
         $this->hasPrintedOutput = true;
     }
 }
