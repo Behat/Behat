@@ -18,6 +18,7 @@ use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\EventDispatcher\Event\BeforeOutlineTested;
 use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\Output\Node\Printer\ExamplePrinter;
+use Behat\Behat\Output\Node\Printer\ExamplesTableHeaderPrinter;
 use Behat\Behat\Output\Node\Printer\Helper\ExampleTableResolver;
 use Behat\Behat\Output\Node\Printer\OutlinePrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
@@ -117,6 +118,10 @@ final class OutlineListener implements EventListener
      */
     private function printExamplesTableHeaderOnTableChange(Formatter $formatter, ExampleNode $example): void
     {
+        if (!$this->outlinePrinter instanceof ExamplesTableHeaderPrinter) {
+            return;
+        }
+
         $exampleTable = $this->exampleTableResolver->resolveTable($this->outline, $example);
 
         if ($exampleTable === $this->printedExampleTable) {

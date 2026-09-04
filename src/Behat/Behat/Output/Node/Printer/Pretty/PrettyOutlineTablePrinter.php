@@ -10,6 +10,7 @@
 
 namespace Behat\Behat\Output\Node\Printer\Pretty;
 
+use Behat\Behat\Output\Node\Printer\ExamplesTableHeaderPrinter;
 use Behat\Behat\Output\Node\Printer\OutlineTablePrinter;
 use Behat\Behat\Output\Node\Printer\ScenarioPrinter;
 use Behat\Behat\Output\Node\Printer\StepPrinter;
@@ -26,7 +27,7 @@ use Behat\Testwork\Tester\Result\TestResult;
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-final class PrettyOutlineTablePrinter implements OutlineTablePrinter
+final class PrettyOutlineTablePrinter implements OutlineTablePrinter, ExamplesTableHeaderPrinter
 {
     private readonly string $indentText;
     private readonly string $subIndentText;

@@ -20,6 +20,7 @@ use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
+use Behat\Behat\Output\Node\Printer\ExamplesTableHeaderPrinter;
 use Behat\Behat\Output\Node\Printer\Helper\ExampleTableResolver;
 use Behat\Behat\Output\Node\Printer\OutlineTablePrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
@@ -146,7 +147,7 @@ final class OutlineTableListener implements EventListener
         assert($example instanceof ExampleNode);
 
         $this->printOutlineHeaderOnce($formatter, $event);
-        $exampleTable = $this->printExamplesTableHeaderOnTableChange($formatter, $example);
+        $this->printExamplesTableHeaderOnTableChange($formatter, $example);
 
         $this->exampleSetupPrinter->printSetup($formatter, $this->exampleSetup);
 
@@ -154,7 +155,7 @@ final class OutlineTableListener implements EventListener
             $this->stepSetupPrinter->printSetup($formatter, $beforeEvent->getSetup());
         }
 
-        $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $exampleTable, $example, $this->stepAfterTestedEvents);
+        $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
 
         foreach ($this->stepAfterTestedEvents as $afterEvent) {
             $this->stepSetupPrinter->printTeardown($formatter, $afterEvent->getTeardown());
@@ -182,19 +183,19 @@ final class OutlineTableListener implements EventListener
 
     /**
      * Prints the header of the examples table $example belongs to, unless it has already been printed.
-     *
-     * @return ExampleTableNode the examples table that $example was created from
      */
-    private function printExamplesTableHeaderOnTableChange(Formatter $formatter, ExampleNode $example): ExampleTableNode
+    private function printExamplesTableHeaderOnTableChange(Formatter $formatter, ExampleNode $example): void
     {
+        if (!$this->tablePrinter instanceof ExamplesTableHeaderPrinter) {
+            return;
+        }
+
         $exampleTable = $this->exampleTableResolver->resolveTable($this->outline, $example);
 
         if ($exampleTable !== $this->printedExampleTable) {
             $this->tablePrinter->printExamplesTableHeader($formatter, $exampleTable);
             $this->printedExampleTable = $exampleTable;
         }
-
-        return $exampleTable;
     }
 
     /**

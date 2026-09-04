@@ -278,16 +278,11 @@
 
         <!--
         The pretty formatter now prints each of an outline's Examples tables separately, instead of the single merged
-        table that the deprecated OutlineNode::getExampleTable() builds. Rendering a heading per table requires a new
-        method on the outline printer interfaces, and the example row printer has to be told which table the example
-        came from so that it can pad the row and read the column headers from the right one.
+        table that the deprecated OutlineNode::getExampleTable() builds. Printing a heading per table is offered
+        through the new ExamplesTableHeaderPrinter interface rather than added to the existing printer interfaces, so
+        that formatters which have not implemented it keep working.
         Grouped by class, as the checker reports one error per parameter.
         -->
-        <ignored-regex>#ADDED: Method printExamplesTableHeader\(\) was added to interface Behat\\Behat\\Output\\Node\\Printer\\OutlinePrinter#</ignored-regex>
-        <ignored-regex>#ADDED: Method printExamplesTableHeader\(\) was added to interface Behat\\Behat\\Output\\Node\\Printer\\OutlineTablePrinter#</ignored-regex>
-        <ignored-regex>#(ADDED|CHANGED): Parameter exampleTable was added to Method printExampleRow\(\) of class Behat\\Behat\\Output\\Node\\Printer\\ExampleRowPrinter#</ignored-regex>
-        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\ExampleRowPrinter\#printExampleRow\(\)#</ignored-regex>
-        <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyExampleRowPrinter\#printExampleRow\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyExampleRowPrinter\#__construct\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyOutlinePrinter\#__construct\(\)#</ignored-regex>
         <ignored-regex>#CHANGED: .+ Behat\\Behat\\Output\\Node\\Printer\\Pretty\\PrettyOutlineTablePrinter\#__construct\(\)#</ignored-regex>

@@ -52,8 +52,9 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
     }
 
-    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleTableNode $exampleTable, ExampleNode $example, array $events): void
+    public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events): void
     {
+        $exampleTable = $this->exampleTableResolver->resolveTable($outline, $example);
         $rowNum = $this->exampleTableResolver->resolveRowNumber($exampleTable, $example);
         $wrapper = $this->getWrapperClosure($outline, $exampleTable, $example, $events);
         $row = $exampleTable->getRowAsStringWithWrappedValues($rowNum, $wrapper);
