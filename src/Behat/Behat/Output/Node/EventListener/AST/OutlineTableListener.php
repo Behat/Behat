@@ -20,10 +20,13 @@ use Behat\Behat\EventDispatcher\Event\ExampleTested;
 use Behat\Behat\EventDispatcher\Event\OutlineTested;
 use Behat\Behat\EventDispatcher\Event\StepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
+use Behat\Behat\Output\Node\Printer\ExamplesTableHeaderPrinter;
+use Behat\Behat\Output\Node\Printer\Helper\ExampleTableResolver;
 use Behat\Behat\Output\Node\Printer\OutlineTablePrinter;
 use Behat\Behat\Output\Node\Printer\SetupPrinter;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\Event\Event;
 use Behat\Testwork\Output\Formatter;
@@ -43,6 +46,8 @@ final class OutlineTableListener implements EventListener
 
     private bool $headerPrinted = false;
 
+    private ?ExampleTableNode $printedExampleTable = null;
+
     /**
      * @var array<int,AfterStepSetup>
      */
@@ -58,6 +63,7 @@ final class OutlineTableListener implements EventListener
         private readonly ExampleRowPrinter $exampleRowPrinter,
         private readonly SetupPrinter $exampleSetupPrinter,
         private readonly SetupPrinter $stepSetupPrinter,
+        private readonly ExampleTableResolver $exampleTableResolver,
     ) {
     }
 
@@ -73,8 +79,7 @@ final class OutlineTableListener implements EventListener
         $this->forgetOutlineOnAfterOutlineEvent($eventName);
         $this->captureExampleSetupOnBeforeEvent($event);
 
-        $this->printHeaderOnAfterExampleEvent($formatter, $event, $eventName);
-        $this->printExampleRowOnAfterExampleEvent($formatter, $event, $eventName);
+        $this->printExampleOnAfterExampleEvent($formatter, $event, $eventName);
         $this->printFooterOnAfterEvent($formatter, $event);
     }
 
@@ -101,6 +106,7 @@ final class OutlineTableListener implements EventListener
 
         $this->outline = $event->getOutline();
         $this->headerPrinted = false;
+        $this->printedExampleTable = null;
     }
 
     /**
@@ -125,38 +131,23 @@ final class OutlineTableListener implements EventListener
         }
 
         $this->outline = null;
+        $this->printedExampleTable = null;
     }
 
     /**
-     * Prints outline header (if has not been printed yet) on example AFTER event.
+     * Prints the outline header, the examples table header and the example row on example AFTER event.
      */
-    private function printHeaderOnAfterExampleEvent(Formatter $formatter, Event $event, string $eventName): void
-    {
-        if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
-            return;
-        }
-
-        if ($this->headerPrinted) {
-            return;
-        }
-
-        $feature = $event->getFeature();
-        $stepTestResults = $this->getStepTestResults();
-
-        $this->tablePrinter->printHeader($formatter, $feature, $this->outline, $stepTestResults);
-        $this->headerPrinted = true;
-    }
-
-    /**
-     * Prints example row on example AFTER event.
-     */
-    private function printExampleRowOnAfterExampleEvent(Formatter $formatter, Event $event, string $eventName): void
+    private function printExampleOnAfterExampleEvent(Formatter $formatter, Event $event, string $eventName): void
     {
         if (!$event instanceof AfterScenarioTested || ExampleTested::AFTER !== $eventName) {
             return;
         }
 
         $example = $event->getScenario();
+        assert($example instanceof ExampleNode);
+
+        $this->printOutlineHeaderOnce($formatter, $event);
+        $this->printExamplesTableHeaderOnTableChange($formatter, $example);
 
         $this->exampleSetupPrinter->printSetup($formatter, $this->exampleSetup);
 
@@ -164,7 +155,6 @@ final class OutlineTableListener implements EventListener
             $this->stepSetupPrinter->printSetup($formatter, $beforeEvent->getSetup());
         }
 
-        assert($example instanceof ExampleNode);
         $this->exampleRowPrinter->printExampleRow($formatter, $this->outline, $example, $this->stepAfterTestedEvents);
 
         foreach ($this->stepAfterTestedEvents as $afterEvent) {
@@ -176,6 +166,36 @@ final class OutlineTableListener implements EventListener
         $this->exampleSetup = null;
         $this->stepBeforeTestedEvents = [];
         $this->stepAfterTestedEvents = [];
+    }
+
+    /**
+     * Prints the outline header (with the step results of the first example) if it has not been printed yet.
+     */
+    private function printOutlineHeaderOnce(Formatter $formatter, AfterScenarioTested $event): void
+    {
+        if ($this->headerPrinted) {
+            return;
+        }
+
+        $this->tablePrinter->printHeader($formatter, $event->getFeature(), $this->outline, $this->getStepTestResults());
+        $this->headerPrinted = true;
+    }
+
+    /**
+     * Prints the header of the examples table $example belongs to, unless it has already been printed.
+     */
+    private function printExamplesTableHeaderOnTableChange(Formatter $formatter, ExampleNode $example): void
+    {
+        if (!$this->tablePrinter instanceof ExamplesTableHeaderPrinter) {
+            return;
+        }
+
+        $exampleTable = $this->exampleTableResolver->resolveTable($this->outline, $example);
+
+        if ($exampleTable !== $this->printedExampleTable) {
+            $this->tablePrinter->printExamplesTableHeader($formatter, $exampleTable);
+            $this->printedExampleTable = $exampleTable;
+        }
     }
 
     /**

@@ -29,6 +29,8 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
     private readonly string $indentText;
     private readonly string $subIndentText;
     private readonly PrettyDescriptionPrinter $descriptionPrinter;
+    private readonly PrettyTagsPrinter $tagsPrinter;
+    private readonly PrettyTitleAndDescriptionSplitter $titleAndDescriptionSplitter;
 
     /**
      * Initializes printer.
@@ -41,12 +43,14 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         $this->indentText = str_repeat(' ', intval($indentation));
         $this->subIndentText = $this->indentText . str_repeat(' ', intval($subIndentation));
         $this->descriptionPrinter = new PrettyDescriptionPrinter();
+        $this->tagsPrinter = new PrettyTagsPrinter();
+        $this->titleAndDescriptionSplitter = new PrettyTitleAndDescriptionSplitter();
     }
 
     public function printHeader(Formatter $formatter, FeatureNode $feature, Scenario $scenario): void
     {
         if ($scenario instanceof TaggedNodeInterface) {
-            $this->printTags($formatter->getOutputPrinter(), $scenario->getTags());
+            $this->tagsPrinter->printTags($formatter->getOutputPrinter(), $scenario->getTags(), $this->indentText);
         }
 
         ['title' => $title, 'description' => $description] = $this->getTitleAndDescription($scenario);
@@ -62,47 +66,16 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
      */
     private function getTitleAndDescription(Scenario $scenario): array
     {
-        if ($scenario instanceof DescribableNodeInterface && $scenario->getDescription()) {
-            // All ScenarioLikeInterface defined by behat/gherkin are also DescribableNodeInterface
-            // but we can't guarantee that's true if the node has come from third-party code.
-            //
-            // If it does match this interface and was parsed in gherkin-32 mode the description
-            // will be in the description property and the title is guaranteed to be a single line.
-            return [
-                'title' => $scenario->getTitle(),
-                'description' => $scenario->getDescription(),
-            ];
-        }
+        // All ScenarioLikeInterface defined by behat/gherkin are also DescribableNodeInterface
+        // but we can't guarantee that's true if the node has come from third-party code.
+        $description = $scenario instanceof DescribableNodeInterface ? $scenario->getDescription() : null;
 
-        // Could have been parsed in gherkin-32 mode with no description, or in legacy mode with a multi-line title
-        // either way the title is the first line (if any) and the description is the rest.
-        $lines = explode("\n", (string) $scenario->getTitle());
-        $title = array_shift($lines);
-
-        return [
-            'title' => $title,
-            'description' => $lines === [] ? null : implode("\n", $lines),
-        ];
+        return $this->titleAndDescriptionSplitter->split($scenario->getTitle(), $description);
     }
 
     public function printFooter(Formatter $formatter, TestResult $result): void
     {
         $formatter->getOutputPrinter()->writeln();
-    }
-
-    /**
-     * Prints scenario tags.
-     *
-     * @param string[]      $tags
-     */
-    private function printTags(OutputPrinter $printer, array $tags): void
-    {
-        if (!count($tags)) {
-            return;
-        }
-
-        $tags = array_map($this->prependTagWithTagSign(...), $tags);
-        $printer->writeln(sprintf('%s{+tag}%s{-tag}', $this->indentText, implode(' ', $tags)));
     }
 
     /**
@@ -121,18 +94,5 @@ final class PrettyScenarioPrinter implements ScenarioPrinter
         if ('' !== $title) {
             $printer->write(sprintf(' %s', $title));
         }
-    }
-
-    /**
-     * Prepends tags string with tag-sign.
-     */
-    private function prependTagWithTagSign(string $tag): string
-    {
-        if (str_starts_with($tag, '@')) {
-            return $tag;
-        }
-
-        // The legacy mode of the behat/gherkin parser is trimming the `@` from tags so we need to re-add it for pretty-printing
-        return '@' . $tag;
     }
 }

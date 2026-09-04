@@ -13,10 +13,12 @@ namespace Behat\Behat\Output\Node\Printer\Pretty;
 use Behat\Behat\Definition\Translator\TranslatorInterface;
 use Behat\Behat\EventDispatcher\Event\AfterStepTested;
 use Behat\Behat\Output\Node\Printer\ExampleRowPrinter;
+use Behat\Behat\Output\Node\Printer\Helper\ExampleTableResolver;
 use Behat\Behat\Output\Node\Printer\Helper\ResultToStringConverter;
 use Behat\Behat\Tester\Result\ExecutedStepResult;
 use Behat\Behat\Tester\Result\StepResult;
 use Behat\Gherkin\Node\ExampleNode;
+use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Testwork\EventDispatcher\Event\AfterTested;
 use Behat\Testwork\Exception\ExceptionPresenter;
@@ -42,6 +44,7 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
         private readonly ResultToStringConverter $resultConverter,
         private readonly ExceptionPresenter $exceptionPresenter,
         private readonly TranslatorInterface $translator,
+        private readonly ExampleTableResolver $exampleTableResolver,
         int $indentation = 6,
         int $subIndentation = 2,
     ) {
@@ -51,9 +54,10 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
 
     public function printExampleRow(Formatter $formatter, OutlineNode $outline, ExampleNode $example, array $events): void
     {
-        $rowNum = array_search($example, $outline->getExamples()) + 1;
-        $wrapper = $this->getWrapperClosure($outline, $example, $events);
-        $row = $outline->getExampleTable()->getRowAsStringWithWrappedValues($rowNum, $wrapper);
+        $exampleTable = $this->exampleTableResolver->resolveTable($outline, $example);
+        $rowNum = $this->exampleTableResolver->resolveRowNumber($exampleTable, $example);
+        $wrapper = $this->getWrapperClosure($outline, $exampleTable, $example, $events);
+        $row = $exampleTable->getRowAsStringWithWrappedValues($rowNum, $wrapper);
 
         $formatter->getOutputPrinter()->writeln(sprintf('%s%s', $this->indentText, $row));
         $this->printStepExceptionsAndStdOut($formatter->getOutputPrinter(), $events);
@@ -66,15 +70,15 @@ final class PrettyExampleRowPrinter implements ExampleRowPrinter
      *
      * @return callable
      */
-    private function getWrapperClosure(OutlineNode $outline, ExampleNode $example, array $stepEvents)
+    private function getWrapperClosure(OutlineNode $outline, ExampleTableNode $exampleTable, ExampleNode $example, array $stepEvents)
     {
         $resultConverter = $this->resultConverter;
 
-        return function ($value, $column) use ($outline, $example, $stepEvents, $resultConverter): string {
+        return function ($value, $column) use ($outline, $exampleTable, $example, $stepEvents, $resultConverter): string {
             $results = [];
             foreach ($stepEvents as $event) {
                 $index = array_search($event->getStep(), $example->getSteps());
-                $header = $outline->getExampleTable()->getRow(0);
+                $header = $exampleTable->getRow(0);
                 $steps = $outline->getSteps();
                 $outlineStepText = $steps[$index]->getText();
 
