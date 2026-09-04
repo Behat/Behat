@@ -17,7 +17,7 @@
         "php": ">=8.2 <8.6",
         "ext-mbstring": "*",
         "composer-runtime-api": "^2.2",
-        "behat/gherkin": "^4.17.0",
+        "behat/gherkin": "dev-feat-rule-node-parsing",
         "cucumber/tag-expressions": "^11.0",
         "composer/xdebug-handler": "^1.4 || ^2.0 || ^3.0",
         "nikic/php-parser": "^4.19.2 || ^5.2",
@@ -41,6 +41,10 @@
         "symfony/polyfill-php84": "^1.31",
         "symfony/process": "^5.4 || ^6.4 || ^7.0"
     },
+
+    "repositories": [
+        {"type": "vcs", "url": "https://github.com/acoulton/gherkin"}
+    ],
 
     "suggest": {
         "ext-dom": "Needed to output test results in JUnit format."
