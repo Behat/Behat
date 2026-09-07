@@ -13,6 +13,7 @@ namespace Behat\Behat\Definition\Search;
 use Behat\Behat\Definition\Definition;
 use Behat\Behat\Definition\DefinitionRepository;
 use Behat\Behat\Definition\Exception\AmbiguousMatchException;
+use Behat\Behat\Definition\Exception\TooManyArgumentsException;
 use Behat\Behat\Definition\Pattern\PatternTransformer;
 use Behat\Behat\Definition\SearchResult;
 use Behat\Behat\Definition\Translator\DefinitionTranslator;
@@ -25,7 +26,6 @@ use Behat\Step\DataTable;
 use Behat\Step\DocString;
 use Behat\Testwork\Argument\ArgumentOrganiser;
 use Behat\Testwork\Argument\Exception\UnexpectedMultilineArgumentException;
-use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\Environment\Environment;
 use ReflectionFunctionAbstract;
 use ReflectionIntersectionType;
@@ -126,9 +126,11 @@ final class RepositorySearchEngine implements SearchEngine
     }
 
     /**
-     * Reports a deprecation if the pattern provides more arguments than the definition can accept.
+     * Fails if the pattern provides more arguments than the definition can accept.
      *
      * @param array<int|string, mixed> $match the pattern match, with any multiline arguments appended
+     *
+     * @throws TooManyArgumentsException
      */
     private function checkForUnusedArguments(Definition $definition, array $match): void
     {
@@ -145,17 +147,7 @@ final class RepositorySearchEngine implements SearchEngine
             return;
         }
 
-        DeprecationCollector::trigger(sprintf(
-            'The pattern "%s" provides %d argument%s but %s only accepts %d. '
-            . 'Silently discarding the extra argument%s is deprecated and will be an error in Behat 4.0: '
-            . 'either add the missing parameters or use non-capturing groups "(?:...)" in the pattern.',
-            $definition->getPattern(),
-            $providedCount,
-            $providedCount === 1 ? '' : 's',
-            $definition->getPath(),
-            $parameterCount,
-            $providedCount - $parameterCount === 1 ? '' : 's',
-        ), $function->getFileName() ?: null, $function->getStartLine() ?: null);
+        throw new TooManyArgumentsException($definition, $providedCount, $parameterCount);
     }
 
     /**
