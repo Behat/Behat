@@ -127,8 +127,7 @@ final class Application extends BaseApplication
         }
 
         $command = $this->createCommand($input, $output);
-        $this->addCommands([$command]);
-
+        method_exists($this, 'addCommand') ? $this->addCommand($command) : $this->add($command);
         return parent::doRun($input, $output);
     }
 
