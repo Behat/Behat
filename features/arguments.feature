@@ -92,6 +92,15 @@ Feature: Step Arguments
         This is probably an error in your step implementation or in %%WORKING_DIR%%features%%DS%%unexpected-table-exception.feature:3
       """
 
+  Scenario: pattern capturing more arguments than the definition accepts
+    When I run behat with the following additional options:
+      | option                              | value |
+      | features/too_many_arguments.feature |       |
+    Then it should fail with:
+      """
+      The pattern "/^(Alice|Bob) presses the (?P<button>red|green) button$/" provides 2 arguments but FeatureContext::pressesTheButton() only accepts 1: either add the missing parameters or use non-capturing groups "(?:...)" in the pattern.
+      """
+
   Scenario: given TableNode that could match an un-typed step argument
     When I run behat with the following additional options:
       | option                                   | value |

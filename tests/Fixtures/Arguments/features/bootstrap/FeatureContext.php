@@ -124,4 +124,14 @@ class FeatureContext implements Context
     {
         Assert::assertSame($expected, $this->text);
     }
+
+    #[Given('/^(Alice|Bob) presses the (?P<button>red|green) button$/')]
+    public function pressesTheButton(string $button): void
+    {
+    }
+
+    #[Given('/^(?:Alice|Bob) pushes the (?P<button>red|green) button$/')]
+    public function pushesTheButton(string $button): void
+    {
+    }
 }
