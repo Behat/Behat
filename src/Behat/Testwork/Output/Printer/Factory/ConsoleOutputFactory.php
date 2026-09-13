@@ -63,10 +63,12 @@ class ConsoleOutputFactory extends OutputFactory
         } elseif (!is_dir($this->getOutputPath())) {
             $stream = fopen($this->getOutputPath(), 'w');
         } else {
-            throw new BadOutputPathException(sprintf(
-                'Filename expected as `output_path` parameter, but got `%s`.',
+            throw new BadOutputPathException(
+                'A file name expected for the `output_path` option, but a directory was given.' . PHP_EOL
+                . 'Note that a single `--out` is applied to every `--format`.' . PHP_EOL
+                . 'Pass one `--out` per `--format`, in the same order, to send them to different places.',
                 $this->getOutputPath()
-            ), $this->getOutputPath());
+            );
         }
 
         return $stream;

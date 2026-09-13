@@ -278,6 +278,17 @@ Feature: Multiple formats
       25 steps (20 passed, 2 failed, 3 undefined)
       """
 
+  Scenario: a single output is applied to every format
+    When I run "behat -f pretty -f junit --out=apples-out"
+    Then it should fail with:
+      """
+      In ConsoleOutputFactory.php line XX:
+
+        A file name expected for the `output_path` option, but a directory was given.
+        Note that a single `--out` is applied to every `--format`.
+        Pass one `--out` per `--format`, in the same order, to send them to different places.
+      """
+
   Scenario: 2 formats, write second to file
     When I run "behat -f pretty -o std --format=progress --out=apples.progress --format-settings='{\"multiline\": false, \"paths\": false}'"
     Then it should fail with:

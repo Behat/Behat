@@ -42,15 +42,19 @@ class OutputController implements Controller
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'How to format tests output. <comment>pretty</comment> is default.' . PHP_EOL .
                 'Available formats are:' . PHP_EOL . $this->getFormatterDescriptions() .
-                'You can use multiple formats at the same time.'
+                'You can use multiple formats at the same time. See <comment>--out</comment>' . PHP_EOL .
+                'to send each of them to a different place.'
             )
             ->addOption(
                 '--out',
                 '-o',
                 InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                 'Write format output to a file/directory instead of' . PHP_EOL .
-                'STDOUT <comment>(output_path)</comment>. You can also provide different' . PHP_EOL .
-                'outputs to multiple formats. This option is mandatory for the junit formatter.'
+                'STDOUT <comment>(output_path)</comment>. A single <comment>--out</comment> is applied to every' . PHP_EOL .
+                '<comment>--format</comment>. To send formats to different places, pass one' . PHP_EOL .
+                '<comment>--out</comment> per <comment>--format</comment>, in the same order, using <comment>std</comment>' . PHP_EOL .
+                'for those that stay on STDOUT.' . PHP_EOL .
+                'This option is mandatory for the junit formatter.'
             )
             ->addOption(
                 '--format-settings',
