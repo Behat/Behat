@@ -24,4 +24,4 @@ return (new Config())
             ->withCompatibilityMode(GherkinCompatibilityMode::LEGACY)
         )
     )
-    ;
+;

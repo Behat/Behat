@@ -141,3 +141,52 @@ Feature: Support Gherkin Rules
           2 scenarios (2 passed)
           6 steps (6 passed)
           """
+
+  Rule: Tagged hooks trigger based on Rule tags
+
+    Scenario: Run with tagged hooks
+      When I run behat with the following additional options:
+        | option                        | value  |
+        | --format                      | pretty |
+        | features/tagged_hooks.feature |        |
+      Then it should fail with:
+        """
+        Feature: Run tagged hooks based on rule tags
+
+          @binary
+          Scenario: Tagged hook works on the Scenario # features/tagged_hooks.feature:4
+            When I add 3 + 3                          # FeatureContext::iAdd()
+              Binary calculators only accept input 0 or 1, got 3 (Exception)
+            Then the result should be 6               # FeatureContext::theResultShouldBe()
+
+          @binary @smoketest
+          Scenario: Adding numbers      # features/tagged_hooks.feature:12
+            When I add 3 + 3            # FeatureContext::iAdd()
+              Binary calculators only accept input 0 or 1, got 3 (Exception)
+            Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+          @binary
+          Scenario: Dividing numbers              # features/tagged_hooks.feature:16
+            When I divide <dividend> by <divisor> # FeatureContext::iDivideBy()
+            Then the result should be <answer>    # FeatureContext::theResultShouldBe()
+
+            Examples:
+              | dividend | divisor | answer |
+              | 6        | 2       | 3      |
+                Failed step: When I divide 6 by 2
+                Binary calculators only accept input 0 or 1, got 6 (Exception)
+              | 1        | 1       | 1      |
+
+          Scenario: Adding numbers      # features/tagged_hooks.feature:28
+            When I add 3 + 3            # FeatureContext::iAdd()
+            Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+        --- Failed scenarios:
+
+            features/tagged_hooks.feature:4 (on line 5)
+            features/tagged_hooks.feature:12 (on line 13)
+            features/tagged_hooks.feature:22 (on line 17)
+
+        5 scenarios (2 passed, 3 failed)
+        10 steps (4 passed, 3 failed, 3 skipped)
+        """
