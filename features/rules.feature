@@ -97,12 +97,13 @@ Feature: Support Gherkin Rules
       When I run behat with the following additional options:
         | option | value                  |
         | --tags | '@maths && @smoketest' |
-      # @todo: Gherkin should merge the `@maths` tag into hoisted nodes for use by other tools that don't know rules (including us)
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
       Then it should pass with:
           """
           Feature: Rules that have tagging
 
-            @smoketest
+            @maths @smoketest
             Scenario: Adding numbers      # features/tagged.feature:7
               When I add 3 + 3            # FeatureContext::iAdd()
               Then the result should be 6 # FeatureContext::theResultShouldBe()
@@ -115,16 +116,19 @@ Feature: Support Gherkin Rules
       When I run behat with the following additional options:
         | option | value                  |
         | --tags | '@offset && ~@invalid' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
       Then it should pass with:
           """
           Feature: Rules that have tagging
 
+            @offset
             Scenario: Adding numbers                       # features/tagged.feature:26
               Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
               When I add 2 + 2                             # FeatureContext::iAdd()
               Then the result should be 5                  # FeatureContext::theResultShouldBe()
 
-            @smoketest
+            @offset @smoketest
             Scenario: Dividing numbers                     # features/tagged.feature:31
               Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
               When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
