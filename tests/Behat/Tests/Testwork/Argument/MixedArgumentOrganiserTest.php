@@ -5,6 +5,7 @@ namespace Behat\Tests\Testwork\Argument;
 use Behat\Testwork\Argument\MixedArgumentOrganiser;
 use DateTime;
 use DateTimeInterface;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 use ReflectionFunction;
 use stdClass;
@@ -91,9 +92,7 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame([1, 'date' => $date], $organised);
     }
 
-    /**
-     * @requires PHP >= 8.0
-     */
+    #[RequiresPhp('>= 8.0')]
     public function testThatItMatchesUnionTypes(): void
     {
         $r = eval(<<<PHP

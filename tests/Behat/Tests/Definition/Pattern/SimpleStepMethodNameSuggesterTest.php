@@ -3,6 +3,7 @@
 namespace Behat\Tests\Definition\Pattern;
 
 use Behat\Behat\Definition\Pattern\SimpleStepMethodNameSuggester;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class SimpleStepMethodNameSuggesterTest extends TestCase
@@ -31,9 +32,7 @@ final class SimpleStepMethodNameSuggesterTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerValidMethodNames
-     */
+    #[DataProvider('providerValidMethodNames')]
     public function testGeneratesValidMethodNames(string $stepText, string $expect)
     {
         $this->assertSame($expect, (new SimpleStepMethodNameSuggester())->suggest($stepText));

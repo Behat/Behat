@@ -7,6 +7,7 @@ namespace Behat\Tests\Config\Converter;
 use Behat\Config\Converter\ConfigConverterTools;
 use Behat\Config\TesterOptions;
 use PhpParser\PrettyPrinter\Standard;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class ConfigConverterToolsTest extends TestCase
@@ -105,9 +106,7 @@ final class ConfigConverterToolsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerRemoveDefaultArguments
-     */
+    #[DataProvider('providerRemoveDefaultArguments')]
     public function testCanRemoveDefaultArgumentsFromMethodCalls(string $class, string $method, array $args, string $expect): void
     {
         $expr = ConfigConverterTools::createObject($class);
@@ -154,9 +153,7 @@ final class ConfigConverterToolsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerValidateMethodCallInput
-     */
+    #[DataProvider('providerValidateMethodCallInput')]
     public function testAddMethodCallValidatesInput(string $class, string $method, array $args, string $expect): void
     {
         $expr = ConfigConverterTools::createObject($class);
@@ -223,9 +220,7 @@ final class ConfigConverterToolsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerErrorReportingToConstants
-     */
+    #[DataProvider('providerErrorReportingToConstants')]
     public function testErrorReportingToConstants(mixed $reporting, string $expect): void
     {
         // Can be used with any method, but might as well test with the one that has the expected signature

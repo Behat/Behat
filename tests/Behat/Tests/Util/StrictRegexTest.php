@@ -8,6 +8,7 @@ use BadMethodCallException;
 use Behat\Behat\Util\RegexException;
 use Behat\Behat\Util\StrictRegex;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class StrictRegexTest extends TestCase
@@ -62,9 +63,7 @@ final class StrictRegexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerReplaceValidCases
-     */
+    #[DataProvider('providerReplaceValidCases')]
     public function testReplaceValidCases(array $args, string $expect): void
     {
         $this->assertSame(
@@ -106,9 +105,7 @@ final class StrictRegexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerReplaceInvalidCases
-     */
+    #[DataProvider('providerReplaceInvalidCases')]
     public function testReplaceInvalidCases(array $args, string $expectException, string $expectMsg): void
     {
         $this->expectException($expectException);
@@ -138,7 +135,7 @@ final class StrictRegexTest extends TestCase
             'replacement with params' => [
                 [
                     '/[a-z]/',
-                    fn (array $matches) => strtoupper($matches[0]),
+                    fn (array $matches) => strtoupper((string) $matches[0]),
                     'Abcdef',
                 ],
                 'ABCDEF',
@@ -146,7 +143,7 @@ final class StrictRegexTest extends TestCase
             'array replacements' => [
                 [
                     ['/^old/', '/(thing|object)/'],
-                    fn (array $matches) => strrev($matches[0]),
+                    fn (array $matches) => strrev((string) $matches[0]),
                     'old things',
                 ],
                 'dlo gnihts',
@@ -154,9 +151,7 @@ final class StrictRegexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerReplaceCallbackValidCases
-     */
+    #[DataProvider('providerReplaceCallbackValidCases')]
     public function testReplaceCallbackValidCases(array $args, string $expect): void
     {
         $this->assertSame(
@@ -189,9 +184,7 @@ final class StrictRegexTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerReplaceCallbackInvalidCases
-     */
+    #[DataProvider('providerReplaceCallbackInvalidCases')]
     public function testReplaceCallbackInvalidCases(array $args, string $expectException, string $expectMsg): void
     {
         $this->expectException($expectException);
