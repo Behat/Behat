@@ -11,6 +11,7 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/features',
         __DIR__ . '/src',
+        __DIR__ . '/tests/Behat'
     ])
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)

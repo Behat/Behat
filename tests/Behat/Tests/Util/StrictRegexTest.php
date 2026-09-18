@@ -138,7 +138,7 @@ final class StrictRegexTest extends TestCase
             'replacement with params' => [
                 [
                     '/[a-z]/',
-                    fn (array $matches) => strtoupper($matches[0]),
+                    fn (array $matches) => strtoupper((string) $matches[0]),
                     'Abcdef',
                 ],
                 'ABCDEF',
@@ -146,7 +146,7 @@ final class StrictRegexTest extends TestCase
             'array replacements' => [
                 [
                     ['/^old/', '/(thing|object)/'],
-                    fn (array $matches) => strrev($matches[0]),
+                    fn (array $matches) => strrev((string) $matches[0]),
                     'old things',
                 ],
                 'dlo gnihts',
