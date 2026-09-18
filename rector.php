@@ -11,11 +11,12 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/features',
         __DIR__ . '/src',
-        __DIR__ . '/tests/Behat'
+        __DIR__ . '/tests/Behat',
     ])
     ->withRootFiles()
     ->withPreparedSets(codeQuality: true)
     ->withPhpSets(php82: true)
+    ->withAttributesSets(phpunit: true)
     ->withSkip([
         StringableForToStringRector::class,
         ReadOnlyClassRector::class,
