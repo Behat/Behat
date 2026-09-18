@@ -10,14 +10,14 @@ Feature: Stringifying PHPUnit exceptions
       | --no-colors |          |
       | --format    | progress |
 
-  Scenario: With PHPUnit 11 working correctly
-    When I run "behat features/with_phpunit_11.feature"
+  Scenario: With a version of PHPUnit that we support, working as expected
+    When I run "behat features/with_supported_phpunit.feature"
     Then it should fail with:
       """
       --- Failed steps:
 
-      001 Scenario: Compare mismatched array                             # features/with_phpunit_11.feature:6
-            Then an array {"value": "foo"} should equal {"value": "bar"} # features/with_phpunit_11.feature:7
+      001 Scenario: Compare mismatched array                             # features/with_supported_phpunit.feature:6
+            Then an array {"value": "foo"} should equal {"value": "bar"} # features/with_supported_phpunit.feature:7
               Should get the right value
               Failed asserting that two arrays are equal.
               --- Expected
@@ -28,8 +28,8 @@ Feature: Stringifying PHPUnit exceptions
               +    'value' => 'foo'
                )
 
-      002 Scenario: Compare mismatched ints  # features/with_phpunit_11.feature:12
-            Then an integer 1 should equal 2 # features/with_phpunit_11.feature:13
+      002 Scenario: Compare mismatched ints  # features/with_supported_phpunit.feature:12
+            Then an integer 1 should equal 2 # features/with_supported_phpunit.feature:13
               check the ints
               Failed asserting that 1 is identical to 2.
 
