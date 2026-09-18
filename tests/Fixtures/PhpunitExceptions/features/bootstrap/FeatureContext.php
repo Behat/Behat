@@ -7,6 +7,7 @@ use Behat\Hook\BeforeFeature;
 use Behat\Hook\BeforeSuite;
 use Behat\Step\Then;
 use PHPUnit\Framework\Assert;
+use PHPUnit\TextUI\Configuration\Builder;
 
 class FeatureContext implements Context
 {
@@ -16,13 +17,15 @@ class FeatureContext implements Context
         // Enforce native assertions during this run, so we can use them to check state without using PHPUnit classes.
         ini_set('assert.active', true);
         ini_set('assert.exception', true);
+        // Bootstrap PHPUnit 11 during this run
+        (new Builder())->build([]);
     }
 
-    #[BeforeFeature('@phpunit_10_broken')]
-    public static function beforeFeatureBreakPHPUnit10(): void
+    #[BeforeFeature('@phpunit_next_broken')]
+    public static function beforeFeatureBreakNextPHPUnit(): void
     {
-        // Note this test proves both that we're handling exceptions, and that Behat will use the PHPUnit 10
-        // ThrowableToStringMapper class if it's present - even though at the moment we're installing PHPUnit 9.
+        // Note this test proves both that we're handling exceptions, and that Behat will use the PHPUnit
+        // ThrowableToStringMapper class if it's present - even though at the moment we're installing PHPUnit 11.
         static::assertClassNotLoaded(PHPUnit\Util\ThrowableToStringMapper::class);
         require_once __DIR__ . '/IncompatibleThrowableToStringMapper.php';
         class_alias(IncompatibleThrowableToStringMapper::class, PHPUnit\Util\ThrowableToStringMapper::class);

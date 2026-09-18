@@ -1,4 +1,4 @@
-@phpunit_10_broken
+@phpunit_next_broken
 Feature: Values do not match
   In order to test the stringification of PHPUnit assertions
   As a contributor of behat
