@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Exception\ServiceContainer;
 
+use Behat\PHPUnitAssertionsExtension\BehatPHPUnitAssertionsExtension;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Exception\Cli\VerbosityController;
 use Behat\Testwork\Exception\ExceptionPresenter;
@@ -20,6 +21,7 @@ use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Behat\Testwork\ServiceContainer\ServiceProcessor;
+use LogicException;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -44,6 +46,8 @@ final class ExceptionExtension implements Extension
 
     private readonly ServiceProcessor $processor;
 
+    private bool $hasPhpunitAssertionsExtension;
+
     /**
      * Initializes extension.
      */
@@ -59,6 +63,8 @@ final class ExceptionExtension implements Extension
 
     public function initialize(ExtensionManager $extensionManager): void
     {
+        /* @phpstan-ignore class.notFound (the extension is an optional dependency, not installed by us) */
+        $this->hasPhpunitAssertionsExtension = in_array(BehatPHPUnitAssertionsExtension::class, $extensionManager->getExtensionClasses());
     }
 
     public function configure(ArrayNodeDefinition $builder): void
@@ -111,9 +117,14 @@ final class ExceptionExtension implements Extension
      */
     private function loadDefaultStringers(ContainerBuilder $container): void
     {
-        $definition = new Definition(PHPUnitExceptionStringer::class);
-        $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
-        $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
+        if (!isset($this->hasPhpunitAssertionsExtension)) {
+            throw new LogicException(self::class.'::initialize() must be called before '.self::class.'::load()');
+        }
+        if (!$this->hasPhpunitAssertionsExtension) {
+            $definition = new Definition(PHPUnitExceptionStringer::class);
+            $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
+            $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
+        }
 
         $definition = new Definition(TestworkExceptionStringer::class);
         $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
