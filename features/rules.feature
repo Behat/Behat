@@ -142,6 +142,61 @@ Feature: Support Gherkin Rules
           6 steps (6 passed)
           """
 
+  Rule: Tag expression filters apply inside rules
+      Background:
+      When I provide the following options for all behat invocations:
+        | option   | value  |
+        | --format | pretty |
+
+    Scenario: Filter at Rule and Scenario level
+      When I run behat with the following additional options:
+        | option           | value                   |
+        | --tag-expression | '@maths and @smoketest' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
+      Then it should pass with:
+          """
+          Feature: Rules that have tagging
+
+            @maths @smoketest
+            Scenario: Adding numbers      # features/tagged.feature:7
+              When I add 3 + 3            # FeatureContext::iAdd()
+              Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+          1 scenario (1 passed)
+          2 steps (2 passed)
+          """
+
+    Scenario: Filter tables inside rules
+      When I run behat with the following additional options:
+        | option           | value                      |
+        | --tag-expression | '@offset and not @invalid' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
+      Then it should pass with:
+          """
+          Feature: Rules that have tagging
+
+            @offset
+            Scenario: Adding numbers                       # features/tagged.feature:26
+              Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+              When I add 2 + 2                             # FeatureContext::iAdd()
+              Then the result should be 5                  # FeatureContext::theResultShouldBe()
+
+            @offset @smoketest
+            Scenario: Dividing numbers                     # features/tagged.feature:31
+              Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+              When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
+              Then the result should be <answer>           # FeatureContext::theResultShouldBe()
+
+              Examples:
+                | dividend | divisor | answer |
+                | 9        | 3       | 4      |
+
+          2 scenarios (2 passed)
+          6 steps (6 passed)
+          """
+
   Rule: Tagged hooks trigger based on Rule tags
 
     Scenario: Run with tagged hooks
