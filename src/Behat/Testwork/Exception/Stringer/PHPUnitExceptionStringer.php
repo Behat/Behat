@@ -10,6 +10,7 @@
 
 namespace Behat\Testwork\Exception\Stringer;
 
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Exception;
 use PHPUnit\Framework\TestFailure;
 use PHPUnit\Util\ThrowableToStringMapper;
@@ -34,6 +35,10 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
 
     public function stringException(Exception $exception, $verbosity): string
     {
+        DeprecationCollector::trigger(
+            'Behat\'s built-in support for PHPUnit assertions is deprecated and will be removed in 4.0. See https://github.com/Behat/PHPUnitAssertionsExtension.'
+        );
+
         // PHPUnit assertion exceptions do not include detailed expected / observed info in their messages. Instead,
         // test result printers within PHPUnit are expected to format and present that information separately. The
         // mechanism for this varies between PHPUnit major versions, and all the implementations are tagged with:
@@ -82,12 +87,11 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
                 <<<TEXT
                 %s
                 !! Could not render more details of this %s.
-                   Behat does not support automatically formatting assertion failures for your PHPUnit version.
-                   See %s for details.
+                   Behat 3.x does not support automatically formatting assertion failures for your PHPUnit version.
+                   See https://github.com/Behat/PHPUnitAssertionsExtension for improved PHPUnit support.
                 TEXT,
                 $exception->getMessage(),
                 $exception::class,
-                self::class,
             );
         } catch (Throwable $phpunitException) {
             // PHPUnit does not guarantee BC on the classes / methods we're calling.
@@ -102,13 +106,12 @@ final class PHPUnitExceptionStringer implements ExceptionStringer
                 <<<TEXT
                 %s
                 !! There was an error trying to render more details of this %s.
-                   You are probably using a PHPUnit version that Behat cannot automatically display failures for.
-                   See %s for details of PHPUnit support.
+                   You are probably using a PHPUnit version that Behat 3.x does not support.
+                   See https://github.com/Behat/PHPUnitAssertionsExtension for improved PHPUnit support.
                    [%s] %s at %s:%s
                 TEXT,
                 $exception->getMessage(),
                 $exception::class,
-                self::class,
                 $phpunitException::class,
                 $phpunitException->getMessage(),
                 $phpunitException->getFile(),
