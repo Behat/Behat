@@ -296,5 +296,12 @@
         -->
         <ignored-regex>#Behat\\Behat\\Tester\\Result\\ExecutedStepResult\#getCallResult\(\) was (removed|marked "@internal")#</ignored-regex>
         <ignored-regex>#Behat\\Testwork\\ServiceContainer\\ExtensionManager\#(setExtensionsPath|activateExtension|initializeExtensions|debugInformation)\(\) was (removed|marked "@internal")#</ignored-regex>
+
+        <!--
+        The PHPUnit exception stringer has been removed. Behat has no runtime dependency on PHPUnit, so the stringer
+        had to sniff for classes that PHPUnit excludes from its own BC promise. Formatting PHPUnit assertion failures
+        now belongs outside core. See https://github.com/Behat/Behat/issues/1746
+        -->
+        <ignored-regex>#REMOVED: Class Behat\\Testwork\\Exception\\Stringer\\PHPUnitExceptionStringer has been deleted#</ignored-regex>
     </baseline>
 </roave-bc-check>

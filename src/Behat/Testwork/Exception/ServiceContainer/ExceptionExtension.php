@@ -13,7 +13,6 @@ namespace Behat\Testwork\Exception\ServiceContainer;
 use Behat\Testwork\Cli\ServiceContainer\CliExtension;
 use Behat\Testwork\Exception\Cli\VerbosityController;
 use Behat\Testwork\Exception\ExceptionPresenter;
-use Behat\Testwork\Exception\Stringer\PHPUnitExceptionStringer;
 use Behat\Testwork\Exception\Stringer\TestworkExceptionStringer;
 use Behat\Testwork\PathOptions\ServiceContainer\PathOptionsExtension;
 use Behat\Testwork\ServiceContainer\Extension;
@@ -109,10 +108,6 @@ final class ExceptionExtension implements Extension
      */
     private function loadDefaultStringers(ContainerBuilder $container): void
     {
-        $definition = new Definition(PHPUnitExceptionStringer::class);
-        $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
-        $container->setDefinition(self::STRINGER_TAG . '.phpunit', $definition);
-
         $definition = new Definition(TestworkExceptionStringer::class);
         $definition->addTag(self::STRINGER_TAG, ['priority' => 50]);
         $container->setDefinition(self::STRINGER_TAG . '.testwork', $definition);
