@@ -1,0 +1,247 @@
+@gherkin-mode:has-explicit
+Feature: Support Gherkin Rules
+  In order to organise my feature files into distinct groups of examples
+  As a user practising Example Mapping
+  I need Behat to support the Rule keyword
+
+  Background:
+    Given I initialise the working directory from the "Rules" fixtures folder
+    And I provide the following options for all behat invocations:
+      | option      | value |
+      | --no-colors |       |
+
+  Scenario: Fails to parse in legacy gherkin mode
+    When I run behat with the following additional options:
+      | option    | value          |
+      | --profile | legacy-gherkin |
+    Then it should fail with:
+      """
+      Expected Step, but got text: "  Rule: Calculator follows rules of maths"
+      """
+
+
+  Rule: Tests run inside rules
+
+    Scenario: Run tests
+      When I run "behat features/pass_and_fail.feature"
+      Then it should fail with:
+        """
+        .............F....
+
+        --- Failed steps:
+
+        001 Example: | 6        | 2       | 3      | # features/pass_and_fail.feature:35
+              Then the result should be 3            # features/pass_and_fail.feature:31
+                Failed asserting that 3 is identical to 4. (Exception)
+
+        5 scenarios (4 passed, 1 failed)
+        18 steps (17 passed, 1 failed)
+        """
+
+  Rule: Formatters can render usable output
+
+    Scenario: Pretty formatter approximates the original gherkin (drops `Rule` concept)
+      When I run behat with the following additional options:
+        | option                         | value  |
+        | --format                       | pretty |
+        | features/pass_and_fail.feature |        |
+      Then it should fail with:
+        """
+        Feature: Rules that pass and fail
+
+          Background:                     # features/pass_and_fail.feature:3
+            Given some setup has happened # FeatureContext::someSetupHasHappened()
+
+          Scenario: Adding numbers      # features/pass_and_fail.feature:8
+            When I add 2 + 2            # FeatureContext::iAdd()
+            Then the result should be 4 # FeatureContext::theResultShouldBe()
+
+          Scenario: Dividing numbers              # features/pass_and_fail.feature:12
+            When I divide <dividend> by <divisor> # FeatureContext::iDivideBy()
+            Then the result should be <answer>    # FeatureContext::theResultShouldBe()
+
+            Examples:
+              | dividend | divisor | answer |
+              | 6        | 2       | 3      |
+
+          Scenario: Adding numbers                       # features/pass_and_fail.feature:25
+            Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+            When I add 2 + 2                             # FeatureContext::iAdd()
+            Then the result should be 5                  # FeatureContext::theResultShouldBe()
+
+          Scenario: Dividing numbers                     # features/pass_and_fail.feature:29
+            Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+            When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
+            Then the result should be <answer>           # FeatureContext::theResultShouldBe()
+
+            Examples:
+              | dividend | divisor | answer |
+              | 6        | 2       | 3      |
+                Failed step: Then the result should be 3
+                Failed asserting that 3 is identical to 4. (Exception)
+              | 9        | 3       | 4      |
+
+        --- Failed scenarios:
+
+            features/pass_and_fail.feature:35 (on line 31)
+        """
+
+  Rule: Tag filters apply inside rules
+
+    Background:
+      When I provide the following options for all behat invocations:
+        | option   | value  |
+        | --format | pretty |
+
+    Scenario: Filter at Rule and Scenario level
+      When I run behat with the following additional options:
+        | option | value                  |
+        | --tags | '@maths && @smoketest' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
+      Then it should pass with:
+          """
+          Feature: Rules that have tagging
+
+            @maths @smoketest
+            Scenario: Adding numbers      # features/tagged.feature:7
+              When I add 3 + 3            # FeatureContext::iAdd()
+              Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+          1 scenario (1 passed)
+          2 steps (2 passed)
+          """
+
+    Scenario: Filter tables inside rules
+      When I run behat with the following additional options:
+        | option | value                  |
+        | --tags | '@offset && ~@invalid' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
+      Then it should pass with:
+          """
+          Feature: Rules that have tagging
+
+            @offset
+            Scenario: Adding numbers                       # features/tagged.feature:26
+              Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+              When I add 2 + 2                             # FeatureContext::iAdd()
+              Then the result should be 5                  # FeatureContext::theResultShouldBe()
+
+            @offset @smoketest
+            Scenario: Dividing numbers                     # features/tagged.feature:31
+              Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+              When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
+              Then the result should be <answer>           # FeatureContext::theResultShouldBe()
+
+              Examples:
+                | dividend | divisor | answer |
+                | 9        | 3       | 4      |
+
+          2 scenarios (2 passed)
+          6 steps (6 passed)
+          """
+
+  Rule: Tag expression filters apply inside rules
+      Background:
+      When I provide the following options for all behat invocations:
+        | option   | value  |
+        | --format | pretty |
+
+    Scenario: Filter at Rule and Scenario level
+      When I run behat with the following additional options:
+        | option           | value                   |
+        | --tag-expression | '@maths and @smoketest' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
+      Then it should pass with:
+          """
+          Feature: Rules that have tagging
+
+            @maths @smoketest
+            Scenario: Adding numbers      # features/tagged.feature:7
+              When I add 3 + 3            # FeatureContext::iAdd()
+              Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+          1 scenario (1 passed)
+          2 steps (2 passed)
+          """
+
+    Scenario: Filter tables inside rules
+      When I run behat with the following additional options:
+        | option           | value                      |
+        | --tag-expression | '@offset and not @invalid' |
+      # Note: Gherkin merges the Rule and Scenario tags when iterating scenarios through the backwards compatibility
+      # layer therefore they appear in the pretty output as though they'd always been on the Scenario.
+      Then it should pass with:
+          """
+          Feature: Rules that have tagging
+
+            @offset
+            Scenario: Adding numbers                       # features/tagged.feature:26
+              Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+              When I add 2 + 2                             # FeatureContext::iAdd()
+              Then the result should be 5                  # FeatureContext::theResultShouldBe()
+
+            @offset @smoketest
+            Scenario: Dividing numbers                     # features/tagged.feature:31
+              Given the calculator has a fixed offset of 1 # FeatureContext::theCalculatorHasAFixedOffsetOf()
+              When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
+              Then the result should be <answer>           # FeatureContext::theResultShouldBe()
+
+              Examples:
+                | dividend | divisor | answer |
+                | 9        | 3       | 4      |
+
+          2 scenarios (2 passed)
+          6 steps (6 passed)
+          """
+
+  Rule: Tagged hooks trigger based on Rule tags
+
+    Scenario: Run with tagged hooks
+      When I run behat with the following additional options:
+        | option                        | value  |
+        | --format                      | pretty |
+        | features/tagged_hooks.feature |        |
+      Then it should fail with:
+        """
+        Feature: Run tagged hooks based on rule tags
+
+          @binary
+          Scenario: Tagged hook works on the Scenario # features/tagged_hooks.feature:4
+            When I add 3 + 3                          # FeatureContext::iAdd()
+              Binary calculators only accept input 0 or 1, got 3 (Exception)
+            Then the result should be 6               # FeatureContext::theResultShouldBe()
+
+          @binary @smoketest
+          Scenario: Adding numbers      # features/tagged_hooks.feature:12
+            When I add 3 + 3            # FeatureContext::iAdd()
+              Binary calculators only accept input 0 or 1, got 3 (Exception)
+            Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+          @binary
+          Scenario: Dividing numbers              # features/tagged_hooks.feature:16
+            When I divide <dividend> by <divisor> # FeatureContext::iDivideBy()
+            Then the result should be <answer>    # FeatureContext::theResultShouldBe()
+
+            Examples:
+              | dividend | divisor | answer |
+              | 6        | 2       | 3      |
+                Failed step: When I divide 6 by 2
+                Binary calculators only accept input 0 or 1, got 6 (Exception)
+              | 1        | 1       | 1      |
+
+          Scenario: Adding numbers      # features/tagged_hooks.feature:28
+            When I add 3 + 3            # FeatureContext::iAdd()
+            Then the result should be 6 # FeatureContext::theResultShouldBe()
+
+        --- Failed scenarios:
+
+            features/tagged_hooks.feature:4 (on line 5)
+            features/tagged_hooks.feature:12 (on line 13)
+            features/tagged_hooks.feature:22 (on line 17)
+
+        5 scenarios (2 passed, 3 failed)
+        10 steps (4 passed, 3 failed, 3 skipped)
+        """
