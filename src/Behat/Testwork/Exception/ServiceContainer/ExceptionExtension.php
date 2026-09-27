@@ -58,6 +58,7 @@ final class ExceptionExtension implements Extension
 
     public function initialize(ExtensionManager $extensionManager): void
     {
+        // no-op
     }
 
     public function configure(ArrayNodeDefinition $builder): void

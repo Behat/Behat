@@ -5,13 +5,14 @@ namespace Behat\Tests\Testwork\Argument;
 use Behat\Testwork\Argument\MixedArgumentOrganiser;
 use DateTime;
 use DateTimeInterface;
+use PHPUnit\Framework\Attributes\RequiresPhp;
 use PHPUnit\Framework\TestCase;
 use ReflectionFunction;
 use stdClass;
 
 final class MixedArgumentOrganiserTest extends TestCase
 {
-    private $organiser;
+    private MixedArgumentOrganiser $organiser;
 
     protected function setUp(): void
     {
@@ -21,7 +22,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItOrganisesNothingIfNoArgs(): void
     {
         $r = new ReflectionFunction(
-            static function (DateTimeInterface $d) {}
+            static function (DateTimeInterface $d): void {}
         );
         $args = [];
 
@@ -33,7 +34,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItMatchesArgsByPosition(): void
     {
         $r = new ReflectionFunction(
-            static function ($x, $y) {}
+            static function ($x, $y): void {}
         );
         $args = [
             1,
@@ -49,7 +50,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItMatchesArgsByName(): void
     {
         $r = new ReflectionFunction(
-            static function ($date) {}
+            static function ($date): void {}
         );
         $args = [
             'date' => $date = new DateTime(),
@@ -64,7 +65,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItMatchesArgsByType(): void
     {
         $r = new ReflectionFunction(
-            static function (DateTimeInterface $d) {}
+            static function (DateTimeInterface $d): void {}
         );
         $args = [
             'x' => $date = new DateTime(),
@@ -79,7 +80,7 @@ final class MixedArgumentOrganiserTest extends TestCase
     public function testThatItMatchesArgsByNameOverType(): void
     {
         $r = new ReflectionFunction(
-            static function (DateTimeInterface $a, $date) {}
+            static function (DateTimeInterface $a, $date): void {}
         );
         $args = [
             'date' => $date = new DateTime(),
@@ -91,9 +92,7 @@ final class MixedArgumentOrganiserTest extends TestCase
         $this->assertSame([1, 'date' => $date], $organised);
     }
 
-    /**
-     * @requires PHP >= 8.0
-     */
+    #[RequiresPhp('>= 8.0')]
     public function testThatItMatchesUnionTypes(): void
     {
         $r = eval(<<<PHP

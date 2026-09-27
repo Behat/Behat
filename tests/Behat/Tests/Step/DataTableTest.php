@@ -6,6 +6,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\DataTable;
 use InvalidArgumentException;
 use OutOfBoundsException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class DataTableTest extends TestCase
@@ -52,11 +53,10 @@ final class DataTableTest extends TestCase
     }
 
     /**
-     * @dataProvider providerAsMaps
-     *
      * @param array<int, list<string>> $rows
      * @param list<array<string, string>> $expect
      */
+    #[DataProvider('providerAsMaps')]
     public function testAsMapsUsesTheFirstRowAsKeys(array $rows, array $expect): void
     {
         $this->assertSame($expect, (new DataTable(new TableNode($rows)))->asMaps());
@@ -84,11 +84,10 @@ final class DataTableTest extends TestCase
     }
 
     /**
-     * @dataProvider providerAsMap
-     *
      * @param array<int, list<string>> $rows
      * @param array<string, string|null> $expect
      */
+    #[DataProvider('providerAsMap')]
     public function testAsMapMapsTheFirstColumnToTheSecondOne(array $rows, array $expect): void
     {
         $this->assertSame($expect, (new DataTable(new TableNode($rows)))->asMap());
@@ -130,37 +129,36 @@ final class DataTableTest extends TestCase
     {
         return [
             'row just past the last one' => [
-                static fn (DataTable $table) => $table->row(3),
+                static fn (DataTable $table): array => $table->row(3),
                 'Row #3 does not exist in this table, which has 3 rows.',
             ],
             'negative row' => [
-                static fn (DataTable $table) => $table->row(-1),
+                static fn (DataTable $table): array => $table->row(-1),
                 'Row #-1 does not exist in this table, which has 3 rows.',
             ],
             'column just past the last one' => [
-                static fn (DataTable $table) => $table->column(2),
+                static fn (DataTable $table): array => $table->column(2),
                 'Column #2 does not exist in this table, which has 2 columns.',
             ],
             'negative column' => [
-                static fn (DataTable $table) => $table->column(-1),
+                static fn (DataTable $table): array => $table->column(-1),
                 'Column #-1 does not exist in this table, which has 2 columns.',
             ],
             'cell in a row just past the last one' => [
-                static fn (DataTable $table) => $table->cell(3, 0),
+                static fn (DataTable $table): string => $table->cell(3, 0),
                 'Row #3 does not exist in this table, which has 3 rows.',
             ],
             'cell in a column just past the last one' => [
-                static fn (DataTable $table) => $table->cell(0, 2),
+                static fn (DataTable $table): string => $table->cell(0, 2),
                 'Column #2 does not exist in this table, which has 2 columns.',
             ],
         ];
     }
 
     /**
-     * @dataProvider providerOutOfBoundsAccess
-     *
      * @param callable(DataTable): mixed $access
      */
+    #[DataProvider('providerOutOfBoundsAccess')]
     public function testAccessingARowColumnOrCellThatDoesNotExistThrows(callable $access, string $expect): void
     {
         $this->expectException(OutOfBoundsException::class);

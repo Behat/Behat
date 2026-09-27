@@ -18,10 +18,10 @@ class PatternTransformerTest extends TestCase
         $policy->method('supportsPattern')
             ->willReturn(true);
         $policy->method('transformPatternToRegex')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['hello world', '/hello world/'],
                 ['hi world', '/hi world/'],
-            ]));
+            ]);
 
         $testedInstance = new PatternTransformer();
         $testedInstance->registerPatternPolicy($policy);
