@@ -4,6 +4,77 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0] - 2026-09-27
+
+If upgrading to 4.0.0 for the first time, please also review the release notes for 4.0.0-alpha1.
+
+This release includes changes that were also included in 3.33.0 or 3.34.0 - they are also
+listed in these release notes.
+
+Behat has no corporate backing - the 4.0 release has taken a huge effort from the volunteer
+maintainers over the last 12 months. If you use Behat for work, please consider showing your
+appreciation by [supporting the project](https://github.com/Behat/Behat#support-the-project)
+ - even small contributions make a big difference.
+
+## Changed
+
+* Remove support for PHPUnit assertions without behat/phpunit-assertions-extension
+  Deprecated for 3.x by @acoulton in [#1895](https://github.com/Behat/Behat/pull/1895)
+  Removed for 4.x by @carlos-granados in [#1888](https://github.com/Behat/Behat/pull/1888)
+* Throw exception if step definition and number of function parameters do not match.
+  Deprecated for 3.x by @carlos-granados in [#1867](https://github.com/Behat/Behat/pull/1867)
+  Changed to exception for 4.x by @carlos-granados in [#1887](https://github.com/Behat/Behat/pull/1887)
+* Show the suite name in failure summaries when several suites ran by @Amoifr in [#1865](https://github.com/Behat/Behat/pull/1865)
+* Show multiple separate Example tables (with tags and descriptions) in pretty printer
+  by @carlos-granados in [#1866](https://github.com/Behat/Behat/pull/1866)
+* Transformations now have a public API of their own - method signatures for `ArgumentTransformer` and `SimpleArgumentTransformation` have changed. By @carlos-granados in [#1870](https://github.com/Behat/Behat/pull/1870)
+* Exclude more internal-only methods from the public API by @carlos-granados in [#1869](https://github.com/Behat/Behat/pull/1869)
+
+## Added
+
+* Support `Rule` nodes in >= GHERKIN_32 compatibility mode.
+  NB: Scenarios within Rules will be parsed, filtered, and executed as expected with
+  any caller. However, Behat's formatters and hooks will receive a modified Feature and
+  node tree with all Rule details stripped out. This will behave as though any Scenarios
+  were a direct child of the Feature - with any Rule Background steps repeated as the
+  first steps of each Scenario. This will be improved in future releases.
+  By @acoulton in [#1879](https://github.com/Behat/Behat/pull/1879)
+* Support steps with both DocString and DataTable arguments in GHERKIN_42 mode.
+  This is the only difference in GHERKIN_42 mode, which is now the default mode for
+  Behat 4.x.
+  By @acoulton in [#1896](https://github.com/Behat/Behat/pull/1896) and
+  [#1902](https://github.com/Behat/Behat/pull/1902)
+* Add 'inline_failures' option to progress formatter by @AlexSkrypnyk in [#1861](https://github.com/Behat/Behat/pull/1861)
+* Add support for filtering on Cucumber tag expressions by @Amoifr in [#1863](https://github.com/Behat/Behat/pull/1863)
+* Add `DataTable` and `DocString` step argument types to reduce coupling to the Gherkin `TableNode` / `PyStringNode`
+  by @Amoifr in [#1864](https://github.com/Behat/Behat/pull/1864) and [#1878](https://github.com/Behat/Behat/pull/1878)
+* Add `hasStdOut()` and `getStdOut()` to `ExecutedStepResult` by @carlos-granados in [#1874](https://github.com/Behat/Behat/pull/1874)
+* Mark reachable interfaces and value objects as `@api` by @carlos-granados in [#1868](https://github.com/Behat/Behat/pull/1868)
+
+## Fixed
+
+* Explain the relationship between --format and --out by @Amoifr 
+  in [#1889](https://github.com/Behat/Behat/pull/1889)
+* Rerun should count scenarios as failed if before / after hooks failed.
+  Previously, scenarios that only failed due to a Scenario, Feature, or Suite hook were never re-run, potentially
+  causing incorrect passing builds. By @Amoifr in [#1877](https://github.com/Behat/Behat/pull/1877)
+* Handle aborted suites when printing unused definitions by @Amoifr in [#1882](https://github.com/Behat/Behat/pull/1882)
+
+## Internal
+
+* Upgrade to PHPUnit 11 by @acoulton in [#1894](https://github.com/Behat/Behat/pull/1894)
+* Run Behat's tests in GHERKIN_42 compatibility mode instead of GHERKIN_32 mode
+  by @acoulton in [#1899](https://github.com/Behat/Behat/pull/1899)
+* Update GitHub actions steps by @dependabot[bot] in [#1892](https://github.com/Behat/Behat/pull/1892)
+* Don't use PHPUnit assertions in Behat's own test suite by @carlos-granados in [#1872](https://github.com/Behat/Behat/pull/1872)
+* Change how we assert on how PHP renders anonymous class names by @carlos-granados in [#1873](https://github.com/Behat/Behat/pull/1873)
+* Use the new hasStdOut()/getStdOut() functions by @carlos-granados in [#1880](https://github.com/Behat/Behat/pull/1880)
+* Enforce the @api boundary in Behat's own code with custom phpstan rules by @carlos-granados in [#1875](https://github.com/Behat/Behat/pull/1875)
+* Add 3.x release notes and merge up changes from 3.x (changes are listed individually above) in
+  [#1884](https://github.com/Behat/Behat/pull/1884), [#1885](https://github.com/Behat/Behat/pull/1885), 
+  [#1886](https://github.com/Behat/Behat/pull/1886), [#1900](https://github.com/Behat/Behat/pull/1900)
+  and [#1901](https://github.com/Behat/Behat/pull/1901)
+
 ## [4.0.0-alpha1] - 2026-06-22
 
 This release introduces a number of breaking changes. We have tried to limit the impact of these on 
@@ -1636,6 +1707,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 ### Changed
   * Initial release
 
+[4.0.0]: https://github.com/Behat/Behat/compare/v4.0.0-alpha1...v4.0.0
 [4.0.0-alpha1]: https://github.com/Behat/Behat/compare/v3.32.0...v4.0.0-alpha1
 [3.34.0]: https://github.com/Behat/Behat/compare/v3.33.0...v3.34.0
 [3.33.0]: https://github.com/Behat/Behat/compare/v3.32.0...v3.33.0
