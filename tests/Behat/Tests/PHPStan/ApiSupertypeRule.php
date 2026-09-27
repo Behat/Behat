@@ -88,7 +88,7 @@ final class ApiSupertypeRule implements Rule
             $supertypes[$interface->getName()] = true;
         }
 
-        for ($parent = $class->getParentClass(); $parent !== null; $parent = $parent->getParentClass()) {
+        for ($parent = $class->getParentClass(); $parent instanceof ClassReflection; $parent = $parent->getParentClass()) {
             $supertypes[$parent->getName()] = true;
         }
 
