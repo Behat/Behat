@@ -119,7 +119,7 @@ final class StrictRegexTest extends TestCase
             'no replacement' => [
                 [
                     '/^old/',
-                    fn () => 'new',
+                    fn (): string => 'new',
                     'some thing',
                 ],
                 'some thing',
@@ -127,7 +127,7 @@ final class StrictRegexTest extends TestCase
             'simple replacement' => [
                 [
                     '/^old/',
-                    fn () => 'new',
+                    fn (): string => 'new',
                     'old thing',
                 ],
                 'new thing',
@@ -143,7 +143,7 @@ final class StrictRegexTest extends TestCase
             'array replacements' => [
                 [
                     ['/^old/', '/(thing|object)/'],
-                    fn (array $matches) => strrev((string) $matches[0]),
+                    fn (array $matches): string => strrev((string) $matches[0]),
                     'old things',
                 ],
                 'dlo gnihts',

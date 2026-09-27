@@ -33,7 +33,7 @@ final class SimpleStepMethodNameSuggesterTest extends TestCase
     }
 
     #[DataProvider('providerValidMethodNames')]
-    public function testGeneratesValidMethodNames(string $stepText, string $expect)
+    public function testGeneratesValidMethodNames(string $stepText, string $expect): void
     {
         $this->assertSame($expect, (new SimpleStepMethodNameSuggester())->suggest($stepText));
     }

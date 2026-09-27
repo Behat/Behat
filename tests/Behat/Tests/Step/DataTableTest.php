@@ -129,27 +129,27 @@ final class DataTableTest extends TestCase
     {
         return [
             'row just past the last one' => [
-                static fn (DataTable $table) => $table->row(3),
+                static fn (DataTable $table): array => $table->row(3),
                 'Row #3 does not exist in this table, which has 3 rows.',
             ],
             'negative row' => [
-                static fn (DataTable $table) => $table->row(-1),
+                static fn (DataTable $table): array => $table->row(-1),
                 'Row #-1 does not exist in this table, which has 3 rows.',
             ],
             'column just past the last one' => [
-                static fn (DataTable $table) => $table->column(2),
+                static fn (DataTable $table): array => $table->column(2),
                 'Column #2 does not exist in this table, which has 2 columns.',
             ],
             'negative column' => [
-                static fn (DataTable $table) => $table->column(-1),
+                static fn (DataTable $table): array => $table->column(-1),
                 'Column #-1 does not exist in this table, which has 2 columns.',
             ],
             'cell in a row just past the last one' => [
-                static fn (DataTable $table) => $table->cell(3, 0),
+                static fn (DataTable $table): string => $table->cell(3, 0),
                 'Row #3 does not exist in this table, which has 3 rows.',
             ],
             'cell in a column just past the last one' => [
-                static fn (DataTable $table) => $table->cell(0, 2),
+                static fn (DataTable $table): string => $table->cell(0, 2),
                 'Column #2 does not exist in this table, which has 2 columns.',
             ],
         ];

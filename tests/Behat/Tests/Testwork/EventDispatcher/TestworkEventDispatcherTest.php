@@ -93,12 +93,12 @@ class TestworkEventDispatcherTest extends TestCase
     /**
      * @return callable
      */
-    public function createListenerSpy()
+    public function createListenerSpy(): object
     {
         return new class {
             public $receivedEvents = [];
 
-            public function __invoke(Event $event)
+            public function __invoke(Event $event): void
             {
                 $this->receivedEvents[] = $event;
             }
