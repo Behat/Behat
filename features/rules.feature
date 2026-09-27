@@ -134,7 +134,7 @@ Feature: Support Gherkin Rules
               When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
               Then the result should be <answer>           # FeatureContext::theResultShouldBe()
 
-              Examples:
+              Examples: That actually work
                 | dividend | divisor | answer |
                 | 9        | 3       | 4      |
 
@@ -189,7 +189,7 @@ Feature: Support Gherkin Rules
               When I divide <dividend> by <divisor>        # FeatureContext::iDivideBy()
               Then the result should be <answer>           # FeatureContext::theResultShouldBe()
 
-              Examples:
+              Examples: That actually work
                 | dividend | divisor | answer |
                 | 9        | 3       | 4      |
 
