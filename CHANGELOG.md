@@ -57,6 +57,37 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 * Move StopOnFailureController to Testwork\Tester\Cli namespace by @carlos-granados in [#1809](https://github.com/Behat/Behat/pull/1809)
 * Finalise all non-API classes that are not extended by @acoulton in [#1815](https://github.com/Behat/Behat/pull/1815)
 
+## [3.34.0] - 2026-09-27
+
+## Changed
+
+* Deprecate using PHPUnit assertions without behat/phpunit-assertions-extension
+  by @acoulton in [#1895](https://github.com/Behat/Behat/pull/1895)
+
+## Added
+
+* Support `Rule` nodes in >= GHERKIN_32 compatibility mode.
+  NB: Scenarios within Rules will be parsed, filtered, and executed as expected with
+  any caller. However, Behat's formatters and hooks will receive a modified Feature and
+  node tree with all Rule details stripped out. This will behave as though any Scenarios
+  were a direct child of the Feature - with any Rule Background steps repeated as the
+  first steps of each Scenario. This will be improved in future releases.
+  By @acoulton in [#1879](https://github.com/Behat/Behat/pull/1879)
+* Support steps with both DocString and DataTable arguments in GHERKIN_42 mode.
+  By @acoulton in [#1896](https://github.com/Behat/Behat/pull/1896)
+
+## Fixed
+
+* Explain the relationship between --format and --out by @Amoifr 
+  in [#1889](https://github.com/Behat/Behat/pull/1889)
+
+## Internal
+
+* Upgrade to PHPUnit 11 by @acoulton in [#1894](https://github.com/Behat/Behat/pull/1894)
+* Run Behat's tests in GHERKIN_42 compatibility mode instead of GHERKIN_32 mode
+  by @acoulton in [#1899](https://github.com/Behat/Behat/pull/1899)
+* Update GitHub actions steps by @dependabot[bot] in [#1892](https://github.com/Behat/Behat/pull/1892)
+
 ## [3.33.0] - 2026-09-07
 
 ### Changed
@@ -1606,6 +1637,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
   * Initial release
 
 [4.0.0-alpha1]: https://github.com/Behat/Behat/compare/v3.32.0...v4.0.0-alpha1
+[3.34.0]: https://github.com/Behat/Behat/compare/v3.33.0...v3.34.0
 [3.33.0]: https://github.com/Behat/Behat/compare/v3.32.0...v3.33.0
 [3.32.0]: https://github.com/Behat/Behat/compare/v3.31.0...v3.32.0
 [3.31.0]: https://github.com/Behat/Behat/compare/v3.30.0...v3.31.0

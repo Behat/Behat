@@ -6,6 +6,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Step\DataTable;
 use InvalidArgumentException;
 use OutOfBoundsException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class DataTableTest extends TestCase
@@ -52,11 +53,10 @@ final class DataTableTest extends TestCase
     }
 
     /**
-     * @dataProvider providerAsMaps
-     *
      * @param array<int, list<string>> $rows
      * @param list<array<string, string>> $expect
      */
+    #[DataProvider('providerAsMaps')]
     public function testAsMapsUsesTheFirstRowAsKeys(array $rows, array $expect): void
     {
         $this->assertSame($expect, (new DataTable(new TableNode($rows)))->asMaps());
@@ -84,11 +84,10 @@ final class DataTableTest extends TestCase
     }
 
     /**
-     * @dataProvider providerAsMap
-     *
      * @param array<int, list<string>> $rows
      * @param array<string, string|null> $expect
      */
+    #[DataProvider('providerAsMap')]
     public function testAsMapMapsTheFirstColumnToTheSecondOne(array $rows, array $expect): void
     {
         $this->assertSame($expect, (new DataTable(new TableNode($rows)))->asMap());
@@ -157,10 +156,9 @@ final class DataTableTest extends TestCase
     }
 
     /**
-     * @dataProvider providerOutOfBoundsAccess
-     *
      * @param callable(DataTable): mixed $access
      */
+    #[DataProvider('providerOutOfBoundsAccess')]
     public function testAccessingARowColumnOrCellThatDoesNotExistThrows(callable $access, string $expect): void
     {
         $this->expectException(OutOfBoundsException::class);
