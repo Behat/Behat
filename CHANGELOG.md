@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [4.0.0] - 2026-09-27
+## [4.0.0] - 2026-09-28
 
 If upgrading to 4.0.0 for the first time, please also review the release notes for 4.0.0-alpha1.
 
