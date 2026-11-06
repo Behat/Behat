@@ -175,7 +175,8 @@ jobs:
       - name: "Check for BC breaks"
         run: |
           bc-check/vendor/bin/roave-backward-compatibility-check \
-            --format=github-actions
+            --format=github-actions \
+            --from=v3.28.0
 
   build-phar:
     name: Build PHAR file
