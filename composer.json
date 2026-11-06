@@ -14,7 +14,7 @@
     ],
 
     "require": {
-        "php": ">=8.2 <8.6",
+        "php": ">=8.2 <8.7",
         "ext-mbstring": "*",
         "composer-runtime-api": "^2.2",
         "behat/gherkin": "^4.18.0@dev",
