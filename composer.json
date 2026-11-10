@@ -14,10 +14,10 @@
     ],
 
     "require": {
-        "php": ">=8.2 <8.6",
+        "php": ">=8.2 <8.7",
         "ext-mbstring": "*",
         "composer-runtime-api": "^2.2",
-        "behat/gherkin": "^4.18.0",
+        "behat/gherkin": "^4.18.0@dev",
         "cucumber/tag-expressions": "^11.0",
         "composer/xdebug-handler": "^1.4 || ^2.0 || ^3.0",
         "nikic/php-parser": "^4.19.2 || ^5.2",
@@ -31,7 +31,7 @@
     },
 
     "require-dev": {
-        "opis/json-schema": "^2.5",
+        "opis/json-schema": "^2.5@dev",
         "php-cs-fixer/shim": "^3.89",
         "phpstan/phpstan": "2.1.46",
         "phpunit/phpunit": "^11.5",
