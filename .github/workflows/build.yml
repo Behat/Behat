@@ -172,10 +172,25 @@ jobs:
           cd bc-check
           composer require --no-interaction roave/backward-compatibility-check:^8.17
 
+      - name: "Find latest release"
+        id: find-latest-release
+        run: |
+          if git merge-base --is-ancestor v4.0.0 HEAD ;
+          then
+            version_series='4.x'
+          else
+            version_series='3.x'
+          fi
+          echo "Version series: $version_series"
+          latest_release=$(git describe --tags --abbrev=0 "origin/$version_series")
+          echo "Latest release: $latest_release"
+          echo "release=$latest_release" >> $GITHUB_OUTPUT
+
       - name: "Check for BC breaks"
         run: |
           bc-check/vendor/bin/roave-backward-compatibility-check \
-            --format=github-actions
+            --format=github-actions \
+            --from="${{ steps.find-latest-release.outputs.release }}"
 
   build-phar:
     name: Build PHAR file
