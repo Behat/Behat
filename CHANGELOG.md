@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.0] - 2026-11-20
+
+## Added
+
+* Support PHP 8.6 by @acoulton in [#1906](https://github.com/Behat/Behat/pull/1906)
+
+## Internal
+
+* Fix target version for BC check job by @acoulton in [#1907](https://github.com/Behat/Behat/pull/1907)
+
 ## [4.0.0] - 2026-09-28
 
 If upgrading to 4.0.0 for the first time, please also review the release notes for 4.0.0-alpha1.
@@ -1717,6 +1727,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 ### Changed
   * Initial release
 
+[4.1.0]: https://github.com/Behat/Behat/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/Behat/Behat/compare/v4.0.0-alpha1...v4.0.0
 [4.0.0-alpha1]: https://github.com/Behat/Behat/compare/v3.32.0...v4.0.0-alpha1
 [3.35.0]: https://github.com/Behat/Behat/compare/v3.34.0...v3.35.0
