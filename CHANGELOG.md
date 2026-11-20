@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.1] - 2026-11-20
+
+### Fixed
+
+* JSON and Junit formatters trigger deprecations on 8.6 by @acoulton in [#1911](https://github.com/Behat/Behat/pull/1911)
+
 ## [4.1.0] - 2026-11-20
 
 ## Added
@@ -137,6 +143,12 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 
 * Move StopOnFailureController to Testwork\Tester\Cli namespace by @carlos-granados in [#1809](https://github.com/Behat/Behat/pull/1809)
 * Finalise all non-API classes that are not extended by @acoulton in [#1815](https://github.com/Behat/Behat/pull/1815)
+
+## [3.35.1] - 2026-11-20
+
+### Fixed
+
+* JSON and Junit formatters trigger deprecations on 8.6 by @acoulton in [#1911](https://github.com/Behat/Behat/pull/1911)
 
 ## [3.35.0] - 2026-11-20
 
@@ -1727,6 +1739,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 ### Changed
   * Initial release
 
+[4.1.1]: https://github.com/Behat/Behat/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/Behat/Behat/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/Behat/Behat/compare/v4.0.0-alpha1...v4.0.0
 [4.0.0-alpha1]: https://github.com/Behat/Behat/compare/v3.32.0...v4.0.0-alpha1
