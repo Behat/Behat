@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.35.1] - 2026-11-20
+
+### Fixed
+
+* JSON and Junit formatters trigger deprecations on 8.6 by @acoulton in [#1911](https://github.com/Behat/Behat/pull/1911)
+
 ## [3.35.0] - 2026-11-20
 
 ## Added
@@ -36,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Fixed
 
-* Explain the relationship between --format and --out by @Amoifr 
+* Explain the relationship between --format and --out by @Amoifr
   in [#1889](https://github.com/Behat/Behat/pull/1889)
 
 ## Internal

@@ -119,7 +119,7 @@ class DurationListener implements EventListener
 
     protected function getHash(object $node): string
     {
-        return spl_object_hash($node);
+        return (string) spl_object_id($node);
     }
 
     protected function startTimer(): Timer
