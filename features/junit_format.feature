@@ -7,11 +7,12 @@ Feature: JUnit Formatter
     Given I initialise the working directory from the "TestReportFormat" fixtures folder
     And I clear the default behat options
     And I provide the following options for all behat invocations:
-      | option          | value            |
-      | --no-colors     |                  |
-      | --snippets-type | regex            |
-      | --format        | junit            |
-      | --out           | {BASE_PATH}/logs |
+      | option                       | value            |
+      | --no-colors                  |                  |
+      | --snippets-type              | regex            |
+      | --format                     | junit            |
+      | --out                        | {BASE_PATH}/logs |
+      | --fail-on-behat-deprecations |                  |
 
   Scenario: Run a single feature
     When I run behat with the following additional options:
