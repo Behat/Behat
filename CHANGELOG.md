@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.35.0] - 2026-11-20
+
+## Added
+
+* Support PHP 8.6 by @acoulton in [#1906](https://github.com/Behat/Behat/pull/1906)
+
+## Internal
+
+* Fix target version for BC check job by @acoulton in [#1907](https://github.com/Behat/Behat/pull/1907)
+
+
 ## [3.34.0] - 2026-09-27
 
 ## Changed
@@ -1583,6 +1594,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
   * Initial release
 
+[3.35.0]: https://github.com/Behat/Behat/compare/v3.34.0...v3.35.0
 [3.34.0]: https://github.com/Behat/Behat/compare/v3.33.0...v3.34.0
 [3.33.0]: https://github.com/Behat/Behat/compare/v3.32.0...v3.33.0
 [3.32.0]: https://github.com/Behat/Behat/compare/v3.31.0...v3.32.0
