@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.0] - 2026-11-20
+
+## Added
+
+* Support PHP 8.6 by @acoulton in [#1906](https://github.com/Behat/Behat/pull/1906)
+
+## Internal
+
+* Fix target version for BC check job by @acoulton in [#1907](https://github.com/Behat/Behat/pull/1907)
+
 ## [4.0.0] - 2026-09-28
 
 If upgrading to 4.0.0 for the first time, please also review the release notes for 4.0.0-alpha1.
@@ -53,7 +63,7 @@ appreciation by [supporting the project](https://github.com/Behat/Behat#support-
 
 ## Fixed
 
-* Explain the relationship between --format and --out by @Amoifr 
+* Explain the relationship between --format and --out by @Amoifr
   in [#1889](https://github.com/Behat/Behat/pull/1889)
 * Rerun should count scenarios as failed if before / after hooks failed.
   Previously, scenarios that only failed due to a Scenario, Feature, or Suite hook were never re-run, potentially
@@ -71,23 +81,23 @@ appreciation by [supporting the project](https://github.com/Behat/Behat#support-
 * Use the new hasStdOut()/getStdOut() functions by @carlos-granados in [#1880](https://github.com/Behat/Behat/pull/1880)
 * Enforce the @api boundary in Behat's own code with custom phpstan rules by @carlos-granados in [#1875](https://github.com/Behat/Behat/pull/1875)
 * Add 3.x release notes and merge up changes from 3.x (changes are listed individually above) in
-  [#1884](https://github.com/Behat/Behat/pull/1884), [#1885](https://github.com/Behat/Behat/pull/1885), 
+  [#1884](https://github.com/Behat/Behat/pull/1884), [#1885](https://github.com/Behat/Behat/pull/1885),
   [#1886](https://github.com/Behat/Behat/pull/1886), [#1900](https://github.com/Behat/Behat/pull/1900)
   and [#1901](https://github.com/Behat/Behat/pull/1901)
 
 ## [4.0.0-alpha1] - 2026-06-22
 
-This release introduces a number of breaking changes. We have tried to limit the impact of these on 
-end-users – most are in code that we expect is only referenced internally. There are some 
-unavoidable changes that will affect end-users and extension authors, but we expect you will be 
-able to apply the vast majority of updates using automated tools. See 
+This release introduces a number of breaking changes. We have tried to limit the impact of these on
+end-users – most are in code that we expect is only referenced internally. There are some
+unavoidable changes that will affect end-users and extension authors, but we expect you will be
+able to apply the vast majority of updates using automated tools. See
 https://docs.behat.org/en/v4.x/releases/upgrading-to-4.0.html for advice on upgrading.
 
-For end-users, **this is essentially a stable release, ready to use in your CI**. The only reason 
-for shipping as an alpha first is to allow extension authors to add support for Behat 4.x and 
+For end-users, **this is essentially a stable release, ready to use in your CI**. The only reason
+for shipping as an alpha first is to allow extension authors to add support for Behat 4.x and
 feed back on any issues before we finalise 4.0.0.
 
-We expect there will be a small number of breaking changes between 4.0.0-alpha1 and 4.0.0. 
+We expect there will be a small number of breaking changes between 4.0.0-alpha1 and 4.0.0.
 See https://docs.behat.org/en/v4.x/releases/upgrading-to-4.0.html for details.
 
 Behat has no corporate backing - the 4.0 release has taken a huge effort from the volunteer
@@ -97,7 +107,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 
 ### Changed
 
-* Future 4.x releases will not guarantee backwards compatibility except for code that is 
+* Future 4.x releases will not guarantee backwards compatibility except for code that is
   explicitly marked as being part of our public API. See https://docs.behat.org/en/v4.x/releases/backwards-compatibility.html for details.
 * Drop support for using `@annotations` to define steps, hooks, and transformations by @carlos-granados in [#1790](https://github.com/Behat/Behat/pull/1790)
 * Drop support for YAML config and finding files in `config` dir by @carlos-granados in [#1791](https://github.com/Behat/Behat/pull/1791)
@@ -105,20 +115,20 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 * Use GherkinCompatibilityMode::GHERKIN_32 by default by @acoulton in [#1812](https://github.com/Behat/Behat/pull/1812)
 * Extension interface should not extend third-party interface by @acoulton in [#1796](https://github.com/Behat/Behat/pull/1796)
 * Remove ScenarioLikeTested in favour of separate events by @acoulton in [#1834](https://github.com/Behat/Behat/pull/1834)
-* Add strict parameter, property and return types throughout the codebase 
-  By @acoulton in [#1820](https://github.com/Behat/Behat/pull/1820), [#1822](https://github.com/Behat/Behat/pull/1822), 
+* Add strict parameter, property and return types throughout the codebase
+  By @acoulton in [#1820](https://github.com/Behat/Behat/pull/1820), [#1822](https://github.com/Behat/Behat/pull/1822),
   [#1824](https://github.com/Behat/Behat/pull/1824), and [#1831](https://github.com/Behat/Behat/pull/1831)
-  And by @stof in [#1837](https://github.com/Behat/Behat/pull/1837), [#1836](https://github.com/Behat/Behat/pull/1836), 
+  And by @stof in [#1837](https://github.com/Behat/Behat/pull/1837), [#1836](https://github.com/Behat/Behat/pull/1836),
   [#1839](https://github.com/Behat/Behat/pull/1839) and [#1838](https://github.com/Behat/Behat/pull/1838).
 * Use explicit type for late-bound Context callable methods by @acoulton in [#1854](https://github.com/Behat/Behat/pull/1854)
 * Define a mandatory constructor for SimpleArgumentTransformation implementations by @acoulton in [#1854](https://github.com/Behat/Behat/pull/1854)
 * Drop deprecated constants, methods, constructor parameters and similar code.
-  By @acoulton in [#1694](https://github.com/Behat/Behat/pull/1694) 
+  By @acoulton in [#1694](https://github.com/Behat/Behat/pull/1694)
   and by @carlos-granados in [#1814](https://github.com/Behat/Behat/pull/1814)
 
 ### Added
 
-* Support Symfony 8 by @Kocal in [#1687](https://github.com/Behat/Behat/pull/1687) 
+* Support Symfony 8 by @Kocal in [#1687](https://github.com/Behat/Behat/pull/1687)
   and @acoulton in [#1758](https://github.com/Behat/Behat/pull/1758)
 
 ### Internal
@@ -127,6 +137,16 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 
 * Move StopOnFailureController to Testwork\Tester\Cli namespace by @carlos-granados in [#1809](https://github.com/Behat/Behat/pull/1809)
 * Finalise all non-API classes that are not extended by @acoulton in [#1815](https://github.com/Behat/Behat/pull/1815)
+
+## [3.35.0] - 2026-11-20
+
+## Added
+
+* Support PHP 8.6 by @acoulton in [#1906](https://github.com/Behat/Behat/pull/1906)
+
+## Internal
+
+* Fix target version for BC check job by @acoulton in [#1907](https://github.com/Behat/Behat/pull/1907)
 
 ## [3.34.0] - 2026-09-27
 
@@ -149,7 +169,7 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 
 ## Fixed
 
-* Explain the relationship between --format and --out by @Amoifr 
+* Explain the relationship between --format and --out by @Amoifr
   in [#1889](https://github.com/Behat/Behat/pull/1889)
 
 ## Internal
@@ -1707,8 +1727,10 @@ appreciation by [supporting the project](https://github.com/acoulton/Behat#suppo
 ### Changed
   * Initial release
 
+[4.1.0]: https://github.com/Behat/Behat/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/Behat/Behat/compare/v4.0.0-alpha1...v4.0.0
 [4.0.0-alpha1]: https://github.com/Behat/Behat/compare/v3.32.0...v4.0.0-alpha1
+[3.35.0]: https://github.com/Behat/Behat/compare/v3.34.0...v3.35.0
 [3.34.0]: https://github.com/Behat/Behat/compare/v3.33.0...v3.34.0
 [3.33.0]: https://github.com/Behat/Behat/compare/v3.32.0...v3.33.0
 [3.32.0]: https://github.com/Behat/Behat/compare/v3.31.0...v3.32.0
