@@ -8,8 +8,10 @@
  * file that was distributed with this source code.
  */
 use Behat\Behat\Context\Context;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Behat\Util\StrictRegex;
+use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -47,8 +49,15 @@ class FeatureContext implements Context
 
     private ?int $errorLevel = null;
 
+    private bool $strictErrorChecks = false;
+
+    /**
+     * @param bool $strictDeprecations whether the behat commands should fail on deprecations and report all PHP errors,
+     *                                 unless the scenario is tagged '@expects-deprecations'
+     */
     public function __construct(
         private ?GherkinCompatibilityMode $gherkinCompatibilityMode,
+        private readonly bool $strictDeprecations = false,
         private readonly Filesystem $filesystem = new Filesystem(),
     ) {
     }
@@ -80,6 +89,13 @@ class FeatureContext implements Context
         }
         $this->workingDir = $dir;
         $this->phpBin = $php;
+    }
+
+    #[BeforeScenario]
+    public function configureStrictErrorChecks(BeforeScenarioScope $scope): void
+    {
+        $this->strictErrorChecks = $this->strictDeprecations
+            && !(new TagFilter('@expects-deprecations'))->isScenarioMatch($scope->getFeature(), $scope->getScenario());
     }
 
     /**
@@ -247,9 +263,15 @@ EOL;
         $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
         $php = $this->phpBin;
+        $errorLevel = $this->errorLevel ?? ($this->strictErrorChecks ? E_ALL : null);
 
-        if ($this->errorLevel !== null) {
-            $php .= ' -d error_reporting=' . $this->errorLevel;
+        if ($errorLevel !== null) {
+            $php .= ' -d error_reporting=' . $errorLevel;
+        }
+
+        // The --debug and --convert-config modes run other commands, which do not have this option
+        if ($this->strictErrorChecks && !preg_match('/--(debug|convert-config)\b/', $argumentsString . ' ' . $this->options)) {
+            $argumentsString .= ' --fail-on-behat-deprecations';
         }
 
         $cmd = sprintf(

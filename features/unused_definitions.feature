@@ -40,6 +40,7 @@ Feature: Unused definitions
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 
+  @expects-deprecations
   Scenario: Print unused definitions from yaml config
     When I run behat with the following additional options:
       | option   | value                   |

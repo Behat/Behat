@@ -37,6 +37,7 @@ Feature: Step Definitions Override Attributes
       2 steps (2 passed)
       """
 
+  @expects-deprecations
   Scenario: Overridden method with parent attribute and child annotation
     When I run behat with the following additional options:
       | option                              | value                             |
@@ -50,6 +51,7 @@ Feature: Step Definitions Override Attributes
       2 steps (2 passed)
       """
 
+  @expects-deprecations
   Scenario: Overridden method with parent annotation and child attribute
     When I run behat with the following additional options:
       | option                              | value                             |

@@ -9,11 +9,20 @@ use Behat\Config\TesterOptions;
 use Behat\Gherkin\GherkinCompatibilityMode;
 
 /*
+ * Set BEHAT_TESTS_STRICT_DEPRECATIONS=1 to fail on deprecations, both in this runner and in the behat commands that the
+ * scenarios run (which also report all PHP errors). It is only enabled in one CI job, so that the other jobs are not
+ * broken by a deprecation in a third-party package update.
+ * Scenarios that expect deprecations (e.g. because they cover a deprecated feature) should be tagged
+ * '@expects-deprecations' to opt out.
+ */
+$strictDeprecations = filter_var(getenv('BEHAT_TESTS_STRICT_DEPRECATIONS'), FILTER_VALIDATE_BOOL);
+
+/*
  * Scenarios that specify a gherkin mode in their own config (or specify that they should use Behat's
  * own default) should be tagged '@gherkin-mode:has-explicit'. They will only run in this suite.
  */
 $explicitGherkinSuite = (new Suite('explicit-gherkin-mode'))
-    ->addContext(FeatureContext::class, ['gherkinCompatibilityMode' => null])
+    ->addContext(FeatureContext::class, ['gherkinCompatibilityMode' => null, 'strictDeprecations' => $strictDeprecations])
     ->withFilter(new TagFilter('@gherkin-mode:has-explicit'));
 
 /*
@@ -24,7 +33,7 @@ $explicitGherkinSuite = (new Suite('explicit-gherkin-mode'))
  * mode, so it is safe to assume that the gherkin-42 suite covers both modes.
  */
 $createGherkinModeSuite = fn (string $name, GherkinCompatibilityMode $mode): Suite => (new Suite($name))
-    ->addContext(FeatureContext::class, ['gherkinCompatibilityMode' => $mode])
+    ->addContext(FeatureContext::class, ['gherkinCompatibilityMode' => $mode, 'strictDeprecations' => $strictDeprecations])
     ->withFilter(new TagFilter('~@gherkin-mode:has-explicit'));
 
 return (new Config())
@@ -38,6 +47,7 @@ return (new Config())
                 ->withCompatibilityMode(GherkinCompatibilityMode::GHERKIN_42),
             )
             ->withTesterOptions((new TesterOptions())
-                ->withFailOnBehatDeprecations(),
+                ->withPrintBehatDeprecations()
+                ->withFailOnBehatDeprecations($strictDeprecations),
             ),
     );

@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Legacy Snippets
 
   This is a deprecated usage of snippets and it is planned to go away in 4.0

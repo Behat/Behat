@@ -3,6 +3,7 @@ Feature: Config
   As a feature automator
   I need to be able to use behat configuration file
 
+  @expects-deprecations
   Scenario: Empty configuration file
     Given a file named "behat.yml" with:
       """
@@ -36,6 +37,7 @@ Feature: Config
           When this scenario executes
       """
 
+  @expects-deprecations
   Scenario: Alternative configuration file
     Given a file named "alternative-behat.yml" with:
       """

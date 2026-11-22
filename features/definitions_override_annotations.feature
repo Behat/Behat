@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Step Definitions Override Annotations
   In order to fine-tune definitions defined in parent classes
   As a step definitions developer

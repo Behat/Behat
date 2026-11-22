@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Definitions Translations Annotations
   In order to be able to use predefined steps in native language
   As a step definitions developer

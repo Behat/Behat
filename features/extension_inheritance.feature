@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Profile extension overrides
     In order to organize my profiles
     As a tester

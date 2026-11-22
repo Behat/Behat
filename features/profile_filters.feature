@@ -50,8 +50,12 @@ Feature: Filters
       """
 
     Examples:
+      | config_file          | comment                                   |
+      | behat-tag-filter.php | Using new method on GherkinOptions object |
+
+    @expects-deprecations
+    Examples:
       | config_file                     | comment                                   |
-      | behat-tag-filter.php            | Using new method on GherkinOptions object |
       | behat-tag-filter-on-profile.php | Using deprecated method on Profile object |
 
   Scenario: Role filters

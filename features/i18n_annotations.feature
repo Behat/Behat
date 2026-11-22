@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: I18n Annotations
   In order to write i18nal features
   As a feature writer

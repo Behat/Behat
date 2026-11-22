@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Step Definition Pattern Annotations
   In order to fix my mistakes easily
   As a step definitions developer

@@ -33,6 +33,7 @@ Feature: Extensions
       `inexistent_extension` extension file or class could not be located.
       """
 
+  @expects-deprecations
   Scenario: Exception handlers extension
     When I run behat with the following additional options:
       | option                              | value                         |

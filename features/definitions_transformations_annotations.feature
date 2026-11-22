@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Step Arguments Transformations Annotations
   In order to follow DRY
   As a feature writer

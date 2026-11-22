@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Config inheritance
   In order to avoid configuration duplication on each system
   As a context developer

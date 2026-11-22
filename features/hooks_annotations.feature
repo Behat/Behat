@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Hooks Annotations
   In order to hook into Behat testing process
   As a tester
