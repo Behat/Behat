@@ -11,7 +11,7 @@ return (new Config())
     ->withProfile(
         (new Profile('default'))
             ->withGherkinOptions((new GherkinOptions())
-                ->withFilter(new TagFilter('tag2'))
+                ->withFilter(new TagFilter('@tag2'))
             )
     )
 ;
