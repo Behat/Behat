@@ -8,7 +8,7 @@
       </trans-unit>
       <trans-unit id="i-have-clicked-plus">
         <source>/^I have clicked "+"$/</source>
-        <target>/^Я нажал "([^"]*)"$/</target>
+        <target>/^Я нажал "(?:[^"]*)"$/</target>
       </trans-unit>
       <trans-unit id="i-should-see">
         <source>/^I should see (\d+) on the screen$/</source>
