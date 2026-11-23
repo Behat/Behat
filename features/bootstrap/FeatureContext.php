@@ -8,10 +8,8 @@
  * file that was distributed with this source code.
  */
 use Behat\Behat\Context\Context;
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Output\Printer\Formatter\ConsoleFormatter;
 use Behat\Behat\Util\StrictRegex;
-use Behat\Gherkin\Filter\TagFilter;
 use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -49,7 +47,7 @@ class FeatureContext implements Context
 
     private ?int $errorLevel = null;
 
-    private bool $strictErrorChecks = false;
+    private bool $strictErrorChecks;
 
     /**
      * @param bool $strictDeprecations whether the behat commands should fail on deprecations and report all PHP errors,
@@ -57,9 +55,10 @@ class FeatureContext implements Context
      */
     public function __construct(
         private ?GherkinCompatibilityMode $gherkinCompatibilityMode,
-        private readonly bool $strictDeprecations = false,
+        bool $strictDeprecations = false,
         private readonly Filesystem $filesystem = new Filesystem(),
     ) {
+        $this->strictErrorChecks = $strictDeprecations;
     }
 
     /**
@@ -91,11 +90,10 @@ class FeatureContext implements Context
         $this->phpBin = $php;
     }
 
-    #[BeforeScenario]
-    public function configureStrictErrorChecks(BeforeScenarioScope $scope): void
+    #[BeforeScenario('@expects-deprecations')]
+    public function disableStrictErrorChecks(): void
     {
-        $this->strictErrorChecks = $this->strictDeprecations
-            && !(new TagFilter('@expects-deprecations'))->isScenarioMatch($scope->getFeature(), $scope->getScenario());
+        $this->strictErrorChecks = false;
     }
 
     /**
