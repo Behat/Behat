@@ -47,18 +47,15 @@ class FeatureContext implements Context
 
     private ?int $errorLevel = null;
 
-    private bool $strictErrorChecks;
-
     /**
      * @param bool $strictDeprecations whether the behat commands should fail on deprecations and report all PHP errors,
      *                                 unless the scenario is tagged '@expects-deprecations'
      */
     public function __construct(
         private ?GherkinCompatibilityMode $gherkinCompatibilityMode,
-        bool $strictDeprecations = false,
+        private bool $strictDeprecations = false,
         private readonly Filesystem $filesystem = new Filesystem(),
     ) {
-        $this->strictErrorChecks = $strictDeprecations;
     }
 
     /**
@@ -91,9 +88,9 @@ class FeatureContext implements Context
     }
 
     #[BeforeScenario('@expects-deprecations')]
-    public function disableStrictErrorChecks(): void
+    public function disableStrictDeprecations(): void
     {
-        $this->strictErrorChecks = false;
+        $this->strictDeprecations = false;
     }
 
     /**
@@ -261,14 +258,14 @@ EOL;
         $argumentsString = strtr($argumentsString, ['\'' => '"']);
 
         $php = $this->phpBin;
-        $errorLevel = $this->errorLevel ?? ($this->strictErrorChecks ? E_ALL : null);
+        $errorLevel = $this->errorLevel ?? ($this->strictDeprecations ? E_ALL : null);
 
         if ($errorLevel !== null) {
             $php .= ' -d error_reporting=' . $errorLevel;
         }
 
         // The --debug and --convert-config modes run other commands, which do not have this option
-        if ($this->strictErrorChecks && !preg_match('/--(debug|convert-config)\b/', $argumentsString . ' ' . $this->options)) {
+        if ($this->strictDeprecations && !preg_match('/--(debug|convert-config)\b/', $argumentsString . ' ' . $this->options)) {
             $argumentsString .= ' --fail-on-behat-deprecations';
         }
 
