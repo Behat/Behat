@@ -789,15 +789,7 @@ EOL;
             return null;
         }
 
-        // The expected text is built with realpath(), but the working directory can be printed without it, with
-        // the short 8.3 name of the temporary directory on Windows. As the resolved path can also contain the other
-        // one (/private/var and /var on macOS), the resolved one is replaced first.
-        $resolvedDir = realpath($this->workingDir) . DIRECTORY_SEPARATOR;
-
-        return rtrim(strtr($matches[0], [
-            $resolvedDir => $resolvedDir,
-            $this->workingDir . DIRECTORY_SEPARATOR => $resolvedDir,
-        ]));
+        return rtrim($matches[0]);
     }
 
     private function assertLastRunDeprecationsWereChecked(): void

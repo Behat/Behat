@@ -30,7 +30,7 @@ Feature: Config inheritance
 
         ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
           → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
-        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "behat.dist.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.dist.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
           → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """
 
@@ -54,6 +54,6 @@ Feature: Config inheritance
 
         ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
           → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
-        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "behat.dist.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.dist.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
           → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """
