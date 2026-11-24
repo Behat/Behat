@@ -36,6 +36,13 @@ Feature: Config
 
           When this scenario executes
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.yml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
+      """
 
   @expects-deprecations
   Scenario: Alternative configuration file
@@ -69,6 +76,13 @@ Feature: Config
       --- Use --snippets-for CLI option to generate snippets for following default suite steps:
 
           When this scenario executes
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "alternative-behat.yml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """
 
   Scenario: Alternative configuration file could not be found

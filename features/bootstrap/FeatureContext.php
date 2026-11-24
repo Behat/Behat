@@ -13,6 +13,7 @@ use Behat\Behat\Util\StrictRegex;
 use Behat\Gherkin\GherkinCompatibilityMode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Hook\AfterScenario;
 use Behat\Hook\AfterSuite;
 use Behat\Hook\BeforeScenario;
 use Behat\Hook\BeforeSuite;
@@ -48,8 +49,19 @@ class FeatureContext implements Context
     private ?int $errorLevel = null;
 
     /**
+     * Whether the scenario is tagged '@expects-deprecations', so that the deprecations of each behat run must be
+     * checked with the "the following deprecations should be reported:" or "no deprecations should be reported" step.
+     */
+    private bool $expectsDeprecations = false;
+
+    /**
+     * Whether the deprecations of the last behat run were checked, null when there is nothing to check.
+     */
+    private ?bool $deprecationsChecked = null;
+
+    /**
      * @param bool $strictDeprecations whether the behat commands should fail on deprecations and report all PHP errors,
-     *                                 unless the scenario is tagged '@expects-deprecations'
+     *                                 unless the scenario is tagged '@expects-deprecations' or '@tests-deprecation-output'
      */
     public function __construct(
         private ?GherkinCompatibilityMode $gherkinCompatibilityMode,
@@ -88,9 +100,29 @@ class FeatureContext implements Context
     }
 
     #[BeforeScenario('@expects-deprecations')]
-    public function disableStrictDeprecations(): void
+    public function expectDeprecations(): void
     {
         $this->strictDeprecations = false;
+        $this->expectsDeprecations = true;
+    }
+
+    /**
+     * The scenarios testing how deprecations are reported set the deprecation options themselves.
+     */
+    #[BeforeScenario('@tests-deprecation-output')]
+    public function leaveDeprecationOptionsAlone(): void
+    {
+        $this->strictDeprecations = false;
+    }
+
+    /**
+     * Makes sure that a scenario allowed to trigger deprecations says which ones, so that a new or changed
+     * deprecation does not go unnoticed.
+     */
+    #[AfterScenario('@expects-deprecations')]
+    public function checkExpectedDeprecationsWereAsserted(): void
+    {
+        $this->assertLastRunDeprecationsWereChecked();
     }
 
     /**
@@ -264,9 +296,18 @@ EOL;
             $php .= ' -d error_reporting=' . $errorLevel;
         }
 
-        // The --debug and --convert-config modes run other commands, which do not have this option
-        if ($this->strictDeprecations && !preg_match('/--(debug|convert-config)\b/', $argumentsString . ' ' . $this->options)) {
-            $argumentsString .= ' --fail-on-behat-deprecations';
+        // The --debug and --convert-config modes run other commands, which do not have these options
+        if (!preg_match('/--(debug|convert-config)\b/', $argumentsString . ' ' . $this->options)) {
+            if ($this->strictDeprecations) {
+                $argumentsString .= ' --fail-on-behat-deprecations';
+            } elseif ($this->expectsDeprecations) {
+                $argumentsString .= ' --print-behat-deprecations';
+            }
+        }
+
+        if ($this->expectsDeprecations) {
+            $this->assertLastRunDeprecationsWereChecked();
+            $this->deprecationsChecked = false;
         }
 
         $cmd = sprintf(
@@ -524,6 +565,36 @@ EOL;
     }
 
     /**
+     * Checks the complete list of deprecations printed by the previously ran command.
+     */
+    #[Then('the following deprecations should be reported:')]
+    public function theFollowingDeprecationsShouldBeReported(PyStringNode $text): void
+    {
+        $this->deprecationsChecked = true;
+
+        $reported = $this->getReportedDeprecations();
+        if ($reported === null) {
+            throw new UnexpectedValueException('Expected deprecations to be reported, but there were none in:' . PHP_EOL . $this->getOutput());
+        }
+
+        $expected = $this->getExpectedOutput($text);
+        if ($reported !== $expected) {
+            throw new UnexpectedValueException($this->diff($expected, $reported));
+        }
+    }
+
+    #[Then('no deprecations should be reported')]
+    public function noDeprecationsShouldBeReported(): void
+    {
+        $this->deprecationsChecked = true;
+
+        $reported = $this->getReportedDeprecations();
+        if ($reported !== null) {
+            throw new UnexpectedValueException('Expected no deprecations to be reported, but got:' . PHP_EOL . $reported);
+        }
+    }
+
+    /**
      * Checks whether previously ran command failed|passed.
      *
      * @param 'pass'|'fail' $success
@@ -707,6 +778,28 @@ EOL;
         $dom->load($xmlFile);
 
         $dom->schemaValidate(__DIR__ . '/schema/' . $schemaPath);
+    }
+
+    /**
+     * Returns the block printed by --print-behat-deprecations, if any.
+     */
+    private function getReportedDeprecations(): ?string
+    {
+        if (!preg_match('/^\d+ deprecations? triggered \(\d+ unique\):\n\n(?:  ⚠ .*\n    → .*(?:\n|$))+/mu', $this->getOutput(), $matches)) {
+            return null;
+        }
+
+        return rtrim($matches[0]);
+    }
+
+    private function assertLastRunDeprecationsWereChecked(): void
+    {
+        if ($this->deprecationsChecked === false) {
+            throw new UnexpectedValueException(
+                'In a scenario tagged @expects-deprecations, the deprecations of each behat run must be checked with the '
+                . '"the following deprecations should be reported:" or "no deprecations should be reported" step.'
+            );
+        }
     }
 
     private function getExitCode(): ?int

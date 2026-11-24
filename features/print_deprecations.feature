@@ -1,4 +1,4 @@
-@expects-deprecations
+@tests-deprecation-output
 Feature: Print deprecations
   In order to identify deprecated code usage in Behat
   As a developer

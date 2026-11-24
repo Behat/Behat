@@ -194,6 +194,15 @@ Feature: Hooks Annotations
       6 scenarios (6 passed)
       11 steps (11 passed)
       """
+    And the following deprecations should be reported:
+      """
+      22 deprecations triggered (2 unique):
+
+        ⚠ Using annotations to define hooks is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (16x)
+          → {BASE_PATH}src/Behat/Behat/Hook/Context/Annotation/HookAnnotationReader.php:XX
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (6x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Hooks on tagged features
     When I run behat with the following additional options:
@@ -243,6 +252,15 @@ Feature: Hooks Annotations
       
       1 scenario (1 passed)
       1 step (1 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      22 deprecations triggered (2 unique):
+
+        ⚠ Using annotations to define hooks is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (16x)
+          → {BASE_PATH}src/Behat/Behat/Hook/Context/Annotation/HookAnnotationReader.php:XX
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (6x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """
 
   Scenario: Hooks output
@@ -349,4 +367,13 @@ Feature: Hooks Annotations
       
       4 scenarios (1 passed, 2 failed, 1 skipped)
       4 steps (1 passed, 1 failed, 2 skipped)
+      """
+    And the following deprecations should be reported:
+      """
+      22 deprecations triggered (2 unique):
+
+        ⚠ Using annotations to define hooks is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (16x)
+          → {BASE_PATH}src/Behat/Behat/Hook/Context/Annotation/HookAnnotationReader.php:XX
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (6x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """

@@ -53,10 +53,21 @@ Feature: Filters
       | config_file          | comment                                   |
       | behat-tag-filter.php | Using new method on GherkinOptions object |
 
-    @expects-deprecations
-    Examples:
-      | config_file                     | comment                                   |
-      | behat-tag-filter-on-profile.php | Using deprecated method on Profile object |
+  @expects-deprecations
+  Scenario: Tag filters using the deprecated method on the Profile object
+    When I run "behat --config=behat-tag-filter-on-profile.php"
+    Then it should pass with:
+      """
+      4 scenarios (4 passed)
+      10 steps (10 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Filter strings should contain `@` prefixes for tags, e.g. `@wip` rather than `wip`.
+          → {BASE_PATH}vendor/behat/gherkin/src/Filter/TagFilterMatcher.php:XX
+      """
 
   Scenario: Role filters
     When I run "behat --config=behat-role-filter.php"

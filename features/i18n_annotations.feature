@@ -72,6 +72,13 @@ Feature: I18n Annotations
 
           И Добавить "нормальное" число
       """
+    And the following deprecations should be reported:
+      """
+      4 deprecations triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (4x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Progress
     When I run behat with the following additional options:
@@ -109,6 +116,13 @@ Feature: I18n Annotations
 
           И Добавить "нормальное" число
       """
+    And the following deprecations should be reported:
+      """
+      4 deprecations triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (4x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Progress with unexisting locale
     When I run behat with the following additional options:
@@ -145,4 +159,11 @@ Feature: I18n Annotations
       --- Use --snippets-for CLI option to generate snippets for following default suite steps:
 
           И Добавить "нормальное" число
+      """
+    And the following deprecations should be reported:
+      """
+      4 deprecations triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (4x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """

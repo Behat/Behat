@@ -26,6 +26,13 @@ Feature: Profile extension overrides
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "behat-default-extension.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
+      """
 
   Scenario: Custom profile disables all extensions
     When I run behat with the following additional options:
@@ -44,6 +51,13 @@ Feature: Profile extension overrides
 
       1 scenario (1 passed)
       2 steps (2 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "behat-default-extension.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """
 
   Scenario: Custom profile has an additional extension
@@ -64,4 +78,11 @@ Feature: Profile extension overrides
 
       1 scenario (1 passed)
       3 steps (3 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "behat-additional-extension.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """

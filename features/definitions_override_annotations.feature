@@ -24,6 +24,13 @@ Feature: Step Definitions Override Annotations
       1 scenario (1 passed)
       1 step (1 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Overridden method with different annotation will have both patterns
     When I run behat with the following additional options:
@@ -36,4 +43,11 @@ Feature: Step Definitions Override Annotations
 
       1 scenario (1 passed)
       2 steps (2 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      2 deprecations triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead. (2x)
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """
