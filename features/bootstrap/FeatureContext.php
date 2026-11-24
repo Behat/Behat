@@ -789,7 +789,13 @@ EOL;
             return null;
         }
 
-        return rtrim($matches[0]);
+        // On Windows, the temporary directory can be printed with its short 8.3 name, which realpath() expands
+        // when the expected text is built
+        return rtrim(str_replace(
+            $this->workingDir . DIRECTORY_SEPARATOR,
+            realpath($this->workingDir) . DIRECTORY_SEPARATOR,
+            $matches[0]
+        ));
     }
 
     private function assertLastRunDeprecationsWereChecked(): void
