@@ -28,6 +28,14 @@ jobs:
         composer-mode: [update]
         symfony-version: ['']
         include:
+          # Fail on deprecations (and report all PHP errors) on the latest PHP with the latest dependencies only, so
+          # that the other jobs are not broken by a deprecation in a third-party package update
+          - php: 8.6
+            os: ubuntu-latest
+            composer-mode: update
+            symfony-version: ''
+            strict-deprecations: true
+
           # Build on the lowest supported PHP with the lowest supported dependencies
           - php: 8.2
             os: ubuntu-latest
@@ -88,6 +96,8 @@ jobs:
         run: ./vendor/bin/phpunit
 
       - name: Run tests (Behat)
+        env:
+          BEHAT_TESTS_STRICT_DEPRECATIONS: ${{ matrix.strict-deprecations && '1' || '0' }}
         run: ./bin/behat -fprogress --strict
 
   static-analysis:

@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Legacy Snippets
 
   This is a deprecated usage of snippets and it is planned to go away in 4.0
@@ -86,6 +87,15 @@ Feature: Legacy Snippets
           use Behat\Step\Then;
           use Behat\Step\DocString;
       """
+    And the following deprecations should be reported:
+      """
+      12 deprecations triggered (2 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+        ⚠ ContextInterfaceBasedPatternIdentifier is deprecated in favour of --snippet-type and will be removed in 4.0. (11x)
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedPatternIdentifier.php:XX
+      """
 
   Scenario: Regex snippets are working
     When I run behat with the following additional options:
@@ -93,6 +103,15 @@ Feature: Legacy Snippets
       | --config                | behat-regex-working.php |
       | --append-snippets       |                         |
       | features/coffee.feature |                         |
+    And the following deprecations should be reported:
+      """
+      12 deprecations triggered (2 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+        ⚠ ContextInterfaceBasedPatternIdentifier is deprecated in favour of --snippet-type and will be removed in 4.0. (11x)
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedPatternIdentifier.php:XX
+      """
     And I run behat with the following additional options:
       | option                  | value                   |
       | --config                | behat-regex-working.php |
@@ -114,6 +133,7 @@ Feature: Legacy Snippets
       2 scenarios (2 pending)
       11 steps (2 pending, 9 skipped)
       """
+    And no deprecations should be reported
 
   Scenario: Turnip snippets
     When I run behat with the following additional options:
@@ -173,6 +193,13 @@ Feature: Legacy Snippets
           use Behat\Step\Then;
           use Behat\Step\DocString;
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+      """
 
   Scenario: Turnip snippets are working
     When I run behat with the following additional options:
@@ -180,6 +207,13 @@ Feature: Legacy Snippets
       | --config                | behat-append.php |
       | --append-snippets       |                  |
       | features/coffee.feature |                  |
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+      """
     And I run behat with the following additional options:
       | option                  | value            |
       | --config                | behat-append.php |
@@ -201,6 +235,7 @@ Feature: Legacy Snippets
       2 scenarios (2 pending)
       11 steps (2 pending, 9 skipped)
       """
+    And no deprecations should be reported
 
   Scenario: Numbers with decimal points
     When I run behat with the following additional options:
@@ -227,11 +262,25 @@ Feature: Legacy Snippets
           use Behat\Behat\Tester\Exception\PendingException;
           use Behat\Step\Then;
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+      """
     When I run behat with the following additional options:
       | option                   | value             |
       | --config                 | behat-decimal.php |
       | --append-snippets        |                   |
       | features/decimal.feature |                   |
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+      """
     And I run behat with the following additional options:
       | option                   | value             |
       | --config                 | behat-decimal.php |
@@ -249,6 +298,7 @@ Feature: Legacy Snippets
       1 scenario (1 pending)
       2 steps (1 pending, 1 skipped)
       """
+    And no deprecations should be reported
 
   Scenario: Parameter with decimal number following string
     When I run behat with the following additional options:
@@ -275,6 +325,13 @@ Feature: Legacy Snippets
           use Behat\Behat\Tester\Exception\PendingException;
           use Behat\Step\Given;
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
+      """
 
   Scenario: Step with slashes
     When I run behat with the following additional options:
@@ -300,4 +357,11 @@ Feature: Legacy Snippets
 
           use Behat\Behat\Tester\Exception\PendingException;
           use Behat\Step\Then;
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ ContextInterfaceBasedContextIdentifier is deprecated in favour of --snippets-for and will be removed in 4.0.
+          → {BASE_PATH}src/Behat/Behat/Context/Snippet/Generator/ContextInterfaceBasedContextIdentifier.php:XX
       """

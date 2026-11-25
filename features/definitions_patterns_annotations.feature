@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Step Definition Pattern Annotations
   In order to fix my mistakes easily
   As a step definitions developer
@@ -23,6 +24,13 @@ Feature: Step Definition Pattern Annotations
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Pattern with decimal point
     When I run behat with the following additional options:
@@ -42,6 +50,13 @@ Feature: Step Definition Pattern Annotations
 
       1 scenario (1 passed)
       2 steps (2 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """
 
   Scenario: Pattern with string including point
@@ -65,6 +80,13 @@ Feature: Step Definition Pattern Annotations
       1 scenario (1 passed)
       3 steps (3 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Pattern with broken regex
     When I run behat with the following additional options:
@@ -78,6 +100,7 @@ Feature: Step Definition Pattern Annotations
       
         The regex `/I am (foo/` is invalid: preg_match(): Compilation failed: missing closing parenthesis at offset 9
       """
+    And no deprecations should be reported
 
   Scenario: Custom regex
     When I run behat with the following additional options:
@@ -91,6 +114,13 @@ Feature: Step Definition Pattern Annotations
 
       1 scenario (1 passed)
       2 steps (2 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """
 
   Scenario: Definition parameter with decimal number following string
@@ -106,6 +136,13 @@ Feature: Step Definition Pattern Annotations
       1 scenario (1 passed)
       1 step (1 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Empty parameter value
     When I run behat with the following additional options:
@@ -119,6 +156,13 @@ Feature: Step Definition Pattern Annotations
 
       1 scenario (1 passed)
       1 step (1 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """
 
   Scenario: UNIX path as parameter
@@ -134,6 +178,13 @@ Feature: Step Definition Pattern Annotations
       1 scenario (1 passed)
       1 step (1 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
 
   Scenario: Negative number parameters without quotes
     When I run behat with the following additional options:
@@ -147,4 +198,11 @@ Feature: Step Definition Pattern Annotations
 
       1 scenario (1 passed)
       1 step (1 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """

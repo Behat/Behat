@@ -40,6 +40,7 @@ Feature: Unused definitions
       `FeatureContext::stepNotUsedInAnyFeature()`
       """
 
+  @expects-deprecations
   Scenario: Print unused definitions from yaml config
     When I run behat with the following additional options:
       | option   | value                   |
@@ -51,6 +52,13 @@ Feature: Unused definitions
       [Then|*] I call a step not used in any feature
       This is a step that is never used and should be removed.
       `FeatureContext::stepNotUsedInAnyFeature()`
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%unused_definitions.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """
 
   Scenario: Print unused definitions from PHP config

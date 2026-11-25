@@ -33,6 +33,7 @@ Feature: Extensions
       `inexistent_extension` extension file or class could not be located.
       """
 
+  @expects-deprecations
   Scenario: Exception handlers extension
     When I run behat with the following additional options:
       | option                              | value                         |
@@ -57,6 +58,9 @@ Feature: Extensions
       
       2 scenarios (2 failed)
       2 steps (2 failed)
+      """
+    And the output should contain:
+      """
       string(16) "Non\Existent\Cls"
       array(2) {
         [0]=>
@@ -64,4 +68,11 @@ Feature: Extensions
         [1]=>
         string(7) "getName"
       }
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat-exception-handlers.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """

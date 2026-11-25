@@ -37,6 +37,7 @@ Feature: Step Definitions Override Attributes
       2 steps (2 passed)
       """
 
+  @expects-deprecations
   Scenario: Overridden method with parent attribute and child annotation
     When I run behat with the following additional options:
       | option                              | value                             |
@@ -49,7 +50,15 @@ Feature: Step Definitions Override Attributes
       1 scenario (1 passed)
       2 steps (2 passed)
       """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
 
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
+      """
+
+  @expects-deprecations
   Scenario: Overridden method with parent annotation and child attribute
     When I run behat with the following additional options:
       | option                              | value                             |
@@ -61,4 +70,11 @@ Feature: Step Definitions Override Attributes
 
       1 scenario (1 passed)
       2 steps (2 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      1 deprecation triggered (1 unique):
+
+        ⚠ Using annotations to define steps is deprecated and will be removed in Behat 4.0. Use PHP attributes instead.
+          → {BASE_PATH}src/Behat/Behat/Definition/Context/Annotation/DefinitionAnnotationReader.php:XX
       """

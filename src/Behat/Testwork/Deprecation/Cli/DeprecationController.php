@@ -41,7 +41,7 @@ final class DeprecationController implements Controller, EventSubscriberInterfac
     public static function getSubscribedEvents(): array
     {
         return [
-            ExerciseCompleted::AFTER => ['onAfterExercise', -100],
+            ExerciseCompleted::AFTER => ['onAfterExercise', -1000],
         ];
     }
 

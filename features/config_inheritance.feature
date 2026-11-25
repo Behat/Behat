@@ -1,3 +1,4 @@
+@expects-deprecations
 Feature: Config inheritance
   In order to avoid configuration duplication on each system
   As a context developer
@@ -23,6 +24,15 @@ Feature: Config inheritance
       1 scenario (1 passed)
       3 steps (3 passed)
       """
+    And the following deprecations should be reported:
+      """
+      2 deprecations triggered (2 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.dist.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
+      """
 
   Scenario: Config should successfully inherit parent one for custom profiles
     When I run "behat --profile custom_profile features/configs.feature"
@@ -37,4 +47,13 @@ Feature: Config inheritance
 
       1 scenario (1 passed)
       3 steps (3 passed)
+      """
+    And the following deprecations should be reported:
+      """
+      2 deprecations triggered (2 unique):
+
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
+        ⚠ Loading YAML configuration files is deprecated and will be removed in Behat 4.0. Please convert "%%WORKING_DIR%%behat.dist.yaml" to a PHP configuration file. You can use the --convert-config option to do this automatically.
+          → {BASE_PATH}src/Behat/Testwork/ServiceContainer/Configuration/ConfigurationLoader.php:XX
       """
