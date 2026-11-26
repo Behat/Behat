@@ -65,8 +65,8 @@ Feature: Filters
       """
       1 deprecation triggered (1 unique):
 
-        ⚠ Filter strings should contain `@` prefixes for tags, e.g. `@wip` rather than `wip`.
-          → {BASE_PATH}vendor/behat/gherkin/src/Filter/TagFilterMatcher.php:XX
+        ⚠ Profile::withFilter is deprecated in config, use withGherkinOptions(new GherkinOptions()->withFilter()).
+          → {BASE_PATH}src/Behat/Config/Profile.php:XX
       """
 
   Scenario: Role filters
