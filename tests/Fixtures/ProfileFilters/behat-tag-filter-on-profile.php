@@ -9,6 +9,6 @@ use Behat\Config\Profile;
 return (new Config())
     ->withProfile(
         (new Profile('default'))
-            ->withFilter(new TagFilter('tag2'))
+            ->withFilter(new TagFilter('@tag2'))
     )
 ;

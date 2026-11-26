@@ -13,6 +13,7 @@ use Behat\Config\Formatter\JUnitFormatter;
 use Behat\Config\Formatter\PrettyFormatter;
 use Behat\Config\Formatter\ProgressFormatter;
 use Behat\Config\Formatter\ShowOutputOption;
+use Behat\Testwork\Deprecation\DeprecationCollector;
 use Behat\Testwork\ServiceContainer\Exception\ConfigurationLoadingException;
 use PhpParser\Node\Expr;
 
@@ -82,10 +83,14 @@ final class Profile implements ConfigConverterInterface
     }
 
     /**
-     * @deprecated use withGherkinOptions()->withFilter(). This method will be removed in 4.0
+     * @deprecated use withGherkinOptions(new GherkinOptions()->withFilter()). This method will be removed in 4.0
      */
     public function withFilter(FilterInterface $filter): self
     {
+        DeprecationCollector::trigger(
+            'Profile::withFilter is deprecated in config, use withGherkinOptions(new GherkinOptions()->withFilter()).'
+        );
+
         return $this->withGherkinOptions(
             (new GherkinOptions($this->settings[self::GHERKIN_SETTING] ?? []))
                 ->withFilter($filter)
